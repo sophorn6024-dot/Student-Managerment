@@ -440,7 +440,6 @@
     .weekend-merged-cell { background: #fce7f3 !important; color: #be185d !important; font-weight: bold; vertical-align: middle; }
     .holiday-cell { background: #fee2e2 !important; color: #b91c1c !important; font-weight: bold; }
     
-    /* 🌟 អក្សរបញ្ឈរមិនបាក់បែក និងមិនត្រឡប់ក្បាល */
     .vertical-sun-box {
       width: 24px;
       height: 80px;
@@ -460,7 +459,6 @@
 
     .stats-summary-bar { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; margin-top: 6px; font-size: 10.5px; line-height: 1.5; gap: 10px; }
 
-    /* 🌟 ថ្ងៃខែចន្ទគតិធម្មតា គ្មានប្រអប់ឡើយ (No Box) */
     .clean-lunar-input {
       font-family: 'Khmer OS Battambang', 'Battambang', sans-serif;
       font-size: 12.5px;
@@ -828,11 +826,26 @@
     <div class="report-paper-container" id="printableReportPaper"></div>
   </div>
 
+  <!-- 🔗 ភ្ជាប់ជាមួយ API ទំនាក់ទំនង Backend លើ GitHub -->
+  <script src="api.js"></script>
+
   <script>
-    var TOKEN = "<?= token ?>";
-    var USER_ROLE = "<?= userRole ?>";
-    var USER_CLASS = "<?= userClass ?>";
-    var TEACHER_NAME = "<?= teacherName ?>";
+    // 🌟 ទាញយក Token ពីគ្រប់ប្រភព (api.js, parent frame, ឬ localStorage)
+    function resolveToken() {
+      if (typeof getStoredToken === 'function') {
+        var t = getStoredToken();
+        if (t) return t;
+      }
+      if (window.parent && window.parent.SESSION_TOKEN) {
+        return window.parent.SESSION_TOKEN;
+      }
+      return localStorage.getItem('krou_session_token') || localStorage.getItem('token') || '';
+    }
+
+    var TOKEN = resolveToken();
+    var USER_ROLE = "teacher";
+    var USER_CLASS = "";
+    var TEACHER_NAME = "";
 
     var KHMER_MONTHS = ["មករា","កុម្ភៈ","មីនា","មេសា","ឧសភា","មិថុនា","កក្កដា","សីហា","កញ្ញា","តុលា","វិច្ឆិកា","ធ្នូ"];
     var WEEKDAYS_KH = ["អា","ច","អ","ព","ព្រ","សុ","ស"];
@@ -864,19 +877,21 @@
       setTimeout(function(){ toast.className = toast.className.replace("show", ""); }, 2500);
     }
 
-    function saveHolidaysData() {
+    async function saveHolidaysData() {
       try {
         localStorage.setItem('school_monthly_holidays', JSON.stringify(monthlyHolidaysMap));
       } catch(e) {}
 
-      if (typeof google !== 'undefined' && google.script && google.script.run) {
+      if (typeof callBackendApi === 'function') {
         try {
-          google.script.run.saveSchoolHolidays(monthlyHolidaysMap);
-        } catch(e) {}
+          await callBackendApi('saveSchoolHolidays', { holidaysMap: monthlyHolidaysMap });
+        } catch(e) {
+          console.warn('កំហុសរក្សាទុកថ្ងៃឈប់:', e);
+        }
       }
     }
 
-    function loadHolidaysData() {
+    async function loadHolidaysData() {
       try {
         var local = localStorage.getItem('school_monthly_holidays');
         if (local) {
@@ -889,18 +904,17 @@
         }
       } catch(e) {}
 
-      if (typeof google !== 'undefined' && google.script && google.script.run) {
+      if (typeof callBackendApi === 'function') {
         try {
-          google.script.run
-            .withSuccessHandler(function(serverData) {
-              if (serverData && typeof serverData === 'object') {
-                monthlyHolidaysMap = Object.assign(monthlyHolidaysMap, serverData);
-                try { localStorage.setItem('school_monthly_holidays', JSON.stringify(monthlyHolidaysMap)); } catch(e){}
-                renderHolidayTagsList();
-              }
-            })
-            .getSchoolHolidays();
-        } catch(e) {}
+          var serverData = await callBackendApi('getSchoolHolidays');
+          if (serverData && typeof serverData === 'object') {
+            monthlyHolidaysMap = Object.assign(monthlyHolidaysMap, serverData);
+            try { localStorage.setItem('school_monthly_holidays', JSON.stringify(monthlyHolidaysMap)); } catch(e){}
+            renderHolidayTagsList();
+          }
+        } catch(e) {
+          console.warn('កំហុសទាញយកថ្ងៃឈប់:', e);
+        }
       }
     }
 
@@ -1027,15 +1041,32 @@
     var studentNotesMap = {};
     var activeActionSheetSid = null;
 
-    window.onload = function() {
+    window.onload = async function() {
       applyTheme(getAutoThemeByTime());
       setInterval(function() { applyTheme(getAutoThemeByTime()); }, 60000);
 
+      TOKEN = resolveToken();
+      await fetchSessionInfo();
       loadHolidaysData();
       updateDateUI();
       initClasses();
       renderHolidayConfigSection();
     };
+
+    async function fetchSessionInfo() {
+      try {
+        if (typeof callBackendApi === 'function' && TOKEN) {
+          var session = await callBackendApi('getCurrentSession', { token: TOKEN });
+          if (session) {
+            USER_ROLE = session.role || 'teacher';
+            USER_CLASS = session.assignedClass || '';
+            TEACHER_NAME = session.name || '';
+          }
+        }
+      } catch(e) {
+        console.warn('Session verification warning:', e);
+      }
+    }
 
     function switchNavTab(tab) {
       document.getElementById('btnTabDaily').classList.toggle('active', tab === 'daily');
@@ -1045,23 +1076,38 @@
       if(tab === 'reports') renderHolidayConfigSection();
     }
 
-    function initClasses() {
-      google.script.run
-        .withSuccessHandler(function(classes) {
-          var sel = document.getElementById('classSelect');
-          sel.innerHTML = '';
-          if (classes && classes.length > 0) {
-            classes.forEach(function(c) {
-              var opt = document.createElement('option');
-              opt.value = c;
-              opt.textContent = 'ថ្នាក់ទី ' + c;
-              sel.appendChild(opt);
-            });
-            if (USER_CLASS) sel.value = USER_CLASS;
-            onClassChange();
+    async function initClasses() {
+      var sel = document.getElementById('classSelect');
+      sel.innerHTML = '<option value="">កំពុងទាញយក...</option>';
+      TOKEN = resolveToken();
+
+      if (typeof callBackendApi !== 'function') {
+        sel.innerHTML = '<option value="">រកមិនឃើញ api.js</option>';
+        return;
+      }
+
+      try {
+        var res = await callBackendApi('getClassList', { token: TOKEN });
+        var classes = Array.isArray(res) ? res : (res && res.classes ? res.classes : []);
+        sel.innerHTML = '';
+        if (classes && classes.length > 0) {
+          classes.forEach(function(c) {
+            var opt = document.createElement('option');
+            opt.value = c;
+            opt.textContent = 'ថ្នាក់ទី ' + c;
+            sel.appendChild(opt);
+          });
+          if (USER_ROLE !== 'admin' && USER_CLASS) {
+            sel.value = USER_CLASS;
           }
-        })
-        .getClassListForSession(TOKEN);
+          onClassChange();
+        } else {
+          sel.innerHTML = '<option value="">គ្មានថ្នាក់</option>';
+        }
+      } catch (err) {
+        console.error('កំហុសទាញយកថ្នាក់:', err);
+        sel.innerHTML = '<option value="">កំហុសទាញយក</option>';
+      }
     }
 
     function onClassChange() {
@@ -1122,22 +1168,38 @@
       loadDailyAttendanceData();
     }
 
-    function loadDailyAttendanceData() {
+    async function loadDailyAttendanceData() {
       var mName = KHMER_MONTHS[selectedDate.getMonth()];
       var day = selectedDate.getDate();
+      TOKEN = resolveToken();
 
-      google.script.run
-        .withSuccessHandler(function(students) {
-          rawStudentsData = students || [];
-          dailyAttendanceState = {};
+      document.getElementById('studentListContainer').innerHTML = `
+        <div style="text-align:center; padding:30px; color:var(--text-muted);">
+          <i class="fa-solid fa-spinner fa-spin fa-2x"></i>
+          <p style="margin-top:8px;">កំពុងទាញយកទិន្នន័យ...</p>
+        </div>`;
 
-          rawStudentsData.forEach(function(s) {
-            dailyAttendanceState[s.id] = (s.days && s.days[day]) ? s.days[day] : 'P';
-          });
-          renderDailyList();
-          updateStatsCounters();
-        })
-        .getMonthlyAttendanceForClassSecured(TOKEN, currentClassName, mName);
+      try {
+        var students = await callBackendApi('getMonthlyAttendanceForClass', {
+          token: TOKEN,
+          className: currentClassName,
+          month: mName
+        });
+
+        rawStudentsData = Array.isArray(students) ? students : [];
+        dailyAttendanceState = {};
+
+        rawStudentsData.forEach(function(s) {
+          dailyAttendanceState[s.id] = (s.days && s.days[day]) ? s.days[day] : 'P';
+        });
+        renderDailyList();
+        updateStatsCounters();
+      } catch (err) {
+        document.getElementById('studentListContainer').innerHTML = `
+          <div style="text-align:center; padding:30px; color:#dc2626;">
+            ⚠️ មិនអាចទាញយកទិន្នន័យបានទេ៖ ${err.message || err}
+          </div>`;
+      }
     }
 
     function renderDailyList() {
@@ -1245,30 +1307,37 @@
       document.getElementById('cntPerm').textContent = c;
     }
 
-    function saveDailyAttendance() {
+    async function saveDailyAttendance() {
       var mName = KHMER_MONTHS[selectedDate.getMonth()];
       var day = selectedDate.getDate();
+      TOKEN = resolveToken();
 
       var records = rawStudentsData.map(function(s) {
         if (!s.days) s.days = {};
-        s.days[day] = dailyAttendanceState[s.id] || 'P'; // 🌟 សមកាលកម្មចូល Memory ភ្លាមៗ
+        s.days[day] = dailyAttendanceState[s.id] || 'P';
         return { id: s.id, name: s.name, sex: s.sex, grade: s.grade, days: s.days };
       });
 
-      google.script.run
-        .withSuccessHandler(function() {
-          showSaveToast();
-        })
-        .saveMonthlyAttendanceForClassSecured(TOKEN, {
-          className: currentClassName, month: mName, records: records
+      try {
+        await callBackendApi('saveMonthlyAttendanceForClass', {
+          token: TOKEN,
+          payload: {
+            className: currentClassName,
+            month: mName,
+            records: records
+          }
         });
+        showSaveToast();
+      } catch(err) {
+        console.warn('កំហុសរក្សាទុកវត្តមាន:', err);
+      }
     }
 
     /* ================= 🖨️ REPORT GENERATION & PDF ================= */
     function openReportView(type) {
       var paper = document.getElementById('printableReportPaper');
       document.getElementById('reportViewerModal').style.display = 'block';
-      paper.innerHTML = '<div style="text-align:center; padding:50px; color:#64748b;">កំពុងរៀបចំរបាយការណ៍...</div>';
+      paper.innerHTML = '<div style="text-align:center; padding:50px; color:#64748b;"><i class="fa-solid fa-spinner fa-spin fa-2x"></i><p style="margin-top:10px;">កំពុងរៀបចំរបាយការណ៍...</p></div>';
 
       if (type === 'monthly') renderMonthlyPrintReport();
       else renderYearlyPrintReport();
@@ -1278,7 +1347,6 @@
       document.getElementById('reportViewerModal').style.display = 'none';
     }
 
-    /* 🌟 PDF កម្រិតច្បាស់ម៉ត់ 300 DPI */
     function downloadPDF() {
       var element = document.getElementById('printableReportPaper');
       var mName = document.getElementById('rptMonthSelect').value;
@@ -1293,7 +1361,7 @@
       html2pdf().from(element).set(opt).save();
     }
 
-    function renderMonthlyPrintReport() {
+    async function renderMonthlyPrintReport() {
       var mName = document.getElementById('rptMonthSelect').value;
       var currentYear = new Date().getFullYear();
       var mIdx = KHMER_MONTHS.indexOf(mName);
@@ -1303,316 +1371,333 @@
       var khDate = getFullKhmerDateString(endOfMonthDate);
       var monthHolidays = monthlyHolidaysMap[mName] || [];
       var holidayDaysList = monthHolidays.map(h => h.day);
+      TOKEN = resolveToken();
 
-      google.script.run
-        .withSuccessHandler(function(res) {
-          var students = (res && res.students) ? res.students : [];
-          var daysCount = res.daysCount || 30;
+      try {
+        var res = await callBackendApi('getMonthlyAttendanceReport', {
+          className: currentClassName,
+          month: mName,
+          year: currentYear
+        });
 
-          var thDays = '', thWeekdays = '';
-          var sundayCols = [];
-          var holidayCols = holidayDaysList;
-          var nonSchoolDaysCount = 0;
+        var students = (res && res.students) ? res.students : [];
+        var daysCount = res.daysCount || 30;
 
-          for (var d = 1; d <= daysCount; d++) {
-            var dow = res.dayLabels[d - 1] ? res.dayLabels[d - 1].dow : 0;
-            var isSun = (dow === 0);
-            var isHol = holidayCols.includes(d);
+        var thDays = '', thWeekdays = '';
+        var sundayCols = [];
+        var holidayCols = holidayDaysList;
+        var nonSchoolDaysCount = 0;
 
-            if (isSun || isHol) {
-              nonSchoolDaysCount++;
-            }
-            if (isSun) sundayCols.push(d);
+        for (var d = 1; d <= daysCount; d++) {
+          var dow = res.dayLabels[d - 1] ? res.dayLabels[d - 1].dow : 0;
+          var isSun = (dow === 0);
+          var isHol = holidayCols.includes(d);
 
-            var cellClass = isSun ? 'weekend-col' : isHol ? 'holiday-cell' : '';
-            thDays += `<th style="width:20px;" class="${cellClass}">${d}</th>`;
-            thWeekdays += `<th class="${cellClass}">${WEEKDAYS_KH[dow]}</th>`;
+          if (isSun || isHol) {
+            nonSchoolDaysCount++;
           }
+          if (isSun) sundayCols.push(d);
 
-          var dailyTotalAbsence = new Array(daysCount + 1).fill(0);
-          var dailyFemaleAbsence = new Array(daysCount + 1).fill(0);
+          var cellClass = isSun ? 'weekend-col' : isHol ? 'holiday-cell' : '';
+          thDays += `<th style="width:20px;" class="${cellClass}">${d}</th>`;
+          thWeekdays += `<th class="${cellClass}">${WEEKDAYS_KH[dow]}</th>`;
+        }
 
-          var rowsHtml = '';
-          var numStudents = students.length || 1;
-          var totalAllPerm = 0, totalAllAbs = 0;
-          var totalFemalePerm = 0, totalFemaleAbs = 0;
+        var dailyTotalAbsence = new Array(daysCount + 1).fill(0);
+        var dailyFemaleAbsence = new Array(daysCount + 1).fill(0);
 
-          students.forEach(function(s, idx) {
-            var dayCells = '';
-            var studentPermCount = 0;
-            var studentAbsCount = 0;
-            var sexStr = (s.sex || '').toString().trim().toLowerCase();
-            var isFemale = (sexStr === 'ស្រី' || sexStr === 'f' || sexStr === 'female');
+        var rowsHtml = '';
+        var numStudents = students.length || 1;
+        var totalAllPerm = 0, totalAllAbs = 0;
+        var totalFemalePerm = 0, totalFemaleAbs = 0;
 
-            for (var d = 1; d <= daysCount; d++) {
-              var isSun = sundayCols.includes(d);
-              var isHol = holidayCols.includes(d);
+        students.forEach(function(s, idx) {
+          var dayCells = '';
+          var studentPermCount = 0;
+          var studentAbsCount = 0;
+          var sexStr = (s.sex || '').toString().trim().toLowerCase();
+          var isFemale = (sexStr === 'ស្រី' || sexStr === 'f' || sexStr === 'female');
 
-              if (isSun) {
-                if (idx === 0) dayCells += `<td class="weekend-merged-cell" rowspan="${numStudents}"><div class="vertical-sun-box"><span class="vertical-sun-text">អាទិត្យ</span></div></td>`;
-              } else if (isHol) {
-                if (idx === 0) {
-                  var holObj = monthHolidays.find(h => h.day === d);
-                  var holReason = holObj ? holObj.reason : 'ឈប់';
-                  dayCells += `<td class="holiday-cell" rowspan="${numStudents}"><div class="vertical-sun-box"><span class="vertical-sun-text">${holReason}</span></div></td>`;
-                }
-              } else {
-                var code = s.days[d - 1] || '-';
-                
-                if (code === 'C') studentPermCount++;
-                if (code === 'A') studentAbsCount++;
-
-                if (code === 'C' || code === 'A') {
-                  dailyTotalAbsence[d]++;
-                  if (isFemale) dailyFemaleAbsence[d]++;
-                }
-
-                var mark = (code === 'C') ? 'ច្ប' : (code === 'A') ? 'អច្ប' : '';
-                dayCells += `<td style="font-size:8px; font-weight:bold; color:${code === 'C' ? '#2563eb' : '#dc2626'};">${mark}</td>`;
-              }
-            }
-
-            var stPerm = studentPermCount || s.totalPermission || 0;
-            var stAbs = studentAbsCount || s.totalAbsent || 0;
-            totalAllPerm += stPerm; 
-            totalAllAbs += stAbs;
-
-            if (isFemale) {
-              totalFemalePerm += stPerm;
-              totalFemaleAbs += stAbs;
-            }
-
-            rowsHtml += `
-              <tr>
-                <td>${idx + 1}</td>
-                <td style="text-align:left; padding-left:4px; font-weight:bold; white-space:nowrap; overflow:hidden;">${s.name}</td>
-                <td>${s.sex || 'ប្រុស'}</td>
-                ${dayCells}
-                <td style="font-weight:bold;">${stPerm > 0 ? stPerm : ''}</td>
-                <td style="font-weight:bold; color:#dc2626;">${stAbs > 0 ? stAbs : ''}</td>
-                <td style="font-weight:bold;">${(stPerm + stAbs) > 0 ? (stPerm + stAbs) : ''}</td>
-              </tr>
-            `;
-          });
-
-          var totalDailyCells = '';
-          var femaleDailyCells = '';
           for (var d = 1; d <= daysCount; d++) {
             var isSun = sundayCols.includes(d);
             var isHol = holidayCols.includes(d);
-            if (isSun || isHol) {
-              totalDailyCells += `<td class="${isHol ? 'holiday-cell' : 'weekend-col'}"></td>`;
-              femaleDailyCells += `<td class="${isHol ? 'holiday-cell' : 'weekend-col'}"></td>`;
+
+            if (isSun) {
+              if (idx === 0) dayCells += `<td class="weekend-merged-cell" rowspan="${numStudents}"><div class="vertical-sun-box"><span class="vertical-sun-text">អាទិត្យ</span></div></td>`;
+            } else if (isHol) {
+              if (idx === 0) {
+                var holObj = monthHolidays.find(h => h.day === d);
+                var holReason = holObj ? holObj.reason : 'ឈប់';
+                dayCells += `<td class="holiday-cell" rowspan="${numStudents}"><div class="vertical-sun-box"><span class="vertical-sun-text">${holReason}</span></div></td>`;
+              }
             } else {
-              var tVal = dailyTotalAbsence[d] > 0 ? dailyTotalAbsence[d] : '';
-              var fVal = dailyFemaleAbsence[d] > 0 ? dailyFemaleAbsence[d] : '';
-              totalDailyCells += `<td style="font-weight:bold; font-size:9px;">${tVal}</td>`;
-              femaleDailyCells += `<td style="font-weight:bold; font-size:9px; color:#dc2626;">${fVal}</td>`;
+              var code = s.days[d - 1] || '-';
+              
+              if (code === 'C') studentPermCount++;
+              if (code === 'A') studentAbsCount++;
+
+              if (code === 'C' || code === 'A') {
+                dailyTotalAbsence[d]++;
+                if (isFemale) dailyFemaleAbsence[d]++;
+              }
+
+              var mark = (code === 'C') ? 'ច្ប' : (code === 'A') ? 'អច្ប' : '';
+              dayCells += `<td style="font-size:8px; font-weight:bold; color:${code === 'C' ? '#2563eb' : '#dc2626'};">${mark}</td>`;
             }
           }
 
-          var actualSchoolDays = daysCount - nonSchoolDaysCount;
-          var totalStudents = students.length;
-          var femaleCount = students.filter(s => {
-            var ss = (s.sex || '').toString().trim().toLowerCase();
-            return ss === 'ស្រី' || ss === 'f' || ss === 'female';
-          }).length;
-          var maleCount = totalStudents - femaleCount;
-          
-          var totalSlots = totalStudents * actualSchoolDays;
-          var totalAbsenceTimes = totalAllPerm + totalAllAbs;
-          var actualPresentTimes = Math.max(0, totalSlots - totalAbsenceTimes);
-          var percentAbsent = totalSlots > 0 ? ((totalAbsenceTimes / totalSlots) * 100).toFixed(2) : "0.00";
+          var stPerm = studentPermCount || s.totalPermission || 0;
+          var stAbs = studentAbsCount || s.totalAbsent || 0;
+          totalAllPerm += stPerm; 
+          totalAllAbs += stAbs;
 
-          var html = `
-            <div class="rpt-header-banner">
-              <div class="f-moul" style="font-size:15px; margin-bottom:1px;">ព្រះរាជាណាចក្រកម្ពុជា</div>
-              <div class="f-moul" style="font-size:13.5px; margin-bottom:2px;">ជាតិ សាសនា ព្រះមហាក្សត្រ</div>
-              <div style="font-size:11px; letter-spacing:3px; color:#dc2626;">✻ ✻ ✻ 📖 ✻ ✻ ✻</div>
-              
-              <div class="f-moul" style="font-size:15px; margin-top:6px; margin-bottom:2px;">បញ្ជីវត្តមានប្រចាំខែ ${mName} ឆ្នាំ ${toKhmerNum(currentYear)}</div>
-              <div style="font-size:12px; font-weight:bold;">ឆ្នាំសិក្សា ២០២៦-២០២៧</div>
-            </div>
+          if (isFemale) {
+            totalFemalePerm += stPerm;
+            totalFemaleAbs += stAbs;
+          }
 
-            <div style="text-align:left; font-weight:bold; font-size:11px; margin-bottom:4px; line-height: 1.3;">
-              <div>ការិយាល័យអប់រំ យុវជន និងកីឡា</div>
-              <div>សាលាបឋមសិក្សាកំពង់ល្ពៅ</div>
-              <div>ថ្នាក់ទី ${currentClassName}</div>
-            </div>
-
-            <table class="print-table">
-              <thead>
-                <tr>
-                  <th rowspan="2" style="width:24px;">ល.រ</th>
-                  <th rowspan="2" style="width:125px;">គោត្តនាម និងនាម</th>
-                  <th rowspan="2" style="width:28px;">ភេទ</th>
-                  ${thDays}
-                  <th rowspan="2" style="width:22px;">ច្ប</th>
-                  <th rowspan="2" style="width:22px;">អច្ប</th>
-                  <th rowspan="2" style="width:24px;">សរុប</th>
-                </tr>
-                <tr>${thWeekdays}</tr>
-              </thead>
-              <tbody>
-                ${rowsHtml}
-                <tr style="font-weight:bold; background:#f8fafc;">
-                  <td colspan="3">សរុបអវត្តមានក្នុងមួយថ្ងៃ</td>
-                  ${totalDailyCells}
-                  <td>${totalAllPerm}</td><td>${totalAllAbs}</td><td>${totalAllPerm + totalAllAbs}</td>
-                </tr>
-                <tr style="font-weight:bold; background:#f8fafc;">
-                  <td colspan="3">ក្នុងនោះស្រី</td>
-                  ${femaleDailyCells}
-                  <td>${totalFemalePerm}</td><td>${totalFemaleAbs}</td><td>${totalFemalePerm + totalFemaleAbs}</td>
-                </tr>
-              </tbody>
-            </table>
-
-            <div class="stats-summary-bar">
-              <div>
-                <div>សិស្សសរុប ៖ <strong>${totalStudents} នាក់</strong> • ស្រី ៖ <strong>${femaleCount} នាក់</strong> • ប្រុស ៖ <strong>${maleCount} នាក់</strong></div>
-                <div>សញ្ញា ៖ <strong>ច្ប</strong>=មានច្បាប់ • <strong>អច្ប</strong>=អត់ច្បាប់ <span style="color:#64748b;">(មិនរាប់ក្នុងភាគរយ)</span></div>
-              </div>
-              <div style="text-align:right;">
-                ចំនួនថ្ងៃរៀនពិតប្រាកដ ៖ <strong>${actualSchoolDays} ថ្ងៃ</strong> • ពេលសិស្សត្រូវមករៀន ៖ <strong>${totalSlots} ពេល</strong> • ពេលអវត្តមាន ៖ <strong>${totalAbsenceTimes} ដង</strong> • ពេលដែលសិស្សមករៀនពិតប្រាកដ ៖ <strong>${actualPresentTimes} ពេល</strong> • ភាគរយអវត្តមាន ៖ <strong>(${totalAbsenceTimes}/${totalSlots})×100 = ${percentAbsent}%</strong>
-              </div>
-            </div>
-
-            <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-top:18px; padding:0 30px;">
-              <div style="display:inline-flex; flex-direction:column; align-items:center; text-align:center; min-width:220px; margin-top:30px;">
-                <div class="f-moul" style="font-size:12.5px; color:#1e3a8a;">បានឃើញ និងឯកភាព</div>
-                <div class="f-bold" style="font-size:12.5px; color:#1e3a8a; margin-top:4px;">នាយកសាលា</div>
-              </div>
-
-              <div style="display:inline-flex; flex-direction:column; align-items:center; text-align:center; min-width:300px;">
-                <!-- 🌟 គ្មានប្រអប់ឡើយ (No Box) -->
-                ${khDate.lunarInputHtml}
-                <div style="font-size:12px; color:#1e3a8a; margin-top:3px;">${khDate.solarLine}</div>
-                <div class="f-moul" style="font-size:13px; color:#1e3a8a; margin-top:5px;">គ្រូទទួលបន្ទុកថ្នាក់</div>
-                <div class="f-bold" style="font-size:13.5px; color:#1e3a8a; margin-top:35px;">${TEACHER_NAME || ''}</div>
-              </div>
-            </div>
+          rowsHtml += `
+            <tr>
+              <td>${idx + 1}</td>
+              <td style="text-align:left; padding-left:4px; font-weight:bold; white-space:nowrap; overflow:hidden;">${s.name}</td>
+              <td>${s.sex || 'ប្រុស'}</td>
+              ${dayCells}
+              <td style="font-weight:bold;">${stPerm > 0 ? stPerm : ''}</td>
+              <td style="font-weight:bold; color:#dc2626;">${stAbs > 0 ? stAbs : ''}</td>
+              <td style="font-weight:bold;">${(stPerm + stAbs) > 0 ? (stPerm + stAbs) : ''}</td>
+            </tr>
           `;
-          document.getElementById('printableReportPaper').innerHTML = html;
-        })
-        .getMonthlyAttendanceReport(currentClassName, mName, currentYear);
+        });
+
+        var totalDailyCells = '';
+        var femaleDailyCells = '';
+        for (var d = 1; d <= daysCount; d++) {
+          var isSun = sundayCols.includes(d);
+          var isHol = holidayCols.includes(d);
+          if (isSun || isHol) {
+            totalDailyCells += `<td class="${isHol ? 'holiday-cell' : 'weekend-col'}"></td>`;
+            femaleDailyCells += `<td class="${isHol ? 'holiday-cell' : 'weekend-col'}"></td>`;
+          } else {
+            var tVal = dailyTotalAbsence[d] > 0 ? dailyTotalAbsence[d] : '';
+            var fVal = dailyFemaleAbsence[d] > 0 ? dailyFemaleAbsence[d] : '';
+            totalDailyCells += `<td style="font-weight:bold; font-size:9px;">${tVal}</td>`;
+            femaleDailyCells += `<td style="font-weight:bold; font-size:9px; color:#dc2626;">${fVal}</td>`;
+          }
+        }
+
+        var actualSchoolDays = daysCount - nonSchoolDaysCount;
+        var totalStudents = students.length;
+        var femaleCount = students.filter(s => {
+          var ss = (s.sex || '').toString().trim().toLowerCase();
+          return ss === 'ស្រី' || ss === 'f' || ss === 'female';
+        }).length;
+        var maleCount = totalStudents - femaleCount;
+        
+        var totalSlots = totalStudents * actualSchoolDays;
+        var totalAbsenceTimes = totalAllPerm + totalAllAbs;
+        var actualPresentTimes = Math.max(0, totalSlots - totalAbsenceTimes);
+        var percentAbsent = totalSlots > 0 ? ((totalAbsenceTimes / totalSlots) * 100).toFixed(2) : "0.00";
+
+        var html = `
+          <div class="rpt-header-banner">
+            <div class="f-moul" style="font-size:15px; margin-bottom:1px;">ព្រះរាជាណាចក្រកម្ពុជា</div>
+            <div class="f-moul" style="font-size:13.5px; margin-bottom:2px;">ជាតិ សាសនា ព្រះមហាក្សត្រ</div>
+            <div style="font-size:11px; letter-spacing:3px; color:#dc2626;">✻ ✻ ✻ 📖 ✻ ✻ ✻</div>
+            
+            <div class="f-moul" style="font-size:15px; margin-top:6px; margin-bottom:2px;">បញ្ជីវត្តមានប្រចាំខែ ${mName} ឆ្នាំ ${toKhmerNum(currentYear)}</div>
+            <div style="font-size:12px; font-weight:bold;">ឆ្នាំសិក្សា ២០២៦-២០២៧</div>
+          </div>
+
+          <div style="text-align:left; font-weight:bold; font-size:11px; margin-bottom:4px; line-height: 1.3;">
+            <div>ការិយាល័យអប់រំ យុវជន និងកីឡា</div>
+            <div>សាលាបឋមសិក្សាកំពង់ល្ពៅ</div>
+            <div>ថ្នាក់ទី ${currentClassName}</div>
+          </div>
+
+          <table class="print-table">
+            <thead>
+              <tr>
+                <th rowspan="2" style="width:24px;">ល.រ</th>
+                <th rowspan="2" style="width:125px;">គោត្តនាម និងនាម</th>
+                <th rowspan="2" style="width:28px;">ភេទ</th>
+                ${thDays}
+                <th rowspan="2" style="width:22px;">ច្ប</th>
+                <th rowspan="2" style="width:22px;">អច្ប</th>
+                <th rowspan="2" style="width:24px;">សរុប</th>
+              </tr>
+              <tr>${thWeekdays}</tr>
+            </thead>
+            <tbody>
+              ${rowsHtml}
+              <tr style="font-weight:bold; background:#f8fafc;">
+                <td colspan="3">សរុបអវត្តមានក្នុងមួយថ្ងៃ</td>
+                ${totalDailyCells}
+                <td>${totalAllPerm}</td><td>${totalAllAbs}</td><td>${totalAllPerm + totalAllAbs}</td>
+              </tr>
+              <tr style="font-weight:bold; background:#f8fafc;">
+                <td colspan="3">ក្នុងនោះស្រី</td>
+                ${femaleDailyCells}
+                <td>${totalFemalePerm}</td><td>${totalFemaleAbs}</td><td>${totalFemalePerm + totalFemaleAbs}</td>
+              </tr>
+            </tbody>
+          </table>
+
+          <div class="stats-summary-bar">
+            <div>
+              <div>សិស្សសរុប ៖ <strong>${totalStudents} នាក់</strong> • ស្រី ៖ <strong>${femaleCount} នាក់</strong> • ប្រុស ៖ <strong>${maleCount} នាក់</strong></div>
+              <div>សញ្ញា ៖ <strong>ច្ប</strong>=មានច្បាប់ • <strong>អច្ប</strong>=អត់ច្បាប់ <span style="color:#64748b;">(មិនរាប់ក្នុងភាគរយ)</span></div>
+            </div>
+            <div style="text-align:right;">
+              ចំនួនថ្ងៃរៀនពិតប្រាកដ ៖ <strong>${actualSchoolDays} ថ្ងៃ</strong> • ពេលសិស្សត្រូវមករៀន ៖ <strong>${totalSlots} ពេល</strong> • ពេលអវត្តមាន ៖ <strong>${totalAbsenceTimes} ដង</strong> • ពេលដែលសិស្សមករៀនពិតប្រាកដ ៖ <strong>${actualPresentTimes} ពេល</strong> • ភាគរយអវត្តមាន ៖ <strong>(${totalAbsenceTimes}/${totalSlots})×100 = ${percentAbsent}%</strong>
+            </div>
+          </div>
+
+          <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-top:18px; padding:0 30px;">
+            <div style="display:inline-flex; flex-direction:column; align-items:center; text-align:center; min-width:220px; margin-top:30px;">
+              <div class="f-moul" style="font-size:12.5px; color:#1e3a8a;">បានឃើញ និងឯកភាព</div>
+              <div class="f-bold" style="font-size:12.5px; color:#1e3a8a; margin-top:4px;">នាយកសាលា</div>
+            </div>
+
+            <div style="display:inline-flex; flex-direction:column; align-items:center; text-align:center; min-width:300px;">
+              ${khDate.lunarInputHtml}
+              <div style="font-size:12px; color:#1e3a8a; margin-top:3px;">${khDate.solarLine}</div>
+              <div class="f-moul" style="font-size:13px; color:#1e3a8a; margin-top:5px;">គ្រូទទួលបន្ទុកថ្នាក់</div>
+              <div class="f-bold" style="font-size:13.5px; color:#1e3a8a; margin-top:35px;">${TEACHER_NAME || ''}</div>
+            </div>
+          </div>
+        `;
+        document.getElementById('printableReportPaper').innerHTML = html;
+      } catch (err) {
+        document.getElementById('printableReportPaper').innerHTML = `
+          <div style="color:#dc2626; text-align:center; padding:30px;">
+            ⚠️ មិនអាចរៀបចំរបាយការណ៍បានទេ៖ ${err.message || err}
+          </div>`;
+      }
     }
 
-    function renderYearlyPrintReport() {
+    async function renderYearlyPrintReport() {
       var currentYear = new Date().getFullYear();
       var endOfYearDate = new Date(currentYear, 8, 0);
       var khDate = getFullKhmerDateString(endOfYearDate);
+      TOKEN = resolveToken();
 
-      google.script.run
-        .withSuccessHandler(function(res) {
-          var students = (res && res.students) ? res.students : [];
-          var mData = res.monthData || {};
-          var s1M = res.sem1Months || [];
-          var s2M = res.sem2Months || [];
+      try {
+        var res = await callBackendApi('getYearlyAttendanceReport', {
+          token: TOKEN,
+          className: currentClassName,
+          year: currentYear
+        });
 
-          // 🌟 ប្រើ Transform Rotate -90deg ដើម្បីអក្សរច្បាស់ មិនបាក់បែកជើង
-          var thS1 = s1M.map(m => `<th colspan="2" style="font-size:8.5px; padding: 4px 0; height: 50px;"><div style="width:20px; height:45px; display:flex; align-items:center; justify-content:center; margin:0 auto;"><span style="display:inline-block; transform:rotate(-90deg); white-space:nowrap; font-weight:bold;">${m}</span></div></th>`).join('');
-          var thS2 = s2M.map(m => `<th colspan="2" style="font-size:8.5px; padding: 4px 0; height: 50px;"><div style="width:20px; height:45px; display:flex; align-items:center; justify-content:center; margin:0 auto;"><span style="display:inline-block; transform:rotate(-90deg); white-space:nowrap; font-weight:bold;">${m}</span></div></th>`).join('');
-          
-          var subCA = '<th style="font-size:7.5px;">ច្ប</th><th style="font-size:7.5px;">អច្ប</th>';
-          var thSub1 = s1M.map(() => subCA).join('') + subCA;
-          var thSub2 = s2M.map(() => subCA).join('') + subCA;
+        var students = (res && res.students) ? res.students : [];
+        var mData = res.monthData || {};
+        var s1M = res.sem1Months || [];
+        var s2M = res.sem2Months || [];
 
-          var rowsHtml = '';
-          students.forEach(function(s, idx) {
-            var s1C = 0, s1A = 0, s2C = 0, s2A = 0;
-            var s1Cells = '', s2Cells = '';
+        var thS1 = s1M.map(m => `<th colspan="2" style="font-size:8.5px; padding: 4px 0; height: 50px;"><div style="width:20px; height:45px; display:flex; align-items:center; justify-content:center; margin:0 auto;"><span style="display:inline-block; transform:rotate(-90deg); white-space:nowrap; font-weight:bold;">${m}</span></div></th>`).join('');
+        var thS2 = s2M.map(m => `<th colspan="2" style="font-size:8.5px; padding: 4px 0; height: 50px;"><div style="width:20px; height:45px; display:flex; align-items:center; justify-content:center; margin:0 auto;"><span style="display:inline-block; transform:rotate(-90deg); white-space:nowrap; font-weight:bold;">${m}</span></div></th>`).join('');
+        
+        var subCA = '<th style="font-size:7.5px;">ច្ប</th><th style="font-size:7.5px;">អច្ប</th>';
+        var thSub1 = s1M.map(() => subCA).join('') + subCA;
+        var thSub2 = s2M.map(() => subCA).join('') + subCA;
 
-            s1M.forEach(function(m) {
-              var rec = (mData[m] && mData[m][s.id]) ? mData[m][s.id] : { c: 0, a: 0 };
-              s1C += rec.c; s1A += rec.a;
-              s1Cells += `<td>${rec.c || ''}</td><td>${rec.a || ''}</td>`;
-            });
-            s1Cells += `<td style="font-weight:bold;">${s1C}</td><td style="font-weight:bold; color:#dc2626;">${s1A}</td>`;
+        var rowsHtml = '';
+        students.forEach(function(s, idx) {
+          var s1C = 0, s1A = 0, s2C = 0, s2A = 0;
+          var s1Cells = '', s2Cells = '';
 
-            s2M.forEach(function(m) {
-              var rec = (mData[m] && mData[m][s.id]) ? mData[m][s.id] : { c: 0, a: 0 };
-              s2C += rec.c; s2A += rec.a;
-              s2Cells += `<td>${rec.c || ''}</td><td>${rec.a || ''}</td>`;
-            });
-            s2Cells += `<td style="font-weight:bold;">${s2C}</td><td style="font-weight:bold; color:#dc2626;">${s2A}</td>`;
-
-            var totC = s1C + s2C, totA = s1A + s2A;
-
-            rowsHtml += `
-              <tr>
-                <td>${idx + 1}</td>
-                <td>${s.id}</td>
-                <td style="text-align:left; padding-left:4px; font-weight:bold; white-space:nowrap;">${s.name}</td>
-                <td>${s.sex || 'ប្រុស'}</td>
-                ${s1Cells}
-                ${s2Cells}
-                <td style="font-weight:bold;">${totC}</td>
-                <td style="font-weight:bold; color:#dc2626;">${totA}</td>
-                <td style="font-weight:bold;">${totC + totA}</td>
-              </tr>
-            `;
+          s1M.forEach(function(m) {
+            var rec = (mData[m] && mData[m][s.id]) ? mData[m][s.id] : { c: 0, a: 0 };
+            s1C += rec.c; s1A += rec.a;
+            s1Cells += `<td>${rec.c || ''}</td><td>${rec.a || ''}</td>`;
           });
+          s1Cells += `<td style="font-weight:bold;">${s1C}</td><td style="font-weight:bold; color:#dc2626;">${s1A}</td>`;
 
-          var html = `
-            <div class="rpt-header-banner">
-              <div class="f-moul" style="font-size:15px; margin-bottom:1px;">ព្រះរាជាណាចក្រកម្ពុជា</div>
-              <div class="f-moul" style="font-size:13.5px; margin-bottom:2px;">ជាតិ សាសនា ព្រះមហាក្សត្រ</div>
-              <div style="font-size:11px; letter-spacing:3px; color:#dc2626;">✻ ✻ ✻ 📖 ✻ ✻ ✻</div>
-              
-              <div class="f-moul" style="font-size:15px; margin-top:6px; margin-bottom:2px;">តារាងសរុបអវត្តមានប្រចាំឆ្នាំ</div>
-              <div style="font-size:12px; font-weight:bold;">ឆ្នាំសិក្សា ២០២៦-២០២៧ • សិស្សសរុប ${students.length} នាក់</div>
-            </div>
+          s2M.forEach(function(m) {
+            var rec = (mData[m] && mData[m][s.id]) ? mData[m][s.id] : { c: 0, a: 0 };
+            s2C += rec.c; s2A += rec.a;
+            s2Cells += `<td>${rec.c || ''}</td><td>${rec.a || ''}</td>`;
+          });
+          s2Cells += `<td style="font-weight:bold;">${s2C}</td><td style="font-weight:bold; color:#dc2626;">${s2A}</td>`;
 
-            <div style="text-align:left; font-weight:bold; font-size:11px; margin-bottom:4px; line-height: 1.3;">
-              <div>ការិយាល័យអប់រំ យុវជន និងកីឡា</div>
-              <div>សាលាបឋមសិក្សាកំពង់ល្ពៅ</div>
-              <div>ថ្នាក់ទី ${currentClassName}</div>
-            </div>
+          var totC = s1C + s2C, totA = s1A + s2A;
 
-            <table class="print-table">
-              <thead>
-                <tr>
-                  <th rowspan="3" style="width:24px;">ល.រ</th>
-                  <th rowspan="3" style="width:35px;">អត្តលេខ</th>
-                  <th rowspan="3" style="width:115px;">គោត្តនាម និងនាម</th>
-                  <th rowspan="3" style="width:28px;">ភេទ</th>
-                  <th colspan="14">ឆមាសទី១</th>
-                  <th colspan="14">ឆមាសទី២</th>
-                  <th colspan="3" rowspan="2">ចំនួនអវត្តមានប្រចាំឆ្នាំ</th>
-                </tr>
-                <tr>
-                  ${thS1}<th colspan="2">សរុប</th>
-                  ${thS2}<th colspan="2">សរុប</th>
-                </tr>
-                <tr>
-                  ${thSub1}${thSub2}
-                  <th style="font-size:7.5px;">ច្ប</th>
-                  <th style="font-size:7.5px;">អច្ប</th>
-                  <th style="font-size:7.5px;">សរុប</th>
-                </tr>
-              </thead>
-              <tbody>${rowsHtml}</tbody>
-            </table>
-
-            <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-top:18px; padding:0 30px;">
-              <div style="display:inline-flex; flex-direction:column; align-items:center; text-align:center; min-width:220px; margin-top:30px;">
-                <div class="f-moul" style="font-size:12.5px; color:#1e3a8a;">បានឃើញ និងឯកភាព</div>
-                <div class="f-bold" style="font-size:12.5px; color:#1e3a8a; margin-top:4px;">នាយកសាលា</div>
-              </div>
-
-              <div style="display:inline-flex; flex-direction:column; align-items:center; text-align:center; min-width:300px;">
-                <!-- 🌟 គ្មានប្រអប់ឡើយ (No Box) -->
-                ${khDate.lunarInputHtml}
-                <div style="font-size:12px; color:#1e3a8a; margin-top:3px;">${khDate.solarLine}</div>
-                <div class="f-moul" style="font-size:13px; color:#1e3a8a; margin-top:5px;">គ្រូទទួលបន្ទុកថ្នាក់</div>
-                <div class="f-bold" style="font-size:13.5px; color:#1e3a8a; margin-top:35px;">${TEACHER_NAME || ''}</div>
-              </div>
-            </div>
+          rowsHtml += `
+            <tr>
+              <td>${idx + 1}</td>
+              <td>${s.id}</td>
+              <td style="text-align:left; padding-left:4px; font-weight:bold; white-space:nowrap;">${s.name}</td>
+              <td>${s.sex || 'ប្រុស'}</td>
+              ${s1Cells}
+              ${s2Cells}
+              <td style="font-weight:bold;">${totC}</td>
+              <td style="font-weight:bold; color:#dc2626;">${totA}</td>
+              <td style="font-weight:bold;">${totC + totA}</td>
+            </tr>
           `;
-          document.getElementById('printableReportPaper').innerHTML = html;
-        })
-        .getYearlyAttendanceReport(currentClassName, currentYear);
+        });
+
+        var html = `
+          <div class="rpt-header-banner">
+            <div class="f-moul" style="font-size:15px; margin-bottom:1px;">ព្រះរាជាណាចក្រកម្ពុជា</div>
+            <div class="f-moul" style="font-size:13.5px; margin-bottom:2px;">ជាតិ សាសនា ព្រះមហាក្សត្រ</div>
+            <div style="font-size:11px; letter-spacing:3px; color:#dc2626;">✻ ✻ ✻ 📖 ✻ ✻ ✻</div>
+            
+            <div class="f-moul" style="font-size:15px; margin-top:6px; margin-bottom:2px;">តារាងសរុបអវត្តមានប្រចាំឆ្នាំ</div>
+            <div style="font-size:12px; font-weight:bold;">ឆ្នាំសិក្សា ២០២៦-២០២៧ • សិស្សសរុប ${students.length} នាក់</div>
+          </div>
+
+          <div style="text-align:left; font-weight:bold; font-size:11px; margin-bottom:4px; line-height: 1.3;">
+            <div>ការិយាល័យអប់រំ យុវជន និងកីឡា</div>
+            <div>សាលាបឋមសិក្សាកំពង់ល្ពៅ</div>
+            <div>ថ្នាក់ទី ${currentClassName}</div>
+          </div>
+
+          <table class="print-table">
+            <thead>
+              <tr>
+                <th rowspan="3" style="width:24px;">ល.រ</th>
+                <th rowspan="3" style="width:35px;">អត្តលេខ</th>
+                <th rowspan="3" style="width:115px;">គោត្តនាម និងនាម</th>
+                <th rowspan="3" style="width:28px;">ភេទ</th>
+                <th colspan="14">ឆមាសទី១</th>
+                <th colspan="14">ឆមាសទី២</th>
+                <th colspan="3" rowspan="2">ចំនួនអវត្តមានប្រចាំឆ្នាំ</th>
+              </tr>
+              <tr>
+                ${thS1}<th colspan="2">សរុប</th>
+                ${thS2}<th colspan="2">សរុប</th>
+              </tr>
+              <tr>
+                ${thSub1}${thSub2}
+                <th style="font-size:7.5px;">ច្ប</th>
+                <th style="font-size:7.5px;">អច្ប</th>
+                <th style="font-size:7.5px;">សរុប</th>
+              </tr>
+            </thead>
+            <tbody>${rowsHtml}</tbody>
+          </table>
+
+          <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-top:18px; padding:0 30px;">
+            <div style="display:inline-flex; flex-direction:column; align-items:center; text-align:center; min-width:220px; margin-top:30px;">
+              <div class="f-moul" style="font-size:12.5px; color:#1e3a8a;">បានឃើញ និងឯកភាព</div>
+              <div class="f-bold" style="font-size:12.5px; color:#1e3a8a; margin-top:4px;">នាយកសាលា</div>
+            </div>
+
+            <div style="display:inline-flex; flex-direction:column; align-items:center; text-align:center; min-width:300px;">
+              ${khDate.lunarInputHtml}
+              <div style="font-size:12px; color:#1e3a8a; margin-top:3px;">${khDate.solarLine}</div>
+              <div class="f-moul" style="font-size:13px; color:#1e3a8a; margin-top:5px;">គ្រូទទួលបន្ទុកថ្នាក់</div>
+              <div class="f-bold" style="font-size:13.5px; color:#1e3a8a; margin-top:35px;">${TEACHER_NAME || ''}</div>
+            </div>
+          </div>
+        `;
+        document.getElementById('printableReportPaper').innerHTML = html;
+      } catch (err) {
+        document.getElementById('printableReportPaper').innerHTML = `
+          <div style="color:#dc2626; text-align:center; padding:30px;">
+            ⚠️ មិនអាចរៀបចំរបាយការណ៍ប្រចាំឆ្នាំបានទេ៖ ${err.message || err}
+          </div>`;
+      }
     }
   </script>
 </body>
