@@ -1,0 +1,1801 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base target="_top">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Khmer&family=Moul&family=Siemreap&display=swap" rel="stylesheet">
+
+  <style>
+    body{
+      font-family:'Siemreap','Khmer OS Battambang',Arial,sans-serif;
+      background:#f1f5f9;
+      padding:15px;
+      font-size:13px;
+      color:#334155;
+      margin:0
+    }
+
+    .khmer-moul{
+      font-family:'Moul','Khmer OS Muol Light',serif
+    }
+
+    .card{
+      background:#fff;
+      padding:20px;
+      border-radius:8px;
+      box-shadow:0 2px 4px rgba(0,0,0,.1);
+      margin-bottom:15px
+    }
+
+    .header-title{
+      text-align:center;
+      color:#b91c1c;
+      font-weight:bold;
+      font-size:18px;
+      margin-bottom:15px;
+      border-bottom:2px solid #b91c1c;
+      padding-bottom:8px
+    }
+
+    .controls{
+      display:flex;
+      gap:12px;
+      align-items:flex-end;
+      flex-wrap:wrap;
+      background:#f8fafc;
+      padding:12px;
+      border-radius:6px;
+      border:1px solid #e2e8f0
+    }
+
+    .col{
+      flex:1;
+      min-width:150px;
+      display:flex;
+      flex-direction:column
+    }
+
+    label{
+      font-weight:bold;
+      margin-bottom:5px;
+      color:#475569
+    }
+
+    select,
+    input[type=number]{
+      padding:8px;
+      border:1px solid #cbd5e1;
+      border-radius:4px;
+      font-size:13px;
+      font-family:inherit;
+      background:white
+    }
+
+    .btn{
+      padding:8px 16px;
+      font-weight:bold;
+      border-radius:4px;
+      border:none;
+      cursor:pointer;
+      transition:.2s;
+      font-family:inherit
+    }
+
+    .btn:hover{
+      filter:brightness(.95);
+      transform:translateY(-1px)
+    }
+
+    .btn-group{
+      background:#15803d;
+      color:#fff
+    }
+
+    .btn-save{
+      background:#d97706;
+      color:#fff;
+      display:none
+    }
+
+    .btn-print{
+      background:#2563eb;
+      color:#fff;
+      display:none
+    }
+
+    .btn-role{
+      background:#7c3aed;
+      color:#fff
+    }
+
+    .btn-rotate{
+      background:#0891b2;
+      color:#fff
+    }
+
+    .roles-card{
+      background:#fff7ed;
+      border:1px solid #fed7aa;
+      border-radius:7px;
+      padding:14px;
+      margin-top:15px
+    }
+
+    .roles-grid{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:12px
+    }
+
+    .role-item{
+      background:white;
+      border:1px solid #cbd5e1;
+      border-radius:6px;
+      padding:10px
+    }
+
+    .role-item.president{
+      border-left:4px solid #b91c1c
+    }
+
+    .role-item.deputy1{
+      border-left:4px solid #0369a1
+    }
+
+    .role-item.deputy2{
+      border-left:4px solid #15803d
+    }
+
+    .role-item select{
+      width:100%
+    }
+
+    .section-title{
+      font-family:'Moul','Khmer OS Muol Light',serif;
+      color:#991b1b;
+      margin-bottom:10px
+    }
+
+    .summary{
+      margin-top:10px;
+      background:#fff;
+      padding:8px;
+      border:1px solid #fed7aa;
+      border-radius:5px;
+      line-height:1.8
+    }
+
+    #status{
+      text-align:center;
+      margin-top:10px;
+      font-weight:bold;
+      min-height:20px
+    }
+
+    .groups-container{
+      display:grid;
+      grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
+      gap:15px;
+      margin-top:15px
+    }
+
+    .group-box{
+      background:#fff;
+      border:1px solid #cbd5e1;
+      border-radius:6px;
+      overflow:hidden;
+      box-shadow:0 1px 3px rgba(0,0,0,.05)
+    }
+
+    .group-header{
+      background:#b91c1c;
+      color:#fff;
+      font-weight:bold;
+      padding:8px 12px;
+      text-align:center;
+      font-size:14px
+    }
+
+    .group-list{
+      list-style:none;
+      padding:0;
+      margin:0
+    }
+
+    .group-list li{
+      padding:6px 12px;
+      border-bottom:1px solid #f1f5f9;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:6px
+    }
+
+    .group-list li:nth-child(even){
+      background:#f8fafc
+    }
+
+    .student-sex{
+      color:#64748b;
+      font-size:11px;
+      white-space:nowrap
+    }
+
+    .role-badge{
+      font-size:10px;
+      font-weight:bold;
+      padding:1px 5px;
+      border-radius:3px;
+      margin-left:4px
+    }
+
+    .role-leader{
+      background:#fef3c7;
+      color:#b45309;
+      border:1px solid #fde68a
+    }
+
+    .role-sub{
+      background:#e0f2fe;
+      color:#0369a1;
+      border:1px solid #bae6fd
+    }
+
+    .count-info{
+      margin-top:8px;
+      color:#475569
+    }
+
+    .print-header,
+    .print-footer{
+      display:none
+    }
+
+    @media(max-width:700px){
+
+      .roles-grid{
+        grid-template-columns:1fr
+      }
+
+      .controls{
+        flex-direction:column;
+        align-items:stretch
+      }
+
+      .col{
+        width:100%
+      }
+    }
+
+    @media print{
+
+      body{
+        background:#fff;
+        padding:0;
+        font-family:'Siemreap','Khmer OS Battambang',serif
+      }
+
+      .card{
+        display:none!important
+      }
+
+      .print-header{
+        display:block;
+        margin-bottom:20px
+      }
+
+      .print-header .kingdom{
+        font-size:13px;
+        text-align:center;
+        margin-bottom:10px;
+        line-height:1.8
+      }
+
+      .print-header .school-info{
+        text-align:left;
+        font-size:13px;
+        color:#b91c1c;
+        line-height:1.6
+      }
+
+      .print-header .doc-title{
+        font-size:16px;
+        text-align:center;
+        margin-top:10px;
+        color:#000
+      }
+
+      .print-header .doc-sub{
+        font-size:12px;
+        color:#475569;
+        text-align:center;
+        margin-top:3px
+      }
+
+      .groups-container{
+        display:flex!important;
+        flex-wrap:wrap!important;
+        justify-content:center!important;
+        gap:12px!important
+      }
+
+      .group-box{
+        width:31%!important;
+        page-break-inside:avoid;
+        border:1px solid #b91c1c;
+        box-sizing:border-box
+      }
+
+      .group-header{
+        background:#b91c1c!important;
+        color:#fff!important;
+        -webkit-print-color-adjust:exact;
+        print-color-adjust:exact
+      }
+
+      .print-footer{
+        display:flex;
+        justify-content:space-between;
+        align-items:flex-start;
+        margin-top:25px;
+        page-break-inside:avoid;
+        font-size:13px
+      }
+
+      .footer-left{
+        text-align:center;
+        width:40%;
+        margin-top:50px
+      }
+
+      .footer-right{
+        text-align:center;
+        width:45%
+      }
+
+      .signature-space{
+        height:75px
+      }
+
+      body *{
+        visibility:hidden
+      }
+
+      #printableArea,
+      #printableArea *{
+        visibility:visible
+      }
+
+      #printableArea{
+        position:absolute;
+        left:0;
+        top:0;
+        width:100%
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <div class="card">
+
+    <div class="header-title khmer-moul">
+      👥 ប្រព័ន្ធបែងចែកសិស្សតាមវេន - សាលាបឋមសិក្សាកំពង់ល្ពៅ
+    </div>
+
+    <div class="controls">
+
+      <div class="col">
+        <label>ជ្រើសរើសថ្នាក់ ៖</label>
+
+        <select id="classSelect" onchange="onClassChange()">
+          <option value="">-- កំពុងទាញយកថ្នាក់ --</option>
+        </select>
+      </div>
+
+    </div>
+
+    <div class="roles-card">
+
+      <div class="section-title">
+        👑 តួនាទីអចិន្ត្រៃយ៍ក្នុងថ្នាក់
+      </div>
+
+      <div class="roles-grid">
+
+        <div class="role-item president">
+          <label>🚩 ប្រធានថ្នាក់</label>
+          <select id="presidentSelect" onchange="onRoleChange()"></select>
+        </div>
+
+        <div class="role-item deputy1">
+          <label>🚩 អនុប្រធានទី១</label>
+          <select id="deputy1Select" onchange="onRoleChange()"></select>
+        </div>
+
+        <div class="role-item deputy2">
+          <label>🚩 អនុប្រធានទី២</label>
+          <select id="deputy2Select" onchange="onRoleChange()"></select>
+        </div>
+
+      </div>
+
+      <div class="controls" style="margin-top:10px">
+
+        <button
+          type="button"
+          class="btn btn-role"
+          onclick="randomLeadership()">
+          🎲 រើសប្រធាន/អនុប្រធាន
+        </button>
+
+        <button
+          type="button"
+          class="btn btn-rotate"
+          onclick="rotateLeadership()">
+          🔄 កំណត់តាមវេន (បន្ទាប់)
+        </button>
+
+        <button
+          type="button"
+          class="btn btn-role"
+          onclick="saveLeadership()">
+          💾 រក្សាទុកតួនាទីថ្នាក់
+        </button>
+
+      </div>
+
+      <div id="roleSummary" class="summary">
+        សូមជ្រើសរើសថ្នាក់ជាមុនសិន។
+      </div>
+
+    </div>
+
+    <div class="card" style="margin-top:15px">
+
+      <div class="section-title">
+        🧹 បែងចែកសិស្សសម្រាប់វេនសម្អាត
+      </div>
+
+      <div class="controls">
+
+        <div class="col">
+
+          <label>របៀបបែងចែក ៖</label>
+
+          <select id="splitMode" onchange="toggleModeInput()">
+
+            <option value="numGroups">
+              កំណត់ចំនួនវេន
+            </option>
+
+            <option value="groupSize">
+              កំណត់ចំនួនសិស្សក្នុង១វេន
+            </option>
+
+          </select>
+
+        </div>
+
+        <div class="col">
+
+          <label id="inputLabel">
+            ចំនួនវេន ៖
+          </label>
+
+          <input
+            type="number"
+            id="splitValue"
+            min="1"
+            value="4">
+
+        </div>
+
+        <button
+          type="button"
+          class="btn btn-group"
+          onclick="generateGroups()">
+          🎲 បែងចែកវេន
+        </button>
+
+        <button
+          type="button"
+          class="btn btn-save"
+          id="saveBtn"
+          onclick="saveToSheet()">
+          💾 រក្សាទុកក្នុង Sheet
+        </button>
+
+        <button
+          type="button"
+          class="btn btn-print"
+          id="printBtn"
+          onclick="window.print()">
+          🖨️ បោះពុម្ព
+        </button>
+
+      </div>
+
+      <div id="countInfo" class="count-info"></div>
+
+      <div id="status"></div>
+
+    </div>
+
+  </div>
+
+
+  <div id="printableArea">
+
+    <div class="print-header">
+
+      <div class="kingdom khmer-moul">
+        ព្រះរាជាណាចក្រកម្ពុជា<br>
+        ជាតិ សាសនា ព្រះមហាក្សត្រ
+      </div>
+
+      <div class="school-info khmer-moul">
+
+        <div>
+          សាលាបឋមសិក្សាកំពង់ល្ពៅ
+        </div>
+
+        <div>
+          កម្រងសាលារៀនអូរជាំ
+        </div>
+
+      </div>
+
+      <div class="doc-title khmer-moul">
+        តារាងវេនសម្អាតថ្នាក់រៀន
+      </div>
+
+      <div
+        class="doc-sub"
+        id="printClassName">
+        ថ្នាក់រៀន ៖ ...
+      </div>
+
+      <div
+        class="doc-sub"
+        id="printRoles">
+      </div>
+
+    </div>
+
+
+    <div
+      id="groupsContainer"
+      class="groups-container">
+    </div>
+
+
+    <div class="print-footer">
+
+      <div class="footer-left">
+
+        <b
+          class="khmer-moul"
+          style="font-size:12px">
+          បានឃើញ និងឯកភាព
+        </b>
+
+        <br>
+
+        <b
+          class="khmer-moul"
+          style="font-size:12px">
+          នាយកសាលា
+        </b>
+
+        <div class="signature-space"></div>
+
+      </div>
+
+
+      <div class="footer-right">
+
+        <div>
+          ថ្ងៃ..................ខែ..........ឆ្នាំ............ព.ស.២៥៦...
+        </div>
+
+        <div>
+          ធ្វើនៅ កំពង់ល្ពៅ, ថ្ងៃទី....... ខែ....... ឆ្នាំ២០២...
+        </div>
+
+        <b
+          class="khmer-moul"
+          style="margin-top:5px;display:inline-block;font-size:12px">
+          គ្រូបន្ទុកថ្នាក់
+        </b>
+
+        <div class="signature-space"></div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <script>
+
+    var currentStudents = [];
+    var currentGroups = [];
+    var savedLeadership = null;
+
+    var daysOfWeek = [
+      "ថ្ងៃចន្ទ",
+      "ថ្ងៃអង្គារ",
+      "ថ្ងៃពុធ",
+      "ថ្ងៃព្រហស្បតិ៍",
+      "ថ្ងៃសុក្រ",
+      "ថ្ងៃសៅរ៍"
+    ];
+
+
+    window.onload = function(){
+      var TOKEN = "<?= token ?>";
+      google.script.run
+        .withSuccessHandler(populateClasses)
+        .withFailureHandler(function(e){
+
+          status(
+            '❌ ' + e.message,
+            'red'
+          );
+
+        })
+        .getClassListForSession(TOKEN);
+
+    };
+
+
+    function status(msg,color){
+
+      document.getElementById('status').innerText = msg || '';
+
+      document.getElementById('status').style.color =
+        color || '#334155';
+
+    }
+
+
+    function populateClasses(classes){
+
+      var s =
+        document.getElementById('classSelect');
+
+      s.innerHTML =
+        '<option value="">-- ជ្រើសរើសថ្នាក់ --</option>';
+
+      (classes || []).forEach(function(c){
+
+        var o =
+          document.createElement('option');
+
+        o.value = c;
+
+        o.textContent =
+          'ថ្នាក់ទី ' + c;
+
+        s.appendChild(o);
+
+      });
+
+    }
+
+
+    function clearRoles(){
+
+      [
+        'presidentSelect',
+        'deputy1Select',
+        'deputy2Select'
+      ].forEach(function(id){
+
+        document.getElementById(id).innerHTML =
+          '<option value="">-- ជ្រើសរើសសិស្ស --</option>';
+
+      });
+
+    }
+
+
+    function studentKey(s){
+
+      return (
+        s.id ||
+        s.name ||
+        ''
+      ).toString().trim();
+
+    }
+
+
+    function findStudent(key){
+
+      return currentStudents.find(function(s){
+
+        return (
+          studentKey(s) === key ||
+          s.name === key
+        );
+
+      }) || null;
+
+    }
+
+
+    function populateRoles(){
+
+      clearRoles();
+
+      currentStudents.forEach(function(s){
+
+        [
+          'presidentSelect',
+          'deputy1Select',
+          'deputy2Select'
+        ].forEach(function(id){
+
+          var o =
+            document.createElement('option');
+
+          o.value =
+            studentKey(s);
+
+          o.textContent =
+            s.name +
+            (s.sex ? ' (' + s.sex + ')' : '');
+
+          document
+            .getElementById(id)
+            .appendChild(o);
+
+        });
+
+      });
+
+      enforceUnique();
+      updateRoleSummary();
+
+    }
+
+
+    function enforceUnique(){
+
+      var ids = [
+        'presidentSelect',
+        'deputy1Select',
+        'deputy2Select'
+      ];
+
+      var chosen =
+        ids.map(function(id){
+
+          return document
+            .getElementById(id)
+            .value;
+
+        });
+
+
+      ids.forEach(function(id,idx){
+
+        var sel =
+          document.getElementById(id);
+
+        var my =
+          sel.value;
+
+        Array.prototype.forEach.call(
+          sel.options,
+          function(o){
+
+            if(!o.value){
+
+              o.hidden = false;
+              return;
+
+            }
+
+            o.hidden =
+              chosen.some(function(v,i){
+
+                return (
+                  i !== idx &&
+                  v === o.value
+                );
+
+              });
+
+          }
+        );
+
+        sel.value = my;
+
+      });
+
+    }
+
+
+    function onRoleChange(){
+
+      enforceUnique();
+      updateRoleSummary();
+
+    }
+
+
+    function updateRoleSummary(){
+
+      var p =
+        findStudent(
+          document.getElementById(
+            'presidentSelect'
+          ).value
+        );
+
+      var d1 =
+        findStudent(
+          document.getElementById(
+            'deputy1Select'
+          ).value
+        );
+
+      var d2 =
+        findStudent(
+          document.getElementById(
+            'deputy2Select'
+          ).value
+        );
+
+
+      document.getElementById(
+        'roleSummary'
+      ).innerHTML =
+
+        '👑 <b>ប្រធានថ្នាក់៖</b> ' +
+        (p ? p.name : 'មិនទាន់ជ្រើសរើស') +
+
+        '<br>⭐ <b>អនុប្រធានទី១៖</b> ' +
+        (d1 ? d1.name : 'មិនទាន់ជ្រើសរើស') +
+
+        '<br>⭐ <b>អនុប្រធានទី២៖</b> ' +
+        (d2 ? d2.name : 'មិនទាន់ជ្រើសរើស') +
+
+        '<br><small>ℹ️ សិស្សទាំង ៣ តួនាទីនេះនឹងមិនចូលវេនសម្អាតទេ។</small>';
+
+    }
+
+
+    function onClassChange(){
+
+      var c =
+        document.getElementById(
+          'classSelect'
+        ).value;
+
+      currentGroups = [];
+
+      document.getElementById(
+        'groupsContainer'
+      ).innerHTML = '';
+
+      document.getElementById(
+        'saveBtn'
+      ).style.display = 'none';
+
+      document.getElementById(
+        'printBtn'
+      ).style.display = 'none';
+
+      clearRoles();
+
+
+      if(!c){
+
+        currentStudents = [];
+        savedLeadership = null;
+
+        updateRoleSummary();
+
+        return;
+
+      }
+
+
+      status(
+        '⏳ កំពុងទាញយកសិស្ស និងតួនាទី...',
+        'blue'
+      );
+
+
+      google.script.run
+
+        .withSuccessHandler(function(students){
+
+          currentStudents =
+            students || [];
+
+          populateRoles();
+
+
+          google.script.run
+
+            .withSuccessHandler(function(ex){
+
+              savedLeadership =
+                ex || null;
+
+              if(ex){
+
+                if(ex.president){
+
+                  document.getElementById(
+                    'presidentSelect'
+                  ).value =
+                    studentKey(ex.president);
+
+                }
+
+                if(ex.deputy1){
+
+                  document.getElementById(
+                    'deputy1Select'
+                  ).value =
+                    studentKey(ex.deputy1);
+
+                }
+
+                if(ex.deputy2){
+
+                  document.getElementById(
+                    'deputy2Select'
+                  ).value =
+                    studentKey(ex.deputy2);
+
+                }
+
+                enforceUnique();
+                updateRoleSummary();
+
+              }
+
+
+              status(
+                '✅ បានទាញយកទិន្នន័យរួចរាល់',
+                'green'
+              );
+
+            })
+
+            .withFailureHandler(function(){
+
+              status(
+                '⚠️ បានទាញយកសិស្ស ប៉ុន្តែមិនមានតួនាទីចាស់',
+                'orange'
+              );
+
+            })
+
+            .getClassLeadership(c);
+
+        })
+
+        .withFailureHandler(function(e){
+
+          status(
+            '❌ ' + e.message,
+            'red'
+          );
+
+        })
+
+        .getStudentsByClass(c);
+
+    }
+
+
+    function randomLeadership(){
+
+      if(currentStudents.length < 3){
+
+        alert(
+          'ថ្នាក់នេះត្រូវមានសិស្សយ៉ាងតិច ៣ នាក់!'
+        );
+
+        return;
+
+      }
+
+
+      var a =
+        currentStudents
+          .slice()
+          .sort(function(){
+
+            return Math.random() - .5;
+
+          });
+
+
+      document.getElementById(
+        'presidentSelect'
+      ).value =
+        studentKey(a[0]);
+
+      document.getElementById(
+        'deputy1Select'
+      ).value =
+        studentKey(a[1]);
+
+      document.getElementById(
+        'deputy2Select'
+      ).value =
+        studentKey(a[2]);
+
+
+      enforceUnique();
+      updateRoleSummary();
+
+    }
+
+
+    /*
+      🔄 កំណត់តាមវេន (Rotation)
+      ------------------------------------
+      ជំនួសឱ្យការជ្រើសរើសដោយចៃដន្យ អនុគមន៍នេះ
+      កំណត់តួនាទីតាមលំដាប់បញ្ជីឈ្មោះសិស្សក្នុងថ្នាក់៖
+
+      - លើកទី១ (គ្មានតួនាទីចាស់ត្រូវបានរក្សាទុក)៖
+          សិស្សទី១ → ប្រធានថ្នាក់
+          សិស្សទី២ → អនុប្រធានទី១
+          សិស្សទី៣ → អនុប្រធានទី២
+
+      - លើកក្រោយៗ (ចុច "បន្ទាប់")៖
+          លុបចេញពីលេខរៀងបន្ទាប់ពីប្រធានចាស់ ហើយបន្តជាវេន
+          រហូតដល់គ្រប់សិស្សគ្រប់រូប ហើយវិលត្រឡប់ពីដើមវិញ
+          (round-robin តាមចំនួនសិស្សសរុប)
+    */
+
+    function rotateLeadership(){
+
+      if(currentStudents.length < 3){
+
+        alert(
+          'ថ្នាក់នេះត្រូវមានសិស្សយ៉ាងតិច ៣ នាក់!'
+        );
+
+        return;
+
+      }
+
+
+      var n =
+        currentStudents.length;
+
+      var startIndex = 0;
+
+
+      var curPresidentKey =
+        document.getElementById(
+          'presidentSelect'
+        ).value;
+
+
+      if(curPresidentKey){
+
+        var curIdx =
+          currentStudents.findIndex(function(s){
+
+            return studentKey(s) === curPresidentKey;
+
+          });
+
+
+        if(curIdx !== -1){
+
+          startIndex =
+            (curIdx + 1) % n;
+
+        }
+
+      }
+
+
+      var picked = [];
+
+      for(var i = 0; i < 3; i++){
+
+        picked.push(
+
+          currentStudents[
+            (startIndex + i) % n
+          ]
+
+        );
+
+      }
+
+
+      document.getElementById(
+        'presidentSelect'
+      ).value =
+        studentKey(picked[0]);
+
+      document.getElementById(
+        'deputy1Select'
+      ).value =
+        studentKey(picked[1]);
+
+      document.getElementById(
+        'deputy2Select'
+      ).value =
+        studentKey(picked[2]);
+
+
+      enforceUnique();
+      updateRoleSummary();
+
+      status(
+        '🔄 បានកំណត់តួនាទីតាមវេន — កុំភ្លេចចុច "រក្សាទុកតួនាទីថ្នាក់"!',
+        'blue'
+      );
+
+    }
+
+
+    function saveLeadership(){
+
+      var c =
+        document.getElementById(
+          'classSelect'
+        ).value;
+
+
+      if(!c){
+
+        alert(
+          'សូមជ្រើសរើសថ្នាក់សិន!'
+        );
+
+        return;
+
+      }
+
+
+      var p =
+        findStudent(
+          document.getElementById(
+            'presidentSelect'
+          ).value
+        );
+
+      var d1 =
+        findStudent(
+          document.getElementById(
+            'deputy1Select'
+          ).value
+        );
+
+      var d2 =
+        findStudent(
+          document.getElementById(
+            'deputy2Select'
+          ).value
+        );
+
+
+      var arr =
+        [p,d1,d2]
+          .filter(Boolean)
+          .map(studentKey);
+
+
+      if(new Set(arr).size !== arr.length){
+
+        alert(
+          'សិស្សម្នាក់មិនអាចកាន់តួនាទីពីរបានទេ!'
+        );
+
+        return;
+
+      }
+
+
+      google.script.run
+
+        .withSuccessHandler(function(r){
+
+          status(
+            '✅ ' + r,
+            'green'
+          );
+
+        })
+
+        .withFailureHandler(function(e){
+
+          status(
+            '❌ ' + e.message,
+            'red'
+          );
+
+        })
+
+        .saveClassLeadership({
+
+          className:c,
+          president:p,
+          deputy1:d1,
+          deputy2:d2
+
+        });
+
+    }
+
+
+    function toggleModeInput(){
+
+      var m =
+        document.getElementById(
+          'splitMode'
+        ).value;
+
+
+      document.getElementById(
+        'inputLabel'
+      ).innerText =
+        m === 'numGroups'
+          ? 'ចំនួនវេន ៖'
+          : 'ចំនួនសិស្ស/វេន ៖';
+
+
+      document.getElementById(
+        'splitValue'
+      ).value =
+        m === 'numGroups'
+          ? 4
+          : 5;
+
+    }
+
+
+    function getExcludedKeys(){
+
+      return [
+
+        document.getElementById(
+          'presidentSelect'
+        ).value,
+
+        document.getElementById(
+          'deputy1Select'
+        ).value,
+
+        document.getElementById(
+          'deputy2Select'
+        ).value
+
+      ].filter(Boolean);
+
+    }
+
+
+    function generateGroups(){
+
+      var c =
+        document.getElementById(
+          'classSelect'
+        ).value;
+
+      var m =
+        document.getElementById(
+          'splitMode'
+        ).value;
+
+      var n =
+        parseInt(
+          document.getElementById(
+            'splitValue'
+          ).value,
+          10
+        );
+
+
+      if(!c){
+
+        alert(
+          'សូមជ្រើសរើសថ្នាក់រៀន!'
+        );
+
+        return;
+
+      }
+
+
+      if(!n || n < 1){
+
+        alert(
+          'សូមបញ្ចូលចំនួនឱ្យបានត្រឹមត្រូវ!'
+        );
+
+        return;
+
+      }
+
+
+      status(
+        '⏳ កំពុងបែងចែកសិស្ស...',
+        'blue'
+      );
+
+
+      document.getElementById(
+        'groupsContainer'
+      ).innerHTML = '';
+
+
+      google.script.run
+
+        .withSuccessHandler(function(students){
+
+          var excluded =
+            getExcludedKeys();
+
+
+          var cleaning =
+            students.filter(function(s){
+
+              return (
+                excluded.indexOf(
+                  studentKey(s)
+                ) === -1
+              );
+
+            });
+
+
+          if(!cleaning.length){
+
+            status(
+              '❌ មិនមានសិស្សសម្រាប់វេនសម្អាតទេ!',
+              'red'
+            );
+
+            return;
+
+          }
+
+
+          if(
+            m === 'numGroups' &&
+            n > cleaning.length
+          ){
+
+            alert(
+              'ចំនួនវេនមិនអាចលើសចំនួនសិស្សដែលត្រូវសម្អាតបានទេ!'
+            );
+
+            return;
+
+          }
+
+
+          for(
+            var i = cleaning.length - 1;
+            i > 0;
+            i--
+          ){
+
+            var j =
+              Math.floor(
+                Math.random() * (i + 1)
+              );
+
+            var t =
+              cleaning[i];
+
+            cleaning[i] =
+              cleaning[j];
+
+            cleaning[j] =
+              t;
+
+          }
+
+
+          var groups = [];
+
+
+          if(m === 'numGroups'){
+
+            for(i = 0; i < n; i++){
+
+              groups.push([]);
+
+            }
+
+
+            cleaning.forEach(function(s,idx){
+
+              groups[
+                idx % n
+              ].push(s);
+
+            });
+
+          }else{
+
+            for(
+              i = 0;
+              i < cleaning.length;
+              i += n
+            ){
+
+              groups.push(
+                cleaning.slice(i,i+n)
+              );
+
+            }
+
+          }
+
+
+          currentGroups =
+            groups;
+
+
+          document.getElementById(
+            'printClassName'
+          ).innerText =
+            'ប្រចាំ ថ្នាក់ទី ' + c;
+
+
+          updatePrintRoles();
+
+          renderGroups(groups);
+
+
+          document.getElementById(
+            'countInfo'
+          ).innerText =
+
+            '👥 សិស្សសរុប៖ ' +
+            students.length +
+            ' នាក់ | 🚫 មិនចូលវេន៖ ' +
+            excluded.length +
+            ' នាក់ | 🧹 ចូលវេនសម្អាត៖ ' +
+            cleaning.length +
+            ' នាក់';
+
+        })
+
+        .withFailureHandler(function(e){
+
+          status(
+            '❌ ' + e.message,
+            'red'
+          );
+
+        })
+
+        .getStudentsByClass(c);
+
+    }
+
+
+    function updatePrintRoles(){
+
+      var p =
+        findStudent(
+          document.getElementById(
+            'presidentSelect'
+          ).value
+        );
+
+      var d1 =
+        findStudent(
+          document.getElementById(
+            'deputy1Select'
+          ).value
+        );
+
+      var d2 =
+        findStudent(
+          document.getElementById(
+            'deputy2Select'
+          ).value
+        );
+
+
+      document.getElementById(
+        'printRoles'
+      ).innerText =
+
+        'ប្រធានថ្នាក់៖ ' +
+        (p ? p.name : '........') +
+
+        ' | អនុប្រធានទី១៖ ' +
+        (d1 ? d1.name : '........') +
+
+        ' | អនុប្រធានទី២៖ ' +
+        (d2 ? d2.name : '........');
+
+    }
+
+
+    /*
+      កែត្រង់នេះ៖
+      បានដកផ្នែក
+      👑 ប្រធានប្រចាំថ្ងៃ
+      ⭐ អនុប្រធានប្រចាំថ្ងៃ
+
+      ចេញទាំងស្រុង។
+    */
+
+    function renderGroups(groups){
+
+      var c =
+        document.getElementById(
+          'groupsContainer'
+        );
+
+      c.innerHTML = '';
+
+
+      groups.forEach(function(group,index){
+
+        if(!group.length) return;
+
+
+        var box =
+          document.createElement('div');
+
+        box.className =
+          'group-box';
+
+
+        var h =
+          document.createElement('div');
+
+        h.className =
+          'group-header';
+
+
+        h.innerText =
+          '🚩 ' +
+          (
+            daysOfWeek[index] ||
+            ('ក្រុមទី ' + (index + 1))
+          ) +
+          ' (' +
+          group.length +
+          ' នាក់)';
+
+
+        box.appendChild(h);
+
+
+        /*
+          👑 ប្រធានប្រចាំថ្ងៃ / ⭐ អនុប្រធានប្រចាំថ្ងៃ
+          ------------------------------------
+          ក្នុងក្រុមនីមួយៗ (វេនប្រចាំថ្ងៃនីមួយៗ)៖
+          - សិស្សទី១ ក្នុងក្រុម = ប្រធានប្រចាំថ្ងៃ
+          - សិស្សទី២ ក្នុងក្រុម = អនុប្រធានប្រចាំថ្ងៃ
+        */
+
+
+        var ul =
+          document.createElement('ul');
+
+        ul.className =
+          'group-list';
+
+
+        group.forEach(function(s,i){
+
+          var li =
+            document.createElement('li');
+
+
+          var left =
+            document.createElement('span');
+
+
+          left.innerHTML =
+            '<b>' +
+            (i + 1) +
+            '.</b> ' +
+            escapeHtml(s.name);
+
+
+          if(i === 0){
+
+            var badgeLead =
+              document.createElement('span');
+
+            badgeLead.className =
+              'role-badge role-leader';
+
+            badgeLead.innerText =
+              '👑 ប្រធាន';
+
+            left.appendChild(badgeLead);
+
+          }else if(i === 1){
+
+            var badgeSub =
+              document.createElement('span');
+
+            badgeSub.className =
+              'role-badge role-sub';
+
+            badgeSub.innerText =
+              '⭐ អនុប្រធាន';
+
+            left.appendChild(badgeSub);
+
+          }
+
+
+          var sex =
+            document.createElement('span');
+
+          sex.className =
+            'student-sex';
+
+
+          sex.textContent =
+            '(' +
+            (s.sex || 'មិនបានដាក់') +
+            ')';
+
+
+          li.appendChild(left);
+
+          li.appendChild(sex);
+
+          ul.appendChild(li);
+
+        });
+
+
+        box.appendChild(ul);
+
+        c.appendChild(box);
+
+      });
+
+
+      status(
+        '🎉 បែងចែកវេនបានជោគជ័យ!',
+        'green'
+      );
+
+
+      document.getElementById(
+        'saveBtn'
+      ).style.display =
+        'inline-block';
+
+
+      document.getElementById(
+        'printBtn'
+      ).style.display =
+        'inline-block';
+
+    }
+
+
+    function saveToSheet(){
+
+      var c =
+        document.getElementById(
+          'classSelect'
+        ).value;
+
+
+      if(!currentGroups.length){
+
+        alert(
+          'សូមបែងចែកវេនសិន!'
+        );
+
+        return;
+
+      }
+
+
+      var p =
+        findStudent(
+          document.getElementById(
+            'presidentSelect'
+          ).value
+        );
+
+      var d1 =
+        findStudent(
+          document.getElementById(
+            'deputy1Select'
+          ).value
+        );
+
+      var d2 =
+        findStudent(
+          document.getElementById(
+            'deputy2Select'
+          ).value
+        );
+
+
+      status(
+        '⏳ កំពុងរក្សាទុក...',
+        'blue'
+      );
+
+
+      google.script.run
+
+        .withSuccessHandler(function(r){
+
+          status(
+            '✅ ' + r,
+            'green'
+          );
+
+        })
+
+        .withFailureHandler(function(e){
+
+          status(
+            '❌ ' + e.message,
+            'red'
+          );
+
+        })
+
+        .saveGroupsToSheet({
+
+          className:c,
+
+          groups:currentGroups,
+
+          classRoles:{
+
+            president:
+              p ? p.name : '',
+
+            deputy1:
+              d1 ? d1.name : '',
+
+            deputy2:
+              d2 ? d2.name : ''
+
+          }
+
+        });
+
+    }
+
+
+    function escapeHtml(s){
+
+      return String(s || '')
+        .replace(/&/g,'&amp;')
+        .replace(/</g,'&lt;')
+        .replace(/>/g,'&gt;')
+        .replace(/"/g,'&quot;')
+        .replace(/'/g,'&#039;');
+
+    }
+
+  </script>
+
+</body>
+</html>

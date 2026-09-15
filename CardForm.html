@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+  <meta charset="UTF-8">
+  <base target="_top">
+  <title>កាតសម្គាល់ខ្លួនសិស្ស (៦កាត & ៨កាត)</title>
+  
+  <!-- Google Fonts ខ្មែរផ្លូវការ -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Battambang:wght@400;700;900&family=Moul&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    :root {
+      --c-blue: #001fd1;
+      --c-green: #009639;
+      --c-orange: #c85000;
+      --c-red: #e60000;
+      --c-border: #0022cc;
+      --stamp-w: 36mm;
+      --stamp-h: 26mm;
+      --stamp-top: -3px;
+      --stamp-left: 0px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+    }
+
+    body {
+      font-family: 'Battambang', sans-serif;
+      background-color: #f1f5f9;
+      color: #0f172a;
+      padding-bottom: 50px;
+    }
+
+    /* របារបញ្ជា (Toolbar Control) */
+    .no-print-toolbar {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: #ffffff;
+      padding: 10px 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.08);
+      border-bottom: 1.5px solid #e2e8f0;
+    }
+
+    .toolbar-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .toolbar-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .form-control {
+      padding: 6px 9px;
+      font-family: 'Battambang', sans-serif;
+      font-size: 13px;
+      border: 1.5px solid #cbd5e1;
+      border-radius: 6px;
+      outline: none;
+      background: #fff;
+    }
+
+    .btn {
+      padding: 6px 12px;
+      font-family: 'Battambang', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      border-radius: 6px;
+      border: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
+    }
+
+    .btn-primary { background: #2563eb; color: #ffffff; }
+    .btn-primary:hover { background: #1d4ed8; }
+
+    .btn-success { background: #16a34a; color: #ffffff; }
+    .btn-success:hover { background: #15803d; }
+
+    .btn-danger { background: #fee2e2; color: #dc2626; border: 1.5px solid #fca5a5; }
+    .btn-danger:hover { background: #fecaca; }
+
+    .btn-outline {
+      background: #ffffff;
+      border: 1.5px solid #cbd5e1;
+      color: #334155;
+    }
+    .btn-outline:hover {
+      background: #f8fafc;
+      border-color: #94a3b8;
+    }
+
+    /* ផ្ទាំងក្រដាស A4 Landscape */
+    .print-area {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 15px;
+      gap: 20px;
+    }
+
+    .a4-page {
+      width: 297mm;
+      height: 210mm;
+      background: #ffffff;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+      page-break-after: always;
+      break-after: page;
+      overflow: hidden;
+      box-sizing: border-box;
+    }
+
+    /* 🌟 ទម្រង់ទី ១ ៖ ១ សន្លឹក = ៦ កាត (ខ្នាតស្តង់ដា 7cm x 10cm) */
+    .a4-page.layout-6 {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-content: center;
+      gap: 4mm 6mm;
+      padding: 3mm 5mm;
+    }
+    .a4-page.layout-6 .student-card {
+      width: 70mm;   /* 7cm */
+      height: 100mm; /* 10cm */
+      flex-shrink: 0;
+    }
+
+    /* 🌟 ទម្រង់ទី ២ ៖ ១ សន្លឹក = ៨ កាត (ខ្នាតសន្សំសំចៃក្រដាស) */
+    .a4-page.layout-8 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      grid-template-rows: repeat(2, 1fr);
+      gap: 3.5mm 3.2mm;
+      padding: 4.5mm 5.5mm;
+    }
+    .a4-page.layout-8 .student-card {
+      width: 100%;
+      height: 100%;
+    }
+
+    /* រចនាប័ទ្មកាតសិស្សម្នាក់ៗតាមគំរូរូបភាព */
+    .student-card {
+      border: 2px solid var(--c-border);
+      background: #ffffff;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+      box-sizing: border-box;
+    }
+
+    /* ផ្នែកក្បាលកាត៖ ឡូហ្គោនៅឆ្វេង និងអក្សរព្រះរាជាណាចក្រកម្ពុជាចំកណ្តាលកាតបេះបិទ */
+    .card-top-header {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-bottom: 2px solid var(--c-border);
+      padding: 2px 5px;
+      background: #ffffff;
+      height: 41px;
+    }
+
+    .header-logo-box {
+      position: absolute;
+      left: 7px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 35px;
+      height: 35px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2;
+    }
+
+    .header-logo-img {
+      width: 35px;
+      height: 35px;
+      object-fit: contain;
+    }
+
+    .header-kingdom {
+      width: 100%;
+      text-align: center;
+      line-height: 1.25;
+      z-index: 1;
+    }
+
+    .kingdom-title {
+      font-family: 'Moul', cursive;
+      font-size: 9.2px;
+      color: #000000;
+      letter-spacing: -0.1px;
+    }
+
+    .kingdom-subtitle {
+      font-family: 'Moul', cursive;
+      font-size: 8.5px;
+      color: #000000;
+      margin-top: 1px;
+    }
+
+    .kingdom-divider {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: 1px;
+    }
+
+    .kingdom-divider svg {
+      width: 85px;
+      height: 5px;
+    }
+
+    /* ផ្នែកតួខ្លួនកាត (Body) */
+    .card-main-body {
+      flex: 1;
+      padding: 4px 8px 3px 8px;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    /* Watermark រូបសញ្ញានៅចំកណ្តាលផ្ទៃកាត */
+    .card-watermark {
+      position: absolute;
+      top: 52%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 53mm;
+      height: 53mm;
+      opacity: 0.22;
+      pointer-events: none;
+      z-index: 0;
+      object-fit: contain;
+      transition: opacity 0.2s;
+    }
+
+    /* ចំណងជើងកាតផ្នែកកណ្តាល ៤ ជួរ */
+    .card-titles {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+      margin-bottom: 1px;
+    }
+
+    .title-badge {
+      font-family: 'Moul', cursive;
+      font-size: 11.2px;
+      color: var(--c-blue);
+      letter-spacing: 0.2px;
+      line-height: 1.45;
+    }
+
+    .title-school {
+      font-family: 'Moul', cursive;
+      font-size: 9.8px;
+      color: var(--c-green);
+      line-height: 1.45;
+    }
+
+    .title-id {
+      font-family: 'Moul', cursive;
+      font-size: 10.5px;
+      color: var(--c-orange);
+      line-height: 1.45;
+    }
+
+    /* 🌟 ឈ្មោះសិស្ស៖ ផ្តល់ចន្លោះសុវត្ថិភាពខាងលើ (Padding-top) និង Line-height ធំទូលាយ ធានាថាមិនដាច់ក្បាលស្រៈ */
+    .title-student-name-center {
+      font-family: 'Moul', cursive;
+      font-size: 14px;
+      color: var(--c-blue);
+      text-align: center;
+      line-height: 1.65;  /* កម្ពស់បន្ទាត់ធំទូលាយ មិនទើសស្រៈលើដូចជា ឿ, ី, ឺ, ិ, ័, ៍ */
+      padding-top: 4px;   /* ផ្ដល់ចន្លោះខាងលើ មិនឱ្យដាច់ក្បាលស្រៈឡើយ */
+      padding-bottom: 2px;
+      width: 100%;
+      white-space: nowrap;
+      overflow: visible;  /* មិនកាត់ផ្ដាច់ស្រៈលើ ឬជើងក្រោមឡើយ */
+      letter-spacing: 0.2px;
+      margin-top: 0px;
+      margin-bottom: 2px;
+    }
+
+    /* ផ្នែកព័ត៌មាន និងរូបថត */
+    .content-container {
+      position: relative;
+      z-index: 1;
+      display: flex;
+      flex-direction: column;
+      margin-top: 0px;
+    }
+
+    /* 🌟 ប្លង់កណ្តាល៖ កម្ពស់ 2.5cm ស្មើនឹងខ្នាតរូបថតបេះបិទ */
+    .mid-split {
+      display: flex;
+      justify-content: space-between;
+      align-items: stretch;
+      gap: 6px;
+      height: 25mm; /* កម្ពស់ 2.5cm */
+    }
+
+    .left-profile-block {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+
+    /* តារាងទិន្នន័យ ៥ ជួរលើ (ចែកស្មើគ្នាពេញ 2.5cm គ្មានចន្លោះទំនេរ) */
+    .info-table-top {
+      width: 100%;
+      height: 100%;
+      border-collapse: collapse;
+      font-size: 9.5px;
+      line-height: 1.35;
+    }
+
+    .info-table-top tr {
+      height: 20%;
+    }
+
+    /* តារាងទិន្នន័យ ២ ជួរក្រោម (អាសយដ្ឋាន + ឆ្នាំសិក្សា) */
+    .info-table-bottom {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 9.5px;
+      line-height: 1.35;
+      margin-top: 2px;
+    }
+
+    .info-table-bottom tr {
+      height: 18px;
+    }
+
+    .lbl-col {
+      width: 76px;
+      color: var(--c-red);
+      font-weight: 700;
+      white-space: nowrap;
+      text-align: left;
+    }
+
+    .cln-col {
+      width: 12px;
+      color: var(--c-red);
+      font-weight: 700;
+      text-align: center;
+      padding-right: 2px;
+    }
+
+    .val-col {
+      font-weight: 700;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      text-align: left;
+      font-size: 10px;
+    }
+
+    .val-blue { color: var(--c-blue); }
+    .val-green { color: var(--c-green); }
+
+    /* 🌟 ប្រអប់រូបថតសិស្ស៖ ខ្នាត 2cm x 2.5cm */
+    .student-photo-box {
+      width: 20mm;  /* 2cm */
+      height: 25mm; /* 2.5cm */
+      border: 2px solid #000000;
+      border-radius: 8px;
+      background: #ffffff;
+      overflow: hidden;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .student-photo-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .student-photo-box i {
+      font-size: 26px;
+      color: #cbd5e1;
+    }
+
+    /* ផ្នែកបាតកាត៖ នៅខាងឆ្វេងដៃ */
+    .card-bottom-signature {
+      position: relative;
+      z-index: 2;
+      display: flex;
+      justify-content: flex-start;
+      padding-left: 6px;
+      margin-top: 1px;
+    }
+
+    .signature-box {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      position: relative;
+      width: 48mm;
+      text-align: center;
+    }
+
+    .sig-date {
+      font-family: 'Battambang', sans-serif;
+      font-weight: 700;
+      font-size: 7.2px;
+      color: #000000;
+      line-height: 1.25;
+      white-space: nowrap;
+      text-align: center;
+    }
+
+    .sig-stamp-wrapper {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      margin-top: 1px;
+      min-height: 26mm;
+    }
+
+    .sig-title {
+      font-family: 'Moul', cursive;
+      font-size: 8.2px;
+      color: #000000;
+      line-height: 1.35;
+      margin-top: 1px;
+      white-space: nowrap;
+      text-align: center;
+      position: relative;
+      z-index: 2;
+    }
+
+    .sig-role {
+      font-family: 'Moul', cursive;
+      font-size: 8px;
+      color: #000000;
+      line-height: 1.35;
+      margin-top: 1px;
+      white-space: nowrap;
+      text-align: center;
+      position: relative;
+      z-index: 2;
+    }
+
+    /* ត្រានាយកសាលា */
+    .stamp-overlay-box {
+      position: absolute;
+      top: var(--stamp-top);
+      left: calc(50% + var(--stamp-left));
+      transform: translateX(-50%);
+      width: var(--stamp-w);
+      height: var(--stamp-h);
+      pointer-events: none;
+      z-index: 6;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .stamp-overlay-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      mix-blend-mode: multiply;
+    }
+
+    /* លក្ខខណ្ឌបោះពុម្ព A4 Landscape */
+    @media print {
+      body {
+        background: transparent !important;
+        padding: 0 !important;
+      }
+      .no-print-toolbar {
+        display: none !important;
+      }
+      .print-area {
+        margin: 0 !important;
+        gap: 0 !important;
+      }
+      .a4-page {
+        box-shadow: none !important;
+        margin: 0 !important;
+        border: none !important;
+        width: 297mm !important;
+        height: 210mm !important;
+      }
+      @page {
+        size: A4 landscape;
+        margin: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- របារបញ្ជា (Toolbar) -->
+  <div class="no-print-toolbar">
+    <!-- ជួរទី ១៖ ថ្នាក់ ទម្រង់កាត ឈ្មោះសាលា ឆ្នាំសិក្សា និងប៊ូតុង Print -->
+    <div class="toolbar-row">
+      <div class="toolbar-group">
+        <label style="font-weight:700; font-size:13px;">ថ្នាក់៖</label>
+        <select id="classSelect" class="form-control" onchange="loadStudents()">
+          <option value="">កំពុងទាញយក...</option>
+        </select>
+
+        <!-- 🌟 ប៊ូតុងប្តូររវាង «៦ កាត» និង «៨ កាត» ភ្លាមៗ -->
+        <label style="font-weight:700; font-size:13px; color:#1e40af;">ទម្រង់កាត៖</label>
+        <select id="layoutSelect" class="form-control" onchange="switchLayout(this.value)" style="font-weight:700; color:#1e3a8a; background:#eff6ff; border:1.5px solid #60a5fa; cursor:pointer;">
+          <option value="6">១ សន្លឹក = ៦ កាត (ខ្នាត 7cm × 10cm)</option>
+          <option value="8">១ សន្លឹក = ៨ កាត (ខ្នាតសន្សំក្រដាស)</option>
+        </select>
+
+        <label style="font-weight:700; font-size:13px;">សាលា៖</label>
+        <input type="text" id="schoolName" class="form-control" value="សាលាបឋមសិក្សាកំពង់ល្ពៅ" style="width:160px;" oninput="refreshDisplay()">
+
+        <label style="font-weight:700; font-size:13px;">ឆ្នាំសិក្សា៖</label>
+        <input type="text" id="schoolYear" class="form-control" value="២០២៥~២០២៦" style="width:100px;" oninput="refreshDisplay()">
+      </div>
+
+      <div class="toolbar-group">
+        <button class="btn btn-primary" onclick="loadStudents()" title="ទាញយកទិន្នន័យឡើងវិញ">
+          <i class="fa-solid fa-rotate"></i> ផ្ទុកឡើងវិញ
+        </button>
+        <button class="btn btn-success" onclick="window.print()">
+          <i class="fa-solid fa-print"></i> បោះពុម្ព A4
+        </button>
+      </div>
+    </div>
+
+    <!-- ជួរទី ២៖ គ្រប់គ្រង Logo និងសារ៉េទីតាំងត្រា -->
+    <div class="toolbar-row" style="background:#f8fafc; padding:6px 10px; border-radius:8px; border:1px solid #e2e8f0;">
+      <!-- ផ្នែក Logo -->
+      <div class="toolbar-group">
+        <label class="btn btn-outline" style="cursor:pointer;" title="ជ្រើសរើសរូប Logo ពីកុំព្យូទ័រ/ទូរសព្ទ">
+          <i class="fa-solid fa-cloud-arrow-up" style="color:#2563eb;"></i> ប្តូរ Logo
+          <input type="file" id="logoUploadInput" accept="image/*" style="display:none;" onchange="handleCustomLogo(event)">
+        </label>
+        <button class="btn btn-danger" onclick="clearCustomLogo()" title="លុប Logo និង Watermark ចេញ">
+          <i class="fa-solid fa-trash-can"></i> លុប Logo
+        </button>
+
+        <label style="font-size:12px; font-weight:700; color:#475569; margin-left:6px;" title="កម្រិតភាពច្បាស់ Watermark">Watermark:</label>
+        <input type="range" id="opacitySlider" min="0.10" max="0.35" step="0.02" value="0.22" style="width:55px; cursor:pointer;" oninput="updateWatermarkOpacity(this.value)">
+      </div>
+
+      <!-- ផ្នែក ត្រានាយកសាលា -->
+      <div class="toolbar-group">
+        <label class="btn btn-outline" style="cursor:pointer; border-color:#fca5a5; color:#b91c1c;" title="បញ្ចូលរូបត្រានាយកសាលា">
+          <i class="fa-solid fa-stamp" style="color:#dc2626;"></i> បញ្ចូលត្រា
+          <input type="file" id="stampUploadInput" accept="image/*" style="display:none;" onchange="handleCustomStamp(event)">
+        </label>
+        <button class="btn btn-danger" onclick="clearCustomStamp()" title="លុបត្រានាយកចេញវិញ">
+          <i class="fa-solid fa-trash-can"></i> លុបត្រា
+        </button>
+
+        <!-- របារសារ៉េត្រា -->
+        <span style="font-size:11.5px; font-weight:700; color:#475569; margin-left:6px;">ទំហំត្រា:</span>
+        <input type="range" id="stampSizeSlider" min="20" max="55" value="36" style="width:60px; cursor:pointer;" oninput="updateStampSize(this.value)" title="សារ៉េទំហំត្រា">
+
+        <span style="font-size:11.5px; font-weight:700; color:#475569;">លើ/ក្រោម:</span>
+        <input type="range" id="stampTopSlider" min="-60" max="60" value="-3" style="width:70px; cursor:pointer;" oninput="updateStampTop(this.value)" title="រំកិលត្រា លើ ឬក្រោម">
+
+        <span style="font-size:11.5px; font-weight:700; color:#475569; color:#2563eb;">ឆ្វេង/ស្តាំ:</span>
+        <input type="range" id="stampLeftSlider" min="-120" max="120" value="0" style="width:85px; cursor:pointer;" oninput="updateStampLeft(this.value)" title="រំកិលត្រា ឆ្វេង ឬស្តាំ">
+
+        <button class="btn btn-outline" onclick="resetStampPosition()" title="កំណត់ត្រាមកចំកណ្តាលដើមវិញ" style="padding: 5px 8px; font-size: 11.5px;">
+          🎯 ចំកណ្តាលដើម
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- កន្លែងបង្ហាញសន្លឹក A4 -->
+  <div class="print-area" id="printArea">
+    <div style="text-align:center; padding:50px; color:#64748b;">
+      <i class="fa-solid fa-spinner fa-spin fa-2x"></i>
+      <p style="margin-top:10px;">សូមរង់ចាំ កំពុងទាញយកបញ្ជីសិស្ស...</p>
+    </div>
+  </div>
+
+  <script>
+    // Logo ក្រសួងដើម
+    var OFFICIAL_MOEYS_LOGO = 'https://images.weserv.nl/?url=upload.wikimedia.org/wikipedia/commons/thumb/8/85/Emblem_of_the_Ministry_of_Education%2C_Youth_and_Sport_%28Cambodia%29.svg/300px-Emblem_of_the_Ministry_of_Education%2C_Youth_and_Sport_%28Cambodia%29.svg.png';
+
+    var customImageUrl = localStorage.getItem('school_user_logo_url') || OFFICIAL_MOEYS_LOGO;
+    var customStampUrl = localStorage.getItem('school_principal_stamp_url') || '';
+    var currentOpacity = '0.22';
+
+    // 🌟 ការកំណត់ទម្រង់ (Default = 6 កាត)
+    var currentLayout = parseInt(localStorage.getItem('school_cards_layout') || '6');
+
+    var stampSettings = JSON.parse(localStorage.getItem('school_stamp_settings') || '{"size":"36","top":"-3","left":"0"}');
+
+    var token = '<?= token ?>';
+    var userClass = '<?= userClass ?>';
+    var userRole = '<?= userRole ?>';
+    var allStudents = [];
+
+    function toKhmerNum(num) {
+      if (num === null || num === undefined || num === '') return '';
+      var khmerDigits = ['០','១','២','៣','៤','៥','៦','៧','៨','៩'];
+      return num.toString().replace(/[0-9]/g, function(d) {
+        return khmerDigits[parseInt(d)];
+      });
+    }
+
+    function getAutoKhmerDate() {
+      var now = new Date();
+      var khmerMonths = ['មករា','កុម្ភៈ','មីនា','មេសា','ឧសភា','មិថុនា','កក្កដា','សីហា','កញ្ញា','តុលា','វិច្ឆិកា','ធ្នូ'];
+      var d = toKhmerNum(now.getDate());
+      var m = khmerMonths[now.getMonth()];
+      var y = toKhmerNum(now.getFullYear());
+      return 'ធ្វើនៅកំពង់ល្ពៅ ថ្ងៃទី' + d + ' ខែ' + m + ' ឆ្នាំ' + y;
+    }
+
+    function handleCustomLogo(event) {
+      var file = event.target.files[0];
+      if (!file) return;
+
+      var reader = new FileReader();
+      reader.onload = function(e) {
+        customImageUrl = e.target.result;
+        try {
+          localStorage.setItem('school_user_logo_url', customImageUrl);
+        } catch (err) {
+          console.warn('LocalStorage: ' + err);
+        }
+        renderCards();
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function clearCustomLogo() {
+      customImageUrl = '';
+      localStorage.removeItem('school_user_logo_url');
+      document.getElementById('logoUploadInput').value = '';
+      renderCards();
+    }
+
+    function handleCustomStamp(event) {
+      var file = event.target.files[0];
+      if (!file) return;
+
+      var reader = new FileReader();
+      reader.onload = function(e) {
+        customStampUrl = e.target.result;
+        try {
+          localStorage.setItem('school_principal_stamp_url', customStampUrl);
+        } catch (err) {
+          console.warn('LocalStorage stamp: ' + err);
+        }
+        renderCards();
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function clearCustomStamp() {
+      customStampUrl = '';
+      localStorage.removeItem('school_principal_stamp_url');
+      document.getElementById('stampUploadInput').value = '';
+      renderCards();
+    }
+
+    function updateWatermarkOpacity(val) {
+      currentOpacity = val;
+      var marks = document.querySelectorAll('.card-watermark');
+      marks.forEach(function(m) {
+        m.style.opacity = val;
+      });
+    }
+
+    function applyStampStyles() {
+      document.documentElement.style.setProperty('--stamp-w', stampSettings.size + 'mm');
+      document.documentElement.style.setProperty('--stamp-h', (stampSettings.size * 0.72) + 'mm');
+      document.documentElement.style.setProperty('--stamp-top', stampSettings.top + 'px');
+      document.documentElement.style.setProperty('--stamp-left', stampSettings.left + 'px');
+      localStorage.setItem('school_stamp_settings', JSON.stringify(stampSettings));
+    }
+
+    function updateStampSize(val) {
+      stampSettings.size = val;
+      applyStampStyles();
+    }
+
+    function updateStampTop(val) {
+      stampSettings.top = val;
+      applyStampStyles();
+    }
+
+    function updateStampLeft(val) {
+      stampSettings.left = val;
+      applyStampStyles();
+    }
+
+    function resetStampPosition() {
+      stampSettings = { size: "36", top: "-3", left: "0" };
+      document.getElementById('stampSizeSlider').value = 36;
+      document.getElementById('stampTopSlider').value = -3;
+      document.getElementById('stampLeftSlider').value = 0;
+      applyStampStyles();
+    }
+
+    // 🌟 អនុគមន៍ប្តូរទម្រង់រវាង ៦ កាត និង ៨ កាត
+    function switchLayout(val) {
+      currentLayout = parseInt(val);
+      localStorage.setItem('school_cards_layout', currentLayout);
+      renderCards();
+    }
+
+    window.addEventListener('DOMContentLoaded', function() {
+      document.getElementById('stampSizeSlider').value = stampSettings.size;
+      document.getElementById('stampTopSlider').value = stampSettings.top;
+      document.getElementById('stampLeftSlider').value = stampSettings.left;
+      document.getElementById('layoutSelect').value = currentLayout;
+      applyStampStyles();
+      
+      initClassDropdown();
+    });
+
+    function initClassDropdown() {
+      google.script.run.withSuccessHandler(function(classes) {
+        var sel = document.getElementById('classSelect');
+        sel.innerHTML = '';
+        
+        if (classes && classes.length > 0) {
+          classes.forEach(function(c) {
+            var opt = document.createElement('option');
+            opt.value = c;
+            opt.textContent = 'ថ្នាក់ទី ' + c;
+            sel.appendChild(opt);
+          });
+          if (userRole !== 'admin' && userClass) {
+            sel.value = userClass;
+          }
+          loadStudents();
+        } else {
+          sel.innerHTML = '<option value="">គ្មានថ្នាក់</option>';
+        }
+      }).getClassListForSession(token);
+    }
+
+    function loadStudents() {
+      var cls = document.getElementById('classSelect').value;
+      if (!cls) return;
+
+      document.getElementById('printArea').innerHTML = `
+        <div style="text-align:center; padding:50px; color:#64748b;">
+          <i class="fa-solid fa-spinner fa-spin fa-2x"></i>
+          <p style="margin-top:10px;">កំពុងទាញយកទិន្នន័យសិស្សថ្នាក់ទី ${cls}...</p>
+        </div>`;
+
+      google.script.run
+        .withSuccessHandler(function(list) {
+          allStudents = list || [];
+          renderCards();
+        })
+        .withFailureHandler(function(err) {
+          document.getElementById('printArea').innerHTML = `
+            <div style="color:red; text-align:center; padding:30px;">
+              កំហុស៖ ${err.message || err}
+            </div>`;
+        })
+        .getAllStudentsCardDataSecured(token, cls);
+    }
+
+    function refreshDisplay() {
+      renderCards();
+    }
+
+    // បង្ហាញកាតសិស្សក្នុងទំព័រ A4 (៦ កាត ឬ ៨ កាត)
+    function renderCards() {
+      var container = document.getElementById('printArea');
+      if (!allStudents || allStudents.length === 0) {
+        container.innerHTML = '<div style="text-align:center; padding:50px; color:#64748b;">មិនមានទិន្នន័យសិស្សក្នុងថ្នាក់នេះទេ</div>';
+        return;
+      }
+
+      var schoolName = document.getElementById('schoolName').value || 'សាលាបឋមសិក្សាកំពង់ល្ពៅ';
+      var schoolYear = document.getElementById('schoolYear').value || '២០២៥~២០២៦';
+      var autoDateText = getAutoKhmerDate();
+
+      var cardsPerPage = currentLayout;
+      var layoutClass = (cardsPerPage === 6) ? 'layout-6' : 'layout-8';
+      var totalPages = Math.ceil(allStudents.length / cardsPerPage);
+      var html = '';
+
+      for (var p = 0; p < totalPages; p++) {
+        html += `<div class="a4-page ${layoutClass}">`;
+        
+        var pageStudents = allStudents.slice(p * cardsPerPage, (p + 1) * cardsPerPage);
+        for (var i = 0; i < pageStudents.length; i++) {
+          var s = pageStudents[i];
+          var khmerId = toKhmerNum(s.id);
+          var dobFormatted = s.dob || '';
+          var addressText = s.address || s.pob || 'ស្វាយជ្រុំ កំពង់ល្ពៅ សំឡូត បាត់ដំបង';
+
+          var photoHtml = (s.imageUrl && s.imageUrl.length > 5)
+            ? `<img src="${s.imageUrl}" alt="រូបថត" onerror="this.src=''">`
+            : `<i class="fa-solid fa-user"></i>`;
+
+          var stampHtml = customStampUrl 
+            ? `<div class="stamp-overlay-box"><img src="${customStampUrl}" alt="ត្រានាយក"></div>`
+            : '';
+
+          var headerLogoHtml = customImageUrl 
+            ? `<img src="${customImageUrl}" class="header-logo-img" alt="Logo" onerror="this.style.display='none'">`
+            : '';
+
+          var watermarkHtml = customImageUrl 
+            ? `<img src="${customImageUrl}" class="card-watermark" style="opacity:${currentOpacity};" alt="Watermark" onerror="this.style.display='none'">`
+            : '';
+
+          html += `
+            <div class="student-card">
+              <!-- ក្បាលកាត -->
+              <div class="card-top-header">
+                <div class="header-logo-box">
+                  ${headerLogoHtml}
+                </div>
+                <div class="header-kingdom">
+                  <div class="kingdom-title">ព្រះរាជាណាចក្រកម្ពុជា</div>
+                  <div class="kingdom-subtitle">ជាតិ សាសនា ព្រះមហាក្សត្រ</div>
+                  <div class="kingdom-divider">
+                    <svg viewBox="0 0 140 8">
+                      <line x1="10" y1="4" x2="60" y2="4" stroke="#000" stroke-width="0.8"/>
+                      <circle cx="8" cy="4" r="1.4" fill="#000"/>
+                      <polygon points="70,1 74,4 70,7 66,4" fill="#000"/>
+                      <circle cx="63" cy="4" r="1.2" fill="#000"/>
+                      <circle cx="77" cy="4" r="1.2" fill="#000"/>
+                      <line x1="80" y1="4" x2="130" y2="4" stroke="#000" stroke-width="0.8"/>
+                      <circle cx="132" cy="4" r="1.4" fill="#000"/>
+                    </svg>
+                  </div>
+                </div>
+              </div>
+
+              <!-- តួខ្លួនកាត -->
+              <div class="card-main-body">
+                <!-- Watermark -->
+                ${watermarkHtml}
+
+                <!-- ចំណងជើងកណ្តាល -->
+                <div class="card-titles">
+                  <div class="title-badge">កាតសម្គាល់ខ្លួនសិស្ស</div>
+                  <div class="title-school">${schoolName}</div>
+                  <div class="title-id">អត្តលេខ៖ ${khmerId}</div>
+                  <!-- 🌟 ឈ្មោះសិស្សធំច្បាស់ មានគម្លាតខាងលើ (Padding-top) មិនដាច់ក្បាលស្រៈឡើយ -->
+                  <div class="title-student-name-center">${s.name || ''}</div>
+                </div>
+
+                <!-- ផ្នែកព័ត៌មាន និងរូបថត (ខ្នាត 2cm x 2.5cm) -->
+                <div class="content-container">
+                  <div class="mid-split">
+                    <div class="left-profile-block">
+                      <table class="info-table-top">
+                        <tr>
+                          <td class="lbl-col">ភេទ</td>
+                          <td class="cln-col">៖</td>
+                          <td class="val-col val-blue">${s.sex || ''}</td>
+                        </tr>
+                        <tr>
+                          <td class="lbl-col">ថ្ងៃខែឆ្នាំកំណើត</td>
+                          <td class="cln-col">៖</td>
+                          <td class="val-col val-blue">${dobFormatted}</td>
+                        </tr>
+                        <tr>
+                          <td class="lbl-col">ថ្នាក់ទី</td>
+                          <td class="cln-col">៖</td>
+                          <td class="val-col val-blue">${toKhmerNum(s.grade || '')}</td>
+                        </tr>
+                        <tr>
+                          <td class="lbl-col">ឈ្មោះឪពុក</td>
+                          <td class="cln-col">៖</td>
+                          <td class="val-col val-green">${s.father || '—'}</td>
+                        </tr>
+                        <tr>
+                          <td class="lbl-col">ឈ្មោះម្តាយ</td>
+                          <td class="cln-col">៖</td>
+                          <td class="val-col val-green">${s.mother || '—'}</td>
+                        </tr>
+                      </table>
+                    </div>
+
+                    <!-- ប្រអប់រូបថត (ខ្នាត 2cm x 2.5cm) -->
+                    <div class="student-photo-box">
+                      ${photoHtml}
+                    </div>
+                  </div>
+
+                  <!-- ជួរព័ត៌មានពេញទទឹង (នៅកៀកជាប់ពីក្រោមឈ្មោះម្តាយតែម្តង) -->
+                  <table class="info-table-bottom">
+                    <tr>
+                      <td class="lbl-col" style="width: 76px;">អាសយដ្ឋានបច្ចុប្បន្ន</td>
+                      <td class="cln-col">៖</td>
+                      <td class="val-col val-blue" style="font-size: 9.2px;">${addressText}</td>
+                    </tr>
+                    <tr>
+                      <td class="lbl-col">ឆ្នាំសិក្សា</td>
+                      <td class="cln-col">៖</td>
+                      <td class="val-col val-green">${toKhmerNum(schoolYear)}</td>
+                    </tr>
+                  </table>
+                </div>
+
+                <!-- ផ្នែកបាតកាត៖ ដាក់មកខាងឆ្វេងដៃ -->
+                <div class="card-bottom-signature">
+                  <div class="signature-box">
+                    <div class="sig-date">${autoDateText}</div>
+                    <div class="sig-stamp-wrapper">
+                      <div class="sig-title">បានឃើញ និងឯកភាព</div>
+                      <div class="sig-role">នាយកសាលា</div>
+                      ${stampHtml}
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          `;
+        }
+        html += '</div>';
+      }
+
+      container.innerHTML = html;
+    }
+  </script>
+</body>
+</html>

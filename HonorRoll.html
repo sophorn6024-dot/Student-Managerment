@@ -1,0 +1,2004 @@
+<!DOCTYPE html>
+<html lang="km">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+  <title>តារាងកិត្តិយស - សាលាបឋមសិក្សាកំពង់ល្ពៅ</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+
+  <!-- Font Moul និង Kantumruy Pro -->
+  <link href="https://fonts.googleapis.com/css2?family=Moul&family=Kantumruy+Pro:wght@300;400;600;700&display=swap"
+    rel="stylesheet">
+
+  <style>
+    /* =========================================================
+       GENERAL
+    ========================================================= */
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      min-height: 100%;
+      overflow-x: hidden;
+    }
+
+    body {
+      font-family: 'Kantumruy Pro', sans-serif;
+      background: #e2e8f0;
+    }
+
+    .font-moul {
+      font-family: 'Moul', cursive;
+    }
+
+
+    /* =========================================================
+       CONTROL PANEL
+    ========================================================= */
+
+    .control-panel {
+      width: min(100%, 960px);
+      margin: 0 auto 24px;
+    }
+
+    .control-inner {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .control-left {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      align-items: center;
+      min-width: 0;
+    }
+
+    .control-group {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      min-width: 0;
+    }
+
+    .control-group select {
+      max-width: 100%;
+    }
+
+
+    /* =========================================================
+       A4 VIEW WRAPPER
+       
+       ក្រដាសនៅតែមានទំហំ A4 794 x 1123px
+       ប៉ុន្តែនៅលើទូរសព្ទនឹង Scale តាមអេក្រង់
+    ========================================================= */
+
+    .a4-view {
+      width: 794px;
+      height: 1123px;
+      margin: 0 auto;
+
+      position: relative;
+
+      transform-origin: top center;
+
+      /* JS នឹងកំណត់ scale */
+      transform: scale(var(--a4-scale, 1));
+
+      /*
+        កន្លែងខាងក្រោមត្រូវបាន JS គ្រប់គ្រង
+        ដើម្បីកុំឱ្យមានទំហំទំនេរច្រើននៅលើ mobile
+      */
+      margin-bottom: calc(1123px * (var(--a4-scale, 1) - 1));
+    }
+
+
+    /* =========================================================
+       HONOR CARD
+    ========================================================= */
+
+    .honor-card {
+
+      width: 794px;
+      height: 1123px;
+
+      background: #ffffff;
+
+      position: relative;
+
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.20);
+
+      margin: 0 auto;
+
+      overflow: hidden;
+
+      border: 10px solid #047857;
+
+      outline: 4px solid #d97706;
+
+      outline-offset: -14px;
+
+      padding: 45px;
+    }
+
+
+    /* =========================================================
+       PHOTO
+    ========================================================= */
+
+    .photo-box {
+
+      border: 3px solid #d97706;
+
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+
+      background: #f8fafc;
+
+      transition: all 0.3s ease;
+    }
+
+    .photo-box:hover {
+      transform: scale(1.03);
+    }
+
+
+    /* =========================================================
+       DRAGGABLE BLOCKS (ឈ្មោះគ្រូ / កាលបរិច្ឆេទ)
+    ========================================================= */
+
+    .draggable-block {
+      cursor: move;
+      -webkit-user-select: none;
+      user-select: none;
+      touch-action: none;
+      border: 1px dashed transparent;
+      border-radius: 6px;
+      padding: 4px 6px;
+    }
+
+    .draggable-block:hover {
+      border-color: #93c5fd;
+      background: rgba(59, 130, 246, 0.06);
+    }
+
+    .draggable-block.dragging {
+      border-color: #2563eb;
+      background: rgba(37, 99, 235, 0.10);
+    }
+
+
+    /* =========================================================
+       DRAGGABLE BLOCKS (ឈ្មោះគ្រូ / ថ្ងៃទី)
+    ========================================================= */
+
+    .draggable-block {
+      cursor: move;
+      padding: 4px 6px;
+      border: 1px dashed transparent;
+      border-radius: 4px;
+      touch-action: none;
+      display: inline-block;
+    }
+
+    .draggable-block:hover {
+      border-color: #93c5fd;
+      background: rgba(59, 130, 246, 0.06);
+    }
+
+    .draggable-block.dragging {
+      border-color: #2563eb;
+      background: rgba(37, 99, 235, 0.10);
+    }
+
+
+    /* =========================================================
+       MOBILE RESPONSIVE
+    ========================================================= */
+
+    @media (max-width: 600px) {
+
+      body {
+        background: #e2e8f0;
+        padding: 8px !important;
+      }
+
+      /*
+        Control Panel
+      */
+
+      .control-panel {
+        width: 100%;
+        margin-bottom: 12px;
+        padding: 12px !important;
+        border-radius: 14px;
+      }
+
+      .control-inner {
+        display: flex;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+      }
+
+      .control-left {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 8px;
+        width: 100%;
+      }
+
+      .control-group {
+        display: grid;
+        grid-template-columns: auto 1fr;
+        gap: 7px;
+        width: 100%;
+      }
+
+      .control-group label {
+        white-space: nowrap;
+        display: flex;
+        align-items: center;
+      }
+
+      .control-group select {
+        width: 100%;
+        min-width: 0;
+        font-size: 14px;
+        padding: 8px 10px !important;
+        min-height: 40px;
+      }
+
+      #periodContainer {
+        width: 100%;
+      }
+
+      #periodContainer select {
+        width: 100%;
+        font-size: 14px;
+        padding: 8px 10px !important;
+        min-height: 40px;
+      }
+
+      .control-left>button {
+        width: 100%;
+        min-height: 42px;
+        font-size: 14px;
+      }
+
+      .control-inner>button {
+        width: 100%;
+        min-height: 42px;
+        font-size: 14px;
+      }
+
+
+      /*
+        A4 Container
+
+        គណនា scale ដោយ JavaScript
+        ដូច្នេះកាតនឹងសមនឹងទទឹងទូរសព្ទ
+      */
+
+      .a4-view {
+        margin-left: auto;
+        margin-right: auto;
+
+        transform-origin: top center;
+      }
+
+
+      /*
+        Honor Card
+      */
+
+      .honor-card {
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.16);
+      }
+    }
+
+
+    /* =========================================================
+       VERY SMALL PHONES
+    ========================================================= */
+
+    @media (max-width: 380px) {
+
+      body {
+        padding: 5px !important;
+      }
+
+      .control-panel {
+        padding: 9px !important;
+      }
+
+      .control-group select,
+      #periodContainer select {
+        font-size: 13px;
+      }
+    }
+
+
+    /* =========================================================
+       TABLET
+    ========================================================= */
+
+    @media (min-width: 601px) and (max-width: 900px) {
+
+      body {
+        padding: 12px !important;
+      }
+
+      .control-panel {
+        width: 100%;
+      }
+    }
+
+
+    /* =========================================================
+       PRINT
+    ========================================================= */
+
+    @media print {
+
+      @page {
+        size: A4 portrait;
+        margin: 0;
+      }
+
+      html,
+      body {
+        width: 210mm;
+        height: 297mm;
+        margin: 0;
+        padding: 0;
+        overflow: visible !important;
+        background: none !important;
+      }
+
+      .no-print {
+        display: none !important;
+      }
+
+      .a4-view {
+        width: 794px !important;
+        height: 1123px !important;
+
+        transform: none !important;
+
+        margin: 0 !important;
+
+        position: relative !important;
+      }
+
+      body {
+        background: none;
+        padding: 0;
+      }
+
+      .draggable-block {
+        border-color: transparent !important;
+        background: transparent !important;
+        padding: 0 !important;
+        cursor: default;
+      }
+
+      .honor-card {
+        box-shadow: none;
+
+        border: 8px solid #047857;
+
+        outline: 3px solid #d97706;
+
+        outline-offset: -12px;
+
+        width: 794px;
+
+        height: 1123px;
+
+        margin: 0;
+
+        padding: 45px;
+      }
+
+      input,
+      select {
+        border: none !important;
+        background: transparent !important;
+        appearance: none;
+
+        padding: 0 !important;
+
+        text-align: center;
+
+        font-weight: bold;
+      }
+
+      /*
+        បង្ខំឱ្យពណ៌ background ចេញពេល Print
+      */
+
+      * {
+        -webkit-print-color-adjust: exact !important;
+        color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+    }
+  </style>
+</head>
+
+
+<body class="p-4">
+
+
+  <!-- =========================================================
+       CONTROL PANEL
+  ========================================================== -->
+
+  <div class="no-print control-panel bg-white p-4 rounded-xl shadow border border-slate-200">
+
+    <div class="control-inner">
+
+      <!-- LEFT -->
+      <div class="control-left">
+
+        <!-- CLASS -->
+        <div class="control-group">
+
+          <label class="font-bold text-sm text-slate-700">
+            ថ្នាក់ទី៖
+          </label>
+
+          <select
+            id="classSelect"
+            class="border p-2 rounded text-sm bg-slate-50">
+
+            <option value="4(ក)">៤(ក)</option>
+
+          </select>
+
+        </div>
+
+
+        <!-- TYPE -->
+        <div class="control-group">
+
+          <label class="font-bold text-sm text-slate-700">
+            ប្រភេទ៖
+          </label>
+
+          <select
+            id="typeSelect"
+            class="border p-2 rounded text-sm bg-slate-50"
+            onchange="togglePeriodOptions()">
+
+            <option value="ប្រចាំខែ">
+              ប្រចាំខែ
+            </option>
+
+            <option value="ការប្រឡងឆមាស">
+              ការប្រឡងឆមាស (តែប្រឡង)
+            </option>
+
+            <option value="ប្រចាំឆមាស">
+              ប្រចាំឆមាស (សរុប)
+            </option>
+
+            <option value="ប្រចាំឆ្នាំ">
+              ប្រចាំឆ្នាំ
+            </option>
+
+          </select>
+
+        </div>
+
+
+        <!-- PERIOD -->
+        <div id="periodContainer" class="control-group">
+
+          <label class="font-bold text-sm text-slate-700">
+            រយៈពេល៖
+          </label>
+
+          <select
+            id="monthSelect"
+            class="border p-2 rounded text-sm bg-slate-50"
+            onchange="loadHonorRoll()">
+
+            <option value="មករា">មករា</option>
+            <option value="កុម្ភៈ">កុម្ភៈ</option>
+            <option value="មីនា">មីនា</option>
+            <option value="មេសា">មេសា</option>
+            <option value="ឧសភា">ឧសភា</option>
+            <option value="មិថុនា">មិថុនា</option>
+            <option value="កក្កដា">កក្កដា</option>
+            <option value="សីហា">សីហា</option>
+            <option value="កញ្ញា">កញ្ញា</option>
+            <option value="តុលា">តុលា</option>
+            <option value="វិច្ឆិកា">វិច្ឆិកា</option>
+            <option value="ធ្នូ">ធ្នូ</option>
+
+          </select>
+
+        </div>
+
+
+        <!-- SHOW BUTTON -->
+        <button
+          onclick="loadHonorRoll()"
+          class="bg-blue-600 text-white px-4 py-2 rounded text-sm font-bold hover:bg-blue-700 shadow-sm transition">
+
+          បង្ហាញតារាង
+
+        </button>
+
+      </div>
+
+
+      <!-- RIGHT BUTTONS -->
+      <div class="flex gap-2">
+
+        <button
+          onclick="resetDraggablePositions()"
+          title="ដាក់ឈ្មោះគ្រូបន្ទុកថ្នាក់ត្រឡប់ទីតាំងដើមវិញ"
+          class="bg-slate-500 text-white px-4 py-2 rounded text-sm font-bold hover:bg-slate-600 shadow-sm transition">
+
+          ↺ ទីតាំងដើម
+
+        </button>
+
+        <button
+          onclick="window.print()"
+          class="bg-emerald-700 text-white px-5 py-2 rounded text-sm font-bold hover:bg-emerald-800 shadow-sm transition">
+
+          🖨️ បោះពុម្ព
+
+        </button>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+
+  <!-- =========================================================
+       A4 VIEW WRAPPER
+  ========================================================== -->
+
+  <div class="a4-view" id="a4View">
+
+    <!-- =======================================================
+         A4 HONOR CARD
+    ======================================================== -->
+
+    <div class="honor-card flex flex-col justify-between">
+
+
+      <!-- =====================================================
+           HEADER
+      ====================================================== -->
+
+      <div>
+
+        <div class="text-center font-bold text-sm space-y-1 text-slate-800">
+
+          <p>
+            ព្រះរាជាណាចក្រកម្ពុជា
+          </p>
+
+          <p>
+            ជាតិ សាសនា ព្រះមហាក្សត្រ
+          </p>
+
+          <div class="w-32 h-1 bg-amber-500 mx-auto my-2 rounded-full">
+          </div>
+
+        </div>
+
+
+        <div class="text-xs font-bold mt-2 text-slate-700 leading-relaxed">
+
+          <p>
+            រដ្ឋបាលក្រុង ស្រុកសំឡូត
+          </p>
+
+          <p>
+            សាលាបឋមសិក្សា ៖ កំពង់ល្ពៅ
+          </p>
+
+          <p id="lblClass" class="text-blue-900 font-extrabold mt-0.5 text-sm">
+
+            ថ្នាក់ទី...(...)
+
+          </p>
+
+        </div>
+
+
+        <!-- TITLE -->
+
+        <div class="text-center mt-4">
+
+          <h1 class="font-moul text-4xl text-emerald-800 tracking-wider drop-shadow-sm">
+
+            តារាងកិត្តិយស
+
+          </h1>
+
+          <p id="lblMonth"
+            class="text-base font-bold text-amber-700 mt-1.5 bg-amber-50 py-0.5 px-4 rounded-full inline-block border border-amber-200">
+
+            ប្រចាំខែ.....
+
+          </p>
+
+        </div>
+
+      </div>
+
+
+
+      <!-- =====================================================
+           STUDENTS
+      ====================================================== -->
+
+      <div class="flex-1 flex flex-col items-center justify-start gap-8 mt-2 mb-4">
+
+
+        <!-- ===================================================
+             RANK 1
+        ==================================================== -->
+
+        <div id="rank1" class="text-center">
+
+          <div class="relative w-32 h-40 mx-auto">
+
+            <div class="w-32 h-40 photo-box rounded-xl overflow-hidden">
+
+              <img
+                src=""
+                class="w-full h-full object-cover"
+                id="img1"
+                alt="រូបថតលេខ១">
+
+            </div>
+
+
+            <span
+              class="absolute -top-3 left-1/2 -translate-x-1/2 bg-amber-500 text-white font-bold w-8 h-8 rounded-full text-sm flex items-center justify-center shadow-md ring-2 ring-white z-10">
+
+              ១
+
+            </span>
+
+          </div>
+
+
+          <div class="mt-2.5 flex justify-center">
+
+            <span
+              id="name1"
+              class="font-moul whitespace-nowrap bg-white border border-amber-400 px-4 py-1.5 rounded-lg text-sm tracking-wide shadow-sm text-amber-900">
+
+              ឈ្មោះសិស្ស
+
+            </span>
+
+          </div>
+
+        </div>
+
+
+
+        <!-- ===================================================
+             RANK 2 + 3
+        ==================================================== -->
+
+        <div class="w-full flex items-start justify-center gap-24">
+
+
+          <!-- RANK 2 -->
+
+          <div id="rank2" class="text-center -translate-x-12">
+
+            <div class="relative w-28 h-36 mx-auto">
+
+              <div class="w-28 h-36 photo-box rounded-xl overflow-hidden">
+
+                <img
+                  src=""
+                  class="w-full h-full object-cover"
+                  id="img2"
+                  alt="រូបថតលេខ២">
+
+              </div>
+
+
+              <span
+                class="absolute -top-3 -left-3 bg-slate-500 text-white font-bold w-7 h-7 rounded-full text-xs flex items-center justify-center shadow-md ring-2 ring-white z-10">
+
+                ២
+
+              </span>
+
+            </div>
+
+
+            <div class="mt-1.5 flex justify-center">
+
+              <span
+                id="name2"
+                class="font-moul whitespace-nowrap bg-white border border-slate-300 px-3.5 py-1 rounded-lg text-[13px] tracking-wide shadow-sm text-slate-800">
+
+                ឈ្មោះសិស្ស
+
+              </span>
+
+            </div>
+
+          </div>
+
+
+
+          <!-- RANK 3 -->
+
+          <div id="rank3" class="text-center translate-x-12">
+
+            <div class="relative w-28 h-36 mx-auto">
+
+              <div class="w-28 h-36 photo-box rounded-xl overflow-hidden">
+
+                <img
+                  src=""
+                  class="w-full h-full object-cover"
+                  id="img3"
+                  alt="រូបថតលេខ៣">
+
+              </div>
+
+
+              <span
+                class="absolute -top-3 -right-3 bg-amber-700 text-white font-bold w-7 h-7 rounded-full text-xs flex items-center justify-center shadow-md ring-2 ring-white z-10">
+
+                ៣
+
+              </span>
+
+            </div>
+
+
+            <div class="mt-1.5 flex justify-center">
+
+              <span
+                id="name3"
+                class="font-moul whitespace-nowrap bg-white border border-amber-700/30 px-3.5 py-1 rounded-lg text-[13px] tracking-wide shadow-sm text-amber-900">
+
+                ឈ្មោះសិស្ស
+
+              </span>
+
+            </div>
+
+          </div>
+
+        </div>
+
+
+
+        <!-- ===================================================
+             RANK 4 + 5
+        ==================================================== -->
+
+        <div class="w-full flex items-start justify-center gap-24">
+
+
+          <!-- RANK 4 -->
+
+          <div id="rank4" class="text-center -translate-x-12">
+
+            <div class="relative w-28 h-36 mx-auto">
+
+              <div class="w-28 h-36 photo-box rounded-xl overflow-hidden">
+
+                <img
+                  src=""
+                  class="w-full h-full object-cover"
+                  id="img4"
+                  alt="រូបថតលេខ៤">
+
+              </div>
+
+
+              <span
+                class="absolute -top-3 -left-3 bg-rose-600 text-white font-bold w-7 h-7 rounded-full text-xs flex items-center justify-center shadow-md ring-2 ring-white z-10">
+
+                ៤
+
+              </span>
+
+            </div>
+
+
+            <div class="mt-1.5 flex justify-center">
+
+              <span
+                id="name4"
+                class="font-moul whitespace-nowrap bg-white border border-rose-300 px-3.5 py-1 rounded-lg text-[13px] tracking-wide shadow-sm text-slate-800">
+
+                ឈ្មោះសិស្ស
+
+              </span>
+
+            </div>
+
+          </div>
+
+
+
+          <!-- RANK 5 -->
+
+          <div id="rank5" class="text-center translate-x-12">
+
+            <div class="relative w-28 h-36 mx-auto">
+
+              <div class="w-28 h-36 photo-box rounded-xl overflow-hidden">
+
+                <img
+                  src=""
+                  class="w-full h-full object-cover"
+                  id="img5"
+                  alt="រូបថតលេខ៥">
+
+              </div>
+
+
+              <span
+                class="absolute -top-3 -right-3 bg-rose-600 text-white font-bold w-7 h-7 rounded-full text-xs flex items-center justify-center shadow-md ring-2 ring-white z-10">
+
+                ៥
+
+              </span>
+
+            </div>
+
+
+            <div class="mt-1.5 flex justify-center">
+
+              <span
+                id="name5"
+                class="font-moul whitespace-nowrap bg-white border border-rose-300 px-3.5 py-1 rounded-lg text-[13px] tracking-wide shadow-sm text-slate-800">
+
+                ឈ្មោះសិស្ស
+
+              </span>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+
+
+
+      <!-- =====================================================
+           FOOTER
+      ====================================================== -->
+
+      <div id="footerRow" class="flex justify-between items-start text-xs font-bold pb-2 text-slate-800 border-t border-slate-100 pt-3">
+
+
+        <!-- SCHOOL DIRECTOR -->
+
+        <div class="text-center">
+
+          <!-- ✅ ចន្លោះខាងលើ ដើម្បីទាញស្លាក "នាយកសាលា" ចុះទាបជាង "គ្រូបន្ទុកថ្នាក់"
+               កម្ពស់នេះនឹងកំណត់ដោយ JS ស្មើនឹងកម្ពស់ប្លុកកាលបរិច្ឆេទ + គម្លាតបន្ថែម -->
+          <div id="directorTopSpacer"></div>
+
+          <p class="text-slate-700">
+            បានឃើញ និងឯកភាព
+          </p>
+
+          <p id="directorLabel" class="font-extrabold text-slate-900 mt-1">
+            នាយកសាលា
+          </p>
+
+          <div class="mt-10"></div>
+
+        </div>
+
+
+
+        <!-- TEACHER -->
+
+        <div class="text-center">
+
+          <!-- កាលបរិច្ឆេទ (ថេរនៅមួយកន្លែង មិនអូសទេ) -->
+          <div id="dateBlock" class="inline-block">
+
+            <!-- Lunar Date -->
+
+            <input
+              type="text"
+              id="lunarDateText"
+              value=""
+              placeholder="វាយបញ្ចូលថ្ងៃខែឆ្នាំចន្ទគតិនៅទីនេះ..."
+              class="font-semibold text-amber-800 bg-amber-50 px-2 py-1 rounded mb-1.5 border border-amber-200 text-center w-96 mx-auto block focus:outline-none focus:ring-1 focus:ring-amber-500">
+
+
+            <!-- SOLAR DATE -->
+
+            <div class="flex items-center justify-center gap-1 font-normal text-slate-700">
+
+              <span>
+                ធ្វើនៅកំពង់ល្ពៅ ថ្ងៃទី
+              </span>
+
+              <input
+                type="text"
+                id="inputDay"
+                value=""
+                class="w-10 text-center border border-blue-400 bg-blue-50/50 rounded py-0.5 font-bold text-blue-900 focus:outline-none focus:ring-1 focus:ring-blue-600">
+
+              <span>
+                ខែ
+              </span>
+
+              <input
+                type="text"
+                id="inputMonth"
+                value=""
+                class="w-16 text-center border border-blue-400 bg-blue-50/50 rounded py-0.5 font-bold text-blue-900 focus:outline-none focus:ring-1 focus:ring-blue-600">
+
+              <span>
+                ឆ្នាំ
+              </span>
+
+              <input
+                type="text"
+                id="inputYear"
+                value="២០២៦"
+                class="w-14 text-center border border-blue-400 bg-blue-50/50 rounded py-0.5 font-bold text-blue-900 focus:outline-none focus:ring-1 focus:ring-blue-600">
+
+            </div>
+
+          </div>
+
+
+          <p class="text-sm font-extrabold text-emerald-900 mt-1" id="teacherLabel">
+
+            គ្រូបន្ទុកថ្នាក់
+
+          </p>
+
+          <!-- ✅ ឈ្មោះគ្រូបន្ទុកថ្នាក់ (ទាញយកដោយស្វ័យប្រវត្តិពី session, អូសបាន) -->
+          <div
+            id="teacherNameDisplay"
+            class="draggable-block font-moul text-sm text-slate-900 mt-1 inline-block"
+            style="min-height:20px;"
+            title="អូសដើម្បីផ្លាស់ទីតាំង">
+            &nbsp;
+          </div>
+
+          <div class="mt-6"></div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+
+  <!-- =========================================================
+       JAVASCRIPT
+  ========================================================== -->
+
+  <script>
+    /* =========================================================
+       RESPONSIVE A4 SCALE
+       
+       មុខងារនេះធ្វើឱ្យ A4 សមនឹងទូរសព្ទ
+       ដោយមិនប៉ះពាល់ដល់ទំហំ A4 ពេល Print
+    ========================================================== */
+
+    function resizeA4View() {
+
+      const wrapper = document.getElementById('a4View');
+
+      if (!wrapper) return;
+
+      const screenWidth = window.innerWidth;
+
+      /*
+        Desktop
+      */
+
+      if (screenWidth > 600) {
+
+        wrapper.style.setProperty('--a4-scale', '1');
+
+        wrapper.style.height = '1123px';
+
+        wrapper.style.marginBottom = '0px';
+
+        return;
+      }
+
+
+      /*
+        Mobile
+
+        ដក padding ចេញពី body
+        ដើម្បីទទួលបានទំហំអេក្រង់អតិបរមា
+      */
+
+      const bodyStyle = getComputedStyle(document.body);
+
+      const bodyPaddingLeft =
+        parseFloat(bodyStyle.paddingLeft) || 0;
+
+      const bodyPaddingRight =
+        parseFloat(bodyStyle.paddingRight) || 0;
+
+
+      const availableWidth =
+        window.innerWidth -
+        bodyPaddingLeft -
+        bodyPaddingRight;
+
+
+      /*
+        Scale តាមទទឹងអេក្រង់
+      */
+
+      let scale =
+        availableWidth / 794;
+
+
+      /*
+        កុំឱ្យធំពេក
+      */
+
+      scale = Math.min(scale, 1);
+
+
+      /*
+        កុំឱ្យតូចជាង 0.35
+      */
+
+      scale = Math.max(scale, 0.35);
+
+
+      wrapper.style.setProperty(
+        '--a4-scale',
+        scale
+      );
+
+
+      /*
+        កំណត់ Height ពិតរបស់ wrapper
+        បន្ទាប់ពី Scale
+      */
+
+      const scaledHeight =
+        1123 * scale;
+
+
+      wrapper.style.height =
+        scaledHeight + 'px';
+
+
+      wrapper.style.marginBottom =
+        '0px';
+    }
+
+
+
+    /*
+      Resize ពេលបើក
+    */
+
+    window.addEventListener(
+      'load',
+      resizeA4View
+    );
+
+
+    /*
+      Resize ពេលបង្វិលទូរសព្ទ
+    */
+
+    window.addEventListener(
+      'resize',
+      resizeA4View
+    );
+
+
+    /*
+      Resize ពេល orientation ផ្លាស់ប្តូរ
+    */
+
+    window.addEventListener(
+      'orientationchange',
+      function () {
+
+        setTimeout(
+          resizeA4View,
+          150
+        );
+
+      }
+    );
+
+
+
+    /* =========================================================
+       PLACEHOLDER IMAGE
+    ========================================================== */
+
+    const PLACEHOLDER_IMG =
+      "data:image/svg+xml;utf8," +
+      encodeURIComponent(
+
+        "<svg xmlns='http://www.w3.org/2000/svg' width='200' height='240'>" +
+
+        "<rect width='100%' height='100%' fill='#f1f5f9'/>" +
+
+        "<circle cx='100' cy='90' r='38' fill='#cbd5e1'/>" +
+
+        "<path d='M40 210 Q100 140 160 210 Z' fill='#cbd5e1'/>" +
+
+        "</svg>"
+
+      );
+
+
+
+    /* =========================================================
+       ✅ ថ្ងៃទី/ខែ/ឆ្នាំ ស៊ុលក្នុងកាលបរិច្ឆេទចុះហត្ថលេខា
+       ចាប់តាមថ្ងៃ និងឆ្នាំបច្ចុប្បន្នដោយស្វ័យប្រវត្តិ
+       (លេខខ្មែរ)
+    ========================================================== */
+
+    function toKhmerNum(num) {
+
+      if (num === null || num === undefined) return '';
+
+      const kd = ['០', '១', '២', '៣', '៤', '៥', '៦', '៧', '៨', '៩'];
+
+      return num.toString().split('').map(
+        d => kd[parseInt(d)] !== undefined ? kd[parseInt(d)] : d
+      ).join('');
+
+    }
+
+
+    function setCurrentKhmerDay() {
+
+      const dayEl =
+        document.getElementById('inputDay');
+
+      if (dayEl) {
+        dayEl.value = toKhmerNum(new Date().getDate());
+      }
+
+    }
+
+
+    function setCurrentKhmerYear() {
+
+      const yearEl =
+        document.getElementById('inputYear');
+
+      if (yearEl) {
+        yearEl.value = toKhmerNum(new Date().getFullYear());
+      }
+
+    }
+
+
+
+    /* =========================================================
+       ✅ តម្រឹមស្លាក "នាយកសាលា" ឱ្យនៅទាបជាង "គ្រូបន្ទុកថ្នាក់"
+
+       ព្រោះជួរឈរគ្រូមានប្លុកកាលបរិច្ឆេទបន្ថែមនៅខាងលើ
+       ធ្វើឱ្យស្លាកគ្រូចុះទាបជាងធម្មតា។ ដើម្បីធានាថាស្លាក
+       "នាយកសាលា" នៅជានិច្ចទាបជាងស្លាក "គ្រូបន្ទុកថ្នាក់"
+       (មិនថាទំហំពុម្ពអក្សរប្រែប្រួលយ៉ាងណា) យើងវាស់ទីតាំង
+       ជាក់ស្តែងរបស់ស្លាកទាំងពីរ ហើយកែតម្រូវដោយស្វ័យប្រវត្តិ។
+    ========================================================== */
+
+    function alignFooterLabels() {
+
+      const spacer =
+        document.getElementById('directorTopSpacer');
+
+      const directorLabel =
+        document.getElementById('directorLabel');
+
+      const teacherLabel =
+        document.getElementById('teacherLabel');
+
+      if (!spacer || !directorLabel || !teacherLabel) return;
+
+
+      /*
+        Reset មុនគណនាឡើងវិញ
+      */
+
+      spacer.style.height = '0px';
+
+
+      const dRect =
+        directorLabel.getBoundingClientRect();
+
+      const tRect =
+        teacherLabel.getBoundingClientRect();
+
+
+      /*
+        ✅ គិតគូរពី --a4-scale (mobile scaling)
+        ព្រោះ getBoundingClientRect() ត្រឡប់ជាទីតាំង
+        តាមអេក្រង់ (ក្រោយពី scale) ប៉ុន្តែ style.height
+        ដែលយើងកំណត់ គឺជា pixel ក្នុងទំហំដើម (794px)
+      */
+
+      const wrapper =
+        document.getElementById('a4View');
+
+      let scale = 1;
+
+      const isPrinting =
+        window.matchMedia &&
+        window.matchMedia('print').matches;
+
+      if (wrapper && !isPrinting) {
+
+        const scaleStr =
+          getComputedStyle(wrapper).getPropertyValue('--a4-scale');
+
+        const parsed = parseFloat(scaleStr);
+
+        if (!isNaN(parsed) && parsed > 0) {
+          scale = parsed;
+        }
+
+      }
+
+
+      /*
+        គម្លាតបន្ថែម (គិតជា pixel ក្នុងទំហំដើម)
+        ដើម្បីធានាថាវាឃើញច្បាស់ថាទាបជាង
+      */
+
+      const desiredGap = 10;
+
+      const diffScreen =
+        tRect.top - dRect.top;
+
+      const diffSource =
+        (diffScreen / scale) + desiredGap;
+
+
+      if (diffSource > 0) {
+        spacer.style.height = diffSource + 'px';
+      }
+
+    }
+
+
+
+    /* =========================================================
+       WINDOW LOAD
+    ========================================================== */
+
+    window.onload = function () {
+
+
+      /*
+        ✅ ចាប់ថ្ងៃទី និងឆ្នាំបច្ចុប្បន្នដោយស្វ័យប្រវត្តិ
+      */
+
+      setCurrentKhmerDay();
+      setCurrentKhmerYear();
+
+
+      /*
+        ✅ តម្រឹមស្លាក នាយកសាលា / គ្រូបន្ទុកថ្នាក់
+      */
+
+      alignFooterLabels();
+
+      /*
+        គណនាឡើងវិញម្តងទៀត បន្ទាប់ពី Font load ចប់
+        (ព្រោះទំហំអក្សរអាចប្តូរបន្តិចបន្តួច)
+      */
+
+      setTimeout(alignFooterLabels, 300);
+
+      window.addEventListener('resize', alignFooterLabels);
+
+      /*
+        ✅ គណនាឡើងវិញមុននឹងបោះពុម្ព (scale ខុសគ្នារវាង
+        mobile view និង print)
+      */
+
+      window.addEventListener('beforeprint', alignFooterLabels);
+      window.addEventListener('afterprint', alignFooterLabels);
+
+
+      /*
+        កំណត់ Placeholder
+        សម្រាប់រូបសិស្សទាំង ៥
+      */
+
+      for (let i = 1; i <= 5; i++) {
+
+        document.getElementById(
+          `img${i}`
+        ).src = PLACEHOLDER_IMG;
+
+      }
+
+
+      /*
+        Load Class List
+      */
+
+
+    var TOKEN = "<?= token ?>";
+
+      google.script.run.withSuccessHandler(populateClasses).getClassListForSession(TOKEN);
+
+      /*
+        ✅ ទាញឈ្មោះគ្រូបន្ទុកថ្នាក់ពី session
+        (ដូចទំព័រតារាងចំណាត់ថ្នាក់)
+      */
+
+      google.script.run
+        .withSuccessHandler(function (session) {
+
+          if (session && session.loggedIn && session.name) {
+
+            document.getElementById(
+              'teacherNameDisplay'
+            ).innerText = session.name;
+
+          }
+
+        })
+        .withFailureHandler(function () {})
+        .getCurrentSession(TOKEN);
+
+      /*
+        ✅ ធ្វើឱ្យឈ្មោះគ្រូបន្ទុកថ្នាក់អូសផ្លាស់ទីតាំងបាន
+        (ថ្ងៃទីនៅថេរនៅមួយកន្លែង មិនអូសទេ)
+      */
+
+      initDraggableBlock('teacherNameDisplay', 'teacherNameDragPosPct');
+
+
+      /*
+        Resize A4
+      */
+
+      resizeA4View();
+
+    };
+
+
+
+    /* =========================================================
+       ✅ DRAG & DROP — ឈ្មោះគ្រូបន្ទុកថ្នាក់ / កាលបរិច្ឆេទ
+
+       ទីតាំងអូសត្រូវបានគណនាជា % ធៀបនឹង .honor-card
+       ដូច្នេះទីតាំងនៅលើអេក្រង់ និងទីតាំងពេលបោះពុម្ព
+       នឹងដូចគ្នាជានិច្ច ទោះបីអេក្រង់ធំតូចខុសគ្នាក៏ដោយ
+    ========================================================== */
+
+    function initDraggableBlock(elementId, storageKey) {
+
+      const el = document.getElementById(elementId);
+
+      const page = document.querySelector('.honor-card');
+
+      if (!el || !page) return;
+
+
+      /*
+        ស្តារទីតាំងចាស់ដែលធ្លាប់អូសទុក (ជា % ធៀបនឹង .honor-card)
+      */
+
+      try {
+
+        const saved = JSON.parse(
+          localStorage.getItem(storageKey) || 'null'
+        );
+
+        if (saved &&
+          typeof saved.leftPct === 'number' &&
+          typeof saved.topPct === 'number') {
+
+          el.style.position = 'absolute';
+          el.style.left = saved.leftPct + '%';
+          el.style.top = saved.topPct + '%';
+          el.style.margin = '0';
+
+        }
+
+      } catch (e) {}
+
+
+      let isDragging = false;
+      let offsetX = 0;
+      let offsetY = 0;
+
+
+      function startDrag(clientX, clientY) {
+
+        isDragging = true;
+
+        el.classList.add('dragging');
+
+
+        if (el.style.position !== 'absolute') {
+
+          const pageRect = page.getBoundingClientRect();
+          const rect = el.getBoundingClientRect();
+
+          el.style.position = 'absolute';
+          el.style.left = (rect.left - pageRect.left) + 'px';
+          el.style.top = (rect.top - pageRect.top) + 'px';
+          el.style.margin = '0';
+
+        }
+
+
+        const rect2 = el.getBoundingClientRect();
+
+        offsetX = clientX - rect2.left;
+        offsetY = clientY - rect2.top;
+
+      }
+
+
+      function moveDrag(clientX, clientY) {
+
+        if (!isDragging) return;
+
+        const pageRect = page.getBoundingClientRect();
+
+        const leftPx = clientX - offsetX - pageRect.left;
+        const topPx = clientY - offsetY - pageRect.top;
+
+        el.style.left = leftPx + 'px';
+        el.style.top = topPx + 'px';
+
+      }
+
+
+      function endDrag() {
+
+        if (!isDragging) return;
+
+        isDragging = false;
+
+        el.classList.remove('dragging');
+
+
+        /*
+          បំប្លែងទីតាំងចុងក្រោយពី px ទៅជា %
+          ធៀបនឹង .honor-card រួចរក្សាទុកជា %
+        */
+
+        const pageRect = page.getBoundingClientRect();
+        const elRect = el.getBoundingClientRect();
+
+        const leftPct = pageRect.width > 0 ?
+          ((elRect.left - pageRect.left) / pageRect.width) * 100 : 0;
+
+        const topPct = pageRect.height > 0 ?
+          ((elRect.top - pageRect.top) / pageRect.height) * 100 : 0;
+
+        el.style.left = leftPct + '%';
+        el.style.top = topPct + '%';
+
+
+        localStorage.setItem(
+          storageKey,
+          JSON.stringify({ leftPct: leftPct, topPct: topPct })
+        );
+
+      }
+
+
+      el.addEventListener('mousedown', function (e) {
+        startDrag(e.clientX, e.clientY);
+        e.preventDefault();
+      });
+
+      document.addEventListener('mousemove', function (e) {
+        moveDrag(e.clientX, e.clientY);
+      });
+
+      document.addEventListener('mouseup', endDrag);
+
+
+      el.addEventListener('touchstart', function (e) {
+        const t = e.touches[0];
+        startDrag(t.clientX, t.clientY);
+      }, { passive: true });
+
+      document.addEventListener('touchmove', function (e) {
+        if (!isDragging) return;
+        const t = e.touches[0];
+        moveDrag(t.clientX, t.clientY);
+      }, { passive: true });
+
+      document.addEventListener('touchend', endDrag);
+
+    }
+
+
+
+    /* =========================================================
+       ✅ RESET DRAGGABLE POSITIONS
+    ========================================================== */
+
+    function resetDraggablePositions() {
+
+      ['teacherNameDragPosPct'].forEach(
+        function (key) {
+          localStorage.removeItem(key);
+        }
+      );
+
+      ['teacherNameDisplay'].forEach(
+        function (id) {
+
+          const el = document.getElementById(id);
+
+          if (el) {
+            el.style.position = '';
+            el.style.left = '';
+            el.style.top = '';
+            el.style.margin = '';
+          }
+
+        }
+      );
+
+    }
+
+
+
+    /* =========================================================
+       POPULATE CLASSES
+    ========================================================== */
+
+    function populateClasses(classes) {
+
+      const select =
+        document.getElementById(
+          'classSelect'
+        );
+
+
+      select.innerHTML = '';
+
+
+      classes.forEach(c => {
+
+        select.innerHTML +=
+          `<option value="${c}">${c}</option>`;
+
+      });
+
+
+      loadHonorRoll();
+
+    }
+
+
+
+    /* =========================================================
+       TOGGLE PERIOD OPTIONS
+    ========================================================== */
+
+    function togglePeriodOptions() {
+
+      const type =
+        document.getElementById(
+          'typeSelect'
+        ).value;
+
+
+      const container =
+        document.getElementById(
+          'periodContainer'
+        );
+
+
+
+      /*
+        ប្រចាំខែ
+      */
+
+      if (type === 'ប្រចាំខែ') {
+
+        container.innerHTML = `
+
+          <label class="font-bold text-sm text-slate-700">
+            រយៈពេល៖
+          </label>
+
+          <select
+            id="monthSelect"
+            class="border p-2 rounded text-sm bg-slate-50"
+            onchange="loadHonorRoll()">
+
+            <option value="មករា">មករា</option>
+            <option value="កុម្ភៈ">កុម្ភៈ</option>
+            <option value="មីនា">មីនា</option>
+            <option value="មេសា">មេសា</option>
+            <option value="ឧសភា">ឧសភា</option>
+            <option value="មិថុនា">មិថុនា</option>
+            <option value="កក្កដា">កក្កដា</option>
+            <option value="សីហា">សីហា</option>
+            <option value="កញ្ញា">កញ្ញា</option>
+            <option value="តុលា">តុលា</option>
+            <option value="វិច្ឆិកា">វិច្ឆិកា</option>
+            <option value="ធ្នូ">ធ្នូ</option>
+
+          </select>
+
+        `;
+
+      }
+
+
+      /*
+        ប្រឡងឆមាស
+      */
+
+      else if (type === 'ការប្រឡងឆមាស') {
+
+        container.innerHTML = `
+
+          <label class="font-bold text-sm text-slate-700">
+            រយៈពេល៖
+          </label>
+
+          <select
+            id="monthSelect"
+            class="border p-2 rounded text-sm bg-slate-50"
+            onchange="loadHonorRoll()">
+
+            <option value="ឆមាសទី១">
+              ការប្រឡងឆមាសទី១
+            </option>
+
+            <option value="ឆមាសទី២">
+              ការប្រឡងឆមាសទី២
+            </option>
+
+          </select>
+
+        `;
+
+      }
+
+
+      /*
+        ប្រចាំឆមាស
+      */
+
+      else if (type === 'ប្រចាំឆមាស') {
+
+        container.innerHTML = `
+
+          <label class="font-bold text-sm text-slate-700">
+            រយៈពេល៖
+          </label>
+
+          <select
+            id="monthSelect"
+            class="border p-2 rounded text-sm bg-slate-50"
+            onchange="loadHonorRoll()">
+
+            <option value="ប្រចាំឆមាសទី១">
+              ប្រចាំឆមាសទី១ (សរុប)
+            </option>
+
+            <option value="ប្រចាំឆមាសទី២">
+              ប្រចាំឆមាសទី២ (សរុប)
+            </option>
+
+          </select>
+
+        `;
+
+      }
+
+
+      /*
+        ប្រចាំឆ្នាំ
+      */
+
+      else if (type === 'ប្រចាំឆ្នាំ') {
+
+        container.innerHTML = `
+
+          <label class="font-bold text-sm text-slate-700">
+            រយៈពេល៖
+          </label>
+
+          <select
+            id="monthSelect"
+            class="border p-2 rounded text-sm bg-slate-50"
+            onchange="loadHonorRoll()">
+
+            <option value="ប្រចាំឆ្នាំ">
+              ពេញមួយឆ្នាំសិក្សា
+            </option>
+
+          </select>
+
+        `;
+
+      }
+
+
+      loadHonorRoll();
+
+    }
+
+
+
+    /* =========================================================
+       PERIOD LABEL
+    ========================================================== */
+
+    function getPeriodLabel(period) {
+
+      const labels = {
+
+        "ឆមាសទី១":
+          "ការប្រឡងឆមាសទី១",
+
+        "ឆមាសទី២":
+          "ការប្រឡងឆមាសទី២",
+
+        "ប្រចាំឆមាសទី១":
+          "ប្រចាំឆមាសទី១ (សរុប)",
+
+        "ប្រចាំឆមាសទី២":
+          "ប្រចាំឆមាសទី២ (សរុប)",
+
+        "ប្រចាំឆ្នាំ":
+          "ប្រចាំឆ្នាំសិក្សា"
+
+      };
+
+
+      return labels[period] ||
+        ("ប្រចាំខែ" + period);
+
+    }
+
+
+
+    /* =========================================================
+       LOAD HONOR ROLL
+    ========================================================== */
+
+    function loadHonorRoll() {
+
+      const className =
+        document.getElementById(
+          'classSelect'
+        ).value;
+
+
+      const type =
+        document.getElementById(
+          'typeSelect'
+        ).value;
+
+
+      const monthSelect =
+        document.getElementById(
+          'monthSelect'
+        );
+
+
+      if (!monthSelect) return;
+
+
+      const period =
+        monthSelect.value;
+
+
+      /*
+        Header Class
+      */
+
+      document.getElementById(
+        'lblClass'
+      ).innerText =
+        "ថ្នាក់ទី " + className;
+
+
+      /*
+        Header Period
+      */
+
+      document.getElementById(
+        'lblMonth'
+      ).innerText =
+        getPeriodLabel(period);
+
+
+      /*
+        ✅ ចាប់ខែដាក់ក្នុងប្រអប់ "ខែ" នៅផ្នែកចុះកាលបរិច្ឆេទ
+        តាមខែដែលបានជ្រើសរើសនៅផ្នែក "ប្រចាំខែ" ។
+        ចំពោះប្រភេទផ្សេងទៀត (ឆមាស/ឆ្នាំ) ទុកឱ្យវាយបញ្ចូលដោយដៃ។
+      */
+
+      const inputMonthEl =
+        document.getElementById(
+          'inputMonth'
+        );
+
+      if (inputMonthEl) {
+
+        if (type === 'ប្រចាំខែ') {
+
+          inputMonthEl.value = period;
+
+        }
+
+      }
+
+
+      /*
+        Load Data
+      */
+
+      google.script.run
+        .withSuccessHandler(renderHonorRoll)
+        .getTopStudentsForHonorRoll(
+          className,
+          period
+        );
+
+    }
+
+
+
+    /* =========================================================
+       RENDER HONOR ROLL
+    ========================================================== */
+
+    function renderHonorRoll(res) {
+
+
+      /*
+        Reset Rank 1-5
+      */
+
+      for (let i = 1; i <= 5; i++) {
+
+        document.getElementById(
+          `name${i}`
+        ).innerText = "-";
+
+
+        document.getElementById(
+          `img${i}`
+        ).src = PLACEHOLDER_IMG;
+
+
+        document.getElementById(
+          `rank${i}`
+        ).style.display = "none";
+
+      }
+
+
+      /*
+        No Data
+      */
+
+      if (!res || !res.topStudents) {
+        return;
+      }
+
+
+      /*
+        Render Students
+      */
+
+      res.topStudents.forEach(
+        (s, idx) => {
+
+          const num =
+            idx + 1;
+
+
+          /*
+            Limit 5
+          */
+
+          if (num > 5) return;
+
+
+          document.getElementById(
+            `rank${num}`
+          ).style.display = "block";
+
+
+          document.getElementById(
+            `name${num}`
+          ).innerText =
+            s.name;
+
+
+          if (s.imageUrl) {
+
+            document.getElementById(
+              `img${num}`
+            ).src =
+              s.imageUrl;
+
+          }
+
+        }
+      );
+
+    }
+
+
+
+    /* =========================================================
+       PREVENT HORIZONTAL SCROLL
+    ========================================================== */
+
+    document.addEventListener(
+      'touchmove',
+      function () {
+
+        /*
+          មិនបិទ touchmove ទេ
+          ដើម្បីរក្សា vertical scrolling
+        */
+
+      },
+      {
+        passive: true
+      }
+    );
+
+  </script>
+
+</body>
+
+</html>

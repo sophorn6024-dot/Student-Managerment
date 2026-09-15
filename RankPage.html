@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base target="_top">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Moul&family=Kantumruy+Pro:wght@400;500;600;700&family=Noto+Sans+Khmer:wght@400;500;600;700&family=Noto+Serif+Khmer:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    @page { size: A4 portrait; margin: 8mm; }
+    * { box-sizing: border-box; }
+    html { height: 100%; -webkit-text-size-adjust: 100%; -moz-text-size-adjust: 100%; text-size-adjust: 100%; }
+    body {
+      font-family: 'Noto Serif Khmer', 'Kantumruy Pro', 'Noto Sans Khmer', 'Khmer OS', 'Khmer OS System', sans-serif;
+      margin: 0; padding: 0; background: white; color: #000; line-height: 1.4;
+      min-height: 100%; overflow-x: hidden; overflow-y: auto;
+      -webkit-overflow-scrolling: touch; touch-action: pan-y;
+      position: relative;
+    }
+    .khmer-moul { font-family: 'Moul', cursive; }
+    .document-header { position: relative; width: 100%; margin-bottom: 12px; padding-top: 0px; }
+    .school-info { position: absolute; left: 0; top: 25px; text-align: center; font-size: 12px; line-height: 1.6; }
+    .nation-info { text-align: center; width: 100%; }
+    table.data-table { width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 8px; table-layout: fixed; }
+    table.data-table th, table.data-table td {
+      border: 1px solid #000; padding: 6px 3px; text-align: center;
+      vertical-align: middle; line-height: 1.35; overflow-wrap: break-word; word-break: normal;
+    }
+    table.data-table th {
+      background-color: #f1f5f9; color: #000;
+      font-family: 'Noto Serif Khmer', 'Kantumruy Pro', 'Noto Sans Khmer', 'Khmer OS', sans-serif;
+      font-size: 11px; padding: 7px 2px; font-weight: 700;
+      -webkit-print-color-adjust: exact; print-color-adjust: exact;
+    }
+    table.data-table td.col-name { text-align: left; padding-left: 8px; padding-right: 4px; font-weight: 600; font-size: 12.5px; white-space: nowrap; }
+    .rank-layout { display: none; width: 100%; }
+    .rank-layout.active { display: block; }
+    .rank-two-columns { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; width: 100%; align-items: start; }
+    .rank-two-columns table.data-table { font-size: 10.5px; margin-top: 4px; min-width: 0; width: 100%; table-layout: fixed; }
+    .rank-two-columns table.data-table th { font-size: 9.5px; padding: 5px 1px; }
+    .rank-two-columns table.data-table td { padding: 4px 1px; }
+    .rank-two-columns table.data-table td.col-name { font-size: 10px; padding-left: 4px; white-space: normal; word-break: break-word; overflow-wrap: break-word; line-height: 1.25; }
+    .blank-row td { border: none !important; background: transparent !important; color: transparent !important; }
+    .blank-row { border: none !important; }
+    .summary-boxes { display: flex; gap: 12px; width: 100%; margin-top: 10px; border-top: 1px solid #000; padding-top: 8px; }
+    .summary-box-left, .summary-box-right {
+      flex: 1; border: 1.5px dashed #16a34a; border-radius: 6px; padding: 8px 12px;
+      font-size: 11.5px; font-weight: 500; line-height: 1.9; color: #000; white-space: nowrap;
+    }
+    .summary-box-left span, .summary-box-right span { font-weight: 700; color: #16a34a; }
+    .grade-percent { font-weight: 700; white-space: nowrap; }
+    .footer-container { margin-top: 12px; display: flex; justify-content: space-between; align-items: flex-start; font-size: 12px; }
+    .footer-left { text-align: center; width: 40%; margin-top: 55px; }
+    .footer-right { text-align: center; width: 55%; }
+    .inline-input {
+      border: 1px dashed #94a3b8; border-radius: 3px; padding: 2px 4px;
+      font-family: 'Noto Serif Khmer', 'Kantumruy Pro'; font-size: 11.5px;
+      text-align: center; background-color: #f8fafc; color: #000; font-weight: 600;
+    }
+    .teacher-name-display {
+      font-family: 'Moul', cursive;
+      font-size: 12px;
+      color: #000;
+      margin-top: 6px;
+      min-height: 18px;
+      text-align: center;
+      display: inline-block;
+      cursor: move;
+      user-select: none;
+      -webkit-user-select: none;
+      padding: 10px 8px;
+      border: 1px dashed transparent;
+      border-radius: 4px;
+      touch-action: none;
+    }
+    .teacher-name-display:hover { border-color: #93c5fd; background: rgba(59,130,246,0.06); }
+    .teacher-name-display.dragging { border-color: #2563eb; background: rgba(37,99,235,0.10); }
+    .control-panel { margin-bottom: 15px; background: #eff6ff; padding: 10px 15px; border-radius: 8px; display: flex; flex-direction: column; gap: 12px; border: 1px solid #bfdbfe; }
+    .control-row { display: flex; gap: 15px; align-items: center; justify-content: space-between; flex-wrap: wrap; }
+    .cp-select-group { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+    .cp-select-group select, .cp-select-group input { padding: 6px; border-radius: 4px; border: 1px solid #ccc; font-family: 'Noto Serif Khmer', 'Kantumruy Pro'; }
+    .period-type-switcher { display: flex; gap: 6px; background: #dbeafe; padding: 4px; border-radius: 6px; }
+    .period-type-btn { padding: 6px 14px; border: none; border-radius: 5px; background: transparent; color: #1e3a8a; cursor: pointer; font-family: 'Noto Serif Khmer', 'Kantumruy Pro'; font-weight: 700; font-size: 13px; }
+    .period-type-btn.active { background: #1e40af; color: white; }
+    #monthSelectWrap, #semesterSelectWrap { display: none; align-items: center; gap: 8px; }
+    #monthSelectWrap.active, #semesterSelectWrap.active { display: flex; }
+    .layout-switcher { display: flex; gap: 6px; }
+    .layout-btn { padding: 6px 12px; border: 1px solid #93c5fd; border-radius: 5px; background: white; color: #1e3a8a; cursor: pointer; font-family: 'Noto Serif Khmer', 'Kantumruy Pro'; font-weight: 700; }
+    .layout-btn.active { background: #2563eb; color: white; border-color: #2563eb; }
+    @media screen and (max-width: 768px) {
+      body { padding: 6px; }
+      .control-row { flex-direction: column; align-items: stretch; gap: 10px; }
+      .control-panel .cp-select-group { flex-direction: column !important; align-items: stretch !important; width: 100%; gap: 8px; }
+      .control-panel .cp-select-group select, .control-panel .cp-select-group input { width: 100%; }
+      #monthSelectWrap, #semesterSelectWrap { width: 100%; }
+      .period-type-switcher { width: 100%; }
+      .period-type-btn { flex: 1; }
+      .control-panel .cp-actions { flex-direction: column !important; align-items: stretch !important; width: 100%; gap: 8px; }
+      .control-panel .cp-actions button { width: 100%; }
+      .layout-switcher { width: 100%; }
+      .layout-switcher .layout-btn { flex: 1; }
+    }
+    @media screen and (max-width: 480px) {
+      .document-header { margin-bottom: 6px; }
+      .school-info { font-size: 8px; top: 18px; line-height: 1.4; }
+      table.data-table { font-size: 7px; margin-top: 4px; }
+      table.data-table th { font-size: 6.5px; padding: 3px 1px; }
+      table.data-table td { padding: 3px 1px; }
+      table.data-table td.col-name { font-size: 7px; white-space: normal; word-break: break-word; padding-left: 3px; }
+      .rank-two-columns { gap: 4px; }
+      .rank-two-columns table.data-table { font-size: 6px; }
+      .rank-two-columns table.data-table th { font-size: 5.5px; padding: 2px 1px; }
+      .rank-two-columns table.data-table td.col-name { font-size: 6px; }
+      .summary-section { flex-direction: column; gap: 6px; font-size: 8px; margin-top: 8px; padding-top: 6px; }
+      .summary-boxes { flex-direction: column; gap: 6px; font-size: 8px; }
+      .footer-container { font-size: 8.5px; margin-top: 8px; }
+      .footer-left { width: 38%; margin-top: 55px; }
+      .footer-right { width: 58%; }
+      .inline-input { font-size: 8px; padding: 1px 3px; }
+    }
+    @media print {
+      .no-print { display: none !important; }
+      body { padding: 0; background: white; }
+      table.data-table { page-break-inside: auto; break-inside: auto; }
+      table.data-table tr, table.data-table thead, table.data-table tbody tr { page-break-inside: avoid !important; break-inside: avoid !important; }
+      table.data-table thead { display: table-header-group; }
+      table.data-table tbody { display: table-row-group; }
+      .school-info { font-size: 11.5pt !important; top: 25px !important; }
+      .nation-info .khmer-moul { font-size: 13pt !important; }
+      #rankLayout1 table.data-table { font-size: 11pt !important; }
+      #rankLayout1 table.data-table th { font-size: 10pt !important; padding: 5px 2px !important; }
+      #rankLayout1 table.data-table td { padding: 5px 2px !important; }
+      #rankLayout1 table.data-table td.col-name { font-size: 11.5pt !important; white-space: nowrap !important; }
+      .rank-two-columns { display: grid !important; grid-template-columns: 1fr 1fr !important; gap: 5px !important; width: 100% !important; }
+      #rankLayout2 table.data-table { table-layout: fixed !important; width: 100% !important; min-width: 0 !important; font-size: 8.5pt !important; }
+      #rankLayout2 table.data-table th { font-size: 7.5pt !important; padding: 3px 1px !important; background-color: #f1f5f9 !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; white-space: nowrap !important; }
+      #rankLayout2 table.data-table td { padding: 3px 1px !important; font-size: 8.5pt !important; }
+      #rankLayout2 table.data-table td:nth-child(1), #rankLayout2 table.data-table td:nth-child(2),
+      #rankLayout2 table.data-table td:nth-child(4), #rankLayout2 table.data-table td:nth-child(5),
+      #rankLayout2 table.data-table td:nth-child(6), #rankLayout2 table.data-table td:nth-child(7),
+      #rankLayout2 table.data-table td:nth-child(9) { white-space: nowrap !important; }
+      #rankLayout2 table.data-table td.col-name { text-align: left !important; padding-left: 3px !important; white-space: normal !important; word-break: break-word !important; overflow-wrap: break-word !important; font-size: 8pt !important; line-height: 1.2 !important; }
+      #rankLayout2 table.data-table th:nth-child(8), #rankLayout2 table.data-table td:nth-child(8) { white-space: normal !important; word-break: break-word !important; line-height: 1.2 !important; font-size: 8pt !important; }
+      .summary-boxes { gap: 10pt !important; margin-top: 8pt !important; padding-top: 6pt !important; }
+      .summary-box-left, .summary-box-right { font-size: 10pt !important; padding: 6pt 10pt !important; line-height: 1.8 !important; border: 1.5px dashed #16a34a !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+      .summary-box-left span, .summary-box-right span { color: #16a34a !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+      .footer-container { font-size: 11pt !important; }
+      .footer-left { margin-top: 55px !important; }
+      .inline-input { border: none !important; background: transparent !important; padding: 0 !important; outline: none !important; font-size: 11pt !important; }
+      .teacher-name-display { font-size: 12px !important; color: #000 !important; border: none !important; background: transparent !important; padding: 0 !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="no-print control-panel">
+    <div class="control-row">
+      <div class="cp-select-group">
+        <label><b>🏫 ថ្នាក់៖</b></label>
+        <select id="classSelect" onchange="loadRankData()">
+          <option value="">-- កំពុងទាញយក... --</option>
+        </select>
+      </div>
+      <div class="cp-select-group">
+        <label><b>👤 គ្រូបន្ទុកថ្នាក់ (កែបាន)៖</b></label>
+        <input type="text" id="teacherNameCtrl" placeholder="ឈ្មោះគ្រូ..." oninput="syncTeacherName(this.value)">
+      </div>
+      <div class="cp-actions" style="display:flex; gap:10px;">
+        <div class="layout-switcher">
+          <button id="layout1Btn" class="layout-btn active" onclick="setRankLayout(1)">ទម្រង់ទី ១</button>
+          <button id="layout2Btn" class="layout-btn" onclick="setRankLayout(2)">ទម្រង់ទី ២ (ចែកជា២)</button>
+        </div>
+        <button id="resetTeacherPosBtn" onclick="resetTeacherNamePosition()" title="ដាក់ឈ្មោះគ្រូបន្ទុកថ្នាក់ត្រឡប់ទីតាំងដើមវិញ" style="padding:6px 14px; background:#64748b; color:white; border:none; border-radius:4px; cursor:pointer; font-weight:bold; font-family:'Noto Serif Khmer','Kantumruy Pro'; font-size:12px;">↺ ទីតាំងឈ្មោះគ្រូ</button>
+        <button id="printBtn" onclick="printWhenFontsReady()" style="padding:6px 16px; background:#16a34a; color:white; border:none; border-radius:4px; cursor:pointer; font-weight:bold; font-family:'Noto Serif Khmer','Kantumruy Pro';">🖨️ បោះពុម្ព</button>
+      </div>
+    </div>
+
+    <div class="control-row">
+      <div class="cp-select-group" style="width:100%;">
+        <label><b>📅 ប្រភេទ៖</b></label>
+        <div class="period-type-switcher">
+          <button type="button" id="typeMonthBtn" class="period-type-btn active" onclick="setPeriodType('month')">ប្រចាំខែ</button>
+          <button type="button" id="typeSemesterBtn" class="period-type-btn" onclick="setPeriodType('semester')">ឆមាស / ប្រចាំឆ្នាំ</button>
+        </div>
+        <div id="monthSelectWrap" class="active">
+          <select id="monthSelect" onchange="loadRankData()">
+            <option value="មករា">ខែមករា</option>
+            <option value="កុម្ភៈ" selected>ខែកុម្ភៈ</option>
+            <option value="មីនា">ខែមីនា</option>
+            <option value="មេសា">ខែមេសា</option>
+            <option value="ឧសភា">ខែឧសភា</option>
+            <option value="មិថុនា">ខែមិថុនា</option>
+            <option value="កក្កដា">ខែកក្កដា</option>
+            <option value="សីហា">ខែសីហា</option>
+            <option value="កញ្ញា">ខែកញ្ញា</option>
+            <option value="តុលា">ខែតុលា</option>
+            <option value="វិច្ឆិកា">ខែវិច្ឆិកា</option>
+            <option value="ធ្នូ">ខែធ្នូ</option>
+          </select>
+        </div>
+        <div id="semesterSelectWrap">
+          <select id="semesterSelect" onchange="loadRankData()">
+            <option value="ឆមាសទី១">ការប្រឡងឆមាសទី១ (តែប្រឡង)</option>
+            <option value="ប្រចាំឆមាសទី១">ប្រចាំឆមាសទី១ (សរុប)</option>
+            <option value="ឆមាសទី២">ការប្រឡងឆមាសទី២ (តែប្រឡង)</option>
+            <option value="ប្រចាំឆមាសទី២">ប្រចាំឆមាសទី២ (សរុប)</option>
+            <option value="ប្រចាំឆ្នាំ">ប្រចាំឆ្នាំ (ពេញមួយឆ្នាំសិក្សា)</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="printPage" style="position:relative;">
+  <div class="document-header">
+    <div class="school-info">
+      <span style="font-weight:700;">រដ្ឋបាល ស្រុកសំឡូត</span><br>
+      <span style="font-weight:700;">សាលាបឋមសិក្សាកំពង់ល្ពៅ</span>
+    </div>
+    <div class="nation-info">
+      <div class="khmer-moul" style="font-size:14px;">ព្រះរាជាណាចក្រកម្ពុជា</div>
+      <div class="khmer-moul" style="font-size:12px; margin-top:3px;">ជាតិ សាសនា ព្រះមហាក្សត្រ</div>
+    </div>
+  </div>
+
+  <div style="text-align:center; margin-top:10px; margin-bottom:8px;">
+    <span id="txtClassHeader" class="khmer-moul" style="font-size:13px; color:#1e3a8a;">ថ្នាក់ទី...</span><br>
+    <span id="txtTitleHeader" class="khmer-moul" style="font-size:14px; margin-top:3px; display:inline-block;">ចំណាត់ថ្នាក់</span>
+  </div>
+
+  <div id="rankLayout1" class="rank-layout active">
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th style="width:5.8%;">ល.រ</th>
+          <th style="width:9%;">អត្តលេខ</th>
+          <th style="width:27.1%;">គោត្តនាម និងនាម</th>
+          <th style="width:6.3%;">ភេទ</th>
+          <th id="thTotalHeader" style="width:9.9%;">ពិន្ទុសរុប</th>
+          <th style="width:9.9%;">មធ្យមភាគ</th>
+          <th style="width:10.7%;">ចំណាត់ថ្នាក់</th>
+          <th style="width:13.2%;">និទ្ទេស</th>
+          <th style="width:8.2%;">លទ្ធផល</th>
+        </tr>
+      </thead>
+      <tbody id="rankBody">
+        <tr><td colspan="9" style="padding:20px; color:#64748b;">កំពុងទាញយកទិន្នន័យ...</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div id="rankLayout2" class="rank-layout">
+    <div class="rank-two-columns">
+      <table class="data-table">
+        <thead id="rankHeadLeft"></thead>
+        <tbody id="rankBodyLeft">
+          <tr><td colspan="9" style="padding:15px; color:#64748b;">កំពុងទាញយកទិន្នន័យ...</td></tr>
+        </tbody>
+      </table>
+      <table class="data-table">
+        <thead id="rankHeadRight"></thead>
+        <tbody id="rankBodyRight">
+          <tr><td colspan="9" style="padding:15px; color:#64748b;">កំពុងទាញយកទិន្នន័យ...</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <div class="summary-boxes">
+    <div class="summary-box-left">
+      • សិស្សជាប់មធ្យមភាគ ៖ <span id="stPass">0</span> នាក់ (ស្រី <span id="stPassFemale">0</span>) <span id="pPass" class="grade-percent">0.00%</span><br>
+      • សិស្សធ្លាក់មធ្យមភាគ ៖ <span id="stFail">0</span> នាក់ (ស្រី <span id="stFailFemale">0</span>) <span id="pFail" class="grade-percent">0.00%</span>
+    </div>
+    <div class="summary-box-left">
+      • និទ្ទេស A ៖ <span id="cA">0</span> នាក់ (ស្រី <span id="fA">0</span>) <span id="pA" class="grade-percent">0.00%</span><br>
+      • និទ្ទេស B ៖ <span id="cB">0</span> នាក់ (ស្រី <span id="fB">0</span>) <span id="pB" class="grade-percent">0.00%</span><br>
+      • និទ្ទេស C ៖ <span id="cC">0</span> នាក់ (ស្រី <span id="fC">0</span>) <span id="pC" class="grade-percent">0.00%</span>
+    </div>
+    <div class="summary-box-right">
+      • និទ្ទេស D ៖ <span id="cD">0</span> នាក់ (ស្រី <span id="fD">0</span>) <span id="pD" class="grade-percent">0.00%</span><br>
+      • និទ្ទេស E ៖ <span id="cE">0</span> នាក់ (ស្រី <span id="fE">0</span>) <span id="pE" class="grade-percent">0.00%</span><br>
+      • និទ្ទេស F ៖ <span id="cF">0</span> នាក់ (ស្រី <span id="fF">0</span>) <span id="pF" class="grade-percent">0.00%</span>
+    </div>
+  </div>
+
+  <div class="footer-container">
+    <div class="footer-left">
+      បានឃើញ និងឯកភាព<br>
+      <div class="khmer-moul" style="font-size:12px; margin-top:5px;">នាយកសាលា</div>
+    </div>
+    <div class="footer-right">
+      <div style="font-size:11px; font-weight:500; text-align:center; margin-bottom:4px;">
+        <input type="text" id="lunarInput" value="" class="inline-input" style="width:100%;" placeholder="វាយបញ្ចូលថ្ងៃចន្ទគតិទីនេះ...">
+      </div>
+      <div style="margin-top:4px; font-size:11.5px;">
+        ធ្វើនៅកំពង់ល្ពៅ, ថ្ងៃទី<input type="text" id="dayInput" value="" class="inline-input" style="width:40px; margin:0 4px;" placeholder="...">
+        ខែ<span id="selectedMonthTxt" style="font-weight:600; padding:0 4px;">...</span>
+        ឆ្នាំ<span id="currentYearTxt">២០២៦</span>
+      </div>
+      <div class="khmer-moul" style="font-size:12px; margin-top:6px;">គ្រូបន្ទុកថ្នាក់</div>
+      <div class="teacher-name-display" id="teacherNameDisplay" title="អូសដើម្បីផ្លាស់ទីតាំង">&nbsp;</div>
+    </div>
+  </div>
+  </div>
+
+  <script>
+    // ✅ TOKEN ទទួលចេញពី doGet() template variable
+    var TOKEN = "<?= token ?>";
+
+    window.onload = function() {
+      setCurrentKhmerYear();
+      setCurrentKhmerDay();
+      initDraggableTeacherName();
+      loadClassList();
+      const savedLayout = localStorage.getItem('rankLayout');
+      setRankLayout(savedLayout === '2' ? 2 : 1);
+      const savedType = localStorage.getItem('periodType');
+      setPeriodType(savedType === 'semester' ? 'semester' : 'month', true);
+      if (document.fonts && document.fonts.ready) {
+        Promise.all([
+          document.fonts.load("400 12px 'Noto Serif Khmer'"),
+          document.fonts.load("600 12px 'Noto Serif Khmer'"),
+          document.fonts.load("700 12px 'Noto Serif Khmer'"),
+          document.fonts.load("400 12px 'Moul'"),
+          document.fonts.load("400 12px 'Noto Sans Khmer'")
+        ]).catch(function() {});
+      }
+
+      // ✅ ចាប់ឈ្មោះគ្រូបន្ទុកថ្នាក់ដោយស្វ័យប្រវត្តិពីគណនីគ្រូដែល login (session.name)
+      google.script.run
+        .withSuccessHandler(function(session) {
+          if (session && session.loggedIn && session.name) {
+            document.getElementById('teacherNameCtrl').value = session.name;
+            document.getElementById('teacherNameDisplay').textContent = session.name;
+          }
+        })
+        .withFailureHandler(function() {})
+        .getCurrentSession(TOKEN);
+    };
+
+    // sync ឈ្មោះគ្រូ control → div ក្នុងទំព័រ
+    function syncTeacherName(val) {
+      document.getElementById('teacherNameDisplay').textContent = val || '';
+    }
+
+    // ✅ ថ្ងៃទីនៅផ្នែកចុះហត្ថលេខា ចាប់តាមថ្ងៃបច្ចុប្បន្ន (លេខខ្មែរ)
+    function setCurrentKhmerDay() {
+      var dayEl = document.getElementById('dayInput');
+      if (dayEl) dayEl.value = toKhmerNum(new Date().getDate());
+    }
+
+    // ==========================================================================
+    // 🖱️ ឈ្មោះគ្រូបន្ទុកថ្នាក់ — អូសដាក់កន្លែងណាក៏បានលើទំព័រ ដើម្បីងាយស្រួល
+    // ✅ ទីតាំងគណនាជា % ធៀបនឹង #printPage (មិនមែនធៀបនឹងអេក្រង់/scroll ទេ)
+    //    ដូច្នេះកន្លែងអូសដាក់នៅលើអេក្រង់ និងកន្លែងបោះពុម្ពនឹងដូចគ្នាជានិច្ច
+    //    ទោះបីផ្ទាំងគ្រប់គ្រង (control panel) ត្រូវលាក់ពេលបោះពុម្ពក៏ដោយ
+    // ==========================================================================
+    var TEACHER_POS_KEY = 'teacherNameDragPosPct';
+
+    function initDraggableTeacherName() {
+      var el = document.getElementById('teacherNameDisplay');
+      var page = document.getElementById('printPage');
+      if (!el || !page) return;
+
+      // ស្តារទីតាំងចាស់ដែលធ្លាប់អូសទុក (ជា % ធៀបនឹង #printPage)
+      try {
+        var saved = JSON.parse(localStorage.getItem(TEACHER_POS_KEY) || 'null');
+        if (saved && typeof saved.leftPct === 'number' && typeof saved.topPct === 'number') {
+          el.style.position = 'absolute';
+          el.style.left = saved.leftPct + '%';
+          el.style.top = saved.topPct + '%';
+          el.style.margin = '0';
+        }
+      } catch (e) {}
+
+      var isDragging = false, offsetX = 0, offsetY = 0;
+
+      function startDrag(clientX, clientY) {
+        isDragging = true;
+        el.classList.add('dragging');
+        if (el.style.position !== 'absolute') {
+          var pageRect = page.getBoundingClientRect();
+          var rect = el.getBoundingClientRect();
+          el.style.position = 'absolute';
+          el.style.left = (rect.left - pageRect.left) + 'px';
+          el.style.top = (rect.top - pageRect.top) + 'px';
+          el.style.margin = '0';
+        }
+        var rect2 = el.getBoundingClientRect();
+        offsetX = clientX - rect2.left;
+        offsetY = clientY - rect2.top;
+      }
+
+      function moveDrag(clientX, clientY) {
+        if (!isDragging) return;
+        var pageRect = page.getBoundingClientRect();
+        var leftPx = clientX - offsetX - pageRect.left;
+        var topPx = clientY - offsetY - pageRect.top;
+        el.style.left = leftPx + 'px';
+        el.style.top = topPx + 'px';
+      }
+
+      function endDrag() {
+        if (!isDragging) return;
+        isDragging = false;
+        el.classList.remove('dragging');
+
+        // ✅ បំប្លែងទីតាំងចុងក្រោយពី px ទៅជា % ធៀបនឹង #printPage រួចរក្សាទុកជា %
+        var pageRect = page.getBoundingClientRect();
+        var elRect = el.getBoundingClientRect();
+        var leftPct = pageRect.width  > 0 ? ((elRect.left - pageRect.left) / pageRect.width)  * 100 : 0;
+        var topPct  = pageRect.height > 0 ? ((elRect.top  - pageRect.top)  / pageRect.height) * 100 : 0;
+
+        el.style.left = leftPct + '%';
+        el.style.top = topPct + '%';
+
+        localStorage.setItem(TEACHER_POS_KEY, JSON.stringify({ leftPct: leftPct, topPct: topPct }));
+      }
+
+      el.addEventListener('mousedown', function(e) { startDrag(e.clientX, e.clientY); e.preventDefault(); });
+      document.addEventListener('mousemove', function(e) { moveDrag(e.clientX, e.clientY); });
+      document.addEventListener('mouseup', endDrag);
+
+      el.addEventListener('touchstart', function(e) {
+        var t = e.touches[0];
+        startDrag(t.clientX, t.clientY);
+      }, { passive: true });
+      document.addEventListener('touchmove', function(e) {
+        if (!isDragging) return;
+        var t = e.touches[0];
+        moveDrag(t.clientX, t.clientY);
+      }, { passive: true });
+      document.addEventListener('touchend', endDrag);
+    }
+
+    function resetTeacherNamePosition() {
+      localStorage.removeItem(TEACHER_POS_KEY);
+      var el = document.getElementById('teacherNameDisplay');
+      if (el) {
+        el.style.position = '';
+        el.style.left = '';
+        el.style.top = '';
+        el.style.margin = '';
+      }
+    }
+
+    function printWhenFontsReady() {
+      var btn = document.getElementById('printBtn');
+      if (!document.fonts || !document.fonts.ready) { window.print(); return; }
+      if (btn) { btn.disabled = true; btn.textContent = '⏳ កំពុងរៀបចំ...'; }
+      document.fonts.ready.then(function() {
+        setTimeout(function() {
+          if (btn) { btn.disabled = false; btn.textContent = '🖨️ បោះពុម្ព'; }
+          window.print();
+        }, 150);
+      }).catch(function() {
+        if (btn) { btn.disabled = false; btn.textContent = '🖨️ បោះពុម្ព'; }
+        window.print();
+      });
+    }
+
+    const SUMMARY_TOTAL_AS_AVG_PERIODS = ["ប្រចាំឆមាសទី១", "ប្រចាំឆមាសទី២", "ប្រចាំឆ្នាំ"];
+
+    function setCurrentKhmerYear() {
+      document.getElementById('currentYearTxt').textContent = toKhmerNum(new Date().getFullYear().toString());
+    }
+
+    function toKhmerNum(num) {
+      if (num === null || num === undefined) return '';
+      const kd = ['០','១','២','៣','៤','៥','៦','៧','៨','៩'];
+      return num.toString().split('').map(d => kd[parseInt(d)] !== undefined ? kd[parseInt(d)] : d).join('');
+    }
+
+    function setPeriodType(type, skipReload) {
+      const monthWrap = document.getElementById('monthSelectWrap');
+      const semWrap = document.getElementById('semesterSelectWrap');
+      const btnMonth = document.getElementById('typeMonthBtn');
+      const btnSem = document.getElementById('typeSemesterBtn');
+      if (type === 'semester') {
+        monthWrap.classList.remove('active'); semWrap.classList.add('active');
+        btnMonth.classList.remove('active'); btnSem.classList.add('active');
+      } else {
+        semWrap.classList.remove('active'); monthWrap.classList.add('active');
+        btnSem.classList.remove('active'); btnMonth.classList.add('active');
+        type = 'month';
+      }
+      localStorage.setItem('periodType', type);
+      if (!skipReload) loadRankData();
+    }
+
+    function getSelectedPeriod() {
+      const type = localStorage.getItem('periodType') === 'semester' ? 'semester' : 'month';
+      return type === 'semester'
+        ? document.getElementById('semesterSelect').value
+        : document.getElementById('monthSelect').value;
+    }
+
+    // ✅ ជំនួស getClassList() → getClassListForSession(TOKEN)
+    function loadClassList() {
+      google.script.run
+        .withSuccessHandler(function(classes) {
+          let select = document.getElementById('classSelect');
+          select.innerHTML = '';
+          if (classes && classes.length > 0) {
+            classes.forEach(function(c) {
+              let opt = document.createElement('option');
+              opt.value = c.toString().trim();
+              opt.textContent = c.toString().startsWith("ថ្នាក់") ? c : "ថ្នាក់ទី " + c;
+              select.appendChild(opt);
+            });
+          }
+          loadRankData();
+        })
+        .withFailureHandler(function(err) {
+          console.error('getClassListForSession error:', err);
+        })
+        .getClassListForSession(TOKEN);
+    }
+
+    function getPeriodTitle(period) {
+      const titles = {
+        "ឆមាសទី១": "ចំណាត់ថ្នាក់ប្រឡងឆមាសទី១",
+        "ឆមាសទី២": "ចំណាត់ថ្នាក់ប្រឡងឆមាសទី២",
+        "ប្រចាំឆមាសទី១": "ចំណាត់ថ្នាក់ប្រចាំឆមាសទី១",
+        "ប្រចាំឆមាសទី២": "ចំណាត់ថ្នាក់ប្រចាំឆមាសទី២",
+        "ប្រចាំឆ្នាំ": "ចំណាត់ថ្នាក់ប្រចាំឆ្នាំ"
+      };
+      return titles[period] || ("ចំណាត់ថ្នាក់ប្រចាំខែ" + period);
+    }
+
+    // ✅ ជំនួស getRankData() → getRankDataSecured(TOKEN, ...)
+    function loadRankData() {
+      let selectedClass = document.getElementById('classSelect').value;
+      let selectedMonth = getSelectedPeriod();
+      if (!selectedClass) return;
+
+      let monthTxtContainer = document.getElementById('selectedMonthTxt');
+      if (selectedMonth.includes("ឆមាស") || selectedMonth === "ប្រចាំឆ្នាំ") {
+        monthTxtContainer.innerHTML = '<input type="text" class="inline-input" style="width:70px;" placeholder="........">';
+      } else {
+        monthTxtContainer.textContent = selectedMonth;
+      }
+
+      document.getElementById('txtClassHeader').textContent = selectedClass.startsWith("ថ្នាក់") ? selectedClass : "ថ្នាក់ទី " + selectedClass;
+      document.getElementById('txtTitleHeader').textContent = getPeriodTitle(selectedMonth);
+      document.getElementById('thTotalHeader').textContent = SUMMARY_TOTAL_AS_AVG_PERIODS.includes(selectedMonth) ? "មធ្យមភាគសរុប" : "ពិន្ទុសរុប";
+      document.getElementById('rankBody').innerHTML = '<tr><td colspan="9" style="padding:20px;">កំពុងទាញយកទិន្នន័យ...</td></tr>';
+
+      google.script.run
+        .withSuccessHandler(function(data) { renderRankTable(data); })
+        .withFailureHandler(function(err) {
+          document.getElementById('rankBody').innerHTML = '<tr><td colspan="9" style="padding:20px; color:#ef4444;">មានបញ្ហា៖ ' + (err.message || err) + '</td></tr>';
+        })
+        .getRankDataSecured(TOKEN, selectedClass, selectedMonth);
+    }
+
+    function getRankTableHeader() {
+      return `<tr>
+        <th style="width:6%;">ល.រ</th>
+        <th style="width:8%;">អ.ល</th>
+        <th style="width:22%;">គោត្តនាម-នាម</th>
+        <th style="width:8%;">ភេទ</th>
+        <th style="width:9%;">សរុប</th>
+        <th style="width:9%;">ម.ភាគ</th>
+        <th style="width:9%;">ចំ.ថ្នាក់</th>
+        <th style="width:18%;">និទ្ទេស</th>
+        <th style="width:11%;">លទ្ធផល</th>
+      </tr>`;
+    }
+
+    function makeBlankRow() {
+      return '<tr class="blank-row"><td>&nbsp;</td><td>&nbsp;</td><td class="col-name">&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>';
+    }
+
+    function getGradeCodeFromAverage(avg) {
+      const value = Number(avg);
+      if (!Number.isFinite(value)) return 'F';
+      if (value >= 9.00) return 'A';
+      if (value >= 8.00) return 'B';
+      if (value >= 7.00) return 'C';
+      if (value >= 6.00) return 'D';
+      if (value >= 5.00) return 'E';
+      return 'F';
+    }
+
+    function getGradeName(code) {
+      const names = { A:'ល្អប្រសើរ', B:'ល្អណាស់', C:'ល្អ', D:'បង្គួរ', E:'មធ្យម', F:'ខ្សោយ' };
+      return names[code] || 'ខ្សោយ';
+    }
+
+    function getGradeColor(code) {
+      const colors = { A:'#0070C0', B:'#92D050', C:'#FFFF00', D:'#7030A0', E:'#00FFFF', F:'#FF0000' };
+      return colors[code] || '#000000';
+    }
+
+    function formatAverage(value) {
+      const n = Number(value);
+      return Number.isFinite(n) ? n.toFixed(2) : '';
+    }
+
+    function makeRankRow(s) {
+      const avg = Number(s.avg);
+      const gradeCode = getGradeCodeFromAverage(avg);
+      const gradeName = getGradeName(gradeCode);
+      const gradeColor = getGradeColor(gradeCode);
+      const result = Number.isFinite(avg) && avg >= 5 ? 'ជាប់' : 'ធ្លាក់';
+      const resultColor = result === 'ជាប់' ? '#16a34a' : '#dc2626';
+      return `<tr>
+        <td>${s.displayNo ?? s.rank ?? ''}</td>
+        <td>${s.id ?? ''}</td>
+        <td class="col-name">${s.name ?? ''}</td>
+        <td>${s.sex ?? ''}</td>
+        <td>${s.total ?? ''}</td>
+        <td>${formatAverage(avg)}</td>
+        <td style="font-weight:bold; color:${Number(s.rank) <= 3 ? '#dc2626' : '#000'};">${s.rank ?? ''}</td>
+        <td style="font-weight:bold; color:${gradeColor};">${gradeName} (${gradeCode})</td>
+        <td style="font-weight:bold; color:${resultColor};">${result}</td>
+      </tr>`;
+    }
+
+    function renderRankTable(data) {
+      let tbody = document.getElementById('rankBody');
+      if (!data || data.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="9" style="padding:20px; color:#ef4444;">ពុំទាន់មានទិន្នន័យពិន្ទុទេ!</td></tr>';
+        document.getElementById('rankBodyLeft').innerHTML = '<tr><td colspan="9" style="padding:15px; color:#ef4444;">ពុំទាន់មានទិន្នន័យ</td></tr>';
+        document.getElementById('rankBodyRight').innerHTML = '<tr><td colspan="9" style="padding:15px; color:#ef4444;">ពុំទាន់មានទិន្នន័យ</td></tr>';
+        document.getElementById('rankHeadLeft').innerHTML = getRankTableHeader();
+        document.getElementById('rankHeadRight').innerHTML = getRankTableHeader();
+        resetSummary(); return;
+      }
+
+      let passCount = 0, passFemale = 0, failCount = 0, failFemale = 0;
+      let counts = { A:0, B:0, C:0, D:0, E:0, F:0 };
+      let females = { A:0, B:0, C:0, D:0, E:0, F:0 };
+
+      data.forEach(function(s) {
+        const avg = Number(s.avg);
+        if (!Number.isFinite(avg)) return;
+        const sex = String(s.sex || '').trim().toUpperCase();
+        const isFemale = sex === 'ស្រី' || sex === 'F';
+        if (avg >= 5.00) { passCount++; if (isFemale) passFemale++; }
+        else { failCount++; if (isFemale) failFemale++; }
+        const gCode = getGradeCodeFromAverage(avg);
+        counts[gCode]++; if (isFemale) females[gCode]++;
+      });
+
+      tbody.innerHTML = data.map(function(s, idx) { return makeRankRow(Object.assign({}, s, { displayNo: idx + 1 })); }).join('');
+
+      const splitAt = Math.ceil(data.length / 2);
+      const leftData = data.slice(0, splitAt);
+      const rightData = data.slice(splitAt);
+
+      document.getElementById('rankHeadLeft').innerHTML = getRankTableHeader();
+      document.getElementById('rankHeadRight').innerHTML = getRankTableHeader();
+
+      let leftRowsHtml = leftData.map(function(s, idx) { return makeRankRow(Object.assign({}, s, { displayNo: idx + 1 })); }).join('');
+      let rightRowsHtml = rightData.length ? rightData.map(function(s, idx) { return makeRankRow(Object.assign({}, s, { displayNo: splitAt + idx + 1 })); }).join('') : '';
+
+      const rowDiff = leftData.length - rightData.length;
+      if (rowDiff > 0) rightRowsHtml += makeBlankRow().repeat(rowDiff);
+      else if (rowDiff < 0) leftRowsHtml += makeBlankRow().repeat(-rowDiff);
+
+      document.getElementById('rankBodyLeft').innerHTML = leftRowsHtml;
+      document.getElementById('rankBodyRight').innerHTML = rightRowsHtml;
+
+      const totalStudents = passCount + failCount;
+      document.getElementById('stPass').textContent = passCount;
+      document.getElementById('stPassFemale').textContent = passFemale;
+      document.getElementById('stFail').textContent = failCount;
+      document.getElementById('stFailFemale').textContent = failFemale;
+      document.getElementById('pPass').textContent = totalStudents > 0 ? ((passCount / totalStudents) * 100).toFixed(2) + '%' : '0.00%';
+      document.getElementById('pFail').textContent = totalStudents > 0 ? ((failCount / totalStudents) * 100).toFixed(2) + '%' : '0.00%';
+
+      ['A','B','C','D','E','F'].forEach(function(g) {
+        const percent = totalStudents > 0 ? ((counts[g] / totalStudents) * 100).toFixed(2) + '%' : '0.00%';
+        document.getElementById('c' + g).textContent = counts[g];
+        document.getElementById('f' + g).textContent = females[g];
+        document.getElementById('p' + g).textContent = percent;
+        const gradeColor = getGradeColor(g);
+        document.getElementById('c' + g).style.color = gradeColor;
+        document.getElementById('f' + g).style.color = gradeColor;
+        document.getElementById('p' + g).style.color = gradeColor;
+      });
+    }
+
+    function setRankLayout(layoutNo) {
+      const layout1 = document.getElementById('rankLayout1');
+      const layout2 = document.getElementById('rankLayout2');
+      const btn1 = document.getElementById('layout1Btn');
+      const btn2 = document.getElementById('layout2Btn');
+      if (layoutNo === 2) {
+        layout1.classList.remove('active'); layout2.classList.add('active');
+        btn1.classList.remove('active'); btn2.classList.add('active');
+        localStorage.setItem('rankLayout', '2');
+      } else {
+        layout2.classList.remove('active'); layout1.classList.add('active');
+        btn2.classList.remove('active'); btn1.classList.add('active');
+        localStorage.setItem('rankLayout', '1');
+      }
+    }
+
+    function resetSummary() {
+      document.getElementById('stPass').textContent = '0';
+      document.getElementById('stPassFemale').textContent = '0';
+      document.getElementById('stFail').textContent = '0';
+      document.getElementById('stFailFemale').textContent = '0';
+      document.getElementById('pPass').textContent = '0.00%';
+      document.getElementById('pFail').textContent = '0.00%';
+      ['A','B','C','D','E','F'].forEach(function(g) {
+        document.getElementById('c' + g).textContent = '0';
+        document.getElementById('f' + g).textContent = '0';
+        document.getElementById('p' + g).textContent = '0.00%';
+        const gradeColor = getGradeColor(g);
+        document.getElementById('c' + g).style.color = gradeColor;
+        document.getElementById('f' + g).style.color = gradeColor;
+        document.getElementById('p' + g).style.color = gradeColor;
+      });
+    }
+  </script>
+</body>
+</html>
