@@ -1,0 +1,675 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+  <base target="_top">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>សៀវភៅសិក្ខាគារិក</title>
+  
+  <!-- 🔤 Google Fonts Khmer -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Battambang:wght@400;700&family=Kantumruy+Pro:ital,wght@0,400;0,600;0,700;1,400&family=Moul&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --navy: #132d56;
+      --navy-light: #1e3a8a;
+      --red-star: #dc2626;
+      --border-color: #132d56;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-print-color-adjust: exact !important;
+      print-color-adjust: exact !important;
+    }
+
+    body {
+      font-family: 'Khmer OS Battambang', 'Battambang', 'Kantumruy Pro', sans-serif;
+      background-color: #2b3544;
+      color: var(--navy);
+      font-size: 14px;
+      line-height: 1.45;
+      text-rendering: optimizeLegibility;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .f-moul { font-family: 'Khmer OS Muol Light', 'Moul', cursive; font-weight: normal; letter-spacing: 0.3px; }
+    .f-bold { font-family: 'Khmer OS Battambang', 'Battambang', sans-serif; font-weight: 700; }
+    .f-regular { font-family: 'Khmer OS Battambang', 'Battambang', 'Kantumruy Pro', sans-serif; font-weight: 400; }
+
+    /* Top Toolbar */
+    .no-print-bar {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: #0f172a;
+      color: #fff;
+      padding: 8px 16px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+    }
+    .tool-group { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+    .btn {
+      display: inline-flex; align-items: center; gap: 4px; padding: 5px 11px;
+      border-radius: 6px; border: 1px solid #4b5563; background: #1f2937; color: #f3f4f6;
+      font-family: 'Kantumruy Pro', sans-serif; font-size: 11.5px; cursor: pointer; text-decoration: none;
+      transition: all 0.15s;
+    }
+    .btn:hover { background: #374151; }
+    .btn-primary { background: #2563eb; border-color: #1d4ed8; color: #fff; font-weight: bold; }
+
+    select {
+      font-family: 'Kantumruy Pro', sans-serif; font-size: 11.5px; padding: 4px 8px;
+      border-radius: 6px; background: #1f2937; color: #fff; border: 1px solid #4b5563; outline: none;
+    }
+
+    .preview-wrapper {
+      padding: 20px 10px; display: flex; flex-direction: column; align-items: center; gap: 20px;
+    }
+    .sheet-page {
+      background: #ffffff; width: 297mm; height: 210mm; max-height: 210mm;
+      padding: 6mm 7.5mm; display: grid; grid-template-columns: 1fr 1fr; gap: 7mm;
+      box-shadow: 0 10px 28px rgba(0,0,0,0.5); page-break-after: always; position: relative; overflow: hidden;
+    }
+    .page-box {
+      border: 3.5px double var(--navy); padding: 14px 18px 12px 18px; display: flex;
+      flex-direction: column; justify-content: space-between; height: 100%; position: relative;
+    }
+
+    .header-text { text-align: center; color: var(--navy); }
+    .header-text h2 { font-size: 17.5px; margin-bottom: 2px; line-height: 1.3; }
+    .header-text h3 { font-size: 15.5px; margin-bottom: 2px; line-height: 1.3; }
+    .header-icons { font-size: 14px; letter-spacing: 6px; color: var(--red-star); margin: 3px 0 5px 0; }
+
+    .dotted-row { display: flex; align-items: flex-end; width: 100%; margin-bottom: 12px; font-size: 15px; }
+    .dotted-label { white-space: nowrap; font-weight: bold; font-size: 15px; }
+    .dotted-space { flex: 1; border-bottom: 1.5px dotted var(--navy); margin-left: 6px; padding-left: 6px; min-height: 23px; font-weight: bold; font-size: 15px; }
+
+    .cover-info-block {
+      margin: 30px 0 20px 0;
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
+    }
+    .cover-dotted-row {
+      display: flex;
+      align-items: flex-end;
+      width: 100%;
+      font-size: 16px;
+    }
+    .cover-dotted-label {
+      white-space: nowrap;
+      font-weight: bold;
+      font-size: 16px;
+    }
+    .cover-dotted-space {
+      flex: 1;
+      border-bottom: 1.6px dotted var(--navy);
+      margin-left: 6px;
+      padding-left: 6px;
+      min-height: 26px;
+      font-weight: bold;
+      font-size: 16px;
+    }
+
+    .custom-table {
+      width: 100%; border-collapse: collapse; font-size: 13px; text-align: center; border: 1.35px solid var(--navy); margin-bottom: 3px; table-layout: fixed;
+    }
+    .custom-table th, .custom-table td {
+      border: 1.15px solid var(--navy); padding: 1.8px 2px; height: 21.5px; vertical-align: middle;
+    }
+    .custom-table th { background: #f8fafc; font-weight: bold; font-size: 13.5px; }
+    .custom-table td.text-left { text-align: left; padding-left: 7px; font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+    .red-bold { color: #dc2626; font-weight: bold; font-size: 13.5px; }
+
+    .sig-block {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 6px;
+    }
+    .sig-inner {
+      text-align: center;
+      min-width: 180px;
+    }
+
+    @media print {
+      html, body { background: none; padding: 0; margin: 0; width: 297mm; height: 210mm; }
+      .no-print-bar { display: none !important; }
+      .preview-wrapper { padding: 0; gap: 0; }
+      .sheet-page { box-shadow: none; margin: 0; width: 297mm; height: 210mm; padding: 6mm 7.5mm; page-break-after: always; break-after: page; page-break-inside: avoid; }
+      @page { size: A4 landscape; margin: 0; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Action Toolbar -->
+  <div class="no-print-bar">
+    <div class="tool-group">
+      <button class="btn" onclick="window.history.back()">⬅ ត្រឡប់</button>
+      
+      <label>ថ្នាក់:</label>
+      <select id="classSelect" onchange="onClassSelectChange()">
+        <option value="">កំពុងទាញយក...</option>
+      </select>
+
+      <label>សិស្ស:</label>
+      <select id="studentSelect" onchange="renderSemesterView()">
+        <option value="ALL">🏫 ទាំងថ្នាក់</option>
+      </select>
+
+      <label>សន្លឹក:</label>
+      <select id="sheetFilterSelect" onchange="renderSemesterView()">
+        <option value="ALL">ទាំងអស់ (៣ សន្លឹក/សិស្ស)</option>
+        <option value="1">សន្លឹកទី១ (ក្របក្រៅ)</option>
+        <option value="2">សន្លឹកទី២ (ក្របក្នុង & សេចក្តីណែនាំ)</option>
+        <option value="3" selected>សន្លឹកទី៣ (លទ្ធផលប្រឡងឆមាស & ប្រចាំឆ្នាំ)</option>
+      </select>
+    </div>
+
+    <div class="tool-group">
+      <button class="btn btn-primary" onclick="window.print()">🖨️ បោះពុម្ព (Print)</button>
+    </div>
+  </div>
+
+  <div class="preview-wrapper" id="semesterContainer">
+    <div style="color: #fff; text-align: center; padding: 40px; font-size: 14px;">⚡ កំពុងទាញយកទិន្នន័យ...</div>
+  </div>
+
+  <script>
+    var TOKEN = "<?= token ?>";
+    var USER_ROLE = "<?= userRole ?>";
+    var USER_CLASS = "<?= userClass ?>";
+    var TEACHER_NAME = "<?= typeof teacherName !== 'undefined' ? teacherName : '' ?>";
+    var TEACHER_SEX = "<?= typeof teacherSex !== 'undefined' ? teacherSex : '' ?>";
+
+    function getTeacherFormalTitle(sex, rawName) {
+      var s = (sex || '').toString().trim().toLowerCase();
+      var n = (rawName || '').toString().trim();
+      if (n.indexOf('លោកគ្រូ') === 0 || n.indexOf('អ្នកគ្រូ') === 0) return n;
+      var isFemale = (s === 'ស្រី' || s === 'f' || s === 'female');
+      return n ? ((isFemale ? 'អ្នកគ្រូ ' : 'លោកគ្រូ ') + n) : (isFemale ? 'អ្នកគ្រូ' : 'លោកគ្រូ');
+    }
+
+    var SEMESTER_SUBJECTS = [
+      { key: 'read',      label: 'អំណាន' },
+      { key: 'listen',    label: 'ស្តាប់ និងនិយាយ' },
+      { key: 'dictation', label: 'សរសេរតាមអាន' },
+      { key: 'essay',     label: 'តែងសេចក្តី' },
+      { key: 'math',      label: 'គណិតវិទ្យា' },
+      { key: 'science',   label: 'វិទ្យាសាស្ត្រ' },
+      { key: 'social',    label: 'សិក្សាសង្គម' },
+      { key: 'homeArts',  label: 'គេហវិទ្យា-អប់រំសិល្បៈ' },
+      { key: 'pe',        label: 'អប់រំកាយ-សុខភាព' },
+      { key: 'ethics',    label: 'អប់រំបំណិនជីវិត' },
+      { key: 'foreign',   label: 'ភាសាបរទេស' }
+    ];
+
+    var bundleData = null;
+
+    window.onload = function() {
+      initClasses();
+    };
+
+    function initClasses() {
+      google.script.run.withSuccessHandler(function(classes) {
+        var sel = document.getElementById('classSelect');
+        sel.innerHTML = '';
+        if (!classes || classes.length === 0) {
+          sel.innerHTML = '<option value="">គ្មានថ្នាក់</option>';
+          loadSemesterData('');
+          return;
+        }
+        classes.forEach(function(c) {
+          var opt = document.createElement('option');
+          opt.value = c;
+          opt.textContent = 'ថ្នាក់ទី ' + c;
+          sel.appendChild(opt);
+        });
+        if (USER_CLASS) sel.value = USER_CLASS;
+        loadSemesterData(sel.value);
+      }).withFailureHandler(function(err) {
+        loadSemesterData('');
+      }).getClassListForSession(TOKEN);
+    }
+
+    function onClassSelectChange() {
+      var cls = document.getElementById('classSelect').value;
+      loadSemesterData(cls);
+    }
+
+    function loadSemesterData(cls) {
+      document.getElementById('semesterContainer').innerHTML = '<div style="color: #fff; text-align: center; padding: 40px; font-size: 14px;">⚡ កំពុងទាញយកទិន្នន័យថ្នាក់ ' + (cls || '') + '...</div>';
+
+      google.script.run
+        .withSuccessHandler(function(res) {
+          if (!res || !res.success) {
+            document.getElementById('semesterContainer').innerHTML = '<div style="color: #f87171; text-align: center; padding: 40px; font-size: 14px;">កំហុស៖ ' + (res.error || 'មិនមានទិន្នន័យថ្នាក់នេះឡើយ') + '</div>';
+            return;
+          }
+
+          bundleData = res;
+
+          if (bundleData.classes && bundleData.classes.length > 0) {
+            var sel = document.getElementById('classSelect');
+            if (sel.options.length <= 1) {
+              sel.innerHTML = '';
+              bundleData.classes.forEach(function(c) {
+                var opt = document.createElement('option');
+                opt.value = c;
+                opt.textContent = 'ថ្នាក់ទី ' + c;
+                sel.appendChild(opt);
+              });
+              sel.value = bundleData.className;
+            }
+          }
+
+          var sSelect = document.getElementById('studentSelect');
+          sSelect.innerHTML = '<option value="ALL">🏫 ទាំងថ្នាក់</option>';
+          (bundleData.students || []).forEach(function(s) {
+            var opt = document.createElement('option');
+            opt.value = s.id;
+            opt.textContent = s.id + ' - ' + s.name;
+            sSelect.appendChild(opt);
+          });
+
+          renderSemesterView();
+        })
+        .withFailureHandler(function(err) {
+          document.getElementById('semesterContainer').innerHTML = '<div style="color: #f87171; text-align: center; padding: 40px; font-size: 14px;">កំហុស Server: ' + err.toString() + '</div>';
+        })
+        .getSemesterRecordBundleSecured(TOKEN, cls);
+    }
+
+    function renderSemesterView() {
+      if (!bundleData) return;
+      var selectedSid = document.getElementById('studentSelect').value;
+      var sheetFilter = document.getElementById('sheetFilterSelect').value;
+      var cls = bundleData.className || document.getElementById('classSelect').value;
+      var container = document.getElementById('semesterContainer');
+      container.innerHTML = '';
+
+      var targetStudents = (selectedSid === 'ALL') ? bundleData.students : bundleData.students.filter(s => s.id === selectedSid);
+      
+      if (!targetStudents || targetStudents.length === 0) {
+        container.innerHTML = '<div style="color: #fff; text-align: center; padding: 40px; font-size: 14px;">មិនមានទិន្នន័យសិស្សក្នុងថ្នាក់នេះឡើយ</div>';
+        return;
+      }
+
+      var totalClassCount = bundleData.students.length;
+
+      targetStudents.forEach(function(student) {
+        var s1Score = bundleData.sem1Scores[student.id] || {};
+        var s2Score = bundleData.sem2Scores[student.id] || {};
+        var s1SubRanks = bundleData.sem1SubRanks || {};
+        var s2SubRanks = bundleData.sem2SubRanks || {};
+        var s1TotRanks = bundleData.sem1TotalRanks || {};
+        var s2TotRanks = bundleData.sem2TotalRanks || {};
+
+        var s1Rank = bundleData.sem1RankMap[student.id] || { avg: 0, rank: '-' };
+        var s2Rank = bundleData.sem2RankMap[student.id] || { avg: 0, rank: '-' };
+        var yRank  = bundleData.yearRankMap[student.id]  || { avg: 0, rank: '-', grade: '-' };
+        var att    = bundleData.attMap[student.id]       || { sem1_p:0, sem1_a:0, sem2_p:0, sem2_a:0 };
+
+        // 🌟 ទាញយកមធ្យមភាគប្រចាំខែពី Backend Bundle
+        var s1MonthlyVal = (bundleData.s1MonthlyAvgMap && bundleData.s1MonthlyAvgMap[student.id]) ? bundleData.s1MonthlyAvgMap[student.id] : '';
+        var s2MonthlyVal = (bundleData.s2MonthlyAvgMap && bundleData.s2MonthlyAvgMap[student.id]) ? bundleData.s2MonthlyAvgMap[student.id] : '';
+
+        // ================= SHEET 1: ក្របក្រៅ =================
+        if (sheetFilter === 'ALL' || sheetFilter === '1') {
+          var sheet1 = document.createElement('div');
+          sheet1.className = 'sheet-page';
+          sheet1.innerHTML = `
+            <div></div>
+            <div class="page-box">
+              <div style="display: flex; flex-direction: column; justify-content: space-between; height: 100%;">
+                <div>
+                  <div class="header-text" style="margin-top: 5px;">
+                    <h2 class="f-moul">ព្រះរាជាណាចក្រកម្ពុជា</h2>
+                    <h3 class="f-moul">ជាតិ សាសនា ព្រះមហាក្សត្រ</h3>
+                    <div class="header-icons">✻ ✻ ✻ 📖 ✻ ✻ ✻</div>
+                    <h2 class="f-moul" style="font-size: 17px; margin-top: 15px;">ក្រសួងអប់រំ យុវជន និងកីឡា</h2>
+                  </div>
+
+                  <div style="text-align: center; margin: 30px 0 20px 0;">
+                    <h1 class="f-moul" style="font-size: 32px; color: var(--navy); line-height: 1.35;">សៀវភៅសិក្ខាគារិក</h1>
+                    <h3 class="f-moul" style="font-size: 17px; margin-top: 10px;">សាលាបឋមសិក្សាចំណេះទូទៅ</h3>
+                  </div>
+
+                  <div class="cover-info-block">
+                    <div class="cover-dotted-row">
+                      <span class="cover-dotted-label">សាលាបឋមសិក្សា ៖</span>
+                      <span class="cover-dotted-space">${bundleData.schoolName || ''}</span>
+                    </div>
+                    <div class="cover-dotted-row">
+                      <span class="cover-dotted-label">ឃុំ/សង្កាត់</span>
+                      <span class="cover-dotted-space"></span>
+                      <span class="cover-dotted-label" style="margin-left: 12px;">ស្រុក/ខណ្ឌ</span>
+                      <span class="cover-dotted-space">សំឡូត</span>
+                      <span class="cover-dotted-label" style="margin-left: 12px;">ខេត្ត/ក្រុង</span>
+                      <span class="cover-dotted-space">បាត់ដំបង</span>
+                    </div>
+                    <div class="cover-dotted-row">
+                      <span class="cover-dotted-label">នាមត្រកូល និងនាមខ្លួន ៖</span>
+                      <span class="cover-dotted-space">${student.name}</span>
+                    </div>
+                    <div class="cover-dotted-row">
+                      <span class="cover-dotted-label">ថ្ងៃ ខែ ឆ្នាំកំណើត ៖</span>
+                      <span class="cover-dotted-space">${student.dob || ''}</span>
+                    </div>
+                    <div class="cover-dotted-row">
+                      <span class="cover-dotted-label">ទីកន្លែងកំណើត ៖</span>
+                      <span class="cover-dotted-space">${student.pob || ''}</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div style="text-align: center; font-size: 17px; letter-spacing: 10px; color: var(--red-star); margin-bottom: 12px;">
+                  ✻ ✻ ✻ ✻ ✻
+                </div>
+              </div>
+            </div>
+          `;
+          container.appendChild(sheet1);
+        }
+
+        // ================= SHEET 2: ក្របក្នុង & សេចក្តីណែនាំ =================
+        if (sheetFilter === 'ALL' || sheetFilter === '2') {
+          var sheet2 = document.createElement('div');
+          sheet2.className = 'sheet-page';
+          sheet2.innerHTML = `
+            <div class="page-box" style="font-size: 12.8px; line-height: 1.55;">
+              <div style="display: flex; flex-direction: column; justify-content: space-between; height: 100%;">
+                <div>
+                  <div style="text-align: center; margin-bottom: 12px;">
+                    <h2 class="f-moul" style="font-size: 16.5px;">សេចក្តីណែនាំ</h2>
+                  </div>
+                  <p style="margin-bottom: 7px;">នាយកសាលាត្រូវចេញ និងគ្រប់គ្រងសៀវភៅសិក្ខាគារិក ហើយត្រូវអនុវត្តតាមចំណុចខាងក្រោម ៖</p>
+                  <p style="margin-bottom: 6px;">១. ចាប់ពីថ្នាក់ទី៣ ឡើងទៅ សិស្សត្រូវមានសៀវភៅសិក្ខាគារិកដែលចេញឱ្យដោយនាយកសាលា ។</p>
+                  <p style="margin-bottom: 6px;">២. ត្រូវចុះនាមត្រកូល និងនាមខ្លួន ភេទ ថ្ងៃ ខែ ឆ្នាំកំណើត ទីកន្លែងកំណើត ឈ្មោះ និងមុខរបរឪពុក/ម្តាយ ឱ្យបានច្បាស់លាស់ ។</p>
+                  <p style="margin-bottom: 6px;">៣. នៅបញ្ចប់ឆមាសនីមួយៗ និងបញ្ចប់ឆ្នាំសិក្សា គ្រូទទួលបន្ទុកថ្នាក់ត្រូវចុះ ចំណាត់ថ្នាក់ និងមធ្យមភាគឱ្យបានត្រឹមត្រូវ ។ ចំណែកនាយកសាលាក៏ត្រូវចុះមូលវិចារ ការសរសើរ ឬកំណែទម្រង់ នៅចុងឆ្នាំសិក្សានីមួយៗដែរ ។</p>
+                  <p style="margin-bottom: 6px;">៤. ចំពោះសិស្សផ្ទេរការសិក្សា នាយកសាលាត្រូវបូកសរុបលទ្ធផលនៃការសិក្សារបស់សិស្ស ឱ្យបានសព្វគ្រប់ រួចចុះហត្ថលេខាដោយដាក់ឈ្មោះ ។</p>
+                  <p style="margin-bottom: 6px;">៥. ហាមគូសលុប ឬសរសេរបន្ថែម ។ ក្នុងករណីមានកែកំហុស ត្រូវចុះហត្ថលេខា និងបញ្ជាក់បន្ថែមពីនាយកសាលា ។</p>
+                  <p style="font-weight: bold; margin-top: 7px; margin-bottom: 3px;">៦. របៀបគណនាមធ្យមភាគប្រចាំឆមាស និងដំណាច់ឆ្នាំ ៖</p>
+                  <div style="margin-left: 15px; font-size: 12px; margin-bottom: 6px; line-height: 1.6;">
+                    <p><strong>ក. ឆមាសទី១ ៖</strong> (មធ្យមភាគពិន្ទុខែ + មធ្យមភាគពិន្ទុប្រឡងឆមាសទី១) / ២</p>
+                    <p><strong>ខ. ឆមាសទី២ ៖</strong> (មធ្យមភាគពិន្ទុខែ + មធ្យមភាគពិន្ទុប្រឡងឆមាសទី២) / ២</p>
+                    <p><strong>គ. ដំណាច់ឆ្នាំសិក្សា ៖</strong> (មធ្យមភាគប្រចាំឆមាសទី១ + មធ្យមភាគប្រចាំឆមាសទី២) / ២</p>
+                  </div>
+                  <p style="margin-bottom: 6px;">៧. មធ្យមភាគប្រចាំឆមាសទី១ ទី២ និងដំណាច់ឆ្នាំ ដែលលោកគ្រូ/អ្នកគ្រូ រកឃើញ ហើយត្រូវស្រង់យកទៅដាក់ត្រង់លទ្ធផលនៃការប្រឡងឆមាស ត្រង់ឆមាស និងដំណាច់ឆ្នាំ ។</p>
+                  <div style="margin-top: 8px; line-height: 1.5;">
+                    <p><strong>កំណត់សម្គាល់ ៖</strong></p>
+                    <p>- ក្នុង ១ ឆមាស មាន ៤ ខែ ឬ ៦ ខែ ។</p>
+                    <p>- នាយកសាលាត្រូវចុះហត្ថលេខាលើរូបថតសិស្ស ។</p>
+                  </div>
+                </div>
+                <div style="text-align: center; letter-spacing: 6px; color: var(--red-star); margin-bottom: 4px;">✻ ✻ ✻ ✻ ✻</div>
+              </div>
+            </div>
+
+            <div class="page-box">
+              <div>
+                <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+                  <div style="border: 1.2px solid var(--navy); width: 32mm; height: 40mm; display: flex; align-items: center; justify-content: center; font-size: 13px; text-align: center;">
+                    រូបថត<br>៤x៦
+                  </div>
+                  <div style="flex: 1; text-align: center; margin-left: 10px;">
+                    <h2 class="f-moul" style="font-size: 19px; margin-top: 5px;">សៀវភៅសិក្ខាគារិក</h2>
+                    <div class="header-icons">✻ ✻ ✻ 📖 ✻ ✻ ✻</div>
+                  </div>
+                </div>
+
+                <div style="margin-top: 14px; font-size: 14px;">
+                  <div class="dotted-row"><span class="dotted-label">នាមត្រកូល និងនាមខ្លួន ៖</span><span class="dotted-space">${student.name}</span></div>
+                  <div class="dotted-row"><span class="dotted-label">ថ្ងៃ ខែ ឆ្នាំកំណើត ៖</span><span class="dotted-space">${student.dob || ''}</span></div>
+                  <div class="dotted-row"><span class="dotted-label">ទីកន្លែងកំណើត ៖</span><span class="dotted-space">${student.pob || ''}</span></div>
+                  <div class="dotted-row"><span class="dotted-label">ឈ្មោះ និងមុខរបរឪពុក ៖</span><span class="dotted-space">${student.father ? student.father + ' (' + student.fatherJob + ')' : ''}</span></div>
+                  <div class="dotted-row"><span class="dotted-label">ឈ្មោះ និងមុខរបរម្តាយ ៖</span><span class="dotted-space">${student.mother ? student.mother + ' (' + student.motherJob + ')' : ''}</span></div>
+                  <div class="dotted-row"><span class="dotted-label">អាសយដ្ឋានបច្ចុប្បន្ន ៖</span><span class="dotted-space">${student.address || ''}</span></div>
+                </div>
+
+                <div class="sig-block" style="margin-top: 8px; font-size: 12.5px;">
+                  <div class="sig-inner">
+                    <div>ថ្ងៃទី...... ខែ...... ឆ្នាំ២០២៦</div>
+                    <div class="f-bold" style="margin-top: 3px;">នាយកសាលា</div>
+                  </div>
+                </div>
+              </div>
+
+              <table class="custom-table" style="margin-top: 10px;">
+                <thead>
+                  <tr>
+                    <th style="width: 18%;">ឆ្នាំសិក្សា</th>
+                    <th style="width: 12%;">ថ្នាក់ទី</th>
+                    <th style="width: 25%;">គ្រឹះស្ថានសិក្សា</th>
+                    <th style="width: 18%;">ថ្ងៃ ខែ ឆ្នាំចូលរៀន</th>
+                    <th style="width: 17%;">ថ្ងៃ ខែ ឆ្នាំចេញ</th>
+                    <th style="width: 10%;">អត្តលេខ</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>២០២៦-២០២៧</td>
+                    <td>${cls}</td>
+                    <td>${bundleData.schoolName || ''}</td>
+                    <td>០១ វិច្ឆិកា ២០២៦</td>
+                    <td>៣១ តុលា ២០២៧</td>
+                    <td>${student.id}</td>
+                  </tr>
+                  <tr><td>&nbsp;</td><td></td><td></td><td></td><td></td><td></td></tr>
+                  <tr><td>&nbsp;</td><td></td><td></td><td></td><td></td><td></td></tr>
+                  <tr><td>&nbsp;</td><td></td><td></td><td></td><td></td><td></td></tr>
+                  <tr><td>&nbsp;</td><td></td><td></td><td></td><td></td><td></td></tr>
+                  <tr><td>&nbsp;</td><td></td><td></td><td></td><td></td><td></td></tr>
+                </tbody>
+              </table>
+            </div>
+          `;
+          container.appendChild(sheet2);
+        }
+
+        // ================= SHEET 3: លទ្ធផលប្រឡងឆមាស និងប្រចាំឆ្នាំ =================
+        if (sheetFilter === 'ALL' || sheetFilter === '3') {
+          var tableRowsHtml = '';
+          var s1Total = 0, s2Total = 0;
+
+          SEMESTER_SUBJECTS.forEach(function(sub) {
+            var v1 = (s1Score[sub.key] !== undefined && s1Score[sub.key] !== '') ? Number(s1Score[sub.key]) : '';
+            var v2 = (s2Score[sub.key] !== undefined && s2Score[sub.key] !== '') ? Number(s2Score[sub.key]) : '';
+            if (v1 !== '') s1Total += v1;
+            if (v2 !== '') s2Total += v2;
+
+            var r1 = (v1 !== '' && s1SubRanks[sub.key] && s1SubRanks[sub.key][student.id]) ? s1SubRanks[sub.key][student.id] : '';
+            var r2 = (v2 !== '' && s2SubRanks[sub.key] && s2SubRanks[sub.key][student.id]) ? s2SubRanks[sub.key][student.id] : '';
+
+            tableRowsHtml += `
+              <tr>
+                <td class="text-left">${sub.label}</td>
+                <td>${v1 !== '' ? v1 : ''}</td>
+                <td class="red-bold">${r1 !== '' ? r1 : ''}</td>
+                <td>${v2 !== '' ? v2 : ''}</td>
+                <td class="red-bold">${r2 !== '' ? r2 : ''}</td>
+              </tr>
+            `;
+          });
+
+          var s1TotRank = (s1Total > 0 && s1TotRanks[student.id]) ? s1TotRanks[student.id] : '';
+          var s2TotRank = (s2Total > 0 && s2TotRanks[student.id]) ? s2TotRanks[student.id] : '';
+
+          var sheet3 = document.createElement('div');
+          sheet3.className = 'sheet-page';
+          sheet3.innerHTML = `
+            <div class="page-box">
+              <div>
+                <div style="display: flex; justify-content: space-between; font-size: 13.5px; margin-bottom: 4px;" class="f-bold">
+                  <div>នាមត្រកូល និងនាមខ្លួន ៖ ${student.name}</div>
+                  <div>ថ្នាក់ទី ៖ ${cls}</div>
+                  <div>ចំនួនសិស្ស ៖ ${totalClassCount} នាក់</div>
+                </div>
+
+                <div class="f-bold" style="margin-bottom: 3px; font-size: 13.5px;">ក. លទ្ធផលនៃការប្រឡងឆមាស</div>
+                <table class="custom-table">
+                  <thead>
+                    <tr>
+                      <th rowspan="2" style="width: 38%; font-size: 13.5px;">មុខវិជ្ជា</th>
+                      <th colspan="2" style="font-size: 13.5px;">ឆមាសទី១</th>
+                      <th colspan="2" style="font-size: 13.5px;">ឆមាសទី២</th>
+                    </tr>
+                    <tr>
+                      <th style="width: 15%;">ពិន្ទុ</th>
+                      <th style="width: 15%;">ចំណាត់ថ្នាក់</th>
+                      <th style="width: 15%;">ពិន្ទុ</th>
+                      <th style="width: 15%;">ចំណាត់ថ្នាក់</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    ${tableRowsHtml}
+                    <tr class="f-bold">
+                      <td class="text-left">សរុបពិន្ទុ</td>
+                      <td>${s1Total > 0 ? s1Total.toFixed(2) : ''}</td>
+                      <td class="red-bold">${s1TotRank !== '' ? s1TotRank : ''}</td>
+                      <td>${s2Total > 0 ? s2Total.toFixed(2) : ''}</td>
+                      <td class="red-bold">${s2TotRank !== '' ? s2TotRank : ''}</td>
+                    </tr>
+                    <tr class="f-bold">
+                      <td class="text-left">មធ្យមភាគ</td>
+                      <td>${s1Score.avg ? Number(s1Score.avg).toFixed(2) : ''}</td>
+                      <td></td>
+                      <td>${s2Score.avg ? Number(s2Score.avg).toFixed(2) : ''}</td>
+                      <td></td>
+                    </tr>
+                    <tr class="f-bold">
+                      <td class="text-left">មធ្យមភាគប្រចាំខែ</td>
+                      <td>${s1MonthlyVal}</td>
+                      <td></td>
+                      <td>${s2MonthlyVal}</td>
+                      <td></td>
+                    </tr>
+                    <tr class="f-bold">
+                      <td class="text-left">មធ្យមភាគប្រចាំឆមាស</td>
+                      <td>${s1Rank.avg > 0 ? s1Rank.avg : '0'}</td>
+                      <td class="red-bold">${s1Rank.rank || '-'}</td>
+                      <td>${s2Rank.avg > 0 ? s2Rank.avg : '0'}</td>
+                      <td class="red-bold">${s2Rank.rank || '-'}</td>
+                    </tr>
+                    <tr class="f-bold" style="background: #f1f5f9; font-size: 13.5px;">
+                      <td colspan="5" style="padding: 4.5px;">
+                        លទ្ធផលដំណាច់ឆ្នាំ ( មធ្យមភាគ <strong class="red-bold">${yRank.avg > 0 ? yRank.avg : '0'}</strong> - ចំណាត់ថ្នាក់ <strong class="red-bold">${yRank.rank || '-'}</strong> - និទ្ទេស <strong class="red-bold">${yRank.grade || '-'}</strong> )
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+
+                <div class="f-bold" style="margin: 6px 0 3px 0; font-size: 13.5px;">ខ. ចំនួនពេលអវត្តមាន</div>
+                <table class="custom-table">
+                  <thead>
+                    <tr>
+                      <th colspan="2" style="font-size: 13px;">ឆមាសទី១</th>
+                      <th colspan="2" style="font-size: 13px;">ឆមាសទី២</th>
+                      <th rowspan="2" style="font-size: 13px;">សរុប</th>
+                    </tr>
+                    <tr>
+                      <th>មានច្បាប់</th>
+                      <th>គ្មានច្បាប់</th>
+                      <th>មានច្បាប់</th>
+                      <th>គ្មានច្បាប់</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>${att.sem1_p}</td>
+                      <td>${att.sem1_a}</td>
+                      <td>${att.sem2_p}</td>
+                      <td>${att.sem2_a}</td>
+                      <td class="f-bold red-bold">${att.sem1_p + att.sem1_a + att.sem2_p + att.sem2_a}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="page-box">
+              <div>
+                <div style="display: flex; justify-content: space-between; font-size: 13.5px; margin-bottom: 4px;" class="f-bold">
+                  <div>សាលា ៖ ${bundleData.schoolName || ''}</div>
+                  <div>ឆ្នាំសិក្សា ៖ ២០២៦-២០២៧</div>
+                </div>
+
+                <div class="f-bold" style="margin-bottom: 3px; font-size: 13.5px;">គ. វាយតម្លៃសិស្សលើការសិក្សា</div>
+                <table class="custom-table" style="height: 65px;">
+                  <thead>
+                    <tr>
+                      <th style="width: 25%;">ឆមាសទី១</th>
+                      <th style="width: 35%;">ឆមាសទី២</th>
+                      <th style="width: 40%;">ប្រចាំឆ្នាំ</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr style="font-size: 12.5px; text-align: left; vertical-align: top; padding: 4px;">
+                      <td>${s1Rank.avg >= 5 ? 'លទ្ធផលសិក្សាមធ្យម' : ''}</td>
+                      <td>${s2Rank.avg >= 5 ? 'លទ្ធផលសិក្សាមធ្យម គួរខិតខំរៀនបន្ថែម' : ''}</td>
+                      <td>និទ្ទេសប្រចាំឆ្នាំ ${yRank.grade || ''} លទ្ធផលសិក្សាមធ្យម គួរខិតខំរៀនបន្ថែមទៀត។ សមនឹងឡើងថ្នាក់បាន។</td>
+                    </tr>
+                  </tbody>
+                </table>
+
+                <div class="f-bold" style="margin: 6px 0 3px 0; font-size: 13.5px;">ឃ. លទ្ធផលប្រចាំឆ្នាំ</div>
+                <div style="font-size: 13px; line-height: 1.65; margin-left: 6px;">
+                  <div>ត្រូវបានឡើងថ្នាក់ទី ៖ <strong class="f-bold">${parseInt(cls) < 6 ? (parseInt(cls) + 1) : 'បញ្ចប់បឋម'}</strong></div>
+                  <div>ត្រូវប្រឡងឡើងថ្នាក់ ៖ ................. មុខវិជ្ជាដែលត្រូវប្រឡង ៖ .................</div>
+                  <div>ត្រូវរៀនត្រួតថ្នាក់ ៖ ................. ត្រូវរៀនឡើងថ្នាក់ទី ៖ .................</div>
+                </div>
+
+                <div class="f-bold" style="margin: 6px 0 3px 0; font-size: 13.5px;">ង. ការសរសើរ និងកំណែទម្រង់</div>
+                <table class="custom-table" style="height: 55px;">
+                  <thead>
+                    <tr>
+                      <th style="width: 50%;">ការសរសើរ</th>
+                      <th style="width: 50%;">កំណែទម្រង់</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr style="font-size: 12.5px; text-align: left; vertical-align: top; padding: 4px;">
+                      <td>${yRank.rank <= 5 ? 'បានចំណាត់ថ្នាក់ទី ' + yRank.rank + ' ក្នុងថ្នាក់ ។ ពូកែខាងសិក្សាសង្គម ។' : 'ខិតខំរៀនសូត្រ'}</td>
+                      <td>គួរពង្រឹងមុខវិជ្ជាសរសេរតាមអាន ។</td>
+                    </tr>
+                  </tbody>
+                </table>
+
+                <div class="sig-block" style="margin-top: 4px; font-size: 12.5px;">
+                  <div class="sig-inner">
+                    <div>ថ្ងៃទី...... ខែ...... ឆ្នាំ២០២៦</div>
+                    <div class="f-bold" style="margin-top: 2px;">គ្រូទទួលបន្ទុកថ្នាក់</div>
+                    <div style="font-weight: bold; margin-top: 20px; font-size: 13.5px;">${TEACHER_NAME || ''}</div>
+                  </div>
+                </div>
+
+                <div class="f-bold" style="margin-top: 4px; font-size: 13.5px;">ច. មូលវិចាររបស់នាយកសាលា</div>
+                <div style="border-bottom: 1.2px dotted var(--navy); min-height: 18px;"></div>
+                <div style="border-bottom: 1.2px dotted var(--navy); min-height: 18px;"></div>
+                
+                <div class="sig-block" style="margin-top: 4px; font-size: 12.5px;">
+                  <div class="sig-inner">
+                    <div>ថ្ងៃទី...... ខែ...... ឆ្នាំ២០២៦</div>
+                    <div class="f-bold" style="margin-top: 2px;">នាយកសាលា</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          `;
+          container.appendChild(sheet3);
+        }
+      });
+    }
+  </script>
+</body>
+</html>

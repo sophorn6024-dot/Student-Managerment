@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+  <base target="_top">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://fonts.googleapis.com/css2?family=Moul&family=Kantumruy+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    @page { size: A4 portrait; margin: 15mm 15mm; }
+
+    * { box-sizing: border-box; font-family: 'Kantumruy Pro', sans-serif; margin: 0; padding: 0; }
+    body { background: #eef2f5; padding: 12px; color: #1e1b2e; }
+    .khmer-moul { font-family: 'Moul', cursive; }
+
+    /* ============ CONTROLS ============ */
+    .no-print {
+      max-width: 820px; margin: 0 auto 14px auto; background: #fff;
+      padding: 14px; border-radius: 10px; box-shadow: 0 3px 10px rgba(0,0,0,.06);
+      display: flex; flex-direction: column; gap: 12px; border: 1px solid #e2e8f0;
+    }
+    .filter-row { display: flex; flex-wrap: wrap; gap: 10px; width: 100%; }
+    .form-group { display: flex; flex-direction: column; gap: 4px; flex: 1; min-width: 140px; }
+    .form-group label { font-size: 12px; font-weight: 700; color: #475569; }
+    .form-control {
+      padding: 9px 12px; border: 1px solid #cbd5e1; border-radius: 6px; font-size: 14px; width: 100%;
+      font-family: 'Kantumruy Pro', sans-serif; background-color: #fff;
+    }
+    .btn {
+      border: none; border-radius: 6px; padding: 10px 16px; font-weight: 700; cursor: pointer;
+      font-size: 14px; color: #fff; transition: background 0.15s ease; width: 100%;
+    }
+    .btn-print { background: #16a34a; }
+    .btn-print:hover { background: #15803d; }
+
+    @media (min-width: 640px) {
+      .no-print { flex-direction: row; align-items: flex-end; justify-content: space-between; }
+      .filter-row { width: auto; }
+      .btn { width: auto; }
+    }
+
+    /* ============ PAGE ============ */
+    .page-wrapper { width: 100%; overflow-x: auto; }
+    .page {
+      width: 210mm; min-height: 297mm; margin: 0 auto;
+      background: #fff; padding: 16mm; box-shadow: 0 10px 28px rgba(15,23,42,.10);
+    }
+
+    .kingdom-header { text-align: center; }
+    .kingdom-header .t1 { font-family: 'Moul', cursive; font-size: 18px; line-height: 1.5; }
+    .kingdom-header .t2 { font-family: 'Moul', cursive; font-size: 14px; margin-top: 2px; }
+    .ornament { text-align: center; margin: 8px 0 10px; font-size: 13px; letter-spacing: 3px; }
+    .office-lines { margin: 4px 0; }
+    .office-line { font-size: 12.5px; font-weight: 700; line-height: 1.6; }
+    .office-line.underline { text-decoration: underline; }
+    .roster-title { text-align: center; font-size: 14px; font-weight: 700; margin: 14px 0 16px; }
+    .roster-title .class-input, .roster-title .year-input {
+      border: none; border-bottom: 1px dashed #64748b; background: transparent;
+      font-family: 'Kantumruy Pro', sans-serif; font-weight: 700; font-size: 14px; color: #1e1b2e;
+      text-align: center; outline: none; padding: 0 3px;
+    }
+    .roster-title .class-input { width: 50px; }
+    .roster-title .year-input  { width: 100px; }
+
+    /* ============ TABLE ============ */
+    table.roster-table {
+      width: 100%; border-collapse: collapse; font-size: 12px; table-layout: fixed; min-width: 680px;
+    }
+    table.roster-table th, table.roster-table td {
+      border: 1px solid #1e1b2e; padding: 6px 4px; text-align: center; vertical-align: middle;
+    }
+    table.roster-table th { font-weight: 700; background: #f1f5f9; font-size: 11px; }
+    table.roster-table td.name-cell { text-align: left; padding-left: 8px; }
+    table.roster-table td.dob-cell, table.roster-table td.note-cell { font-size: 11px; }
+
+    table.roster-table col.col-no     { width: 6%; }
+    table.roster-table col.col-id     { width: 11%; }
+    table.roster-table col.col-name   { width: 22%; }
+    table.roster-table col.col-sex    { width: 6%; }
+    table.roster-table col.col-dob    { width: 21%; }
+    table.roster-table col.col-from   { width: 9%; }
+    table.roster-table col.col-note   { width: 10%; }
+    table.roster-table col.col-action { width: 15%; }
+
+    th.no-print-col, td.no-print-col { background: #fef9c3; }
+    .dropout-select {
+      width: 100%; padding: 6px 4px; border-radius: 6px; border: 1px solid #cbd5e1;
+      font-size: 11.5px; font-family: 'Kantumruy Pro', sans-serif; background: #fff; color: #334155;
+    }
+    .dropout-select.is-dropped { background: #fee2e2; color: #991b1b; font-weight: 700; border-color: #fecaca; }
+    tr.row-dropped td { color: #dc2626; font-weight: 700; }
+    tr.row-dropped td.no-print-col { color: #334155; font-weight: 400; }
+    .empty-note { text-align: center; padding: 24px; color: #94a3b8; font-size: 13px; }
+
+    /* ============ FOOTER ============ */
+    .footer-row {
+      display: flex; justify-content: space-between; align-items: flex-start; margin-top: 30px;
+      font-size: 13px; font-weight: 700;
+    }
+    .footer-col { width: 46%; text-align: center; }
+    
+    /* ផ្នែកនាយកសាលា៖ ទាបជាងផ្នែកគ្រូ */
+    .footer-col.principal-col {
+      margin-top: 22px; 
+    }
+    .footer-col.principal-col .footer-gap {
+      height: 60px; 
+    }
+
+    .footer-col .role-title { font-size: 13.5px; margin-top: 4px; }
+    
+    /* កាត់បន្ថយ gap ចុះមកត្រឹម 40px ដើម្បីឱ្យឈ្មោះគ្រូឡើងលើ */
+    .footer-gap { height: 40px; }
+
+    .date-fields { font-weight: 500; text-align: center; margin-bottom: 2px; font-size: 12px; }
+    .date-fields input {
+      border: 1px solid #93c5fd; background: #eff6ff; border-radius: 4px; text-align: center;
+      font-weight: 700; color: #1e3a8a; padding: 2px 4px; font-family: 'Kantumruy Pro'; font-size: 12px;
+    }
+
+    /* ✅ ឈ្មោះគ្រូ — លើកឡើងលើបន្តិច និងខិតទៅស្ដាំបន្ថែមទៀត */
+    .teacher-name-display {
+      font-family: 'Moul', cursive;
+      font-size: 13px;
+      color: #1e1b2e;
+      margin-top: 7px; /* បន្ថយ margin-top ដើម្បីឱ្យឡើងទៅលើ */
+      min-height: 20px;
+      text-align: center;
+      padding-left: 150px; /* បង្កើន margin/padding ដើម្បីឱ្យខិតទៅស្ដាំទៀត */
+    }
+
+    /* ============ PRINT ============ */
+    @media print {
+      * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+      .no-print { display: none !important; }
+      html, body { background: #fff; padding: 0; margin: 0; }
+      .page-wrapper { overflow: visible !important; }
+      .page { box-shadow: none; width: 100%; min-height: 0; padding: 0; margin: 0; }
+      table.roster-table { min-width: 100% !important; }
+      table.roster-table th { background: #f1f5f9 !important; }
+      .date-fields input { border: none !important; background: transparent !important; }
+      th.no-print-col, td.no-print-col { display: none !important; }
+      col.col-action { display: none !important; }
+      table.roster-table col.col-no   { width: 7%; }
+      table.roster-table col.col-id   { width: 13%; }
+      table.roster-table col.col-name { width: 26%; }
+      table.roster-table col.col-sex  { width: 7%; }
+      table.roster-table col.col-dob  { width: 25%; }
+      table.roster-table col.col-from { width: 10%; }
+      table.roster-table col.col-note { width: 12%; }
+      
+      .teacher-name-display {
+        font-family: 'Moul', cursive !important;
+        font-size: 13px !important;
+        color: #000 !important;
+        margin-top: 7px !important;
+        padding-left: 150px !important; /* រក្សាគម្លាតខិតស្ដាំពេលបោះពុម្ព */
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="no-print">
+    <div class="filter-row">
+      <div class="form-group">
+        <label>ថ្នាក់</label>
+        <select id="classSelect" class="form-control" onchange="loadRoster()">
+          <option value="">-- កំពុងទាញយក... --</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>ឆ្នាំសិក្សា</label>
+        <input type="text" id="yearInput" class="form-control" oninput="syncTitleYear()">
+      </div>
+      <div class="form-group">
+        <label>ឈ្មោះគ្រូបន្ទុកថ្នាក់ (កែបាន)</label>
+        <input type="text" id="teacherNameCtrl" class="form-control"
+               placeholder="ឈ្មោះគ្រូ..." oninput="syncTeacherName(this.value)">
+      </div>
+    </div>
+    <button class="btn btn-print" onclick="window.print()">🖨️ បោះពុម្ព</button>
+  </div>
+
+  <div class="page-wrapper">
+    <div class="page">
+      <div class="kingdom-header">
+        <div class="t1">ព្រះរាជាណាចក្រកម្ពុជា</div>
+        <div class="t2">ជាតិ សាសនា ព្រះមហាក្សត្រ</div>
+      </div>
+      <div class="ornament">◆</div>
+      <div class="office-lines">
+        <div class="office-line underline">រដ្ឋបាលស្រុកសំឡូត</div>
+        <div class="office-line">ការិយាល័យអប់រំ យុវជន និងកីឡានៃរដ្ឋបាលស្រុកសំឡូត</div>
+        <div class="office-line">សាលាបឋមសិក្សា ៖ កំពង់ល្ពៅ</div>
+      </div>
+      <div class="roster-title">
+        បញ្ជីរាយនាមសិស្សថ្នាក់ទី<input type="text" id="titleClass" class="class-input" value="">
+        ឆ្នាំសិក្សា<input type="text" id="titleYear" class="year-input" value="">
+      </div>
+
+      <table class="roster-table">
+        <colgroup>
+          <col class="col-no"><col class="col-id"><col class="col-name"><col class="col-sex">
+          <col class="col-dob"><col class="col-from"><col class="col-note"><col class="col-action">
+        </colgroup>
+        <thead>
+          <tr>
+            <th>ល.រ</th>
+            <th>អត្តលេខ</th>
+            <th>គោត្តនាម និងនាម</th>
+            <th>ភេទ</th>
+            <th>ថ្ងៃខែឆ្នាំកំណើត</th>
+            <th>មកពីថ្នាក់ទី</th>
+            <th>ផ្សេងៗ</th>
+            <th class="no-print-col">សិស្សបោះបង់</th>
+          </tr>
+        </thead>
+        <tbody id="rosterBody">
+          <tr><td colspan="8" class="empty-note">សូមជ្រើសរើសថ្នាក់</td></tr>
+        </tbody>
+      </table>
+
+      <div class="footer-row">
+        <!-- ឆ្វេង: នាយកសាលា -->
+        <div class="footer-col principal-col">
+          <div>បានឃើញ និងឯកភាព</div>
+          <div class="khmer-moul role-title">នាយកសាលា</div>
+          <div class="footer-gap"></div>
+        </div>
+
+        <!-- ស្ដាំ: គ្រូបន្ទុកថ្នាក់ -->
+        <div class="footer-col">
+          <div class="date-fields">
+            ធ្វើនៅកំពង់ល្ពៅ ថ្ងៃទី
+            <input type="text" id="dayInput" value="" style="width:34px;">
+            ខែ
+            <input type="text" id="monthInput" value="" placeholder="......" style="width:65px;">
+            ឆ្នាំ<span id="currentYearTxt"></span>
+          </div>
+          <div class="khmer-moul role-title">គ្រូបន្ទុកថ្នាក់</div>
+          <div class="footer-gap"></div>
+          <!-- ឈ្មោះគ្រូ៖ ឡើងលើ និងខិតទៅស្ដាំបន្ថែម -->
+          <div class="teacher-name-display" id="teacherNameDisplay">&nbsp;</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script>
+    var khmerDigits = ['០','១','២','៣','៤','៥','៦','៧','៨','៩'];
+    var khmerMonths = ['មករា','កុម្ភៈ','មីនា','មេសា','ឧសភា','មិថុនា','កក្កដា','សីហា','កញ្ញា','តុលា','វិច្ឆិកា','ធ្នូ'];
+    var TOKEN = "<?= token ?>";
+
+    function toKhmerNum(num) {
+      return String(num).replace(/\d/g, function(d){ return khmerDigits[d]; });
+    }
+
+    /* sync ឈ្មោះគ្រូ control → div ក្នុង page */
+    function syncTeacherName(val) {
+      var el = document.getElementById('teacherNameDisplay');
+      el.textContent = val || '';
+    }
+
+    window.onload = function() {
+      var now = new Date();
+      document.getElementById('currentYearTxt').innerText = toKhmerNum(now.getFullYear());
+      document.getElementById('dayInput').value   = toKhmerNum(now.getDate());
+      document.getElementById('monthInput').value = khmerMonths[now.getMonth()];
+
+      var startYear  = now.getMonth() >= 7 ? now.getFullYear() : now.getFullYear() - 1;
+      var schoolYear = toKhmerNum(startYear) + '-' + toKhmerNum(startYear + 1);
+      document.getElementById('yearInput').value  = schoolYear;
+      document.getElementById('titleYear').value  = schoolYear;
+
+      /* ទាញបញ្ជីថ្នាក់ */
+      google.script.run
+        .withSuccessHandler(populateClasses)
+        .getClassListForSession(TOKEN);
+
+      /* ទាញឈ្មោះគ្រូពី session */
+      google.script.run
+        .withSuccessHandler(function(session) {
+          if (session && session.loggedIn && session.name) {
+            document.getElementById('teacherNameCtrl').value = session.name;
+            document.getElementById('teacherNameDisplay').textContent = session.name;
+          }
+        })
+        .withFailureHandler(function(){})
+        .getCurrentSession(TOKEN);
+    };
+
+    function populateClasses(classes) {
+      var sel = document.getElementById('classSelect');
+      sel.innerHTML = '<option value="">-- ជ្រើសរើសថ្នាក់ --</option>';
+      (classes || []).forEach(function(c) {
+        sel.innerHTML += '<option value="' + c + '">ថ្នាក់ទី ' + c + '</option>';
+      });
+    }
+
+    function syncTitleYear() {
+      document.getElementById('titleYear').value = document.getElementById('yearInput').value;
+    }
+
+    function loadRoster() {
+      var cls   = document.getElementById('classSelect').value;
+      var tbody = document.getElementById('rosterBody');
+      document.getElementById('titleClass').value = cls;
+
+      if (!cls) {
+        tbody.innerHTML = '<tr><td colspan="8" class="empty-note">សូមជ្រើសរើសថ្នាក់</td></tr>';
+        return;
+      }
+      tbody.innerHTML = '<tr><td colspan="8" class="empty-note">កំពុងទាញយកទិន្នន័យ...</td></tr>';
+
+      google.script.run
+        .withSuccessHandler(renderRoster)
+        .withFailureHandler(function(err) {
+          tbody.innerHTML = '<tr><td colspan="8" class="empty-note">មានបញ្ហា៖ ' +
+            (err && err.message ? err.message : err) + '</td></tr>';
+        })
+        .getStudentRosterByClassSecured(TOKEN, cls);
+    }
+
+    function renderRoster(students) {
+      var tbody = document.getElementById('rosterBody');
+      if (!students || students.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="8" class="empty-note">គ្មានទិន្នន័យសិស្សសម្រាប់ថ្នាក់នេះទេ</td></tr>';
+        return;
+      }
+      var html = '';
+      students.forEach(function(s, idx) {
+        var dropped  = s.dropoutSemester || '';
+        var noteText = dropped ? ('បោះបង់ (' + dropped + ')') : '';
+        var rowClass = dropped ? 'row-dropped' : '';
+        html +=
+          '<tr class="' + rowClass + '">' +
+          '<td>' + toKhmerNum(idx + 1) + '</td>' +
+          '<td>' + escapeHtml(s.id) + '</td>' +
+          '<td class="name-cell">' + escapeHtml(s.name) + '</td>' +
+          '<td>' + escapeHtml(s.sex) + '</td>' +
+          '<td class="dob-cell">' + escapeHtml(s.dob || '-') + '</td>' +
+          '<td>' + escapeHtml(s.fromClass || '') + '</td>' +
+          '<td class="note-cell">' + escapeHtml(noteText) + '</td>' +
+          '<td class="no-print-col">' +
+            '<select class="dropout-select ' + (dropped ? 'is-dropped' : '') + '" ' +
+              'data-id="' + escapeHtml(s.id) + '" onchange="onDropoutChange(this)">' +
+              '<option value=""'           + (!dropped               ? ' selected' : '') + '>សកម្ម</option>' +
+              '<option value="ឆមាសទី១"'  + (dropped==='ឆមាសទី១' ? ' selected' : '') + '>បោះបង់ ឆមាស១</option>' +
+              '<option value="ឆមាសទី២"'  + (dropped==='ឆមាសទី២' ? ' selected' : '') + '>បោះបង់ ឆមាស២</option>' +
+            '</select>' +
+          '</td></tr>';
+      });
+      tbody.innerHTML = html;
+    }
+
+    function onDropoutChange(selectEl) {
+      var studentId = selectEl.dataset.id;
+      var semester  = selectEl.value;
+      var label = semester
+        ? 'តើអ្នកប្រាកដថាចង់កត់ត្រាថាសិស្សនេះបានបោះបង់ការសិក្សា (' + semester + ') មែនទេ?\nសិស្សនឹងលែងបង្ហាញនៅក្នុងទម្រង់ផ្សេងៗ (វត្តមាន/ពិន្ទុ) សម្រាប់ខែឆមាសបន្ទាប់ទៀត'
+        : 'តើអ្នកប្រាកដថាចង់ត្រឡប់សិស្សនេះទៅជាសកម្មវិញមែនទេ?';
+      if (!confirm(label)) { loadRoster(); return; }
+      selectEl.disabled = true;
+      google.script.run
+        .withSuccessHandler(function(res) { alert(res); loadRoster(); })
+        .withFailureHandler(function(err) {
+          selectEl.disabled = false;
+          alert('មានបញ្ហា៖ ' + (err && err.message ? err.message : err));
+          loadRoster();
+        })
+        .setStudentDropout(studentId, semester);
+    }
+
+    function escapeHtml(value) {
+      if (value === null || value === undefined) return '';
+      return String(value)
+        .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+    }
+  </script>
+</body>
+</html>

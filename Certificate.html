@@ -1,0 +1,771 @@
+<!DOCTYPE html>
+<html lang="km">
+
+<head>
+  <base target="_top">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>បណ្ណសរសើរសិស្ស (ប្រចាំឆ្នាំ លេខ១ ដល់ ៥)</title>
+
+  <!-- Khmer Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Moul&family=Siemreap&family=Kantumruy+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <style>
+    /* =====================================================
+       🌟 ភ្ជាប់ពុម្ពអក្សរ TACTEING ពិតប្រាកដ
+    ===================================================== */
+    @font-face {
+      font-family: 'Tacteing';
+      src: local('Tacteing'),
+           local('Khmer OS Tacteing'),
+           local('Tacteing Regular'),
+           local('Tacteing-Regular'),
+           url('https://cdn.jsdelivr.net/gh/SOMONSOUM/Latex-Project@master/pptexam/Tacteing.ttf') format('truetype');
+      font-display: block;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html, body {
+      width: 100%;
+      min-height: 100vh;
+      background-color: #eef2f5;
+      font-family: 'Siemreap', sans-serif;
+      padding: 15px;
+      overflow-x: hidden;
+    }
+
+    /* =====================================================
+       TOOLBAR
+    ===================================================== */
+    .no-print-toolbar {
+      width: 100%;
+      background: #ffffff;
+      padding: 15px 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      margin-bottom: 20px;
+    }
+
+    .toolbar-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
+    .toolbar-row:last-child {
+      margin-bottom: 0;
+    }
+
+    .toolbar-group {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+
+    .toolbar-group label {
+      color: #333;
+      white-space: nowrap;
+    }
+
+    .toolbar-group input,
+    .toolbar-group select {
+      padding: 6px 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      font-family: 'Kantumruy Pro', sans-serif;
+      font-size: 13px;
+      background: #fff;
+      outline: none;
+    }
+
+    .toolbar-group input:focus,
+    .toolbar-group select:focus {
+      border-color: #0d6efd;
+      box-shadow: 0 0 0 2px rgba(13, 110, 253, .10);
+    }
+
+    /* =====================================================
+       BUTTONS
+    ===================================================== */
+    .btn-action {
+      background-color: #0d6efd;
+      color: white;
+      border: none;
+      padding: 7px 18px;
+      border-radius: 4px;
+      cursor: pointer;
+      font-family: 'Kantumruy Pro', sans-serif;
+      font-weight: 600;
+      font-size: 13px;
+      transition: transform .15s ease, background .15s ease;
+    }
+
+    .btn-action:hover {
+      background-color: #0b5ed7;
+      transform: translateY(-1px);
+    }
+
+    .btn-print {
+      background-color: #198754;
+    }
+
+    .btn-print:hover {
+      background-color: #157347;
+    }
+
+    /* =====================================================
+       CERTIFICATES LIST & CANVAS
+    ===================================================== */
+    .certificate-list {
+      display: flex;
+      flex-direction: column;
+      gap: 25px;
+      align-items: center;
+    }
+
+    .certificate-container {
+      width: 960px;
+      height: 710px;
+      margin: 0 auto;
+      background-color: #fffdf7;
+      padding: 20px;
+      position: relative;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+      overflow: hidden;
+      page-break-after: always;
+      break-after: page;
+    }
+
+    /* =====================================================
+       DEFAULT BORDER
+    ===================================================== */
+    .outer-border {
+      border: 4px solid #800000;
+      padding: 5px;
+      height: 100%;
+      position: relative;
+      z-index: 2;
+    }
+
+    .inner-border {
+      border: 2px solid #d4af37;
+      outline: 1px solid #800000;
+      outline-offset: 4px;
+      height: 100%;
+      padding: 22px 35px 18px 35px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      position: relative;
+      background: radial-gradient(circle, rgba(255, 255, 255, 1) 55%, rgba(253, 248, 235, 1) 100%);
+    }
+
+    /* =====================================================
+       FRAME OVERLAY
+    ===================================================== */
+    .frame-overlay {
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      z-index: 1;
+      pointer-events: none;
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: 100% 100%;
+      display: none;
+      -webkit-print-color-adjust: exact;
+      print-color-adjust: exact;
+    }
+
+    .frame-overlay.active {
+      display: block;
+    }
+
+    .certificate-container.has-frame {
+      padding: 130px 55px 70px 55px;
+    }
+
+    /* =====================================================
+       CORNER KBACH
+    ===================================================== */
+    .corner-kbach {
+      position: absolute;
+      width: 48px;
+      height: 48px;
+      fill: #d4af37;
+      z-index: 2;
+    }
+
+    .top-left { top: -2px; left: -2px; }
+    .top-right { top: -2px; right: -2px; transform: rotate(90deg); }
+    .bottom-left { bottom: -2px; left: -2px; transform: rotate(-90deg); }
+    .bottom-right { bottom: -2px; right: -2px; transform: rotate(180deg); }
+
+    /* =====================================================
+       🌟 HEADER (បាវចនាជាតិខ្ពស់ជាងរដ្ឋបាលបន្តិច តាមក្បួនរដ្ឋបាល)
+    ===================================================== */
+    .header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      width: 100%;
+      padding: 0 45px;
+    }
+
+    /* ផ្នែករដ្ឋបាលខាងឆ្វេង (ទាបជាងបាវចនាជាតិបន្តិច) */
+    .header-left {
+      text-align: left;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: flex-start;
+      flex-shrink: 0;
+      margin-top: 8px; /* 🌟 ទម្លាក់ចុះបន្តិចឱ្យបាវចនាជាតិមើលទៅខ្ពស់ជាង */
+    }
+
+    /* ផ្នែកបាវចនាជាតិខាងស្តាំ (ខ្ពស់ជាងរដ្ឋបាល) */
+    .header-right { 
+      text-align: center; 
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      flex-shrink: 0;
+      margin-top: -5px; /* 🌟 លើកឱ្យខ្ពស់ជាងផ្នែករដ្ឋបាលបន្តិច */
+    }
+
+    /* ជួរទី ១ និងទី ២ ផ្នែករដ្ឋបាល (ខាងឆ្វេង) */
+    .header-admin-line1 {
+      font-family: 'Moul', serif;
+      color: #002b66;
+      font-size: 13px;
+      line-height: 1.7;
+      margin: 0;
+      white-space: nowrap;
+    }
+
+    .header-admin-line2 {
+      font-family: 'Moul', serif;
+      color: #002b66;
+      font-size: 13px;
+      line-height: 1.7;
+      margin: 0;
+      white-space: nowrap;
+    }
+
+    /* ជួរទី ១ និងទី ២ ផ្នែកបាវចនាជាតិ (ខាងស្តាំ) */
+    .kingdom-line {
+      font-family: 'Moul', serif;
+      color: #800000;
+      font-size: 13px;
+      line-height: 1.7;
+      margin: 0;
+      text-align: center;
+      white-space: nowrap;
+    }
+
+    .motto-line {
+      font-family: 'Moul', serif;
+      color: #800000;
+      font-size: 12.5px;
+      line-height: 1.7;
+      margin: 0;
+      text-align: center;
+      white-space: nowrap;
+    }
+
+    /* 🌟 ក្បាច់ TACTEING លេខ ៣ */
+    .flagRow {
+      color: #d4af37;
+      font-family: 'Tacteing', 'Khmer OS Tacteing', sans-serif;
+      font-size: 40px;
+      line-height: 0.3;
+      margin-top: 8px;
+      user-select: none;
+      display: block;
+      text-align: center;
+    }
+
+    /* =====================================================
+       TITLE
+    ===================================================== */
+    .cert-title-block {
+      margin-top: -10px;
+      text-align: center;
+    }
+
+    .cert-title {
+      font-family: 'Moul', serif;
+      color: #800000;
+      font-size: 32px;
+      margin: 0;
+      letter-spacing: 1px;
+      text-shadow: 1px 1px 0px rgba(212, 175, 55, 0.4);
+    }
+
+    .cert-subtitle-school {
+      font-family: 'Moul', serif;
+      color: #4B0082;
+      font-size: 15px;
+      margin-top: 3px;
+    }
+
+    /* =====================================================
+       BODY
+    ===================================================== */
+    .cert-body {
+      font-family: 'Siemreap', sans-serif;
+      font-size: 13px;
+      color: #222;
+      line-height: 1.8;
+    }
+
+    .nowrap-group {
+      white-space: nowrap;
+      display: inline-block;
+      margin: 0 1px;
+    }
+
+    /* 🌟 អក្សរមូល MOUL សម្រាប់ទិន្នន័យសំខាន់ៗ (ចំណាត់ថ្នាក់ មធ្យមភាគ ឆ្នាំសិក្សា...) */
+    .field-highlight {
+      font-family: 'Moul', serif;
+      font-weight: 400;
+      font-size: 14.5px;
+      color: #800000;
+      padding: 0 3px;
+      line-height: 1.6;
+    }
+
+    /* ឈ្មោះសិស្ស៖ មិនដាច់ក្បាលស្រៈខាងលើ */
+    .student-name {
+      font-family: 'Moul', serif;
+      font-weight: 400;
+      font-size: 15px;
+      color: #800000;
+      display: inline-block;
+      padding: 4px 10px 2px 10px;
+      line-height: 1.6;
+    }
+
+    /* =====================================================
+       PHOTO
+    ===================================================== */
+    .student-photo-box {
+      width: 113px;
+      height: 151px;
+      transform: translateY(-8px);
+      flex-shrink: 0;
+      flex-grow: 0;
+      border: 3px solid #d4af37;
+      border-radius: 4px;
+      background-color: #f8f9fa;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+    }
+
+    .student-photo-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    /* =====================================================
+       FOOTER
+    ===================================================== */
+    .footer-section {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+      align-items: center;
+      column-gap: 10px;
+      font-family: 'Siemreap', sans-serif;
+      font-size: 13px;
+    }
+
+    .signature-box {
+      text-align: center;
+      justify-self: center;
+    }
+
+    .signature-title {
+      font-family: 'Moul', serif;
+      font-size: 12px;
+      color: #002b66;
+      margin-top: 4px;
+    }
+
+    .signature-space {
+      height: 62px;
+    }
+
+    /* =====================================================
+       PRINT A4 LANDSCAPE (បោះពុម្ពម្ដងទាំងអស់ ១សន្លឹក=១បណ្ណ)
+    ===================================================== */
+    @media print {
+      html, body {
+        background: transparent !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        overflow: visible !important;
+      }
+
+      .no-print-toolbar {
+        display: none !important;
+      }
+
+      .certificate-list {
+        gap: 0 !important;
+      }
+
+      .certificate-container {
+        width: 297mm !important;
+        height: 210mm !important;
+        max-height: 210mm !important;
+        margin: 0 !important;
+        padding: 10mm 15mm !important;
+        box-shadow: none !important;
+        page-break-after: always !important;
+        break-after: page !important;
+        overflow: hidden !important;
+        transform: none !important;
+      }
+
+      .certificate-container.has-frame {
+        padding: 38mm 18mm 20mm 18mm !important;
+      }
+
+      .header-row {
+        padding: 0 12mm !important;
+      }
+
+      @page {
+        size: A4 landscape;
+        margin: 0;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- =====================================================
+       CONTROL TOOLBAR
+  ===================================================== -->
+  <div class="no-print-toolbar">
+    <div class="toolbar-row">
+      <div class="toolbar-group">
+        <label>ជ្រើសរើសថ្នាក់:</label>
+        <select id="selectClass" onchange="loadTopStudents()"></select>
+      </div>
+
+      <div class="toolbar-group">
+        <label>ជ្រើសរើសស៊ុម:</label>
+        <select id="selectFrame" onchange="updateAllFrames()">
+          <option value="">ស៊ុមលំនាំដើម (Kbach)</option>
+          <option value="1">ស៊ុមទី១</option>
+          <option value="2">ស៊ុមទី២</option>
+          <option value="3">ស៊ុមទី៣</option>
+          <option value="4">ស៊ុមទី៤</option>
+          <option value="5">ស៊ុមទី៥</option>
+          <option value="6">ស៊ុមទី៦</option>
+          <option value="7">ស៊ុមទី៧</option>
+          <option value="8">ស៊ុមទី៨</option>
+          <option value="9">ស៊ុមទី៩</option>
+          <option value="10">ស៊ុមទី១០</option>
+          <option value="11">ស៊ុមទី១១</option>
+        </select>
+      </div>
+
+      <div class="toolbar-group">
+        <label>សាលារៀន:</label>
+        <input type="text" id="inSchool" value="សាលាបឋមសិក្សាកំពង់ល្ពៅ" oninput="updateAllCertText()">
+      </div>
+
+      <div class="toolbar-group">
+        <label>ឆ្នាំសិក្សា:</label>
+        <input type="text" id="inYear" value="" style="width:140px;" oninput="updateAllCertText()">
+      </div>
+
+      <button class="btn-action" onclick="loadTopStudents()">
+        🔄 ផ្ទុកទិន្នន័យ
+      </button>
+
+      <button class="btn-action btn-print" onclick="window.print()">
+        🖨️ បោះពុម្ពទាំងអស់
+      </button>
+    </div>
+
+    <!-- ROW 2: កាលបរិច្ឆេទ -->
+    <div class="toolbar-row">
+      <div class="toolbar-group" style="width:100%;">
+        <label>កាលបរិច្ឆេទ:</label>
+        <textarea id="inDate" rows="2" style="width:100%; max-width:600px; resize:vertical; font-family:'Kantumruy Pro',sans-serif; font-size:12.5px; padding:5px 10px; border:1px solid #ccc; border-radius:4px;" oninput="updateAllCertText()">ថ្ងៃព្រហស្បតិ៍ ១៤កើត ខែស្រាពណ៍ ឆ្នាំមមី អដ្ឋស័ក ព.ស ២៥៧០
+កំពង់ល្ពៅ ថ្ងៃទី២៧ ខែសីហា ឆ្នាំ២០២៦</textarea>
+        <span id="roleNotice" style="font-size:12px; color:#0d6efd; font-weight:bold; margin-left:10px;">
+          ★ បង្ហាញសិស្សពូកែប្រចាំឆ្នាំ លេខ១ ដល់លេខ ៥
+        </span>
+      </div>
+    </div>
+  </div>
+
+  <!-- =====================================================
+       CERTIFICATES LIST (កន្លែងបង្ហាញបណ្ណសរសើរទាំងអស់)
+  ===================================================== -->
+  <div id="certificateList" class="certificate-list">
+    <div style="text-align:center; padding:50px; font-size:16px; color:#666;">
+      កំពុងទាញយកទិន្នន័យសិស្ស...
+    </div>
+  </div>
+
+  <!-- =====================================================
+       JAVASCRIPT
+  ===================================================== -->
+  <script>
+    const token = '<?= token ?>';
+    const userRole = '<?= userRole ?>';
+    const userClass = '<?= userClass ?>';
+
+    let fetchedStudents = [];
+    let classesLoaded = false;
+
+    const FRAME_IMAGES = {
+      "1": "https://lh3.googleusercontent.com/d/1N57PmjOvX02wM-yGow7sef2DrWoGg8qq",
+      "2": "https://lh3.googleusercontent.com/d/1JssVh9vT0J0Iq3PKK0USsBIwngD-OGv2",
+      "3": "https://lh3.googleusercontent.com/d/1Xf0jwMiDuDa8kyN858mISM0iZLzK06GG",
+      "4": "https://lh3.googleusercontent.com/d/1FrGrRAz6now1IbDnK_umDSNNcIMFT5_J",
+      "5": "https://lh3.googleusercontent.com/d/11hrJOsGUv_X4HAOcrKi6gqfDrCGHjEvK",
+      "6": "https://lh3.googleusercontent.com/d/1Ws58mgtFQLxAne6AUoUaovCeirskyj68",
+      "7": "https://lh3.googleusercontent.com/d/1AiYIycD4gxMcFSd6rPBX2TEW-sDIc6qS",
+      "8": "https://lh3.googleusercontent.com/d/13XXPmD2pTLAgmO_5-RB6TjzKEH0x9ybH",
+      "9": "https://lh3.googleusercontent.com/d/17d-TZq4oTkrjtRp_nzXbKbj4vyfJsQ3N",
+      "10": "https://lh3.googleusercontent.com/d/1NBl8VJXqPRvFCLcu9VYUbFXE98-dT8Y7",
+      "11": "https://lh3.googleusercontent.com/d/1cyb6NhrT93aNXrSrDDelvin3alc46lTH"
+    };
+
+    const NO_PHOTO_SRC = "data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='150' height='150'><rect width='100%25' height='100%25' fill='%23f0f0f0'/><text x='50%25' y='50%25' font-size='14' text-anchor='middle' fill='%23999' dy='.3em'>NO PHOTO</text></svg>";
+    const KHMER_DIGITS = ['០','១','២','៣','៤','៥','៦','៧','៨','៩'];
+
+    function toKhmerDigits(str) {
+      if (str === null || str === undefined) return '';
+      return String(str).replace(/[0-9]/g, function(d) {
+        return KHMER_DIGITS[d];
+      });
+    }
+
+    function defaultAcademicYear() {
+      const now = new Date();
+      const y = now.getFullYear();
+      const startYear = now.getMonth() >= 7 ? y : y - 1;
+      return (toKhmerDigits(startYear) + ' - ' + toKhmerDigits(startYear + 1));
+    }
+
+    window.onload = function() {
+      document.getElementById('inYear').value = defaultAcademicYear();
+
+      const noticeEl = document.getElementById('roleNotice');
+      if (userRole === 'admin') {
+        noticeEl.innerText = '★ គណនី Admin (អាចជ្រើសរើស និងមើលឃើញគ្រប់ថ្នាក់ទាំងអស់)';
+      } else {
+        noticeEl.innerText = `★ គណនីគ្រូបន្ទុកថ្នាក់ (មើលឃើញតែសិស្សថ្នាក់ទី ${userClass})`;
+      }
+
+      google.script.run
+        .withSuccessHandler(function(classes) {
+          const classSelect = document.getElementById('selectClass');
+          classSelect.innerHTML = '';
+
+          (classes || []).forEach(function(c) {
+            const opt = document.createElement('option');
+            opt.value = c;
+            opt.innerText = 'ថ្នាក់ទី ' + c;
+            classSelect.appendChild(opt);
+          });
+
+          if (userRole !== 'admin' && userClass) {
+            classSelect.value = userClass;
+          }
+
+          classesLoaded = true;
+          if (classSelect.options.length > 0) {
+            loadTopStudents();
+          } else {
+            document.getElementById('certificateList').innerHTML = 
+              '<div style="text-align:center; padding:50px; color:red;">រកមិនឃើញថ្នាក់ណាមួយទេ!</div>';
+          }
+        })
+        .withFailureHandler(function(err) {
+          alert('កំហុសក្នុងការទាញបញ្ជីថ្នាក់៖ ' + err.message);
+        })
+        .getClassListForSession(token);
+    };
+
+    function loadTopStudents() {
+      if (!classesLoaded) return;
+      let selectedClass = document.getElementById('selectClass').value;
+      if (userRole !== 'admin' && userClass) {
+        selectedClass = userClass;
+      }
+      if (!selectedClass) return;
+
+      document.getElementById('certificateList').innerHTML = 
+        `<div style="text-align:center; padding:50px; font-size:16px; color:#666;">កំពុងទាញយកទិន្នន័យសិស្សពូកែលេខ ១ ដល់ ៥ ប្រចាំឆ្នាំ (ថ្នាក់ទី ${selectedClass})...</div>`;
+
+      google.script.run
+        .withSuccessHandler(renderAllCertificates)
+        .withFailureHandler(function(err) {
+          document.getElementById('certificateList').innerHTML = 
+            '<div style="text-align:center; padding:50px; color:red;">កំហុស៖ ' + err.message + '</div>';
+        })
+        .getTopStudentsDataSecured(token, selectedClass, 'ប្រចាំឆ្នាំ', 'top5Ties');
+    }
+
+    function renderAllCertificates(res) {
+      const container = document.getElementById('certificateList');
+      if (!res || !res.success || !res.scores || res.scores.length === 0) {
+        container.innerHTML = '<div style="text-align:center; padding:50px; color:#666; font-size:16px;">ពុំមានទិន្នន័យសិស្សពូកែចំណាត់ថ្នាក់លេខ ១ ដល់ ៥ ក្នុងថ្នាក់នេះឡើយ។</div>';
+        return;
+      }
+
+      fetchedStudents = res.scores;
+      const schoolInput = document.getElementById('inSchool').value || 'សាលាបឋមសិក្សាកំពង់ល្ពៅ';
+      const yearInput = document.getElementById('inYear').value || defaultAcademicYear();
+      const dateInput = document.getElementById('inDate').value || '';
+
+      let html = '';
+
+      fetchedStudents.forEach(function(st, idx) {
+        const photoSrc = (st.imageUrl && st.imageUrl.trim()) ? st.imageUrl.trim() : NO_PHOTO_SRC;
+
+        html += `
+        <div class="certificate-container" id="cert-${idx}">
+          <div class="frame-overlay" id="frameOverlay-${idx}"></div>
+
+          <div class="outer-border">
+            <svg class="corner-kbach top-left" viewBox="0 0 100 100"><path d="M0,0 L100,0 L100,20 L20,20 L20,100 L0,100 Z" /><circle cx="35" cy="35" r="10" /></svg>
+            <svg class="corner-kbach top-right" viewBox="0 0 100 100"><path d="M0,0 L100,0 L100,20 L20,20 L20,100 L0,100 Z" /><circle cx="35" cy="35" r="10" /></svg>
+            <svg class="corner-kbach bottom-left" viewBox="0 0 100 100"><path d="M0,0 L100,0 L100,20 L20,20 L20,100 L0,100 Z" /><circle cx="35" cy="35" r="10" /></svg>
+            <svg class="corner-kbach bottom-right" viewBox="0 0 100 100"><path d="M0,0 L100,0 L100,20 L20,20 L20,100 L0,100 Z" /><circle cx="35" cy="35" r="10" /></svg>
+
+            <div class="inner-border">
+              <!-- 🌟 HEADER (បាវចនាជាតិខ្ពស់ជាងរដ្ឋបាលបន្តិច) -->
+              <div class="header-row">
+                <div class="header-left">
+                  <div class="header-admin-line1">រដ្ឋបាលស្រុកសំឡូត</div>
+                  <div class="header-admin-line2">សាលារៀន ៖ <span class="cert-out-school">${schoolInput}</span></div>
+                </div>
+                <div class="header-right">
+                  <div class="kingdom-line">ព្រះរាជាណាចក្រកម្ពុជា</div>
+                  <div class="motto-line">ជាតិ សាសនា ព្រះមហាក្សត្រ</div>
+                  <div class="flagRow">3</div>
+                </div>
+              </div>
+
+              <!-- TITLE -->
+              <div class="cert-title-block">
+                <h1 class="cert-title">បណ្ណសរសើរ</h1>
+                <p style="font-family:'Kantumruy Pro'; font-size:12px; color:#555; letter-spacing:2px; margin-top:2px;">CERTIFICATE OF COMMENDATION</p>
+                <div class="cert-subtitle-school">នាយក${schoolInput}</div>
+              </div>
+
+              <!-- BODY (ប្រើ Font MOUL លើ ចំណាត់ថ្នាក់, មធ្យមភាគ, និង ឆ្នាំសិក្សា) -->
+              <div class="cert-body">
+                សូមសរសើរចំពោះសិស្សឈ្មោះ
+                <div class="student-name">${st.studentName || '...............................'}</div>
+                <span class="nowrap-group">ភេទ <span class="field-highlight">${st.gender || '.........'}</span></span>
+                <span class="nowrap-group">កើតថ្ងៃទី <span class="field-highlight">${toKhmerDigits(st.dob) || '........................................'}</span></span>
+                <span class="nowrap-group">រៀនថ្នាក់ទី <span class="field-highlight">${toKhmerDigits(st.class) || '........'}</span></span>
+                <br>
+                នៃ <span class="field-highlight cert-out-school">${schoolInput}</span> ។ ដែលបានខិតខំសិក្សារៀនសូត្រ
+                <span class="nowrap-group">
+                  ទទួលបានចំណាត់ថ្នាក់លេខ <span class="field-highlight">${toKhmerDigits(st.rank)}</span>
+                  មធ្យមភាគ <span class="field-highlight">${toKhmerDigits(st.avg)}</span>
+                </span>
+                <br>
+                <span class="nowrap-group">ក្នុងឆ្នាំសិក្សា <span class="field-highlight cert-out-year">${toKhmerDigits(yearInput)}</span></span> ។
+                <br>
+                បណ្ណសរសើរនេះប្រគល់ជូនសាមីខ្លួនប្រើប្រាស់តាមការដែលអាចប្រើបាន ។
+              </div>
+
+              <!-- FOOTER -->
+              <div class="footer-section">
+                <div class="signature-box">
+                  <span>បានឃើញ និងឯកភាព</span><br>
+                  <div class="signature-title">នាយកសាលា</div>
+                  <div class="signature-space"></div>
+                </div>
+
+                <div class="student-photo-box">
+                  <img src="${photoSrc}" alt="Student Photo" onerror="this.onerror=null; this.src=NO_PHOTO_SRC;">
+                </div>
+
+                <div class="signature-box" style="align-self:start; margin-top:6px;">
+                  <span class="cert-out-date" style="display:inline-block; white-space:pre; font-size:12px; line-height:1.5;">${toKhmerDigits(dateInput)}</span><br>
+                  <div class="signature-title">គ្រូបន្ទុកថ្នាក់</div>
+                  <div class="signature-space"></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        `;
+      });
+
+      container.innerHTML = html;
+      updateAllFrames();
+    }
+
+    function updateAllCertText() {
+      const schoolVal = document.getElementById('inSchool').value || '...................';
+      const yearVal = toKhmerDigits(document.getElementById('inYear').value || '...................');
+      const dateVal = toKhmerDigits(document.getElementById('inDate').value || '');
+
+      document.querySelectorAll('.cert-out-school').forEach(el => el.innerText = schoolVal);
+      document.querySelectorAll('.cert-subtitle-school').forEach(el => el.innerText = 'នាយក' + schoolVal);
+      document.querySelectorAll('.cert-out-year').forEach(el => el.innerText = yearVal);
+      document.querySelectorAll('.cert-out-date').forEach(el => el.innerText = dateVal);
+    }
+
+    function updateAllFrames() {
+      const val = document.getElementById('selectFrame').value;
+
+      document.querySelectorAll('.certificate-container').forEach(function(container, idx) {
+        const overlay = container.querySelector('.frame-overlay');
+        const outerBorder = container.querySelector('.outer-border');
+        const innerBorder = container.querySelector('.inner-border');
+        const cornerKbachEls = container.querySelectorAll('.corner-kbach');
+
+        if (val && FRAME_IMAGES[val]) {
+          overlay.style.backgroundImage = "url('" + FRAME_IMAGES[val] + "')";
+          overlay.classList.add('active');
+          container.classList.add('has-frame');
+          outerBorder.style.border = 'none';
+          innerBorder.style.border = 'none';
+          innerBorder.style.outline = 'none';
+          innerBorder.style.background = 'transparent';
+          cornerKbachEls.forEach(el => el.style.display = 'none');
+        } else {
+          overlay.classList.remove('active');
+          overlay.style.backgroundImage = '';
+          container.classList.remove('has-frame');
+          outerBorder.style.border = '';
+          innerBorder.style.border = '';
+          innerBorder.style.outline = '';
+          innerBorder.style.background = '';
+          cornerKbachEls.forEach(el => el.style.display = '');
+        }
+      });
+    }
+  </script>
+</body>
+</html>

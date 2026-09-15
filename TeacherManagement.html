@@ -1,0 +1,2724 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+  <base target="_top">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link href="https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@400;500;600;700&family=Moul&display=swap" rel="stylesheet">
+
+  <style>
+    :root {
+      --navy-1:#0f172a;
+      --navy-2:#1e3a8a;
+      --blue:#2563eb;
+      --blue2:#3b82f6;
+      --blue-soft:#eff6ff;
+      --green:#16a34a;
+      --amber:#d97706;
+      --purple:#7c3aed;
+      --text:#1e293b;
+      --muted:#64748b;
+      --border:#e2e8f0;
+      --bg:#f1f5f9;
+      --danger:#dc2626;
+      --white:#fff;
+    }
+
+    * {
+      box-sizing:border-box;
+      margin:0;
+      padding:0;
+      font-family:'Kantumruy Pro',sans-serif;
+    }
+
+    html,body {
+      background:var(--bg);
+      color:var(--text);
+    }
+
+    body {
+      padding:22px 24px 40px;
+    }
+
+    /* =========================
+       PAGE HEADER
+    ========================= */
+
+    .page-head {
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      margin-bottom:18px;
+      gap:15px;
+      flex-wrap:wrap;
+    }
+
+    .page-title {
+      display:flex;
+      align-items:center;
+      gap:12px;
+    }
+
+    .page-title-icon {
+      width:44px;
+      height:44px;
+      border-radius:13px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:22px;
+      background:linear-gradient(135deg,#1e3a8a,#7c3aed);
+      color:#fff;
+      box-shadow:0 8px 20px rgba(37,99,235,.2);
+    }
+
+    .page-head h2 {
+      font-size:17px;
+      color:var(--navy-2);
+    }
+
+    .page-head p {
+      font-size:12px;
+      color:var(--muted);
+      margin-top:3px;
+    }
+
+    .add-btn {
+      background:linear-gradient(120deg,var(--navy-2),var(--purple));
+      color:#fff;
+      border:none;
+      padding:11px 18px;
+      border-radius:11px;
+      font-size:13px;
+      font-weight:700;
+      cursor:pointer;
+      display:flex;
+      align-items:center;
+      gap:7px;
+      box-shadow:0 7px 18px rgba(37,99,235,.25);
+      transition:.18s ease;
+    }
+
+    .add-btn:hover {
+      transform:translateY(-2px);
+      box-shadow:0 10px 24px rgba(37,99,235,.3);
+    }
+
+    /* =========================
+       SEARCH
+    ========================= */
+
+    .search-bar {
+      margin-bottom:16px;
+    }
+
+    .search-wrap {
+      position:relative;
+      width:100%;
+      max-width:350px;
+    }
+
+    .search-wrap span {
+      position:absolute;
+      left:13px;
+      top:50%;
+      transform:translateY(-50%);
+      color:#94a3b8;
+      font-size:15px;
+    }
+
+    .search-bar input {
+      width:100%;
+      padding:11px 14px 11px 38px;
+      border-radius:11px;
+      border:1.5px solid var(--border);
+      font-size:13px;
+      outline:none;
+      background:#fff;
+      transition:.18s ease;
+    }
+
+    .search-bar input:focus {
+      border-color:var(--blue);
+      box-shadow:0 0 0 3px rgba(37,99,235,.08);
+    }
+
+    /* =========================
+       TABLE
+    ========================= */
+
+    .table-panel {
+      background:#fff;
+      border-radius:16px;
+      border:1px solid var(--border);
+      box-shadow:0 3px 10px rgba(15,23,42,.04);
+      overflow:hidden;
+      overflow-x:auto;
+    }
+
+    table {
+      width:100%;
+      border-collapse:collapse;
+      font-size:12.5px;
+    }
+
+    thead th {
+      background:linear-gradient(90deg,var(--navy-2),#4338ca);
+      color:#fff;
+      text-align:center;
+      padding:12px 10px;
+      font-weight:700;
+      white-space:nowrap;
+    }
+
+    tbody td {
+      padding:10px;
+      border-bottom:1px solid var(--border);
+      text-align:center;
+      white-space:nowrap;
+    }
+
+    tbody tr {
+      transition:.15s ease;
+    }
+
+    tbody tr:hover {
+      background:var(--blue-soft);
+    }
+
+    tbody tr:last-child td {
+      border-bottom:none;
+    }
+
+    .name-cell {
+      font-weight:700;
+      text-align:left !important;
+    }
+
+    .empty-row td {
+      color:#94a3b8;
+      padding:30px 0;
+    }
+
+    .avatar-thumb,
+    .avatar-fallback {
+      width:36px;
+      height:36px;
+      border-radius:50%;
+    }
+
+    .avatar-thumb {
+      object-fit:cover;
+      display:inline-block;
+      background:#e2e8f0;
+      border:1px solid var(--border);
+    }
+
+    .avatar-fallback {
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      background:linear-gradient(135deg,#3b82f6,#8b5cf6);
+      color:#fff;
+      font-weight:700;
+      font-size:13px;
+    }
+
+    .badge-user {
+      background:#f0fdf4;
+      color:var(--green);
+      font-weight:700;
+      padding:4px 9px;
+      border-radius:999px;
+      font-size:11px;
+    }
+
+    .badge-role {
+      font-weight:700;
+      padding:4px 10px;
+      border-radius:999px;
+      font-size:11px;
+    }
+
+    .badge-role.admin {
+      background:#fef3c7;
+      color:#b45309;
+    }
+
+    .badge-role.teacher {
+      background:#eff6ff;
+      color:var(--blue);
+    }
+
+    .row-actions {
+      display:flex;
+      gap:6px;
+      justify-content:center;
+    }
+
+    .icon-btn {
+      width:31px;
+      height:31px;
+      border-radius:8px;
+      border:none;
+      cursor:pointer;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:13px;
+      transition:.15s ease;
+    }
+
+    .icon-btn:hover {
+      transform:translateY(-2px);
+    }
+
+    .icon-btn.edit {
+      background:#eff6ff;
+      color:var(--blue);
+    }
+
+    .icon-btn.del {
+      background:#fef2f2;
+      color:var(--danger);
+    }
+
+    /* ======================================================
+       MODAL BACKDROP
+    ====================================================== */
+
+    .modal-backdrop {
+      display:none;
+      position:fixed;
+      inset:0;
+      background:rgba(15,23,42,.58);
+      backdrop-filter:blur(6px);
+      -webkit-backdrop-filter:blur(6px);
+      z-index:999;
+      align-items:center;
+      justify-content:center;
+      padding:18px;
+    }
+
+    .modal-backdrop.show {
+      display:flex;
+      animation:fadeBackdrop .18s ease both;
+    }
+
+    @keyframes fadeBackdrop {
+      from {opacity:0;}
+      to {opacity:1;}
+    }
+
+    /* ======================================================
+       MODAL
+    ====================================================== */
+
+    .modal-card {
+      background:#fff;
+      border-radius:22px;
+      width:680px;
+      max-width:100%;
+      max-height:94vh;
+      overflow:hidden;
+      display:flex;
+      flex-direction:column;
+      box-shadow:
+        0 30px 80px rgba(15,23,42,.30),
+        0 8px 25px rgba(15,23,42,.12);
+
+      animation:modalIn .25s cubic-bezier(.2,.8,.2,1) both;
+    }
+
+    @keyframes modalIn {
+      from {
+        opacity:0;
+        transform:translateY(18px) scale(.96);
+      }
+      to {
+        opacity:1;
+        transform:translateY(0) scale(1);
+      }
+    }
+
+    /* =========================
+       MODAL HEADER
+    ========================= */
+
+    .modal-header {
+      position:relative;
+      padding:20px 22px;
+      background:
+        radial-gradient(circle at 90% 0%,rgba(255,255,255,.16),transparent 30%),
+        linear-gradient(120deg,#1e3a8a,#4338ca,#7c3aed);
+      color:#fff;
+    }
+
+    .modal-header-inner {
+      display:flex;
+      align-items:center;
+      gap:13px;
+    }
+
+    .modal-header-icon {
+      width:48px;
+      height:48px;
+      border-radius:14px;
+      background:rgba(255,255,255,.16);
+      border:1px solid rgba(255,255,255,.22);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:23px;
+      flex-shrink:0;
+    }
+
+    .modal-header h3 {
+      font-size:16px;
+      font-weight:700;
+      margin-bottom:3px;
+    }
+
+    .modal-header p {
+      font-size:11.5px;
+      color:rgba(255,255,255,.78);
+    }
+
+    .modal-close {
+      position:absolute;
+      right:15px;
+      top:15px;
+      width:32px;
+      height:32px;
+      border-radius:9px;
+      border:none;
+      cursor:pointer;
+      background:rgba(255,255,255,.13);
+      color:#fff;
+      font-size:18px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      transition:.15s ease;
+    }
+
+    .modal-close:hover {
+      background:rgba(255,255,255,.24);
+      transform:rotate(3deg);
+    }
+
+    /* =========================
+       MODAL BODY
+    ========================= */
+
+    .modal-body {
+      padding:20px 22px 8px;
+      overflow-y:auto;
+    }
+
+    .modal-body::-webkit-scrollbar {
+      width:6px;
+    }
+
+    .modal-body::-webkit-scrollbar-thumb {
+      background:#cbd5e1;
+      border-radius:20px;
+    }
+
+    /* =========================
+       PHOTO SECTION
+    ========================= */
+
+    .photo-section {
+      display:flex;
+      align-items:center;
+      gap:17px;
+      padding:14px;
+      border:1px solid var(--border);
+      border-radius:15px;
+      background:linear-gradient(135deg,#f8fafc,#fff);
+      margin-bottom:20px;
+    }
+
+    .photo-box {
+      position:relative;
+      width:78px;
+      height:78px;
+      flex-shrink:0;
+    }
+
+    .photo-preview {
+      width:78px;
+      height:78px;
+      border-radius:18px;
+      object-fit:cover;
+      background:#e2e8f0;
+      border:2px solid #fff;
+      box-shadow:0 4px 13px rgba(15,23,42,.12);
+      display:none;
+    }
+
+    .photo-placeholder {
+      width:78px;
+      height:78px;
+      border-radius:18px;
+      background:linear-gradient(135deg,#eff6ff,#f5f3ff);
+      border:1.5px dashed #bfdbfe;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      flex-direction:column;
+      color:#64748b;
+      gap:3px;
+    }
+
+    .photo-placeholder .photo-icon {
+      font-size:25px;
+    }
+
+    .photo-placeholder span:last-child {
+      font-size:9px;
+    }
+
+    .photo-info {
+      flex:1;
+    }
+
+    .photo-info strong {
+      display:block;
+      font-size:13px;
+      margin-bottom:3px;
+    }
+
+    .photo-info p {
+      font-size:10.5px;
+      color:var(--muted);
+      line-height:1.6;
+      margin-bottom:8px;
+    }
+
+    .photo-upload-label {
+      display:inline-flex;
+      align-items:center;
+      gap:6px;
+      background:#eff6ff;
+      color:var(--blue);
+      border:1px solid #bfdbfe;
+      padding:7px 11px;
+      border-radius:8px;
+      font-size:11px;
+      font-weight:700;
+      cursor:pointer;
+      transition:.15s ease;
+    }
+
+    .photo-upload-label:hover {
+      background:#dbeafe;
+    }
+
+    #fPhoto {
+      display:none;
+    }
+
+    /* =========================
+       SECTION TITLE
+    ========================= */
+
+    .form-section {
+      margin-bottom:20px;
+    }
+
+    .section-title {
+      display:flex;
+      align-items:center;
+      gap:8px;
+      margin-bottom:12px;
+    }
+
+    .section-title-icon {
+      width:28px;
+      height:28px;
+      border-radius:8px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:14px;
+      background:#eff6ff;
+      color:var(--blue);
+    }
+
+    .section-title h4 {
+      font-size:12.5px;
+      font-weight:700;
+      color:var(--navy-2);
+    }
+
+    .section-title small {
+      margin-left:auto;
+      color:#94a3b8;
+      font-size:10px;
+      font-weight:400;
+    }
+
+    /* =========================
+       FORM GRID
+    ========================= */
+
+    .form-grid {
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:13px;
+    }
+
+    .field.full {
+      grid-column:1 / -1;
+    }
+
+    .field label {
+      display:flex;
+      align-items:center;
+      gap:4px;
+      font-size:11.5px;
+      font-weight:700;
+      margin-bottom:5px;
+      color:#334155;
+    }
+
+    .required {
+      color:var(--danger);
+      font-size:12px;
+    }
+
+    .input-wrap {
+      position:relative;
+    }
+
+    .input-icon {
+      position:absolute;
+      left:11px;
+      top:50%;
+      transform:translateY(-50%);
+      font-size:13px;
+      color:#94a3b8;
+      pointer-events:none;
+    }
+
+    .field input,
+    .field select {
+      width:100%;
+      height:40px;
+      padding:8px 11px 8px 34px;
+      border-radius:10px;
+      border:1.5px solid var(--border);
+      font-size:12.5px;
+      outline:none;
+      background:#fff;
+      color:var(--text);
+      transition:.18s ease;
+    }
+
+    .field select {
+      cursor:pointer;
+    }
+
+    .field input:focus,
+    .field select:focus {
+      border-color:var(--blue);
+      box-shadow:0 0 0 3px rgba(37,99,235,.08);
+    }
+
+    .field input::placeholder {
+      color:#a8b2c0;
+    }
+
+    .password-toggle {
+      position:absolute;
+      right:8px;
+      top:50%;
+      transform:translateY(-50%);
+      border:none;
+      background:transparent;
+      cursor:pointer;
+      width:30px;
+      height:30px;
+      border-radius:7px;
+      color:#64748b;
+    }
+
+    .password-toggle:hover {
+      background:#f1f5f9;
+    }
+
+    #fPassword {
+      padding-right:42px;
+    }
+
+    .field small {
+      display:block;
+      margin-top:4px;
+      color:#94a3b8;
+      font-size:9.5px;
+      line-height:1.5;
+    }
+
+    /* =========================
+       ROLE CARD
+    ========================= */
+
+    .role-box {
+      margin-top:2px;
+      padding:12px;
+      border-radius:12px;
+      border:1px solid #dbeafe;
+      background:#f8fbff;
+    }
+
+    .role-help {
+      display:flex;
+      align-items:flex-start;
+      gap:8px;
+      margin-top:7px;
+      color:#64748b;
+      font-size:10px;
+      line-height:1.5;
+    }
+
+    .role-help-icon {
+      color:var(--blue);
+      font-size:13px;
+    }
+
+    /* =========================
+       FOOTER
+    ========================= */
+
+    .modal-footer {
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      padding:15px 22px;
+      border-top:1px solid var(--border);
+      background:#fff;
+      box-shadow:0 -5px 15px rgba(15,23,42,.025);
+    }
+
+    .footer-note {
+      color:#94a3b8;
+      font-size:10px;
+    }
+
+    .footer-actions {
+      display:flex;
+      gap:8px;
+    }
+
+    .btn {
+      min-width:100px;
+      height:39px;
+      padding:8px 17px;
+      border-radius:10px;
+      font-size:12px;
+      font-weight:700;
+      cursor:pointer;
+      border:none;
+      transition:.16s ease;
+    }
+
+    .btn.cancel {
+      background:#f1f5f9;
+      color:#475569;
+    }
+
+    .btn.cancel:hover {
+      background:#e2e8f0;
+    }
+
+    .btn.save {
+      background:linear-gradient(120deg,#1e3a8a,#7c3aed);
+      color:#fff;
+      box-shadow:0 5px 14px rgba(37,99,235,.22);
+    }
+
+    .btn.save:hover {
+      transform:translateY(-1px);
+      box-shadow:0 7px 18px rgba(37,99,235,.28);
+    }
+
+    .btn:disabled {
+      opacity:.65;
+      cursor:not-allowed;
+      transform:none !important;
+    }
+
+    /* =========================
+       TOAST
+    ========================= */
+
+    .toast {
+      position:fixed;
+      bottom:24px;
+      right:24px;
+      background:var(--navy-1);
+      color:#fff;
+      padding:12px 18px;
+      border-radius:10px;
+      font-size:12.5px;
+      font-weight:600;
+      box-shadow:0 10px 24px rgba(0,0,0,.25);
+      opacity:0;
+      pointer-events:none;
+      transition:.25s ease;
+      transform:translateY(10px);
+      z-index:2000;
+    }
+
+    .toast.show {
+      opacity:1;
+      transform:translateY(0);
+    }
+
+    .toast.err {
+      background:var(--danger);
+    }
+
+    /* =========================
+       DENIED
+    ========================= */
+
+    .denied-wrap {
+      display:none;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+      padding:80px 20px;
+      color:var(--muted);
+    }
+
+    .denied-wrap .di {
+      font-size:46px;
+      margin-bottom:14px;
+    }
+
+    .denied-wrap h3 {
+      color:var(--navy-2);
+      font-size:15px;
+      margin-bottom:6px;
+    }
+
+    /* =========================
+       MOBILE
+    ========================= */
+
+    @media(max-width:700px) {
+
+      body {
+        padding:14px 10px 30px;
+      }
+
+      .page-head {
+        align-items:flex-start;
+      }
+
+      .page-title-icon {
+        width:40px;
+        height:40px;
+        font-size:19px;
+      }
+
+      .page-head h2 {
+        font-size:15px;
+      }
+
+      .page-head p {
+        font-size:10.5px;
+        max-width:240px;
+      }
+
+      .add-btn {
+        width:100%;
+        justify-content:center;
+      }
+
+      .search-wrap {
+        max-width:none;
+      }
+
+      .table-panel {
+        border-radius:12px;
+      }
+
+      .modal-backdrop {
+        padding:8px;
+        align-items:flex-end;
+      }
+
+      .modal-card {
+        width:100%;
+        max-height:96vh;
+        border-radius:20px 20px 12px 12px;
+      }
+
+      .modal-header {
+        padding:16px;
+      }
+
+      .modal-header-icon {
+        width:42px;
+        height:42px;
+        font-size:20px;
+      }
+
+      .modal-header h3 {
+        font-size:14px;
+      }
+
+      .modal-header p {
+        font-size:10px;
+      }
+
+      .modal-body {
+        padding:15px 15px 5px;
+      }
+
+      .photo-section {
+        padding:11px;
+        gap:12px;
+      }
+
+      .photo-box,
+      .photo-preview,
+      .photo-placeholder {
+        width:68px;
+        height:68px;
+      }
+
+      .photo-info strong {
+        font-size:12px;
+      }
+
+      .photo-info p {
+        font-size:9.5px;
+      }
+
+      .form-grid {
+        grid-template-columns:1fr;
+        gap:11px;
+      }
+
+      .field.full {
+        grid-column:auto;
+      }
+
+      .field input,
+      .field select {
+        height:42px;
+      }
+
+      .modal-footer {
+        padding:12px 15px;
+        display:block;
+      }
+
+      .footer-note {
+        display:none;
+      }
+
+      .footer-actions {
+        width:100%;
+      }
+
+      .footer-actions .btn {
+        flex:1;
+      }
+
+      .toast {
+        left:12px;
+        right:12px;
+        bottom:14px;
+        text-align:center;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- =========================
+       ACCESS DENIED
+  ========================= -->
+  <div class="denied-wrap" id="deniedWrap">
+    <div class="di">🔒</div>
+    <h3>អ្នកគ្មានសិទ្ធិចូលមើលទំព័រនេះ</h3>
+    <p>ទំព័រគ្រប់គ្រងគ្រូបង្រៀនសម្រាប់ Admin ប៉ុណ្ណោះ។</p>
+  </div>
+
+  <!-- =========================
+       MAIN PAGE
+  ========================= -->
+  <div id="pageBody">
+
+    <div class="page-head">
+
+      <div class="page-title">
+        <div class="page-title-icon">👨‍🏫</div>
+
+        <div>
+          <h2>គ្រូបង្រៀន</h2>
+          <p>
+            គ្រប់គ្រងព័ត៌មានគ្រូ តួនាទី ថ្នាក់ទទួលបន្ទុក និងគណនីចូលប្រើប្រាស់
+          </p>
+        </div>
+      </div>
+
+      <button class="add-btn" onclick="openModal()">
+        <span>➕</span>
+        <span>បន្ថែមគ្រូថ្មី</span>
+      </button>
+
+    </div>
+
+
+    <!-- SEARCH -->
+    <div class="search-bar">
+
+      <div class="search-wrap">
+        <span>🔍</span>
+
+        <input
+          type="text"
+          id="searchInput"
+          placeholder="ស្វែងរកតាមឈ្មោះ ឬអត្តលេខ..."
+          oninput="renderTable()"
+        >
+      </div>
+
+    </div>
+
+
+    <!-- TABLE -->
+    <div class="table-panel">
+
+      <table>
+
+        <thead>
+          <tr>
+            <th>ល.រ</th>
+            <th>រូបថត</th>
+            <th>អត្តលេខ</th>
+            <th>ឈ្មោះគ្រូ</th>
+            <th>លេខទូរសព្ទ</th>
+            <th>ថ្ងៃខែឆ្នាំកំណើត</th>
+            <th>ទីកន្លែងបច្ចុប្បន្ន</th>
+            <th>Username</th>
+            <th>តួនាទី</th>
+            <th>ថ្នាក់ទទួលបន្ទុក</th>
+            <th>សកម្មភាព</th>
+          </tr>
+        </thead>
+
+        <tbody id="tableBody">
+          <tr class="empty-row">
+            <td colspan="11">
+              កំពុងទាញយកទិន្នន័យ...
+            </td>
+          </tr>
+        </tbody>
+
+      </table>
+
+    </div>
+
+  </div>
+
+
+  <!-- ==================================================
+       ADD / EDIT MODAL
+  ================================================== -->
+
+  <div class="modal-backdrop" id="modalBackdrop">
+
+    <div class="modal-card">
+
+      <!-- HEADER -->
+      <div class="modal-header">
+
+        <div class="modal-header-inner">
+
+          <div class="modal-header-icon" id="modalIcon">
+            👨‍🏫
+          </div>
+
+          <div>
+            <h3 id="modalTitle">
+              បន្ថែមគ្រូថ្មី
+            </h3>
+
+            <p id="modalSubtitle">
+              បំពេញព័ត៌មានខាងក្រោម ដើម្បីបង្កើតគណនីគ្រូថ្មី
+            </p>
+          </div>
+
+        </div>
+
+        <button
+          type="button"
+          class="modal-close"
+          onclick="closeModal()"
+        >
+          ×
+        </button>
+
+      </div>
+
+
+      <!-- BODY -->
+      <div class="modal-body">
+
+        <form id="teacherForm" onsubmit="return saveTeacher(event)">
+
+          <input
+            type="hidden"
+            id="teacherId"
+          >
+
+
+          <!-- =========================
+               PHOTO
+          ========================= -->
+
+          <div class="photo-section">
+
+            <div class="photo-box">
+
+              <div
+                class="photo-placeholder"
+                id="photoPlaceholder"
+              >
+                <div class="photo-icon">📷</div>
+                <span>រូបថត</span>
+              </div>
+
+              <img
+                class="photo-preview"
+                id="photoPreview"
+                src=""
+                onerror="this.style.display='none'"
+              >
+
+            </div>
+
+
+            <div class="photo-info">
+
+              <strong>រូបថតគ្រូ</strong>
+
+              <p>
+                អាចបញ្ចូលរូបថតផ្ទាល់ខ្លួនរបស់គ្រូ។
+                ណែនាំឱ្យប្រើរូបភាពច្បាស់ និងមានទំហំសមរម្យ។
+              </p>
+
+              <label
+                class="photo-upload-label"
+                for="fPhoto"
+              >
+                📁 ជ្រើសរើសរូបថត
+              </label>
+
+              <input
+                type="file"
+                id="fPhoto"
+                accept="image/*"
+                onchange="onPhotoPicked(event)"
+              >
+
+            </div>
+
+          </div>
+
+
+          <!-- =========================
+               PERSONAL INFORMATION
+          ========================= -->
+
+          <div class="form-section">
+
+            <div class="section-title">
+
+              <div class="section-title-icon">
+                👤
+              </div>
+
+              <h4>
+                ព័ត៌មានផ្ទាល់ខ្លួន
+              </h4>
+
+              <small>
+                ព័ត៌មានសំខាន់
+              </small>
+
+            </div>
+
+
+            <div class="form-grid">
+
+              <!-- CODE -->
+              <div class="field">
+
+                <label>
+                  អត្តលេខ
+                  <span class="required">*</span>
+                </label>
+
+                <div class="input-wrap">
+
+                  <span class="input-icon">🪪</span>
+
+                  <input
+                    type="text"
+                    id="fCode"
+                    placeholder="ឧ. T001"
+                    required
+                  >
+
+                </div>
+
+              </div>
+
+
+              <!-- PHONE -->
+              <div class="field">
+
+                <label>
+                  លេខទូរសព្ទ
+                  <span class="required">*</span>
+                </label>
+
+                <div class="input-wrap">
+
+                  <span class="input-icon">📱</span>
+
+                  <input
+                    type="text"
+                    id="fPhone"
+                    placeholder="ឧ. 012 345 678"
+                    required
+                  >
+
+                </div>
+
+              </div>
+
+
+              <!-- NAME -->
+              <div class="field full">
+
+                <label>
+                  ឈ្មោះគ្រូ
+                  <span class="required">*</span>
+                </label>
+
+                <div class="input-wrap">
+
+                  <span class="input-icon">👤</span>
+
+                  <input
+                    type="text"
+                    id="fName"
+                    placeholder="បញ្ចូលឈ្មោះគ្រូ"
+                    required
+                  >
+
+                </div>
+
+              </div>
+
+
+              <!-- DOB -->
+              <div class="field">
+
+                <label>
+                  ថ្ងៃខែឆ្នាំកំណើត
+                  <span class="required">*</span>
+                </label>
+
+                <div class="input-wrap">
+
+                  <span class="input-icon">📅</span>
+
+                  <input
+                    type="date"
+                    id="fDob"
+                    required
+                  >
+
+                </div>
+
+              </div>
+
+
+              <!-- ADDRESS -->
+              <div class="field">
+
+                <label>
+                  ទីកន្លែងបច្ចុប្បន្ន
+                  <span class="required">*</span>
+                </label>
+
+                <div class="input-wrap">
+
+                  <span class="input-icon">📍</span>
+
+                  <input
+                    type="text"
+                    id="fAddress"
+                    placeholder="ឃុំ / ស្រុក / ខេត្ត"
+                    required
+                  >
+
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <!-- =========================
+               ACCOUNT
+          ========================= -->
+
+          <div class="form-section">
+
+            <div class="section-title">
+
+              <div class="section-title-icon">
+                🔐
+              </div>
+
+              <h4>
+                គណនីចូលប្រើប្រាស់
+              </h4>
+
+              <small>
+                Login
+              </small>
+
+            </div>
+
+
+            <div class="form-grid">
+
+              <!-- USERNAME -->
+              <div class="field">
+
+                <label>
+                  Username
+                  <span class="required">*</span>
+                </label>
+
+                <div class="input-wrap">
+
+                  <span class="input-icon">👤</span>
+
+                  <input
+                    type="text"
+                    id="fUsername"
+                    placeholder="ឧ. teacher01"
+                    required
+                  >
+
+                </div>
+
+              </div>
+
+
+              <!-- PASSWORD -->
+              <div class="field">
+
+                <label>
+                  Password
+                  <span
+                    class="required"
+                    id="passwordRequired"
+                  >
+                    *
+                  </span>
+                </label>
+
+                <div class="input-wrap">
+
+                  <span class="input-icon">🔑</span>
+
+                  <input
+                    type="password"
+                    id="fPassword"
+                    placeholder="បញ្ចូល Password"
+                    required
+                  >
+
+                  <button
+                    type="button"
+                    class="password-toggle"
+                    onclick="togglePassword()"
+                    title="បង្ហាញ/លាក់ Password"
+                  >
+                    👁️
+                  </button>
+
+                </div>
+
+                <small id="passHint">
+                  ប្រើ Password ដែលពិបាកទាយ និងមិនគួរចែករំលែក។
+                </small>
+
+              </div>
+
+            </div>
+
+          </div>
+
+
+          <!-- =========================
+               ROLE / CLASS
+          ========================= -->
+
+          <div class="form-section">
+
+            <div class="section-title">
+
+              <div class="section-title-icon">
+                🏫
+              </div>
+
+              <h4>
+                តួនាទី និងថ្នាក់ទទួលបន្ទុក
+              </h4>
+
+              <small>
+                Permission
+              </small>
+
+            </div>
+
+
+            <div class="role-box">
+
+              <div class="form-grid">
+
+                <!-- ROLE -->
+                <div class="field">
+
+                  <label>
+                    តួនាទី
+                    <span class="required">*</span>
+                  </label>
+
+                  <div class="input-wrap">
+
+                    <span class="input-icon">🛡️</span>
+
+                    <select
+                      id="fRole"
+                      onchange="onRoleChange()"
+                    >
+
+                      <option value="teacher">
+                        គ្រូ — មើលបានតែថ្នាក់ខ្លួន
+                      </option>
+
+                      <option value="admin">
+                        Admin — មើលបានគ្រប់ថ្នាក់
+                      </option>
+
+                    </select>
+
+                  </div>
+
+                </div>
+
+
+                <!-- CLASS -->
+                <div
+                  class="field"
+                  id="assignedClassWrap"
+                >
+
+                  <label>
+                    ថ្នាក់ទទួលបន្ទុក
+                    <span class="required">*</span>
+                  </label>
+
+                  <div class="input-wrap">
+
+                    <span class="input-icon">🏫</span>
+
+                    <select id="fAssignedClass"></select>
+
+                  </div>
+
+                </div>
+
+              </div>
+
+
+              <div class="role-help">
+
+                <span class="role-help-icon">
+                  ℹ️
+                </span>
+
+                <span id="roleHelpText">
+                  គ្រូអាចចូលមើល និងគ្រប់គ្រងទិន្នន័យ
+                  ដែលពាក់ព័ន្ធនឹងថ្នាក់ដែលបានកំណត់។
+                </span>
+
+              </div>
+
+            </div>
+
+          </div>
+
+        </form>
+
+      </div>
+
+
+      <!-- FOOTER -->
+      <div class="modal-footer">
+
+        <div class="footer-note">
+          <span id="footerModeText">
+            ➕ កំពុងបង្កើតគណនីគ្រូថ្មី
+          </span>
+        </div>
+
+        <div class="footer-actions">
+
+          <button
+            type="button"
+            class="btn cancel"
+            onclick="closeModal()"
+          >
+            បោះបង់
+          </button>
+
+          <button
+            type="submit"
+            form="teacherForm"
+            class="btn save"
+            id="saveBtn"
+          >
+            💾 រក្សាទុក
+          </button>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- TOAST -->
+  <div
+    class="toast"
+    id="toast"
+  ></div>
+
+
+<script>
+
+  var TOKEN = "<?= token ?>";
+
+  var teachers = [];
+
+  var editingId = null;
+
+  var pickedPhotoBase64 = null;
+
+
+  /* =========================
+     KHMER NUMBER
+  ========================= */
+
+  var khmerDigits = [
+    '០','១','២','៣','៤',
+    '៥','៦','៧','៨','៩'
+  ];
+
+  function toKhmerNum(n) {
+
+    return String(n).replace(
+      /\d/g,
+      function(d) {
+        return khmerDigits[d];
+      }
+    );
+
+  }
+
+
+  /* =========================
+     INIT
+  ========================= */
+
+  function initPage() {
+
+    google.script.run
+
+      .withSuccessHandler(function(session) {
+
+        if (
+          !session ||
+          !session.loggedIn ||
+          session.role !== 'admin'
+        ) {
+
+          document.getElementById(
+            'pageBody'
+          ).style.display = 'none';
+
+          document.getElementById(
+            'deniedWrap'
+          ).style.display = 'flex';
+
+          return;
+        }
+
+
+        document.getElementById(
+          'pageBody'
+        ).style.display = 'block';
+
+
+        loadClassOptions();
+
+        loadTeachers();
+
+      })
+
+      .withFailureHandler(function() {
+
+        document.getElementById(
+          'pageBody'
+        ).style.display = 'none';
+
+        document.getElementById(
+          'deniedWrap'
+        ).style.display = 'flex';
+
+      })
+
+      .getCurrentSession(TOKEN);
+
+  }
+
+
+  /* =========================
+     CLASS OPTIONS
+  ========================= */
+
+  function loadClassOptions() {
+
+    google.script.run
+
+      .withSuccessHandler(function(classes) {
+
+        var sel =
+          document.getElementById(
+            'fAssignedClass'
+          );
+
+        sel.innerHTML = '';
+
+
+        (classes || []).forEach(
+          function(c) {
+
+            var opt =
+              document.createElement('option');
+
+            opt.value = c;
+
+            opt.textContent =
+              'ថ្នាក់ទី ' + c;
+
+            sel.appendChild(opt);
+
+          }
+        );
+
+      })
+
+      .withFailureHandler(function() {})
+
+      .getClassList();
+
+  }
+
+
+  /* =========================
+     LOAD TEACHERS
+  ========================= */
+
+  function loadTeachers() {
+
+    google.script.run
+
+      .withSuccessHandler(function(list) {
+
+        teachers = list || [];
+
+        renderTable();
+
+      })
+
+      .withFailureHandler(function(err) {
+
+        document.getElementById(
+          'tableBody'
+        ).innerHTML =
+
+          '<tr class="empty-row">' +
+          '<td colspan="11" style="color:#dc2626;">' +
+          'មានបញ្ហា៖ ' +
+          escapeHtml(err.message || err) +
+          '</td>' +
+          '</tr>';
+
+      })
+
+      .getTeachers(TOKEN);
+
+  }
+
+
+  /* =========================
+     RENDER TABLE
+  ========================= */
+
+  function renderTable() {
+
+    var q =
+      (
+        document.getElementById(
+          'searchInput'
+        ).value || ''
+      )
+      .trim()
+      .toLowerCase();
+
+
+    var filtered =
+      teachers.filter(function(t) {
+
+        if (!q) return true;
+
+        return (
+
+          (t.name || '')
+            .toLowerCase()
+            .indexOf(q) !== -1
+
+          ||
+
+          (t.code || '')
+            .toLowerCase()
+            .indexOf(q) !== -1
+
+        );
+
+      });
+
+
+    var body =
+      document.getElementById(
+        'tableBody'
+      );
+
+
+    if (filtered.length === 0) {
+
+      body.innerHTML =
+        '<tr class="empty-row">' +
+        '<td colspan="11">' +
+        'មិនទាន់មានទិន្នន័យគ្រូបង្រៀនទេ' +
+        '</td>' +
+        '</tr>';
+
+      return;
+
+    }
+
+
+    var html = '';
+
+
+    filtered.forEach(
+      function(t, i) {
+
+        var roleLabel =
+          t.role === 'admin'
+            ? 'Admin'
+            : 'គ្រូ';
+
+
+        var roleClass =
+          t.role === 'admin'
+            ? 'admin'
+            : 'teacher';
+
+
+        var photoCell =
+          t.photoUrl
+
+          ?
+
+          '<img class="avatar-thumb" ' +
+          'src="' +
+          escapeHtml(t.photoUrl) +
+          '" ' +
+          'onerror="this.style.display=\'none\'">'
+
+          :
+
+          '<span class="avatar-fallback">' +
+          (
+            t.name
+              ? escapeHtml(
+                  t.name.charAt(0)
+                )
+              : '?'
+          ) +
+          '</span>';
+
+
+        html +=
+
+          '<tr>' +
+
+          '<td>' +
+          toKhmerNum(i + 1) +
+          '</td>' +
+
+          '<td>' +
+          photoCell +
+          '</td>' +
+
+          '<td>' +
+          escapeHtml(t.code) +
+          '</td>' +
+
+          '<td class="name-cell">' +
+          escapeHtml(t.name) +
+          '</td>' +
+
+          '<td>' +
+          escapeHtml(t.phone) +
+          '</td>' +
+
+          '<td>' +
+          escapeHtml(t.dob) +
+          '</td>' +
+
+          '<td>' +
+          escapeHtml(t.address) +
+          '</td>' +
+
+          '<td>' +
+          '<span class="badge-user">' +
+          escapeHtml(t.username) +
+          '</span>' +
+          '</td>' +
+
+          '<td>' +
+          '<span class="badge-role ' +
+          roleClass +
+          '">' +
+          roleLabel +
+          '</span>' +
+          '</td>' +
+
+          '<td>' +
+
+          (
+            t.role === 'admin'
+
+            ?
+
+            'គ្រប់ថ្នាក់'
+
+            :
+
+            (
+              t.assignedClass
+              ?
+
+              'ថ្នាក់ទី ' +
+              escapeHtml(
+                t.assignedClass
+              )
+
+              :
+
+              '—'
+            )
+          )
+
+          +
+
+          '</td>' +
+
+          '<td>' +
+
+          '<div class="row-actions">' +
+
+          '<button ' +
+          'class="icon-btn edit" ' +
+          'title="កែប្រែ" ' +
+          'onclick="editTeacher(\'' +
+          String(t.id).replace(/'/g,"\\'") +
+          '\')">' +
+          '✏️' +
+          '</button>' +
+
+          '<button ' +
+          'class="icon-btn del" ' +
+          'title="លុប" ' +
+          'onclick="deleteTeacherRow(\'' +
+          String(t.id).replace(/'/g,"\\'") +
+          '\', \'' +
+          String(t.name || '').replace(/'/g,"\\'") +
+          '\')">' +
+          '🗑️' +
+          '</button>' +
+
+          '</div>' +
+
+          '</td>' +
+
+          '</tr>';
+
+      }
+    );
+
+
+    body.innerHTML = html;
+
+  }
+
+
+  /* =========================
+     ESCAPE HTML
+  ========================= */
+
+  function escapeHtml(s) {
+
+    if (
+      s === undefined ||
+      s === null
+    ) {
+      return '';
+    }
+
+    return String(s).replace(
+      /[&<>"']/g,
+      function(c) {
+
+        return {
+          '&':'&amp;',
+          '<':'&lt;',
+          '>':'&gt;',
+          '"':'&quot;',
+          "'":'&#39;'
+        }[c];
+
+      }
+    );
+
+  }
+
+
+  /* =========================
+     ROLE CHANGE
+  ========================= */
+
+  function onRoleChange() {
+
+    var role =
+      document.getElementById(
+        'fRole'
+      ).value;
+
+
+    var wrap =
+      document.getElementById(
+        'assignedClassWrap'
+      );
+
+
+    var help =
+      document.getElementById(
+        'roleHelpText'
+      );
+
+
+    if (role === 'admin') {
+
+      wrap.style.display = 'none';
+
+      help.innerText =
+        'Admin អាចមើល និងគ្រប់គ្រងទិន្នន័យគ្រប់ថ្នាក់នៅក្នុងប្រព័ន្ធ។';
+
+    } else {
+
+      wrap.style.display = 'block';
+
+      help.innerText =
+        'គ្រូអាចចូលមើល និងគ្រប់គ្រងទិន្នន័យដែលពាក់ព័ន្ធនឹងថ្នាក់ដែលបានកំណត់។';
+
+    }
+
+  }
+
+
+  /* =========================
+     PHOTO PICK
+  ========================= */
+
+  function onPhotoPicked(ev) {
+
+    var file =
+      ev.target.files[0];
+
+    if (!file) return;
+
+
+    if (
+      !file.type.startsWith('image/')
+    ) {
+
+      showToast(
+        '❌ សូមជ្រើសរើសឯកសាររូបភាព',
+        true
+      );
+
+      ev.target.value = '';
+
+      return;
+
+    }
+
+
+    var reader =
+      new FileReader();
+
+
+    reader.onload =
+      function(e) {
+
+        pickedPhotoBase64 =
+          e.target.result;
+
+
+        var preview =
+          document.getElementById(
+            'photoPreview'
+          );
+
+
+        var placeholder =
+          document.getElementById(
+            'photoPlaceholder'
+          );
+
+
+        preview.src =
+          pickedPhotoBase64;
+
+
+        preview.style.display =
+          'block';
+
+
+        placeholder.style.display =
+          'none';
+
+      };
+
+
+    reader.readAsDataURL(file);
+
+  }
+
+
+  /* =========================
+     OPEN MODAL
+  ========================= */
+
+  function openModal() {
+
+    editingId = null;
+
+    pickedPhotoBase64 = null;
+
+
+    document.getElementById(
+      'modalTitle'
+    ).innerText =
+      'បន្ថែមគ្រូថ្មី';
+
+
+    document.getElementById(
+      'modalSubtitle'
+    ).innerText =
+      'បំពេញព័ត៌មានខាងក្រោម ដើម្បីបង្កើតគណនីគ្រូថ្មី';
+
+
+    document.getElementById(
+      'modalIcon'
+    ).innerText = '➕';
+
+
+    document.getElementById(
+      'footerModeText'
+    ).innerText =
+      '➕ កំពុងបង្កើតគណនីគ្រូថ្មី';
+
+
+    document.getElementById(
+      'teacherForm'
+    ).reset();
+
+
+    document.getElementById(
+      'teacherId'
+    ).value = '';
+
+
+    document.getElementById(
+      'fPassword'
+    ).type = 'password';
+
+
+    document.getElementById(
+      'fPassword'
+    ).required = true;
+
+
+    document.getElementById(
+      'passwordRequired'
+    ).style.display =
+      'inline';
+
+
+    document.getElementById(
+      'passHint'
+    ).innerText =
+      'ប្រើ Password ដែលពិបាកទាយ និងមិនគួរចែករំលែក។';
+
+
+    document.getElementById(
+      'photoPreview'
+    ).style.display =
+      'none';
+
+
+    document.getElementById(
+      'photoPlaceholder'
+    ).style.display =
+      'flex';
+
+
+    document.getElementById(
+      'fRole'
+    ).value =
+      'teacher';
+
+
+    onRoleChange();
+
+
+    document.getElementById(
+      'modalBackdrop'
+    ).classList.add('show');
+
+
+    setTimeout(function(){
+
+      document.getElementById(
+        'fCode'
+      ).focus();
+
+    },100);
+
+  }
+
+
+  /* =========================
+     EDIT TEACHER
+  ========================= */
+
+  function editTeacher(id) {
+
+    var t =
+      teachers.find(
+        function(x) {
+          return String(x.id) === String(id);
+        }
+      );
+
+
+    if (!t) return;
+
+
+    editingId = id;
+
+    pickedPhotoBase64 = null;
+
+
+    document.getElementById(
+      'modalTitle'
+    ).innerText =
+      'កែប្រែព័ត៌មានគ្រូ';
+
+
+    document.getElementById(
+      'modalSubtitle'
+    ).innerText =
+      'កែប្រែព័ត៌មានរបស់គ្រូ ហើយចុចរក្សាទុក';
+
+
+    document.getElementById(
+      'modalIcon'
+    ).innerText =
+      '✏️';
+
+
+    document.getElementById(
+      'footerModeText'
+    ).innerText =
+      '✏️ កំពុងកែប្រែព័ត៌មានគ្រូ';
+
+
+    document.getElementById(
+      'teacherId'
+    ).value =
+      t.id;
+
+
+    document.getElementById(
+      'fCode'
+    ).value =
+      t.code || '';
+
+
+    document.getElementById(
+      'fName'
+    ).value =
+      t.name || '';
+
+
+    document.getElementById(
+      'fPhone'
+    ).value =
+      t.phone || '';
+
+
+    document.getElementById(
+      'fDob'
+    ).value =
+      t.dobIso || '';
+
+
+    document.getElementById(
+      'fAddress'
+    ).value =
+      t.address || '';
+
+
+    document.getElementById(
+      'fUsername'
+    ).value =
+      t.username || '';
+
+
+    document.getElementById(
+      'fPassword'
+    ).value =
+      '';
+
+
+    document.getElementById(
+      'fPassword'
+    ).type =
+      'password';
+
+
+    document.getElementById(
+      'fPassword'
+    ).required =
+      false;
+
+
+    document.getElementById(
+      'passwordRequired'
+    ).style.display =
+      'none';
+
+
+    document.getElementById(
+      'passHint'
+    ).innerText =
+      'ទុកទទេ ប្រសិនបើមិនចង់ប្តូរ Password។';
+
+
+    document.getElementById(
+      'fRole'
+    ).value =
+      t.role === 'admin'
+        ? 'admin'
+        : 'teacher';
+
+
+    onRoleChange();
+
+
+    if (t.assignedClass) {
+
+      document.getElementById(
+        'fAssignedClass'
+      ).value =
+        t.assignedClass;
+
+    }
+
+
+    var preview =
+      document.getElementById(
+        'photoPreview'
+      );
+
+
+    var placeholder =
+      document.getElementById(
+        'photoPlaceholder'
+      );
+
+
+    if (t.photoUrl) {
+
+      preview.src =
+        t.photoUrl;
+
+      preview.style.display =
+        'block';
+
+      placeholder.style.display =
+        'none';
+
+    } else {
+
+      preview.style.display =
+        'none';
+
+      placeholder.style.display =
+        'flex';
+
+    }
+
+
+    document.getElementById(
+      'modalBackdrop'
+    ).classList.add('show');
+
+  }
+
+
+  /* =========================
+     CLOSE MODAL
+  ========================= */
+
+  function closeModal() {
+
+    document.getElementById(
+      'modalBackdrop'
+    ).classList.remove('show');
+
+  }
+
+
+  /* =========================
+     PASSWORD TOGGLE
+  ========================= */
+
+  function togglePassword() {
+
+    var input =
+      document.getElementById(
+        'fPassword'
+      );
+
+
+    var button =
+      document.querySelector(
+        '.password-toggle'
+      );
+
+
+    if (input.type === 'password') {
+
+      input.type = 'text';
+
+      button.innerText = '🙈';
+
+    } else {
+
+      input.type = 'password';
+
+      button.innerText = '👁️';
+
+    }
+
+  }
+
+
+  /* =========================
+     SAVE TEACHER
+  ========================= */
+
+  function saveTeacher(ev) {
+
+    ev.preventDefault();
+
+
+    var data = {
+
+      code:
+        document.getElementById(
+          'fCode'
+        ).value.trim(),
+
+      name:
+        document.getElementById(
+          'fName'
+        ).value.trim(),
+
+      phone:
+        document.getElementById(
+          'fPhone'
+        ).value.trim(),
+
+      dob:
+        document.getElementById(
+          'fDob'
+        ).value,
+
+      address:
+        document.getElementById(
+          'fAddress'
+        ).value.trim(),
+
+      username:
+        document.getElementById(
+          'fUsername'
+        ).value.trim(),
+
+      password:
+        document.getElementById(
+          'fPassword'
+        ).value,
+
+      role:
+        document.getElementById(
+          'fRole'
+        ).value,
+
+      assignedClass:
+        document.getElementById(
+          'fAssignedClass'
+        ).value
+
+    };
+
+
+    if (pickedPhotoBase64) {
+
+      data.photoFile = {
+        base64:
+          pickedPhotoBase64
+      };
+
+    }
+
+
+    var saveBtn =
+      document.getElementById(
+        'saveBtn'
+      );
+
+
+    saveBtn.disabled = true;
+
+    saveBtn.innerText =
+      '⏳ កំពុងរក្សាទុក...';
+
+
+    var handler = {
+
+      onSuccess:function() {
+
+        saveBtn.disabled = false;
+
+        saveBtn.innerText =
+          '💾 រក្សាទុក';
+
+
+        closeModal();
+
+
+        showToast(
+          '✅ បានរក្សាទុកដោយជោគជ័យ'
+        );
+
+
+        loadTeachers();
+
+      },
+
+
+      onFail:function(err) {
+
+        saveBtn.disabled = false;
+
+        saveBtn.innerText =
+          '💾 រក្សាទុក';
+
+
+        showToast(
+          '❌ មានបញ្ហា៖ ' +
+          (err.message || err),
+          true
+        );
+
+      }
+
+    };
+
+
+    if (editingId) {
+
+      google.script.run
+
+        .withSuccessHandler(
+          handler.onSuccess
+        )
+
+        .withFailureHandler(
+          handler.onFail
+        )
+
+        .updateTeacher(
+          TOKEN,
+          editingId,
+          data
+        );
+
+    } else {
+
+      google.script.run
+
+        .withSuccessHandler(
+          handler.onSuccess
+        )
+
+        .withFailureHandler(
+          handler.onFail
+        )
+
+        .addTeacher(
+          TOKEN,
+          data
+        );
+
+    }
+
+
+    return false;
+
+  }
+
+
+  /* =========================
+     DELETE
+  ========================= */
+
+  function deleteTeacherRow(
+    id,
+    name
+  ) {
+
+    if (
+      !confirm(
+        'តើអ្នកចង់លុបគ្រូ "' +
+        name +
+        '" មែនទេ?'
+      )
+    ) {
+      return;
+    }
+
+
+    google.script.run
+
+      .withSuccessHandler(
+        function() {
+
+          showToast(
+            '🗑️ បានលុបរួចរាល់'
+          );
+
+          loadTeachers();
+
+        }
+      )
+
+      .withFailureHandler(
+        function(err) {
+
+          showToast(
+            '❌ មានបញ្ហា៖ ' +
+            (err.message || err),
+            true
+          );
+
+        }
+      )
+
+      .deleteTeacher(
+        TOKEN,
+        id
+      );
+
+  }
+
+
+  /* =========================
+     TOAST
+  ========================= */
+
+  var toastTimer;
+
+
+  function showToast(
+    msg,
+    isErr
+  ) {
+
+    var t =
+      document.getElementById(
+        'toast'
+      );
+
+
+    t.innerText = msg;
+
+
+    t.classList.toggle(
+      'err',
+      !!isErr
+    );
+
+
+    t.classList.add(
+      'show'
+    );
+
+
+    clearTimeout(
+      toastTimer
+    );
+
+
+    toastTimer =
+      setTimeout(
+        function() {
+
+          t.classList.remove(
+            'show'
+          );
+
+        },
+        2600
+      );
+
+  }
+
+
+  /* =========================
+     CLICK OUTSIDE MODAL
+  ========================= */
+
+  document.getElementById(
+    'modalBackdrop'
+  ).addEventListener(
+    'click',
+    function(e) {
+
+      if (
+        e.target === this
+      ) {
+        closeModal();
+      }
+
+    }
+  );
+
+
+  /* =========================
+     ESC KEY
+  ========================= */
+
+  document.addEventListener(
+    'keydown',
+    function(e) {
+
+      if (
+        e.key === 'Escape'
+      ) {
+
+        var modal =
+          document.getElementById(
+            'modalBackdrop'
+          );
+
+
+        if (
+          modal.classList.contains(
+            'show'
+          )
+        ) {
+          closeModal();
+        }
+
+      }
+
+    }
+  );
+
+
+  /* =========================
+     START
+  ========================= */
+
+  initPage();
+
+</script>
+
+</body>
+</html>
