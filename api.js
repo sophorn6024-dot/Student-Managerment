@@ -1,7 +1,7 @@
 // ==========================================================================
 // 🔗 API CLIENT FOR GITHUB PAGES
 // ==========================================================================
-const BACKEND_API_URL = "https://script.google.com/macros/s/AKfycbwYOUR_REAL_DEPLOY_ID_HERE/exec";
+const BACKEND_API_URL = "https://script.google.com/macros/s/AKfycbxe6vrQshGAPglgmmZykljXazDNh1ZwWSRdFDAip1WWWRky24lmBo-qicLK3_i10AvT/exec";
 const TOKEN_KEY = "school_persistent_token";
 
 async function callBackendApi(action, data = {}) {
