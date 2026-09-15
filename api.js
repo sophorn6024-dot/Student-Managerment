@@ -10,8 +10,10 @@ async function callBackendApi(action, data = {}) {
       method: "POST",
       // text/plain ជួយកាត់បន្ថយបញ្ហា CORS Preflight នៅលើ Browser
       headers: { "Content-Type": "text/plain;charset=utf-8" },
+      redirect: "follow", // បញ្ជាក់ឱ្យ Browser ដើរតាម Redirect របស់ Google Apps Script
       body: JSON.stringify({ action: action, data: data })
     });
+    
     if (!res.ok) throw new Error("HTTP error " + res.status);
     return await res.json();
   } catch (err) {
