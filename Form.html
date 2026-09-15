@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="km">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>បញ្ចូលព័ត៌មានសិស្ស</title>
+
+  <!-- 🔤 Google Fonts Khmer -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Battambang:wght@400;700&family=Kantumruy+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Moul&display=swap" rel="stylesheet">
+
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Kantumruy Pro', 'Battambang', sans-serif;
+      background: linear-gradient(135deg, #e0f2fe 0%, #f8fafc 45%, #eef2ff 100%);
+      color: #1e293b;
+      min-height: 100vh;
+      font-size: 13.5px;
+      padding: 16px 12px 60px;
+    }
+
+    .page-wrapper { width: 100%; max-width: 950px; margin: 0 auto; }
+
+    /* HEADER */
+    .top-header {
+      position: relative; overflow: hidden;
+      background: linear-gradient(135deg, #075985, #0e7490, #0891b2);
+      color: white; border-radius: 18px; padding: 20px;
+      margin-bottom: 16px; box-shadow: 0 10px 25px rgba(8, 47, 73, 0.15);
+    }
+    .header-content { display: flex; align-items: center; gap: 14px; }
+    .school-icon {
+      width: 48px; height: 48px; border-radius: 14px;
+      background: rgba(255,255,255,0.18); display: flex;
+      align-items: center; justify-content: center; font-size: 26px; flex-shrink: 0;
+    }
+    .header-text h1 { font-family: 'Moul', cursive; font-size: 16px; font-weight: normal; margin-bottom: 3px; }
+    .header-text p { font-size: 12px; opacity: 0.9; }
+
+    /* FORM CARD */
+    .form-card {
+      background: rgba(255,255,255,0.98); border-radius: 18px;
+      padding: 20px; box-shadow: 0 8px 30px rgba(15,23,42,0.06);
+      border: 1px solid rgba(226,232,240,0.9);
+    }
+
+    .section { margin-bottom: 22px; }
+    .section-header {
+      display: flex; align-items: center; gap: 10px;
+      padding-bottom: 10px; margin-bottom: 14px; border-bottom: 1px solid #e2e8f0;
+    }
+    .section-icon {
+      width: 36px; height: 36px; display: flex; align-items: center;
+      justify-content: center; border-radius: 10px; background: #e0f2fe; font-size: 18px;
+    }
+    .section-title { font-size: 14.5px; font-weight: 700; color: #0f172a; }
+
+    .form-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+    .field.full { grid-column: 1 / -1; }
+    .field label { display: block; margin-bottom: 6px; font-size: 12.5px; font-weight: 600; color: #334155; }
+    .required { color: #ef4444; margin-left: 2px; }
+
+    input, select, textarea {
+      width: 100%; border: 1.5px solid #dbe3ec; border-radius: 10px;
+      background: #f8fafc; color: #0f172a; font-family: inherit; font-size: 13.5px;
+      transition: all 0.2s ease;
+    }
+    input, select { height: 44px; padding: 0 12px; }
+    textarea { min-height: 75px; padding: 10px 12px; resize: vertical; line-height: 1.5; }
+    input:focus, select:focus, textarea:focus {
+      outline: none; background: white; border-color: #0891b2;
+      box-shadow: 0 0 0 3px rgba(8,145,178,0.12);
+    }
+
+    /* PHOTO AREA */
+    .photo-section { display: grid; grid-template-columns: 1fr 140px; gap: 14px; align-items: center; }
+    .photo-upload {
+      border: 2px dashed #cbd5e1; background: #f8fafc; border-radius: 14px;
+      padding: 14px; text-align: center; cursor: pointer;
+    }
+    .photo-upload:hover { border-color: #0891b2; background: #f0fdff; }
+    .photo-preview-box {
+      width: 130px; height: 160px; border-radius: 12px;
+      background: #f1f5f9; border: 1px solid #cbd5e1;
+      display: flex; align-items: center; justify-content: center; overflow: hidden; margin: 0 auto;
+    }
+    .photo-preview-box img { width: 100%; height: 100%; object-fit: cover; display: none; }
+
+    /* BUTTONS */
+    .action-area { display: flex; gap: 10px; margin-top: 10px; padding-top: 16px; border-top: 1px solid #e2e8f0; }
+    .btn {
+      border: none; border-radius: 10px; min-height: 46px; padding: 0 20px;
+      font-family: inherit; font-size: 13.5px; font-weight: 700; cursor: pointer;
+      display: flex; align-items: center; justify-content: center; gap: 6px;
+    }
+    .btn-submit { flex: 1; color: white; background: linear-gradient(135deg, #0369a1, #0891b2); box-shadow: 0 4px 12px rgba(8,145,178,0.2); }
+    .btn-reset { background: #f1f5f9; color: #475569; }
+
+    #status { margin-top: 14px; min-height: 24px; text-align: center; font-weight: 700; font-size: 13px; }
+    .status-success { color: #15803d; }
+    .status-error { color: #dc2626; }
+    .spinner { width: 16px; height: 16px; border: 2px solid rgba(255,255,255,0.4); border-top-color: white; border-radius: 50%; animation: spin 0.7s linear infinite; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    @media (max-width: 650px) {
+      .form-grid { grid-template-columns: 1fr; }
+      .photo-section { grid-template-columns: 1fr; }
+      .photo-preview-box { order: -1; }
+      .action-area { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="page-wrapper">
+  <div class="top-header">
+    <div class="header-content">
+      <div class="school-icon">🏫</div>
+      <div class="header-text">
+        <h1>បញ្ចូលប្រវត្តិរូបសិស្សថ្មី</h1>
+        <p>សាលាបឋមសិក្សាកំពង់ល្ពៅ</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="form-card">
+    <form id="studentForm" onsubmit="handleFormSubmit(event)">
+      <!-- ផ្នែកទី ១ -->
+      <div class="section">
+        <div class="section-header">
+          <div class="section-icon">👨‍🎓</div>
+          <div class="section-title">ព័ត៌មានផ្ទាល់ខ្លួនសិស្ស</div>
+        </div>
+        <div class="form-grid">
+          <div class="field">
+            <label>អត្តលេខសិស្ស <span class="required">*</span></label>
+            <input type="text" id="studentId" placeholder="ឧ. 001" required autocomplete="off">
+          </div>
+          <div class="field">
+            <label>ឈ្មោះសិស្ស <span class="required">*</span></label>
+            <input type="text" id="studentName" placeholder="បញ្ចូលឈ្មោះសិស្ស" required autocomplete="off">
+          </div>
+          <div class="field">
+            <label>ភេទ <span class="required">*</span></label>
+            <select id="gender" required>
+              <option value="">-- ជ្រើសរើស --</option>
+              <option value="ប្រុស">👦 ប្រុស</option>
+              <option value="ស្រី">👧 ស្រី</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>ថ្ងៃខែឆ្នាំកំណើត <span class="required">*</span></label>
+            <input type="date" id="dob" required>
+          </div>
+          <div class="field">
+            <label>ថ្នាក់ទី <span class="required">*</span></label>
+            <input type="text" id="grade" placeholder="ឧ. ៤(ក)" required autocomplete="off">
+          </div>
+          <div class="field">
+            <label>លេខទូរស័ព្ទ</label>
+            <input type="tel" id="phone" placeholder="ឧ. 012 345 678" autocomplete="off">
+          </div>
+          <div class="field full">
+            <label>ទីកន្លែងកំណើត</label>
+            <textarea id="pob" placeholder="ភូមិ ឃុំ/សង្កាត់ ស្រុក/ក្រុង ខេត្ត..."></textarea>
+          </div>
+        </div>
+      </div>
+
+      <!-- ផ្នែកទី ២ -->
+      <div class="section">
+        <div class="section-header">
+          <div class="section-icon">👨‍👩‍👦</div>
+          <div class="section-title">ព័ត៌មានឪពុកម្តាយ</div>
+        </div>
+        <div class="form-grid">
+          <div class="field"><label>ឈ្មោះឪពុក</label><input type="text" id="fatherName" placeholder="ឈ្មោះឪពុក"></div>
+          <div class="field"><label>មុខរបរឪពុក</label><input type="text" id="fatherJob" placeholder="មុខរបរឪពុក"></div>
+          <div class="field"><label>ឈ្មោះម្តាយ</label><input type="text" id="motherName" placeholder="ឈ្មោះម្តាយ"></div>
+          <div class="field"><label>មុខរបរម្តាយ</label><input type="text" id="motherJob" placeholder="មុខរបរម្តាយ"></div>
+        </div>
+      </div>
+
+      <!-- ផ្នែកទី ៣ -->
+      <div class="section">
+        <div class="section-header">
+          <div class="section-icon">📍</div>
+          <div class="section-title">អាសយដ្ឋានបច្ចុប្បន្ន និងរូបថត</div>
+        </div>
+        <div class="form-grid">
+          <div class="field full">
+            <label>អាសយដ្ឋានសព្វថ្ងៃ</label>
+            <textarea id="address" placeholder="ភូមិ ឃុំ/សង្កាត់ ស្រុក/ក្រុង ខេត្ត..."></textarea>
+          </div>
+          <div class="field full">
+            <label>រូបថតសិស្ស</label>
+            <div class="photo-section">
+              <div class="photo-upload" onclick="document.getElementById('photoInput').click()">
+                <div style="font-size:30px;">📷</div>
+                <div style="font-weight:700; color:#334155;">ជ្រើសរើសរូបថត</div>
+                <div style="font-size:11px; color:#64748b;">មិនលើសពី 5MB ឡើយ</div>
+                <input type="file" id="photoInput" accept="image/*" style="display:none;" onchange="previewPhoto(this)">
+              </div>
+              <div class="photo-preview-box">
+                <img id="photoPreview" alt="Preview">
+                <div id="photoPlaceholder" style="color:#94a3b8; font-size:11px; text-align:center;">👤<br>គ្មានរូបថត</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="action-area">
+        <button type="button" class="btn btn-reset" onclick="resetForm()">🔄 សម្អាត</button>
+        <button type="submit" class="btn btn-submit" id="submitBtn">
+          <span id="submitIcon">💾</span>
+          <span id="submitText">រក្សាទុកទិន្នន័យ</span>
+        </button>
+      </div>
+    </form>
+    <div id="status"></div>
+  </div>
+</div>
+
+<!-- 🔗 ភ្ជាប់ API សម្រាប់ទំនាក់ទំនងជាមួយ Google Sheets -->
+<script src="api.js"></script>
+
+<script>
+  let photoBase64 = null;
+
+  function previewPhoto(input) {
+    const file = input.files[0];
+    if (!file) return;
+    if (file.size > 5 * 1024 * 1024) { alert("រូបថតធំពេក! សូមជ្រើសរើសរូបថតក្រោម 5MB"); input.value = ''; return; }
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      photoBase64 = e.target.result;
+      document.getElementById('photoPreview').src = photoBase64;
+      document.getElementById('photoPreview').style.display = 'block';
+      document.getElementById('photoPlaceholder').style.display = 'none';
+    };
+    reader.readAsDataURL(file);
+  }
+
+  function resetForm() {
+    document.getElementById('studentForm').reset();
+    photoBase64 = null;
+    document.getElementById('photoPreview').style.display = 'none';
+    document.getElementById('photoPlaceholder').style.display = 'block';
+    document.getElementById('status').innerText = '';
+  }
+
+  async function handleFormSubmit(e) {
+    e.preventDefault();
+    const btn = document.getElementById('submitBtn');
+    const status = document.getElementById('status');
+    
+    btn.disabled = true;
+    document.getElementById('submitIcon').innerHTML = '<span class="spinner"></span>';
+    document.getElementById('submitText').innerText = 'កំពុងរក្សាទុក...';
+    status.innerText = '';
+
+    const formData = {
+      studentId: document.getElementById('studentId').value.trim(),
+      name: document.getElementById('studentName').value.trim(),
+      gender: document.getElementById('gender').value,
+      dob: document.getElementById('dob').value,
+      grade: document.getElementById('grade').value.trim(),
+      phone: document.getElementById('phone').value.trim(),
+      pob: document.getElementById('pob').value.trim(),
+      fatherName: document.getElementById('fatherName').value.trim(),
+      fatherJob: document.getElementById('fatherJob').value.trim(),
+      motherName: document.getElementById('motherName').value.trim(),
+      motherJob: document.getElementById('motherJob').value.trim(),
+      address: document.getElementById('address').value.trim(),
+      photoFile: photoBase64 ? { base64: photoBase64 } : null
+    };
+
+    // យក Token ពី LocalStorage ឬ Parent Frame
+    const token = getStoredToken() || (window.parent && window.parent.SESSION_TOKEN) || localStorage.getItem('school_persistent_token');
+
+    try {
+      const res = await callBackendApi('submitStudentData', { token: token, formData: formData });
+      btn.disabled = false;
+      document.getElementById('submitIcon').innerText = '💾';
+      document.getElementById('submitText').innerText = 'រក្សាទុកទិន្នន័យ';
+
+      if (res && res.message) {
+        status.className = 'status-success';
+        status.innerText = '🎉 ' + res.message;
+        resetForm();
+      } else if (res && res.error) {
+        status.className = 'status-error';
+        status.innerText = '❌ ' + res.error;
+      }
+    } catch(err) {
+      btn.disabled = false;
+      document.getElementById('submitIcon').innerText = '💾';
+      document.getElementById('submitText').innerText = 'រក្សាទុកទិន្នន័យ';
+      status.className = 'status-error';
+      status.innerText = '❌ មានបញ្ហាក្នុងការភ្ជាប់ទៅ Server៖ ' + err.message;
+    }
+  }
+</script>
+</body>
+</html>
