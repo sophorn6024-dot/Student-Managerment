@@ -1515,3 +1515,136 @@ function getStudentAbsenceMap(className, period) {
     return absMap;
   } catch(e) { return {}; }
 }
+// ==========================================================================
+// 🔐 AUTH & USER PROFILES (អានត្រូវតាមរចនាសម្ព័ន្ធ Sheet ជាក់ស្តែង)
+// ==========================================================================
+var TEACHER_SHEET_NAME = 'ព័ត៌មានគ្រូ';
+
+// អនុគមន៍សម្អាតដកឃ្លាមើលមិនឃើញ (Khmer Zero-Width Space)
+function cleanKhmerText_(txt) {
+  return String(txt == null ? '' : txt)
+    .replace(/[\u200B-\u200D\uFEFF]/g, '')
+    .trim();
+}
+
+// ស្វែងរកជួរដេកដែលចាប់ផ្ដើមទិន្នន័យគ្រូដោយស្វ័យប្រវត្តិ
+function findTeacherDataStartRow_(sheet) {
+  var lastRow = sheet.getLastRow();
+  if (lastRow < 1) return 4;
+  
+  // ពិនិត្យរកជួរដែលមានពាក្យ "Username" ឬ "អត្តលេខ"
+  var maxScan = Math.min(lastRow, 10);
+  var headerScan = sheet.getRange(1, 1, maxScan, 12).getValues();
+  
+  for (var r = 0; r < headerScan.length; r++) {
+    for (var c = 0; c < headerScan[r].length; c++) {
+      var cellVal = cleanKhmerText_(headerScan[r][c]).toLowerCase();
+      if (cellVal === 'username' || cellVal === 'អត្តលេខ') {
+        return r + 2; // ទិន្នន័យពិតប្រាកដចាប់ផ្ដើមបន្ទាប់ពីជួរ Header មួយជួរ
+      }
+    }
+  }
+  return 4; // បើស្វែងរកមិនឃើញ យកលំនាំដើមជួរទី ៤
+}
+
+function getTeacherSheet_() {
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var sheet = ss.getSheetByName(TEACHER_SHEET_NAME);
+  if (!sheet) {
+    // បើឈ្មោះ Sheet មិនមែន "ព័ត៌មានគ្រូ" ទេ ស្វែងរក Sheet ដំបូងគេ
+    sheet = ss.getSheets()[0];
+  }
+  return sheet;
+}
+
+function readAllTeachers_() {
+  var sheet = getTeacherSheet_();
+  var startRow = findTeacherDataStartRow_(sheet);
+  var lr = sheet.getLastRow();
+  if (lr < startRow) return [];
+
+  var numRows = lr - startRow + 1;
+  var values = sheet.getRange(startRow, 1, numRows, 12).getValues();
+  var list = [];
+
+  values.forEach(function(row, idx) {
+    var no = cleanKhmerText_(row[0]);
+    var code = cleanKhmerText_(row[1]);
+    var name = cleanKhmerText_(row[2]);
+    var username = cleanKhmerText_(row[7]);
+
+    // ប្រសិនបើគ្មាន Username ឬគ្មានឈ្មោះ មិនបាច់រាប់បញ្ចូលទេ
+    if (!username && !name) return;
+
+    var dob = row[5], dobIso = '', dobD = '';
+    if (dob instanceof Date) {
+      dobIso = Utilities.formatDate(dob, Session.getScriptTimeZone(), 'yyyy-MM-dd');
+      dobD = Utilities.formatDate(dob, Session.getScriptTimeZone(), 'dd/MM/yyyy');
+    } else {
+      dobD = cleanKhmerText_(dob);
+      dobIso = dobD;
+    }
+
+    var rn = startRow + idx;
+    var pu = extractImageUrl_(sheet.getRange(rn, 12));
+    var role = cleanKhmerText_(row[9]).toLowerCase();
+
+    list.push({
+      id: code || no || String(rn),
+      no: no,
+      code: code,
+      name: name,
+      sex: cleanKhmerText_(row[3]) || 'ប្រុស',
+      phone: cleanKhmerText_(row[4]),
+      dob: dobD,
+      dobIso: dobIso,
+      address: cleanKhmerText_(row[6]),
+      username: username,
+      role: role === 'admin' ? 'admin' : 'teacher',
+      assignedClass: cleanKhmerText_(row[10]), // គ្រូបន្ទុកថ្នាក់ (ឧ. ១(ក), ២(ក))
+      photoUrl: pu,
+      rowIndex: rn
+    });
+  });
+
+  return list;
+}
+
+function checkLogin(username, password) {
+  try {
+    var u = cleanKhmerText_(username).toLowerCase();
+    var p = cleanKhmerText_(password);
+
+    if (!u || !p) {
+      return { success: false, message: 'សូមបញ្ចូល Username និង Password!' };
+    }
+
+    var teachers = readAllTeachers_();
+    if (!teachers.length) {
+      return { success: false, message: 'រកមិនឃើញទិន្នន័យគ្រូក្នុង Sheet ឡើយ' };
+    }
+
+    var sheet = getTeacherSheet_();
+    for (var i = 0; i < teachers.length; i++) {
+      var t = teachers[i];
+      var rn = t.rowIndex;
+      
+      // ទាញយក Password ពិតពី Sheet ដោយផ្ទាល់
+      var sheetPass = cleanKhmerText_(sheet.getRange(rn, 9).getValue());
+
+      if (t.username.toLowerCase() === u && sheetPass === p) {
+        var token = createSessionToken_(t);
+        return {
+          success: true,
+          token: token,
+          teacher: t,
+          message: 'ចូលប្រើប្រាស់ជោគជ័យ'
+        };
+      }
+    }
+
+    return { success: false, message: 'Username ឬ Password មិនត្រឹមត្រូវទេ!' };
+  } catch (err) {
+    return { success: false, message: 'កំហុស៖ ' + err.message };
+  }
+}
