@@ -21,7 +21,6 @@
       --primary: #2563eb;
       --primary-hover: #1d4ed8;
       --primary-soft: #eff6ff;
-      --purple: #7c3aed;
       
       --bg: #f8fafc;
       --surface: #ffffff;
@@ -35,7 +34,6 @@
       --text-soft: #94a3b8;
       
       --card-shadow: 0 4px 18px -2px rgba(15, 23, 42, 0.05);
-      --card-shadow-hover: 0 10px 25px -4px rgba(15, 23, 42, 0.08);
 
       --p-bg: #ecfdf5; --p-txt: #059669; --p-bd: #a7f3d0;
       --a-bg: #fef2f2; --a-txt: #dc2626; --a-bd: #fecaca;
@@ -47,7 +45,6 @@
       --primary: #3b82f6;
       --primary-hover: #60a5fa;
       --primary-soft: rgba(59, 130, 246, 0.15);
-      --purple: #a855f7;
       
       --bg: #0b1120;
       --surface: #151f32;
@@ -61,7 +58,6 @@
       --text-soft: #64748b;
       
       --card-shadow: 0 6px 20px rgba(0, 0, 0, 0.45);
-      --card-shadow-hover: 0 12px 30px rgba(0, 0, 0, 0.6);
 
       --p-bg: rgba(5, 150, 105, 0.18); --p-txt: #34d399; --p-bd: #059669;
       --a-bg: rgba(220, 38, 38, 0.18);  --a-txt: #f87171; --a-bd: #dc2626;
@@ -412,49 +408,108 @@
       outline: none;
     }
 
-    /* ACTION SHEET MODAL */
+    /* ================= 🔍 ACTION SHEET MODAL (CENTERED & FIXED) ================= */
     .action-sheet-backdrop {
       display: none;
       position: fixed;
       inset: 0;
-      background: rgba(0, 0, 0, 0.6);
+      background: rgba(0, 0, 0, 0.65);
       backdrop-filter: blur(5px);
-      z-index: 1000;
-      align-items: flex-end;
+      -webkit-backdrop-filter: blur(5px);
+      z-index: 9999;
+      align-items: center;
       justify-content: center;
-      padding-bottom: 24px;
+      padding: 16px;
     }
     .action-sheet-backdrop.show { display: flex; }
     
     .action-sheet-card {
-      width: 420px;
-      max-width: 92%;
+      width: 380px;
+      max-width: 95%;
       background: var(--surface);
       border: 1.5px solid var(--border);
-      border-radius: 22px;
-      padding: 20px 22px 24px;
-      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5);
+      border-radius: 20px;
+      padding: 18px 20px;
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5);
+      position: relative;
+      animation: popIn 0.2s ease-out;
     }
-    .sheet-handle-bar { width: 38px; height: 5px; border-radius: 5px; background: var(--border); margin: 0 auto 12px; }
-    .sheet-student-name { text-align: center; font-size: 15.5px; font-weight: 700; color: var(--text); margin-bottom: 18px; }
 
-    .sheet-options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    @keyframes popIn {
+      from { transform: scale(0.92); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    .sheet-header-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .sheet-student-name {
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text);
+    }
+
+    .sheet-close-x {
+      background: var(--surface-elevated);
+      border: 1px solid var(--border);
+      color: var(--text-muted);
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+    }
+    .sheet-close-x:hover { color: #dc2626; border-color: #dc2626; }
+
+    .sheet-options-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 12px;
+    }
+
     .sheet-choice-btn {
-      padding: 12px;
-      border-radius: 14px;
+      padding: 12px 8px;
+      border-radius: 12px;
       font-size: 13px;
       font-weight: 700;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
-      border: 1px solid transparent;
+      gap: 6px;
+      border: 1.5px solid transparent;
+      transition: all 0.15s ease;
     }
+    .sheet-choice-btn:active { transform: scale(0.96); }
+
     .sheet-choice-btn.p { background: var(--p-bg); color: var(--p-txt); border-color: var(--p-bd); }
     .sheet-choice-btn.a { background: var(--a-bg); color: var(--a-txt); border-color: var(--a-bd); }
     .sheet-choice-btn.l { background: var(--l-bg); color: var(--l-txt); border-color: var(--l-bd); }
     .sheet-choice-btn.c { background: var(--c-bg); color: var(--c-txt); border-color: var(--c-bd); }
+
+    .btn-sheet-cancel {
+      width: 100%;
+      padding: 10px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      background: var(--surface-elevated);
+      color: var(--text-muted);
+      font-size: 12.5px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .btn-sheet-cancel:hover { background: var(--border); color: var(--text); }
 
     /* ================= 2. TAB: REPORTS MENU ================= */
     .report-menu-row {
@@ -824,26 +879,32 @@
     </div>
   </div>
 
-  <!-- ================= 3. ACTION SHEET MODAL ================= -->
-  <div id="statusActionSheetModal" class="action-sheet-backdrop" onclick="closeStatusActionSheet(event)">
+  <!-- ================= 3. ACTION SHEET MODAL (CENTERED & PROPERLY SIZED) ================= -->
+  <div id="statusActionSheetModal" class="action-sheet-backdrop" onclick="closeStatusActionSheet()">
     <div class="action-sheet-card" onclick="event.stopPropagation()">
-      <div class="sheet-handle-bar"></div>
-      <div class="sheet-student-name" id="actionSheetStudentName">ឈ្មោះសិស្ស</div>
+      <div class="sheet-header-row">
+        <div class="sheet-student-name" id="actionSheetStudentName">ឈ្មោះសិស្ស</div>
+        <button type="button" class="sheet-close-x" onclick="closeStatusActionSheet()" title="បិទ">✕</button>
+      </div>
       
       <div class="sheet-options-grid">
-        <button class="sheet-choice-btn p" onclick="selectActionStatus('P')">
+        <button type="button" class="sheet-choice-btn p" onclick="selectActionStatus('P')">
           <i class="fa-solid fa-check"></i> វត្តមាន (P)
         </button>
-        <button class="sheet-choice-btn a" onclick="selectActionStatus('A')">
+        <button type="button" class="sheet-choice-btn a" onclick="selectActionStatus('A')">
           <i class="fa-solid fa-xmark"></i> អវត្តមាន (A)
         </button>
-        <button class="sheet-choice-btn l" onclick="selectActionStatus('L')">
+        <button type="button" class="sheet-choice-btn l" onclick="selectActionStatus('L')">
           <i class="fa-regular fa-clock"></i> យឺត (L)
         </button>
-        <button class="sheet-choice-btn c" onclick="selectActionStatus('C')">
+        <button type="button" class="sheet-choice-btn c" onclick="selectActionStatus('C')">
           <i class="fa-solid fa-shield-halved"></i> មានច្បាប់ (C)
         </button>
       </div>
+
+      <button type="button" class="btn-sheet-cancel" onclick="closeStatusActionSheet()">
+        បោះបង់ / បិទ
+      </button>
     </div>
   </div>
 
@@ -863,7 +924,7 @@
   <script src="api.js"></script>
 
   <script>
-    // 🌟 Theme Sync ជាមួយ parent window
+    // 🌟 ធ្វើសមកាលកម្ម Theme ជាមួយ parent window
     function syncThemeWithParent() {
       var pTheme = (window.parent && window.parent.document && window.parent.document.documentElement.getAttribute('data-theme'))
         || localStorage.getItem('krou_theme_manual') 
@@ -1244,10 +1305,10 @@
               </div>
               
               <div class="att-split-btn">
-                <button class="att-btn-main" onclick="toggleQuickStatus('${s.id}')">
+                <button type="button" class="att-btn-main" onclick="toggleQuickStatus('${s.id}')">
                   ${btnText}
                 </button>
-                <button class="att-btn-dropdown-trigger" onclick="openStatusActionSheet('${s.id}', '${s.name}')" title="ជម្រើសផ្សេងទៀត">
+                <button type="button" class="att-btn-dropdown-trigger" onclick="openStatusActionSheet('${s.id}', '${s.name}')" title="ជម្រើសផ្សេងទៀត">
                   <i class="fa-solid fa-chevron-down"></i>
                 </button>
               </div>
@@ -1274,8 +1335,10 @@
       document.getElementById('statusActionSheetModal').classList.add('show');
     }
 
-    function closeStatusActionSheet(e) {
-      document.getElementById('statusActionSheetModal').classList.remove('show');
+    function closeStatusActionSheet() {
+      var modal = document.getElementById('statusActionSheetModal');
+      if (modal) modal.classList.remove('show');
+      activeActionSheetSid = null;
     }
 
     function selectActionStatus(code) {
@@ -1285,7 +1348,7 @@
         updateStatsCounters();
         saveDailyAttendance();
       }
-      document.getElementById('statusActionSheetModal').classList.remove('show');
+      closeStatusActionSheet();
     }
 
     function setBulkDailyStatus(code) {
@@ -1624,7 +1687,7 @@
             <tr>
               <td>${idx + 1}</td>
               <td>${s.id}</td>
-              <td style="text-align:left; padding-left:4px; font-weight:bold;">${s.name}</td>
+              <td style="text-align:left; padding-left:4px; font-weight:bold; white-space:nowrap;">${s.name}</td>
               <td>${s.sex || 'ប្រុស'}</td>
               ${s1Cells}
               ${s2Cells}
