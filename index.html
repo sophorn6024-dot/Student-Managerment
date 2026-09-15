@@ -1450,7 +1450,7 @@
     iframeView.classList.add('active');
     overlay.classList.add('show');
 
-    // 🌟 ផ្ទុកទំព័ររង (Subpages) លើ GitHub តាមរយៈឈ្មោះឯកសារ .html
+    // 🌟 ផ្ទុកទំព័ររង (Subpages) លើ GitHub
     frame.src = page + '.html';
   }
 
@@ -1629,3 +1629,75 @@
       }
     } catch(err) {
       btn.innerText = '💾 រក្សាទុក';
+      btn.disabled = false;
+      alert('❌ កំហុស៖ ' + err.message);
+    }
+    return false;
+  }
+
+  function showToast(msg) {
+    var t = document.getElementById('profileToast');
+    t.innerText = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2600);
+  }
+
+  async function doLogout() {
+    if (!confirm('តើអ្នកពិតជាចង់ចាកចេញពីប្រព័ន្ធមែនទេ?')) return;
+    try { await callBackendApi('logoutSession', { token: SESSION_TOKEN }); } catch(e) {}
+    removeStoredToken();
+    window.location.replace('login.html');
+  }
+
+  async function confirmClearAllData() {
+    if (!IS_ADMIN) return;
+    if (!confirm('⚠️ ព្រមាន៖ តើអ្នកពិតជាចង់សម្អាតទិន្នន័យទាំងអស់មែនទេ?')) return;
+    if (prompt('ដើម្បីបញ្ជាក់ សូមវាយ៖ DELETE') !== 'DELETE') return;
+    try {
+      await callBackendApi('clearAllSystemData', { token: SESSION_TOKEN });
+      alert('✅ សម្អាតទិន្នន័យបានជោគជ័យ');
+      location.reload();
+    } catch(err) {
+      alert('កំហុស៖ ' + err.message);
+    }
+  }
+
+  function bootAuthenticatedApp() {
+    setTodayPill();
+    refreshStats();
+    initGreetings();
+    navigate(currentPage, null);
+  }
+
+  async function verifySessionBeforeBoot() {
+    if (!SESSION_TOKEN) {
+      window.location.replace('login.html');
+      return;
+    }
+    try {
+      var session = await callBackendApi('getCurrentSession', { token: SESSION_TOKEN });
+      if (!session || !session.loggedIn) {
+        removeStoredToken();
+        window.location.replace('login.html');
+        return;
+      }
+      TEACHER_NAME = session.name || '';
+      USER_ROLE = session.role || 'teacher';
+      IS_ADMIN = String(USER_ROLE).trim().toLowerCase() === 'admin';
+      if (session.sex) TEACHER_SEX = session.sex;
+      
+      document.getElementById('userNameLabel').innerText = TEACHER_NAME;
+      renderAvatar(session.photoUrl || '');
+      initAdminTools();
+      bootAuthenticatedApp();
+    } catch(err) {
+      window.location.replace('login.html');
+    }
+  }
+
+  window.onload = function() {
+    verifySessionBeforeBoot();
+  };
+</script>
+</body>
+</html>
