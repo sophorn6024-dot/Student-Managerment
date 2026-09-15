@@ -131,7 +131,6 @@
       box-sizing: border-box;
     }
 
-    /* 🌟 ទម្រង់ទី ១ ៖ ១ សន្លឹក = ៦ កាត (ខ្នាតស្តង់ដា 7cm x 10cm) */
     .a4-page.layout-6 {
       display: flex;
       flex-wrap: wrap;
@@ -141,12 +140,11 @@
       padding: 3mm 5mm;
     }
     .a4-page.layout-6 .student-card {
-      width: 70mm;   /* 7cm */
-      height: 100mm; /* 10cm */
+      width: 70mm;
+      height: 100mm;
       flex-shrink: 0;
     }
 
-    /* 🌟 ទម្រង់ទី ២ ៖ ១ សន្លឹក = ៨ កាត (ខ្នាតសន្សំសំចៃក្រដាស) */
     .a4-page.layout-8 {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
@@ -159,7 +157,6 @@
       height: 100%;
     }
 
-    /* រចនាប័ទ្មកាតសិស្សម្នាក់ៗតាមគំរូរូបភាព */
     .student-card {
       border: 2px solid var(--c-border);
       background: #ffffff;
@@ -170,7 +167,6 @@
       box-sizing: border-box;
     }
 
-    /* ផ្នែកក្បាលកាត */
     .card-top-header {
       position: relative;
       display: flex;
@@ -234,7 +230,6 @@
       height: 5px;
     }
 
-    /* ផ្នែកតួខ្លួនកាត (Body) */
     .card-main-body {
       flex: 1;
       padding: 4px 8px 3px 8px;
@@ -244,7 +239,6 @@
       justify-content: space-between;
     }
 
-    /* Watermark រូបសញ្ញានៅចំកណ្តាលផ្ទៃកាត */
     .card-watermark {
       position: absolute;
       top: 52%;
@@ -259,7 +253,6 @@
       transition: opacity 0.2s;
     }
 
-    /* ចំណងជើងកាតផ្នែកកណ្តាល */
     .card-titles {
       position: relative;
       z-index: 1;
@@ -293,7 +286,6 @@
       line-height: 1.45;
     }
 
-    /* ឈ្មោះសិស្ស */
     .title-student-name-center {
       font-family: 'Moul', cursive;
       font-size: 14px;
@@ -310,7 +302,6 @@
       margin-bottom: 2px;
     }
 
-    /* ផ្នែកព័ត៌មាន និងរូបថត */
     .content-container {
       position: relative;
       z-index: 1;
@@ -324,7 +315,7 @@
       justify-content: space-between;
       align-items: stretch;
       gap: 6px;
-      height: 25mm; /* កម្ពស់ 2.5cm */
+      height: 25mm;
     }
 
     .left-profile-block {
@@ -342,9 +333,7 @@
       line-height: 1.35;
     }
 
-    .info-table-top tr {
-      height: 20%;
-    }
+    .info-table-top tr { height: 20%; }
 
     .info-table-bottom {
       width: 100%;
@@ -354,9 +343,7 @@
       margin-top: 2px;
     }
 
-    .info-table-bottom tr {
-      height: 18px;
-    }
+    .info-table-bottom tr { height: 18px; }
 
     .lbl-col {
       width: 76px;
@@ -386,7 +373,6 @@
     .val-blue { color: var(--c-blue); }
     .val-green { color: var(--c-green); }
 
-    /* ប្រអប់រូបថតសិស្ស (ខ្នាត 2cm x 2.5cm) */
     .student-photo-box {
       width: 20mm;
       height: 25mm;
@@ -411,7 +397,6 @@
       color: #cbd5e1;
     }
 
-    /* ផ្នែកបាតកាត */
     .card-bottom-signature {
       position: relative;
       z-index: 2;
@@ -474,7 +459,6 @@
       z-index: 2;
     }
 
-    /* ត្រានាយកសាលា */
     .stamp-overlay-box {
       position: absolute;
       top: var(--stamp-top);
@@ -496,19 +480,10 @@
       mix-blend-mode: multiply;
     }
 
-    /* លក្ខខណ្ឌបោះពុម្ព A4 Landscape */
     @media print {
-      body {
-        background: transparent !important;
-        padding: 0 !important;
-      }
-      .no-print-toolbar {
-        display: none !important;
-      }
-      .print-area {
-        margin: 0 !important;
-        gap: 0 !important;
-      }
+      body { background: transparent !important; padding: 0 !important; }
+      .no-print-toolbar { display: none !important; }
+      .print-area { margin: 0 !important; gap: 0 !important; }
       .a4-page {
         box-shadow: none !important;
         margin: 0 !important;
@@ -516,10 +491,7 @@
         width: 297mm !important;
         height: 210mm !important;
       }
-      @page {
-        size: A4 landscape;
-        margin: 0;
-      }
+      @page { size: A4 landscape; margin: 0; }
     }
   </style>
 </head>
@@ -548,7 +520,7 @@
       </div>
 
       <div class="toolbar-group">
-        <button class="btn btn-primary" onclick="loadStudents()" title="ទាញយកទិន្នន័យឡើងវិញ">
+        <button class="btn btn-primary" onclick="initClassDropdown()" title="ទាញយកទិន្នន័យឡើងវិញ">
           <i class="fa-solid fa-rotate"></i> ផ្ទុកឡើងវិញ
         </button>
         <button class="btn btn-success" onclick="window.print()">
@@ -618,8 +590,19 @@
     var currentLayout = parseInt(localStorage.getItem('school_cards_layout') || '6');
     var stampSettings = JSON.parse(localStorage.getItem('school_stamp_settings') || '{"size":"36","top":"-3","left":"0"}');
 
-    // 🌟 ទាញយក Token និងព័ត៌មាន Session ពី Storage
-    var token = (typeof getStoredToken === 'function') ? getStoredToken() : (localStorage.getItem('krou_session_token') || '');
+    // 🌟 ទាញយក Token (ស្វែងរកគ្រប់កន្លែង៖ api.js, parent window, ឬ localStorage)
+    function resolveToken() {
+      if (typeof getStoredToken === 'function') {
+        var t = getStoredToken();
+        if (t) return t;
+      }
+      if (window.parent && window.parent.SESSION_TOKEN) {
+        return window.parent.SESSION_TOKEN;
+      }
+      return localStorage.getItem('krou_session_token') || localStorage.getItem('token') || '';
+    }
+
+    var token = resolveToken();
     var userClass = '';
     var userRole = 'teacher';
     var allStudents = [];
@@ -744,12 +727,23 @@
       initClassDropdown();
     });
 
-    // 🌟 មុខងារទាញយកបញ្ជីថ្នាក់តាមរយៈ Backend API លើ GitHub
+    // 🌟 ទាញយកបញ្ជីថ្នាក់
     async function initClassDropdown() {
       var sel = document.getElementById('classSelect');
-      
+      sel.innerHTML = '<option value="">កំពុងទាញយក...</option>';
+      token = resolveToken();
+
+      if (typeof callBackendApi !== 'function') {
+        sel.innerHTML = '<option value="">រកមិនឃើញ api.js</option>';
+        document.getElementById('printArea').innerHTML = `
+          <div style="color:#dc2626; text-align:center; padding:40px; font-size:14px;">
+            ⚠️ មិនអាចទាក់ទង Backend បានទេ ដោយសាររកមិនឃើញឯកសារ <b>api.js</b>។
+          </div>`;
+        return;
+      }
+
       try {
-        if (typeof callBackendApi === 'function' && token) {
+        if (token) {
           var session = await callBackendApi('getCurrentSession', { token: token });
           if (session) {
             userRole = session.role || 'teacher';
@@ -761,11 +755,9 @@
       }
 
       try {
-        if (typeof callBackendApi !== 'function') {
-          throw new Error('រកមិនឃើញឯកសារ api.js ឬ callBackendApi() ឡើយ');
-        }
-
-        var classes = await callBackendApi('getClassList', { token: token });
+        var res = await callBackendApi('getClassList', { token: token });
+        var classes = Array.isArray(res) ? res : (res && res.classes ? res.classes : []);
+        
         sel.innerHTML = '';
         
         if (classes && classes.length > 0) {
@@ -783,18 +775,19 @@
           loadStudents();
         } else {
           sel.innerHTML = '<option value="">គ្មានថ្នាក់</option>';
+          document.getElementById('printArea').innerHTML = '<div style="text-align:center; padding:50px; color:#64748b;">មិនទាន់មានថ្នាក់រៀនក្នុង Sheet ឡើយ</div>';
         }
       } catch (err) {
         console.error(err);
         sel.innerHTML = '<option value="">កំហុសទាញយក</option>';
         document.getElementById('printArea').innerHTML = `
-          <div style="color:red; text-align:center; padding:30px;">
-            កំហុសក្នុងការទាញយកបញ្ជីថ្នាក់៖ ${err.message || err}
+          <div style="color:#dc2626; text-align:center; padding:40px; font-size:14px;">
+            ⚠️ មិនអាចទាញយកបញ្ជីថ្នាក់បានទេ៖ ${err.message || err}
           </div>`;
       }
     }
 
-    // 🌟 មុខងារទាញយកទិន្នន័យកាតសិស្សតាមថ្នាក់
+    // 🌟 ទាញយកទិន្នន័យសិស្ស
     async function loadStudents() {
       var cls = document.getElementById('classSelect').value;
       if (!cls) return;
@@ -806,17 +799,14 @@
         </div>`;
 
       try {
-        if (typeof callBackendApi !== 'function') {
-          throw new Error('រកមិនឃើញឯកសារ api.js');
-        }
-
-        var list = await callBackendApi('getAllStudentsCardData', { token: token, classFilter: cls });
-        allStudents = list || [];
+        token = resolveToken();
+        var res = await callBackendApi('getAllStudentsCardData', { token: token, classFilter: cls });
+        allStudents = Array.isArray(res) ? res : (res && res.students ? res.students : (res && res.data ? res.data : []));
         renderCards();
       } catch (err) {
         document.getElementById('printArea').innerHTML = `
-          <div style="color:red; text-align:center; padding:30px;">
-            កំហុសក្នុងការទាញយកទិន្នន័យ៖ ${err.message || err}
+          <div style="color:#dc2626; text-align:center; padding:40px; font-size:14px;">
+            ⚠️ កំហុសក្នុងការទាញយកទិន្នន័យសិស្ស៖ ${err.message || err}
           </div>`;
       }
     }
@@ -825,11 +815,11 @@
       renderCards();
     }
 
-    // បង្ហាញកាតសិស្សក្នុងទំព័រ A4 (៦ កាត ឬ ៨ កាត)
+    // បង្ហាញកាតសិស្ស
     function renderCards() {
       var container = document.getElementById('printArea');
       if (!allStudents || allStudents.length === 0) {
-        container.innerHTML = '<div style="text-align:center; padding:50px; color:#64748b;">មិនមានទិន្នន័យសិស្សក្នុងថ្នាក់នេះទេ</div>';
+        container.innerHTML = '<div style="text-align:center; padding:50px; color:#64748b; font-size:14px;">មិនមានទិន្នន័យសិស្សក្នុងថ្នាក់នេះទេ</div>';
         return;
       }
 
@@ -870,7 +860,6 @@
 
           html += `
             <div class="student-card">
-              <!-- ក្បាលកាត -->
               <div class="card-top-header">
                 <div class="header-logo-box">
                   ${headerLogoHtml}
@@ -892,12 +881,9 @@
                 </div>
               </div>
 
-              <!-- តួខ្លួនកាត -->
               <div class="card-main-body">
-                <!-- Watermark -->
                 ${watermarkHtml}
 
-                <!-- ចំណងជើងកណ្តាល -->
                 <div class="card-titles">
                   <div class="title-badge">កាតសម្គាល់ខ្លួនសិស្ស</div>
                   <div class="title-school">${schoolName}</div>
@@ -905,7 +891,6 @@
                   <div class="title-student-name-center">${s.name || ''}</div>
                 </div>
 
-                <!-- ផ្នែកព័ត៌មាន និងរូបថត (ខ្នាត 2cm x 2.5cm) -->
                 <div class="content-container">
                   <div class="mid-split">
                     <div class="left-profile-block">
@@ -957,7 +942,6 @@
                   </table>
                 </div>
 
-                <!-- ផ្នែកបាតកាត -->
                 <div class="card-bottom-signature">
                   <div class="signature-box">
                     <div class="sig-date">${autoDateText}</div>
