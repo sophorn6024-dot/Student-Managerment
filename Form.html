@@ -1,0 +1,1971 @@
+<!DOCTYPE html>
+<html lang="km">
+
+<head>
+  <base target="_top">
+
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
+
+  <title>បញ្ចូលព័ត៌មានសិស្ស</title>
+
+  <style>
+
+    /* =====================================================
+       RESET
+    ===================================================== */
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family:
+        "Khmer OS Battambang",
+        "Noto Sans Khmer",
+        Arial,
+        sans-serif;
+
+      background:
+        linear-gradient(
+          135deg,
+          #e0f2fe 0%,
+          #f8fafc 45%,
+          #eef2ff 100%
+        );
+
+      color: #1e293b;
+      min-height: 100vh;
+    }
+
+
+    /* =====================================================
+       MAIN CONTAINER
+    ===================================================== */
+
+    .page-wrapper {
+      width: 100%;
+      max-width: 1050px;
+      margin: 0 auto;
+      padding: 24px 16px 40px;
+    }
+
+
+    /* =====================================================
+       HEADER
+    ===================================================== */
+
+    .top-header {
+      position: relative;
+      overflow: hidden;
+
+      background:
+        linear-gradient(
+          135deg,
+          #075985,
+          #0e7490,
+          #0891b2
+        );
+
+      color: white;
+
+      border-radius: 22px;
+
+      padding: 25px 25px 28px;
+
+      margin-bottom: 18px;
+
+      box-shadow:
+        0 12px 30px rgba(8, 47, 73, 0.18);
+    }
+
+    .top-header::before {
+      content: "";
+      position: absolute;
+
+      width: 180px;
+      height: 180px;
+
+      border-radius: 50%;
+
+      background: rgba(255,255,255,0.08);
+
+      right: -50px;
+      top: -70px;
+    }
+
+    .top-header::after {
+      content: "";
+      position: absolute;
+
+      width: 110px;
+      height: 110px;
+
+      border-radius: 50%;
+
+      background: rgba(255,255,255,0.06);
+
+      left: -35px;
+      bottom: -50px;
+    }
+
+    .header-content {
+      position: relative;
+      z-index: 2;
+
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .school-icon {
+      width: 58px;
+      height: 58px;
+
+      border-radius: 17px;
+
+      background: rgba(255,255,255,0.16);
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      font-size: 30px;
+
+      flex-shrink: 0;
+
+      border: 1px solid rgba(255,255,255,0.20);
+    }
+
+    .header-text h1 {
+      margin: 0 0 4px;
+
+      font-size: 21px;
+      line-height: 1.5;
+
+      font-weight: 700;
+    }
+
+    .header-text p {
+      margin: 0;
+
+      font-size: 13px;
+
+      opacity: 0.9;
+    }
+
+
+    /* =====================================================
+       FORM CARD
+    ===================================================== */
+
+    .form-card {
+      background: rgba(255,255,255,0.97);
+
+      border-radius: 22px;
+
+      padding: 25px;
+
+      box-shadow:
+        0 10px 35px rgba(15,23,42,0.08);
+
+      border: 1px solid rgba(226,232,240,0.9);
+    }
+
+
+    /* =====================================================
+       SECTION
+    ===================================================== */
+
+    .section {
+      margin-bottom: 25px;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+
+      padding-bottom: 12px;
+
+      margin-bottom: 17px;
+
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .section-icon {
+      width: 42px;
+      height: 42px;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      border-radius: 13px;
+
+      background: #e0f2fe;
+
+      font-size: 20px;
+    }
+
+    .section-title {
+      font-size: 16px;
+      font-weight: 700;
+
+      color: #0f172a;
+    }
+
+    .section-subtitle {
+      font-size: 11px;
+      color: #64748b;
+
+      margin-top: 1px;
+    }
+
+
+    /* =====================================================
+       GRID
+    ===================================================== */
+
+    .form-grid {
+      display: grid;
+
+      grid-template-columns:
+        repeat(2, minmax(0, 1fr));
+
+      gap: 16px;
+    }
+
+    .field.full {
+      grid-column: 1 / -1;
+    }
+
+
+    /* =====================================================
+       FIELD
+    ===================================================== */
+
+    .field {
+      min-width: 0;
+    }
+
+    .field label {
+      display: block;
+
+      margin-bottom: 7px;
+
+      font-size: 13px;
+
+      font-weight: 700;
+
+      color: #334155;
+    }
+
+    .required {
+      color: #ef4444;
+      margin-left: 2px;
+    }
+
+
+    /* =====================================================
+       INPUT
+    ===================================================== */
+
+    .input-wrapper {
+      position: relative;
+    }
+
+    input,
+    select,
+    textarea {
+
+      width: 100%;
+
+      border: 1.5px solid #dbe3ec;
+
+      border-radius: 12px;
+
+      background: #f8fafc;
+
+      color: #0f172a;
+
+      font-family: inherit;
+
+      font-size: 14px;
+
+      transition:
+        border-color 0.2s ease,
+        box-shadow 0.2s ease,
+        background 0.2s ease,
+        transform 0.2s ease;
+    }
+
+    input,
+    select {
+      height: 47px;
+      padding: 0 14px;
+    }
+
+    textarea {
+      min-height: 92px;
+      padding: 12px 14px;
+
+      resize: vertical;
+      line-height: 1.7;
+    }
+
+    input:hover,
+    select:hover,
+    textarea:hover {
+      background: white;
+      border-color: #94a3b8;
+    }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+
+      outline: none;
+
+      background: white;
+
+      border-color: #0891b2;
+
+      box-shadow:
+        0 0 0 4px rgba(8,145,178,0.10);
+    }
+
+    input::placeholder,
+    textarea::placeholder {
+      color: #94a3b8;
+    }
+
+
+    /* =====================================================
+       PHOTO AREA
+    ===================================================== */
+
+    .photo-section {
+      display: grid;
+
+      grid-template-columns: 1fr 180px;
+
+      gap: 20px;
+
+      align-items: center;
+    }
+
+    .photo-upload {
+
+      border: 2px dashed #cbd5e1;
+
+      background: #f8fafc;
+
+      border-radius: 16px;
+
+      padding: 20px;
+
+      text-align: center;
+
+      transition: 0.2s;
+    }
+
+    .photo-upload:hover {
+      border-color: #0891b2;
+      background: #f0fdff;
+    }
+
+    .photo-upload-icon {
+      font-size: 36px;
+
+      margin-bottom: 6px;
+    }
+
+    .photo-upload-title {
+      font-weight: 700;
+
+      color: #334155;
+
+      margin-bottom: 4px;
+    }
+
+    .photo-upload-info {
+      font-size: 11px;
+
+      color: #64748b;
+
+      margin-bottom: 12px;
+    }
+
+    input[type="file"] {
+      height: auto;
+      padding: 9px;
+      background: white;
+      cursor: pointer;
+    }
+
+
+    /* =====================================================
+       PHOTO PREVIEW
+    ===================================================== */
+
+    .photo-preview-box {
+
+      width: 180px;
+      height: 210px;
+
+      border-radius: 16px;
+
+      background:
+        linear-gradient(
+          145deg,
+          #f1f5f9,
+          #e2e8f0
+        );
+
+      border: 1px solid #cbd5e1;
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      overflow: hidden;
+
+      position: relative;
+    }
+
+    .photo-preview-box img {
+
+      width: 100%;
+      height: 100%;
+
+      object-fit: cover;
+
+      display: none;
+    }
+
+    .photo-placeholder {
+      text-align: center;
+      color: #94a3b8;
+      padding: 15px;
+    }
+
+    .photo-placeholder-icon {
+      font-size: 42px;
+      margin-bottom: 5px;
+    }
+
+    .photo-placeholder-text {
+      font-size: 11px;
+    }
+
+
+    /* =====================================================
+       BUTTON AREA
+    ===================================================== */
+
+    .action-area {
+
+      display: flex;
+
+      gap: 12px;
+
+      margin-top: 10px;
+
+      padding-top: 20px;
+
+      border-top: 1px solid #e2e8f0;
+    }
+
+    .btn {
+
+      border: none;
+
+      border-radius: 12px;
+
+      min-height: 50px;
+
+      padding: 0 22px;
+
+      font-family: inherit;
+
+      font-size: 14px;
+
+      font-weight: 700;
+
+      cursor: pointer;
+
+      transition: 0.2s;
+
+      display: flex;
+
+      align-items: center;
+
+      justify-content: center;
+
+      gap: 8px;
+    }
+
+    .btn-submit {
+
+      flex: 1;
+
+      color: white;
+
+      background:
+        linear-gradient(
+          135deg,
+          #0369a1,
+          #0891b2
+        );
+
+      box-shadow:
+        0 6px 15px rgba(8,145,178,0.20);
+    }
+
+    .btn-submit:hover {
+      transform: translateY(-1px);
+
+      box-shadow:
+        0 9px 20px rgba(8,145,178,0.28);
+    }
+
+    .btn-submit:disabled {
+      opacity: 0.65;
+
+      cursor: not-allowed;
+
+      transform: none;
+    }
+
+    .btn-reset {
+
+      background: #f1f5f9;
+
+      color: #475569;
+
+      border: 1px solid #e2e8f0;
+    }
+
+    .btn-reset:hover {
+      background: #e2e8f0;
+    }
+
+
+    /* =====================================================
+       STATUS
+    ===================================================== */
+
+    #status {
+
+      margin-top: 16px;
+
+      min-height: 25px;
+
+      text-align: center;
+
+      font-weight: 700;
+
+      font-size: 13px;
+    }
+
+    .status-success {
+      color: #15803d;
+    }
+
+    .status-error {
+      color: #dc2626;
+    }
+
+
+    /* =====================================================
+       FOOTER
+    ===================================================== */
+
+    .footer-note {
+
+      text-align: center;
+
+      margin-top: 15px;
+
+      font-size: 11px;
+
+      color: #64748b;
+    }
+
+
+    /* =====================================================
+       LOADING
+    ===================================================== */
+
+    .spinner {
+
+      width: 18px;
+      height: 18px;
+
+      border: 2px solid rgba(255,255,255,0.4);
+
+      border-top-color: white;
+
+      border-radius: 50%;
+
+      animation:
+        spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+
+      to {
+        transform: rotate(360deg);
+      }
+
+    }
+
+
+    /* =====================================================
+       MOBILE
+    ===================================================== */
+
+    @media (max-width: 700px) {
+
+      body {
+        background: #f1f5f9;
+      }
+
+      .page-wrapper {
+
+        padding:
+          10px
+          10px
+          25px;
+      }
+
+      .top-header {
+
+        border-radius: 17px;
+
+        padding:
+          18px
+          17px
+          20px;
+
+        margin-bottom: 10px;
+      }
+
+      .school-icon {
+
+        width: 47px;
+        height: 47px;
+
+        border-radius: 13px;
+
+        font-size: 24px;
+      }
+
+      .header-content {
+        gap: 11px;
+      }
+
+      .header-text h1 {
+        font-size: 16px;
+      }
+
+      .header-text p {
+        font-size: 10px;
+      }
+
+      .form-card {
+
+        padding: 16px;
+
+        border-radius: 17px;
+      }
+
+      .form-grid {
+
+        grid-template-columns: 1fr;
+
+        gap: 13px;
+      }
+
+      .field.full {
+        grid-column: auto;
+      }
+
+      .section {
+        margin-bottom: 22px;
+      }
+
+      .section-header {
+        margin-bottom: 13px;
+      }
+
+      .section-icon {
+
+        width: 38px;
+        height: 38px;
+
+        font-size: 18px;
+      }
+
+      .section-title {
+        font-size: 14px;
+      }
+
+      .section-subtitle {
+        font-size: 10px;
+      }
+
+      input,
+      select {
+
+        height: 50px;
+
+        font-size: 14px;
+      }
+
+      textarea {
+        font-size: 14px;
+      }
+
+      .photo-section {
+
+        grid-template-columns: 1fr;
+
+        gap: 15px;
+      }
+
+      .photo-preview-box {
+
+        width: 150px;
+        height: 175px;
+
+        margin: 0 auto;
+
+        order: -1;
+      }
+
+      .photo-upload {
+        padding: 16px;
+      }
+
+      .action-area {
+
+        flex-direction: column;
+
+        gap: 9px;
+      }
+
+      .btn {
+
+        width: 100%;
+
+        min-height: 52px;
+      }
+
+    }
+
+
+    /* =====================================================
+       SMALL MOBILE
+    ===================================================== */
+
+    @media (max-width: 380px) {
+
+      .form-card {
+        padding: 13px;
+      }
+
+      .top-header {
+        padding: 15px;
+      }
+
+      .header-text h1 {
+        font-size: 14px;
+      }
+
+      input,
+      select,
+      textarea {
+        font-size: 13px;
+      }
+
+    }
+
+  </style>
+</head>
+
+
+<body>
+
+
+<div class="page-wrapper">
+
+
+  <!-- ===================================================
+       HEADER
+  ==================================================== -->
+
+  <div class="top-header">
+
+    <div class="header-content">
+
+      <div class="school-icon">
+        🏫
+      </div>
+
+      <div class="header-text">
+
+        <h1>
+          បញ្ចូលប្រវត្តិរូបសិស្ស
+        </h1>
+
+        <p>
+          សាលាបឋមសិក្សាកំពង់ល្ពៅ
+        </p>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+
+  <!-- ===================================================
+       FORM
+  ==================================================== -->
+
+  <div class="form-card">
+
+
+    <form id="studentForm">
+
+
+      <!-- ================================================
+           SECTION 1
+      ================================================= -->
+
+      <div class="section">
+
+        <div class="section-header">
+
+          <div class="section-icon">
+            👨‍🎓
+          </div>
+
+          <div>
+
+            <div class="section-title">
+              ព័ត៌មានសិស្ស
+            </div>
+
+            <div class="section-subtitle">
+              សូមបញ្ចូលព័ត៌មានមូលដ្ឋានរបស់សិស្ស
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <div class="form-grid">
+
+
+          <div class="field">
+
+            <label>
+              អត្តលេខសិស្ស
+              <span class="required">*</span>
+            </label>
+
+            <input
+              type="text"
+              id="studentId"
+              name="studentId"
+              placeholder="ឧ. 001"
+              required
+              autocomplete="off"
+            >
+
+          </div>
+
+
+          <div class="field">
+
+            <label>
+              ឈ្មោះសិស្ស
+              <span class="required">*</span>
+            </label>
+
+            <input
+              type="text"
+              id="studentName"
+              name="studentName"
+              placeholder="បញ្ចូលឈ្មោះសិស្ស"
+              required
+              autocomplete="off"
+            >
+
+          </div>
+
+
+          <div class="field">
+
+            <label>
+              ភេទ
+              <span class="required">*</span>
+            </label>
+
+            <select
+              id="gender"
+              name="gender"
+              required
+            >
+
+              <option value="">
+                -- ជ្រើសរើសភេទ --
+              </option>
+
+              <option value="ប្រុស">
+                👦 ប្រុស
+              </option>
+
+              <option value="ស្រី">
+                👧 ស្រី
+              </option>
+
+            </select>
+
+          </div>
+
+
+          <div class="field">
+
+            <label>
+              ថ្ងៃខែឆ្នាំកំណើត
+              <span class="required">*</span>
+            </label>
+
+            <input
+              type="date"
+              id="dob"
+              name="dob"
+              required
+            >
+
+          </div>
+
+
+          <div class="field">
+
+            <label>
+              ថ្នាក់ទី
+              <span class="required">*</span>
+            </label>
+
+            <input
+              type="text"
+              id="grade"
+              name="grade"
+              placeholder="ឧ. ៤ ក"
+              required
+              autocomplete="off"
+            >
+
+          </div>
+
+
+          <div class="field">
+
+            <label>
+              លេខទូរស័ព្ទ
+            </label>
+
+            <input
+              type="tel"
+              id="phone"
+              name="phone"
+              placeholder="ឧ. 012 345 678"
+              autocomplete="off"
+            >
+
+          </div>
+
+
+          <div class="field full">
+
+            <label>
+              ទីកន្លែងកំណើត
+            </label>
+
+            <textarea
+              id="pob"
+              name="pob"
+              placeholder="ភូមិ ឃុំ/សង្កាត់ ស្រុក/ក្រុង ខេត្ត..."
+            ></textarea>
+
+          </div>
+
+
+        </div>
+
+      </div>
+
+
+
+      <!-- ================================================
+           SECTION 2
+      ================================================= -->
+
+      <div class="section">
+
+        <div class="section-header">
+
+          <div class="section-icon">
+            👨‍👩‍👦
+          </div>
+
+          <div>
+
+            <div class="section-title">
+              ព័ត៌មានឪពុកម្តាយ
+            </div>
+
+            <div class="section-subtitle">
+              ព័ត៌មានអាណាព្យាបាលរបស់សិស្ស
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <div class="form-grid">
+
+
+          <div class="field">
+
+            <label>
+              ឈ្មោះឪពុក
+            </label>
+
+            <input
+              type="text"
+              id="fatherName"
+              name="fatherName"
+              placeholder="ឈ្មោះឪពុក"
+              autocomplete="off"
+            >
+
+          </div>
+
+
+          <div class="field">
+
+            <label>
+              មុខរបរឪពុក
+            </label>
+
+            <input
+              type="text"
+              id="fatherJob"
+              name="fatherJob"
+              placeholder="មុខរបរ"
+              autocomplete="off"
+            >
+
+          </div>
+
+
+          <div class="field">
+
+            <label>
+              ឈ្មោះម្តាយ
+            </label>
+
+            <input
+              type="text"
+              id="motherName"
+              name="motherName"
+              placeholder="ឈ្មោះម្តាយ"
+              autocomplete="off"
+            >
+
+          </div>
+
+
+          <div class="field">
+
+            <label>
+              មុខរបរម្តាយ
+            </label>
+
+            <input
+              type="text"
+              id="motherJob"
+              name="motherJob"
+              placeholder="មុខរបរ"
+              autocomplete="off"
+            >
+
+          </div>
+
+
+        </div>
+
+      </div>
+
+
+
+      <!-- ================================================
+           SECTION 3
+      ================================================= -->
+
+      <div class="section">
+
+        <div class="section-header">
+
+          <div class="section-icon">
+            📍
+          </div>
+
+          <div>
+
+            <div class="section-title">
+              អាសយដ្ឋាន និងរូបថត
+            </div>
+
+            <div class="section-subtitle">
+              ព័ត៌មានទំនាក់ទំនង និងរូបថតសិស្ស
+            </div>
+
+          </div>
+
+        </div>
+
+
+        <div class="form-grid">
+
+
+          <div class="field full">
+
+            <label>
+              អាសយដ្ឋានសព្វថ្ងៃ
+            </label>
+
+            <textarea
+              id="address"
+              name="address"
+              placeholder="ភូមិ ឃុំ/សង្កាត់ ស្រុក/ក្រុង ខេត្ត..."
+            ></textarea>
+
+          </div>
+
+
+          <div class="field full">
+
+
+            <label>
+              រូបថតសិស្ស
+            </label>
+
+
+            <div class="photo-section">
+
+
+              <!-- Upload -->
+
+              <div class="photo-upload">
+
+                <div class="photo-upload-icon">
+                  📷
+                </div>
+
+                <div class="photo-upload-title">
+                  ជ្រើសរើសរូបថត
+                </div>
+
+                <div class="photo-upload-info">
+                  មិនបង្ខំ • JPG / PNG / WEBP • មិនលើស 5MB
+                </div>
+
+
+                <input
+                  type="file"
+                  id="photoInput"
+                  name="photoInput"
+                  accept="image/jpeg,image/png,image/webp,image/*"
+                >
+
+              </div>
+
+
+              <!-- Preview -->
+
+              <div class="photo-preview-box">
+
+                <img
+                  id="photoPreview"
+                  alt="Student Photo Preview"
+                >
+
+                <div
+                  class="photo-placeholder"
+                  id="photoPlaceholder"
+                >
+
+                  <div class="photo-placeholder-icon">
+                    👤
+                  </div>
+
+                  <div class="photo-placeholder-text">
+                    មិនទាន់មានរូបថត
+                  </div>
+
+                </div>
+
+              </div>
+
+
+            </div>
+
+          </div>
+
+
+        </div>
+
+      </div>
+
+
+
+      <!-- ================================================
+           BUTTONS
+      ================================================= -->
+
+      <div class="action-area">
+
+
+        <button
+          type="button"
+          class="btn btn-reset"
+          id="resetBtn"
+        >
+          🔄 សម្អាត
+        </button>
+
+
+        <button
+          type="submit"
+          class="btn btn-submit"
+          id="submitBtn"
+        >
+
+          <span id="submitIcon">
+            💾
+          </span>
+
+          <span id="submitText">
+            រក្សាទុកទិន្នន័យ
+          </span>
+
+        </button>
+
+
+      </div>
+
+
+    </form>
+
+
+    <!-- Status -->
+
+    <div id="status"></div>
+
+
+  </div>
+
+
+  <div class="footer-note">
+    * ព័ត៌មានដែលមានសញ្ញា <span class="required">*</span> ត្រូវបំពេញ
+  </div>
+
+
+</div>
+
+
+
+<script>
+
+
+  /* =====================================================
+     ELEMENTS
+  ===================================================== */
+
+  const form =
+    document.getElementById("studentForm");
+
+  const submitBtn =
+    document.getElementById("submitBtn");
+
+  const submitIcon =
+    document.getElementById("submitIcon");
+
+  const submitText =
+    document.getElementById("submitText");
+
+  const resetBtn =
+    document.getElementById("resetBtn");
+
+  const status =
+    document.getElementById("status");
+
+  const photoInput =
+    document.getElementById("photoInput");
+
+  const photoPreview =
+    document.getElementById("photoPreview");
+
+  const photoPlaceholder =
+    document.getElementById("photoPlaceholder");
+
+
+
+  /* =====================================================
+     PHOTO PREVIEW
+  ===================================================== */
+
+  photoInput.addEventListener(
+    "change",
+    function () {
+
+      const file =
+        this.files &&
+        this.files.length
+          ? this.files[0]
+          : null;
+
+
+      if (!file) {
+
+        photoPreview.style.display =
+          "none";
+
+        photoPlaceholder.style.display =
+          "block";
+
+        return;
+      }
+
+
+      if (!file.type.startsWith("image/")) {
+
+        showError(
+          "សូមជ្រើសរើសឯកសាររូបភាព។"
+        );
+
+        this.value = "";
+
+        return;
+      }
+
+
+      const maxSize =
+        5 * 1024 * 1024;
+
+
+      if (file.size > maxSize) {
+
+        showError(
+          "រូបថតធំពេក។ សូមជ្រើសរើសរូបថតមិនលើស 5MB។"
+        );
+
+        this.value = "";
+
+        return;
+      }
+
+
+      const reader =
+        new FileReader();
+
+
+      reader.onload =
+        function (event) {
+
+          photoPreview.src =
+            event.target.result;
+
+          photoPreview.style.display =
+            "block";
+
+          photoPlaceholder.style.display =
+            "none";
+
+        };
+
+
+      reader.readAsDataURL(file);
+
+    }
+  );
+
+
+
+  /* =====================================================
+     RESET BUTTON
+  ===================================================== */
+
+  resetBtn.addEventListener(
+    "click",
+    function () {
+
+      if (
+        !confirm(
+          "តើអ្នកពិតជាចង់សម្អាតទិន្នន័យដែលបានបញ្ចូលមែនទេ?"
+        )
+      ) {
+
+        return;
+
+      }
+
+
+      form.reset();
+
+
+      photoPreview.src = "";
+
+      photoPreview.style.display =
+        "none";
+
+      photoPlaceholder.style.display =
+        "block";
+
+
+      clearStatus();
+
+    }
+  );
+
+
+
+  /* =====================================================
+     FORM SUBMIT
+  ===================================================== */
+
+  form.addEventListener(
+    "submit",
+    function (event) {
+
+      event.preventDefault();
+
+      processForm();
+
+    }
+  );
+
+
+
+  /* =====================================================
+     PROCESS FORM
+  ===================================================== */
+
+  function processForm() {
+
+
+    clearStatus();
+
+
+    const studentId =
+      document
+        .getElementById("studentId")
+        .value
+        .trim();
+
+
+    const name =
+      document
+        .getElementById("studentName")
+        .value
+        .trim();
+
+
+    const gender =
+      document
+        .getElementById("gender")
+        .value;
+
+
+    const dob =
+      document
+        .getElementById("dob")
+        .value;
+
+
+    const grade =
+      document
+        .getElementById("grade")
+        .value
+        .trim();
+
+
+    const phone =
+      document
+        .getElementById("phone")
+        .value
+        .trim();
+
+
+    const pob =
+      document
+        .getElementById("pob")
+        .value
+        .trim();
+
+
+    const fatherName =
+      document
+        .getElementById("fatherName")
+        .value
+        .trim();
+
+
+    const fatherJob =
+      document
+        .getElementById("fatherJob")
+        .value
+        .trim();
+
+
+    const motherName =
+      document
+        .getElementById("motherName")
+        .value
+        .trim();
+
+
+    const motherJob =
+      document
+        .getElementById("motherJob")
+        .value
+        .trim();
+
+
+    const address =
+      document
+        .getElementById("address")
+        .value
+        .trim();
+
+
+    const formData = {
+
+      studentId: studentId,
+
+      name: name,
+
+      gender: gender,
+
+      dob: dob,
+
+      grade: grade,
+
+      phone: phone,
+
+      pob: pob,
+
+      fatherName: fatherName,
+
+      fatherJob: fatherJob,
+
+      motherName: motherName,
+
+      motherJob: motherJob,
+
+      address: address,
+
+      photoFile: null
+
+    };
+
+
+    /* ---------------------------------------------
+       Validate
+    --------------------------------------------- */
+
+    if (
+      !studentId ||
+      !name ||
+      !gender ||
+      !dob ||
+      !grade
+    ) {
+
+      showError(
+        "សូមបំពេញព័ត៌មានដែលមានសញ្ញា * ឱ្យបានគ្រប់គ្រាន់។"
+      );
+
+      return;
+    }
+
+
+    /* ---------------------------------------------
+       Photo
+    --------------------------------------------- */
+
+    const file =
+      photoInput.files &&
+      photoInput.files.length
+        ? photoInput.files[0]
+        : null;
+
+
+    if (file) {
+
+      const maxSize =
+        5 * 1024 * 1024;
+
+
+      if (
+        !file.type.startsWith("image/")
+      ) {
+
+        showError(
+          "សូមជ្រើសរើសតែរូបភាពប៉ុណ្ណោះ។"
+        );
+
+        return;
+      }
+
+
+      if (file.size > maxSize) {
+
+        showError(
+          "រូបថតមិនអាចលើសពី 5MB បានទេ។"
+        );
+
+        return;
+      }
+
+
+      setLoading(true);
+
+
+      const reader =
+        new FileReader();
+
+
+      reader.onload =
+        function (event) {
+
+          try {
+
+            const bytes =
+              new Uint8Array(
+                event.target.result
+              );
+
+
+            formData.photoFile = {
+
+              bytes:
+                Array.from(bytes),
+
+              mimeType:
+                file.type,
+
+              fileName:
+                file.name
+
+            };
+
+
+            sendToServer(formData);
+
+          }
+          catch (error) {
+
+            setLoading(false);
+
+            showError(
+              "មិនអាចអានរូបថតបានទេ។"
+            );
+
+          }
+
+        };
+
+
+      reader.onerror =
+        function () {
+
+          setLoading(false);
+
+          showError(
+            "មានបញ្ហាក្នុងការអានរូបថត។"
+          );
+
+        };
+
+
+      reader.readAsArrayBuffer(file);
+
+    }
+
+    else {
+
+      setLoading(true);
+
+      sendToServer(formData);
+
+    }
+
+  }
+
+
+
+  /* =====================================================
+     SEND TO SERVER
+  ===================================================== */
+
+  function sendToServer(formData) {
+
+
+    if (
+      typeof google === "undefined" ||
+      !google.script ||
+      !google.script.run
+    ) {
+
+      setLoading(false);
+
+      showError(
+        "មិនអាចភ្ជាប់ទៅ Google Apps Script បានទេ។"
+      );
+
+      return;
+    }
+
+
+    google.script.run
+
+      .withSuccessHandler(
+        function (result) {
+
+          success(result);
+
+        }
+      )
+
+      .withFailureHandler(
+        function (error) {
+
+          fail(error);
+
+        }
+      )
+
+      .submitStudentData(formData);
+
+  }
+
+
+
+  /* =====================================================
+     SUCCESS
+  ===================================================== */
+
+  function success(message) {
+
+
+    setLoading(false);
+
+
+    status.className =
+      "status-success";
+
+
+    status.innerText =
+      "🎉 " +
+      (
+        message ||
+        "រក្សាទុកទិន្នន័យបានជោគជ័យ!"
+      );
+
+
+    form.reset();
+
+
+    photoPreview.src = "";
+
+    photoPreview.style.display =
+      "none";
+
+    photoPlaceholder.style.display =
+      "block";
+
+
+    /*
+      បិទ Dialog ប្រសិនបើ Form
+      ត្រូវបានបើកជា Dialog/Sidebar
+    */
+
+    setTimeout(
+      function () {
+
+        try {
+
+          if (
+            typeof google !== "undefined" &&
+            google.script &&
+            google.script.host &&
+            typeof google.script.host.close ===
+              "function"
+          ) {
+
+            google.script.host.close();
+
+          }
+
+        }
+        catch (e) {
+
+          // Web App មិនចាំបាច់បិទ
+        }
+
+      },
+      1800
+    );
+
+  }
+
+
+
+  /* =====================================================
+     FAILURE
+  ===================================================== */
+
+  function fail(error) {
+
+
+    setLoading(false);
+
+
+    let message =
+      "មានបញ្ហាក្នុងការរក្សាទុកទិន្នន័យ។";
+
+
+    if (error) {
+
+      if (error.message) {
+
+        message =
+          error.message;
+
+      }
+      else if (
+        typeof error === "string"
+      ) {
+
+        message =
+          error;
+
+      }
+
+    }
+
+
+    showError(message);
+
+  }
+
+
+
+  /* =====================================================
+     LOADING
+  ===================================================== */
+
+  function setLoading(isLoading) {
+
+
+    submitBtn.disabled =
+      isLoading;
+
+
+    resetBtn.disabled =
+      isLoading;
+
+
+    if (isLoading) {
+
+      submitIcon.innerHTML =
+        '<span class="spinner"></span>';
+
+      submitText.innerText =
+        "កំពុងរក្សាទុក...";
+
+    }
+    else {
+
+      submitIcon.innerText =
+        "💾";
+
+      submitText.innerText =
+        "រក្សាទុកទិន្នន័យ";
+
+    }
+
+  }
+
+
+
+  /* =====================================================
+     ERROR
+  ===================================================== */
+
+  function showError(message) {
+
+
+    status.className =
+      "status-error";
+
+
+    status.innerText =
+      "❌ " +
+      message;
+
+
+    window.scrollTo({
+      top: document.body.scrollHeight,
+      behavior: "smooth"
+    });
+
+  }
+
+
+
+  /* =====================================================
+     CLEAR STATUS
+  ===================================================== */
+
+  function clearStatus() {
+
+    status.className = "";
+
+    status.innerText = "";
+
+  }
+
+
+</script>
+
+</body>
+</html>
