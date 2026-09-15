@@ -1,9 +1,20 @@
 // ==========================================================================
 // 🌐 API ROUTER សម្រាប់បម្រើទិន្នន័យទៅ GITHUB PAGES
 // ==========================================================================
+function doGet(e) {
+  return ContentService.createTextOutput(JSON.stringify({
+    status: "online",
+    message: "Google Apps Script Backend API កំពុងដំណើរការធម្មតា!"
+  })).setMimeType(ContentService.MimeType.JSON);
+}
+
 function doPost(e) {
   var output = { success: false };
   try {
+    if (!e || !e.postData || !e.postData.contents) {
+      throw new Error("គ្មានទិន្នន័យបញ្ជូនមកឡើយ (Empty Post Data)");
+    }
+
     var req = JSON.parse(e.postData.contents);
     var action = req.action;
     var data = req.data || {};
@@ -149,8 +160,14 @@ var SEMESTER1_MONTHS   = ['វិច្ឆិកា','ធ្នូ','មករ�
 var SEMESTER2_MONTHS   = ['ឧសភា','មិថុនា','កក្កដា','សីហា','កញ្ញា','តុលា'];
 var KHMER_MONTH_NAMES  = ['មករា','កុម្ភៈ','មីនា','មេសា','ឧសភា','មិថុនា','កក្កដា','សីហា','កញ្ញា','តុលា','វិច្ឆិកា','ធ្នូ'];
 
+function cleanKhmerText_(txt) {
+  return String(txt == null ? '' : txt)
+    .replace(/[\u200B-\u200D\uFEFF]/g, '')
+    .trim();
+}
+
 function getCleanClassName_(cls) {
-  return (cls || '').toString().trim().replace(/^ថ្នាក់ទី\s*/, '').replace(/^ថ្នាក់\s*/, '');
+  return cleanKhmerText_(cls).replace(/^ថ្នាក់ទី\s*/, '').replace(/^ថ្នាក់\s*/, '');
 }
 
 function matchClass_(rawGrade, selectedClass) {
@@ -1109,33 +1126,84 @@ function saveGroupsToSheet(payload) {
 }
 
 // ==========================================================================
-// 🔐 AUTH & USER PROFILES
+// 🔐 AUTH & USER PROFILES (អានត្រូវតាមរចនាសម្ព័ន្ធ Sheet ជាក់ស្តែង)
 // ==========================================================================
-var TEACHER_SHEET_NAME = 'ព័ត៌មានគ្រូ', TEACHER_DATA_START_ROW = 3;
+var TEACHER_SHEET_NAME = 'ព័ត៌មានគ្រូ';
+
+function findTeacherDataStartRow_(sheet) {
+  var lastRow = sheet.getLastRow();
+  if (lastRow < 1) return 4;
+  var maxScan = Math.min(lastRow, 10);
+  var headerScan = sheet.getRange(1, 1, maxScan, 12).getValues();
+  for (var r = 0; r < headerScan.length; r++) {
+    for (var c = 0; c < headerScan[r].length; c++) {
+      var cellVal = cleanKhmerText_(headerScan[r][c]).toLowerCase();
+      if (cellVal === 'username' || cellVal === 'អត្តលេខ') {
+        return r + 2;
+      }
+    }
+  }
+  return 4;
+}
 
 function getTeacherSheet_() {
-  var ss = SpreadsheetApp.getActiveSpreadsheet(), sheet = ss.getSheetByName(TEACHER_SHEET_NAME);
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var sheet = ss.getSheetByName(TEACHER_SHEET_NAME);
   if (!sheet) {
-    sheet = ss.insertSheet(TEACHER_SHEET_NAME);
-    sheet.getRange(1, 1, 1, 12).merge().setValue('ព័ត៌មានគ្រូបង្រៀន').setFontWeight('bold').setFontSize(13).setHorizontalAlignment('center');
-    sheet.appendRow(['ល.រ','អត្តលេខ','ឈ្មោះគ្រូ','ភេទ','លេខទូរសព្ទ','ថ្ងៃខែឆ្នាំ','ទីកន្លែង','Username','password','តួនាទី','ថ្នាក់','រូបថត']);
-    sheet.getRange(2, 1, 1, 12).setFontWeight('bold').setBackground('#6d9eeb').setFontColor('white').setHorizontalAlignment('center');
+    sheet = ss.getSheets()[0];
   }
   return sheet;
 }
 
 function readAllTeachers_() {
-  var sheet = getTeacherSheet_(), lr = sheet.getLastRow();
-  if (lr < TEACHER_DATA_START_ROW) return [];
-  var values = sheet.getRange(TEACHER_DATA_START_ROW, 1, lr - TEACHER_DATA_START_ROW + 1, 12).getValues(), list = [];
+  var sheet = getTeacherSheet_();
+  var startRow = findTeacherDataStartRow_(sheet);
+  var lr = sheet.getLastRow();
+  if (lr < startRow) return [];
+
+  var numRows = lr - startRow + 1;
+  var values = sheet.getRange(startRow, 1, numRows, 12).getValues();
+  var list = [];
+
   values.forEach(function(row, idx) {
-    if (!row[0] && !row[2]) return;
+    var no = cleanKhmerText_(row[0]);
+    var code = cleanKhmerText_(row[1]);
+    var name = cleanKhmerText_(row[2]);
+    var username = cleanKhmerText_(row[7]);
+
+    if (!username && !name) return;
+
     var dob = row[5], dobIso = '', dobD = '';
-    if (dob instanceof Date) { dobIso = Utilities.formatDate(dob, Session.getScriptTimeZone(), 'yyyy-MM-dd'); dobD = Utilities.formatDate(dob, Session.getScriptTimeZone(), 'dd/MM/yyyy'); }
-    else { dobD = String(dob || ''); dobIso = dobD; }
-    var rn = TEACHER_DATA_START_ROW + idx, pu = extractImageUrl_(sheet.getRange(rn, 12));
-    list.push({ id:String(row[1] || row[0]), no:row[0], code:row[1], name:row[2], sex:row[3] || '', phone:row[4], dob:dobD, dobIso:dobIso, address:row[6], username:row[7], role:row[9] ? String(row[9]).trim().toLowerCase() : 'teacher', assignedClass:row[10] ? String(row[10]).trim() : '', photoUrl:pu, rowIndex:rn });
+    if (dob instanceof Date) {
+      dobIso = Utilities.formatDate(dob, Session.getScriptTimeZone(), 'yyyy-MM-dd');
+      dobD = Utilities.formatDate(dob, Session.getScriptTimeZone(), 'dd/MM/yyyy');
+    } else {
+      dobD = cleanKhmerText_(dob);
+      dobIso = dobD;
+    }
+
+    var rn = startRow + idx;
+    var pu = extractImageUrl_(sheet.getRange(rn, 12));
+    var role = cleanKhmerText_(row[9]).toLowerCase();
+
+    list.push({
+      id: code || no || String(rn),
+      no: no,
+      code: code,
+      name: name,
+      sex: cleanKhmerText_(row[3]) || 'ប្រុស',
+      phone: cleanKhmerText_(row[4]),
+      dob: dobD,
+      dobIso: dobIso,
+      address: cleanKhmerText_(row[6]),
+      username: username,
+      role: role === 'admin' ? 'admin' : 'teacher',
+      assignedClass: cleanKhmerText_(row[10]),
+      photoUrl: pu,
+      rowIndex: rn
+    });
   });
+
   return list;
 }
 
@@ -1165,36 +1233,35 @@ function getSessionFromToken_(token) {
 
 function checkLogin(username, password) {
   try {
-    var u = String(username || '').trim().toLowerCase();
-    var p = String(password || '').trim();
-    if (!u || !p) return { success: false, message: 'សូមបញ្ចូល Username និង Password!' };
+    var u = cleanKhmerText_(username).toLowerCase();
+    var p = cleanKhmerText_(password);
+
+    if (!u || !p) {
+      return { success: false, message: 'សូមបញ្ចូល Username និង Password!' };
+    }
+
+    var teachers = readAllTeachers_();
+    if (!teachers.length) {
+      return { success: false, message: 'រកមិនឃើញទិន្នន័យគ្រូក្នុង Sheet ឡើយ' };
+    }
 
     var sheet = getTeacherSheet_();
-    var lr = sheet.getLastRow();
-    if (lr < TEACHER_DATA_START_ROW) return { success: false, message: 'មិនទាន់មានគណនីគ្រូក្នុងប្រព័ន្ធឡើយ' };
+    for (var i = 0; i < teachers.length; i++) {
+      var t = teachers[i];
+      var rn = t.rowIndex;
+      var sheetPass = cleanKhmerText_(sheet.getRange(rn, 9).getValue());
 
-    var values = sheet.getRange(TEACHER_DATA_START_ROW, 1, lr - TEACHER_DATA_START_ROW + 1, 12).getValues();
-    for (var i = 0; i < values.length; i++) {
-      var row = values[i];
-      var su = String(row[7] || '').trim().toLowerCase();
-      var sp = String(row[8] || '').trim();
-      if (su === u && sp === p) {
-        var rn = TEACHER_DATA_START_ROW + i;
-        var role = String(row[9] || 'teacher').trim().toLowerCase();
-        var teacher = {
-          id: row[1] ? String(row[1]) : String(rn),
-          code: row[1] ? String(row[1]) : '',
-          name: String(row[2] || ''),
-          sex: String(row[3] || 'ប្រុស'),
-          username: su,
-          role: role === 'admin' ? 'admin' : 'teacher',
-          assignedClass: String(row[10] || ''),
-          photoUrl: extractImageUrl_(sheet.getRange(rn, 12))
+      if (t.username.toLowerCase() === u && sheetPass === p) {
+        var token = createSessionToken_(t);
+        return {
+          success: true,
+          token: token,
+          teacher: t,
+          message: 'ចូលប្រើប្រាស់ជោគជ័យ'
         };
-        var token = createSessionToken_(teacher);
-        return { success: true, token: token, teacher: teacher, message: 'ចូលប្រើប្រាស់ជោគជ័យ' };
       }
     }
+
     return { success: false, message: 'Username ឬ Password មិនត្រឹមត្រូវទេ!' };
   } catch (err) {
     return { success: false, message: 'កំហុស៖ ' + err.message };
@@ -1308,27 +1375,52 @@ function getMyProfile(token) {
 
 function updateMyProfile(token, data) {
   var s = getSessionOrThrow_(token);
-  var sheet = getTeacherSheet_(), lr = sheet.getLastRow();
-  if (lr < TEACHER_DATA_START_ROW) throw new Error('រកមិនឃើញទិន្នន័យគ្រូទេ');
-  var values = sheet.getRange(TEACHER_DATA_START_ROW, 1, lr - TEACHER_DATA_START_ROW + 1, 12).getValues(), foundRow = -1;
+  var sheet = getTeacherSheet_();
+  var startRow = findTeacherDataStartRow_(sheet);
+  var lr = sheet.getLastRow();
+  if (lr < startRow) throw new Error('រកមិនឃើញទិន្នន័យគ្រូទេ');
+
+  var numRows = lr - startRow + 1;
+  var values = sheet.getRange(startRow, 1, numRows, 12).getValues();
+  var foundRow = -1;
+
   for (var i = 0; i < values.length; i++) {
-    var su = values[i][7] ? String(values[i][7]).trim() : '';
-    if (su === s.username) { foundRow = TEACHER_DATA_START_ROW + i; break; }
+    var su = cleanKhmerText_(values[i][7]).toLowerCase();
+    if (su === s.username.toLowerCase()) {
+      foundRow = startRow + i;
+      break;
+    }
   }
+
   if (foundRow === -1) throw new Error('រកមិនឃើញគណនីគ្រូនេះទេ');
+
   if (data.name) sheet.getRange(foundRow, 3).setValue(data.name);
   if (data.sex) sheet.getRange(foundRow, 4).setValue(data.sex);
   if (data.phone) sheet.getRange(foundRow, 5).setValue(data.phone);
   if (data.dob) sheet.getRange(foundRow, 6).setValue(data.dob);
   if (data.address) sheet.getRange(foundRow, 7).setValue(data.address);
-  if (data.password && String(data.password).trim() !== '') sheet.getRange(foundRow, 9).setValue(String(data.password).trim());
+  if (data.password && String(data.password).trim() !== '') {
+    sheet.getRange(foundRow, 9).setValue(String(data.password).trim());
+  }
+
   var photoUrl = s.photoUrl || '';
   if (data.photoFile && data.photoFile.base64) {
     var uploadedUrl = uploadStudentPhoto(data.photoFile.base64, 'គ្រូ_' + (data.name || s.username));
     sheet.getRange(foundRow, 12).setValue('=IMAGE("' + uploadedUrl + '")');
     photoUrl = uploadedUrl;
   }
-  var updatedTeacher = { id: s.id, code: s.code, name: data.name || s.name, sex: data.sex || s.sex, username: s.username, role: s.role, assignedClass: s.assignedClass, photoUrl: photoUrl };
+
+  var updatedTeacher = {
+    id: s.id,
+    code: s.code,
+    name: data.name || s.name,
+    sex: data.sex || s.sex,
+    username: s.username,
+    role: s.role,
+    assignedClass: s.assignedClass,
+    photoUrl: photoUrl
+  };
+
   var json = JSON.stringify(updatedTeacher);
   CacheService.getScriptCache().put('session_' + token, json, 21600);
   PropertiesService.getScriptProperties().setProperty('session_' + token, json);
@@ -1514,137 +1606,4 @@ function getStudentAbsenceMap(className, period) {
     });
     return absMap;
   } catch(e) { return {}; }
-}
-// ==========================================================================
-// 🔐 AUTH & USER PROFILES (អានត្រូវតាមរចនាសម្ព័ន្ធ Sheet ជាក់ស្តែង)
-// ==========================================================================
-var TEACHER_SHEET_NAME = 'ព័ត៌មានគ្រូ';
-
-// អនុគមន៍សម្អាតដកឃ្លាមើលមិនឃើញ (Khmer Zero-Width Space)
-function cleanKhmerText_(txt) {
-  return String(txt == null ? '' : txt)
-    .replace(/[\u200B-\u200D\uFEFF]/g, '')
-    .trim();
-}
-
-// ស្វែងរកជួរដេកដែលចាប់ផ្ដើមទិន្នន័យគ្រូដោយស្វ័យប្រវត្តិ
-function findTeacherDataStartRow_(sheet) {
-  var lastRow = sheet.getLastRow();
-  if (lastRow < 1) return 4;
-  
-  // ពិនិត្យរកជួរដែលមានពាក្យ "Username" ឬ "អត្តលេខ"
-  var maxScan = Math.min(lastRow, 10);
-  var headerScan = sheet.getRange(1, 1, maxScan, 12).getValues();
-  
-  for (var r = 0; r < headerScan.length; r++) {
-    for (var c = 0; c < headerScan[r].length; c++) {
-      var cellVal = cleanKhmerText_(headerScan[r][c]).toLowerCase();
-      if (cellVal === 'username' || cellVal === 'អត្តលេខ') {
-        return r + 2; // ទិន្នន័យពិតប្រាកដចាប់ផ្ដើមបន្ទាប់ពីជួរ Header មួយជួរ
-      }
-    }
-  }
-  return 4; // បើស្វែងរកមិនឃើញ យកលំនាំដើមជួរទី ៤
-}
-
-function getTeacherSheet_() {
-  var ss = SpreadsheetApp.getActiveSpreadsheet();
-  var sheet = ss.getSheetByName(TEACHER_SHEET_NAME);
-  if (!sheet) {
-    // បើឈ្មោះ Sheet មិនមែន "ព័ត៌មានគ្រូ" ទេ ស្វែងរក Sheet ដំបូងគេ
-    sheet = ss.getSheets()[0];
-  }
-  return sheet;
-}
-
-function readAllTeachers_() {
-  var sheet = getTeacherSheet_();
-  var startRow = findTeacherDataStartRow_(sheet);
-  var lr = sheet.getLastRow();
-  if (lr < startRow) return [];
-
-  var numRows = lr - startRow + 1;
-  var values = sheet.getRange(startRow, 1, numRows, 12).getValues();
-  var list = [];
-
-  values.forEach(function(row, idx) {
-    var no = cleanKhmerText_(row[0]);
-    var code = cleanKhmerText_(row[1]);
-    var name = cleanKhmerText_(row[2]);
-    var username = cleanKhmerText_(row[7]);
-
-    // ប្រសិនបើគ្មាន Username ឬគ្មានឈ្មោះ មិនបាច់រាប់បញ្ចូលទេ
-    if (!username && !name) return;
-
-    var dob = row[5], dobIso = '', dobD = '';
-    if (dob instanceof Date) {
-      dobIso = Utilities.formatDate(dob, Session.getScriptTimeZone(), 'yyyy-MM-dd');
-      dobD = Utilities.formatDate(dob, Session.getScriptTimeZone(), 'dd/MM/yyyy');
-    } else {
-      dobD = cleanKhmerText_(dob);
-      dobIso = dobD;
-    }
-
-    var rn = startRow + idx;
-    var pu = extractImageUrl_(sheet.getRange(rn, 12));
-    var role = cleanKhmerText_(row[9]).toLowerCase();
-
-    list.push({
-      id: code || no || String(rn),
-      no: no,
-      code: code,
-      name: name,
-      sex: cleanKhmerText_(row[3]) || 'ប្រុស',
-      phone: cleanKhmerText_(row[4]),
-      dob: dobD,
-      dobIso: dobIso,
-      address: cleanKhmerText_(row[6]),
-      username: username,
-      role: role === 'admin' ? 'admin' : 'teacher',
-      assignedClass: cleanKhmerText_(row[10]), // គ្រូបន្ទុកថ្នាក់ (ឧ. ១(ក), ២(ក))
-      photoUrl: pu,
-      rowIndex: rn
-    });
-  });
-
-  return list;
-}
-
-function checkLogin(username, password) {
-  try {
-    var u = cleanKhmerText_(username).toLowerCase();
-    var p = cleanKhmerText_(password);
-
-    if (!u || !p) {
-      return { success: false, message: 'សូមបញ្ចូល Username និង Password!' };
-    }
-
-    var teachers = readAllTeachers_();
-    if (!teachers.length) {
-      return { success: false, message: 'រកមិនឃើញទិន្នន័យគ្រូក្នុង Sheet ឡើយ' };
-    }
-
-    var sheet = getTeacherSheet_();
-    for (var i = 0; i < teachers.length; i++) {
-      var t = teachers[i];
-      var rn = t.rowIndex;
-      
-      // ទាញយក Password ពិតពី Sheet ដោយផ្ទាល់
-      var sheetPass = cleanKhmerText_(sheet.getRange(rn, 9).getValue());
-
-      if (t.username.toLowerCase() === u && sheetPass === p) {
-        var token = createSessionToken_(t);
-        return {
-          success: true,
-          token: token,
-          teacher: t,
-          message: 'ចូលប្រើប្រាស់ជោគជ័យ'
-        };
-      }
-    }
-
-    return { success: false, message: 'Username ឬ Password មិនត្រឹមត្រូវទេ!' };
-  } catch (err) {
-    return { success: false, message: 'កំហុស៖ ' + err.message };
-  }
 }
