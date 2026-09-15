@@ -2,7 +2,7 @@
 <html lang="km" data-theme="light">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>ប្រព័ន្ធគ្រប់គ្រងសិស្ស - KrouDigital</title>
 
   <!-- 🔤 Google Fonts Khmer -->
@@ -11,26 +11,36 @@
   <link href="https://fonts.googleapis.com/css2?family=Battambang:wght@400;700&family=Kantumruy+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Moul&display=swap" rel="stylesheet">
 
   <style>
+    /* =========================================================
+       🎨 THEME VARIABLES & FONT SYSTEM
+    ========================================================= */
     :root {
       --primary: #2563eb;
       --primary-hover: #1d4ed8;
       --primary-soft: #eff6ff;
       --navy: #0f172a;
-      --bg: #f8fafc;
+      
+      /* Light Theme */
+      --bg: #f1f5f9;
       --surface: #ffffff;
       --surface-elevated: #ffffff;
       --border: #e2e8f0;
       --border-subtle: #f1f5f9;
       --text: #0f172a;
       --text-muted: #64748b;
-      --topbar-bg: rgba(255, 255, 255, 0.95);
+      --text-soft: #94a3b8;
+      
+      --topbar-bg: rgba(255, 255, 255, 0.88);
       --sidebar-bg: linear-gradient(180deg, #090d16 0%, #0f172a 45%, #1e3a8a 100%);
-      --card-shadow: 0 4px 16px -2px rgba(15, 23, 42, 0.05);
+      --card-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.06);
+      --card-shadow-hover: 0 12px 30px -4px rgba(15, 23, 42, 0.12);
+      
       --sidebar-w: 260px;
-      --bottom-nav-h: 60px;
-      --topbar-h: 58px;
+      --sidebar-w-collapsed: 78px;
+      --bottom-nav-h: 62px;
     }
 
+    /* 🌙 Dark Theme */
     [data-theme="dark"] {
       --bg: #090d16;
       --surface: #111827;
@@ -39,210 +49,1148 @@
       --border-subtle: #1e293b;
       --text: #f8fafc;
       --text-muted: #94a3b8;
-      --topbar-bg: rgba(17, 24, 39, 0.95);
+      --text-soft: #64748b;
+      
+      --topbar-bg: rgba(17, 24, 39, 0.88);
       --sidebar-bg: linear-gradient(180deg, #030712 0%, #0b1120 50%, #0f172a 100%);
       --card-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.4);
+      --card-shadow-hover: 0 12px 32px -4px rgba(0, 0, 0, 0.6);
       --primary-soft: rgba(37, 99, 235, 0.15);
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Kantumruy Pro', 'Battambang', sans-serif; -webkit-tap-highlight-color: transparent; }
-    
-    /* 🌟 ការពារការ Scroll ជាន់គ្នានៅលើទូរសព្ទ (No Double Scroll) */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Kantumruy Pro', 'Khmer OS Battambang', 'Battambang', sans-serif;
+      -webkit-tap-highlight-color: transparent;
+      transition: background-color 0.25s ease, border-color 0.25s ease, color 0.25s ease;
+      letter-spacing: 0.2px;
+    }
+
     html, body {
-      width: 100vw; height: 100vh; height: 100dvh;
-      background: var(--bg); color: var(--text);
-      overflow: hidden; position: fixed; font-size: 13.5px;
+      width: 100vw;
+      height: 100vh;
+      background: var(--bg);
+      color: var(--text);
+      overflow: hidden;
+      position: fixed;
+      font-size: 13.5px;
     }
 
-    .f-moul { font-family: 'Moul', cursive; font-weight: normal; }
-    .app-layout { display: flex; width: 100vw; height: 100%; overflow: hidden; position: relative; }
+    .f-moul { 
+      font-family: 'Khmer OS Muol Light', 'Moul', cursive; 
+      font-weight: normal; 
+      letter-spacing: 0.5px; 
+    }
 
-    /* SIDEBAR */
+    .app-layout {
+      display: flex;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      position: relative;
+    }
+
+    /* =========================================================
+       SIDEBAR NAVIGATION
+    ========================================================= */
     .sidebar {
-      width: var(--sidebar-w); height: 100%; background: var(--sidebar-bg); color: #fff;
-      display: flex; flex-direction: column; flex-shrink: 0; z-index: 60;
-      box-shadow: 4px 0 20px rgba(0,0,0,0.15); transition: transform 0.25s ease;
+      width: var(--sidebar-w);
+      height: 100vh;
+      background: var(--sidebar-bg);
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      flex-shrink: 0;
+      z-index: 60;
+      box-shadow: 5px 0 25px rgba(0,0,0,0.15);
+      transition: width 0.28s cubic-bezier(0.4, 0, 0.2, 1), transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
     }
+
+    .sidebar.collapsed { width: var(--sidebar-w-collapsed); }
+
     .brand-box {
-      height: var(--topbar-h); display: flex; align-items: center; justify-content: space-between;
-      padding: 0 16px; border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      min-height: 70px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 18px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+      white-space: nowrap;
+      overflow: hidden;
     }
-    .brand-info { display: flex; align-items: center; gap: 10px; }
-    .brand-logo { width: 36px; height: 36px; border-radius: 10px; background: linear-gradient(135deg, #2563eb, #8b5cf6); display: flex; align-items: center; justify-content: center; font-size: 18px; }
-    .nav-scrollable { flex: 1; overflow-y: auto; padding: 12px 8px; -webkit-overflow-scrolling: touch; }
-    
+
+    .brand-info {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      overflow: hidden;
+    }
+
+    .brand-logo {
+      width: 42px;
+      height: 42px;
+      border-radius: 13px;
+      background: linear-gradient(135deg, #2563eb, #8b5cf6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      box-shadow: 0 6px 18px rgba(37, 99, 235, 0.35);
+      flex-shrink: 0;
+    }
+
+    .brand-meta { overflow: hidden; }
+    .sidebar.collapsed .brand-meta { opacity: 0; width: 0; display: none; }
+    .brand-title { font-size: 13.5px; font-weight: bold; color: #fff; }
+    .brand-sub { font-size: 10.5px; color: rgba(255, 255, 255, 0.65); margin-top: 2px; }
+
+    .sidebar-close-mobile-btn {
+      display: none;
+      background: rgba(255, 255, 255, 0.12);
+      border: none;
+      color: #fff;
+      width: 32px;
+      height: 32px;
+      border-radius: 10px;
+      font-size: 16px;
+      cursor: pointer;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .nav-scrollable {
+      flex: 1;
+      overflow-y: auto;
+      overflow-x: hidden;
+      padding: 14px 10px;
+      -webkit-overflow-scrolling: touch;
+    }
+    .nav-scrollable::-webkit-scrollbar { width: 4px; }
+    .nav-scrollable::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.15); border-radius: 4px; }
+
     .nav-link-btn {
-      height: 40px; display: flex; align-items: center; gap: 10px; padding: 0 12px; margin-bottom: 4px;
-      border-radius: 10px; color: rgba(255, 255, 255, 0.75); font-size: 12.5px; font-weight: 500; cursor: pointer; text-decoration: none;
+      height: 42px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 0 12px;
+      margin-bottom: 5px;
+      border-radius: 12px;
+      color: rgba(255, 255, 255, 0.78);
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      white-space: nowrap;
+      text-decoration: none;
+      transition: all 0.18s ease;
+      position: relative;
     }
-    .nav-link-btn:hover { background: rgba(255, 255, 255, 0.08); color: #fff; }
-    .nav-link-btn.active { background: linear-gradient(90deg, rgba(37, 99, 235, 0.45), rgba(124, 58, 237, 0.3)); color: #fff; font-weight: 600; }
-    .nav-icon { font-size: 16px; width: 20px; text-align: center; }
 
+    .nav-link-btn:active { transform: scale(0.97); }
+    .nav-link-btn:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: #ffffff;
+      transform: translateX(2px);
+    }
+
+    .nav-link-btn.active {
+      background: linear-gradient(90deg, rgba(37, 99, 235, 0.4), rgba(124, 58, 237, 0.25));
+      color: #ffffff;
+      font-weight: 600;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+    }
+
+    .nav-link-btn.active::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 4px;
+      height: 22px;
+      background: #60a5fa;
+      border-radius: 0 4px 4px 0;
+    }
+
+    .nav-icon { font-size: 16px; width: 22px; text-align: center; flex-shrink: 0; }
+    .sidebar.collapsed .nav-text { opacity: 0; width: 0; display: none; }
+
+    /* SUBMENU DROPDOWN */
     .nav-dropdown { position: relative; margin-bottom: 4px; }
-    .dropdown-chevron { font-size: 10px; margin-left: auto; transition: transform 0.2s; }
-    .nav-dropdown.open .dropdown-chevron { transform: rotate(180deg); }
-    .nav-submenu { display: none; flex-direction: column; gap: 2px; padding-left: 18px; margin-top: 2px; }
-    .nav-dropdown.open .nav-submenu { display: flex; }
-    .nav-sub-item { height: 36px; display: flex; align-items: center; gap: 8px; padding: 0 10px; border-radius: 8px; color: rgba(255, 255, 255, 0.7); font-size: 12px; cursor: pointer; }
-    .nav-sub-item:hover, .nav-sub-item.active { background: rgba(59, 130, 246, 0.35); color: #fff; }
+    .nav-dropdown-toggle { display: flex; align-items: center; justify-content: space-between; }
+    .dropdown-chevron { font-size: 11px; transition: transform 0.2s ease; margin-left: auto; opacity: 0.7; }
+    .nav-dropdown.open .dropdown-chevron { transform: rotate(180deg); opacity: 1; }
+    .sidebar.collapsed .dropdown-chevron { display: none; }
 
-    /* MAIN */
-    .main-wrapper { flex: 1; height: 100%; display: flex; flex-direction: column; min-width: 0; background: var(--bg); position: relative; }
-    .topbar {
-      height: var(--topbar-h); background: var(--topbar-bg); backdrop-filter: blur(10px);
-      border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; padding: 0 14px; z-index: 30; flex-shrink: 0;
+    .nav-submenu {
+      display: none;
+      flex-direction: column;
+      gap: 3px;
+      padding-left: 20px;
+      margin-top: 3px;
+      margin-bottom: 6px;
     }
-    .topbar-left { display: flex; align-items: center; gap: 10px; }
-    .hamburger-btn { display: none; background: var(--surface); border: 1px solid var(--border); width: 36px; height: 36px; border-radius: 9px; font-size: 18px; cursor: pointer; align-items: center; justify-content: center; color: var(--text); }
-    .page-title { font-size: 14.5px; font-weight: 600; }
-    .topbar-right { display: flex; align-items: center; gap: 8px; }
-    .theme-toggle-btn { width: 36px; height: 36px; border-radius: 9px; border: 1px solid var(--border); background: var(--surface); color: var(--text); cursor: pointer; }
-    .btn-logout { padding: 6px 12px; border-radius: 8px; border: 1px solid rgba(239, 68, 68, 0.3); background: rgba(239, 68, 68, 0.08); color: #ef4444; font-size: 11.5px; font-weight: 600; cursor: pointer; }
+    .nav-dropdown.open .nav-submenu { display: flex; }
+    .sidebar.collapsed .nav-submenu { display: none !important; }
 
-    /* CONTENT VIEW */
-    .content-area { flex: 1; height: calc(100% - var(--topbar-h)); position: relative; overflow: hidden; }
-    .view-panel { position: absolute; inset: 0; width: 100%; height: 100%; overflow-y: auto; -webkit-overflow-scrolling: touch; display: none; }
-    .view-panel.active { display: block; }
+    .nav-sub-item {
+      height: 38px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 0 10px;
+      border-radius: 10px;
+      color: rgba(255, 255, 255, 0.72);
+      font-size: 12.5px;
+      font-weight: 500;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.15s ease;
+    }
+    .nav-sub-item:active { transform: scale(0.97); }
+    .nav-sub-item:hover {
+      background: rgba(255, 255, 255, 0.12);
+      color: #ffffff;
+      transform: translateX(3px);
+    }
+    .nav-sub-item.active {
+      background: rgba(59, 130, 246, 0.35);
+      color: #ffffff;
+      font-weight: 600;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .sub-icon { font-size: 14px; width: 18px; text-align: center; flex-shrink: 0; }
 
-    /* DASHBOARD */
-    #dashboardView { padding: 14px 16px 80px; }
-    .dash-container { max-width: 1200px; margin: 0 auto; display: flex; flex-direction: column; gap: 14px; }
-    .welcome-hero { border-radius: 16px; padding: 18px; color: #fff; background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 50%, #7c3aed 100%); }
-    .stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
-    .stat-card { background: var(--surface); border: 1px solid var(--border); border-radius: 14px; padding: 12px; display: flex; align-items: center; gap: 10px; }
-    .stat-icon-wrap { width: 38px; height: 38px; border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
-    .stat-digit { font-size: 19px; font-weight: 700; }
-    .stat-title { font-size: 10.5px; color: var(--text-muted); }
+    .sidebar-footer {
+      padding: 14px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
 
-    .dash-split-grid { display: grid; grid-template-columns: 1.2fr 1fr; gap: 12px; }
-    .dash-panel { background: var(--surface); border: 1px solid var(--border); border-radius: 16px; padding: 14px; }
-    .quick-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
-    .quick-item-card { min-height: 70px; background: var(--surface-elevated); border: 1px solid var(--border); border-radius: 12px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; cursor: pointer; }
+    .collapse-toggle-btn {
+      width: 100%;
+      height: 36px;
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: rgba(255, 255, 255, 0.06);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 13px;
+      transition: all 0.2s;
+    }
+    .collapse-toggle-btn:hover { background: rgba(255, 255, 255, 0.14); }
+
+    .admin-clear-btn {
+      width: 100%;
+      height: 38px;
+      border-radius: 10px;
+      border: 1px solid rgba(239, 68, 68, 0.4);
+      background: linear-gradient(135deg, rgba(185, 28, 28, 0.35), rgba(220, 38, 38, 0.2));
+      color: #fca5a5;
+      font-size: 12px;
+      font-weight: 600;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .admin-clear-btn:hover { background: rgba(220, 38, 38, 0.4); color: #fff; }
+    .sidebar.collapsed .admin-clear-btn span:last-child { display: none; }
+
+    /* =========================================================
+       TOPBAR & MAIN AREA
+    ========================================================= */
+    .main-wrapper {
+      flex: 1;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      background: var(--bg);
+      position: relative;
+    }
+
+    .topbar {
+      height: 64px;
+      background: var(--topbar-bg);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      z-index: 30;
+      flex-shrink: 0;
+    }
+
+    .topbar-left { display: flex; align-items: center; gap: 12px; min-width: 0; }
+    .hamburger-btn {
+      display: none;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      width: 38px;
+      height: 38px;
+      border-radius: 11px;
+      font-size: 18px;
+      color: var(--text);
+      cursor: pointer;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+    }
+    .page-title {
+      font-size: 15.5px;
+      font-weight: 600;
+      color: var(--text);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .topbar-right { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+
+    .theme-toggle-btn {
+      width: 38px;
+      height: 38px;
+      border-radius: 11px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      transition: all 0.2s ease;
+    }
+    .theme-toggle-btn:hover {
+      transform: translateY(-2px);
+      border-color: var(--primary);
+    }
+
+    .date-badge {
+      background: var(--primary-soft);
+      color: var(--primary);
+      font-size: 11.5px;
+      font-weight: 500;
+      padding: 6px 12px;
+      border-radius: 30px;
+      white-space: nowrap;
+      border: 1px solid rgba(37, 99, 235, 0.15);
+    }
+
+    .user-profile-widget {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding-left: 8px;
+      border-left: 1px solid var(--border);
+    }
+
+    .user-name-txt { font-size: 12.5px; font-weight: 600; color: var(--text); }
+
+    .avatar-btn {
+      width: 38px;
+      height: 38px;
+      border-radius: 11px;
+      background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      overflow: hidden;
+      border: 2px solid var(--surface);
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+    }
+    .avatar-btn img { width: 100%; height: 100%; object-fit: cover; }
+
+    .btn-logout {
+      padding: 6px 12px;
+      border-radius: 10px;
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      background: rgba(239, 68, 68, 0.08);
+      color: #ef4444;
+      font-size: 11.5px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s;
+      white-space: nowrap;
+    }
+    .btn-logout:hover { background: #ef4444; color: #fff; }
+
+    /* =========================================================
+       CONTENT AREA
+    ========================================================= */
+    .content-area {
+      flex: 1;
+      min-height: 0;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .view-panel {
+      position: absolute;
+      inset: 0;
+      overflow-y: auto;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(8px);
+      transition: opacity 0.24s ease, transform 0.24s ease;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .view-panel.active {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0);
+    }
+
+    /* Dashboard Layout */
+    #dashboardView {
+      padding: 24px 28px 40px;
+    }
+    .dash-container {
+      max-width: 1440px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .welcome-hero {
+      position: relative;
+      border-radius: 22px;
+      padding: 24px 28px;
+      color: #fff;
+      background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 50%, #7c3aed 100%);
+      box-shadow: 0 10px 28px -4px rgba(37, 99, 235, 0.28);
+      overflow: hidden;
+    }
+    .welcome-hero h1 { font-size: 20px; margin-bottom: 6px; position: relative; z-index: 2; line-height: 1.4; font-weight: normal; }
+    .welcome-hero p { font-size: 12.5px; opacity: 0.92; max-width: 680px; line-height: 1.6; position: relative; z-index: 2; font-weight: 300; }
+    .welcome-hero::after {
+      content: "🏫";
+      position: absolute;
+      right: 20px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 90px;
+      opacity: 0.12;
+      pointer-events: none;
+    }
+
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+
+    .stat-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 16px 18px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      box-shadow: var(--card-shadow);
+      transition: all 0.2s ease;
+    }
+    .stat-card:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--card-shadow-hover);
+      border-color: var(--primary);
+    }
+
+    .stat-icon-wrap {
+      width: 48px;
+      height: 48px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+    .stat-icon-wrap.blue  { background: #eff6ff; color: #2563eb; }
+    .stat-icon-wrap.green { background: #f0fdf4; color: #16a34a; }
+    .stat-icon-wrap.pink  { background: #fdf2f8; color: #db2777; }
+    .stat-icon-wrap.amber { background: #fffbeb; color: #d97706; }
+
+    [data-theme="dark"] .stat-icon-wrap.blue  { background: rgba(37, 99, 235, 0.2); }
+    [data-theme="dark"] .stat-icon-wrap.green { background: rgba(22, 163, 74, 0.2); }
+    [data-theme="dark"] .stat-icon-wrap.pink  { background: rgba(219, 39, 119, 0.2); }
+    [data-theme="dark"] .stat-icon-wrap.amber { background: rgba(217, 119, 6, 0.2); }
+
+    .stat-digit { font-size: 22px; font-weight: 700; color: var(--text); line-height: 1.2; }
+    .stat-title { font-size: 11px; font-weight: 500; color: var(--text-muted); margin-top: 2px; }
+
+    .dash-split-grid {
+      display: grid;
+      grid-template-columns: 1.3fr 1fr;
+      gap: 18px;
+    }
+
+    .dash-panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 20px 22px;
+      box-shadow: var(--card-shadow);
+    }
+    .dash-panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+    .dash-panel-title { font-size: 14px; font-weight: 600; color: var(--text); display: flex; align-items: center; gap: 8px; }
+
+    /* Bar Chart Area */
+    .bar-chart-container {
+      width: 100%;
+      overflow-x: auto;
+      padding-bottom: 6px;
+      -webkit-overflow-scrolling: touch;
+    }
+    .bar-chart-stage {
+      min-width: 440px;
+      height: 230px;
+      display: flex;
+      align-items: stretch;
+      position: relative;
+      padding: 12px 10px 28px 38px;
+    }
+    .chart-grid-lines {
+      position: absolute;
+      left: 38px;
+      right: 10px;
+      top: 12px;
+      bottom: 28px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      pointer-events: none;
+    }
+    .grid-line-item { width: 100%; height: 1px; background: var(--border-subtle); position: relative; }
+    .grid-line-val { position: absolute; left: -34px; top: -7px; font-size: 10px; color: var(--text-soft); }
+    .chart-bars-wrap {
+      flex: 1;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-around;
+      gap: 10px;
+      border-bottom: 1px solid var(--border);
+      height: 100%;
+    }
+    .bar-col {
+      flex: 1;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      position: relative;
+    }
+    .bar-val-txt { font-size: 10px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+    .bar-fill {
+      width: 24px;
+      max-width: 70%;
+      background: linear-gradient(180deg, #3b82f6, #6366f1);
+      border-radius: 6px 6px 2px 2px;
+      box-shadow: 0 4px 10px rgba(59, 130, 246, 0.25);
+      transition: height 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+    .bar-label-txt {
+      position: absolute;
+      bottom: -24px;
+      font-size: 10px;
+      font-weight: 500;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    .quick-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
+    .quick-item-card {
+      min-height: 84px;
+      background: var(--surface-elevated);
+      border: 1px solid var(--border);
+      border-radius: 15px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 5px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-decoration: none;
+    }
     .quick-item-card:active { transform: scale(0.96); }
+    .quick-item-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--primary);
+      box-shadow: 0 8px 16px rgba(37, 99, 235, 0.12);
+      background: var(--primary-soft);
+    }
+    .quick-item-card .qi { font-size: 20px; }
+    .quick-item-card .qt { font-size: 11px; font-weight: 500; color: var(--text); text-align: center; }
 
-    /* IFRAME FULL CONTAINER */
-    #iframeView { padding: 0; background: var(--surface); overflow: hidden; }
+    .class-progress-list { display: flex; flex-direction: column; gap: 12px; }
+    .class-prog-row { display: flex; align-items: center; gap: 10px; font-size: 12px; }
+    .class-prog-title { width: 80px; font-weight: 600; color: var(--text); flex-shrink: 0; }
+    .class-prog-track { flex: 1; height: 8px; background: var(--border-subtle); border-radius: 20px; overflow: hidden; }
+    .class-prog-fill { height: 100%; border-radius: 20px; background: linear-gradient(90deg, #3b82f6, #8b5cf6); transition: width 0.9s cubic-bezier(0.2, 0.8, 0.2, 1); }
+    .class-prog-count { width: 38px; text-align: right; font-weight: 600; color: var(--text-muted); }
+
+    /* =========================================================
+       IFRAME VIEW
+    ========================================================= */
+    #iframeView { padding: 0; background: var(--surface); }
     .iframe-container { width: 100%; height: 100%; position: relative; }
-    #pageFrame { width: 100%; height: 100%; border: none; display: block; }
-    .loading-glass-overlay { position: absolute; inset: 0; background: var(--bg); display: flex; align-items: center; justify-content: center; gap: 10px; z-index: 10; opacity: 0; pointer-events: none; transition: opacity 0.2s; }
-    .loading-glass-overlay.show { opacity: 1; pointer-events: auto; }
-    .spinner-ring { width: 28px; height: 28px; border: 3px solid var(--border); border-top-color: var(--primary); border-radius: 50%; animation: spin 0.7s linear infinite; }
+    #pageFrame { width: 100%; height: 100%; border: none; background: var(--surface); }
+
+    .loading-glass-overlay {
+      position: absolute;
+      inset: 0;
+      background: var(--bg);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      z-index: 10;
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition: all 0.2s;
+    }
+    .loading-glass-overlay.show { opacity: 1; visibility: visible; pointer-events: auto; }
+    .spinner-ring {
+      width: 32px;
+      height: 32px;
+      border: 3px solid var(--border);
+      border-top-color: var(--primary);
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+    }
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    /* MOBILE BOTTOM NAV */
-    .mobile-bottom-nav {
-      display: none; position: fixed; left: 0; right: 0; bottom: 0; height: var(--bottom-nav-h);
-      background: var(--topbar-bg); backdrop-filter: blur(12px); border-top: 1px solid var(--border);
-      z-index: 40; padding: 0 4px; align-items: center; justify-content: space-around;
+    /* =========================================================
+       🌟 WELCOME GREETING POPUP
+    ========================================================= */
+    .welcome-popup {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: rgba(255, 255, 255, 0.96);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1.5px solid rgba(37, 99, 235, 0.25);
+      border-radius: 18px;
+      padding: 12px 18px 12px 14px;
+      box-shadow: 0 16px 40px rgba(15, 23, 42, 0.16);
+      transform: translateY(-80px) scale(0.92);
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      max-width: 90vw;
     }
-    .m-nav-item { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; flex: 1; height: 100%; cursor: pointer; color: var(--text-muted); }
+
+    [data-theme="dark"] .welcome-popup {
+      background: rgba(17, 24, 39, 0.96);
+      border-color: rgba(96, 165, 250, 0.3);
+      box-shadow: 0 16px 45px rgba(0, 0, 0, 0.55);
+    }
+
+    .welcome-popup.show {
+      transform: translateY(0) scale(1);
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .welcome-popup-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 13px;
+      background: linear-gradient(135deg, #2563eb, #8b5cf6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      color: #fff;
+      flex-shrink: 0;
+    }
+
+    .welcome-popup-content { display: flex; flex-direction: column; gap: 2px; }
+    .welcome-popup-title { font-size: 13px; font-weight: 700; color: var(--text); }
+    .welcome-popup-msg { font-size: 11px; color: var(--text-muted); line-height: 1.4; }
+
+    .welcome-popup-close {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 14px;
+      padding: 4px;
+      margin-left: 6px;
+    }
+
+    /* =========================================================
+       📱 MOBILE BOTTOM NAVIGATION BAR
+    ========================================================= */
+    .mobile-bottom-nav {
+      display: none;
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: var(--bottom-nav-h);
+      background: var(--topbar-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-top: 1px solid var(--border);
+      z-index: 40;
+      padding: 0 8px;
+      box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.05);
+      align-items: center;
+      justify-content: space-around;
+    }
+
+    .m-nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+      flex: 1;
+      height: 100%;
+      cursor: pointer;
+      color: var(--text-muted);
+      text-decoration: none;
+      border-radius: 10px;
+      transition: all 0.15s ease;
+    }
+    .m-nav-item:active { transform: scale(0.92); }
     .m-nav-item.active { color: var(--primary); font-weight: 600; }
-    .m-nav-item .m-icon { font-size: 18px; }
-    .m-nav-item .m-txt { font-size: 9.5px; }
+    .m-nav-item .m-icon { font-size: 18px; line-height: 1; }
+    .m-nav-item .m-txt { font-size: 10px; line-height: 1; }
+
+    /* =========================================================
+       MODAL: USER PROFILE
+    ========================================================= */
+    .modal-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(6px);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+    .modal-backdrop.show { display: flex; }
+    .modal-dialog {
+      width: 440px;
+      max-width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      box-shadow: 0 25px 60px rgba(0,0,0,0.3);
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .modal-head-banner {
+      padding: 20px;
+      background: linear-gradient(135deg, #1e3a8a, #7c3aed);
+      color: #fff;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .modal-close-btn {
+      position: absolute;
+      right: 14px;
+      top: 14px;
+      background: rgba(255,255,255,0.18);
+      border: none;
+      color: #fff;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .modal-avatar-preview {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      border: 3px solid #fff;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.2);
+      object-fit: cover;
+      margin-top: 8px;
+    }
+
+    .modal-body { padding: 18px; }
+    .form-group-field { margin-bottom: 12px; }
+    .form-group-field label { display: block; font-size: 11px; font-weight: 600; margin-bottom: 5px; color: var(--text); }
+    .form-group-field input, .form-group-field select {
+      width: 100%;
+      padding: 10px 14px;
+      border-radius: 11px;
+      border: 1px solid var(--border);
+      background: var(--surface-elevated);
+      color: var(--text);
+      font-size: 13px;
+      outline: none;
+    }
+    .form-group-field input:focus { border-color: var(--primary); }
+
+    .modal-foot-actions {
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+      margin-top: 16px;
+    }
+    .btn-modal {
+      padding: 9px 18px;
+      border-radius: 11px;
+      font-size: 12.5px;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+    }
+    .btn-modal.primary { background: var(--primary); color: #fff; }
+    .btn-modal.cancel { background: var(--border-subtle); color: var(--text); }
+
+    /* Toast */
+    .toast-box {
+      position: fixed;
+      right: 20px;
+      bottom: 74px;
+      padding: 10px 16px;
+      border-radius: 12px;
+      background: #0f172a;
+      color: #fff;
+      font-size: 12px;
+      font-weight: 600;
+      z-index: 200;
+      opacity: 0;
+      transform: translateY(12px);
+      transition: all 0.25s;
+      pointer-events: none;
+    }
+    .toast-box.show { opacity: 1; transform: translateY(0); }
+
+    /* =========================================================
+       📱 RESPONSIVE RULES FOR SMARTPHONES (< 768px)
+    ========================================================= */
+    @media (max-width: 1024px) {
+      .stat-grid { grid-template-columns: repeat(2, 1fr); }
+      .dash-split-grid { grid-template-columns: 1fr; }
+    }
 
     @media (max-width: 768px) {
-      .sidebar { position: fixed; left: 0; top: 0; bottom: 0; width: 260px !important; transform: translateX(-100%); z-index: 90; }
+      .sidebar {
+        position: fixed;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 275px !important;
+        transform: translateX(-100%);
+        z-index: 90;
+      }
       .sidebar.open { transform: translateX(0); }
+      .sidebar.collapsed { width: 275px !important; }
+      .sidebar.collapsed .brand-meta,
+      .sidebar.collapsed .nav-text,
+      .sidebar.collapsed .dropdown-chevron {
+        display: inline !important;
+        opacity: 1 !important;
+        width: auto !important;
+      }
+      .sidebar-close-mobile-btn { display: flex; }
+      .collapse-toggle-btn { display: none; }
+
+      .topbar { height: 56px; padding: 0 12px; }
       .hamburger-btn { display: flex; }
+      .user-name-txt, .date-badge { display: none; }
+      .page-title { font-size: 14px; }
+
       .mobile-bottom-nav { display: flex; }
-      .stat-grid { grid-template-columns: 1fr 1fr; }
-      .dash-split-grid { grid-template-columns: 1fr; }
-      .content-area { height: calc(100% - var(--topbar-h) - var(--bottom-nav-h)); }
-      #dashboardView { padding: 12px 12px calc(var(--bottom-nav-h) + 14px); }
+      
+      #dashboardView { padding: 14px 12px calc(var(--bottom-nav-h) + 14px); }
+      #iframeView { padding-bottom: var(--bottom-nav-h); }
+
+      .welcome-hero { padding: 16px 16px; border-radius: 16px; }
+      .welcome-hero h1 { font-size: 16px; }
+      .welcome-hero p { font-size: 11.5px; }
+
+      .stat-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
+      .stat-card { padding: 12px 14px; gap: 10px; border-radius: 14px; }
+      .stat-icon-wrap { width: 38px; height: 38px; font-size: 17px; border-radius: 10px; }
+      .stat-digit { font-size: 19px; }
+      .stat-title { font-size: 10px; }
+
+      .dash-panel { padding: 14px 14px; border-radius: 16px; }
+      .dash-panel-title { font-size: 13px; }
+      
+      .quick-grid { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+      .quick-item-card { min-height: 72px; border-radius: 12px; }
+      .quick-item-card .qi { font-size: 19px; }
+      .quick-item-card .qt { font-size: 10px; }
+
+      .modal-backdrop { align-items: flex-end; padding: 0; }
+      .modal-dialog { width: 100%; max-height: 88vh; border-radius: 22px 22px 0 0; margin: 0; }
     }
   </style>
 </head>
+
 <body>
 
-<div class="app-layout">
-  <div id="mobileBackdrop" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.5); z-index:80;" onclick="closeSidebarMobile()"></div>
+<!-- 🌟 POPUP ស្វាគមន៍ -->
+<div id="welcomeGreetingPopup" class="welcome-popup">
+  <div class="welcome-popup-icon" id="welcomePopupIcon">🌅</div>
+  <div class="welcome-popup-content">
+    <div class="welcome-popup-title" id="welcomePopupTitle">អរុណសួស្ដី!</div>
+    <div class="welcome-popup-msg" id="welcomePopupMsg">រីករាយដែលបានជួបលោកគ្រូ/អ្នកគ្រូ ចូលប្រើប្រាស់ប្រព័ន្ធ។</div>
+  </div>
+  <button class="welcome-popup-close" onclick="closeGreetingPopup()" title="បិទ">✕</button>
+</div>
 
-  <!-- SIDEBAR -->
+<div class="app-layout">
+
+  <!-- Mobile Backdrop -->
+  <div id="mobileBackdrop" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.55); z-index:80; backdrop-filter:blur(3px);" onclick="closeSidebarMobile()"></div>
+
+  <!-- SIDEBAR NAVIGATION -->
   <aside class="sidebar" id="sidebar">
     <div class="brand-box">
       <div class="brand-info">
         <div class="brand-logo">🏫</div>
-        <div style="font-size:12px; font-weight:bold;">សាលាបឋមសិក្សាកំពង់ល្ពៅ</div>
+        <div class="brand-meta">
+          <div class="brand-title f-moul">សាលាបឋមសិក្សា</div>
+          <div class="brand-sub">កំពង់ល្ពៅ · គ្រប់គ្រងសិស្ស</div>
+        </div>
       </div>
-      <button onclick="closeSidebarMobile()" style="background:none; border:none; color:#fff; font-size:16px;">✕</button>
+      <button class="sidebar-close-mobile-btn" onclick="closeSidebarMobile()">✕</button>
     </div>
 
     <nav class="nav-scrollable">
-      <div class="nav-link-btn active" data-page="dashboard" onclick="navigate('dashboard', this)"><span class="nav-icon">🏠</span><span>ទំព័រដើម</span></div>
-      <!-- 🌟 ប៊ូតុងបញ្ចូលសិស្សថ្មី ភ្ជាប់ជាមួយ Form.html -->
-      <div class="nav-link-btn" data-page="addStudent" onclick="navigate('addStudent', this)"><span class="nav-icon">✍️</span><span>បញ្ចូលសិស្សថ្មី</span></div>
-      <div class="nav-link-btn" data-page="editStudent" onclick="navigate('editStudent', this)"><span class="nav-icon">✏️</span><span>កែប្រែ/លុបទិន្នន័យ</span></div>
-      <div class="nav-link-btn" data-page="cards" onclick="navigate('cards', this)"><span class="nav-icon">🪪</span><span>កាតសិស្ស (ID Card)</span></div>
-      <div class="nav-link-btn" data-page="attendance" onclick="navigate('attendance', this)"><span class="nav-icon">📅</span><span>វត្តមានសិស្ស</span></div>
-      <div class="nav-link-btn" data-page="scores" onclick="navigate('scores', this)"><span class="nav-icon">📊</span><span>ស្រង់ពិន្ទុ</span></div>
-      <div class="nav-link-btn" data-page="groups" onclick="navigate('groups', this)"><span class="nav-icon">👥</span><span>បែងចែកជាក្រុម</span></div>
-      <div class="nav-link-btn" data-page="wheel" onclick="navigate('wheel', this)"><span class="nav-icon">🎡</span><span>បង្វិលកង់ជ្រើសរើស</span></div>
+      <div class="nav-link-btn active" data-page="dashboard" onclick="navigate('dashboard', this)">
+        <span class="nav-icon">🏠</span><span class="nav-text">ទំព័រដើម</span>
+      </div>
+
+      <div class="nav-link-btn" data-page="addStudent" onclick="navigate('addStudent', this)">
+        <span class="nav-icon">✍️</span><span class="nav-text">បញ្ចូលសិស្សថ្មី</span>
+      </div>
+
+      <div class="nav-link-btn" data-page="editStudent" onclick="navigate('editStudent', this)">
+        <span class="nav-icon">✏️</span><span class="nav-text">កែប្រែ/លុបទិន្នន័យ</span>
+      </div>
+
+      <div class="nav-link-btn" data-page="cards" onclick="navigate('cards', this)">
+        <span class="nav-icon">🪪</span><span class="nav-text">កាតសិស្ស (ID Card)</span>
+      </div>
+
+      <div class="nav-link-btn" data-page="groups" onclick="navigate('groups', this)">
+        <span class="nav-icon">👥</span><span class="nav-text">បែងចែកជាក្រុម</span>
+      </div>
+
+      <div class="nav-link-btn" data-page="wheel" onclick="navigate('wheel', this)">
+        <span class="nav-icon">🎡</span><span class="nav-text">បង្វិលកង់ជ្រើសរើស</span>
+      </div>
+
+      <div class="nav-link-btn" data-page="attendance" onclick="navigate('attendance', this)">
+        <span class="nav-icon">📅</span><span class="nav-text">វត្តមានសិស្ស</span>
+      </div>
+
+      <div class="nav-link-btn" data-page="scores" onclick="navigate('scores', this)">
+        <span class="nav-icon">📊</span><span class="nav-text">ស្រង់ពិន្ទុ</span>
+      </div>
 
       <div class="nav-dropdown" id="reportsDropdown">
-        <div class="nav-link-btn" onclick="document.getElementById('reportsDropdown').classList.toggle('open')">
-          <span class="nav-icon">📁</span><span>របាយការណ៍</span><span class="dropdown-chevron">▾</span>
+        <div class="nav-link-btn nav-dropdown-toggle" onclick="toggleSubmenu('reportsDropdown')">
+          <span class="nav-icon">📁</span>
+          <span class="nav-text">របាយការណ៍</span>
+          <span class="dropdown-chevron">▾</span>
         </div>
+        
         <div class="nav-submenu">
-          <div class="nav-sub-item" data-page="roster" onclick="navigate('roster', this)">🗒️ បញ្ជីរាយនាមសិស្ស</div>
-          <div class="nav-sub-item" data-page="rank" onclick="navigate('rank', this)">🏆 តារាងចំណាត់ថ្នាក់</div>
-          <div class="nav-sub-item" data-page="honorRoll" onclick="navigate('honorRoll', this)">🌟 តារាងកិត្តិយស</div>
-          <div class="nav-sub-item" data-page="certificate" onclick="navigate('certificate', this)">🎖️ ប័ណ្ណសរសើរ</div>
-          <div class="nav-sub-item" data-page="report" onclick="navigate('report', this)">📋 សៀវភៅតាមដាន</div>
-          <div class="nav-sub-item" data-page="semesterRecord" onclick="navigate('semesterRecord', this)">📘 សៀវភៅសិក្ខាគារិក</div>
+          <div class="nav-sub-item" data-page="roster" onclick="navigate('roster', this)">
+            <span class="sub-icon">🗒️</span><span class="nav-text">បញ្ជីរាយនាមសិស្ស</span>
+          </div>
+          <div class="nav-sub-item" data-page="rank" onclick="navigate('rank', this)">
+            <span class="sub-icon">🏆</span><span class="nav-text">តារាងចំណាត់ថ្នាក់</span>
+          </div>
+          <div class="nav-sub-item" data-page="honorRoll" onclick="navigate('honorRoll', this)">
+            <span class="sub-icon">🌟</span><span class="nav-text">តារាងកិត្តិយស</span>
+          </div>
+          <div class="nav-sub-item" data-page="certificate" onclick="navigate('certificate', this)">
+            <span class="sub-icon">🎖️</span><span class="nav-text">ប័ណ្ណសរសើរ</span>
+          </div>
+          <div class="nav-sub-item" data-page="report" onclick="navigate('report', this)">
+            <span class="sub-icon">📋</span><span class="nav-text">សៀវភៅតាមដាន</span>
+          </div>
+          <div class="nav-sub-item" data-page="semesterRecord" onclick="navigate('semesterRecord', this)">
+            <span class="sub-icon">📘</span><span class="nav-text">សៀវភៅសិក្ខាគារិក</span>
+          </div>
         </div>
+      </div>
+
+      <div class="nav-link-btn" id="teacherAdminNav" data-page="teachers" onclick="navigate('teachers', this)" style="display:none;">
+        <span class="nav-icon">👨‍🏫</span><span class="nav-text">គ្រប់គ្រងគ្រូ</span>
       </div>
     </nav>
+
+    <div class="sidebar-footer">
+      <button class="admin-clear-btn" id="adminClearBtn" onclick="confirmClearAllData()">
+        <span>🗑️</span><span>សម្អាតទិន្នន័យទាំងអស់</span>
+      </button>
+
+      <button class="collapse-toggle-btn" onclick="toggleSidebarCollapse()" title="បង្រួម/ពង្រីក">
+        ◀
+      </button>
+    </div>
   </aside>
 
-  <!-- MAIN -->
+  <!-- MAIN AREA -->
   <main class="main-wrapper">
+    
+    <!-- Topbar -->
     <header class="topbar">
       <div class="topbar-left">
-        <button class="hamburger-btn" onclick="openSidebarMobile()">☰</button>
+        <button class="hamburger-btn" onclick="openSidebarMobile()" title="ម៉ឺនុយ">☰</button>
         <div class="page-title" id="pageTitle">🏠 ទំព័រដើម</div>
       </div>
+
       <div class="topbar-right">
-        <button class="theme-toggle-btn" onclick="toggleTheme()" id="themeIcon">🌙</button>
-        <span id="userNameLabel" style="font-weight:600;">...</span>
-        <button class="btn-logout" onclick="doLogout()">ចាកចេញ</button>
+        <button class="theme-toggle-btn" onclick="toggleTheme()" id="themeBtn" title="ប្ដូរ Dark/Light Mode">
+          <span id="themeIcon">🌙</span>
+        </button>
+
+        <div class="date-badge" id="todayPill">-</div>
+
+        <div class="user-profile-widget">
+          <span class="user-name-txt" id="userNameLabel">...</span>
+          <div class="avatar-btn" id="userAvatar" onclick="openProfileModal()" title="ព័ត៌មានផ្ទាល់ខ្លួន">
+            👤
+          </div>
+          <button class="btn-logout" onclick="doLogout()">ចាកចេញ</button>
+        </div>
       </div>
     </header>
 
+    <!-- Content Area -->
     <div class="content-area">
+
       <!-- DASHBOARD VIEW -->
       <div class="view-panel active" id="dashboardView">
         <div class="dash-container">
+          
           <div class="welcome-hero">
-            <h1 class="f-moul" id="heroGreeting">សូមស្វាគមន៍ 👋</h1>
-            <p>ប្រព័ន្ធគ្រប់គ្រងសិស្ស វត្តមាន និងពិន្ទុ សាលាបឋមសិក្សាកំពង់ល្ពៅ។</p>
+            <h1 class="f-moul" id="heroGreeting">សូមស្វាគមន៍មកកាន់ប្រព័ន្ធគ្រប់គ្រងសិស្ស 👋</h1>
+            <p id="heroSubGreeting">តាមដានទិន្នន័យសិស្ស វត្តមាន ពិន្ទុ និងឯកសារផ្សេងៗ របស់សាលាបឋមសិក្សាកំពង់ល្ពៅ បានយ៉ាងងាយស្រួល និងរហ័សទាន់ចិត្ត។</p>
           </div>
 
           <div class="stat-grid">
-            <div class="stat-card"><div class="stat-icon-wrap" style="background:#eff6ff; color:#2563eb;">👨‍🎓</div><div><div class="stat-digit" id="statTotal">0</div><div class="stat-title">សិស្សសរុប</div></div></div>
-            <div class="stat-card"><div class="stat-icon-wrap" style="background:#f0fdf4; color:#16a34a;">✅</div><div><div class="stat-digit" id="statActive">0</div><div class="stat-title">សិស្សសកម្ម</div></div></div>
-            <div class="stat-card"><div class="stat-icon-wrap" style="background:#fdf2f8; color:#db2777;">👧</div><div><div class="stat-digit" id="statFemale">0</div><div class="stat-title">សិស្សស្រី</div></div></div>
-            <div class="stat-card"><div class="stat-icon-wrap" style="background:#fffbeb; color:#d97706;">🏫</div><div><div class="stat-digit" id="statClasses">0</div><div class="stat-title">ថ្នាក់រៀន</div></div></div>
+            <div class="stat-card">
+              <div class="stat-icon-wrap blue">👨‍🎓</div>
+              <div>
+                <div class="stat-digit" id="statTotal">0</div>
+                <div class="stat-title">សិស្សសរុប</div>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon-wrap green">✅</div>
+              <div>
+                <div class="stat-digit" id="statActive">0</div>
+                <div class="stat-title">សិស្សសកម្ម</div>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon-wrap pink">👧</div>
+              <div>
+                <div class="stat-digit" id="statFemale">0</div>
+                <div class="stat-title">សិស្សស្រី</div>
+              </div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-icon-wrap amber">🏫</div>
+              <div>
+                <div class="stat-digit" id="statClasses">0</div>
+                <div class="stat-title">ថ្នាក់រៀន</div>
+              </div>
+            </div>
           </div>
 
           <div class="dash-split-grid">
             <div class="dash-panel">
-              <div style="font-weight:600; margin-bottom:10px;">⚡ ចូលប្រើលឿន</div>
-              <div class="quick-grid">
-                <!-- 🌟 ប៊ូតុង Quick Action បញ្ចូលសិស្ស -->
-                <div class="quick-item-card" onclick="navigate('addStudent')"><span style="font-size:18px;">✍️</span><span style="font-size:10.5px;">បញ្ចូលសិស្ស</span></div>
-                <div class="quick-item-card" onclick="navigate('attendance')"><span style="font-size:18px;">📅</span><span style="font-size:10.5px;">វត្តមាន</span></div>
-                <div class="quick-item-card" onclick="navigate('scores')"><span style="font-size:18px;">📊</span><span style="font-size:10.5px;">ស្រង់ពិន្ទុ</span></div>
-                <div class="quick-item-card" onclick="navigate('cards')"><span style="font-size:18px;">🪪</span><span style="font-size:10.5px;">កាតសិស្ស</span></div>
-                <div class="quick-item-card" onclick="navigate('rank')"><span style="font-size:18px;">🏆</span><span style="font-size:10.5px;">ចំណាត់ថ្នាក់</span></div>
-                <div class="quick-item-card" onclick="navigate('roster')"><span style="font-size:18px;">🗒️</span><span style="font-size:10.5px;">បញ្ជីសិស្ស</span></div>
+              <div class="dash-panel-header">
+                <div class="dash-panel-title">📊 ចំនួនសិស្សតាមថ្នាក់</div>
+              </div>
+              <div class="bar-chart-container">
+                <div class="bar-chart-stage" id="barChart">
+                  <div class="chart-grid-lines" id="chartGrid"></div>
+                  <div class="chart-bars-wrap" id="barsArea"></div>
+                </div>
               </div>
             </div>
+
             <div class="dash-panel">
-              <div style="font-weight:600; margin-bottom:10px;">📈 ស្ថិតិសិស្សតាមថ្នាក់</div>
-              <div id="classBreakdownArea" style="font-size:12px; color:var(--text-muted);">កំពុងទាញយក...</div>
+              <div class="dash-panel-header">
+                <div class="dash-panel-title">⚡ ចូលប្រើលឿន</div>
+              </div>
+              <div class="quick-grid">
+                <div class="quick-item-card" onclick="navigateFromDash('addStudent')"><span class="qi">✍️</span><span class="qt">បញ្ចូលសិស្ស</span></div>
+                <div class="quick-item-card" onclick="navigateFromDash('attendance')"><span class="qi">📅</span><span class="qt">វត្តមាន</span></div>
+                <div class="quick-item-card" onclick="navigateFromDash('scores')"><span class="qi">📊</span><span class="qt">ស្រង់ពិន្ទុ</span></div>
+                <div class="quick-item-card" onclick="navigateFromDash('rank')"><span class="qi">🏆</span><span class="qt">ចំណាត់ថ្នាក់</span></div>
+                <div class="quick-item-card" onclick="navigateFromDash('roster')"><span class="qi">🗒️</span><span class="qt">បញ្ជីសិស្ស</span></div>
+                <div class="quick-item-card" onclick="navigateFromDash('report')"><span class="qi">📋</span><span class="qt">សៀវភៅតាមដាន</span></div>
+              </div>
             </div>
           </div>
+
+          <div class="dash-panel">
+            <div class="dash-panel-header">
+              <div class="dash-panel-title">📈 ស្ថិតិសិស្សតាមថ្នាក់</div>
+            </div>
+            <div class="class-progress-list" id="classBreakdownArea">
+              <div style="text-align:center; padding:20px; color:var(--text-muted); font-size:12px;">កំពុងទាញយកទិន្នន័យ...</div>
+            </div>
+          </div>
+
         </div>
       </div>
 
@@ -251,24 +1199,96 @@
         <div class="iframe-container">
           <div class="loading-glass-overlay" id="loadingOverlay">
             <div class="spinner-ring"></div>
-            <div style="font-size:12px;">កំពុងផ្ទុកទំព័រ...</div>
+            <div style="font-size:12px; font-weight:600; color:var(--text-muted);">កំពុងផ្ទុកទំព័រ...</div>
           </div>
           <iframe id="pageFrame" src="about:blank"></iframe>
         </div>
       </div>
+
     </div>
 
-    <!-- MOBILE BOTTOM NAV -->
+    <!-- MOBILE BOTTOM NAVIGATION -->
     <nav class="mobile-bottom-nav">
-      <div class="m-nav-item active" id="mNavDash" onclick="navigate('dashboard')"><span class="m-icon">🏠</span><span class="m-txt">ទំព័រដើម</span></div>
-      <!-- 🌟 ប៊ូតុងបញ្ចូលសិស្សលើ Mobile Bottom Bar -->
-      <div class="m-nav-item" id="mNavAdd" onclick="navigate('addStudent')"><span class="m-icon">✍️</span><span class="m-txt">បញ្ចូល</span></div>
-      <div class="m-nav-item" id="mNavAtt" onclick="navigate('attendance')"><span class="m-icon">📅</span><span class="m-txt">វត្តមាន</span></div>
-      <div class="m-nav-item" id="mNavScores" onclick="navigate('scores')"><span class="m-icon">📊</span><span class="m-txt">ពិន្ទុ</span></div>
-      <div class="m-nav-item" onclick="openSidebarMobile()"><span class="m-icon">☰</span><span class="m-txt">ម៉ឺនុយ</span></div>
+      <div class="m-nav-item active" id="mNavDash" onclick="navigate('dashboard', null)">
+        <span class="m-icon">🏠</span>
+        <span class="m-txt">ទំព័រដើម</span>
+      </div>
+      <div class="m-nav-item" id="mNavAtt" onclick="navigate('attendance', null)">
+        <span class="m-icon">📅</span>
+        <span class="m-txt">វត្តមាន</span>
+      </div>
+      <div class="m-nav-item" id="mNavScores" onclick="navigate('scores', null)">
+        <span class="m-icon">📊</span>
+        <span class="m-txt">ស្រង់ពិន្ទុ</span>
+      </div>
+      <div class="m-nav-item" id="mNavReports" onclick="toggleSubmenu('reportsDropdown'); openSidebarMobile();">
+        <span class="m-icon">📁</span>
+        <span class="m-txt">របាយការណ៍</span>
+      </div>
+      <div class="m-nav-item" onclick="openSidebarMobile()">
+        <span class="m-icon">☰</span>
+        <span class="m-txt">ម៉ឺនុយ</span>
+      </div>
     </nav>
+
   </main>
 </div>
+
+<!-- MODAL: USER PROFILE -->
+<div class="modal-backdrop" id="profileModalBackdrop" onclick="if(event.target===this) closeProfileModal()">
+  <div class="modal-dialog">
+    <div class="modal-head-banner">
+      <button class="modal-close-btn" onclick="closeProfileModal()">✕</button>
+      <div style="font-size:14.5px; font-weight:bold;">👤 ព័ត៌មានផ្ទាល់ខ្លួន</div>
+      <img id="profilePhotoPreview" class="modal-avatar-preview" src="" style="display:none;">
+      <div id="profileAvatarPlaceholder" class="modal-avatar-preview" style="display:flex; align-items:center; justify-content:center; font-size:28px; background:linear-gradient(135deg,#3b82f6,#8b5cf6);">👤</div>
+    </div>
+
+    <div class="modal-body">
+      <form id="profileForm" onsubmit="return saveMyProfile(event)">
+        <div style="text-align:center; margin-bottom:14px;">
+          <label style="font-size:11px; font-weight:600; padding:6px 14px; border-radius:20px; background:var(--primary-soft); color:var(--primary); cursor:pointer;">
+            📷 ប្តូររូបថត <input type="file" accept="image/*" style="display:none;" onchange="onProfilePhotoPicked(event)">
+          </label>
+        </div>
+
+        <div class="form-group-field">
+          <label>ឈ្មោះគ្រូ</label>
+          <input type="text" id="pfName" required>
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+          <div class="form-group-field">
+            <label>ភេទ</label>
+            <select id="pfSex"><option value="ប្រុស">ប្រុស</option><option value="ស្រី">ស្រី</option></select>
+          </div>
+          <div class="form-group-field">
+            <label>លេខទូរសព្ទ</label>
+            <input type="text" id="pfPhone" required>
+          </div>
+        </div>
+        <div class="form-group-field">
+          <label>ថ្ងៃខែឆ្នាំកំណើត</label>
+          <input type="date" id="pfDob">
+        </div>
+        <div class="form-group-field">
+          <label>ទីកន្លែងបច្ចុប្បន្ន</label>
+          <input type="text" id="pfAddress" required>
+        </div>
+        <div class="form-group-field">
+          <label>ពាក្យសម្ងាត់ថ្មី (ទុកទទេបើមិនប្តូរ)</label>
+          <input type="password" id="pfPassword" placeholder="••••••••">
+        </div>
+
+        <div class="modal-foot-actions">
+          <button type="button" class="btn-modal cancel" onclick="closeProfileModal()">បិទ</button>
+          <button type="submit" class="btn-modal primary" id="profileSaveBtn">💾 រក្សាទុក</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="toast-box" id="profileToast"></div>
 
 <!-- 🔗 ភ្ជាប់ API សម្រាប់ទំនាក់ទំនងជាមួយ Google Sheets -->
 <script src="api.js"></script>
@@ -276,58 +1296,140 @@
 <script>
   let SESSION_TOKEN = getStoredToken();
   let TEACHER_NAME = "";
+  let TEACHER_PHOTO_URL = "";
   let USER_ROLE = "teacher";
-  let USER_CLASS = "";
-
-  /* 🌟 តារាងភ្ជាប់ឈ្មោះឯកសារជាក់ស្តែងនៅលើ GITHUB REPO របស់អ្នក */
-  const PAGE_FILE_MAP = {
-    dashboard: 'dashboard',
-    addStudent: 'Form.html',         // 👈 បញ្ចូលសិស្សថ្មី រត់ទៅ Form.html
-    editStudent: 'EditForm.html',
-    cards: 'CardForm.html',
-    groups: 'GroupForm.html',
-    wheel: 'Whell.html',
-    attendance: 'AttendancePage.html',
-    scores: 'ScoreForm.html',
-    roster: 'RosterForm.html',
-    rank: 'RankPage.html',
-    honorRoll: 'HonorRoll.html',
-    certificate: 'Certificate.html',
-    report: 'report.html',
-    semesterRecord: 'SemesterRecord.html',
-    teachers: 'TeacherManagement.html'
-  };
+  let IS_ADMIN = false;
+  let TEACHER_SEX = localStorage.getItem('krou_teacher_sex') || '';
 
   const PAGE_TITLES = {
-    dashboard: "🏠 ទំព័រដើម", addStudent: "✍️ បញ្ចូលសិស្សថ្មី", editStudent: "✏️ កែប្រែទិន្នន័យ",
-    cards: "🪪 កាតសិស្ស", attendance: "📅 វត្តមានសិស្ស", scores: "📊 ស្រង់ពិន្ទុ",
-    groups: "👥 បែងចែកក្រុម", wheel: "🎡 បង្វិលកង់", roster: "🗒️ បញ្ជីរាយនាម",
-    rank: "🏆 ចំណាត់ថ្នាក់", honorRoll: "🌟 តារាងកិត្តិយស", certificate: "🎖️ ប័ណ្ណសរសើរ",
-    report: "📋 សៀវភៅតាមដាន", semesterRecord: "📘 សៀវភៅសិក្ខាគារិក", teachers: "👨‍🏫 គ្រប់គ្រងគ្រូ"
+    dashboard: "🏠 ទំព័រដើម", roster: "🗒️ បញ្ជីរាយនាមសិស្ស", addStudent: "✍️ បញ្ចូលសិស្សថ្មី",
+    editStudent: "✏️ កែប្រែ/លុបទិន្នន័យ", cards: "🪪 កាតសិស្ស (ID Card)", groups: "👥 បែងចែកជាក្រុម",
+    wheel: "🎡 បង្វិលកង់ជ្រើសរើស", attendance: "📅 ស្រង់វត្តមានសិស្ស", scores: "📊 ស្រង់ពិន្ទុសិស្ស",
+    rank: "🏆 តារាងចំណាត់ថ្នាក់", honorRoll: "🌟 តារាងកិត្តិយស", certificate: "🎖️ ប័ណ្ណសរសើរ",
+    report: "📋 សៀវភៅតាមដាន", semesterRecord: "📘 សៀវភៅសិក្ខាគារិក", teachers: "👨‍🏫 គ្រប់គ្រងគ្រូបង្រៀន"
   };
 
-  function openSidebarMobile() { document.getElementById('sidebar').classList.add('open'); document.getElementById('mobileBackdrop').style.display='block'; }
-  function closeSidebarMobile() { document.getElementById('sidebar').classList.remove('open'); document.getElementById('mobileBackdrop').style.display='none'; }
-  function toggleTheme() {
-    const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-    document.documentElement.setAttribute('data-theme', next);
-    document.getElementById('themeIcon').textContent = next === 'dark' ? '☀️' : '🌙';
+  function getTeacherFormalTitle(sex, rawName) {
+    var s = (sex || '').toString().trim().toLowerCase();
+    var n = (rawName || '').toString().trim();
+    if (n.indexOf('លោកគ្រូ') === 0 || n.indexOf('អ្នកគ្រូ') === 0) return n;
+    var isFemale = (s === 'ស្រី' || s === 'f' || s === 'female' || s === 'ស្រី្ត');
+    return n ? ((isFemale ? 'អ្នកគ្រូ ' : 'លោកគ្រូ ') + n) : (isFemale ? 'អ្នកគ្រូ' : 'លោកគ្រូ');
   }
 
-  /* 🌟 បញ្ជូនទៅកាន់ FORM នីមួយៗ */
+  function getTimeGreeting() {
+    var hour = new Date().getHours();
+    if (hour >= 5 && hour < 12) return { greeting: "អរុណសួស្ដី", icon: "🌅", periodDesc: "ពេលព្រឹកដ៏ស្រស់បំព្រង" };
+    if (hour >= 12 && hour < 17) return { greeting: "ទិវាសួស្ដី", icon: "☀️", periodDesc: "ពេលរសៀល" };
+    if (hour >= 17 && hour < 21) return { greeting: "សាយណ្ហសួស្ដី", icon: "🌇", periodDesc: "ពេលល្ងាច" };
+    return { greeting: "រាត្រីសួស្ដី", icon: "🌙", periodDesc: "ពេលរាត្រី" };
+  }
+
+  function initGreetings() {
+    var timeData = getTimeGreeting();
+    var formalName = getTeacherFormalTitle(TEACHER_SEX, TEACHER_NAME);
+
+    var heroEl = document.getElementById('heroGreeting');
+    if (heroEl) heroEl.innerHTML = timeData.icon + ' ' + timeData.greeting + ' ' + formalName + ' 👋';
+    
+    var heroSubEl = document.getElementById('heroSubGreeting');
+    if (heroSubEl) heroSubEl.innerText = 'សូមស្វាគមន៍ការចូលកាន់ប្រព័ន្ធគ្រប់គ្រងសិស្ស សាលាបឋមសិក្សាកំពង់ល្ពៅ ក្នុង' + timeData.periodDesc + '។';
+
+    var popIcon = document.getElementById('welcomePopupIcon');
+    var popTitle = document.getElementById('welcomePopupTitle');
+    var popMsg = document.getElementById('welcomePopupMsg');
+    var popupEl = document.getElementById('welcomeGreetingPopup');
+
+    if (popIcon) popIcon.innerText = timeData.icon;
+    if (popTitle) popTitle.innerText = timeData.greeting + ' ' + formalName + '!';
+    if (popMsg) popMsg.innerText = 'បានចូលប្រើប្រាស់គណនីដោយជោគជ័យ ក្នុង' + timeData.periodDesc + '។';
+
+    if (popupEl) {
+      setTimeout(() => popupEl.classList.add('show'), 350);
+      setTimeout(() => closeGreetingPopup(), 5000);
+    }
+  }
+
+  function closeGreetingPopup() {
+    var popupEl = document.getElementById('welcomeGreetingPopup');
+    if (popupEl) popupEl.classList.remove('show');
+  }
+
+  function getAutoThemeByTime() {
+    var hour = new Date().getHours();
+    return (hour >= 18 || hour < 6) ? 'dark' : 'light';
+  }
+
+  function applyTheme(theme) {
+    document.documentElement.setAttribute('data-theme', theme);
+    var icon = document.getElementById('themeIcon');
+    if (icon) icon.textContent = theme === 'dark' ? '☀️' : '🌙';
+  }
+
+  function toggleTheme() {
+    var current = document.documentElement.getAttribute('data-theme') || 'light';
+    var next = current === 'dark' ? 'light' : 'dark';
+    localStorage.setItem('krou_theme_manual', next);
+    applyTheme(next);
+  }
+
+  applyTheme(localStorage.getItem('krou_theme_manual') || getAutoThemeByTime());
+
+  function toggleSubmenu(id) {
+    var el = document.getElementById(id);
+    if (el) el.classList.toggle('open');
+  }
+
+  function renderAvatar(photoUrl) {
+    var av = document.getElementById('userAvatar');
+    if (photoUrl && String(photoUrl).trim() !== "") {
+      av.innerHTML = '<img src="' + photoUrl + '" onerror="this.style.display=\'none\';this.parentNode.innerText=\'' + (TEACHER_NAME ? TEACHER_NAME.charAt(0) : '👤') + '\'">';
+    } else {
+      av.innerText = TEACHER_NAME ? TEACHER_NAME.charAt(0) : '👤';
+    }
+  }
+
+  function initAdminTools() {
+    var clearBtn = document.getElementById('adminClearBtn');
+    var teacherNav = document.getElementById('teacherAdminNav');
+    if (IS_ADMIN) {
+      if (clearBtn) clearBtn.style.display = 'flex';
+      if (teacherNav) teacherNav.style.display = 'flex';
+    } else {
+      if (clearBtn) clearBtn.style.display = 'none';
+      if (teacherNav) teacherNav.style.display = 'none';
+    }
+  }
+
+  // 🌟 រក្សា State Navigation
+  var currentPage = localStorage.getItem('krou_active_page') || 'dashboard';
+
   function navigate(page, el) {
     if (!page) return;
+    currentPage = page;
     localStorage.setItem('krou_active_page', page);
-
+    
     document.querySelectorAll('.nav-link-btn, .nav-sub-item').forEach(n => n.classList.remove('active'));
-    const target = el || document.querySelector(`[data-page="${page}"]`);
+    var target = el || document.querySelector('[data-page="' + page + '"]');
     if (target) target.classList.add('active');
 
     document.querySelectorAll('.m-nav-item').forEach(m => m.classList.remove('active'));
-    if (page === 'dashboard') document.getElementById('mNavDash')?.classList.add('active');
-    else if (page === 'addStudent') document.getElementById('mNavAdd')?.classList.add('active');
-    else if (page === 'attendance') document.getElementById('mNavAtt')?.classList.add('active');
-    else if (page === 'scores') document.getElementById('mNavScores')?.classList.add('active');
+    if (page === 'dashboard') {
+      var mb = document.getElementById('mNavDash');
+      if (mb) mb.classList.add('active');
+    } else if (page === 'attendance') {
+      var mb = document.getElementById('mNavAtt');
+      if (mb) mb.classList.add('active');
+    } else if (page === 'scores') {
+      var mb = document.getElementById('mNavScores');
+      if (mb) mb.classList.add('active');
+    }
+
+    var reportPages = ['roster', 'rank', 'honorRoll', 'certificate', 'report', 'semesterRecord'];
+    var reportsDropdown = document.getElementById('reportsDropdown');
+    if (reportPages.includes(page)) {
+      if (reportsDropdown) reportsDropdown.classList.add('open');
+    }
 
     document.getElementById('pageTitle').innerText = PAGE_TITLES[page] || page;
     closeSidebarMobile();
@@ -339,74 +1441,263 @@
       return;
     }
 
-    const fileName = PAGE_FILE_MAP[page];
-    if (!fileName) return;
+    var iframeView = document.getElementById('iframeView');
+    var dashboardView = document.getElementById('dashboardView');
+    var frame = document.getElementById('pageFrame');
+    var overlay = document.getElementById('loadingOverlay');
 
-    document.getElementById('dashboardView').classList.remove('active');
-    document.getElementById('iframeView').classList.add('active');
-    const overlay = document.getElementById('loadingOverlay');
+    dashboardView.classList.remove('active');
+    iframeView.classList.add('active');
     overlay.classList.add('show');
 
-    const frame = document.getElementById('pageFrame');
-    frame.src = fileName;
+    // 🌟 ផ្ទុកទំព័ររង (Subpages) លើ GitHub
+    frame.src = page + '.html';
   }
+
+  function navigateFromDash(page) { navigate(page, null); }
 
   document.getElementById('pageFrame').addEventListener('load', function() {
     document.getElementById('loadingOverlay').classList.remove('show');
   });
 
-  const khDigits = ['០','១','២','៣','៤','៥','៦','៧','៨','៩'];
+  function toggleSidebarCollapse() {
+    document.getElementById('sidebar').classList.toggle('collapsed');
+  }
+  function openSidebarMobile() {
+    document.getElementById('sidebar').classList.add('open');
+    document.getElementById('mobileBackdrop').style.display = 'block';
+  }
+  function closeSidebarMobile() {
+    document.getElementById('sidebar').classList.remove('open');
+    document.getElementById('mobileBackdrop').style.display = 'none';
+  }
+
+  var khDigits = ['០','១','២','៣','៤','៥','៦','៧','៨','៩'];
+  var khDays = ["អាទិត្យ","ចន្ទ","អង្គារ","ពុធ","ព្រហស្បតិ៍","សុក្រ","សៅរ៍"];
+  var khMonths = ["មករា","កុម្ភៈ","មីនា","មេសា","ឧសភា","មិថុនា","កក្កដា","សីហា","កញ្ញា","តុលា","វិច្ឆិកា","ធ្នូ"];
+
   function toKhNum(n) { return String(n).replace(/\d/g, d => khDigits[d]); }
+
+  function setTodayPill() {
+    var d = new Date();
+    document.getElementById('todayPill').innerText = 'ថ្ងៃ' + khDays[d.getDay()] + ' ទី' + toKhNum(d.getDate()) + ' ខែ' + khMonths[d.getMonth()] + ' ឆ្នាំ' + toKhNum(d.getFullYear());
+  }
+
+  function animateCount(id, target) {
+    var el = document.getElementById(id), start = 0, duration = 600, startTime = null;
+    function step(ts) {
+      if (!startTime) startTime = ts;
+      var progress = Math.min((ts - startTime) / duration, 1);
+      el.innerText = toKhNum(Math.round(progress * target));
+      if (progress < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+
+  function renderBarChart(classData) {
+    var barsArea = document.getElementById('barsArea'), grid = document.getElementById('chartGrid');
+    barsArea.innerHTML = ''; grid.innerHTML = '';
+    if (!classData || !classData.length) {
+      barsArea.innerHTML = '<div style="color:var(--text-muted); font-size:11.5px; margin:auto;">មិនទាន់មានទិន្នន័យសិស្ស</div>';
+      return;
+    }
+    var max = Math.max.apply(null, classData.map(c => Number(c.count || 0))) || 1;
+
+    for (var i = 5; i >= 0; i--) {
+      var val = Math.ceil((max * i) / 5);
+      grid.innerHTML += `<div class="grid-line-item"><span class="grid-line-val">${toKhNum(val)}</span></div>`;
+    }
+
+    classData.forEach((c) => {
+      var count = Number(c.count || 0), pct = (count / max) * 100;
+      barsArea.innerHTML += `
+        <div class="bar-col">
+          <span class="bar-val-txt">${toKhNum(count)}</span>
+          <div class="bar-fill" style="height:0%;" data-h="${pct}%"></div>
+          <span class="bar-label-txt">ថ្នាក់ទី ${c.className}</span>
+        </div>
+      `;
+    });
+
+    setTimeout(() => {
+      document.querySelectorAll('.bar-fill').forEach(el => el.style.height = el.getAttribute('data-h'));
+    }, 60);
+  }
 
   async function refreshStats() {
     try {
-      const stats = await callBackendApi('getDashboardStats');
+      var stats = await callBackendApi('getDashboardStats');
       if (!stats) return;
-      document.getElementById('statTotal').innerText = toKhNum(stats.totalStudents || 0);
-      document.getElementById('statActive').innerText = toKhNum(stats.activeCount || 0);
-      document.getElementById('statFemale').innerText = toKhNum(stats.femaleCount || 0);
-      document.getElementById('statClasses').innerText = toKhNum(stats.totalClasses || 0);
+      animateCount('statTotal', stats.totalStudents || 0);
+      animateCount('statActive', stats.activeCount || 0);
+      animateCount('statFemale', stats.femaleCount || 0);
+      animateCount('statClasses', stats.totalClasses || 0);
 
-      const list = stats.classBreakdown || [];
-      const area = document.getElementById('classBreakdownArea');
-      if (!list.length) { area.innerHTML = 'មិនទាន់មានទិន្នន័យ'; return; }
+      var data = stats.classBreakdown || [];
+      renderBarChart(data);
 
-      let h = '';
-      list.forEach(c => {
-        h += `<div style="display:flex; justify-content:space-between; margin-bottom:6px;"><span>ថ្នាក់ទី ${c.className}</span><strong>${toKhNum(c.count)} នាក់</strong></div>`;
+      var area = document.getElementById('classBreakdownArea');
+      if (!data.length) {
+        area.innerHTML = '<div style="text-align:center; color:var(--text-muted); padding:10px; font-size:12px;">មិនទាន់មានទិន្នន័យ</div>';
+        return;
+      }
+      var max = Math.max.apply(null, data.map(c => Number(c.count || 0))) || 1;
+      var h = '';
+      data.forEach(c => {
+        var count = Number(c.count || 0), pct = Math.round((count / max) * 100);
+        h += `
+          <div class="class-prog-row">
+            <div class="class-prog-title">ថ្នាក់ទី ${c.className}</div>
+            <div class="class-prog-track"><div class="class-prog-fill" style="width:${pct}%;"></div></div>
+            <div class="class-prog-count">${toKhNum(count)}</div>
+          </div>
+        `;
       });
       area.innerHTML = h;
-    } catch(e) {}
+    } catch(e) {
+      console.error("កំហុសទាញយកស្ថិតិ:", e);
+    }
+  }
+
+  var profilePickedPhotoBase64 = null;
+
+  async function openProfileModal() {
+    document.getElementById('profileForm').reset();
+    document.getElementById('profileModalBackdrop').classList.add('show');
+    try {
+      var p = await callBackendApi('getMyProfile', { token: SESSION_TOKEN });
+      if (!p) return;
+      document.getElementById('pfName').value = p.name || '';
+      document.getElementById('pfSex').value = p.sex || 'ប្រុស';
+      document.getElementById('pfPhone').value = p.phone || '';
+      document.getElementById('pfDob').value = p.dobIso || '';
+      document.getElementById('pfAddress').value = p.address || '';
+      if (p.photoUrl) {
+        document.getElementById('profilePhotoPreview').src = p.photoUrl;
+        document.getElementById('profilePhotoPreview').style.display = 'block';
+        document.getElementById('profileAvatarPlaceholder').style.display = 'none';
+      }
+    } catch(err) {
+      console.error(err);
+    }
+  }
+
+  function closeProfileModal() { document.getElementById('profileModalBackdrop').classList.remove('show'); }
+
+  function onProfilePhotoPicked(ev) {
+    var file = ev.target.files[0];
+    if (!file) return;
+    var reader = new FileReader();
+    reader.onload = function(e) {
+      profilePickedPhotoBase64 = e.target.result;
+      document.getElementById('profilePhotoPreview').src = profilePickedPhotoBase64;
+      document.getElementById('profilePhotoPreview').style.display = 'block';
+      document.getElementById('profileAvatarPlaceholder').style.display = 'none';
+    };
+    reader.readAsDataURL(file);
+  }
+
+  async function saveMyProfile(ev) {
+    ev.preventDefault();
+    var btn = document.getElementById('profileSaveBtn');
+    btn.innerText = '⏳ កំពុងរក្សា...';
+    btn.disabled = true;
+
+    var data = {
+      name: document.getElementById('pfName').value.trim(),
+      sex: document.getElementById('pfSex').value,
+      phone: document.getElementById('pfPhone').value.trim(),
+      dob: document.getElementById('pfDob').value,
+      address: document.getElementById('pfAddress').value.trim(),
+      password: document.getElementById('pfPassword').value
+    };
+    if (profilePickedPhotoBase64) data.photoFile = { base64: profilePickedPhotoBase64 };
+
+    try {
+      var res = await callBackendApi('updateMyProfile', { token: SESSION_TOKEN, profileData: data });
+      btn.innerText = '💾 រក្សាទុក';
+      btn.disabled = false;
+      closeProfileModal();
+      showToast('✅ រក្សាទុកព័ត៌មានជោគជ័យ');
+      if (res && res.teacher) {
+        TEACHER_NAME = res.teacher.name || TEACHER_NAME;
+        TEACHER_SEX = res.teacher.sex || TEACHER_SEX;
+        localStorage.setItem('krou_teacher_sex', TEACHER_SEX);
+        document.getElementById('userNameLabel').innerText = TEACHER_NAME;
+        renderAvatar(res.teacher.photoUrl || '');
+        initGreetings();
+      }
+    } catch(err) {
+      btn.innerText = '💾 រក្សាទុក';
+      btn.disabled = false;
+      alert('❌ កំហុស៖ ' + err.message);
+    }
+    return false;
+  }
+
+  function showToast(msg) {
+    var t = document.getElementById('profileToast');
+    t.innerText = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2600);
   }
 
   async function doLogout() {
     if (!confirm('តើអ្នកពិតជាចង់ចាកចេញពីប្រព័ន្ធមែនទេ?')) return;
-    try { await callBackendApi('logoutSession', { token: SESSION_TOKEN }); } catch(e){}
+    try { await callBackendApi('logoutSession', { token: SESSION_TOKEN }); } catch(e) {}
     removeStoredToken();
     window.location.replace('login.html');
   }
 
-  async function verifySession() {
-    if (!SESSION_TOKEN) { window.location.replace('login.html'); return; }
+  async function confirmClearAllData() {
+    if (!IS_ADMIN) return;
+    if (!confirm('⚠️ ព្រមាន៖ តើអ្នកពិតជាចង់សម្អាតទិន្នន័យទាំងអស់មែនទេ?')) return;
+    if (prompt('ដើម្បីបញ្ជាក់ សូមវាយ៖ DELETE') !== 'DELETE') return;
     try {
-      const session = await callBackendApi('getCurrentSession', { token: SESSION_TOKEN });
-      if (!session || !session.loggedIn) { removeStoredToken(); window.location.replace('login.html'); return; }
+      await callBackendApi('clearAllSystemData', { token: SESSION_TOKEN });
+      alert('✅ សម្អាតទិន្នន័យបានជោគជ័យ');
+      location.reload();
+    } catch(err) {
+      alert('កំហុស៖ ' + err.message);
+    }
+  }
 
+  function bootAuthenticatedApp() {
+    setTodayPill();
+    refreshStats();
+    initGreetings();
+    navigate(currentPage, null);
+  }
+
+  async function verifySessionBeforeBoot() {
+    if (!SESSION_TOKEN) {
+      window.location.replace('login.html');
+      return;
+    }
+    try {
+      var session = await callBackendApi('getCurrentSession', { token: SESSION_TOKEN });
+      if (!session || !session.loggedIn) {
+        removeStoredToken();
+        window.location.replace('login.html');
+        return;
+      }
       TEACHER_NAME = session.name || '';
       USER_ROLE = session.role || 'teacher';
-      USER_CLASS = session.assignedClass || '';
-
+      IS_ADMIN = String(USER_ROLE).trim().toLowerCase() === 'admin';
+      if (session.sex) TEACHER_SEX = session.sex;
+      
       document.getElementById('userNameLabel').innerText = TEACHER_NAME;
-      document.getElementById('heroGreeting').innerText = `សូមស្វាគមន៍ ${TEACHER_NAME} 👋`;
-
-      const savedPage = localStorage.getItem('krou_active_page') || 'dashboard';
-      navigate(savedPage);
-    } catch(e) {
+      renderAvatar(session.photoUrl || '');
+      initAdminTools();
+      bootAuthenticatedApp();
+    } catch(err) {
       window.location.replace('login.html');
     }
   }
 
-  window.onload = verifySession;
+  window.onload = function() {
+    verifySessionBeforeBoot();
+  };
 </script>
 </body>
 </html>
