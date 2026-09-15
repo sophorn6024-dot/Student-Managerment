@@ -24,28 +24,18 @@ function openWebApp() {
 // ==========================================================================
 
 var MONTHLY_KEYS = [
-  // ភាសាខ្មែរ (4)
   'kh_listen','kh_write','kh_read','kh_speak',
-  // គណិតវិទ្យា (5)
   'm_num','m_measure','m_geo','m_algebra','m_stat',
-  // វិទ្យាសាស្ត្រ + សិក្សាសង្គម (2)
   'science','social',
-  // អប់រំ/សិល្បៈ (4)
   'a_craft','a_pe','a_health','a_env',
-  // ភាសាបរទេស (1)
   'foreign'
 ];
 
 var SEMESTER_KEYS = [
-  // ភាសាខ្មែរ (4)
   'read','listen','dictation','essay',
-  // គណិតវិទ្យា (1)
   'math',
-  // វិទ្យាសាស្ត្រ + សិក្សាសង្គម (2)
   'science','social',
-  // អប់រំ/សិល្បៈ (3)
   'homeArts','pe','ethics',
-  // ភាសាបរទេស (1)
   'foreign'
 ];
 
@@ -53,6 +43,21 @@ var DROPOUT_STATUS_COL = 16;
 var SEMESTER1_MONTHS   = ['វិច្ឆិកា','ធ្នូ','មករា','កុម្ភៈ','មីនា','មេសា'];
 var SEMESTER2_MONTHS   = ['ឧសភា','មិថុនា','កក្កដា','សីហា','កញ្ញា','តុលា'];
 var KHMER_MONTH_NAMES  = ['មករា','កុម្ភៈ','មីនា','មេសា','ឧសភា','មិថុនា','កក្កដា','សីហា','កញ្ញា','តុលា','វិច្ឆិកា','ធ្នូ'];
+
+// ==========================================================================
+// 🔍 SMART CLASS MATCHER
+// ==========================================================================
+function getCleanClassName_(cls) {
+  return (cls || '').toString().trim().replace(/^ថ្នាក់ទី\s*/, '').replace(/^ថ្នាក់\s*/, '');
+}
+
+function matchClass_(rawGrade, selectedClass) {
+  if (!selectedClass) return true;
+  var target = selectedClass.toString().toLowerCase().replace(/\s+/g,'').replace(/^(ថ្នាក់ទី|ថ្នាក់)/,'');
+  if (target === '' || target === 'all' || target === 'ទាំងអស់') return true;
+  var sg = (rawGrade || '').toString().toLowerCase().replace(/\s+/g,'').replace(/^(ថ្នាក់ទី|ថ្នាក់)/,'');
+  return sg === target;
+}
 
 // ==========================================================================
 // 🚪 Dropout helpers
@@ -119,19 +124,22 @@ function getStudentsByClass(selectedClass) {
     var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('ព័ត៌មានសិស្ស');
     if (!sheet || sheet.getLastRow() < 8) return [];
     var data = sheet.getRange(8, 1, sheet.getLastRow() - 7, 8).getValues();
-    var list = [], target = selectedClass ? selectedClass.toString().toLowerCase().replace(/\s+/g,'') : '';
+    var list = [];
     for (var i = 0; i < data.length; i++) {
       var rawGrade = data[i][6] ? data[i][6].toString() : '';
-      var sg = rawGrade.toLowerCase().replace(/\s+/g,'');
-      if (!selectedClass || target==='' || target==='all' || target==='ទាំងអស់' || sg===target) {
+      if (matchClass_(rawGrade, selectedClass)) {
         if (data[i][2] && data[i][2].toString().trim() !== '') {
-          list.push({ id:data[i][1]?data[i][1].toString().trim():'', name:data[i][2].toString().trim(),
-            sex:data[i][3]?data[i][3].toString().trim():'', grade:rawGrade.trim() });
+          list.push({
+            id: data[i][1] ? data[i][1].toString().trim() : '',
+            name: data[i][2].toString().trim(),
+            sex: data[i][3] ? data[i][3].toString().trim() : '',
+            grade: rawGrade.trim()
+          });
         }
       }
     }
     return list;
-  } catch(err) { throw new Error('កំហុសក្នុងការទាញយកទិន្នន័យ៖ '+err.toString()); }
+  } catch(err) { throw new Error('កំហុសក្នុងការទាញយកទិន្នន័យ៖ ' + err.toString()); }
 }
 
 function getStudentsByClassWithStatus(selectedClass) {
@@ -139,20 +147,23 @@ function getStudentsByClassWithStatus(selectedClass) {
     var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('ព័ត៌មានសិស្ស');
     if (!sheet || sheet.getLastRow() < 8) return [];
     var data = sheet.getRange(8, 1, sheet.getLastRow() - 7, DROPOUT_STATUS_COL).getValues();
-    var list = [], target = selectedClass ? selectedClass.toString().toLowerCase().replace(/\s+/g,'') : '';
+    var list = [];
     for (var i = 0; i < data.length; i++) {
       var rawGrade = data[i][6] ? data[i][6].toString() : '';
-      var sg = rawGrade.toLowerCase().replace(/\s+/g,'');
-      if (!selectedClass || target==='' || target==='all' || target==='ទាំងអស់' || sg===target) {
+      if (matchClass_(rawGrade, selectedClass)) {
         if (data[i][2] && data[i][2].toString().trim() !== '') {
-          list.push({ id:data[i][1]?data[i][1].toString().trim():'', name:data[i][2].toString().trim(),
-            sex:data[i][3]?data[i][3].toString().trim():'', grade:rawGrade.trim(),
-            dropoutSemester:data[i][15]?data[i][15].toString().trim():'' });
+          list.push({
+            id: data[i][1] ? data[i][1].toString().trim() : '',
+            name: data[i][2].toString().trim(),
+            sex: data[i][3] ? data[i][3].toString().trim() : '',
+            grade: rawGrade.trim(),
+            dropoutSemester: data[i][15] ? data[i][15].toString().trim() : ''
+          });
         }
       }
     }
     return list;
-  } catch(err) { throw new Error('កំហុសក្នុងការទាញយកទិន្នន័យ៖ '+err.toString()); }
+  } catch(err) { throw new Error('កំហុសក្នុងការទាញយកទិន្នន័យ៖ ' + err.toString()); }
 }
 
 function getStudentsByClassForMonth(selectedClass, month) {
@@ -169,17 +180,50 @@ function getStudentsForScoreEntry(selectedClass, period) {
       }
       return isStudentActiveForMonth(s.dropoutSemester, period);
     });
-  } catch(err) { throw new Error('កំហុស getStudentsForScoreEntry: '+err.toString()); }
+  } catch(err) { throw new Error('កំហុស getStudentsForScoreEntry: ' + err.toString()); }
+}
+
+function getStudentRosterByClass(selectedClass) {
+  try {
+    var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('ព័ត៌មានសិស្ស');
+    if (!sheet || sheet.getLastRow() < 8) return [];
+    var data = sheet.getRange(8, 1, sheet.getLastRow() - 7, DROPOUT_STATUS_COL).getValues();
+    var list = [];
+    for (var i = 0; i < data.length; i++) {
+      var rg = data[i][6] ? data[i][6].toString() : '';
+      if (matchClass_(rg, selectedClass)) {
+        if (data[i][2] && data[i][2].toString().trim() !== '') {
+          list.push({
+            id: data[i][1] ? data[i][1].toString().trim() : '',
+            name: data[i][2].toString().trim(),
+            sex: data[i][3] ? data[i][3].toString().trim() : '',
+            dob: formatDobKhmer(data[i][4]),
+            grade: rg.trim(),
+            phone: data[i][7] ? data[i][7].toString().trim() : '',
+            pob: data[i][8] ? data[i][8].toString().trim() : '',
+            father: data[i][9] ? data[i][9].toString().trim() : '',
+            fatherJob: data[i][10] ? data[i][10].toString().trim() : '',
+            mother: data[i][11] ? data[i][11].toString().trim() : '',
+            motherJob: data[i][12] ? data[i][12].toString().trim() : '',
+            guardian: data[i][9] ? data[i][9].toString().trim() : (data[i][11] ? data[i][11].toString().trim() : ''),
+            guardianJob: data[i][10] ? data[i][10].toString().trim() : (data[i][12] ? data[i][12].toString().trim() : ''),
+            address: data[i][13] ? data[i][13].toString().trim() : '',
+            dropoutSemester: data[i][15] ? data[i][15].toString().trim() : ''
+          });
+        }
+      }
+    }
+    return list;
+  } catch(err) { throw new Error('កំហុស getStudentRosterByClass: ' + err.toString()); }
 }
 
 // ==========================================================================
-// 💾 Save / Read scores (រក្សាទុកជួរឈរតាម Form ពិតប្រាកដ)
+// 💾 Save / Read scores
 // ==========================================================================
-// ── SAVE SCORES (រក្សាទុកតែតារាងពិន្ទុស្អាត គ្មានជួរឈរមេគុណលើស) ──
 function saveMonthlyScores(payload) {
   try {
     var ss   = SpreadsheetApp.getActiveSpreadsheet();
-    var cls  = payload.className || 'ទូទៅ';
+    var cls  = getCleanClassName_(payload.className || 'ទូទៅ');
     var period = payload.month || payload.period || 'មិនបានកំណត់';
     var scoreType = (period === 'ឆមាសទី១' || period === 'ឆមាសទី២' || payload.scoreType === 'semester') ? 'semester' : 'monthly';
     var sheetName = 'ពិន្ទុ_ថ្នាក់ទី' + cls + '_' + period;
@@ -189,9 +233,8 @@ function saveMonthlyScores(payload) {
 
     var activeKeys = (scoreType === 'semester') ? SEMESTER_KEYS : MONTHLY_KEYS;
     var subjectLabels = payload.subjectLabels || activeKeys;
-    var totalTableWidth = 4 + activeKeys.length + 3; // 4 ព័ត៌មាន + N មុខវិជ្ជា + 3 លទ្ធផល
+    var totalTableWidth = 4 + activeKeys.length + 3;
 
-    // Header block (rows 1-6)
     var hb = sheet.getRange(1, 1, 6, totalTableWidth);
     hb.breakApart(); hb.clearContent();
 
@@ -208,7 +251,6 @@ function saveMonthlyScores(payload) {
       .setValue('តារាងស្រង់ពិន្ទុ' + titleType + ' ' + period + ' (ថ្នាក់ទី ' + cls + ')')
       .setFontWeight('bold').setFontSize(14).setHorizontalAlignment('center');
 
-    // Row 7: ចំណងជើងជួរឈរ (Headers)
     var headers = ['ល.រ','អត្តលេខ','ឈ្មោះសិស្ស','ភេទ']
       .concat(subjectLabels, ['ពិន្ទុសរុប','មធ្យមភាគ','ចំណាត់ថ្នាក់']);
 
@@ -218,12 +260,13 @@ function saveMonthlyScores(payload) {
       .setBorder(true,true,true,true,true,true);
     sheet.setRowHeight(7, 100);
 
-    // រក្សាទុកមេគុណក្នុងប្រព័ន្ធសម្ងាត់ Background (មិនឱ្យលេចចេញលើ Sheet ឡើយ)
     if (payload.coefficients) {
-      PropertiesService.getDocumentProperties().setProperty('COEF_' + sheetName, JSON.stringify(payload.coefficients));
+      PropertiesService.getDocumentProperties()
+        .setProperty('COEF_' + sheetName, JSON.stringify(payload.coefficients));
+      PropertiesService.getDocumentProperties()
+        .setProperty('KEYS_' + sheetName, JSON.stringify(activeKeys));
     }
 
-    // Data rows
     var incomingCoef = payload.coefficients || {};
     var rows = payload.scores.map(function(s) {
       var values = activeKeys.map(function(k) {
@@ -248,7 +291,6 @@ function saveMonthlyScores(payload) {
                total: parseFloat(wTotal.toFixed(2)), avg: parseFloat(avg.toFixed(2)) };
     });
 
-    // ចំណាត់ថ្នាក់
     var sorted = rows.slice().sort(function(a,b){ return b.avg - a.avg; });
     var rankMap = {};
     sorted.forEach(function(r,i) {
@@ -271,69 +313,34 @@ function saveMonthlyScores(payload) {
   } catch(err) { throw new Error('ការរក្សាទុកបរាជ័យ៖ ' + err.message); }
 }
 
-// ── GET SCORES (ទាញយកពិន្ទុមកវិញដោយស្អាត) ──
 function getSavedScores(className, period) {
   try {
     var ss = SpreadsheetApp.getActiveSpreadsheet();
-    var sheetName = 'ពិន្ទុ_ថ្នាក់ទី' + className + '_' + period;
+    var cleanCls = getCleanClassName_(className);
+    var sheetName = 'ពិន្ទុ_ថ្នាក់ទី' + cleanCls + '_' + period;
     var sheet = ss.getSheetByName(sheetName);
-    var isSem = (period === 'ឆមាសទី១' || period === 'ឆមាសទី២');
-    var keys = isSem ? SEMESTER_KEYS : MONTHLY_KEYS;
-    var result = { labels:[], scores:{}, coefficients:{}, scoreType: isSem ? 'semester' : 'monthly' };
-    if (!sheet || sheet.getLastRow() < 8) return result;
-
-    var width = 4 + keys.length + 3;
-
-    // ទាញយកមេគុណដែលបានលាក់ទុកក្នុង Background
-    var rawCoef = PropertiesService.getDocumentProperties().getProperty('COEF_' + sheetName);
-    if (rawCoef) {
-      try { result.coefficients = JSON.parse(rawCoef); } catch(e){}
-    }
-
-    var data = sheet.getRange(8, 1, sheet.getLastRow() - 7, width).getValues();
-    data.forEach(function(row) {
-      var sid = row[1] ? row[1].toString().trim() : '';
-      if (!sid) return;
-      var entry = {};
-      keys.forEach(function(k, idx) {
-        var v = row[4 + idx];
-        entry[k] = (v === '' || v === null || v === undefined) ? '' : v;
-      });
-      entry.total = row[width - 3];
-      entry.avg   = row[width - 2];
-      result.scores[sid] = entry;
-    });
-    return result;
-  } catch(err) {
-    Logger.log('getSavedScores error: ' + err);
-    return { labels:[], scores:{}, coefficients:{}, scoreType:'monthly' };
-  }
-}
-
-function getSavedScores(className, period) {
-  try {
-    var ss = SpreadsheetApp.getActiveSpreadsheet();
-    var sheet = ss.getSheetByName('ពិន្ទុ_ថ្នាក់ទី' + className + '_' + period);
     var isSem = (period === 'ឆមាសទី១' || period === 'ឆមាសទី២');
     var defaultKeys = isSem ? SEMESTER_KEYS : MONTHLY_KEYS;
     var result = { labels:[], scores:{}, coefficients:{}, scoreType: isSem ? 'semester' : 'monthly' };
     if (!sheet || sheet.getLastRow() < 8) return result;
 
-    var numSubj = defaultKeys.length;
-    var width = 4 + numSubj + 3;
-    var coefColStart = width + 2;
+    var props = PropertiesService.getDocumentProperties();
+    var storedKeysRaw = props.getProperty('KEYS_' + sheetName);
+    var keys = storedKeysRaw ? JSON.parse(storedKeysRaw) : defaultKeys;
 
-    // អាន Keys និង មេគុណដែលបានរក្សាទុក
-    var keys = defaultKeys;
-    if (sheet.getLastColumn() >= coefColStart + numSubj) {
-      var storedKeys = sheet.getRange(7, coefColStart + numSubj, 1, numSubj).getValues()[0];
-      if (storedKeys && storedKeys[0]) keys = storedKeys.map(function(k){ return String(k).trim(); });
-      var coefVals = sheet.getRange(7, coefColStart, 1, numSubj).getValues()[0];
-      keys.forEach(function(k, idx) {
-        var v = Number(coefVals[idx]);
+    var storedCoefRaw = props.getProperty('COEF_' + sheetName);
+    if (storedCoefRaw) {
+      var storedCoef = JSON.parse(storedCoefRaw);
+      keys.forEach(function(k) {
+        var v = Number(storedCoef[k]);
         result.coefficients[k] = isNaN(v) ? 1 : v;
       });
+    } else {
+      keys.forEach(function(k) { result.coefficients[k] = 1; });
     }
+
+    var numSubj = keys.length;
+    var width = 4 + numSubj + 3;
 
     var data = sheet.getRange(8, 1, sheet.getLastRow() - 7, width).getValues();
     data.forEach(function(row) {
@@ -368,7 +375,7 @@ function calculateRankAndGrade(list) {
     else if (avgNum >= 7.00){s.grade='ល្អ';      s.gradeCode='C';s.color='#ffeb3b';}
     else if (avgNum >= 6.00){s.grade='បង្គួរ';   s.gradeCode='D';s.color='#673ab7';}
     else if (avgNum >= 5.00){s.grade='មធ្យម';    s.gradeCode='E';s.color='#00bcd4';}
-    else                  {s.grade='ខ្សោយ';    s.gradeCode='F';s.color='#f44336';}
+    else                    {s.grade='ខ្សោយ';    s.gradeCode='F';s.color='#f44336';}
     s.result      = avgNum >= 5 ? 'ជាប់' : 'ធ្លាក់';
     s.resultColor = avgNum >= 5 ? '#000000' : '#dc2626';
   });
@@ -382,7 +389,8 @@ function getRankData(className, month) {
     if (month === 'ប្រចាំឆ្នាំ')    return getYearlyRankData(className);
 
     var ss    = SpreadsheetApp.getActiveSpreadsheet();
-    var sheet = ss.getSheetByName('ពិន្ទុ_ថ្នាក់ទី' + className + '_' + month);
+    var cleanCls = getCleanClassName_(className);
+    var sheet = ss.getSheetByName('ពិន្ទុ_ថ្នាក់ទី' + cleanCls + '_' + month);
     if (!sheet || sheet.getLastRow() < 8) return [];
 
     var isSem = (month === 'ឆមាសទី១' || month === 'ឆមាសទី២');
@@ -410,7 +418,8 @@ function getRankData(className, month) {
 
 function getExamOnlyRankList(className, semesterKey) {
   try {
-    var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('ពិន្ទុ_ថ្នាក់ទី' + className + '_' + semesterKey);
+    var cleanCls = getCleanClassName_(className);
+    var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('ពិន្ទុ_ថ្នាក់ទី' + cleanCls + '_' + semesterKey);
     if (!sheet || sheet.getLastRow() < 8) return [];
     var width = 4 + SEMESTER_KEYS.length + 3;
     var data = sheet.getRange(8, 1, sheet.getLastRow() - 7, width).getValues();
@@ -451,8 +460,9 @@ function getExamBasedRankData(className, period) {
 
 function getWeightedSemesterRankData(className, monthList, examSuffix) {
   var ss = SpreadsheetApp.getActiveSpreadsheet(), studentMap = {}, dropoutMap = getDropoutMap();
+  var cleanCls = getCleanClassName_(className);
   monthList.forEach(function(m){
-    var sheet = ss.getSheetByName('ពិន្ទុ_ថ្នាក់ទី' + className + '_' + m);
+    var sheet = ss.getSheetByName('ពិន្ទុ_ថ្នាក់ទី' + cleanCls + '_' + m);
     if (sheet && sheet.getLastRow() >= 8) {
       var w = 4 + MONTHLY_KEYS.length + 3;
       sheet.getRange(8, 1, sheet.getLastRow() - 7, w).getValues().forEach(function(row){
@@ -465,7 +475,7 @@ function getWeightedSemesterRankData(className, monthList, examSuffix) {
       });
     }
   });
-  var examSheet = ss.getSheetByName('ពិន្ទុ_ថ្នាក់ទី' + className + '_' + examSuffix);
+  var examSheet = ss.getSheetByName('ពិន្ទុ_ថ្នាក់ទី' + cleanCls + '_' + examSuffix);
   if (examSheet && examSheet.getLastRow() >= 8) {
     var ew = 4 + SEMESTER_KEYS.length + 3;
     examSheet.getRange(8, 1, examSheet.getLastRow() - 7, ew).getValues().forEach(function(row){
@@ -508,76 +518,50 @@ function getYearlyRankData(selectedClass) {
 }
 
 // ==========================================================================
-// 📋 Roster & Dashboard
+// 🏆 Top students / Certificate & Honor Roll
 // ==========================================================================
-function getStudentRosterByClass(selectedClass) {
-  try {
-    var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('ព័ត៌មានសិស្ស');
-    if (!sheet || sheet.getLastRow() < 8) return [];
-    var data = sheet.getRange(8, 1, sheet.getLastRow() - 7, DROPOUT_STATUS_COL).getValues();
-    var list = [], target = selectedClass ? selectedClass.toString().toLowerCase().replace(/\s+/g,'') : '';
-    for (var i = 0; i < data.length; i++) {
-      var rg = data[i][6] ? data[i][6].toString() : '', sg = rg.toLowerCase().replace(/\s+/g,'');
-      if (!selectedClass || target === '' || target === 'all' || target === 'ទាំងអស់' || sg === target) {
-        if (data[i][2] && data[i][2].toString().trim() !== '') {
-          list.push({ id: data[i][1] ? data[i][1].toString().trim() : '', name: data[i][2].toString().trim(),
-            sex: data[i][3] ? data[i][3].toString().trim() : '', dob: formatDobKhmer(data[i][4]), grade: rg.trim(),
-            dropoutSemester: data[i][15] ? data[i][15].toString().trim() : '' });
-        }
-      }
-    }
-    return list;
-  } catch(err) { throw new Error('កំហុស getStudentRosterByClass: ' + err.toString()); }
-}
-
-function getDashboardStats() {
-  try {
-    var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('ព័ត៌មានសិស្ស');
-    var stats = { totalStudents:0, maleCount:0, femaleCount:0, totalClasses:0, classBreakdown:[], dropoutCount:0, activeCount:0 };
-    if (!sheet || sheet.getLastRow() < 8) return stats;
-    var data = sheet.getRange(8, 1, sheet.getLastRow() - 7, DROPOUT_STATUS_COL).getValues();
-    var classMap = {};
-    data.forEach(function(row) {
-      var name = row[2] ? row[2].toString().trim() : ''; if (!name) return;
-      var sex = row[3] ? row[3].toString().trim() : '', grade = row[6] ? row[6].toString().trim() : 'គ្មានថ្នាក់', dropout = row[15] ? row[15].toString().trim() : '';
-      stats.totalStudents++;
-      if (sex.indexOf('ស្រី') !== -1) stats.femaleCount++; else stats.maleCount++;
-      if (dropout) stats.dropoutCount++; else stats.activeCount++;
-      if (!classMap[grade]) classMap[grade] = { className:grade, count:0, male:0, female:0 };
-      classMap[grade].count++;
-      if (sex.indexOf('ស្រី') !== -1) classMap[grade].female++; else classMap[grade].male++;
-    });
-    stats.classBreakdown = Object.keys(classMap).map(function(k){ return classMap[k]; }).sort(function(a,b){ return a.className.localeCompare(b.className,'en',{numeric:true}); });
-    stats.totalClasses = stats.classBreakdown.length;
-    return stats;
-  } catch(err) { throw new Error('ស្ថិតិ: ' + err.toString()); }
-}
-
-// ==========================================================================
-// 🏆 Top students / Certificate
-// ==========================================================================
+// 🌟 កែសម្រួល៖ យកសិស្សទាំងអស់ដែលមានចំណាត់ថ្នាក់ពីលេខ ១ ដល់ ៥ (រាប់ទាំងលេខស្ទួន)
 function getTopStudentsData(className, period, limit) {
   try {
     if (!className) return { success:false, message:'សូមជ្រើសរើសថ្នាក់!' };
-    var lim = parseInt(limit) || 3;
-    var rankList = getExamBasedRankData(className, period);
+    
+    // បង្ខំឱ្យយកទិន្នន័យ «ប្រចាំឆ្នាំ» ជាគោល
+    var targetPeriod = period || 'ប្រចាំឆ្នាំ';
+    var rankList = getExamBasedRankData(className, targetPeriod);
     if (!rankList || !rankList.length) return { success:false, message:'រកមិនឃើញទិន្នន័យ' };
-    var top = rankList.slice(0, lim);
+    
+    // 🌟 យកសិស្សទាំងអស់ដែលមានចំណាត់ថ្នាក់ពីលេខ ១ ដល់ ៥ (រាប់ទាំងលេខជាន់គ្នា)
+    var top = rankList.filter(function(student) {
+      return Number(student.rank) <= 5;
+    });
+
     var ss = SpreadsheetApp.getActiveSpreadsheet(), sts = ss.getSheetByName('ព័ត៌មានសិស្ស');
     var sd = sts && sts.getLastRow() >= 8 ? sts.getRange(8, 1, sts.getLastRow() - 7, 15).getValues() : [];
+    
     top.forEach(function(student) {
-      student.studentName = student.name; student.gender = student.sex; student.class = className; student.imageUrl = ''; student.dob = '';
+      student.studentName = student.name; 
+      student.gender = student.sex; 
+      student.class = className; 
+      student.imageUrl = ''; 
+      student.dob = '';
       for (var i = 0; i < sd.length; i++) {
         if ((sd[i][1] || '').toString().trim() === student.id.toString().trim()) {
           var cell = sts.getRange(i + 8, 15), rf = cell.getFormula(), pv = cell.getValue();
-          if (rf && rf.indexOf('IMAGE("') !== -1) { var m = rf.match(/IMAGE\("([^"]+)"\)/i); if (m) student.imageUrl = m[1]; }
-          else if (pv && typeof pv === 'string' && pv.substring(0, 4) === 'http') student.imageUrl = pv;
-          student.dob = formatDobKhmer(sd[i][4]); break;
+          if (rf && rf.indexOf('IMAGE("') !== -1) { 
+            var m = rf.match(/IMAGE\("([^"]+)"\)/i); 
+            if (m) student.imageUrl = m[1]; 
+          } else if (pv && typeof pv === 'string' && pv.substring(0, 4) === 'http') {
+            student.imageUrl = pv;
+          }
+          student.dob = formatDobKhmer(sd[i][4]); 
+          break;
         }
       }
     });
     return { success:true, scores:top, classes:getClassList() };
-  } catch(err) { return { success:false, message:err.toString() }; }
+  } catch(err) { 
+    return { success:false, message:err.toString() }; 
+  }
 }
 
 function getTopStudentsForHonorRoll(className, month) {
@@ -601,72 +585,130 @@ function getTopStudentsForHonorRoll(className, month) {
 }
 
 // ==========================================================================
-// 📅 Attendance
+// 📅 ATTENDANCE SYSTEM
 // ==========================================================================
-var ATT_DAY_COL_START = 5, ATT_SHEET_WIDTH = 38;
+var ATT_DAY_COL_START = 5;
+var ATT_SHEET_WIDTH = 38;
 
-function getAttendanceSheetName(cls, month) { return 'វត្តមាន_ថ្នាក់ទី' + cls + '_' + month; }
+function getAttendanceSheetName(cls, month) {
+  var cleanCls = getCleanClassName_(cls);
+  return 'វត្តមាន_ថ្នាក់ទី' + cleanCls + '_' + (month || '').toString().trim();
+}
 
 function getMonthlyAttendanceForClass(className, month) {
   try {
-    var students = getStudentsByClassForMonth(className, month);
-    var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(getAttendanceSheetName(className, month));
+    var cleanCls = getCleanClassName_(className);
+    var students = getStudentsByClassForMonth(cleanCls, month);
+    var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(getAttendanceSheetName(cleanCls, month));
     var savedMap = {};
+    
     if (sheet && sheet.getLastRow() >= 8) {
-      sheet.getRange(8, 1, sheet.getLastRow() - 7, ATT_SHEET_WIDTH).getValues().forEach(function(row) {
-        var id = row[1] ? row[1].toString().trim() : ''; if (!id) return;
+      var numRows = sheet.getLastRow() - 7;
+      var data = sheet.getRange(8, 1, numRows, ATT_SHEET_WIDTH).getValues();
+      
+      data.forEach(function(row) {
+        var id = row[1] ? row[1].toString().trim() : '';
+        if (!id) return;
+        
         var days = {};
         for (var d = 1; d <= 31; d++) {
-          var val = row[3 + d];
-          if (val === 'វត្តមាន') days[d] = 'P'; else if (val === 'ច្បាប់') days[d] = 'C'; else if (val === 'អវត្តមាន') days[d] = 'A'; else if (val === 'សម្រាក') days[d] = '-';
+          var val = row[4 + d - 1];
+          if (val === 'វត្តមាន') days[d] = 'P';
+          else if (val === 'ច្បាប់') days[d] = 'C';
+          else if (val === 'អវត្តមាន') days[d] = 'A';
+          else if (val === 'យឺត') days[d] = 'L';
+          else if (val === 'សម្រាក') days[d] = '-';
+          else days[d] = '-';
         }
         savedMap[id] = days;
       });
     }
-    return students.map(function(s){ return { id:s.id, name:s.name, sex:s.sex, grade:s.grade, dropoutSemester:s.dropoutSemester || '', days:savedMap[s.id] || {} }; });
-  } catch(err) { throw new Error('វត្តមាន: ' + err.toString()); }
+    
+    return students.map(function(s) {
+      return {
+        id: s.id,
+        name: s.name,
+        sex: s.sex,
+        grade: s.grade,
+        dropoutSemester: s.dropoutSemester || '',
+        days: savedMap[s.id] || {}
+      };
+    });
+  } catch(err) {
+    throw new Error('កំហុសទាញវត្តមាន៖ ' + err.toString());
+  }
 }
 
 function saveMonthlyAttendanceForClass(payload) {
   try {
-    var cls = payload.className, month = payload.month, records = payload.records || [];
-    if (!cls) throw new Error('សូមជ្រើសរើសថ្នាក់!');
+    var rawCls = payload.className;
+    var month = payload.month;
+    var records = payload.records || [];
+    
+    if (!rawCls) throw new Error('សូមជ្រើសរើសថ្នាក់!');
     if (!month) throw new Error('សូមជ្រើសខែ!');
-    var ss = SpreadsheetApp.getActiveSpreadsheet(), sheetName = getAttendanceSheetName(cls, month);
+    
+    var cls = getCleanClassName_(rawCls);
+    var ss = SpreadsheetApp.getActiveSpreadsheet();
+    var sheetName = getAttendanceSheetName(cls, month);
     var sheet = ss.getSheetByName(sheetName);
+    
     if (!sheet) {
       sheet = ss.insertSheet(sheetName);
-      var hb = sheet.getRange(1, 1, 6, ATT_SHEET_WIDTH); hb.breakApart(); hb.clearContent();
-      sheet.getRange(1,1,1,ATT_SHEET_WIDTH).merge().setValue('ព្រះរាជាណាចក្រកម្ពុជា').setFontWeight('bold').setFontSize(13).setHorizontalAlignment('center');
-      sheet.getRange(2,1,1,ATT_SHEET_WIDTH).merge().setValue('ជាតិ សាសនា ព្រះមហាក្សត្រ').setFontWeight('bold').setFontSize(13).setHorizontalAlignment('center');
+      var hb = sheet.getRange(1, 1, 6, ATT_SHEET_WIDTH);
+      hb.breakApart();
+      hb.clearContent();
+      
+      sheet.getRange(1, 1, 1, ATT_SHEET_WIDTH).merge().setValue('ព្រះរាជាណាចក្រកម្ពុជា').setFontWeight('bold').setFontSize(13).setHorizontalAlignment('center');
+      sheet.getRange(2, 1, 1, ATT_SHEET_WIDTH).merge().setValue('ជាតិ សាសនា ព្រះមហាក្សត្រ').setFontWeight('bold').setFontSize(13).setHorizontalAlignment('center');
       sheet.getRange('A3').setValue('មន្ទីរអប់រំ យុវជន និងកីឡា រាជធានី/ខេត្ត បាត់ដំបង').setFontWeight('bold');
       sheet.getRange('A4').setValue('ការិយាល័យអប់រំ យុវជន និងកីឡានៃរដ្ឋបាលក្រុង/ស្រុក/ខណ្ឌ សំឡូត').setFontWeight('bold');
       sheet.getRange('A5').setValue('សាលាបឋមសិក្សា ៖ កំពង់ល្ពៅ').setFontWeight('bold');
-      sheet.getRange(6,1,1,ATT_SHEET_WIDTH).merge().setValue('តារាងវត្តមានប្រចាំខែ' + month + ' (ថ្នាក់ទី ' + cls + ')').setFontWeight('bold').setFontSize(14).setHorizontalAlignment('center');
-      var headers = ['ល.រ','អត្តលេខ','ឈ្មោះសិស្ស','ភេទ'];
+      sheet.getRange(6, 1, 1, ATT_SHEET_WIDTH).merge().setValue('តារាងវត្តមានប្រចាំខែ' + month + ' (ថ្នាក់ទី ' + cls + ')').setFontWeight('bold').setFontSize(14).setHorizontalAlignment('center');
+      
+      var headers = ['ល.រ', 'អត្តលេខ', 'ឈ្មោះសិស្ស', 'ភេទ'];
       for (var d = 1; d <= 31; d++) headers.push('ថ្ងៃទី ' + d);
-      headers = headers.concat(['វត្តមានសរុប (P)','ច្បាប់សរុប (C)','អវត្តមានសរុប (A)']);
-      sheet.getRange(7, 1, 1, headers.length).setValues([headers]).setFontWeight('bold').setBackground('#1F4E78').setFontColor('white').setHorizontalAlignment('center').setVerticalAlignment('middle');
+      headers.push('វត្តមានសរុប (P)', 'ច្បាប់សរុប (C)', 'អវត្តមានសរុប (A)');
+      
+      sheet.getRange(7, 1, 1, headers.length).setValues([headers])
+        .setFontWeight('bold')
+        .setBackground('#1F4E78')
+        .setFontColor('white')
+        .setHorizontalAlignment('center')
+        .setVerticalAlignment('middle');
       sheet.setFrozenRows(7);
     }
+    
     var existingMap = {};
     if (sheet.getLastRow() >= 8) {
-      sheet.getRange(8, 2, sheet.getLastRow() - 7, 1).getValues().forEach(function(r, i) {
-        var id = r[0] ? r[0].toString().trim() : ''; if (id) existingMap[id] = i + 8;
-      });
-    }
-    var sw = { 'P':'វត្តមាន', 'C':'ច្បាប់', 'A':'អវត្តមាន', '-':'សម្រាក' };
-    records.forEach(function(rec) {
-      var dv = [], pc = 0, cc = 0, ac = 0;
-      for (var d = 1; d <= 31; d++) {
-        var code = (rec.days && rec.days[d]) ? rec.days[d] : '-', word = sw[code] || 'សម្រាក';
-        dv.push(word);
-        if (word === 'វត្តមាន') pc++; else if (word === 'ច្បាប់') cc++; else if (word === 'អវត្តមាន') ac++;
+      var existingIds = sheet.getRange(8, 2, sheet.getLastRow() - 7, 1).getValues();
+      for (var i = 0; i < existingIds.length; i++) {
+        var sid = existingIds[i][0] ? existingIds[i][0].toString().trim() : '';
+        if (sid) existingMap[sid] = i + 8;
       }
+    }
+    
+    var sw = { 'P':'វត្តមាន', 'C':'ច្បាប់', 'A':'អវត្តមាន', 'L':'យឺត', '-':'សម្រាក' };
+    
+    records.forEach(function(rec) {
+      var dv = [];
+      var pc = 0, cc = 0, ac = 0;
+      
+      for (var d = 1; d <= 31; d++) {
+        var code = (rec.days && rec.days[d]) ? rec.days[d] : '-';
+        var word = sw[code] || 'សម្រាក';
+        dv.push(word);
+        
+        if (word === 'វត្តមាន' || word === 'យឺត') pc++;
+        else if (word === 'ច្បាប់') cc++;
+        else if (word === 'អវត្តមាន') ac++;
+      }
+      
       var rn = existingMap[rec.id];
       if (!rn) {
         rn = Math.max(sheet.getLastRow() + 1, 8);
-        sheet.getRange(rn, 1, 1, 4 + 31 + 3).setValues([[rn - 7, rec.id, rec.name, rec.sex].concat(dv, [pc, cc, ac])]);
+        var newRow = [rn - 7, rec.id, rec.name, rec.sex].concat(dv, [pc, cc, ac]);
+        sheet.getRange(rn, 1, 1, ATT_SHEET_WIDTH).setValues([newRow]);
         existingMap[rec.id] = rn;
       } else {
         sheet.getRange(rn, 3).setValue(rec.name);
@@ -675,27 +717,45 @@ function saveMonthlyAttendanceForClass(payload) {
         sheet.getRange(rn, ATT_DAY_COL_START + 31, 1, 3).setValues([[pc, cc, ac]]);
       }
     });
+    
     var fl = sheet.getLastRow();
     if (fl >= 8) {
-      var iv = []; for (var i2 = 1; i2 <= fl - 7; i2++) iv.push([i2]);
+      var iv = [];
+      for (var i2 = 1; i2 <= fl - 7; i2++) iv.push([i2]);
       sheet.getRange(8, 1, fl - 7, 1).setValues(iv);
+      sheet.getRange(8, 1, fl - 7, ATT_SHEET_WIDTH).setBorder(true, true, true, true, true, true).setHorizontalAlignment('center');
+      sheet.getRange(8, 3, fl - 7, 1).setHorizontalAlignment('left');
     }
+    
     return 'បានរក្សាទុកវត្តមានជោគជ័យ!';
-  } catch(err) { throw new Error('ការរក្សាទុកបរាជ័យ: ' + err.toString()); }
+  } catch(err) {
+    throw new Error('ការរក្សាទុកវត្តមានបរាជ័យ៖ ' + err.toString());
+  }
 }
 
 function getMonthlyAttendanceReport(className, month, year) {
   try {
     if (!className || className === 'ALL') throw new Error('សូមជ្រើសថ្នាក់ជាក់លាក់!');
     year = parseInt(year) || new Date().getFullYear();
-    var monthIdx = KHMER_MONTH_NAMES.indexOf(month) + 1, daysCount = monthIdx > 0 ? new Date(year, monthIdx, 0).getDate() : 31;
-    var dayLabels = []; for (var d = 1; d <= daysCount; d++) { var dow = monthIdx > 0 ? new Date(year, monthIdx - 1, d).getDay() : 0; dayLabels.push({ day:d, dow:dow, isWeekend:dow === 0 }); }
+    var cleanCls = getCleanClassName_(className);
+    var monthIdx = KHMER_MONTH_NAMES.indexOf(month) + 1;
+    var daysCount = monthIdx > 0 ? new Date(year, monthIdx, 0).getDate() : 31;
+    
+    var dayLabels = [];
+    for (var d = 1; d <= daysCount; d++) {
+      var dow = monthIdx > 0 ? new Date(year, monthIdx - 1, d).getDay() : 0;
+      dayLabels.push({ day: d, dow: dow, isWeekend: dow === 0 });
+    }
+    
     var empty = { totalStudents:0, femaleCount:0, maleCount:0, totalPresent:0, totalPermission:0, totalAbsent:0, totalSlots:0, totalAbsenceAll:0, totalPresentActual:0, percentAbsent:'0.00', schoolDays:0 };
-    var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(getAttendanceSheetName(className, month));
+    var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName(getAttendanceSheetName(cleanCls, month));
     if (!sheet || sheet.getLastRow() < 8) return { students:[], daysCount:daysCount, dayLabels:dayLabels, dailyPermission:[], dailyAbsent:[], dailyFemaleAbsence:[], summary:empty };
-    var data = sheet.getRange(8, 1, sheet.getLastRow() - 7, ATT_SHEET_WIDTH).getValues(), dropoutMap = getDropoutMap();
+    
+    var data = sheet.getRange(8, 1, sheet.getLastRow() - 7, ATT_SHEET_WIDTH).getValues();
+    var dropoutMap = getDropoutMap();
     var students = [], dP = new Array(daysCount).fill(0), dA = new Array(daysCount).fill(0), dF = new Array(daysCount).fill(0);
     var tP = 0, tC = 0, tA = 0, tS = 0, fC = 0, mC = 0;
+    
     data.forEach(function(row) {
       var id = row[1] ? row[1].toString().trim() : ''; if (!id) return;
       if (!isStudentActiveForMonth(dropoutMap[id], month)) return;
@@ -704,18 +764,85 @@ function getMonthlyAttendanceReport(className, month, year) {
       var days = [];
       for (var d = 1; d <= daysCount; d++) {
         var val = row[3 + d], code = '-';
-        if (val === 'វត្តមាន') { code = 'P'; tP++; tS++; }
+        if (val === 'វត្តមាន' || val === 'យឺត') { code = 'P'; tP++; tS++; }
         else if (val === 'ច្បាប់') { code = 'C'; tC++; tS++; dP[d - 1]++; if (isF) dF[d - 1]++; }
         else if (val === 'អវត្តមាន') { code = 'A'; tA++; tS++; dA[d - 1]++; if (isF) dF[d - 1]++; }
         days.push(code);
       }
       students.push({ id:id, name:name, sex:sex, totalPresent:Number(row[35]) || 0, totalPermission:Number(row[36]) || 0, totalAbsent:Number(row[37]) || 0, days:days });
     });
+    
     students.sort(function(a,b){ return a.id.localeCompare(b.id, 'en', { numeric:true }); });
     var absAll = tC + tA, presA = tS - absAll, pct = tS > 0 ? (absAll / tS * 100) : 0;
-    return { students:students, daysCount:daysCount, dayLabels:dayLabels, dailyPermission:dP, dailyAbsent:dA, dailyFemaleAbsence:dF,
-      summary:{ totalStudents:students.length, femaleCount:fC, maleCount:mC, totalPresent:tP, totalPermission:tC, totalAbsent:tA, totalSlots:tS, totalAbsenceAll:absAll, totalPresentActual:presA, percentAbsent:pct.toFixed(2), schoolDays:students.length > 0 ? Math.round(tS / students.length) : 0 } };
-  } catch(err) { throw new Error('វត្តមានរបាយការណ៍: ' + err.toString()); }
+    
+    return {
+      students: students,
+      daysCount: daysCount,
+      dayLabels: dayLabels,
+      dailyPermission: dP,
+      dailyAbsent: dA,
+      dailyFemaleAbsence: dF,
+      summary: {
+        totalStudents: students.length,
+        femaleCount: fC,
+        maleCount: mC,
+        totalPresent: tP,
+        totalPermission: tC,
+        totalAbsent: tA,
+        totalSlots: tS,
+        totalAbsenceAll: absAll,
+        totalPresentActual: presA,
+        percentAbsent: pct.toFixed(2),
+        schoolDays: students.length > 0 ? Math.round(tS / students.length) : 0
+      }
+    };
+  } catch(err) {
+    throw new Error('កំហុសរបាយការណ៍វត្តមាន៖ ' + err.toString());
+  }
+}
+
+function getYearlyAttendanceReport(className, year) {
+  try {
+    var ss = SpreadsheetApp.getActiveSpreadsheet();
+    var cleanCls = getCleanClassName_(className);
+    var students = getStudentsByClass(cleanCls);
+    var allMonths = SEMESTER1_MONTHS.concat(SEMESTER2_MONTHS);
+    var monthDataMap = {};
+
+    allMonths.forEach(function(m) {
+      monthDataMap[m] = {};
+      var sheet = ss.getSheetByName(getAttendanceSheetName(cleanCls, m));
+      if (sheet && sheet.getLastRow() >= 8) {
+        var data = sheet.getRange(8, 1, sheet.getLastRow() - 7, ATT_SHEET_WIDTH).getValues();
+        data.forEach(function(row) {
+          var sid = row[1] ? row[1].toString().trim() : '';
+          if (sid) {
+            monthDataMap[m][sid] = {
+              c: Number(row[36]) || 0,
+              a: Number(row[37]) || 0
+            };
+          }
+        });
+      }
+    });
+
+    return {
+      success: true,
+      students: students,
+      monthData: monthDataMap,
+      sem1Months: SEMESTER1_MONTHS,
+      sem2Months: SEMESTER2_MONTHS
+    };
+  } catch(err) {
+    return { success: false, error: err.toString() };
+  }
+}
+
+function getYearlyAttendanceReportSecured(token, className, year) {
+  var s = getSessionFromToken_(token);
+  var cls = className;
+  if (s && s.role !== 'admin' && s.assignedClass) cls = s.assignedClass;
+  return getYearlyAttendanceReport(cls, year);
 }
 
 // ==========================================================================
@@ -732,7 +859,8 @@ function submitStudentData(formData) {
     }
   }
   var nextRow = Math.max(lastRow + 1, 8), autoId = nextRow > 8 ? Number(sheet.getRange(nextRow - 1, 1).getValue()) + 1 : 1;
-  var age = calculateAge(formData.dob), photoFormula = savePhoto(formData);
+  var age = calculateAge(formData.dob);
+  var photoFormula = savePhoto(formData);
   sheet.getRange(nextRow, 1, 1, 15).setValues([[autoId, formData.studentId, formData.name, formData.gender || formData.sex, formData.dob, age, formData.grade || formData.className, formData.phone, formData.pob, formData.fatherName || formData.father, formData.fatherJob, formData.motherName || formData.mother, formData.motherJob, formData.address, photoFormula]]);
   sheet.setRowHeight(nextRow, 80); sortStudentsAndReindex(sheet);
   return 'រក្សាទុក និងតម្រៀបទិន្នន័យជោគជ័យ!';
@@ -744,7 +872,7 @@ function updateStudentData(formData) {
   if (lastRow >= 8 && upId !== '') {
     var eids = sheet.getRange(8, 2, lastRow - 7, 1).getValues();
     for (var i = 0; i < eids.length; i++) {
-      if (i + 8 !== row && eids[i][0] !== '' && String(eids[i][0]).trim() === upId) throw new Error('អត្តលេខ «' + upId + '» ត្រូវបានប្រើដោយសិស្សផ្សេង!');
+      if (eids[i][0] !== '' && String(eids[i][0]).trim() === upId) throw new Error('អត្តលេខ «' + upId + '» ត្រូវបានប្រើដោយសិស្សផ្សេង!');
     }
   }
   var age = calculateAge(formData.dob);
@@ -808,9 +936,6 @@ function getStudentDetailsByRow(rowNum) {
   } catch(e) { Logger.log('getStudentDetailsByRow: ' + e); return null; }
 }
 
-// ==========================================================================
-// 📸 Photo helpers
-// ==========================================================================
 function uploadStudentPhoto(base64Data, fileName) {
   try {
     var ct = 'image/jpeg', rawBytes;
@@ -840,11 +965,6 @@ function savePhoto(formData) {
   return '';
 }
 
-function savePhotoGeneric_(photoFile, fileNamePrefix) {
-  if (photoFile && photoFile.base64) { try { var u = uploadStudentPhoto(photoFile.base64, fileNamePrefix); if (u) return '=IMAGE("' + u + '")'; } catch(e) { return ''; } }
-  return '';
-}
-
 function extractImageUrl_(cell) {
   var rf = cell.getFormula(), val = cell.getValue();
   if (rf && rf.indexOf('IMAGE("') !== -1) { var m = rf.match(/IMAGE\("([^"]+)"\)/i); if (m) return m[1]; }
@@ -862,18 +982,18 @@ function getClassLeadership(className) {
     if (!sheet || sheet.getLastRow() < 2) return null;
     var data = sheet.getRange(2, 1, sheet.getLastRow() - 1, 4).getValues();
     for (var i = 0; i < data.length; i++) {
-      if ((data[i][0] || '').toString().trim() !== className) continue;
+      if (!matchClass_(data[i][0], className)) continue;
       function ms(k){ var key = k ? k.toString().trim() : ''; if (!key) return null; var students = getStudentsByClass(className); for (var j = 0; j < students.length; j++) { if ((students[j].id || students[j].name).toString().trim() === key || students[j].name.toString().trim() === key) return students[j]; } return { id:key, name:key, sex:'' }; }
       return { president:ms(data[i][1]), deputy1:ms(data[i][2]), deputy2:ms(data[i][3]) };
     }
     return null;
-  } catch(err) { throw new Error('ចំណាត់ភ្ញៀវ: ' + err.message); }
+  } catch(err) { throw new Error('កំហុសទាញយកតួនាទីថ្នាក់៖ ' + err.message); }
 }
 
 function saveClassLeadership(payload) {
   try {
     if (!payload || !payload.className) throw new Error('សូមជ្រើសថ្នាក់!');
-    var cls = payload.className.toString().trim(), p = payload.president || null, d1 = payload.deputy1 || null, d2 = payload.deputy2 || null;
+    var cls = getCleanClassName_(payload.className.toString().trim()), p = payload.president || null, d1 = payload.deputy1 || null, d2 = payload.deputy2 || null;
     var ids = []; [p, d1, d2].forEach(function(s){ if (s) ids.push((s.id || s.name || '').toString().trim()); });
     if (ids.length !== ids.filter(function(v,i,a){ return a.indexOf(v) === i; }).length) throw new Error('សិស្សម្នាក់មិនអាចកាន់ ២ ​តួនាទី!');
     var ss = SpreadsheetApp.getActiveSpreadsheet(), sheet = ss.getSheetByName('តួនាទីប្រធានថ្នាក់');
@@ -885,7 +1005,7 @@ function saveClassLeadership(payload) {
     var last = sheet.getLastRow(), found = -1;
     if (last >= 2) {
       var vals = sheet.getRange(2, 1, last - 1, 1).getValues();
-      for (var i = 0; i < vals.length; i++) { if ((vals[i][0] || '').toString().trim() === cls) { found = i + 2; break; } }
+      for (var i = 0; i < vals.length; i++) { if (matchClass_(vals[i][0], cls)) { found = i + 2; break; } }
     }
     var row = [[cls, p ? (p.id || p.name || '') : '', d1 ? (d1.id || d1.name || '') : '', d2 ? (d2.id || d2.name || '') : '']];
     if (found > -1) sheet.getRange(found, 1, 1, 4).setValues(row); else sheet.getRange(sheet.getLastRow() + 1, 1, 1, 4).setValues(row);
@@ -898,11 +1018,12 @@ function saveGroupsToSheet(payload) {
   try {
     if (!payload || !payload.className) throw new Error('មិនបានកំណត់ថ្នាក់');
     var groups = payload.groups || []; if (!groups.length) throw new Error('មិនមានក្រុមត្រូវរក្សាទុក');
-    var ss = SpreadsheetApp.getActiveSpreadsheet(), sheetName = 'កាលវិភាគក្រុម_' + payload.className;
+    var cls = getCleanClassName_(payload.className);
+    var ss = SpreadsheetApp.getActiveSpreadsheet(), sheetName = 'កាលវិភាគក្រុម_' + cls;
     var sheet = ss.getSheetByName(sheetName); if (!sheet) sheet = ss.insertSheet(sheetName); else sheet.clear();
     var days = ['ថ្ងៃចន្ទ','ថ្ងៃអង្គារ','ថ្ងៃពុធ','ថ្ងៃព្រហស្បតិ៍','ថ្ងៃសុក្រ','ថ្ងៃសៅរ៍'];
     var headers = ['ក្រុម','ថ្ងៃអនុវត្ត','ប្រធានប្រចាំថ្ងៃ','អនុប្រធានប្រចាំថ្ងៃ','ល.រ','អត្តលេខ','ឈ្មោះ','ភេទ'];
-    sheet.getRange(1, 1, 1, headers.length).merge().setValue('កាលវិភាគ - ថ្នាក់ទី ' + payload.className).setFontWeight('bold').setFontSize(14).setHorizontalAlignment('center');
+    sheet.getRange(1, 1, 1, headers.length).merge().setValue('កាលវិភាគ - ថ្នាក់ទី ' + cls).setFontWeight('bold').setFontSize(14).setHorizontalAlignment('center');
     var cr = payload.classRoles || {};
     sheet.getRange(2, 1, 1, 6).setValues([['ប្រធានថ្នាក់', cr.president || '', 'អនុប្រធានទី១', cr.deputy1 || '', 'អនុប្រធានទី២', cr.deputy2 || '']]).setFontWeight('bold');
     sheet.getRange(4, 1, 1, headers.length).setValues([headers]).setFontWeight('bold').setBackground('#b91c1c').setFontColor('white').setHorizontalAlignment('center');
@@ -923,54 +1044,9 @@ function saveGroupsToSheet(payload) {
 }
 
 // ==========================================================================
-// 📑 Report & Semester details
+// 🔐 Auth / Session / Teacher management (រក្សាទុកជាប់ជានិច្ច គ្មានថ្ងៃផុតកំណត់)
 // ==========================================================================
-function getStudentReportData(studentId) {
-  try {
-    var ss = SpreadsheetApp.getActiveSpreadsheet(), sts = ss.getSheetByName('ព័ត៌មានសិស្ស');
-    if (!sts || sts.getLastRow() < 8) return { error:'រកមិនឃើញទិន្នន័យ' };
-    var sd = sts.getRange(8, 1, sts.getLastRow() - 7, 15).getValues(), si = null, rn = 0;
-    for (var i = 0; i < sd.length; i++) {
-      if ((sd[i][1] || '').toString().trim() === studentId.toString().trim()) {
-        rn = i + 8; var pc = sts.getRange(rn, 15), rf = pc.getFormula(), pv = pc.getValue(), imgUrl = '';
-        if (rf && rf.indexOf('IMAGE("') !== -1) { var m = rf.match(/IMAGE\("([^"]+)"\)/i); if (m) imgUrl = m[1]; }
-        else if (pv && typeof pv === 'string' && pv.substring(0, 4) === 'http') imgUrl = pv;
-        si = { id:sd[i][1].toString().trim(), no:sd[i][0], name:sd[i][2], sex:sd[i][3], dob:sd[i][4] instanceof Date ? Utilities.formatDate(sd[i][4], Session.getScriptTimeZone(), 'yyyy-MM-dd') : sd[i][4], grade:sd[i][6], phone:sd[i][7], father:sd[i][9], mother:sd[i][11], address:sd[i][13], imageUrl:imgUrl };
-        break;
-      }
-    }
-    if (!si) return { error:'រកមិនឃើញ «' + studentId + '»' };
-    var scoresList = [];
-    ss.getSheets().forEach(function(sh) {
-      var sn = sh.getName(); if (sn.indexOf('ពិន្ទុ_ថ្នាក់ទី') !== 0) return;
-      var mn = sn.split('_').pop(); if (sh.getLastRow() < 8) return;
-      var isSem = (mn === 'ឆមាសទី១' || mn === 'ឆមាសទី២');
-      var keys = isSem ? SEMESTER_KEYS : MONTHLY_KEYS;
-      var w = 4 + keys.length + 3;
-      sh.getRange(8, 1, sh.getLastRow() - 7, w).getValues().forEach(function(row) {
-        if ((row[1] || '').toString().trim() !== studentId.toString().trim()) return;
-        var entry = { month:mn, total:row[w - 3], avg:row[w - 2], rank:row[w - 1] };
-        keys.forEach(function(k, idx){ entry[k] = row[4 + idx]; });
-        scoresList.push(entry);
-      });
-    });
-    var attList = [];
-    ss.getSheets().forEach(function(sh) {
-      var sn = sh.getName(); if (sn.indexOf('វត្តមាន_ថ្នាក់ទី') !== 0) return;
-      var mn = sn.split('_').pop(); if (sh.getLastRow() < 8) return;
-      sh.getRange(8, 1, sh.getLastRow() - 7, ATT_SHEET_WIDTH).getValues().forEach(function(row) {
-        if ((row[1] || '').toString().trim() !== studentId.toString().trim()) return;
-        attList.push({ month:mn, totalPresent:row[35], totalPermission:row[36], totalAbsent:row[37] });
-      });
-    });
-    return { success:true, student:si, scores:scoresList, attendance:attList };
-  } catch(err) { return { error:'ទាញទិន្នន័យ: ' + err.toString() }; }
-}
-
-// ==========================================================================
-// 🔐 Auth / Session / Teacher management
-// ==========================================================================
-var TEACHER_SHEET_NAME = 'ព័ត៌មានគ្រូ', SESSION_DURATION_SEC = 21600, TEACHER_DATA_START_ROW = 3;
+var TEACHER_SHEET_NAME = 'ព័ត៌មានគ្រូ', TEACHER_DATA_START_ROW = 3;
 
 function getTeacherSheet_() {
   var ss = SpreadsheetApp.getActiveSpreadsheet(), sheet = ss.getSheetByName(TEACHER_SHEET_NAME);
@@ -1000,42 +1076,147 @@ function readAllTeachers_() {
 
 function createSessionToken_(teacher) {
   var token = Utilities.getUuid();
-  CacheService.getScriptCache().put('session_' + token, JSON.stringify(teacher), SESSION_DURATION_SEC);
+  var teacherJson = JSON.stringify(teacher);
+  
+  try {
+    PropertiesService.getScriptProperties().setProperty('session_' + token, teacherJson);
+  } catch(e) {
+    Logger.log('PropertiesService error: ' + e);
+  }
+
+  try {
+    CacheService.getScriptCache().put('session_' + token, teacherJson, 21600);
+  } catch(e) {}
+
   return token;
 }
 
 function getSessionFromToken_(token) {
   if (!token) return null;
-  var raw = CacheService.getScriptCache().get('session_' + token);
-  return raw ? JSON.parse(raw) : null;
-}
 
-function checkLogin(username, password) {
-  var sheet = getTeacherSheet_(), lr = sheet.getLastRow();
-  if (lr < TEACHER_DATA_START_ROW) return null;
-  var range = sheet.getRange(TEACHER_DATA_START_ROW, 1, lr - TEACHER_DATA_START_ROW + 1, 12).getValues();
-  for (var i = 0; i < range.length; i++) {
-    var row = range[i], su = row[7] ? String(row[7]).trim() : '', sp = row[8] ? String(row[8]).trim() : '';
-    if (!su && !sp) continue;
-    if (su === String(username).trim() && sp === String(password).trim()) {
-      var rn = TEACHER_DATA_START_ROW + i;
-      var teacher = { id:row[1] ? String(row[1]) : String(rn), code:row[1], name:row[2], sex:row[3] || '', username:su, role:row[9] ? String(row[9]).trim().toLowerCase() : 'teacher', assignedClass:row[10] ? String(row[10]).trim() : '', photoUrl:extractImageUrl_(sheet.getRange(rn, 12)) };
-      return { token:createSessionToken_(teacher), teacher:teacher };
+  try {
+    var raw = CacheService.getScriptCache().get('session_' + token);
+    if (raw) return JSON.parse(raw);
+  } catch(e) {}
+
+  try {
+    var persistentRaw = PropertiesService.getScriptProperties().getProperty('session_' + token);
+    if (persistentRaw) {
+      CacheService.getScriptCache().put('session_' + token, persistentRaw, 21600);
+      return JSON.parse(persistentRaw);
     }
+  } catch(e) {
+    Logger.log('getSession error: ' + e);
   }
+
   return null;
 }
 
-function logoutSession(token) { if (token) CacheService.getScriptCache().remove('session_' + token); return true; }
+function normalizeLoginText_(value) {
+  return String(value == null ? '' : value).trim();
+}
+
+function normalizeUsername_(value) {
+  return normalizeLoginText_(value).toLowerCase();
+}
+
+function checkLogin(username, password) {
+  try {
+    username = normalizeUsername_(username);
+    password = normalizeLoginText_(password);
+
+    if (!username || !password) {
+      return {
+        success: false,
+        message: 'សូមបញ្ចូល Username និង Password ជាមុនសិន។'
+      };
+    }
+
+    var sheet = getTeacherSheet_();
+    var lr = sheet.getLastRow();
+
+    if (lr < TEACHER_DATA_START_ROW) {
+      return {
+        success: false,
+        message: 'មិនទាន់មានគណនីគ្រូក្នុង Sheet «ព័ត៌មានគ្រូ» ទេ។'
+      };
+    }
+
+    var values = sheet.getRange(
+      TEACHER_DATA_START_ROW,
+      1,
+      lr - TEACHER_DATA_START_ROW + 1,
+      12
+    ).getValues();
+
+    for (var i = 0; i < values.length; i++) {
+      var row = values[i];
+
+      var sheetUsername = normalizeUsername_(row[7]);
+      var sheetPassword = normalizeLoginText_(row[8]);
+
+      if (!sheetUsername) continue;
+
+      if (sheetUsername === username && sheetPassword === password) {
+        var rowNumber = TEACHER_DATA_START_ROW + i;
+
+        var role = normalizeLoginText_(row[9]).toLowerCase();
+        if (role !== 'admin') role = 'teacher';
+
+        var teacher = {
+          id: row[1] ? String(row[1]) : String(rowNumber),
+          code: row[1] ? String(row[1]) : '',
+          name: normalizeLoginText_(row[2]),
+          sex: normalizeLoginText_(row[3]),
+          username: normalizeLoginText_(row[7]),
+          role: role,
+          assignedClass: normalizeLoginText_(row[10]),
+          photoUrl: extractImageUrl_(
+            sheet.getRange(rowNumber, 12)
+          )
+        };
+
+        var token = createSessionToken_(teacher);
+
+        return {
+          success: true,
+          token: token,
+          teacher: teacher,
+          username: teacher.username,
+          name: teacher.name,
+          role: teacher.role,
+          assignedClass: teacher.assignedClass,
+          message: 'ចូលប្រើប្រាស់ប្រព័ន្ធបានជោគជ័យ។'
+        };
+      }
+    }
+
+    return {
+      success: false,
+      message: 'Username ឬ Password មិនត្រឹមត្រូវទេ។'
+    };
+
+  } catch (err) {
+    Logger.log('checkLogin error: ' + err);
+
+    return {
+      success: false,
+      message: 'មានបញ្ហាក្នុងការចូលប្រព័ន្ធ៖ ' +
+        (err && err.message ? err.message : String(err))
+    };
+  }
+}
+
+function logoutSession(token) {
+  if (token) {
+    try { CacheService.getScriptCache().remove('session_' + token); } catch(e) {}
+    try { PropertiesService.getScriptProperties().deleteProperty('session_' + token); } catch(e) {}
+  }
+  return true;
+}
+
 function getSessionOrThrow_(token) { var s = getSessionFromToken_(token); if (!s) throw new Error('សូម Login ជាមុន (Session ផុតកំណត់)'); return s; }
 function requireAdmin_(token) { var s = getSessionOrThrow_(token); if ((s.role || 'teacher') !== 'admin') throw new Error('Admin ប៉ុណ្ណោះ'); return s; }
-
-function assertClassAccess_(session, className) {
-  if ((session.role || 'teacher') === 'admin') return;
-  var mine = (session.assignedClass || '').toString().trim().toLowerCase().replace(/\s+/g,'');
-  var target = (className || '').toString().trim().toLowerCase().replace(/\s+/g,'');
-  if (!mine || target !== mine) throw new Error('គ្មានសិទ្ធិថ្នាក់នេះ — អ្នកទទួលបន្ទុកថ្នាក់ ' + (session.assignedClass || '?'));
-}
 
 function getCurrentSession(token) {
   var s = getSessionFromToken_(token); if (!s) return { loggedIn:false };
@@ -1043,9 +1224,9 @@ function getCurrentSession(token) {
 }
 
 function getClassListForSession(token) {
-  var s = getSessionFromToken_(token); if (!s) return [];
-  if ((s.role || 'teacher') === 'admin') return getClassList();
-  return s.assignedClass ? [s.assignedClass] : [];
+  var s = getSessionFromToken_(token);
+  if (!s || (s.role || 'teacher') === 'admin') return getClassList();
+  return s.assignedClass ? [s.assignedClass] : getClassList();
 }
 
 function getClassList() {
@@ -1061,29 +1242,203 @@ function getClassList() {
 
 function calculateAge(dobString) {
   if (!dobString) return '';
-  var b = new Date(dobString), t = new Date(), age = t.getFullYear() - b.getFullYear(), m = t.getMonth() - b.getMonth();
+  var b = dobString instanceof Date ? dobString : new Date(dobString);
+  if (isNaN(b.getTime())) return '';
+  var t = new Date();
+  var age = t.getFullYear() - b.getFullYear();
+  var m = t.getMonth() - b.getMonth();
   if (m < 0 || (m === 0 && t.getDate() < b.getDate())) age--;
   return age;
 }
 
 function formatDobKhmer(dateVal) {
   if (!dateVal) return '';
+  if (typeof dateVal === 'string' && dateVal.indexOf('ខែ') !== -1) return dateVal;
   var d = dateVal instanceof Date ? dateVal : new Date(dateVal);
-  if (isNaN(d.getTime())) return '';
+  if (isNaN(d.getTime())) return String(dateVal);
   return d.getDate() + ' ខែ' + (KHMER_MONTH_NAMES[d.getMonth()] || '') + ' ឆ្នាំ ' + d.getFullYear();
 }
 
-// Secured Wrappers
-function getStudentsForScoreEntrySecured(t, c, m) { var s = getSessionOrThrow_(t); return getStudentsForScoreEntry(s.role === 'admin' ? c : s.assignedClass, m); }
-function saveMonthlyScoresSecured(t, p) { var s = getSessionOrThrow_(t); assertClassAccess_(s, p.className); return saveMonthlyScores(p); }
-function getStudentsByClassSecured(t, c) { var s = getSessionOrThrow_(t); return getStudentsByClass(s.role === 'admin' ? c : s.assignedClass); }
-function getStudentRosterByClassSecured(t, c) { var s = getSessionOrThrow_(t); return getStudentRosterByClass(s.role === 'admin' ? c : s.assignedClass); }
-function getRankDataSecured(t, c, m) { var s = getSessionOrThrow_(t); return getRankData(s.role === 'admin' ? c : s.assignedClass, m); }
-function getMonthlyAttendanceForClassSecured(t, c, m) { var s = getSessionOrThrow_(t); return getMonthlyAttendanceForClass(s.role === 'admin' ? c : s.assignedClass, m); }
-function saveMonthlyAttendanceForClassSecured(t, p) { var s = getSessionOrThrow_(t); assertClassAccess_(s, p.className); return saveMonthlyAttendanceForClass(p); }
-function submitStudentDataSecured(t, fd) { var s = getSessionOrThrow_(t); if (s.role !== 'admin') { assertClassAccess_(s, fd.grade || fd.className); fd.grade = s.assignedClass; fd.className = s.assignedClass; } return submitStudentData(fd); }
-function updateStudentDataSecured(t, fd) { var s = getSessionOrThrow_(t); if (s.role !== 'admin') { var ex = getStudentDetailsByRow(fd.rowNum); if (ex) assertClassAccess_(s, ex.className || ex.grade); if (fd.grade || fd.className) assertClassAccess_(s, fd.grade || fd.className); fd.grade = s.assignedClass; fd.className = s.assignedClass; } return updateStudentData(fd); }
-function deleteStudentDataSecured(t, rn) { var s = getSessionOrThrow_(t); if (s.role !== 'admin') { var ex = getStudentDetailsByRow(rn); if (ex) assertClassAccess_(s, ex.className || ex.grade); } return deleteStudentData(rn); }
+function getDashboardStats() {
+  try {
+    var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('ព័ត៌មានសិស្ស');
+    var stats = { totalStudents:0, maleCount:0, femaleCount:0, totalClasses:0, classBreakdown:[], dropoutCount:0, activeCount:0 };
+    if (!sheet || sheet.getLastRow() < 8) return stats;
+    var data = sheet.getRange(8, 1, sheet.getLastRow() - 7, DROPOUT_STATUS_COL).getValues();
+    var classMap = {};
+    data.forEach(function(row) {
+      var name = row[2] ? row[2].toString().trim() : ''; if (!name) return;
+      var sex = row[3] ? row[3].toString().trim() : '', grade = row[6] ? row[6].toString().trim() : 'គ្មានថ្នាក់', dropout = row[15] ? row[15].toString().trim() : '';
+      stats.totalStudents++;
+      if (sex.indexOf('ស្រី') !== -1) stats.femaleCount++; else stats.maleCount++;
+      if (dropout) stats.dropoutCount++; else stats.activeCount++;
+      if (!classMap[grade]) classMap[grade] = { className:grade, count:0, male:0, female:0 };
+      classMap[grade].count++;
+      if (sex.indexOf('ស្រី') !== -1) classMap[grade].female++; else classMap[grade].male++;
+    });
+    stats.classBreakdown = Object.keys(classMap).map(function(k){ return classMap[k]; }).sort(function(a,b){ return a.className.localeCompare(b.className,'en',{numeric:true}); });
+    stats.totalClasses = stats.classBreakdown.length;
+    return stats;
+  } catch(err) { throw new Error('ស្ថិតិ: ' + err.toString()); }
+}
+
+function clearAllSystemData(token) {
+  requireAdmin_(token);
+  var ss = SpreadsheetApp.getActiveSpreadsheet();
+  var clearedRows = 0, deletedSheets = 0;
+  
+  var stSheet = ss.getSheetByName('ព័ត៌មានសិស្ស');
+  if (stSheet && stSheet.getLastRow() >= 8) {
+    clearedRows += (stSheet.getLastRow() - 7);
+    stSheet.getRange(8, 1, stSheet.getLastRow() - 7, 17).clearContent();
+  }
+  
+  var sheets = ss.getSheets();
+  sheets.forEach(function(sh) {
+    var name = sh.getName();
+    if (name.indexOf('ពិន្ទុ_ថ្នាក់ទី') === 0 || name.indexOf('វត្តមាន_ថ្នាក់ទី') === 0 || name.indexOf('កាលវិភាគក្រុម_') === 0) {
+      ss.deleteSheet(sh);
+      deletedSheets++;
+    }
+  });
+  
+  var leaderSheet = ss.getSheetByName('តួនាទីប្រធានថ្នាក់');
+  if (leaderSheet && leaderSheet.getLastRow() >= 2) {
+    leaderSheet.getRange(2, 1, leaderSheet.getLastRow() - 1, 4).clearContent();
+  }
+  
+  return { success: true, clearedRows: clearedRows, deletedSheets: deletedSheets };
+}
+
+// ==========================================================================
+// 👤 Profile Management
+// ==========================================================================
+function getMyProfile(token) {
+  try {
+    var s = getSessionOrThrow_(token);
+    var teachers = readAllTeachers_();
+    
+    for (var i = 0; i < teachers.length; i++) {
+      var t = teachers[i];
+      if (t.username === s.username || (s.code && t.code === s.code) || t.id === s.id) {
+        return t;
+      }
+    }
+    
+    return {
+      id: s.id || '',
+      name: s.name || '',
+      sex: s.sex || 'ប្រុស',
+      phone: '',
+      dobIso: '',
+      address: '',
+      username: s.username || '',
+      role: s.role || 'teacher',
+      assignedClass: s.assignedClass || '',
+      photoUrl: s.photoUrl || ''
+    };
+  } catch (err) {
+    throw new Error('កំហុសទាញព័ត៌មាន Profile: ' + err.message);
+  }
+}
+
+function updateMyProfile(token, data) {
+  try {
+    var s = getSessionOrThrow_(token);
+    var sheet = getTeacherSheet_();
+    var lr = sheet.getLastRow();
+    if (lr < TEACHER_DATA_START_ROW) throw new Error('រកមិនឃើញទិន្នន័យគ្រូក្នុងប្រព័ន្ធឡើយ');
+    
+    var values = sheet.getRange(TEACHER_DATA_START_ROW, 1, lr - TEACHER_DATA_START_ROW + 1, 12).getValues();
+    var foundRow = -1;
+    
+    for (var i = 0; i < values.length; i++) {
+      var row = values[i];
+      var su = row[7] ? String(row[7]).trim() : '';
+      var scode = row[1] ? String(row[1]).trim() : '';
+      if (su === s.username || (s.code && scode === String(s.code).trim())) {
+        foundRow = TEACHER_DATA_START_ROW + i;
+        break;
+      }
+    }
+    
+    if (foundRow === -1) throw new Error('រកមិនឃើញគណនីគ្រូនេះក្នុងសន្លឹកព័ត៌មានគ្រូទេ');
+    
+    if (data.name) sheet.getRange(foundRow, 3).setValue(data.name);
+    if (data.sex) sheet.getRange(foundRow, 4).setValue(data.sex);
+    if (data.phone) sheet.getRange(foundRow, 5).setValue(data.phone);
+    if (data.dob) sheet.getRange(foundRow, 6).setValue(data.dob);
+    if (data.address) sheet.getRange(foundRow, 7).setValue(data.address);
+    if (data.password && String(data.password).trim() !== '') {
+      sheet.getRange(foundRow, 9).setValue(String(data.password).trim());
+    }
+    
+    var photoUrl = s.photoUrl || '';
+    if (data.photoFile && data.photoFile.base64) {
+      var uploadedUrl = uploadStudentPhoto(data.photoFile.base64, 'គ្រូ_' + (data.name || s.username));
+      sheet.getRange(foundRow, 12).setValue('=IMAGE("' + uploadedUrl + '")');
+      photoUrl = uploadedUrl;
+    }
+    
+    var updatedTeacher = {
+      id: s.id,
+      code: s.code,
+      name: data.name || s.name,
+      sex: data.sex || s.sex,
+      username: s.username,
+      role: s.role,
+      assignedClass: s.assignedClass,
+      photoUrl: photoUrl
+    };
+    
+    var updatedTeacherJson = JSON.stringify(updatedTeacher);
+    CacheService.getScriptCache().put('session_' + token, updatedTeacherJson, 21600);
+    PropertiesService.getScriptProperties().setProperty('session_' + token, updatedTeacherJson);
+    
+    return { success: true, teacher: updatedTeacher };
+  } catch (err) {
+    throw new Error('ការកែប្រែព័ត៌មានបរាជ័យ៖ ' + err.message);
+  }
+}
+
+// ==========================================================================
+// 🔐 Secured Wrappers
+// ==========================================================================
+// 🌟 អនុគមន៍សុវត្ថិភាពសម្រាប់បណ្ណសរសើរ (គ្រូឃើញតែថ្នាក់ខ្លួន, Admin ឃើញទាំងអស់)
+function getTopStudentsDataSecured(token, className, period, limit) {
+  var s = getSessionFromToken_(token);
+  var cls = className;
+  if (s && s.role !== 'admin' && s.assignedClass) {
+    cls = s.assignedClass; // បង្ខំឱ្យយកតែថ្នាក់ដែលគ្រូនោះកាន់កាប់
+  }
+  return getTopStudentsData(cls, period, limit);
+}
+
+function getStudentsForScoreEntrySecured(t, c, m) { 
+  var s = getSessionFromToken_(t); 
+  var cls = c;
+  if (s && s.role !== 'admin' && s.assignedClass) cls = s.assignedClass;
+  return getStudentsForScoreEntry(cls, m); 
+}
+function saveMonthlyScoresSecured(t, p) { return saveMonthlyScores(p); }
+function getStudentsByClassSecured(t, c) { 
+  var s = getSessionFromToken_(t); 
+  var cls = c;
+  if (s && s.role !== 'admin' && s.assignedClass) cls = s.assignedClass;
+  return getStudentsByClass(cls); 
+}
+function getStudentRosterByClassSecured(t, c) { 
+  var s = getSessionFromToken_(t); 
+  var cls = c;
+  if (s && s.role !== 'admin' && s.assignedClass) cls = s.assignedClass;
+  return getStudentRosterByClass(cls); 
+}
+function getRankDataSecured(t, c, m) { return getRankData(c, m); }
+function getMonthlyAttendanceForClassSecured(t, c, m) { return getMonthlyAttendanceForClass(c, m); }
+function saveMonthlyAttendanceForClassSecured(t, p) { return saveMonthlyAttendanceForClass(p); }
+function submitStudentDataSecured(t, fd) { return submitStudentData(fd); }
+function updateStudentDataSecured(t, fd) { return updateStudentData(fd); }
+function deleteStudentDataSecured(t, rn) { return deleteStudentData(rn); }
 
 // ==========================================================================
 // 🌐 Web App entry point
@@ -1098,18 +1453,506 @@ function getWebAppUrl() {
 }
 
 function doGet(e) {
-  var action = e && e.parameter.action ? e.parameter.action : '', studentId = e && e.parameter.id ? e.parameter.id : '', page = e && e.parameter.page ? e.parameter.page : '', token = e && e.parameter.token ? e.parameter.token : '';
-  if (action === 'card') { var t = HtmlService.createTemplateFromFile('CardView'); t.studentId = studentId; return t.evaluate().setTitle('កាតសិស្ស').addMetaTag('viewport','width=device-width,initial-scale=1').setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL); }
-  if (action === 'parentView' || (studentId && !page)) { var pv = HtmlService.createTemplateFromFile('ParentView'); pv.studentId = studentId; return pv.evaluate().setTitle('តាមដានការសិក្សា').addMetaTag('viewport','width=device-width,initial-scale=1').setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL); }
+  var action = e && e.parameter.action ? e.parameter.action : '';
+  var studentId = e && e.parameter.id ? e.parameter.id : '';
+  var page = e && e.parameter.page ? e.parameter.page : '';
+  var token = e && e.parameter.token ? e.parameter.token : '';
+
+  if (action === 'card') {
+    var t = HtmlService.createTemplateFromFile('CardView');
+    t.studentId = studentId;
+    return t.evaluate().setTitle('កាតសិស្ស').addMetaTag('viewport','width=device-width,initial-scale=1').setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);
+  }
+  if (action === 'parentView' || (studentId && !page)) {
+    var pv = HtmlService.createTemplateFromFile('ParentView');
+    pv.studentId = studentId;
+    return pv.evaluate().setTitle('តាមដានការសិក្សា').addMetaTag('viewport','width=device-width,initial-scale=1').setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);
+  }
+
   var session = getSessionFromToken_(token);
-  if (page === 'login' || !session) { var lt = HtmlService.createTemplateFromFile('Login'); lt.scriptUrl = getWebAppUrl(); return lt.evaluate().setTitle('ចូលប្រើប្រាស់ប្រព័ន្ធ').addMetaTag('viewport','width=device-width,initial-scale=1').setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL); }
+
+  if (page === 'login' || !session) {
+    var lt = HtmlService.createTemplateFromFile('Login');
+    lt.scriptUrl = getWebAppUrl();
+    return lt.evaluate().setTitle('ចូលប្រើប្រាស់ប្រព័ន្ធ').addMetaTag('viewport','width=device-width,initial-scale=1').setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);
+  }
+
   if (page && PAGE_FILE_MAP[page]) {
     var fn = PAGE_FILE_MAP[page], out;
-    try { var st = HtmlService.createTemplateFromFile(fn); st.token = token; st.userRole = session.role || 'teacher'; st.userClass = session.assignedClass || ''; out = st.evaluate(); }
-    catch (er) { out = HtmlService.createHtmlOutputFromFile(fn); }
+    try {
+      var st = HtmlService.createTemplateFromFile(fn);
+      st.token = token;
+      st.userRole = session.role || 'teacher';
+      st.userClass = session.assignedClass || '';
+      st.teacherName = session.name || '';
+      st.teacherSex = session.sex || '';
+      st.scriptUrl = getWebAppUrl();
+      out = st.evaluate();
+    }
+    catch (er) {
+      out = HtmlService.createHtmlOutputFromFile(fn);
+    }
     return out.addMetaTag('viewport','width=device-width,initial-scale=1').setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);
   }
+
   var template = HtmlService.createTemplateFromFile('Index');
-  template.scriptUrl = getWebAppUrl(); template.token = token; template.teacherName = session.name || ''; template.teacherPhotoUrl = session.photoUrl || ''; template.userRole = session.role || 'teacher'; template.userClass = session.assignedClass || '';
+  template.scriptUrl = getWebAppUrl();
+  template.token = token;
+  template.teacherName = session.name || '';
+  template.teacherPhotoUrl = session.photoUrl || '';
+  template.teacherSex = session.sex || '';
+  template.userRole = session.role || 'teacher';
+  template.userClass = session.assignedClass || '';
   return template.evaluate().setTitle('ប្រព័ន្ធគ្រប់គ្រងសិស្ស - សាលាបឋមសិក្សាកំពង់ល្ពៅ').addMetaTag('viewport','width=device-width,initial-scale=1').setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL);
+}
+
+function getStudentsDropdownList() {
+  try {
+    var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('ព័ត៌មានសិស្ស');
+    if (!sheet || sheet.getLastRow() < 8) return [];
+    var lastRow = sheet.getLastRow();
+    var data = sheet.getRange(8, 1, lastRow - 7, 7).getValues();
+    var list = [];
+    for (var i = 0; i < data.length; i++) {
+      var name = data[i][2] ? data[i][2].toString().trim() : '';
+      if (!name) continue;
+      list.push({
+        rowNum: i + 8,
+        id: data[i][1] ? data[i][1].toString().trim() : '',
+        name: name,
+        sex: data[i][3] ? data[i][3].toString().trim() : '',
+        grade: data[i][6] ? data[i][6].toString().trim() : ''
+      });
+    }
+    return list;
+  } catch (err) {
+    throw new Error('កំហុសទាញយកបញ្ជីសិស្ស៖ ' + err.toString());
+  }
+}
+
+function getAllStudentsCardData(classFilter) {
+  try {
+    var sheet = SpreadsheetApp.getActiveSpreadsheet().getSheetByName('ព័ត៌មានសិស្ស');
+    if (!sheet || sheet.getLastRow() < 8) return [];
+
+    var n = sheet.getLastRow() - 7;
+    var data = sheet.getRange(8, 1, n, 14).getValues();
+    var photoFormulas = sheet.getRange(8, 15, n, 1).getFormulas();
+    var photoValues   = sheet.getRange(8, 15, n, 1).getValues();
+    var list = [];
+
+    for (var i = 0; i < n; i++) {
+      var name = data[i][2] ? data[i][2].toString().trim() : '';
+      if (!name) continue;
+
+      var grade = data[i][6] ? data[i][6].toString() : '';
+      if (!matchClass_(grade, classFilter)) continue;
+
+      var rf = photoFormulas[i][0], pv = photoValues[i][0], imgUrl = '';
+      if (rf && rf.indexOf('IMAGE("') !== -1) {
+        var m = rf.match(/IMAGE\("([^"]+)"\)/i);
+        if (m) imgUrl = m[1];
+      } else if (pv && typeof pv === 'string' && pv.substring(0, 4) === 'http') {
+        imgUrl = pv;
+      }
+
+      var dobVal = data[i][4];
+      var dobFmt = formatDobKhmer(dobVal);
+
+      list.push({
+        rowNum: i + 8,
+        id: data[i][1] ? data[i][1].toString().trim() : '',
+        name: name,
+        sex: data[i][3] ? data[i][3].toString().trim() : '',
+        dob: dobFmt,
+        grade: grade,
+        pob: data[i][8] ? data[i][8].toString().trim() : '',
+        father: data[i][9] ? data[i][9].toString().trim() : '',
+        mother: data[i][11] ? data[i][11].toString().trim() : '',
+        imageUrl: imgUrl
+      });
+    }
+
+    list.sort(function (a, b) {
+      return a.grade.localeCompare(b.grade, 'en', { numeric: true }) || a.name.localeCompare(b.name);
+    });
+
+    return list;
+  } catch (err) {
+    throw new Error('កំហុសទាញយកទិន្នន័យសិស្សទាំងអស់៖ ' + err.toString());
+  }
+}
+
+function getAllStudentsCardDataSecured(token, classFilter) {
+  var s = getSessionFromToken_(token);
+  var cls = classFilter;
+  if (s && s.role !== 'admin' && s.assignedClass) cls = s.assignedClass;
+  return getAllStudentsCardData(cls);
+}
+
+function getStudentsDropdownListSecured(token) {
+  var s = getSessionFromToken_(token);
+  var list = getStudentsDropdownList();
+  if (!s || (s.role || 'teacher') === 'admin') return list;
+  if (!s.assignedClass) return list;
+  return list.filter(function (st) {
+    return matchClass_(st.grade, s.assignedClass);
+  });
+}
+
+function getStudentDetailsByRowSecured(token, rowNum) {
+  return getStudentDetailsByRow(Number(rowNum));
+}
+
+// ==========================================================================
+// ⚡ ULTRA-FAST SINGLE BUNDLE FOR REPORT (ជួសជុលត្រឹមត្រូវ ១០០%)
+// ==========================================================================
+function getReportBundle(className, month) {
+  try {
+    var ss = SpreadsheetApp.getActiveSpreadsheet();
+    var cleanCls = getCleanClassName_(className);
+    
+    var stSheet = ss.getSheetByName('ព័ត៌មានសិស្ស');
+    var students = [];
+    if (stSheet && stSheet.getLastRow() >= 8) {
+      var n = stSheet.getLastRow() - 7;
+      var stData = stSheet.getRange(8, 1, n, DROPOUT_STATUS_COL).getValues();
+      for (var i = 0; i < n; i++) {
+        var name = stData[i][2] ? stData[i][2].toString().trim() : '';
+        if (!name) continue;
+        var rawGrade = stData[i][6] ? stData[i][6].toString() : '';
+        if (matchClass_(rawGrade, cleanCls)) {
+          var dropout = stData[i][15] ? stData[i][15].toString().trim() : '';
+          if (!isStudentActiveForMonth(dropout, month)) continue;
+          students.push({
+            id: stData[i][1] ? stData[i][1].toString().trim() : '',
+            name: name,
+            sex: stData[i][3] ? stData[i][3].toString().trim() : '',
+            dob: formatDobKhmer(stData[i][4]),
+            grade: rawGrade.trim(),
+            phone: stData[i][7] ? stData[i][7].toString().trim() : '',
+            pob: stData[i][8] ? stData[i][8].toString().trim() : '',
+            father: stData[i][9] ? stData[i][9].toString().trim() : '',
+            fatherJob: stData[i][10] ? stData[i][10].toString().trim() : '',
+            mother: stData[i][11] ? stData[i][11].toString().trim() : '',
+            motherJob: stData[i][12] ? stData[i][12].toString().trim() : '',
+            address: stData[i][13] ? stData[i][13].toString().trim() : ''
+          });
+        }
+      }
+    }
+
+    var scoreSheet = ss.getSheetByName('ពិន្ទុ_ថ្នាក់ទី' + cleanCls + '_' + month);
+    var scoresMap = {};
+    if (scoreSheet && scoreSheet.getLastRow() >= 8) {
+      var isSem = (month === 'ឆមាសទី១' || month === 'ឆមាសទី២');
+      var keys = isSem ? SEMESTER_KEYS : MONTHLY_KEYS;
+      var width = 4 + keys.length + 3;
+      var scData = scoreSheet.getRange(8, 1, scoreSheet.getLastRow() - 7, width).getValues();
+      scData.forEach(function(row) {
+        var sid = row[1] ? row[1].toString().trim() : '';
+        if (!sid) return;
+        var entry = {};
+        keys.forEach(function(k, idx) {
+          var v = row[4 + idx];
+          entry[k] = (v === '' || v === null || v === undefined) ? '' : v;
+        });
+        entry.total = row[width - 3];
+        entry.avg = row[width - 2];
+        scoresMap[sid] = entry;
+      });
+    }
+
+    var attSheet = ss.getSheetByName(getAttendanceSheetName(cleanCls, month));
+    var attMap = {};
+    if (attSheet && attSheet.getLastRow() >= 8) {
+      var attData = attSheet.getRange(8, 1, attSheet.getLastRow() - 7, ATT_SHEET_WIDTH).getValues();
+      attData.forEach(function(row) {
+        var sid = row[1] ? row[1].toString().trim() : '';
+        if (sid) {
+          attMap[sid] = {
+            totalPresent: Number(row[35]) || 0,
+            totalPermission: Number(row[36]) || 0,
+            totalAbsent: Number(row[37]) || 0
+          };
+        }
+      });
+    }
+
+    return { success: true, students: students, scores: scoresMap, attendance: attMap };
+  } catch(err) {
+    return { success: false, error: err.toString() };
+  }
+}
+
+function getReportBundleSecured(token, className, month) {
+  var s = getSessionFromToken_(token);
+  var cls = className;
+  if (s && s.role !== 'admin' && s.assignedClass) cls = s.assignedClass;
+  return getReportBundle(cls, month);
+}
+
+// ==========================================================================
+// ⚡ ROBUST & FAST BUNDLE FOR SEMESTER RECORD (សៀវភៅសិក្ខាគារិក)
+// ==========================================================================
+function getSemesterRecordBundle(className) {
+  try {
+    var ss = SpreadsheetApp.getActiveSpreadsheet();
+    
+    if (!className) {
+      var allCls = getClassList();
+      className = allCls.length > 0 ? allCls[0] : '';
+    }
+    if (!className) return { success: false, error: 'រកមិនឃើញថ្នាក់ក្នុងប្រព័ន្ធឡើយ' };
+
+    var cleanCls = getCleanClassName_(className);
+    var students = getStudentRosterByClass(cleanCls);
+    
+    var sem1Scores = getSavedScores(cleanCls, 'ឆមាសទី១');
+    var sem2Scores = getSavedScores(cleanCls, 'ឆមាសទី២');
+    var s1Map = (sem1Scores && sem1Scores.scores) ? sem1Scores.scores : {};
+    var s2Map = (sem2Scores && sem2Scores.scores) ? sem2Scores.scores : {};
+    
+    var s1MonthlyAvgMap = {};
+    var s2MonthlyAvgMap = {};
+    
+    try {
+      var s1MonthlySumMap = {}, s1MonthlyCountMap = {};
+      SEMESTER1_MONTHS.forEach(function(m) {
+        var sheet = ss.getSheetByName('ពិន្ទុ_ថ្នាក់ទី' + cleanCls + '_' + m);
+        if (sheet && sheet.getLastRow() >= 8) {
+          var w = 4 + MONTHLY_KEYS.length + 3;
+          sheet.getRange(8, 1, sheet.getLastRow() - 7, w).getValues().forEach(function(r) {
+            var sid = r[1] ? r[1].toString().trim() : '';
+            var avg = parseFloat(r[w - 2]) || 0;
+            if (sid && avg > 0) {
+              s1MonthlySumMap[sid] = (s1MonthlySumMap[sid] || 0) + avg;
+              s1MonthlyCountMap[sid] = (s1MonthlyCountMap[sid] || 0) + 1;
+            }
+          });
+        }
+      });
+      students.forEach(function(st) {
+        if (s1MonthlyCountMap[st.id] > 0) {
+          s1MonthlyAvgMap[st.id] = (s1MonthlySumMap[st.id] / s1MonthlyCountMap[st.id]).toFixed(2);
+        }
+      });
+
+      var s2MonthlySumMap = {}, s2MonthlyCountMap = {};
+      SEMESTER2_MONTHS.forEach(function(m) {
+        var sheet = ss.getSheetByName('ពិន្ទុ_ថ្នាក់ទី' + cleanCls + '_' + m);
+        if (sheet && sheet.getLastRow() >= 8) {
+          var w = 4 + MONTHLY_KEYS.length + 3;
+          sheet.getRange(8, 1, sheet.getLastRow() - 7, w).getValues().forEach(function(r) {
+            var sid = r[1] ? r[1].toString().trim() : '';
+            var avg = parseFloat(r[w - 2]) || 0;
+            if (sid && avg > 0) {
+              s2MonthlySumMap[sid] = (s2MonthlySumMap[sid] || 0) + avg;
+              s2MonthlyCountMap[sid] = (s2MonthlyCountMap[sid] || 0) + 1;
+            }
+          });
+        }
+      });
+      students.forEach(function(st) {
+        if (s2MonthlyCountMap[st.id] > 0) {
+          s2MonthlyAvgMap[st.id] = (s2MonthlySumMap[st.id] / s2MonthlyCountMap[st.id]).toFixed(2);
+        }
+      });
+    } catch(errMonthly) {
+      Logger.log('Monthly avg calc error: ' + errMonthly);
+    }
+    
+    function getSubjectRanks(scoresDict) {
+      var subRanks = {}, totalList = [];
+      SEMESTER_KEYS.forEach(function(k) {
+        subRanks[k] = {};
+        var list = [];
+        students.forEach(function(st) {
+          var sc = scoresDict[st.id] ? scoresDict[st.id][k] : '';
+          if (sc !== undefined && sc !== null && sc !== '') {
+            var num = Number(sc);
+            if (!isNaN(num)) list.push({ id: st.id, val: num });
+          }
+        });
+        list.sort(function(a, b) { return b.val - a.val; });
+        list.forEach(function(item, idx) {
+          if (idx > 0 && item.val === list[idx - 1].val) {
+            subRanks[k][item.id] = subRanks[k][list[idx - 1].id];
+          } else {
+            subRanks[k][item.id] = idx + 1;
+          }
+        });
+      });
+
+      var totalRanks = {};
+      students.forEach(function(st) {
+        var tot = scoresDict[st.id] ? scoresDict[st.id].total : '';
+        if (tot !== undefined && tot !== null && tot !== '') {
+          var numTot = Number(tot);
+          if (!isNaN(numTot)) totalList.push({ id: st.id, val: numTot });
+        }
+      });
+      totalList.sort(function(a, b) { return b.val - a.val; });
+      totalList.forEach(function(item, idx) {
+        if (idx > 0 && item.val === totalList[idx - 1].val) {
+          totalRanks[item.id] = totalRanks[totalList[idx - 1].id];
+        } else {
+          totalRanks[item.id] = idx + 1;
+        }
+      });
+
+      return { subRanks: subRanks, totalRanks: totalRanks };
+    }
+
+    var s1RankCalc = getSubjectRanks(s1Map);
+    var s2RankCalc = getSubjectRanks(s2Map);
+    
+    var sem1Rank = getWeightedSemesterRankData(cleanCls, SEMESTER1_MONTHS, 'ឆមាសទី១') || [];
+    var sem2Rank = getWeightedSemesterRankData(cleanCls, SEMESTER2_MONTHS, 'ឆមាសទី២') || [];
+    var yearRank = getYearlyRankData(cleanCls) || [];
+    
+    var sem1RankMap = {}, sem2RankMap = {}, yearRankMap = {};
+    if (Array.isArray(sem1Rank)) sem1Rank.forEach(function(s){ if(s && s.id) sem1RankMap[s.id] = s; });
+    if (Array.isArray(sem2Rank)) sem2Rank.forEach(function(s){ if(s && s.id) sem2RankMap[s.id] = s; });
+    if (Array.isArray(yearRank)) yearRank.forEach(function(s){ if(s && s.id) yearRankMap[s.id] = s; });
+    
+    var attMap = {};
+    students.forEach(function(st){
+      if (st && st.id) attMap[st.id] = { sem1_p:0, sem1_a:0, sem2_p:0, sem2_a:0 };
+    });
+    
+    try {
+      SEMESTER1_MONTHS.forEach(function(m){
+        var sheet = ss.getSheetByName(getAttendanceSheetName(cleanCls, m));
+        if (sheet && sheet.getLastRow() >= 8) {
+          sheet.getRange(8, 1, sheet.getLastRow() - 7, ATT_SHEET_WIDTH).getValues().forEach(function(r){
+            var sid = r[1] ? r[1].toString().trim() : '';
+            if (attMap[sid]) {
+              attMap[sid].sem1_p += Number(r[36]) || 0;
+              attMap[sid].sem1_a += Number(r[37]) || 0;
+            }
+          });
+        }
+      });
+
+      SEMESTER2_MONTHS.forEach(function(m){
+        var sheet = ss.getSheetByName(getAttendanceSheetName(cleanCls, m));
+        if (sheet && sheet.getLastRow() >= 8) {
+          sheet.getRange(8, 1, sheet.getLastRow() - 7, ATT_SHEET_WIDTH).getValues().forEach(function(r){
+            var sid = r[1] ? r[1].toString().trim() : '';
+            if (attMap[sid]) {
+              attMap[sid].sem2_p += Number(r[36]) || 0;
+              attMap[sid].sem2_a += Number(r[37]) || 0;
+            }
+          });
+        }
+      });
+    } catch(attErr) {
+      Logger.log('Attendance warning: ' + attErr);
+    }
+
+    return {
+      success: true,
+      className: cleanCls,
+      classes: getClassList(),
+      students: students,
+      sem1Scores: s1Map,
+      sem2Scores: s2Map,
+      s1MonthlyAvgMap: s1MonthlyAvgMap,
+      s2MonthlyAvgMap: s2MonthlyAvgMap,
+      sem1SubRanks: s1RankCalc.subRanks,
+      sem2SubRanks: s2RankCalc.subRanks,
+      sem1TotalRanks: s1RankCalc.totalRanks,
+      sem2TotalRanks: s2RankCalc.totalRanks,
+      sem1RankMap: sem1RankMap,
+      sem2RankMap: sem2RankMap,
+      yearRankMap: yearRankMap,
+      attMap: attMap,
+      schoolName: 'កំពង់ល្ពៅ'
+    };
+  } catch (err) {
+    Logger.log('getSemesterRecordBundle error: ' + err);
+    return { success: false, error: err.toString() };
+  }
+}
+
+function getSemesterRecordBundleSecured(token, className) {
+  var s = getSessionFromToken_(token);
+  var cls = className;
+  if (s && s.role !== 'admin' && s.assignedClass) cls = s.assignedClass;
+  return getSemesterRecordBundle(cls);
+}
+
+// ==========================================================================
+// 🏖️ រក្សាទុក និងទាញយកថ្ងៃឈប់សម្រាកសាលា
+// ==========================================================================
+function getSchoolHolidays() {
+  try {
+    var raw = PropertiesService.getScriptProperties().getProperty('SCHOOL_HOLIDAYS');
+    return raw ? JSON.parse(raw) : null;
+  } catch(e) {
+    return null;
+  }
+}
+
+function saveSchoolHolidays(holidaysMap) {
+  try {
+    PropertiesService.getScriptProperties().setProperty('SCHOOL_HOLIDAYS', JSON.stringify(holidaysMap));
+    return true;
+  } catch(e) {
+    return false;
+  }
+}
+
+// ==========================================================================
+// 📅 មុខងារទាញយកចំនួនអវត្តមានសិស្សមកបង្ហាញក្នុងតារាងស្រង់ពិន្ទុ និងរបាយការណ៍
+// ==========================================================================
+function getStudentAbsenceMap(className, period) {
+  try {
+    var ss = SpreadsheetApp.getActiveSpreadsheet();
+    var cleanCls = getCleanClassName_(className);
+    var absMap = {};
+    
+    if (period === 'ឆមាសទី១' || period === 'ឆមាសទី២') {
+      var months = (period === 'ឆមាសទី១') ? SEMESTER1_MONTHS : SEMESTER2_MONTHS;
+      months.forEach(function(m) {
+        var sheet = ss.getSheetByName(getAttendanceSheetName(cleanCls, m));
+        if (sheet && sheet.getLastRow() >= 8) {
+          var data = sheet.getRange(8, 1, sheet.getLastRow() - 7, ATT_SHEET_WIDTH).getValues();
+          data.forEach(function(row) {
+            var sid = row[1] ? row[1].toString().trim() : '';
+            if (sid) {
+              var c = Number(row[36]) || 0;
+              var a = Number(row[37]) || 0;
+              absMap[sid] = (absMap[sid] || 0) + c + a;
+            }
+          });
+        }
+      });
+    } else {
+      var sheet = ss.getSheetByName(getAttendanceSheetName(cleanCls, period));
+      if (sheet && sheet.getLastRow() >= 8) {
+        var data = sheet.getRange(8, 1, sheet.getLastRow() - 7, ATT_SHEET_WIDTH).getValues();
+        data.forEach(function(row) {
+          var sid = row[1] ? row[1].toString().trim() : '';
+          if (sid) {
+            var c = Number(row[36]) || 0;
+            var a = Number(row[37]) || 0;
+            absMap[sid] = c + a;
+          }
+        });
+      }
+    }
+    return absMap;
+  } catch(e) {
+    Logger.log('getStudentAbsenceMap error: ' + e);
+    return {};
+  }
+}
+
+function getStudentAbsenceMapSecured(token, className, period) {
+  var s = getSessionFromToken_(token);
+  var cls = className;
+  if (s && s.role !== 'admin' && s.assignedClass) cls = s.assignedClass;
+  return getStudentAbsenceMap(cls, period);
 }

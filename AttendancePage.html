@@ -1,0 +1,1619 @@
+<!DOCTYPE html>
+<html lang="km" data-theme="light">
+<head>
+  <base target="_top">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ស្រង់អវត្តមាន</title>
+  
+  <!-- 🔤 Google Fonts Khmer -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Battambang:wght@400;700&family=Kantumruy+Pro:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Moul&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
+  
+  <!-- 📄 Html2Pdf Library for High Resolution PDF Export -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+  <style>
+    /* ================= 🎨 THEME PALETTES ================= */
+    :root, [data-theme="light"] {
+      --primary-purple: #9333ea;
+      --purple-dark: #7e22ce;
+      --purple-glow: rgba(147, 51, 234, 0.15);
+      
+      --bg: linear-gradient(135deg, #fdf4ff 0%, #f5f3ff 50%, #fdf2f8 100%);
+      --surface: #ffffff;
+      --surface-card: #ffffff;
+      --border: #e9d5ff;
+      --border-subtle: #f1f5f9;
+      
+      --text: #0f172a;
+      --text-muted: #64748b;
+      --navy-blue: #1e3a8a;
+      
+      --green-bg: #f0fdf4; --green-txt: #16a34a; --green-bd: #bbf7d0;
+      --red-bg: #fef2f2;   --red-txt: #dc2626;   --red-bd: #fecaca;
+      --amber-bg: #fffbeb; --amber-txt: #d97706; --amber-bd: #fde68a;
+      --blue-bg: #eff6ff;  --blue-txt: #2563eb;  --blue-bd: #bfdbfe;
+    }
+
+    [data-theme="dark"] {
+      --primary-purple: #a855f7;
+      --purple-dark: #7e22ce;
+      --purple-glow: rgba(168, 85, 247, 0.25);
+      
+      --bg: #090d16;
+      --surface: #111827;
+      --surface-card: #131d31;
+      --border: #1f293d;
+      --border-subtle: #1e293b;
+      
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --navy-blue: #60a5fa;
+      
+      --green-bg: rgba(16, 185, 129, 0.15); --green-txt: #34d399; --green-bd: #059669;
+      --red-bg: rgba(225, 29, 72, 0.15);   --red-txt: #fb7185;   --red-bd: #be123c;
+      --amber-bg: rgba(245, 158, 11, 0.15); --amber-txt: #fbbf24; --amber-bd: #d97706;
+      --blue-bg: rgba(59, 130, 246, 0.15);  --blue-txt: #60a5fa;  --blue-bd: #2563eb;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease; }
+    body {
+      font-family: 'Khmer OS Battambang', 'Battambang', 'Kantumruy Pro', sans-serif;
+      background: var(--bg);
+      background-attachment: fixed;
+      color: var(--text);
+      font-size: 13px;
+      line-height: 1.4;
+      min-height: 100vh;
+      padding: 12px 14px 40px;
+    }
+
+    .f-moul { font-family: 'Khmer OS Muol Light', 'Moul', cursive; font-weight: normal; }
+
+    /* ================= 🟢 TOAST NOTIFICATION ================= */
+    #saveToast {
+      visibility: hidden;
+      min-width: 240px;
+      background-color: #059669;
+      color: #fff;
+      text-align: center;
+      border-radius: 14px;
+      padding: 11px 18px;
+      position: fixed;
+      z-index: 3000;
+      left: 50%;
+      bottom: 30px;
+      transform: translateX(-50%);
+      font-size: 13.5px;
+      font-weight: bold;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      opacity: 0;
+      transition: opacity 0.3s, visibility 0.3s;
+    }
+    #saveToast.show {
+      visibility: visible;
+      opacity: 1;
+    }
+
+    /* ================= TOP HEADER ================= */
+    .page-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+    .page-title {
+      font-size: 18px;
+      color: var(--primary-purple);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .top-nav-bar {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 10px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+      margin-bottom: 16px;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .tabs-group { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    
+    .tab-pill-btn {
+      display: inline-flex; align-items: center; gap: 6px; padding: 7px 16px;
+      border-radius: 12px; font-size: 12.5px; font-weight: bold; cursor: pointer;
+      border: none; background: transparent; color: var(--text-muted); transition: all 0.2s ease;
+    }
+    .tab-pill-btn.active {
+      background: linear-gradient(135deg, #9333ea, #7e22ce); color: #ffffff;
+      box-shadow: 0 4px 12px var(--purple-glow);
+    }
+
+    .date-trigger-btn {
+      display: inline-flex; align-items: center; gap: 8px; padding: 7px 14px;
+      border-radius: 12px; border: 1px solid var(--border); background: var(--surface-card);
+      color: var(--text); font-size: 12.5px; font-weight: bold; cursor: pointer;
+    }
+
+    .class-select-pill {
+      padding: 9px 18px;
+      border-radius: 14px;
+      border: 1.5px solid var(--border);
+      background: var(--surface-card);
+      color: var(--text);
+      font-family: 'Khmer OS Battambang', 'Battambang', 'Kantumruy Pro', sans-serif;
+      font-weight: bold;
+      font-size: 13.5px;
+      outline: none;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+      appearance: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%239333ea' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+      background-repeat: no-repeat;
+      background-position: right 12px center;
+      background-size: 14px;
+      padding-right: 38px;
+      transition: all 0.2s ease;
+    }
+
+    /* ================= 📅 POPUP CALENDAR ================= */
+    .calendar-popup {
+      display: none; position: absolute; top: 52px; left: 0; width: 300px;
+      background: var(--surface); border: 1px solid var(--border); border-radius: 18px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25); padding: 16px; z-index: 100;
+    }
+    .calendar-popup.show { display: block; }
+    .cal-head-selectors { display: flex; justify-content: space-between; gap: 8px; margin-bottom: 10px; }
+    .cal-head-selectors select {
+      flex: 1; padding: 6px 8px; border-radius: 10px; border: 1px solid var(--border);
+      background: var(--surface-card); color: var(--text); font-size: 12px; font-weight: bold; outline: none;
+    }
+    .cal-month-title { text-align: center; font-weight: bold; font-size: 13.5px; color: var(--primary-purple); margin-bottom: 8px; }
+    .cal-weekdays {
+      display: grid; grid-template-columns: repeat(7, 1fr); text-align: center;
+      font-size: 11px; font-weight: bold; color: var(--text-muted); margin-bottom: 6px;
+    }
+    .cal-days-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
+    .cal-day-cell {
+      height: 32px; display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: bold; border-radius: 50%; cursor: pointer; transition: all 0.15s;
+    }
+    .cal-day-cell:hover { background: rgba(168, 85, 247, 0.2); color: var(--primary-purple); }
+    .cal-day-cell.selected { background: var(--primary-purple) !important; color: #fff !important; }
+    .cal-day-cell.muted { color: #94a3b8; cursor: default; }
+
+    /* ================= 1. DAILY ATTENDANCE ================= */
+    .daily-layout-grid { display: grid; grid-template-columns: 1fr; gap: 16px; }
+    @media(min-width: 900px) {
+      .daily-layout-grid { grid-template-columns: 300px 1fr; gap: 20px; }
+    }
+    
+    .daily-sidebar-card, .daily-list-card, .report-launcher-card {
+      background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 18px;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.05);
+    }
+
+    .gender-summary-box {
+      display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; margin-top: 10px;
+    }
+    .gender-chip {
+      background: var(--surface-card); border: 1px solid var(--border);
+      border-radius: 12px; padding: 6px 2px; text-align: center;
+    }
+    .gender-chip span { display: block; font-size: 10.5px; color: var(--text-muted); }
+    .gender-chip strong { display: block; font-size: 15px; font-weight: bold; color: var(--text); margin-top: 2px; }
+
+    .status-counter-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 12px 0; }
+    .counter-card {
+      border-radius: 14px; padding: 10px 12px; display: flex; flex-direction: column; justify-content: space-between; height: 70px;
+    }
+    .counter-card.present    { background: var(--green-bg); border: 1px solid var(--green-bd); }
+    .counter-card.absent     { background: var(--red-bg);   border: 1px solid var(--red-bd); }
+    .counter-card.late       { background: var(--amber-bg); border: 1px solid var(--amber-bd); }
+    .counter-card.permission { background: var(--blue-bg);  border: 1px solid var(--blue-bd); }
+
+    .counter-card .c-label { font-size: 11.5px; font-weight: bold; }
+    .counter-card.present .c-label { color: var(--green-txt); }
+    .counter-card.absent .c-label  { color: var(--red-txt); }
+    .counter-card.late .c-label    { color: var(--amber-txt); }
+    .counter-card.permission .c-label { color: var(--blue-txt); }
+
+    .counter-card .c-val { font-size: 20px; font-weight: 800; }
+    .counter-card.present .c-val { color: var(--green-txt); }
+    .counter-card.absent .c-val  { color: var(--red-txt); }
+    .counter-card.late .c-val    { color: var(--amber-txt); }
+    .counter-card.permission .c-val { color: var(--blue-txt); }
+
+    .search-pill-wrap {
+      display: flex; align-items: center; gap: 8px; background: var(--surface-card);
+      border: 1px solid var(--border); border-radius: 16px; padding: 7px 12px; margin-bottom: 10px;
+    }
+    .search-pill-wrap input { border: none; background: transparent; outline: none; font-size: 12.5px; color: var(--text); width: 100%; }
+    
+    .bulk-actions-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; }
+    .btn-bulk {
+      padding: 9px; border-radius: 12px; font-size: 12.5px; font-weight: bold; border: none;
+      cursor: pointer; color: #fff; display: flex; align-items: center; justify-content: center; gap: 6px;
+    }
+    .btn-bulk.present { background: #059669; }
+    .btn-bulk.absent  { background: #e11d48; }
+
+    .student-item-card {
+      background: var(--surface-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 12px 14px;
+      margin-bottom: 8px;
+      transition: all 0.2s ease;
+    }
+    .student-item-card.has-absent { border-color: rgba(225, 29, 72, 0.4); background: rgba(225, 29, 72, 0.04); }
+
+    .st-top-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+    }
+    .st-name-title {
+      font-size: 14px;
+      font-weight: bold;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      word-break: break-word;
+    }
+
+    .att-split-btn {
+      display: inline-flex;
+      border-radius: 10px;
+      overflow: hidden;
+      border: 1.5px solid transparent;
+      flex-shrink: 0;
+    }
+    .att-btn-main {
+      padding: 6px 14px;
+      font-size: 12px;
+      font-weight: bold;
+      cursor: pointer;
+      border: none;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .att-btn-dropdown-trigger {
+      padding: 6px 8px;
+      cursor: pointer;
+      border: none;
+      border-left: 1px solid rgba(255, 255, 255, 0.2);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .status-P .att-split-btn { background: var(--green-bg); border-color: var(--green-bd); color: var(--green-txt); }
+    .status-A .att-split-btn { background: var(--red-bg);   border-color: var(--red-bd);   color: var(--red-txt); }
+    .status-L .att-split-btn { background: var(--amber-bg); border-color: var(--amber-bd); color: var(--amber-txt); }
+    .status-C .att-split-btn { background: var(--blue-bg);  border-color: var(--blue-bd);  color: var(--blue-txt); }
+
+    .st-note-input {
+      width: 100%;
+      margin-top: 8px;
+      padding: 7px 12px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      font-size: 12px;
+      outline: none;
+    }
+
+    /* ================= 🔍 ACTION SHEET MODAL ================= */
+    .action-sheet-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.65);
+      backdrop-filter: blur(4px);
+      z-index: 1000;
+      align-items: flex-end;
+      justify-content: center;
+      padding-bottom: 20px;
+    }
+    .action-sheet-backdrop.show { display: flex; }
+    
+    .action-sheet-card {
+      width: 420px;
+      max-width: 94%;
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-radius: 20px;
+      padding: 18px 20px 22px;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+    }
+    .sheet-handle-bar { width: 36px; height: 4px; border-radius: 4px; background: var(--text-muted); margin: 0 auto 10px; }
+    .sheet-student-name { text-align: center; font-size: 15px; font-weight: bold; color: var(--text); margin-bottom: 16px; }
+
+    .sheet-options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .sheet-choice-btn {
+      padding: 11px; border-radius: 12px; font-size: 13px; font-weight: bold; cursor: pointer;
+      display: flex; align-items: center; justify-content: center; gap: 6px;
+    }
+    .sheet-choice-btn.p { background: #064e3b; color: #34d399; border: 1.5px solid #059669; }
+    .sheet-choice-btn.a { background: #4c0519; color: #fb7185; border: 1.5px solid #be123c; }
+    .sheet-choice-btn.l { background: #451a03; color: #fbbf24; border: 1.5px solid #d97706; }
+    .sheet-choice-btn.c { background: #172554; color: #60a5fa; border: 1.5px solid #2563eb; }
+
+    /* ================= 2. TAB: REPORTS MENU ================= */
+    .report-menu-row {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 14px 18px; border-radius: 14px; background: var(--surface-card); border: 1px solid var(--border);
+      margin-top: 10px; gap: 10px;
+    }
+    .btn-open-report {
+      padding: 7px 16px; border-radius: 10px; background: var(--primary-purple); color: #fff;
+      font-weight: bold; font-size: 12.5px; border: none; cursor: pointer; flex-shrink: 0;
+    }
+
+    .holiday-config-box {
+      background: var(--surface-card);
+      border: 1.5px solid var(--border);
+      border-radius: 16px;
+      padding: 16px;
+      margin-top: 12px;
+      margin-bottom: 14px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.04);
+    }
+    .holiday-tag-pill {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: rgba(16, 185, 129, 0.1); color: #059669; border: 1px solid rgba(16, 185, 129, 0.3);
+      padding: 5px 12px; border-radius: 20px; font-size: 12.5px; font-weight: bold; margin: 4px;
+    }
+    .holiday-tag-pill i { cursor: pointer; color: #ef4444; }
+
+    .holiday-calendar-trigger {
+      display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px; border-radius: 12px;
+      border: 1.5px solid var(--border); background: var(--surface); color: var(--text);
+      font-size: 12.5px; font-weight: bold; cursor: pointer;
+    }
+    .holiday-calendar-popup {
+      display: none; position: absolute; top: 48px; left: 0; width: 290px;
+      background: var(--surface); border: 1px solid var(--border); border-radius: 18px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.25); padding: 16px; z-index: 150;
+    }
+    .holiday-calendar-popup.show { display: block; }
+
+    /* ================= 3. REPORT VIEWER & PRINT SETUP ================= */
+    #reportViewerModal {
+      display: none; position: fixed; inset: 0; background: #090d16; z-index: 2000;
+      overflow-y: auto; padding: 10px 10px 40px;
+    }
+    .viewer-top-bar {
+      position: sticky; top: 0; background: #111827; color: #fff; padding: 10px 16px;
+      border-radius: 12px; display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 16px; z-index: 100;
+    }
+    
+    .report-paper-container {
+      background: #ffffff;
+      width: 297mm;
+      max-width: 100%;
+      min-height: 210mm;
+      margin: 0 auto;
+      padding: 8mm 10mm;
+      border-radius: 4px;
+      box-shadow: 0 10px 35px rgba(0,0,0,0.7);
+      color: #0f172a;
+      font-size: 11px;
+    }
+    .rpt-header-banner { text-align: center; color: #1e3a8a; margin-bottom: 8px; }
+    
+    .print-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 10px;
+      text-align: center;
+      border: 1px solid #334155;
+      margin: 6px 0;
+    }
+    .print-table th, .print-table td {
+      border: 1px solid #334155;
+      padding: 2.5px 1px;
+      vertical-align: middle;
+    }
+    .weekend-merged-cell { background: #fce7f3 !important; color: #be185d !important; font-weight: bold; vertical-align: middle; }
+    .holiday-cell { background: #fee2e2 !important; color: #b91c1c !important; font-weight: bold; }
+    
+    /* 🌟 អក្សរបញ្ឈរមិនបាក់បែក និងមិនត្រឡប់ក្បាល */
+    .vertical-sun-box {
+      width: 24px;
+      height: 80px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto;
+    }
+    .vertical-sun-text {
+      display: inline-block;
+      white-space: nowrap;
+      transform: rotate(-90deg);
+      font-size: 9.5px;
+      font-weight: bold;
+      line-height: 1;
+    }
+
+    .stats-summary-bar { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; margin-top: 6px; font-size: 10.5px; line-height: 1.5; gap: 10px; }
+
+    /* 🌟 ថ្ងៃខែចន្ទគតិធម្មតា គ្មានប្រអប់ឡើយ (No Box) */
+    .clean-lunar-input {
+      font-family: 'Khmer OS Battambang', 'Battambang', sans-serif;
+      font-size: 12.5px;
+      font-weight: bold;
+      color: #1e3a8a;
+      border: none !important;
+      background: transparent !important;
+      box-shadow: none !important;
+      padding: 0 !important;
+      text-align: center;
+      width: 100%;
+      max-width: 480px;
+      outline: none;
+      margin: 0 auto;
+      display: block;
+    }
+
+    @page {
+      size: A4 landscape;
+      margin: 5mm 6mm;
+    }
+
+    @media print {
+      html, body {
+        background: #ffffff !important;
+        color: #000000 !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        width: 100% !important;
+        height: auto !important;
+        -webkit-print-color-adjust: exact !important;
+        print-color-adjust: exact !important;
+      }
+
+      .page-header,
+      .top-nav-bar,
+      #tabDailyView,
+      #tabReportsMenu,
+      #saveToast,
+      #statusActionSheetModal,
+      .viewer-top-bar,
+      .holiday-config-box {
+        display: none !important;
+      }
+
+      #reportViewerModal {
+        display: block !important;
+        position: static !important;
+        background: #ffffff !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        inset: auto !important;
+        overflow: visible !important;
+        width: 100% !important;
+      }
+
+      .report-paper-container {
+        width: 100% !important;
+        max-width: 100% !important;
+        min-height: auto !important;
+        margin: 0 !important;
+        padding: 0 !important;
+        box-shadow: none !important;
+        border-radius: 0 !important;
+        background: #ffffff !important;
+        font-size: 9.5px !important;
+      }
+
+      .print-table {
+        width: 100% !important;
+        table-layout: auto !important;
+      }
+
+      .print-table th, .print-table td {
+        padding: 2px 0.5px !important;
+        font-size: 8.5px !important;
+        border: 1px solid #1e293b !important;
+      }
+
+      .clean-lunar-input {
+        border: none !important;
+        background: transparent !important;
+        box-shadow: none !important;
+      }
+
+      .stats-summary-bar {
+        font-size: 9px !important;
+        margin-top: 5px !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 🟢 TOAST NOTIFICATION FOR SAVE SUCCESS -->
+  <div id="saveToast"><i class="fa-solid fa-circle-check" style="font-size:16px;"></i> បានរក្សាទុកដោយជោគជ័យ</div>
+
+  <!-- ================= TOP HEADER ================= -->
+  <div class="page-header">
+    <div class="page-title f-moul">
+      <span>ស្រង់អវត្តមាន</span>
+    </div>
+    <div style="font-size: 18px; color: var(--primary-purple); cursor: pointer;">
+      <i class="fa-solid fa-bell"></i>
+    </div>
+  </div>
+
+  <!-- ================= TOP NAV TABS BAR ================= -->
+  <div class="top-nav-bar">
+    <div class="tabs-group">
+      <button class="tab-pill-btn active" id="btnTabDaily" onclick="switchNavTab('daily')">
+        ប្រចាំថ្ងៃ
+      </button>
+      <button class="tab-pill-btn" id="btnTabReports" onclick="switchNavTab('reports')">
+        <i class="fa-solid fa-chart-simple"></i> របាយការណ៍ & សង្ខេបខែ
+      </button>
+
+      <!-- Date Picker Trigger Pill -->
+      <div style="position: relative;">
+        <button class="date-trigger-btn" id="btnDateDisplay" onclick="toggleCalendarPopup()">
+          <i class="fa-regular fa-calendar"></i>
+          <span id="txtDisplayDate">1 កញ្ញា 2026</span>
+        </button>
+
+        <!-- 📅 POPUP KHMER CALENDAR -->
+        <div class="calendar-popup" id="calPopup">
+          <div class="cal-head-selectors">
+            <select id="calMonthSelect" onchange="renderCalendarDays()">
+              <option value="0">មករា</option><option value="1">កុម្ភៈ</option>
+              <option value="2">មីនា</option><option value="3">មេសា</option>
+              <option value="4">ឧសភា</option><option value="5">មិថុនា</option>
+              <option value="6">កក្កដា</option><option value="7">សីហា</option>
+              <option value="8" selected>កញ្ញា</option><option value="9">តុលា</option>
+              <option value="10">វិច្ឆិកា</option><option value="11">ធ្នូ</option>
+            </select>
+            <select id="calYearSelect" onchange="renderCalendarDays()">
+              <option value="2025">2025</option>
+              <option value="2026" selected>2026</option>
+              <option value="2027">2027</option>
+            </select>
+          </div>
+
+          <div class="cal-month-title" id="calMonthYearTitle">កញ្ញា 2026</div>
+
+          <div class="cal-weekdays">
+            <span>អា</span><span>ច</span><span>អ</span><span>ព</span><span>ព្រ</span><span>សុ</span><span>ស</span>
+          </div>
+
+          <div class="cal-days-grid" id="calDaysGrid"></div>
+
+          <div style="display:flex; justify-content:space-between; margin-top:10px; font-size:12px; font-weight:bold;">
+            <span style="color:#ec4899; cursor:pointer;" onclick="selectTodayDate()">ថ្ងៃនេះ</span>
+            <span style="color:var(--text-muted); cursor:pointer;" onclick="toggleCalendarPopup()">បិទ</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Class Selector -->
+    <div>
+      <select id="classSelect" class="class-select-pill" onchange="onClassChange()">
+        <option value="">កំពុងទាញយកថ្នាក់...</option>
+      </select>
+    </div>
+  </div>
+
+  <!-- ================= 1. TAB: វត្តមានប្រចាំថ្ងៃ ================= -->
+  <div id="tabDailyView">
+    <div class="daily-layout-grid">
+      
+      <!-- Left Stats Sidebar -->
+      <div class="daily-sidebar-card">
+        <div style="font-size:12px; color:var(--text-muted);">
+          <div>ថ្ងៃនេះ:</div>
+          <div style="font-size:14.5px; font-weight:bold; color:var(--text);" id="lblSelectedDateIso">2026-09-01</div>
+        </div>
+
+        <!-- Gender Stats -->
+        <div class="gender-summary-box">
+          <div class="gender-chip">
+            <span>ប្រុស</span>
+            <strong id="countMale">0</strong>
+          </div>
+          <div class="gender-chip">
+            <span style="color:#fb7185;">ស្រី</span>
+            <strong id="countFemale" style="color:#fb7185;">0</strong>
+          </div>
+          <div class="gender-chip">
+            <span>សរុប</span>
+            <strong id="countTotal">0</strong>
+          </div>
+        </div>
+
+        <!-- 4 Counter Cards -->
+        <div class="status-counter-grid">
+          <div class="counter-card present">
+            <div class="c-label">មានវត្តមាន</div>
+            <div class="c-val" id="cntPresent">0</div>
+          </div>
+          <div class="counter-card absent">
+            <div class="c-label">អវត្តមាន</div>
+            <div class="c-val" id="cntAbsent">0</div>
+          </div>
+          <div class="counter-card late">
+            <div class="c-label">យឺត</div>
+            <div class="c-val" id="cntLate">0</div>
+          </div>
+          <div class="counter-card permission">
+            <div class="c-label">មានច្បាប់</div>
+            <div class="c-val" id="cntPerm">0</div>
+          </div>
+        </div>
+
+        <!-- Search Input -->
+        <div class="search-pill-wrap">
+          <i class="fa-solid fa-magnifying-glass" style="color:#64748b; font-size:12px;"></i>
+          <input type="text" id="searchBox" placeholder="ស្វែងរកឈ្មោះ..." oninput="renderDailyList()">
+        </div>
+
+        <!-- Bulk Actions -->
+        <div class="bulk-actions-row">
+          <button class="btn-bulk present" onclick="setBulkDailyStatus('P')">
+            <i class="fa-solid fa-check"></i> វត្តមាន
+          </button>
+          <button class="btn-bulk absent" onclick="setBulkDailyStatus('A')">
+            <i class="fa-solid fa-xmark"></i> អវត្តមាន
+          </button>
+        </div>
+
+        <!-- Helper Tip -->
+        <div style="border: 1px dashed var(--border); border-radius:12px; padding:9px; font-size:11px; color:var(--text-muted); line-height:1.4;">
+          ចុចលើស្ថានភាព ដើម្បីប្តូររហ័ស ឬប្រើសញ្ញាព្រួញចុះក្រោមដើម្បីជ្រើសរើសលម្អិត។
+        </div>
+      </div>
+
+      <!-- Right Student Attendance List -->
+      <div class="daily-list-card">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; padding-bottom:8px; border-bottom:1px solid var(--border);">
+          <div>
+            <h3 style="font-size:14.5px; font-weight:bold; color:var(--text);">បញ្ជីសិស្ស</h3>
+            <span style="font-size:11px; color:var(--text-muted);">រក្សាទុកស្វ័យប្រវត្តពេលផ្លាស់ប្តូរ</span>
+          </div>
+          <span style="font-size:11.5px; font-weight:bold; color:#34d399; background:rgba(16,185,129,0.15); padding:3px 9px; border-radius:20px;">✓ សកម្ម</span>
+        </div>
+
+        <div id="studentListContainer">
+          <div style="text-align:center; padding:30px; color:var(--text-muted);">កំពុងទាញយកទិន្នន័យ...</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ================= 2. TAB: របាយការណ៍ & សង្ខេបខែ ================= -->
+  <div id="tabReportsMenu" style="display:none;">
+    <div class="report-launcher-card" style="max-width: 800px; margin: 0 auto;">
+      <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; flex-wrap:wrap; gap:10px;">
+        <div style="display:flex; align-items:center; gap:10px;">
+          <div style="width:40px; height:40px; border-radius:10px; background:rgba(168,85,247,0.2); color:var(--primary-purple); display:flex; align-items:center; justify-content:center; font-size:20px;">📋</div>
+          <div>
+            <h2 class="f-moul" style="font-size:15px; color:var(--text);">បញ្ជីអវត្តមាន</h2>
+            <p style="font-size:11.5px; color:var(--text-muted);">ប្រចាំខែ និងសរុបប្រចាំឆ្នាំ</p>
+          </div>
+        </div>
+
+        <select id="rptMonthSelect" class="class-select-pill" onchange="renderHolidayConfigSection()">
+          <option value="មករា">មករា</option><option value="កុម្ភៈ">កុម្ភៈ</option>
+          <option value="មីនា">មីនា</option><option value="មេសា">មេសា</option>
+          <option value="ឧសភា">ឧសភា</option><option value="មិថុនា">មិថុនា</option>
+          <option value="កក្កដា">កក្កដា</option><option value="សីហា">សីហា</option>
+          <option value="កញ្ញា" selected>កញ្ញា</option><option value="តុលា">តុលា</option>
+          <option value="វិច្ឆិកា">វិច្ឆិកា</option><option value="ធ្នូ">ធ្នូ</option>
+        </select>
+      </div>
+
+      <div class="holiday-config-box">
+        <div style="font-size: 13.5px; font-weight: bold; color: var(--text); margin-bottom: 6px; display: flex; align-items: center; gap: 6px;">
+          <i class="fa-solid fa-umbrella-beach" style="color: #059669;"></i>
+          <span>ថ្ងៃឈប់ / ថ្ងៃសុំច្បាប់ (មិនរាប់ជាថ្ងៃរៀន)៖</span>
+        </div>
+        <div style="font-size: 11.5px; color: var(--text-muted); margin-bottom: 10px;">
+          ជ្រើសរើសថ្ងៃពីប្រតិទិនខែ • កាត់បន្ថយថ្ងៃរៀនពិតប្រាកដស្វ័យប្រវត្ត។
+        </div>
+        <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-bottom: 10px;">
+          
+          <div style="position: relative;">
+            <button class="holiday-calendar-trigger" onclick="toggleHolidayCalPopup()">
+              <i class="fa-regular fa-calendar-days" style="color: var(--primary-purple);"></i>
+              <span id="selectedHolidayDateTxt">ជ្រើសរើសថ្ងៃទី</span>
+            </button>
+
+            <div class="holiday-calendar-popup" id="holidayCalPopup">
+              <div class="cal-month-title" id="holidayCalTitle">កញ្ញា 2026</div>
+              <div class="cal-weekdays">
+                <span>អា</span><span>ច</span><span>អ</span><span>ព</span><span>ព្រ</span><span>សុ</span><span>ស</span>
+              </div>
+              <div class="cal-days-grid" id="holidayCalDaysGrid"></div>
+              <div style="display:flex; justify-content:space-between; margin-top:10px; font-size:11.5px; font-weight:bold;">
+                <span style="color:var(--text-muted); cursor:pointer;" onclick="toggleHolidayCalPopup()">បិទ</span>
+              </div>
+            </div>
+          </div>
+
+          <input type="text" id="holidayReasonInput" placeholder="មូលហេតុ (ឧ. បុណ្យភ្ជុំបិណ្ឌ)" style="flex: 1; min-width: 180px; padding: 8px 12px; border-radius: 12px; border: 1.5px solid var(--border); background: var(--surface); color: var(--text); outline: none; font-size: 13px;">
+          <button onclick="addHolidayForCurrentMonth()" style="padding: 8px 18px; border-radius: 12px; background: #059669; color: #fff; font-weight: bold; border: none; cursor: pointer; font-size: 13px;"><i class="fa-solid fa-plus"></i> បន្ថែម</button>
+        </div>
+        <div id="holidayTagsContainer" style="display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px;">
+        </div>
+      </div>
+
+      <div class="report-menu-row">
+        <div style="display:flex; align-items:center; gap:8px; font-weight:bold; font-size:13.5px; color:var(--text);">
+          <span style="color:#38bdf8; font-size:16px;">📋</span>
+          <span>បញ្ជីវត្តមានប្រចាំខែ</span>
+        </div>
+        <button class="btn-open-report" onclick="openReportView('monthly')">
+          <i class="fa-solid fa-print"></i> បើកមើល
+        </button>
+      </div>
+
+      <div class="report-menu-row">
+        <div style="display:flex; align-items:center; gap:8px; font-weight:bold; font-size:13.5px; color:var(--text);">
+          <span style="color:#a855f7; font-size:16px;">📅</span>
+          <span>សរុបអវត្តមានប្រចាំឆ្នាំ</span>
+        </div>
+        <button class="btn-open-report" onclick="openReportView('yearly')">
+          <i class="fa-solid fa-print"></i> បើកមើល
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= 3. ACTION SHEET MODAL ================= -->
+  <div id="statusActionSheetModal" class="action-sheet-backdrop" onclick="closeStatusActionSheet(event)">
+    <div class="action-sheet-card" onclick="event.stopPropagation()">
+      <div class="sheet-handle-bar"></div>
+      <div class="sheet-student-name" id="actionSheetStudentName">ឈ្មោះសិស្ស</div>
+      
+      <div class="sheet-options-grid">
+        <button class="sheet-choice-btn p" onclick="selectActionStatus('P')">
+          <i class="fa-solid fa-check"></i> មានវត្តមាន
+        </button>
+        <button class="sheet-choice-btn a" onclick="selectActionStatus('A')">
+          <i class="fa-solid fa-xmark"></i> អវត្តមាន
+        </button>
+        <button class="sheet-choice-btn l" onclick="selectActionStatus('L')">
+          <i class="fa-regular fa-clock"></i> យឺត
+        </button>
+        <button class="sheet-choice-btn c" onclick="selectActionStatus('C')">
+          <i class="fa-solid fa-shield-halved"></i> មានច្បាប់
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= 4. REPORT VIEWER MODAL ================= -->
+  <div id="reportViewerModal">
+    <div class="viewer-top-bar">
+      <button class="tab-pill-btn" style="background:#1f293d; color:#fff;" onclick="closeReportView()">⬅ ត្រឡប់</button>
+      <div style="display:flex; gap:8px;">
+        <button class="tab-pill-btn" style="background:#059669; color:#fff;" onclick="downloadPDF()"><i class="fa-solid fa-file-pdf"></i> ទាញយក PDF</button>
+        <button class="tab-pill-btn" style="background:var(--primary-purple); color:#fff;" onclick="window.print()"><i class="fa-solid fa-print"></i> បោះពុម្ព</button>
+      </div>
+    </div>
+    <div class="report-paper-container" id="printableReportPaper"></div>
+  </div>
+
+  <script>
+    var TOKEN = "<?= token ?>";
+    var USER_ROLE = "<?= userRole ?>";
+    var USER_CLASS = "<?= userClass ?>";
+    var TEACHER_NAME = "<?= teacherName ?>";
+
+    var KHMER_MONTHS = ["មករា","កុម្ភៈ","មីនា","មេសា","ឧសភា","មិថុនា","កក្កដា","សីហា","កញ្ញា","តុលា","វិច្ឆិកា","ធ្នូ"];
+    var WEEKDAYS_KH = ["អា","ច","អ","ព","ព្រ","សុ","ស"];
+    var WEEKDAYS_FULL = ["អាទិត្យ","ចន្ទ","អង្គារ","ពុធ","ព្រហស្បតិ៍","សុក្រ","សៅរ៍"];
+    var KHMER_DIGITS = ['០','១','២','៣','៤','៥','៦','៧','៨','៩'];
+
+    var monthlyHolidaysMap = {
+      "មករា": [], "កុម្ភៈ": [], "មីនា": [], "មេសា": [], 
+      "ឧសភា": [], "មិថុនា": [], "កក្កដា": [], "សីហា": [], 
+      "កញ្ញា": [], "តុលា": [], "វិច្ឆិកា": [], "ធ្នូ": []
+    };
+
+    var selectedHolidayDay = null;
+
+    function toKhmerNum(n) { return String(n).replace(/\d/g, d => KHMER_DIGITS[d]); }
+
+    function getAutoThemeByTime() {
+      var hour = new Date().getHours();
+      return (hour >= 18 || hour < 6) ? 'dark' : 'light';
+    }
+
+    function applyTheme(theme) {
+      document.documentElement.setAttribute('data-theme', theme);
+    }
+
+    function showSaveToast() {
+      var toast = document.getElementById("saveToast");
+      toast.className = "show";
+      setTimeout(function(){ toast.className = toast.className.replace("show", ""); }, 2500);
+    }
+
+    function saveHolidaysData() {
+      try {
+        localStorage.setItem('school_monthly_holidays', JSON.stringify(monthlyHolidaysMap));
+      } catch(e) {}
+
+      if (typeof google !== 'undefined' && google.script && google.script.run) {
+        try {
+          google.script.run.saveSchoolHolidays(monthlyHolidaysMap);
+        } catch(e) {}
+      }
+    }
+
+    function loadHolidaysData() {
+      try {
+        var local = localStorage.getItem('school_monthly_holidays');
+        if (local) {
+          var parsed = JSON.parse(local);
+          monthlyHolidaysMap = Object.assign({
+            "មករា": [], "កុម្ភៈ": [], "មីនា": [], "មេសា": [], 
+            "ឧសភា": [], "មិថុនា": [], "កក្កដា": [], "សីហា": [], 
+            "កញ្ញា": [], "តុលា": [], "វិច្ឆិកា": [], "ធ្នូ": []
+          }, parsed);
+        }
+      } catch(e) {}
+
+      if (typeof google !== 'undefined' && google.script && google.script.run) {
+        try {
+          google.script.run
+            .withSuccessHandler(function(serverData) {
+              if (serverData && typeof serverData === 'object') {
+                monthlyHolidaysMap = Object.assign(monthlyHolidaysMap, serverData);
+                try { localStorage.setItem('school_monthly_holidays', JSON.stringify(monthlyHolidaysMap)); } catch(e){}
+                renderHolidayTagsList();
+              }
+            })
+            .getSchoolHolidays();
+        } catch(e) {}
+      }
+    }
+
+    function toggleHolidayCalPopup() {
+      var pop = document.getElementById('holidayCalPopup');
+      pop.classList.toggle('show');
+      if (pop.classList.contains('show')) {
+        renderHolidayCalendarDays();
+      }
+    }
+
+    function renderHolidayCalendarDays() {
+      var mName = document.getElementById('rptMonthSelect').value;
+      var mIdx = KHMER_MONTHS.indexOf(mName);
+      var currentYear = new Date().getFullYear();
+      
+      document.getElementById('holidayCalTitle').textContent = mName + " " + currentYear;
+      var grid = document.getElementById('holidayCalDaysGrid');
+      grid.innerHTML = '';
+
+      var firstDay = new Date(currentYear, mIdx, 1).getDay();
+      var totalDays = new Date(currentYear, mIdx + 1, 0).getDate();
+      var prevTotal = new Date(currentYear, mIdx, 0).getDate();
+
+      for (var p = firstDay - 1; p >= 0; p--) {
+        grid.innerHTML += `<div class="cal-day-cell muted">${prevTotal - p}</div>`;
+      }
+      for (var d = 1; d <= totalDays; d++) {
+        var isSel = (selectedHolidayDay === d);
+        grid.innerHTML += `<div class="cal-day-cell ${isSel ? 'selected' : ''}" onclick="pickHolidayCalendarDate(${d})">${d}</div>`;
+      }
+    }
+
+    function pickHolidayCalendarDate(d) {
+      selectedHolidayDay = d;
+      var mName = document.getElementById('rptMonthSelect').value;
+      document.getElementById('selectedHolidayDateTxt').textContent = `ថ្ងៃទី ${toKhmerNum(d)}  ${mName}`;
+      toggleHolidayCalPopup();
+    }
+
+    function renderHolidayConfigSection() {
+      selectedHolidayDay = null;
+      var mName = document.getElementById('rptMonthSelect').value;
+      document.getElementById('selectedHolidayDateTxt').textContent = `ជ្រើសរើសថ្ងៃទី (${mName})`;
+      renderHolidayTagsList();
+    }
+
+    function addHolidayForCurrentMonth() {
+      var mName = document.getElementById('rptMonthSelect').value;
+      var reasonInput = document.getElementById('holidayReasonInput');
+      
+      if (!selectedHolidayDay) {
+        alert('សូមចុចលើប្រអប់ប្រតិទិន ដើម្បីជ្រើសរើសថ្ងៃឈប់សម្រាកសិន!');
+        return;
+      }
+
+      var reason = (reasonInput.value || 'ថ្ងៃឈប់សម្រាក').trim();
+
+      if (!monthlyHolidaysMap[mName]) monthlyHolidaysMap[mName] = [];
+      
+      if (!monthlyHolidaysMap[mName].some(h => h.day === selectedHolidayDay)) {
+        monthlyHolidaysMap[mName].push({ day: selectedHolidayDay, reason: reason });
+        monthlyHolidaysMap[mName].sort((a, b) => a.day - b.day);
+      }
+
+      saveHolidaysData();
+
+      reasonInput.value = '';
+      selectedHolidayDay = null;
+      document.getElementById('selectedHolidayDateTxt').textContent = `ជ្រើសរើសថ្ងៃទី (${mName})`;
+      renderHolidayTagsList();
+      showSaveToast();
+    }
+
+    function removeHoliday(mName, dayNum) {
+      if (monthlyHolidaysMap[mName]) {
+        monthlyHolidaysMap[mName] = monthlyHolidaysMap[mName].filter(h => h.day !== dayNum);
+        saveHolidaysData();
+        renderHolidayTagsList();
+      }
+    }
+
+    function renderHolidayTagsList() {
+      var mName = document.getElementById('rptMonthSelect').value;
+      var container = document.getElementById('holidayTagsContainer');
+      var list = monthlyHolidaysMap[mName] || [];
+
+      if (list.length === 0) {
+        container.innerHTML = '<span style="font-size:11.5px; color:var(--text-muted); font-style:italic;">មិនទាន់មានថ្ងៃឈប់សម្រាកសម្រាប់ខែនេះទេ</span>';
+        return;
+      }
+
+      var html = '';
+      list.forEach(function(h) {
+        html += `
+          <span class="holiday-tag-pill">
+            ថ្ងៃទី${toKhmerNum(h.day)} (${h.reason})
+            <i class="fa-solid fa-xmark" onclick="removeHoliday('${mName}', ${h.day})" title="លុបចេញ"></i>
+          </span>
+        `;
+      });
+      container.innerHTML = html;
+    }
+
+    function getFullKhmerDateString(dateObj) {
+      var d = dateObj || new Date();
+      var solarDay = toKhmerNum(d.getDate());
+      var solarMonth = KHMER_MONTHS[d.getMonth()];
+      var solarYear = toKhmerNum(d.getFullYear());
+
+      var defaultLunar = `ថ្ងៃពុធ ៤រោច ខែភទ្របទ ឆ្នាំមមី អដ្ឋស័ក ពុទ្ធសករាជ ២៥៧០`;
+      var defaultSolar = `ធ្វើនៅកំពង់ល្ពៅ,ថ្ងៃទី${solarDay} ខែ${solarMonth} ឆ្នាំ${solarYear}`;
+
+      return {
+        lunarInputHtml: `<input type="text" class="clean-lunar-input" value="${defaultLunar}" title="ចុចដើម្បីកែប្រែថ្ងៃខែចន្ទគតិ">`,
+        solarLine: defaultSolar
+      };
+    }
+
+    var selectedDate = new Date();
+    var currentClassName = "";
+    var rawStudentsData = [];
+    var dailyAttendanceState = {};
+    var studentNotesMap = {};
+    var activeActionSheetSid = null;
+
+    window.onload = function() {
+      applyTheme(getAutoThemeByTime());
+      setInterval(function() { applyTheme(getAutoThemeByTime()); }, 60000);
+
+      loadHolidaysData();
+      updateDateUI();
+      initClasses();
+      renderHolidayConfigSection();
+    };
+
+    function switchNavTab(tab) {
+      document.getElementById('btnTabDaily').classList.toggle('active', tab === 'daily');
+      document.getElementById('btnTabReports').classList.toggle('active', tab === 'reports');
+      document.getElementById('tabDailyView').style.display = (tab === 'daily') ? 'block' : 'none';
+      document.getElementById('tabReportsMenu').style.display = (tab === 'reports') ? 'block' : 'none';
+      if(tab === 'reports') renderHolidayConfigSection();
+    }
+
+    function initClasses() {
+      google.script.run
+        .withSuccessHandler(function(classes) {
+          var sel = document.getElementById('classSelect');
+          sel.innerHTML = '';
+          if (classes && classes.length > 0) {
+            classes.forEach(function(c) {
+              var opt = document.createElement('option');
+              opt.value = c;
+              opt.textContent = 'ថ្នាក់ទី ' + c;
+              sel.appendChild(opt);
+            });
+            if (USER_CLASS) sel.value = USER_CLASS;
+            onClassChange();
+          }
+        })
+        .getClassListForSession(TOKEN);
+    }
+
+    function onClassChange() {
+      currentClassName = document.getElementById('classSelect').value;
+      if (!currentClassName) return;
+      loadDailyAttendanceData();
+    }
+
+    function updateDateUI() {
+      var d = selectedDate.getDate();
+      var mIdx = selectedDate.getMonth();
+      var y = selectedDate.getFullYear();
+      document.getElementById('txtDisplayDate').textContent = d + " " + KHMER_MONTHS[mIdx] + " " + y;
+      var iso = y + "-" + String(mIdx + 1).padStart(2, '0') + "-" + String(d).padStart(2, '0');
+      document.getElementById('lblSelectedDateIso').textContent = iso;
+    }
+
+    function toggleCalendarPopup() {
+      var pop = document.getElementById('calPopup');
+      pop.classList.toggle('show');
+      if (pop.classList.contains('show')) {
+        document.getElementById('calMonthSelect').value = selectedDate.getMonth();
+        document.getElementById('calYearSelect').value = selectedDate.getFullYear();
+        renderCalendarDays();
+      }
+    }
+
+    function renderCalendarDays() {
+      var m = parseInt(document.getElementById('calMonthSelect').value);
+      var y = parseInt(document.getElementById('calYearSelect').value);
+      var grid = document.getElementById('calDaysGrid');
+      grid.innerHTML = '';
+
+      var firstDay = new Date(y, m, 1).getDay();
+      var totalDays = new Date(y, m + 1, 0).getDate();
+      var prevTotal = new Date(y, m, 0).getDate();
+
+      for (var p = firstDay - 1; p >= 0; p--) {
+        grid.innerHTML += `<div class="cal-day-cell muted">${prevTotal - p}</div>`;
+      }
+      for (var d = 1; d <= totalDays; d++) {
+        var isSel = (d === selectedDate.getDate() && m === selectedDate.getMonth() && y === selectedDate.getFullYear());
+        grid.innerHTML += `<div class="cal-day-cell ${isSel ? 'selected' : ''}" onclick="pickCalendarDate(${y}, ${m}, ${d})">${d}</div>`;
+      }
+    }
+
+    function pickCalendarDate(y, m, d) {
+      selectedDate = new Date(y, m, d);
+      updateDateUI();
+      toggleCalendarPopup();
+      loadDailyAttendanceData();
+    }
+
+    function selectTodayDate() {
+      selectedDate = new Date();
+      updateDateUI();
+      toggleCalendarPopup();
+      loadDailyAttendanceData();
+    }
+
+    function loadDailyAttendanceData() {
+      var mName = KHMER_MONTHS[selectedDate.getMonth()];
+      var day = selectedDate.getDate();
+
+      google.script.run
+        .withSuccessHandler(function(students) {
+          rawStudentsData = students || [];
+          dailyAttendanceState = {};
+
+          rawStudentsData.forEach(function(s) {
+            dailyAttendanceState[s.id] = (s.days && s.days[day]) ? s.days[day] : 'P';
+          });
+          renderDailyList();
+          updateStatsCounters();
+        })
+        .getMonthlyAttendanceForClassSecured(TOKEN, currentClassName, mName);
+    }
+
+    function renderDailyList() {
+      var container = document.getElementById('studentListContainer');
+      if (!rawStudentsData.length) {
+        container.innerHTML = '<div style="text-align:center; padding:30px; color:var(--text-muted);">គ្មានទិន្នន័យសិស្សឡើយ</div>';
+        return;
+      }
+      var q = (document.getElementById('searchBox').value || '').trim().toLowerCase();
+      var list = rawStudentsData.filter(s => (s.name||'').toLowerCase().includes(q) || (s.id||'').toLowerCase().includes(q));
+
+      var html = '';
+      list.forEach(function(s, idx) {
+        var st = dailyAttendanceState[s.id] || 'P';
+        var isPresent = (st === 'P');
+        var isAbsent = (st === 'A');
+        var noteVal = studentNotesMap[s.id] || '';
+
+        var btnText = (st === 'P') ? '<i class="fa-solid fa-check"></i> មានវត្តមាន' :
+                      (st === 'A') ? '<i class="fa-solid fa-xmark"></i> អវត្តមាន' :
+                      (st === 'L') ? '<i class="fa-regular fa-clock"></i> យឺត' : '<i class="fa-solid fa-shield-halved"></i> មានច្បាប់';
+
+        var noteInputHtml = !isPresent ? `
+          <input type="text" class="st-note-input" placeholder="មូលហេតុ / ចំណាំ..." value="${noteVal}" oninput="studentNotesMap['${s.id}']=this.value; saveDailyAttendance();">
+        ` : '';
+
+        html += `
+          <div class="student-item-card status-${st} ${isAbsent ? 'has-absent' : ''}" id="stCard_${s.id}">
+            <div class="st-top-row">
+              <div class="st-name-title">
+                <span style="color:var(--text-muted); font-size:11.5px; width:18px;">${idx + 1}</span>
+                <span>${s.name}</span>
+              </div>
+              
+              <div class="att-split-btn">
+                <button class="att-btn-main" onclick="toggleQuickStatus('${s.id}')">
+                  ${btnText}
+                </button>
+                <button class="att-btn-dropdown-trigger" onclick="openStatusActionSheet('${s.id}', '${s.name}')" title="ជម្រើសផ្សេងទៀត">
+                  <i class="fa-solid fa-chevron-down"></i>
+                </button>
+              </div>
+            </div>
+
+            ${noteInputHtml}
+          </div>
+        `;
+      });
+      container.innerHTML = html;
+    }
+
+    function toggleQuickStatus(sid) {
+      var cur = dailyAttendanceState[sid] || 'P';
+      dailyAttendanceState[sid] = (cur === 'P') ? 'A' : 'P';
+      renderDailyList();
+      updateStatsCounters();
+      saveDailyAttendance();
+    }
+
+    function openStatusActionSheet(sid, name) {
+      activeActionSheetSid = sid;
+      document.getElementById('actionSheetStudentName').textContent = name;
+      document.getElementById('statusActionSheetModal').classList.add('show');
+    }
+
+    function closeStatusActionSheet(e) {
+      document.getElementById('statusActionSheetModal').classList.remove('show');
+    }
+
+    function selectActionStatus(code) {
+      if (activeActionSheetSid) {
+        dailyAttendanceState[activeActionSheetSid] = code;
+        renderDailyList();
+        updateStatsCounters();
+        saveDailyAttendance();
+      }
+      document.getElementById('statusActionSheetModal').classList.remove('show');
+    }
+
+    function setBulkDailyStatus(code) {
+      rawStudentsData.forEach(function(s) { dailyAttendanceState[s.id] = code; });
+      renderDailyList();
+      updateStatsCounters();
+      saveDailyAttendance();
+    }
+
+    function updateStatsCounters() {
+      var p = 0, a = 0, l = 0, c = 0;
+      var male = 0, female = 0;
+      rawStudentsData.forEach(function(s) {
+        var sexStr = (s.sex || '').toString().trim().toLowerCase();
+        var isF = (sexStr === 'ស្រី' || sexStr === 'f' || sexStr === 'female');
+        if (isF) female++; else male++;
+
+        var st = dailyAttendanceState[s.id] || 'P';
+        if (st === 'P') p++; else if (st === 'A') a++; else if (st === 'L') l++; else if (st === 'C') c++;
+      });
+      document.getElementById('countMale').textContent = male;
+      document.getElementById('countFemale').textContent = female;
+      document.getElementById('countTotal').textContent = rawStudentsData.length;
+
+      document.getElementById('cntPresent').textContent = p;
+      document.getElementById('cntAbsent').textContent = a;
+      document.getElementById('cntLate').textContent = l;
+      document.getElementById('cntPerm').textContent = c;
+    }
+
+    function saveDailyAttendance() {
+      var mName = KHMER_MONTHS[selectedDate.getMonth()];
+      var day = selectedDate.getDate();
+
+      var records = rawStudentsData.map(function(s) {
+        if (!s.days) s.days = {};
+        s.days[day] = dailyAttendanceState[s.id] || 'P'; // 🌟 សមកាលកម្មចូល Memory ភ្លាមៗ
+        return { id: s.id, name: s.name, sex: s.sex, grade: s.grade, days: s.days };
+      });
+
+      google.script.run
+        .withSuccessHandler(function() {
+          showSaveToast();
+        })
+        .saveMonthlyAttendanceForClassSecured(TOKEN, {
+          className: currentClassName, month: mName, records: records
+        });
+    }
+
+    /* ================= 🖨️ REPORT GENERATION & PDF ================= */
+    function openReportView(type) {
+      var paper = document.getElementById('printableReportPaper');
+      document.getElementById('reportViewerModal').style.display = 'block';
+      paper.innerHTML = '<div style="text-align:center; padding:50px; color:#64748b;">កំពុងរៀបចំរបាយការណ៍...</div>';
+
+      if (type === 'monthly') renderMonthlyPrintReport();
+      else renderYearlyPrintReport();
+    }
+
+    function closeReportView() {
+      document.getElementById('reportViewerModal').style.display = 'none';
+    }
+
+    /* 🌟 PDF កម្រិតច្បាស់ម៉ត់ 300 DPI */
+    function downloadPDF() {
+      var element = document.getElementById('printableReportPaper');
+      var mName = document.getElementById('rptMonthSelect').value;
+      var opt = {
+        margin:       [4, 6, 4, 6],
+        filename:     'Attendance_Report_Class_' + currentClassName + '_' + mName + '.pdf',
+        image:        { type: 'jpeg', quality: 1.0 },
+        html2canvas:  { scale: 3, useCORS: true, letterRendering: true },
+        jsPDF:        { unit: 'mm', format: 'a4', orientation: 'landscape', compress: true }
+      };
+      
+      html2pdf().from(element).set(opt).save();
+    }
+
+    function renderMonthlyPrintReport() {
+      var mName = document.getElementById('rptMonthSelect').value;
+      var currentYear = new Date().getFullYear();
+      var mIdx = KHMER_MONTHS.indexOf(mName);
+      if (mIdx === -1) mIdx = new Date().getMonth();
+
+      var endOfMonthDate = new Date(currentYear, mIdx + 1, 0);
+      var khDate = getFullKhmerDateString(endOfMonthDate);
+      var monthHolidays = monthlyHolidaysMap[mName] || [];
+      var holidayDaysList = monthHolidays.map(h => h.day);
+
+      google.script.run
+        .withSuccessHandler(function(res) {
+          var students = (res && res.students) ? res.students : [];
+          var daysCount = res.daysCount || 30;
+
+          var thDays = '', thWeekdays = '';
+          var sundayCols = [];
+          var holidayCols = holidayDaysList;
+          var nonSchoolDaysCount = 0;
+
+          for (var d = 1; d <= daysCount; d++) {
+            var dow = res.dayLabels[d - 1] ? res.dayLabels[d - 1].dow : 0;
+            var isSun = (dow === 0);
+            var isHol = holidayCols.includes(d);
+
+            if (isSun || isHol) {
+              nonSchoolDaysCount++;
+            }
+            if (isSun) sundayCols.push(d);
+
+            var cellClass = isSun ? 'weekend-col' : isHol ? 'holiday-cell' : '';
+            thDays += `<th style="width:20px;" class="${cellClass}">${d}</th>`;
+            thWeekdays += `<th class="${cellClass}">${WEEKDAYS_KH[dow]}</th>`;
+          }
+
+          var dailyTotalAbsence = new Array(daysCount + 1).fill(0);
+          var dailyFemaleAbsence = new Array(daysCount + 1).fill(0);
+
+          var rowsHtml = '';
+          var numStudents = students.length || 1;
+          var totalAllPerm = 0, totalAllAbs = 0;
+          var totalFemalePerm = 0, totalFemaleAbs = 0;
+
+          students.forEach(function(s, idx) {
+            var dayCells = '';
+            var studentPermCount = 0;
+            var studentAbsCount = 0;
+            var sexStr = (s.sex || '').toString().trim().toLowerCase();
+            var isFemale = (sexStr === 'ស្រី' || sexStr === 'f' || sexStr === 'female');
+
+            for (var d = 1; d <= daysCount; d++) {
+              var isSun = sundayCols.includes(d);
+              var isHol = holidayCols.includes(d);
+
+              if (isSun) {
+                if (idx === 0) dayCells += `<td class="weekend-merged-cell" rowspan="${numStudents}"><div class="vertical-sun-box"><span class="vertical-sun-text">អាទិត្យ</span></div></td>`;
+              } else if (isHol) {
+                if (idx === 0) {
+                  var holObj = monthHolidays.find(h => h.day === d);
+                  var holReason = holObj ? holObj.reason : 'ឈប់';
+                  dayCells += `<td class="holiday-cell" rowspan="${numStudents}"><div class="vertical-sun-box"><span class="vertical-sun-text">${holReason}</span></div></td>`;
+                }
+              } else {
+                var code = s.days[d - 1] || '-';
+                
+                if (code === 'C') studentPermCount++;
+                if (code === 'A') studentAbsCount++;
+
+                if (code === 'C' || code === 'A') {
+                  dailyTotalAbsence[d]++;
+                  if (isFemale) dailyFemaleAbsence[d]++;
+                }
+
+                var mark = (code === 'C') ? 'ច្ប' : (code === 'A') ? 'អច្ប' : '';
+                dayCells += `<td style="font-size:8px; font-weight:bold; color:${code === 'C' ? '#2563eb' : '#dc2626'};">${mark}</td>`;
+              }
+            }
+
+            var stPerm = studentPermCount || s.totalPermission || 0;
+            var stAbs = studentAbsCount || s.totalAbsent || 0;
+            totalAllPerm += stPerm; 
+            totalAllAbs += stAbs;
+
+            if (isFemale) {
+              totalFemalePerm += stPerm;
+              totalFemaleAbs += stAbs;
+            }
+
+            rowsHtml += `
+              <tr>
+                <td>${idx + 1}</td>
+                <td style="text-align:left; padding-left:4px; font-weight:bold; white-space:nowrap; overflow:hidden;">${s.name}</td>
+                <td>${s.sex || 'ប្រុស'}</td>
+                ${dayCells}
+                <td style="font-weight:bold;">${stPerm > 0 ? stPerm : ''}</td>
+                <td style="font-weight:bold; color:#dc2626;">${stAbs > 0 ? stAbs : ''}</td>
+                <td style="font-weight:bold;">${(stPerm + stAbs) > 0 ? (stPerm + stAbs) : ''}</td>
+              </tr>
+            `;
+          });
+
+          var totalDailyCells = '';
+          var femaleDailyCells = '';
+          for (var d = 1; d <= daysCount; d++) {
+            var isSun = sundayCols.includes(d);
+            var isHol = holidayCols.includes(d);
+            if (isSun || isHol) {
+              totalDailyCells += `<td class="${isHol ? 'holiday-cell' : 'weekend-col'}"></td>`;
+              femaleDailyCells += `<td class="${isHol ? 'holiday-cell' : 'weekend-col'}"></td>`;
+            } else {
+              var tVal = dailyTotalAbsence[d] > 0 ? dailyTotalAbsence[d] : '';
+              var fVal = dailyFemaleAbsence[d] > 0 ? dailyFemaleAbsence[d] : '';
+              totalDailyCells += `<td style="font-weight:bold; font-size:9px;">${tVal}</td>`;
+              femaleDailyCells += `<td style="font-weight:bold; font-size:9px; color:#dc2626;">${fVal}</td>`;
+            }
+          }
+
+          var actualSchoolDays = daysCount - nonSchoolDaysCount;
+          var totalStudents = students.length;
+          var femaleCount = students.filter(s => {
+            var ss = (s.sex || '').toString().trim().toLowerCase();
+            return ss === 'ស្រី' || ss === 'f' || ss === 'female';
+          }).length;
+          var maleCount = totalStudents - femaleCount;
+          
+          var totalSlots = totalStudents * actualSchoolDays;
+          var totalAbsenceTimes = totalAllPerm + totalAllAbs;
+          var actualPresentTimes = Math.max(0, totalSlots - totalAbsenceTimes);
+          var percentAbsent = totalSlots > 0 ? ((totalAbsenceTimes / totalSlots) * 100).toFixed(2) : "0.00";
+
+          var html = `
+            <div class="rpt-header-banner">
+              <div class="f-moul" style="font-size:15px; margin-bottom:1px;">ព្រះរាជាណាចក្រកម្ពុជា</div>
+              <div class="f-moul" style="font-size:13.5px; margin-bottom:2px;">ជាតិ សាសនា ព្រះមហាក្សត្រ</div>
+              <div style="font-size:11px; letter-spacing:3px; color:#dc2626;">✻ ✻ ✻ 📖 ✻ ✻ ✻</div>
+              
+              <div class="f-moul" style="font-size:15px; margin-top:6px; margin-bottom:2px;">បញ្ជីវត្តមានប្រចាំខែ ${mName} ឆ្នាំ ${toKhmerNum(currentYear)}</div>
+              <div style="font-size:12px; font-weight:bold;">ឆ្នាំសិក្សា ២០២៦-២០២៧</div>
+            </div>
+
+            <div style="text-align:left; font-weight:bold; font-size:11px; margin-bottom:4px; line-height: 1.3;">
+              <div>ការិយាល័យអប់រំ យុវជន និងកីឡា</div>
+              <div>សាលាបឋមសិក្សាកំពង់ល្ពៅ</div>
+              <div>ថ្នាក់ទី ${currentClassName}</div>
+            </div>
+
+            <table class="print-table">
+              <thead>
+                <tr>
+                  <th rowspan="2" style="width:24px;">ល.រ</th>
+                  <th rowspan="2" style="width:125px;">គោត្តនាម និងនាម</th>
+                  <th rowspan="2" style="width:28px;">ភេទ</th>
+                  ${thDays}
+                  <th rowspan="2" style="width:22px;">ច្ប</th>
+                  <th rowspan="2" style="width:22px;">អច្ប</th>
+                  <th rowspan="2" style="width:24px;">សរុប</th>
+                </tr>
+                <tr>${thWeekdays}</tr>
+              </thead>
+              <tbody>
+                ${rowsHtml}
+                <tr style="font-weight:bold; background:#f8fafc;">
+                  <td colspan="3">សរុបអវត្តមានក្នុងមួយថ្ងៃ</td>
+                  ${totalDailyCells}
+                  <td>${totalAllPerm}</td><td>${totalAllAbs}</td><td>${totalAllPerm + totalAllAbs}</td>
+                </tr>
+                <tr style="font-weight:bold; background:#f8fafc;">
+                  <td colspan="3">ក្នុងនោះស្រី</td>
+                  ${femaleDailyCells}
+                  <td>${totalFemalePerm}</td><td>${totalFemaleAbs}</td><td>${totalFemalePerm + totalFemaleAbs}</td>
+                </tr>
+              </tbody>
+            </table>
+
+            <div class="stats-summary-bar">
+              <div>
+                <div>សិស្សសរុប ៖ <strong>${totalStudents} នាក់</strong> • ស្រី ៖ <strong>${femaleCount} នាក់</strong> • ប្រុស ៖ <strong>${maleCount} នាក់</strong></div>
+                <div>សញ្ញា ៖ <strong>ច្ប</strong>=មានច្បាប់ • <strong>អច្ប</strong>=អត់ច្បាប់ <span style="color:#64748b;">(មិនរាប់ក្នុងភាគរយ)</span></div>
+              </div>
+              <div style="text-align:right;">
+                ចំនួនថ្ងៃរៀនពិតប្រាកដ ៖ <strong>${actualSchoolDays} ថ្ងៃ</strong> • ពេលសិស្សត្រូវមករៀន ៖ <strong>${totalSlots} ពេល</strong> • ពេលអវត្តមាន ៖ <strong>${totalAbsenceTimes} ដង</strong> • ពេលដែលសិស្សមករៀនពិតប្រាកដ ៖ <strong>${actualPresentTimes} ពេល</strong> • ភាគរយអវត្តមាន ៖ <strong>(${totalAbsenceTimes}/${totalSlots})×100 = ${percentAbsent}%</strong>
+              </div>
+            </div>
+
+            <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-top:18px; padding:0 30px;">
+              <div style="display:inline-flex; flex-direction:column; align-items:center; text-align:center; min-width:220px; margin-top:30px;">
+                <div class="f-moul" style="font-size:12.5px; color:#1e3a8a;">បានឃើញ និងឯកភាព</div>
+                <div class="f-bold" style="font-size:12.5px; color:#1e3a8a; margin-top:4px;">នាយកសាលា</div>
+              </div>
+
+              <div style="display:inline-flex; flex-direction:column; align-items:center; text-align:center; min-width:300px;">
+                <!-- 🌟 គ្មានប្រអប់ឡើយ (No Box) -->
+                ${khDate.lunarInputHtml}
+                <div style="font-size:12px; color:#1e3a8a; margin-top:3px;">${khDate.solarLine}</div>
+                <div class="f-moul" style="font-size:13px; color:#1e3a8a; margin-top:5px;">គ្រូទទួលបន្ទុកថ្នាក់</div>
+                <div class="f-bold" style="font-size:13.5px; color:#1e3a8a; margin-top:35px;">${TEACHER_NAME || ''}</div>
+              </div>
+            </div>
+          `;
+          document.getElementById('printableReportPaper').innerHTML = html;
+        })
+        .getMonthlyAttendanceReport(currentClassName, mName, currentYear);
+    }
+
+    function renderYearlyPrintReport() {
+      var currentYear = new Date().getFullYear();
+      var endOfYearDate = new Date(currentYear, 8, 0);
+      var khDate = getFullKhmerDateString(endOfYearDate);
+
+      google.script.run
+        .withSuccessHandler(function(res) {
+          var students = (res && res.students) ? res.students : [];
+          var mData = res.monthData || {};
+          var s1M = res.sem1Months || [];
+          var s2M = res.sem2Months || [];
+
+          // 🌟 ប្រើ Transform Rotate -90deg ដើម្បីអក្សរច្បាស់ មិនបាក់បែកជើង
+          var thS1 = s1M.map(m => `<th colspan="2" style="font-size:8.5px; padding: 4px 0; height: 50px;"><div style="width:20px; height:45px; display:flex; align-items:center; justify-content:center; margin:0 auto;"><span style="display:inline-block; transform:rotate(-90deg); white-space:nowrap; font-weight:bold;">${m}</span></div></th>`).join('');
+          var thS2 = s2M.map(m => `<th colspan="2" style="font-size:8.5px; padding: 4px 0; height: 50px;"><div style="width:20px; height:45px; display:flex; align-items:center; justify-content:center; margin:0 auto;"><span style="display:inline-block; transform:rotate(-90deg); white-space:nowrap; font-weight:bold;">${m}</span></div></th>`).join('');
+          
+          var subCA = '<th style="font-size:7.5px;">ច្ប</th><th style="font-size:7.5px;">អច្ប</th>';
+          var thSub1 = s1M.map(() => subCA).join('') + subCA;
+          var thSub2 = s2M.map(() => subCA).join('') + subCA;
+
+          var rowsHtml = '';
+          students.forEach(function(s, idx) {
+            var s1C = 0, s1A = 0, s2C = 0, s2A = 0;
+            var s1Cells = '', s2Cells = '';
+
+            s1M.forEach(function(m) {
+              var rec = (mData[m] && mData[m][s.id]) ? mData[m][s.id] : { c: 0, a: 0 };
+              s1C += rec.c; s1A += rec.a;
+              s1Cells += `<td>${rec.c || ''}</td><td>${rec.a || ''}</td>`;
+            });
+            s1Cells += `<td style="font-weight:bold;">${s1C}</td><td style="font-weight:bold; color:#dc2626;">${s1A}</td>`;
+
+            s2M.forEach(function(m) {
+              var rec = (mData[m] && mData[m][s.id]) ? mData[m][s.id] : { c: 0, a: 0 };
+              s2C += rec.c; s2A += rec.a;
+              s2Cells += `<td>${rec.c || ''}</td><td>${rec.a || ''}</td>`;
+            });
+            s2Cells += `<td style="font-weight:bold;">${s2C}</td><td style="font-weight:bold; color:#dc2626;">${s2A}</td>`;
+
+            var totC = s1C + s2C, totA = s1A + s2A;
+
+            rowsHtml += `
+              <tr>
+                <td>${idx + 1}</td>
+                <td>${s.id}</td>
+                <td style="text-align:left; padding-left:4px; font-weight:bold; white-space:nowrap;">${s.name}</td>
+                <td>${s.sex || 'ប្រុស'}</td>
+                ${s1Cells}
+                ${s2Cells}
+                <td style="font-weight:bold;">${totC}</td>
+                <td style="font-weight:bold; color:#dc2626;">${totA}</td>
+                <td style="font-weight:bold;">${totC + totA}</td>
+              </tr>
+            `;
+          });
+
+          var html = `
+            <div class="rpt-header-banner">
+              <div class="f-moul" style="font-size:15px; margin-bottom:1px;">ព្រះរាជាណាចក្រកម្ពុជា</div>
+              <div class="f-moul" style="font-size:13.5px; margin-bottom:2px;">ជាតិ សាសនា ព្រះមហាក្សត្រ</div>
+              <div style="font-size:11px; letter-spacing:3px; color:#dc2626;">✻ ✻ ✻ 📖 ✻ ✻ ✻</div>
+              
+              <div class="f-moul" style="font-size:15px; margin-top:6px; margin-bottom:2px;">តារាងសរុបអវត្តមានប្រចាំឆ្នាំ</div>
+              <div style="font-size:12px; font-weight:bold;">ឆ្នាំសិក្សា ២០២៦-២០២៧ • សិស្សសរុប ${students.length} នាក់</div>
+            </div>
+
+            <div style="text-align:left; font-weight:bold; font-size:11px; margin-bottom:4px; line-height: 1.3;">
+              <div>ការិយាល័យអប់រំ យុវជន និងកីឡា</div>
+              <div>សាលាបឋមសិក្សាកំពង់ល្ពៅ</div>
+              <div>ថ្នាក់ទី ${currentClassName}</div>
+            </div>
+
+            <table class="print-table">
+              <thead>
+                <tr>
+                  <th rowspan="3" style="width:24px;">ល.រ</th>
+                  <th rowspan="3" style="width:35px;">អត្តលេខ</th>
+                  <th rowspan="3" style="width:115px;">គោត្តនាម និងនាម</th>
+                  <th rowspan="3" style="width:28px;">ភេទ</th>
+                  <th colspan="14">ឆមាសទី១</th>
+                  <th colspan="14">ឆមាសទី២</th>
+                  <th colspan="3" rowspan="2">ចំនួនអវត្តមានប្រចាំឆ្នាំ</th>
+                </tr>
+                <tr>
+                  ${thS1}<th colspan="2">សរុប</th>
+                  ${thS2}<th colspan="2">សរុប</th>
+                </tr>
+                <tr>
+                  ${thSub1}${thSub2}
+                  <th style="font-size:7.5px;">ច្ប</th>
+                  <th style="font-size:7.5px;">អច្ប</th>
+                  <th style="font-size:7.5px;">សរុប</th>
+                </tr>
+              </thead>
+              <tbody>${rowsHtml}</tbody>
+            </table>
+
+            <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-top:18px; padding:0 30px;">
+              <div style="display:inline-flex; flex-direction:column; align-items:center; text-align:center; min-width:220px; margin-top:30px;">
+                <div class="f-moul" style="font-size:12.5px; color:#1e3a8a;">បានឃើញ និងឯកភាព</div>
+                <div class="f-bold" style="font-size:12.5px; color:#1e3a8a; margin-top:4px;">នាយកសាលា</div>
+              </div>
+
+              <div style="display:inline-flex; flex-direction:column; align-items:center; text-align:center; min-width:300px;">
+                <!-- 🌟 គ្មានប្រអប់ឡើយ (No Box) -->
+                ${khDate.lunarInputHtml}
+                <div style="font-size:12px; color:#1e3a8a; margin-top:3px;">${khDate.solarLine}</div>
+                <div class="f-moul" style="font-size:13px; color:#1e3a8a; margin-top:5px;">គ្រូទទួលបន្ទុកថ្នាក់</div>
+                <div class="f-bold" style="font-size:13.5px; color:#1e3a8a; margin-top:35px;">${TEACHER_NAME || ''}</div>
+              </div>
+            </div>
+          `;
+          document.getElementById('printableReportPaper').innerHTML = html;
+        })
+        .getYearlyAttendanceReport(currentClassName, currentYear);
+    }
+  </script>
+</body>
+</html>
