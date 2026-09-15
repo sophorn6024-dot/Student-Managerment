@@ -4,318 +4,406 @@
   <base target="_top">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ស្រង់អវត្តមាន</title>
+  <title>ស្រង់វត្តមានសិស្ស</title>
   
   <!-- 🔤 Google Fonts Khmer -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Battambang:wght@400;700&family=Kantumruy+Pro:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Moul&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Battambang:wght@400;600;700;800&family=Kantumruy+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Moul&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
   
-  <!-- 📄 Html2Pdf Library for High Resolution PDF Export -->
+  <!-- 📄 Html2Pdf Library -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
   <style>
-    /* ================= 🎨 THEME PALETTES ================= */
+    /* ================= 🎨 MODERN THEME SYSTEM ================= */
     :root, [data-theme="light"] {
-      --primary-purple: #9333ea;
-      --purple-dark: #7e22ce;
-      --purple-glow: rgba(147, 51, 234, 0.15);
+      --primary: #2563eb;
+      --primary-hover: #1d4ed8;
+      --primary-soft: #eff6ff;
+      --purple: #7c3aed;
       
-      --bg: linear-gradient(135deg, #fdf4ff 0%, #f5f3ff 50%, #fdf2f8 100%);
+      --bg: #f8fafc;
       --surface: #ffffff;
       --surface-card: #ffffff;
-      --border: #e9d5ff;
+      --surface-elevated: #f1f5f9;
+      --border: #e2e8f0;
       --border-subtle: #f1f5f9;
       
       --text: #0f172a;
       --text-muted: #64748b;
-      --navy-blue: #1e3a8a;
+      --text-soft: #94a3b8;
       
-      --green-bg: #f0fdf4; --green-txt: #16a34a; --green-bd: #bbf7d0;
-      --red-bg: #fef2f2;   --red-txt: #dc2626;   --red-bd: #fecaca;
-      --amber-bg: #fffbeb; --amber-txt: #d97706; --amber-bd: #fde68a;
-      --blue-bg: #eff6ff;  --blue-txt: #2563eb;  --blue-bd: #bfdbfe;
+      --card-shadow: 0 4px 18px -2px rgba(15, 23, 42, 0.05);
+      --card-shadow-hover: 0 10px 25px -4px rgba(15, 23, 42, 0.08);
+
+      --p-bg: #ecfdf5; --p-txt: #059669; --p-bd: #a7f3d0;
+      --a-bg: #fef2f2; --a-txt: #dc2626; --a-bd: #fecaca;
+      --l-bg: #fffbeb; --l-txt: #d97706; --l-bd: #fde68a;
+      --c-bg: #eff6ff; --c-txt: #2563eb; --c-bd: #bfdbfe;
     }
 
     [data-theme="dark"] {
-      --primary-purple: #a855f7;
-      --purple-dark: #7e22ce;
-      --purple-glow: rgba(168, 85, 247, 0.25);
+      --primary: #3b82f6;
+      --primary-hover: #60a5fa;
+      --primary-soft: rgba(59, 130, 246, 0.15);
+      --purple: #a855f7;
       
-      --bg: #090d16;
-      --surface: #111827;
-      --surface-card: #131d31;
-      --border: #1f293d;
+      --bg: #0b1120;
+      --surface: #151f32;
+      --surface-card: #151f32;
+      --surface-elevated: #1e293b;
+      --border: #23324d;
       --border-subtle: #1e293b;
       
       --text: #f8fafc;
       --text-muted: #94a3b8;
-      --navy-blue: #60a5fa;
+      --text-soft: #64748b;
       
-      --green-bg: rgba(16, 185, 129, 0.15); --green-txt: #34d399; --green-bd: #059669;
-      --red-bg: rgba(225, 29, 72, 0.15);   --red-txt: #fb7185;   --red-bd: #be123c;
-      --amber-bg: rgba(245, 158, 11, 0.15); --amber-txt: #fbbf24; --amber-bd: #d97706;
-      --blue-bg: rgba(59, 130, 246, 0.15);  --blue-txt: #60a5fa;  --blue-bd: #2563eb;
+      --card-shadow: 0 6px 20px rgba(0, 0, 0, 0.45);
+      --card-shadow-hover: 0 12px 30px rgba(0, 0, 0, 0.6);
+
+      --p-bg: rgba(5, 150, 105, 0.18); --p-txt: #34d399; --p-bd: #059669;
+      --a-bg: rgba(220, 38, 38, 0.18);  --a-txt: #f87171; --a-bd: #dc2626;
+      --l-bg: rgba(217, 119, 6, 0.18);  --l-txt: #fbbf24; --l-bd: #d97706;
+      --c-bg: rgba(37, 99, 235, 0.18);  --c-txt: #60a5fa; --c-bd: #2563eb;
     }
 
-    * { box-sizing: border-box; margin: 0; padding: 0; transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease; }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Kantumruy Pro', 'Khmer OS Battambang', 'Battambang', sans-serif;
+      transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+    }
+
     body {
-      font-family: 'Khmer OS Battambang', 'Battambang', 'Kantumruy Pro', sans-serif;
       background: var(--bg);
-      background-attachment: fixed;
       color: var(--text);
       font-size: 13px;
-      line-height: 1.4;
+      line-height: 1.45;
       min-height: 100vh;
-      padding: 12px 14px 40px;
+      padding: 16px 18px 50px;
     }
 
     .f-moul { font-family: 'Khmer OS Muol Light', 'Moul', cursive; font-weight: normal; }
 
-    /* ================= 🟢 TOAST NOTIFICATION ================= */
+    /* TOAST */
     #saveToast {
       visibility: hidden;
-      min-width: 240px;
-      background-color: #059669;
+      min-width: 220px;
+      background: #059669;
       color: #fff;
       text-align: center;
-      border-radius: 14px;
-      padding: 11px 18px;
+      border-radius: 12px;
+      padding: 10px 18px;
       position: fixed;
       z-index: 3000;
       left: 50%;
-      bottom: 30px;
+      bottom: 24px;
       transform: translateX(-50%);
-      font-size: 13.5px;
-      font-weight: bold;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+      font-size: 13px;
+      font-weight: 600;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
       display: flex;
       align-items: center;
       justify-content: center;
       gap: 8px;
       opacity: 0;
-      transition: opacity 0.3s, visibility 0.3s;
+      transition: all 0.3s;
     }
-    #saveToast.show {
-      visibility: visible;
-      opacity: 1;
-    }
+    #saveToast.show { visibility: visible; opacity: 1; transform: translateX(-50%) translateY(-6px); }
 
-    /* ================= TOP HEADER ================= */
-    .page-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 12px;
-    }
-    .page-title {
-      font-size: 18px;
-      color: var(--primary-purple);
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-
+    /* ================= TOP NAV BAR ================= */
     .top-nav-bar {
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 18px;
-      padding: 10px 14px;
+      padding: 10px 16px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
-      margin-bottom: 16px;
-      gap: 10px;
+      box-shadow: var(--card-shadow);
+      margin-bottom: 18px;
+      gap: 12px;
       flex-wrap: wrap;
     }
+
     .tabs-group { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
     
     .tab-pill-btn {
-      display: inline-flex; align-items: center; gap: 6px; padding: 7px 16px;
-      border-radius: 12px; font-size: 12.5px; font-weight: bold; cursor: pointer;
-      border: none; background: transparent; color: var(--text-muted); transition: all 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 16px;
+      border-radius: 12px;
+      font-size: 12.5px;
+      font-weight: 600;
+      cursor: pointer;
+      border: 1px solid transparent;
+      background: var(--surface-elevated);
+      color: var(--text-muted);
     }
+    .tab-pill-btn:hover { color: var(--text); }
     .tab-pill-btn.active {
-      background: linear-gradient(135deg, #9333ea, #7e22ce); color: #ffffff;
-      box-shadow: 0 4px 12px var(--purple-glow);
+      background: linear-gradient(135deg, #2563eb, #7c3aed);
+      color: #ffffff;
+      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3);
     }
 
     .date-trigger-btn {
-      display: inline-flex; align-items: center; gap: 8px; padding: 7px 14px;
-      border-radius: 12px; border: 1px solid var(--border); background: var(--surface-card);
-      color: var(--text); font-size: 12.5px; font-weight: bold; cursor: pointer;
-    }
-
-    .class-select-pill {
-      padding: 9px 18px;
-      border-radius: 14px;
-      border: 1.5px solid var(--border);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 14px;
+      border-radius: 12px;
+      border: 1px solid var(--border);
       background: var(--surface-card);
       color: var(--text);
-      font-family: 'Khmer OS Battambang', 'Battambang', 'Kantumruy Pro', sans-serif;
-      font-weight: bold;
-      font-size: 13.5px;
+      font-size: 12.5px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+    .date-trigger-btn:hover { border-color: var(--primary); }
+
+    .class-select-pill {
+      padding: 8px 16px;
+      border-radius: 12px;
+      border: 1.5px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      font-weight: 700;
+      font-size: 13px;
       outline: none;
       cursor: pointer;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
-      appearance: none;
-      -webkit-appearance: none;
-      -moz-appearance: none;
-      background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%239333ea' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
-      background-repeat: no-repeat;
-      background-position: right 12px center;
-      background-size: 14px;
-      padding-right: 38px;
-      transition: all 0.2s ease;
+      box-shadow: var(--card-shadow);
     }
+    .class-select-pill:focus { border-color: var(--primary); }
 
-    /* ================= 📅 POPUP CALENDAR ================= */
+    /* CALENDAR POPUP */
     .calendar-popup {
-      display: none; position: absolute; top: 52px; left: 0; width: 300px;
-      background: var(--surface); border: 1px solid var(--border); border-radius: 18px;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25); padding: 16px; z-index: 100;
+      display: none;
+      position: absolute;
+      top: 50px;
+      left: 0;
+      width: 290px;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.3);
+      padding: 16px;
+      z-index: 100;
     }
     .calendar-popup.show { display: block; }
     .cal-head-selectors { display: flex; justify-content: space-between; gap: 8px; margin-bottom: 10px; }
     .cal-head-selectors select {
-      flex: 1; padding: 6px 8px; border-radius: 10px; border: 1px solid var(--border);
-      background: var(--surface-card); color: var(--text); font-size: 12px; font-weight: bold; outline: none;
+      flex: 1;
+      padding: 6px 8px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: var(--surface-elevated);
+      color: var(--text);
+      font-size: 12px;
+      font-weight: 600;
+      outline: none;
     }
-    .cal-month-title { text-align: center; font-weight: bold; font-size: 13.5px; color: var(--primary-purple); margin-bottom: 8px; }
+    .cal-month-title { text-align: center; font-weight: 700; font-size: 13.5px; color: var(--primary); margin-bottom: 8px; }
     .cal-weekdays {
-      display: grid; grid-template-columns: repeat(7, 1fr); text-align: center;
-      font-size: 11px; font-weight: bold; color: var(--text-muted); margin-bottom: 6px;
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      text-align: center;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+      margin-bottom: 6px;
     }
     .cal-days-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
     .cal-day-cell {
-      height: 32px; display: flex; align-items: center; justify-content: center;
-      font-size: 12px; font-weight: bold; border-radius: 50%; cursor: pointer; transition: all 0.15s;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      font-weight: 600;
+      border-radius: 50%;
+      cursor: pointer;
     }
-    .cal-day-cell:hover { background: rgba(168, 85, 247, 0.2); color: var(--primary-purple); }
-    .cal-day-cell.selected { background: var(--primary-purple) !important; color: #fff !important; }
-    .cal-day-cell.muted { color: #94a3b8; cursor: default; }
+    .cal-day-cell:hover { background: var(--primary-soft); color: var(--primary); }
+    .cal-day-cell.selected { background: var(--primary) !important; color: #fff !important; }
+    .cal-day-cell.muted { color: var(--text-soft); cursor: default; }
 
     /* ================= 1. DAILY ATTENDANCE ================= */
-    .daily-layout-grid { display: grid; grid-template-columns: 1fr; gap: 16px; }
-    @media(min-width: 900px) {
-      .daily-layout-grid { grid-template-columns: 300px 1fr; gap: 20px; }
+    .daily-layout-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 18px;
+    }
+    @media(min-width: 960px) {
+      .daily-layout-grid { grid-template-columns: 310px 1fr; }
     }
     
     .daily-sidebar-card, .daily-list-card, .report-launcher-card {
-      background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 18px;
-      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.05);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 18px 20px;
+      box-shadow: var(--card-shadow);
     }
 
     .gender-summary-box {
-      display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; margin-top: 10px;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 8px;
+      margin-top: 12px;
     }
     .gender-chip {
-      background: var(--surface-card); border: 1px solid var(--border);
-      border-radius: 12px; padding: 6px 2px; text-align: center;
+      background: var(--surface-elevated);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 8px 4px;
+      text-align: center;
     }
-    .gender-chip span { display: block; font-size: 10.5px; color: var(--text-muted); }
-    .gender-chip strong { display: block; font-size: 15px; font-weight: bold; color: var(--text); margin-top: 2px; }
+    .gender-chip span { display: block; font-size: 11px; color: var(--text-muted); font-weight: 500; }
+    .gender-chip strong { display: block; font-size: 16px; font-weight: 700; color: var(--text); margin-top: 2px; }
 
-    .status-counter-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 12px 0; }
+    .status-counter-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin: 14px 0;
+    }
     .counter-card {
-      border-radius: 14px; padding: 10px 12px; display: flex; flex-direction: column; justify-content: space-between; height: 70px;
+      border-radius: 14px;
+      padding: 12px 14px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      height: 74px;
     }
-    .counter-card.present    { background: var(--green-bg); border: 1px solid var(--green-bd); }
-    .counter-card.absent     { background: var(--red-bg);   border: 1px solid var(--red-bd); }
-    .counter-card.late       { background: var(--amber-bg); border: 1px solid var(--amber-bd); }
-    .counter-card.permission { background: var(--blue-bg);  border: 1px solid var(--blue-bd); }
+    .counter-card.present    { background: var(--p-bg); border: 1px solid var(--p-bd); color: var(--p-txt); }
+    .counter-card.absent     { background: var(--a-bg); border: 1px solid var(--a-bd); color: var(--a-txt); }
+    .counter-card.late       { background: var(--l-bg); border: 1px solid var(--l-bd); color: var(--l-txt); }
+    .counter-card.permission { background: var(--c-bg); border: 1px solid var(--c-bd); color: var(--c-txt); }
 
-    .counter-card .c-label { font-size: 11.5px; font-weight: bold; }
-    .counter-card.present .c-label { color: var(--green-txt); }
-    .counter-card.absent .c-label  { color: var(--red-txt); }
-    .counter-card.late .c-label    { color: var(--amber-txt); }
-    .counter-card.permission .c-label { color: var(--blue-txt); }
-
-    .counter-card .c-val { font-size: 20px; font-weight: 800; }
-    .counter-card.present .c-val { color: var(--green-txt); }
-    .counter-card.absent .c-val  { color: var(--red-txt); }
-    .counter-card.late .c-val    { color: var(--amber-txt); }
-    .counter-card.permission .c-val { color: var(--blue-txt); }
+    .counter-card .c-label { font-size: 11.5px; font-weight: 600; }
+    .counter-card .c-val { font-size: 22px; font-weight: 800; }
 
     .search-pill-wrap {
-      display: flex; align-items: center; gap: 8px; background: var(--surface-card);
-      border: 1px solid var(--border); border-radius: 16px; padding: 7px 12px; margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      background: var(--surface-elevated);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 8px 14px;
+      margin-bottom: 12px;
     }
-    .search-pill-wrap input { border: none; background: transparent; outline: none; font-size: 12.5px; color: var(--text); width: 100%; }
+    .search-pill-wrap input {
+      border: none;
+      background: transparent;
+      outline: none;
+      font-size: 13px;
+      color: var(--text);
+      width: 100%;
+    }
     
-    .bulk-actions-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; }
+    .bulk-actions-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 14px;
+    }
     .btn-bulk {
-      padding: 9px; border-radius: 12px; font-size: 12.5px; font-weight: bold; border: none;
-      cursor: pointer; color: #fff; display: flex; align-items: center; justify-content: center; gap: 6px;
+      padding: 9px;
+      border-radius: 12px;
+      font-size: 12.5px;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
     }
     .btn-bulk.present { background: #059669; }
-    .btn-bulk.absent  { background: #e11d48; }
+    .btn-bulk.absent  { background: #dc2626; }
+    .btn-bulk:active { transform: scale(0.97); }
 
+    /* STUDENT CARDS */
     .student-item-card {
-      background: var(--surface-card);
+      background: var(--surface-elevated);
       border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 12px 14px;
+      border-radius: 15px;
+      padding: 12px 16px;
       margin-bottom: 8px;
-      transition: all 0.2s ease;
+      transition: all 0.18s ease;
     }
-    .student-item-card.has-absent { border-color: rgba(225, 29, 72, 0.4); background: rgba(225, 29, 72, 0.04); }
+    .student-item-card:hover {
+      border-color: var(--primary);
+      box-shadow: var(--card-shadow);
+    }
+    .student-item-card.has-absent {
+      border-color: rgba(220, 38, 38, 0.4);
+      background: rgba(220, 38, 38, 0.05);
+    }
 
     .st-top-row {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      gap: 8px;
+      gap: 10px;
     }
     .st-name-title {
       font-size: 14px;
-      font-weight: bold;
+      font-weight: 700;
       color: var(--text);
       display: flex;
       align-items: center;
-      gap: 8px;
-      word-break: break-word;
+      gap: 10px;
     }
 
     .att-split-btn {
       display: inline-flex;
       border-radius: 10px;
       overflow: hidden;
-      border: 1.5px solid transparent;
+      border: 1px solid transparent;
       flex-shrink: 0;
+      font-weight: 700;
     }
     .att-btn-main {
       padding: 6px 14px;
       font-size: 12px;
-      font-weight: bold;
+      font-weight: 700;
       cursor: pointer;
       border: none;
+      background: transparent;
+      color: inherit;
       display: flex;
       align-items: center;
-      gap: 5px;
+      gap: 6px;
     }
     .att-btn-dropdown-trigger {
-      padding: 6px 8px;
+      padding: 6px 9px;
       cursor: pointer;
       border: none;
-      border-left: 1px solid rgba(255, 255, 255, 0.2);
+      background: rgba(0, 0, 0, 0.06);
+      color: inherit;
       display: flex;
       align-items: center;
       justify-content: center;
     }
+    [data-theme="dark"] .att-btn-dropdown-trigger { background: rgba(255, 255, 255, 0.1); }
 
-    .status-P .att-split-btn { background: var(--green-bg); border-color: var(--green-bd); color: var(--green-txt); }
-    .status-A .att-split-btn { background: var(--red-bg);   border-color: var(--red-bd);   color: var(--red-txt); }
-    .status-L .att-split-btn { background: var(--amber-bg); border-color: var(--amber-bd); color: var(--amber-txt); }
-    .status-C .att-split-btn { background: var(--blue-bg);  border-color: var(--blue-bd);  color: var(--blue-txt); }
+    .status-P .att-split-btn { background: var(--p-bg); border-color: var(--p-bd); color: var(--p-txt); }
+    .status-A .att-split-btn { background: var(--a-bg); border-color: var(--a-bd); color: var(--a-txt); }
+    .status-L .att-split-btn { background: var(--l-bg); border-color: var(--l-bd); color: var(--l-txt); }
+    .status-C .att-split-btn { background: var(--c-bg); border-color: var(--c-bd); color: var(--c-txt); }
 
     .st-note-input {
       width: 100%;
       margin-top: 8px;
-      padding: 7px 12px;
+      padding: 8px 12px;
       border-radius: 10px;
       border: 1px solid var(--border);
       background: var(--surface);
@@ -324,102 +412,132 @@
       outline: none;
     }
 
-    /* ================= 🔍 ACTION SHEET MODAL ================= */
+    /* ACTION SHEET MODAL */
     .action-sheet-backdrop {
       display: none;
       position: fixed;
       inset: 0;
-      background: rgba(0, 0, 0, 0.65);
-      backdrop-filter: blur(4px);
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(5px);
       z-index: 1000;
       align-items: flex-end;
       justify-content: center;
-      padding-bottom: 20px;
+      padding-bottom: 24px;
     }
     .action-sheet-backdrop.show { display: flex; }
     
     .action-sheet-card {
       width: 420px;
-      max-width: 94%;
+      max-width: 92%;
       background: var(--surface);
       border: 1.5px solid var(--border);
-      border-radius: 20px;
-      padding: 18px 20px 22px;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+      border-radius: 22px;
+      padding: 20px 22px 24px;
+      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.5);
     }
-    .sheet-handle-bar { width: 36px; height: 4px; border-radius: 4px; background: var(--text-muted); margin: 0 auto 10px; }
-    .sheet-student-name { text-align: center; font-size: 15px; font-weight: bold; color: var(--text); margin-bottom: 16px; }
+    .sheet-handle-bar { width: 38px; height: 5px; border-radius: 5px; background: var(--border); margin: 0 auto 12px; }
+    .sheet-student-name { text-align: center; font-size: 15.5px; font-weight: 700; color: var(--text); margin-bottom: 18px; }
 
     .sheet-options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
     .sheet-choice-btn {
-      padding: 11px; border-radius: 12px; font-size: 13px; font-weight: bold; cursor: pointer;
-      display: flex; align-items: center; justify-content: center; gap: 6px;
+      padding: 12px;
+      border-radius: 14px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      border: 1px solid transparent;
     }
-    .sheet-choice-btn.p { background: #064e3b; color: #34d399; border: 1.5px solid #059669; }
-    .sheet-choice-btn.a { background: #4c0519; color: #fb7185; border: 1.5px solid #be123c; }
-    .sheet-choice-btn.l { background: #451a03; color: #fbbf24; border: 1.5px solid #d97706; }
-    .sheet-choice-btn.c { background: #172554; color: #60a5fa; border: 1.5px solid #2563eb; }
+    .sheet-choice-btn.p { background: var(--p-bg); color: var(--p-txt); border-color: var(--p-bd); }
+    .sheet-choice-btn.a { background: var(--a-bg); color: var(--a-txt); border-color: var(--a-bd); }
+    .sheet-choice-btn.l { background: var(--l-bg); color: var(--l-txt); border-color: var(--l-bd); }
+    .sheet-choice-btn.c { background: var(--c-bg); color: var(--c-txt); border-color: var(--c-bd); }
 
     /* ================= 2. TAB: REPORTS MENU ================= */
     .report-menu-row {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 14px 18px; border-radius: 14px; background: var(--surface-card); border: 1px solid var(--border);
-      margin-top: 10px; gap: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 18px;
+      border-radius: 14px;
+      background: var(--surface-elevated);
+      border: 1px solid var(--border);
+      margin-top: 10px;
+      gap: 10px;
     }
     .btn-open-report {
-      padding: 7px 16px; border-radius: 10px; background: var(--primary-purple); color: #fff;
-      font-weight: bold; font-size: 12.5px; border: none; cursor: pointer; flex-shrink: 0;
+      padding: 8px 16px;
+      border-radius: 11px;
+      background: var(--primary);
+      color: #fff;
+      font-weight: 600;
+      font-size: 12.5px;
+      border: none;
+      cursor: pointer;
+      flex-shrink: 0;
     }
 
     .holiday-config-box {
-      background: var(--surface-card);
+      background: var(--surface-elevated);
       border: 1.5px solid var(--border);
       border-radius: 16px;
       padding: 16px;
       margin-top: 12px;
       margin-bottom: 14px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.04);
     }
     .holiday-tag-pill {
-      display: inline-flex; align-items: center; gap: 6px;
-      background: rgba(16, 185, 129, 0.1); color: #059669; border: 1px solid rgba(16, 185, 129, 0.3);
-      padding: 5px 12px; border-radius: 20px; font-size: 12.5px; font-weight: bold; margin: 4px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: var(--p-bg);
+      color: var(--p-txt);
+      border: 1px solid var(--p-bd);
+      padding: 5px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      margin: 4px;
     }
-    .holiday-tag-pill i { cursor: pointer; color: #ef4444; }
+    .holiday-tag-pill i { cursor: pointer; color: #dc2626; }
 
-    .holiday-calendar-trigger {
-      display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px; border-radius: 12px;
-      border: 1.5px solid var(--border); background: var(--surface); color: var(--text);
-      font-size: 12.5px; font-weight: bold; cursor: pointer;
-    }
-    .holiday-calendar-popup {
-      display: none; position: absolute; top: 48px; left: 0; width: 290px;
-      background: var(--surface); border: 1px solid var(--border); border-radius: 18px;
-      box-shadow: 0 15px 35px rgba(0,0,0,0.25); padding: 16px; z-index: 150;
-    }
-    .holiday-calendar-popup.show { display: block; }
-
-    /* ================= 3. REPORT VIEWER & PRINT SETUP ================= */
+    /* ================= 3. REPORT VIEWER ================= */
     #reportViewerModal {
-      display: none; position: fixed; inset: 0; background: #090d16; z-index: 2000;
-      overflow-y: auto; padding: 10px 10px 40px;
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: var(--bg);
+      z-index: 2000;
+      overflow-y: auto;
+      padding: 12px 14px 40px;
     }
     .viewer-top-bar {
-      position: sticky; top: 0; background: #111827; color: #fff; padding: 10px 16px;
-      border-radius: 12px; display: flex; align-items: center; justify-content: space-between;
-      margin-bottom: 16px; z-index: 100;
+      position: sticky;
+      top: 0;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      padding: 10px 18px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+      z-index: 100;
+      box-shadow: var(--card-shadow);
     }
     
     .report-paper-container {
       background: #ffffff;
+      color: #0f172a;
       width: 297mm;
       max-width: 100%;
       min-height: 210mm;
       margin: 0 auto;
       padding: 8mm 10mm;
       border-radius: 4px;
-      box-shadow: 0 10px 35px rgba(0,0,0,0.7);
-      color: #0f172a;
+      box-shadow: 0 10px 35px rgba(0,0,0,0.3);
       font-size: 11px;
     }
     .rpt-header-banner { text-align: center; color: #1e3a8a; margin-bottom: 8px; }
@@ -437,7 +555,7 @@
       padding: 2.5px 1px;
       vertical-align: middle;
     }
-    .weekend-merged-cell { background: #fce7f3 !important; color: #be185d !important; font-weight: bold; vertical-align: middle; }
+    .weekend-merged-cell { background: #fce7f3 !important; color: #be185d !important; font-weight: bold; }
     .holiday-cell { background: #fee2e2 !important; color: #b91c1c !important; font-weight: bold; }
     
     .vertical-sun-box {
@@ -457,17 +575,12 @@
       line-height: 1;
     }
 
-    .stats-summary-bar { display: flex; justify-content: space-between; align-items: flex-start; flex-wrap: wrap; margin-top: 6px; font-size: 10.5px; line-height: 1.5; gap: 10px; }
-
     .clean-lunar-input {
-      font-family: 'Khmer OS Battambang', 'Battambang', sans-serif;
       font-size: 12.5px;
       font-weight: bold;
       color: #1e3a8a;
       border: none !important;
       background: transparent !important;
-      box-shadow: none !important;
-      padding: 0 !important;
       text-align: center;
       width: 100%;
       max-width: 480px;
@@ -476,110 +589,35 @@
       display: block;
     }
 
-    @page {
-      size: A4 landscape;
-      margin: 5mm 6mm;
-    }
+    @page { size: A4 landscape; margin: 5mm 6mm; }
 
     @media print {
-      html, body {
-        background: #ffffff !important;
-        color: #000000 !important;
-        margin: 0 !important;
-        padding: 0 !important;
-        width: 100% !important;
-        height: auto !important;
-        -webkit-print-color-adjust: exact !important;
-        print-color-adjust: exact !important;
-      }
-
-      .page-header,
-      .top-nav-bar,
-      #tabDailyView,
-      #tabReportsMenu,
-      #saveToast,
-      #statusActionSheetModal,
-      .viewer-top-bar,
-      .holiday-config-box {
-        display: none !important;
-      }
-
-      #reportViewerModal {
-        display: block !important;
-        position: static !important;
-        background: #ffffff !important;
-        padding: 0 !important;
-        margin: 0 !important;
-        inset: auto !important;
-        overflow: visible !important;
-        width: 100% !important;
-      }
-
-      .report-paper-container {
-        width: 100% !important;
-        max-width: 100% !important;
-        min-height: auto !important;
-        margin: 0 !important;
-        padding: 0 !important;
-        box-shadow: none !important;
-        border-radius: 0 !important;
-        background: #ffffff !important;
-        font-size: 9.5px !important;
-      }
-
-      .print-table {
-        width: 100% !important;
-        table-layout: auto !important;
-      }
-
-      .print-table th, .print-table td {
-        padding: 2px 0.5px !important;
-        font-size: 8.5px !important;
-        border: 1px solid #1e293b !important;
-      }
-
-      .clean-lunar-input {
-        border: none !important;
-        background: transparent !important;
-        box-shadow: none !important;
-      }
-
-      .stats-summary-bar {
-        font-size: 9px !important;
-        margin-top: 5px !important;
-      }
+      body { background: #fff !important; color: #000 !important; padding: 0 !important; }
+      .top-nav-bar, #tabDailyView, #tabReportsMenu, #saveToast, #statusActionSheetModal, .viewer-top-bar { display: none !important; }
+      #reportViewerModal { display: block !important; position: static !important; padding: 0 !important; background: transparent !important; }
+      .report-paper-container { width: 100% !important; box-shadow: none !important; padding: 0 !important; }
     }
   </style>
 </head>
 <body>
 
-  <!-- 🟢 TOAST NOTIFICATION FOR SAVE SUCCESS -->
-  <div id="saveToast"><i class="fa-solid fa-circle-check" style="font-size:16px;"></i> បានរក្សាទុកដោយជោគជ័យ</div>
-
-  <!-- ================= TOP HEADER ================= -->
-  <div class="page-header">
-    <div class="page-title f-moul">
-      <span>ស្រង់អវត្តមាន</span>
-    </div>
-    <div style="font-size: 18px; color: var(--primary-purple); cursor: pointer;">
-      <i class="fa-solid fa-bell"></i>
-    </div>
-  </div>
+  <!-- 🟢 TOAST NOTIFICATION -->
+  <div id="saveToast"><i class="fa-solid fa-circle-check"></i> បានរក្សាទុកដោយជោគជ័យ</div>
 
   <!-- ================= TOP NAV TABS BAR ================= -->
   <div class="top-nav-bar">
     <div class="tabs-group">
       <button class="tab-pill-btn active" id="btnTabDaily" onclick="switchNavTab('daily')">
-        ប្រចាំថ្ងៃ
+        <i class="fa-solid fa-calendar-check"></i> វត្តមានប្រចាំថ្ងៃ
       </button>
       <button class="tab-pill-btn" id="btnTabReports" onclick="switchNavTab('reports')">
-        <i class="fa-solid fa-chart-simple"></i> របាយការណ៍ & សង្ខេបខែ
+        <i class="fa-solid fa-chart-pie"></i> របាយការណ៍ & សង្ខេបខែ
       </button>
 
       <!-- Date Picker Trigger Pill -->
       <div style="position: relative;">
         <button class="date-trigger-btn" id="btnDateDisplay" onclick="toggleCalendarPopup()">
-          <i class="fa-regular fa-calendar"></i>
+          <i class="fa-regular fa-calendar" style="color:var(--primary);"></i>
           <span id="txtDisplayDate">1 កញ្ញា 2026</span>
         </button>
 
@@ -609,8 +647,8 @@
 
           <div class="cal-days-grid" id="calDaysGrid"></div>
 
-          <div style="display:flex; justify-content:space-between; margin-top:10px; font-size:12px; font-weight:bold;">
-            <span style="color:#ec4899; cursor:pointer;" onclick="selectTodayDate()">ថ្ងៃនេះ</span>
+          <div style="display:flex; justify-content:space-between; margin-top:12px; font-size:12px; font-weight:600;">
+            <span style="color:var(--primary); cursor:pointer;" onclick="selectTodayDate()">ថ្ងៃនេះ</span>
             <span style="color:var(--text-muted); cursor:pointer;" onclick="toggleCalendarPopup()">បិទ</span>
           </div>
         </div>
@@ -632,8 +670,8 @@
       <!-- Left Stats Sidebar -->
       <div class="daily-sidebar-card">
         <div style="font-size:12px; color:var(--text-muted);">
-          <div>ថ្ងៃនេះ:</div>
-          <div style="font-size:14.5px; font-weight:bold; color:var(--text);" id="lblSelectedDateIso">2026-09-01</div>
+          <div>កាលបរិច្ឆេទជ្រើសរើស៖</div>
+          <div style="font-size:15px; font-weight:700; color:var(--text); margin-top:2px;" id="lblSelectedDateIso">2026-09-01</div>
         </div>
 
         <!-- Gender Stats -->
@@ -643,8 +681,8 @@
             <strong id="countMale">0</strong>
           </div>
           <div class="gender-chip">
-            <span style="color:#fb7185;">ស្រី</span>
-            <strong id="countFemale" style="color:#fb7185;">0</strong>
+            <span style="color:#f43f5e;">ស្រី</span>
+            <strong id="countFemale" style="color:#f43f5e;">0</strong>
           </div>
           <div class="gender-chip">
             <span>សរុប</span>
@@ -655,7 +693,7 @@
         <!-- 4 Counter Cards -->
         <div class="status-counter-grid">
           <div class="counter-card present">
-            <div class="c-label">មានវត្តមាន</div>
+            <div class="c-label">វត្តមាន</div>
             <div class="c-val" id="cntPresent">0</div>
           </div>
           <div class="counter-card absent">
@@ -674,38 +712,37 @@
 
         <!-- Search Input -->
         <div class="search-pill-wrap">
-          <i class="fa-solid fa-magnifying-glass" style="color:#64748b; font-size:12px;"></i>
-          <input type="text" id="searchBox" placeholder="ស្វែងរកឈ្មោះ..." oninput="renderDailyList()">
+          <i class="fa-solid fa-magnifying-glass" style="color:var(--text-muted); font-size:12px;"></i>
+          <input type="text" id="searchBox" placeholder="ស្វែងរកឈ្មោះសិស្ស..." oninput="renderDailyList()">
         </div>
 
         <!-- Bulk Actions -->
         <div class="bulk-actions-row">
           <button class="btn-bulk present" onclick="setBulkDailyStatus('P')">
-            <i class="fa-solid fa-check"></i> វត្តមាន
+            <i class="fa-solid fa-check-double"></i> វត្តមានទាំងអស់
           </button>
           <button class="btn-bulk absent" onclick="setBulkDailyStatus('A')">
-            <i class="fa-solid fa-xmark"></i> អវត្តមាន
+            <i class="fa-solid fa-xmark"></i> អវត្តមានទាំងអស់
           </button>
         </div>
 
-        <!-- Helper Tip -->
-        <div style="border: 1px dashed var(--border); border-radius:12px; padding:9px; font-size:11px; color:var(--text-muted); line-height:1.4;">
-          ចុចលើស្ថានភាព ដើម្បីប្តូររហ័ស ឬប្រើសញ្ញាព្រួញចុះក្រោមដើម្បីជ្រើសរើសលម្អិត។
+        <div style="background:var(--surface-elevated); border-radius:12px; padding:10px; font-size:11.5px; color:var(--text-muted); line-height:1.45;">
+          💡 <b>ចំណាំ៖</b> ចុចលើប៊ូតុងដើម្បីប្ដូរវត្តមានលឿន ឬចុចសញ្ញា ▾ ដើម្បីជ្រើសរើសប្រភេទអវត្តមាន។
         </div>
       </div>
 
       <!-- Right Student Attendance List -->
       <div class="daily-list-card">
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; padding-bottom:8px; border-bottom:1px solid var(--border);">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; padding-bottom:10px; border-bottom:1px solid var(--border);">
           <div>
-            <h3 style="font-size:14.5px; font-weight:bold; color:var(--text);">បញ្ជីសិស្ស</h3>
-            <span style="font-size:11px; color:var(--text-muted);">រក្សាទុកស្វ័យប្រវត្តពេលផ្លាស់ប្តូរ</span>
+            <h3 style="font-size:15px; font-weight:700; color:var(--text);">បញ្ជីឈ្មោះសិស្ស</h3>
+            <span style="font-size:11.5px; color:var(--text-muted);">ប្រព័ន្ធរក្សាទុកស្វ័យប្រវត្តិពេលកែប្រែ</span>
           </div>
-          <span style="font-size:11.5px; font-weight:bold; color:#34d399; background:rgba(16,185,129,0.15); padding:3px 9px; border-radius:20px;">✓ សកម្ម</span>
+          <span style="font-size:11.5px; font-weight:600; color:#059669; background:var(--p-bg); padding:4px 10px; border-radius:20px;">✓ សកម្ម</span>
         </div>
 
         <div id="studentListContainer">
-          <div style="text-align:center; padding:30px; color:var(--text-muted);">កំពុងទាញយកទិន្នន័យ...</div>
+          <div style="text-align:center; padding:40px; color:var(--text-muted);">កំពុងទាញយកទិន្នន័យ...</div>
         </div>
       </div>
 
@@ -714,13 +751,13 @@
 
   <!-- ================= 2. TAB: របាយការណ៍ & សង្ខេបខែ ================= -->
   <div id="tabReportsMenu" style="display:none;">
-    <div class="report-launcher-card" style="max-width: 800px; margin: 0 auto;">
-      <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; flex-wrap:wrap; gap:10px;">
+    <div class="report-launcher-card" style="max-width: 820px; margin: 0 auto;">
+      <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:16px; flex-wrap:wrap; gap:10px;">
         <div style="display:flex; align-items:center; gap:10px;">
-          <div style="width:40px; height:40px; border-radius:10px; background:rgba(168,85,247,0.2); color:var(--primary-purple); display:flex; align-items:center; justify-content:center; font-size:20px;">📋</div>
+          <div style="width:40px; height:40px; border-radius:12px; background:var(--primary-soft); color:var(--primary); display:flex; align-items:center; justify-content:center; font-size:18px;">📋</div>
           <div>
-            <h2 class="f-moul" style="font-size:15px; color:var(--text);">បញ្ជីអវត្តមាន</h2>
-            <p style="font-size:11.5px; color:var(--text-muted);">ប្រចាំខែ និងសរុបប្រចាំឆ្នាំ</p>
+            <h2 class="f-moul" style="font-size:14.5px; color:var(--text);">របាយការណ៍អវត្តមាន</h2>
+            <p style="font-size:11.5px; color:var(--text-muted);">ទាញយកជារបាយការណ៍ប្រចាំខែ និងសរុបប្រចាំឆ្នាំ</p>
           </div>
         </div>
 
@@ -735,44 +772,40 @@
       </div>
 
       <div class="holiday-config-box">
-        <div style="font-size: 13.5px; font-weight: bold; color: var(--text); margin-bottom: 6px; display: flex; align-items: center; gap: 6px;">
-          <i class="fa-solid fa-umbrella-beach" style="color: #059669;"></i>
-          <span>ថ្ងៃឈប់ / ថ្ងៃសុំច្បាប់ (មិនរាប់ជាថ្ងៃរៀន)៖</span>
+        <div style="font-size:13px; font-weight:700; color:var(--text); margin-bottom:6px; display:flex; align-items:center; gap:6px;">
+          <i class="fa-solid fa-umbrella-beach" style="color:#059669;"></i>
+          <span>កំណត់ថ្ងៃឈប់សម្រាកក្នុងខែ (មិនរាប់ជាថ្ងៃរៀន)៖</span>
         </div>
-        <div style="font-size: 11.5px; color: var(--text-muted); margin-bottom: 10px;">
-          ជ្រើសរើសថ្ងៃពីប្រតិទិនខែ • កាត់បន្ថយថ្ងៃរៀនពិតប្រាកដស្វ័យប្រវត្ត។
-        </div>
-        <div style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap; margin-bottom: 10px;">
+        <div style="display:flex; gap:8px; align-items:center; flex-wrap:wrap; margin-bottom:10px; margin-top:10px;">
           
           <div style="position: relative;">
-            <button class="holiday-calendar-trigger" onclick="toggleHolidayCalPopup()">
-              <i class="fa-regular fa-calendar-days" style="color: var(--primary-purple);"></i>
+            <button class="date-trigger-btn" onclick="toggleHolidayCalPopup()">
+              <i class="fa-regular fa-calendar-days" style="color:var(--primary);"></i>
               <span id="selectedHolidayDateTxt">ជ្រើសរើសថ្ងៃទី</span>
             </button>
 
-            <div class="holiday-calendar-popup" id="holidayCalPopup">
+            <div class="calendar-popup" id="holidayCalPopup" style="top:46px;">
               <div class="cal-month-title" id="holidayCalTitle">កញ្ញា 2026</div>
               <div class="cal-weekdays">
                 <span>អា</span><span>ច</span><span>អ</span><span>ព</span><span>ព្រ</span><span>សុ</span><span>ស</span>
               </div>
               <div class="cal-days-grid" id="holidayCalDaysGrid"></div>
-              <div style="display:flex; justify-content:space-between; margin-top:10px; font-size:11.5px; font-weight:bold;">
-                <span style="color:var(--text-muted); cursor:pointer;" onclick="toggleHolidayCalPopup()">បិទ</span>
+              <div style="display:flex; justify-content:flex-end; margin-top:10px;">
+                <span style="color:var(--text-muted); cursor:pointer; font-size:12px; font-weight:600;" onclick="toggleHolidayCalPopup()">បិទ</span>
               </div>
             </div>
           </div>
 
-          <input type="text" id="holidayReasonInput" placeholder="មូលហេតុ (ឧ. បុណ្យភ្ជុំបិណ្ឌ)" style="flex: 1; min-width: 180px; padding: 8px 12px; border-radius: 12px; border: 1.5px solid var(--border); background: var(--surface); color: var(--text); outline: none; font-size: 13px;">
-          <button onclick="addHolidayForCurrentMonth()" style="padding: 8px 18px; border-radius: 12px; background: #059669; color: #fff; font-weight: bold; border: none; cursor: pointer; font-size: 13px;"><i class="fa-solid fa-plus"></i> បន្ថែម</button>
+          <input type="text" id="holidayReasonInput" placeholder="មូលហេតុ (ឧ. បុណ្យភ្ជុំបិណ្ឌ)" style="flex:1; min-width:180px; padding:8px 12px; border-radius:12px; border:1px solid var(--border); background:var(--surface); color:var(--text); outline:none; font-size:12.5px;">
+          <button onclick="addHolidayForCurrentMonth()" class="btn-open-report" style="background:#059669;"><i class="fa-solid fa-plus"></i> បន្ថែម</button>
         </div>
-        <div id="holidayTagsContainer" style="display: flex; flex-wrap: wrap; gap: 4px; margin-top: 6px;">
-        </div>
+        <div id="holidayTagsContainer" style="display:flex; flex-wrap:wrap; gap:4px; margin-top:6px;"></div>
       </div>
 
       <div class="report-menu-row">
-        <div style="display:flex; align-items:center; gap:8px; font-weight:bold; font-size:13.5px; color:var(--text);">
-          <span style="color:#38bdf8; font-size:16px;">📋</span>
-          <span>បញ្ជីវត្តមានប្រចាំខែ</span>
+        <div style="display:flex; align-items:center; gap:10px; font-weight:600; font-size:13.5px; color:var(--text);">
+          <span style="font-size:18px;">📄</span>
+          <span>តារាងវត្តមានប្រចាំខែ</span>
         </div>
         <button class="btn-open-report" onclick="openReportView('monthly')">
           <i class="fa-solid fa-print"></i> បើកមើល
@@ -780,9 +813,9 @@
       </div>
 
       <div class="report-menu-row">
-        <div style="display:flex; align-items:center; gap:8px; font-weight:bold; font-size:13.5px; color:var(--text);">
-          <span style="color:#a855f7; font-size:16px;">📅</span>
-          <span>សរុបអវត្តមានប្រចាំឆ្នាំ</span>
+        <div style="display:flex; align-items:center; gap:10px; font-weight:600; font-size:13.5px; color:var(--text);">
+          <span style="font-size:18px;">📊</span>
+          <span>តារាងសរុបអវត្តមានប្រចាំឆ្នាំ</span>
         </div>
         <button class="btn-open-report" onclick="openReportView('yearly')">
           <i class="fa-solid fa-print"></i> បើកមើល
@@ -799,16 +832,16 @@
       
       <div class="sheet-options-grid">
         <button class="sheet-choice-btn p" onclick="selectActionStatus('P')">
-          <i class="fa-solid fa-check"></i> មានវត្តមាន
+          <i class="fa-solid fa-check"></i> វត្តមាន (P)
         </button>
         <button class="sheet-choice-btn a" onclick="selectActionStatus('A')">
-          <i class="fa-solid fa-xmark"></i> អវត្តមាន
+          <i class="fa-solid fa-xmark"></i> អវត្តមាន (A)
         </button>
         <button class="sheet-choice-btn l" onclick="selectActionStatus('L')">
-          <i class="fa-regular fa-clock"></i> យឺត
+          <i class="fa-regular fa-clock"></i> យឺត (L)
         </button>
         <button class="sheet-choice-btn c" onclick="selectActionStatus('C')">
-          <i class="fa-solid fa-shield-halved"></i> មានច្បាប់
+          <i class="fa-solid fa-shield-halved"></i> មានច្បាប់ (C)
         </button>
       </div>
     </div>
@@ -817,10 +850,10 @@
   <!-- ================= 4. REPORT VIEWER MODAL ================= -->
   <div id="reportViewerModal">
     <div class="viewer-top-bar">
-      <button class="tab-pill-btn" style="background:#1f293d; color:#fff;" onclick="closeReportView()">⬅ ត្រឡប់</button>
+      <button class="tab-pill-btn" onclick="closeReportView()">⬅ ត្រឡប់ក្រោយ</button>
       <div style="display:flex; gap:8px;">
         <button class="tab-pill-btn" style="background:#059669; color:#fff;" onclick="downloadPDF()"><i class="fa-solid fa-file-pdf"></i> ទាញយក PDF</button>
-        <button class="tab-pill-btn" style="background:var(--primary-purple); color:#fff;" onclick="window.print()"><i class="fa-solid fa-print"></i> បោះពុម្ព</button>
+        <button class="tab-pill-btn" style="background:var(--primary); color:#fff;" onclick="window.print()"><i class="fa-solid fa-print"></i> បោះពុម្ព</button>
       </div>
     </div>
     <div class="report-paper-container" id="printableReportPaper"></div>
@@ -830,7 +863,14 @@
   <script src="api.js"></script>
 
   <script>
-    // 🌟 ទាញយក Token ពីគ្រប់ប្រភព (api.js, parent frame, ឬ localStorage)
+    // 🌟 Theme Sync ជាមួយ parent window
+    function syncThemeWithParent() {
+      var pTheme = (window.parent && window.parent.document && window.parent.document.documentElement.getAttribute('data-theme'))
+        || localStorage.getItem('krou_theme_manual') 
+        || 'light';
+      document.documentElement.setAttribute('data-theme', pTheme);
+    }
+
     function resolveToken() {
       if (typeof getStoredToken === 'function') {
         var t = getStoredToken();
@@ -849,7 +889,6 @@
 
     var KHMER_MONTHS = ["មករា","កុម្ភៈ","មីនា","មេសា","ឧសភា","មិថុនា","កក្កដា","សីហា","កញ្ញា","តុលា","វិច្ឆិកា","ធ្នូ"];
     var WEEKDAYS_KH = ["អា","ច","អ","ព","ព្រ","សុ","ស"];
-    var WEEKDAYS_FULL = ["អាទិត្យ","ចន្ទ","អង្គារ","ពុធ","ព្រហស្បតិ៍","សុក្រ","សៅរ៍"];
     var KHMER_DIGITS = ['០','១','២','៣','៤','៥','៦','៧','៨','៩'];
 
     var monthlyHolidaysMap = {
@@ -862,32 +901,16 @@
 
     function toKhmerNum(n) { return String(n).replace(/\d/g, d => KHMER_DIGITS[d]); }
 
-    function getAutoThemeByTime() {
-      var hour = new Date().getHours();
-      return (hour >= 18 || hour < 6) ? 'dark' : 'light';
-    }
-
-    function applyTheme(theme) {
-      document.documentElement.setAttribute('data-theme', theme);
-    }
-
     function showSaveToast() {
       var toast = document.getElementById("saveToast");
       toast.className = "show";
-      setTimeout(function(){ toast.className = toast.className.replace("show", ""); }, 2500);
+      setTimeout(function(){ toast.className = toast.className.replace("show", ""); }, 2200);
     }
 
     async function saveHolidaysData() {
-      try {
-        localStorage.setItem('school_monthly_holidays', JSON.stringify(monthlyHolidaysMap));
-      } catch(e) {}
-
+      try { localStorage.setItem('school_monthly_holidays', JSON.stringify(monthlyHolidaysMap)); } catch(e) {}
       if (typeof callBackendApi === 'function') {
-        try {
-          await callBackendApi('saveSchoolHolidays', { holidaysMap: monthlyHolidaysMap });
-        } catch(e) {
-          console.warn('កំហុសរក្សាទុកថ្ងៃឈប់:', e);
-        }
+        try { await callBackendApi('saveSchoolHolidays', { holidaysMap: monthlyHolidaysMap }); } catch(e) {}
       }
     }
 
@@ -895,12 +918,7 @@
       try {
         var local = localStorage.getItem('school_monthly_holidays');
         if (local) {
-          var parsed = JSON.parse(local);
-          monthlyHolidaysMap = Object.assign({
-            "មករា": [], "កុម្ភៈ": [], "មីនា": [], "មេសា": [], 
-            "ឧសភា": [], "មិថុនា": [], "កក្កដា": [], "សីហា": [], 
-            "កញ្ញា": [], "តុលា": [], "វិច្ឆិកា": [], "ធ្នូ": []
-          }, parsed);
+          monthlyHolidaysMap = Object.assign(monthlyHolidaysMap, JSON.parse(local));
         }
       } catch(e) {}
 
@@ -909,21 +927,16 @@
           var serverData = await callBackendApi('getSchoolHolidays');
           if (serverData && typeof serverData === 'object') {
             monthlyHolidaysMap = Object.assign(monthlyHolidaysMap, serverData);
-            try { localStorage.setItem('school_monthly_holidays', JSON.stringify(monthlyHolidaysMap)); } catch(e){}
             renderHolidayTagsList();
           }
-        } catch(e) {
-          console.warn('កំហុសទាញយកថ្ងៃឈប់:', e);
-        }
+        } catch(e) {}
       }
     }
 
     function toggleHolidayCalPopup() {
       var pop = document.getElementById('holidayCalPopup');
       pop.classList.toggle('show');
-      if (pop.classList.contains('show')) {
-        renderHolidayCalendarDays();
-      }
+      if (pop.classList.contains('show')) renderHolidayCalendarDays();
     }
 
     function renderHolidayCalendarDays() {
@@ -972,7 +985,6 @@
       }
 
       var reason = (reasonInput.value || 'ថ្ងៃឈប់សម្រាក').trim();
-
       if (!monthlyHolidaysMap[mName]) monthlyHolidaysMap[mName] = [];
       
       if (!monthlyHolidaysMap[mName].some(h => h.day === selectedHolidayDay)) {
@@ -981,7 +993,6 @@
       }
 
       saveHolidaysData();
-
       reasonInput.value = '';
       selectedHolidayDay = null;
       document.getElementById('selectedHolidayDateTxt').textContent = `ជ្រើសរើសថ្ងៃទី (${mName})`;
@@ -1042,8 +1053,8 @@
     var activeActionSheetSid = null;
 
     window.onload = async function() {
-      applyTheme(getAutoThemeByTime());
-      setInterval(function() { applyTheme(getAutoThemeByTime()); }, 60000);
+      syncThemeWithParent();
+      setInterval(syncThemeWithParent, 1500);
 
       TOKEN = resolveToken();
       await fetchSessionInfo();
@@ -1063,9 +1074,7 @@
             TEACHER_NAME = session.name || '';
           }
         }
-      } catch(e) {
-        console.warn('Session verification warning:', e);
-      }
+      } catch(e) {}
     }
 
     function switchNavTab(tab) {
@@ -1105,7 +1114,6 @@
           sel.innerHTML = '<option value="">គ្មានថ្នាក់</option>';
         }
       } catch (err) {
-        console.error('កំហុសទាញយកថ្នាក់:', err);
         sel.innerHTML = '<option value="">កំហុសទាញយក</option>';
       }
     }
@@ -1174,9 +1182,9 @@
       TOKEN = resolveToken();
 
       document.getElementById('studentListContainer').innerHTML = `
-        <div style="text-align:center; padding:30px; color:var(--text-muted);">
+        <div style="text-align:center; padding:40px; color:var(--text-muted);">
           <i class="fa-solid fa-spinner fa-spin fa-2x"></i>
-          <p style="margin-top:8px;">កំពុងទាញយកទិន្នន័យ...</p>
+          <p style="margin-top:10px;">កំពុងទាញយកទិន្នន័យ...</p>
         </div>`;
 
       try {
@@ -1205,7 +1213,7 @@
     function renderDailyList() {
       var container = document.getElementById('studentListContainer');
       if (!rawStudentsData.length) {
-        container.innerHTML = '<div style="text-align:center; padding:30px; color:var(--text-muted);">គ្មានទិន្នន័យសិស្សឡើយ</div>';
+        container.innerHTML = '<div style="text-align:center; padding:40px; color:var(--text-muted);">គ្មានទិន្នន័យសិស្សឡើយ</div>';
         return;
       }
       var q = (document.getElementById('searchBox').value || '').trim().toLowerCase();
@@ -1218,7 +1226,7 @@
         var isAbsent = (st === 'A');
         var noteVal = studentNotesMap[s.id] || '';
 
-        var btnText = (st === 'P') ? '<i class="fa-solid fa-check"></i> មានវត្តមាន' :
+        var btnText = (st === 'P') ? '<i class="fa-solid fa-check"></i> វត្តមាន' :
                       (st === 'A') ? '<i class="fa-solid fa-xmark"></i> អវត្តមាន' :
                       (st === 'L') ? '<i class="fa-regular fa-clock"></i> យឺត' : '<i class="fa-solid fa-shield-halved"></i> មានច្បាប់';
 
@@ -1230,8 +1238,9 @@
           <div class="student-item-card status-${st} ${isAbsent ? 'has-absent' : ''}" id="stCard_${s.id}">
             <div class="st-top-row">
               <div class="st-name-title">
-                <span style="color:var(--text-muted); font-size:11.5px; width:18px;">${idx + 1}</span>
+                <span style="color:var(--text-muted); font-size:12px; width:22px;">${idx + 1}</span>
                 <span>${s.name}</span>
+                <span style="font-size:11px; color:var(--text-muted); font-weight:normal;">(${s.sex || 'ប្រុស'})</span>
               </div>
               
               <div class="att-split-btn">
@@ -1329,11 +1338,11 @@
         });
         showSaveToast();
       } catch(err) {
-        console.warn('កំហុសរក្សាទុកវត្តមាន:', err);
+        console.warn(err);
       }
     }
 
-    /* ================= 🖨️ REPORT GENERATION & PDF ================= */
+    /* ================= 🖨️ REPORTS ================= */
     function openReportView(type) {
       var paper = document.getElementById('printableReportPaper');
       document.getElementById('reportViewerModal').style.display = 'block';
@@ -1352,12 +1361,11 @@
       var mName = document.getElementById('rptMonthSelect').value;
       var opt = {
         margin:       [4, 6, 4, 6],
-        filename:     'Attendance_Report_Class_' + currentClassName + '_' + mName + '.pdf',
+        filename:     'Attendance_Report_' + currentClassName + '_' + mName + '.pdf',
         image:        { type: 'jpeg', quality: 1.0 },
-        html2canvas:  { scale: 3, useCORS: true, letterRendering: true },
-        jsPDF:        { unit: 'mm', format: 'a4', orientation: 'landscape', compress: true }
+        html2canvas:  { scale: 3, useCORS: true },
+        jsPDF:        { unit: 'mm', format: 'a4', orientation: 'landscape' }
       };
-      
       html2pdf().from(element).set(opt).save();
     }
 
@@ -1393,9 +1401,7 @@
           var isSun = (dow === 0);
           var isHol = holidayCols.includes(d);
 
-          if (isSun || isHol) {
-            nonSchoolDaysCount++;
-          }
+          if (isSun || isHol) nonSchoolDaysCount++;
           if (isSun) sundayCols.push(d);
 
           var cellClass = isSun ? 'weekend-col' : isHol ? 'holiday-cell' : '';
@@ -1432,7 +1438,6 @@
               }
             } else {
               var code = s.days[d - 1] || '-';
-              
               if (code === 'C') studentPermCount++;
               if (code === 'A') studentAbsCount++;
 
@@ -1459,7 +1464,7 @@
           rowsHtml += `
             <tr>
               <td>${idx + 1}</td>
-              <td style="text-align:left; padding-left:4px; font-weight:bold; white-space:nowrap; overflow:hidden;">${s.name}</td>
+              <td style="text-align:left; padding-left:4px; font-weight:bold;">${s.name}</td>
               <td>${s.sex || 'ប្រុស'}</td>
               ${dayCells}
               <td style="font-weight:bold;">${stPerm > 0 ? stPerm : ''}</td>
@@ -1504,12 +1509,11 @@
             <div class="f-moul" style="font-size:13.5px; margin-bottom:2px;">ជាតិ សាសនា ព្រះមហាក្សត្រ</div>
             <div style="font-size:11px; letter-spacing:3px; color:#dc2626;">✻ ✻ ✻ 📖 ✻ ✻ ✻</div>
             
-            <div class="f-moul" style="font-size:15px; margin-top:6px; margin-bottom:2px;">បញ្ជីវត្តមានប្រចាំខែ ${mName} ឆ្នាំ ${toKhmerNum(currentYear)}</div>
+            <div class="f-moul" style="font-size:14.5px; margin-top:6px; margin-bottom:2px;">បញ្ជីវត្តមានប្រចាំខែ ${mName} ឆ្នាំ ${toKhmerNum(currentYear)}</div>
             <div style="font-size:12px; font-weight:bold;">ឆ្នាំសិក្សា ២០២៦-២០២៧</div>
           </div>
 
           <div style="text-align:left; font-weight:bold; font-size:11px; margin-bottom:4px; line-height: 1.3;">
-            <div>ការិយាល័យអប់រំ យុវជន និងកីឡា</div>
             <div>សាលាបឋមសិក្សាកំពង់ល្ពៅ</div>
             <div>ថ្នាក់ទី ${currentClassName}</div>
           </div>
@@ -1542,27 +1546,22 @@
             </tbody>
           </table>
 
-          <div class="stats-summary-bar">
-            <div>
-              <div>សិស្សសរុប ៖ <strong>${totalStudents} នាក់</strong> • ស្រី ៖ <strong>${femaleCount} នាក់</strong> • ប្រុស ៖ <strong>${maleCount} នាក់</strong></div>
-              <div>សញ្ញា ៖ <strong>ច្ប</strong>=មានច្បាប់ • <strong>អច្ប</strong>=អត់ច្បាប់ <span style="color:#64748b;">(មិនរាប់ក្នុងភាគរយ)</span></div>
-            </div>
-            <div style="text-align:right;">
-              ចំនួនថ្ងៃរៀនពិតប្រាកដ ៖ <strong>${actualSchoolDays} ថ្ងៃ</strong> • ពេលសិស្សត្រូវមករៀន ៖ <strong>${totalSlots} ពេល</strong> • ពេលអវត្តមាន ៖ <strong>${totalAbsenceTimes} ដង</strong> • ពេលដែលសិស្សមករៀនពិតប្រាកដ ៖ <strong>${actualPresentTimes} ពេល</strong> • ភាគរយអវត្តមាន ៖ <strong>(${totalAbsenceTimes}/${totalSlots})×100 = ${percentAbsent}%</strong>
-            </div>
+          <div style="display:flex; justify-content:space-between; margin-top:6px; font-size:10px; line-height:1.5;">
+            <div>សិស្សសរុប ៖ <strong>${totalStudents} នាក់</strong> (ស្រី <strong>${femaleCount}</strong>)</div>
+            <div>ចំនួនថ្ងៃរៀន ៖ <strong>${actualSchoolDays} ថ្ងៃ</strong> • ភាគរយអវត្តមាន ៖ <strong>${percentAbsent}%</strong></div>
           </div>
 
-          <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-top:18px; padding:0 30px;">
-            <div style="display:inline-flex; flex-direction:column; align-items:center; text-align:center; min-width:220px; margin-top:30px;">
-              <div class="f-moul" style="font-size:12.5px; color:#1e3a8a;">បានឃើញ និងឯកភាព</div>
-              <div class="f-bold" style="font-size:12.5px; color:#1e3a8a; margin-top:4px;">នាយកសាលា</div>
+          <div style="display:flex; justify-content:space-between; margin-top:20px; padding:0 30px;">
+            <div style="text-align:center; min-width:180px;">
+              <div class="f-moul" style="font-size:12px; color:#1e3a8a;">បានឃើញ និងឯកភាព</div>
+              <div style="font-size:12px; font-weight:bold; color:#1e3a8a; margin-top:4px;">នាយកសាលា</div>
             </div>
 
-            <div style="display:inline-flex; flex-direction:column; align-items:center; text-align:center; min-width:300px;">
+            <div style="text-align:center; min-width:260px;">
               ${khDate.lunarInputHtml}
-              <div style="font-size:12px; color:#1e3a8a; margin-top:3px;">${khDate.solarLine}</div>
-              <div class="f-moul" style="font-size:13px; color:#1e3a8a; margin-top:5px;">គ្រូទទួលបន្ទុកថ្នាក់</div>
-              <div class="f-bold" style="font-size:13.5px; color:#1e3a8a; margin-top:35px;">${TEACHER_NAME || ''}</div>
+              <div style="font-size:11.5px; color:#1e3a8a; margin-top:3px;">${khDate.solarLine}</div>
+              <div class="f-moul" style="font-size:12px; color:#1e3a8a; margin-top:4px;">គ្រូទទួលបន្ទុកថ្នាក់</div>
+              <div style="font-size:13px; font-weight:bold; color:#1e3a8a; margin-top:32px;">${TEACHER_NAME || ''}</div>
             </div>
           </div>
         `;
@@ -1593,10 +1592,10 @@
         var s1M = res.sem1Months || [];
         var s2M = res.sem2Months || [];
 
-        var thS1 = s1M.map(m => `<th colspan="2" style="font-size:8.5px; padding: 4px 0; height: 50px;"><div style="width:20px; height:45px; display:flex; align-items:center; justify-content:center; margin:0 auto;"><span style="display:inline-block; transform:rotate(-90deg); white-space:nowrap; font-weight:bold;">${m}</span></div></th>`).join('');
-        var thS2 = s2M.map(m => `<th colspan="2" style="font-size:8.5px; padding: 4px 0; height: 50px;"><div style="width:20px; height:45px; display:flex; align-items:center; justify-content:center; margin:0 auto;"><span style="display:inline-block; transform:rotate(-90deg); white-space:nowrap; font-weight:bold;">${m}</span></div></th>`).join('');
+        var thS1 = s1M.map(m => `<th colspan="2" style="font-size:8px; padding:3px 0;"><div class="vertical-sun-box" style="height:42px;"><span class="vertical-sun-text">${m}</span></div></th>`).join('');
+        var thS2 = s2M.map(m => `<th colspan="2" style="font-size:8px; padding:3px 0;"><div class="vertical-sun-box" style="height:42px;"><span class="vertical-sun-text">${m}</span></div></th>`).join('');
         
-        var subCA = '<th style="font-size:7.5px;">ច្ប</th><th style="font-size:7.5px;">អច្ប</th>';
+        var subCA = '<th style="font-size:7px;">ច្ប</th><th style="font-size:7px;">អច្ប</th>';
         var thSub1 = s1M.map(() => subCA).join('') + subCA;
         var thSub2 = s2M.map(() => subCA).join('') + subCA;
 
@@ -1625,7 +1624,7 @@
             <tr>
               <td>${idx + 1}</td>
               <td>${s.id}</td>
-              <td style="text-align:left; padding-left:4px; font-weight:bold; white-space:nowrap;">${s.name}</td>
+              <td style="text-align:left; padding-left:4px; font-weight:bold;">${s.name}</td>
               <td>${s.sex || 'ប្រុស'}</td>
               ${s1Cells}
               ${s2Cells}
@@ -1642,14 +1641,8 @@
             <div class="f-moul" style="font-size:13.5px; margin-bottom:2px;">ជាតិ សាសនា ព្រះមហាក្សត្រ</div>
             <div style="font-size:11px; letter-spacing:3px; color:#dc2626;">✻ ✻ ✻ 📖 ✻ ✻ ✻</div>
             
-            <div class="f-moul" style="font-size:15px; margin-top:6px; margin-bottom:2px;">តារាងសរុបអវត្តមានប្រចាំឆ្នាំ</div>
-            <div style="font-size:12px; font-weight:bold;">ឆ្នាំសិក្សា ២០២៦-២០២៧ • សិស្សសរុប ${students.length} នាក់</div>
-          </div>
-
-          <div style="text-align:left; font-weight:bold; font-size:11px; margin-bottom:4px; line-height: 1.3;">
-            <div>ការិយាល័យអប់រំ យុវជន និងកីឡា</div>
-            <div>សាលាបឋមសិក្សាកំពង់ល្ពៅ</div>
-            <div>ថ្នាក់ទី ${currentClassName}</div>
+            <div class="f-moul" style="font-size:14.5px; margin-top:6px; margin-bottom:2px;">តារាងសរុបអវត្តមានប្រចាំឆ្នាំ</div>
+            <div style="font-size:12px; font-weight:bold;">ឆ្នាំសិក្សា ២០២៦-២០២៧</div>
           </div>
 
           <table class="print-table">
@@ -1669,25 +1662,25 @@
               </tr>
               <tr>
                 ${thSub1}${thSub2}
-                <th style="font-size:7.5px;">ច្ប</th>
-                <th style="font-size:7.5px;">អច្ប</th>
-                <th style="font-size:7.5px;">សរុប</th>
+                <th style="font-size:7px;">ច្ប</th>
+                <th style="font-size:7px;">អច្ប</th>
+                <th style="font-size:7px;">សរុប</th>
               </tr>
             </thead>
             <tbody>${rowsHtml}</tbody>
           </table>
 
-          <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-top:18px; padding:0 30px;">
-            <div style="display:inline-flex; flex-direction:column; align-items:center; text-align:center; min-width:220px; margin-top:30px;">
-              <div class="f-moul" style="font-size:12.5px; color:#1e3a8a;">បានឃើញ និងឯកភាព</div>
-              <div class="f-bold" style="font-size:12.5px; color:#1e3a8a; margin-top:4px;">នាយកសាលា</div>
+          <div style="display:flex; justify-content:space-between; margin-top:20px; padding:0 30px;">
+            <div style="text-align:center; min-width:180px;">
+              <div class="f-moul" style="font-size:12px; color:#1e3a8a;">បានឃើញ និងឯកភាព</div>
+              <div style="font-size:12px; font-weight:bold; color:#1e3a8a; margin-top:4px;">នាយកសាលា</div>
             </div>
 
-            <div style="display:inline-flex; flex-direction:column; align-items:center; text-align:center; min-width:300px;">
+            <div style="text-align:center; min-width:260px;">
               ${khDate.lunarInputHtml}
-              <div style="font-size:12px; color:#1e3a8a; margin-top:3px;">${khDate.solarLine}</div>
-              <div class="f-moul" style="font-size:13px; color:#1e3a8a; margin-top:5px;">គ្រូទទួលបន្ទុកថ្នាក់</div>
-              <div class="f-bold" style="font-size:13.5px; color:#1e3a8a; margin-top:35px;">${TEACHER_NAME || ''}</div>
+              <div style="font-size:11.5px; color:#1e3a8a; margin-top:3px;">${khDate.solarLine}</div>
+              <div class="f-moul" style="font-size:12px; color:#1e3a8a; margin-top:4px;">គ្រូទទួលបន្ទុកថ្នាក់</div>
+              <div style="font-size:13px; font-weight:bold; color:#1e3a8a; margin-top:32px;">${TEACHER_NAME || ''}</div>
             </div>
           </div>
         `;
