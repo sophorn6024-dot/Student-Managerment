@@ -5,10 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>ប្រព័ន្ធគ្រប់គ្រងសិស្ស - KrouDigital</title>
 
-  <!-- 🔤 Google Fonts Khmer -->
+  <!-- 🔤 Google Fonts Khmer (Khmer OS Battambang & Moul) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Battambang:wght@400;700&family=Kantumruy+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Moul&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Battambang:wght@400;700;900&family=Moul&display=swap" rel="stylesheet">
 
   <style>
     /* =========================================================
@@ -58,14 +58,19 @@
       --primary-soft: rgba(37, 99, 235, 0.15);
     }
 
+    /* 🌟 កំណត់ FONT KHMER OS BATTAMBANG ទូទាំងប្រព័ន្ធ */
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: 'Kantumruy Pro', 'Khmer OS Battambang', 'Battambang', sans-serif;
+      font-family: 'Khmer OS Battambang', 'Battambang', sans-serif;
       -webkit-tap-highlight-color: transparent;
       transition: background-color 0.25s ease, border-color 0.25s ease, color 0.25s ease;
-      letter-spacing: 0.2px;
+      letter-spacing: 0.1px;
+    }
+
+    html, body, button, input, select, textarea {
+      font-family: 'Khmer OS Battambang', 'Battambang', sans-serif;
     }
 
     html, body {
@@ -79,7 +84,7 @@
     }
 
     .f-moul { 
-      font-family: 'Khmer OS Muol Light', 'Moul', cursive; 
+      font-family: 'Khmer OS Muol Light', 'Moul', cursive !important; 
       font-weight: normal; 
       letter-spacing: 0.5px; 
     }
@@ -197,7 +202,7 @@
     .nav-link-btn.active {
       background: linear-gradient(90deg, rgba(37, 99, 235, 0.4), rgba(124, 58, 237, 0.25));
       color: #ffffff;
-      font-weight: 600;
+      font-weight: 700;
       border: 1px solid rgba(255, 255, 255, 0.12);
     }
 
@@ -257,7 +262,7 @@
     .nav-sub-item.active {
       background: rgba(59, 130, 246, 0.35);
       color: #ffffff;
-      font-weight: 600;
+      font-weight: 700;
       border: 1px solid rgba(255, 255, 255, 0.1);
     }
     .sub-icon { font-size: 14px; width: 18px; text-align: center; flex-shrink: 0; }
@@ -347,7 +352,7 @@
     }
     .page-title {
       font-size: 15.5px;
-      font-weight: 600;
+      font-weight: 700;
       color: var(--text);
       white-space: nowrap;
       overflow: hidden;
@@ -380,7 +385,7 @@
       background: var(--primary-soft);
       color: var(--primary);
       font-size: 11.5px;
-      font-weight: 500;
+      font-weight: 600;
       padding: 6px 12px;
       border-radius: 30px;
       white-space: nowrap;
@@ -395,7 +400,7 @@
       border-left: 1px solid var(--border);
     }
 
-    .user-name-txt { font-size: 12.5px; font-weight: 600; color: var(--text); }
+    .user-name-txt { font-size: 12.5px; font-weight: 700; color: var(--text); }
 
     .avatar-btn {
       width: 38px;
@@ -406,7 +411,7 @@
       display: flex;
       align-items: center;
       justify-content: center;
-      font-weight: 600;
+      font-weight: 700;
       font-size: 14px;
       cursor: pointer;
       overflow: hidden;
@@ -422,7 +427,7 @@
       background: rgba(239, 68, 68, 0.08);
       color: #ef4444;
       font-size: 11.5px;
-      font-weight: 600;
+      font-weight: 700;
       cursor: pointer;
       transition: all 0.15s;
       white-space: nowrap;
@@ -474,7 +479,7 @@
       overflow: hidden;
     }
     .welcome-hero h1 { font-size: 20px; margin-bottom: 6px; position: relative; z-index: 2; line-height: 1.4; font-weight: normal; }
-    .welcome-hero p { font-size: 12.5px; opacity: 0.92; max-width: 680px; line-height: 1.6; position: relative; z-index: 2; font-weight: 300; }
+    .welcome-hero p { font-size: 12.5px; opacity: 0.92; max-width: 680px; line-height: 1.6; position: relative; z-index: 2; font-weight: 400; }
     .welcome-hero::after {
       content: "🏫";
       position: absolute;
@@ -529,8 +534,8 @@
     [data-theme="dark"] .stat-icon-wrap.pink  { background: rgba(219, 39, 119, 0.2); }
     [data-theme="dark"] .stat-icon-wrap.amber { background: rgba(217, 119, 6, 0.2); }
 
-    .stat-digit { font-size: 22px; font-weight: 700; color: var(--text); line-height: 1.2; }
-    .stat-title { font-size: 11px; font-weight: 500; color: var(--text-muted); margin-top: 2px; }
+    .stat-digit { font-size: 22px; font-weight: 800; color: var(--text); line-height: 1.2; }
+    .stat-title { font-size: 11.5px; font-weight: 600; color: var(--text-muted); margin-top: 2px; }
 
     .dash-split-grid {
       display: grid;
@@ -551,7 +556,7 @@
       justify-content: space-between;
       margin-bottom: 16px;
     }
-    .dash-panel-title { font-size: 14px; font-weight: 600; color: var(--text); display: flex; align-items: center; gap: 8px; }
+    .dash-panel-title { font-size: 14px; font-weight: 700; color: var(--text); display: flex; align-items: center; gap: 8px; }
 
     /* Bar Chart Area */
     .bar-chart-container {
@@ -580,7 +585,7 @@
       pointer-events: none;
     }
     .grid-line-item { width: 100%; height: 1px; background: var(--border-subtle); position: relative; }
-    .grid-line-val { position: absolute; left: -34px; top: -7px; font-size: 10px; color: var(--text-soft); }
+    .grid-line-val { position: absolute; left: -34px; top: -7px; font-size: 10px; font-weight: bold; color: var(--text-soft); }
     .chart-bars-wrap {
       flex: 1;
       display: flex;
@@ -599,7 +604,7 @@
       justify-content: flex-end;
       position: relative;
     }
-    .bar-val-txt { font-size: 10px; font-weight: 600; color: var(--text); margin-bottom: 4px; }
+    .bar-val-txt { font-size: 10.5px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
     .bar-fill {
       width: 24px;
       max-width: 70%;
@@ -611,8 +616,8 @@
     .bar-label-txt {
       position: absolute;
       bottom: -24px;
-      font-size: 10px;
-      font-weight: 500;
+      font-size: 10.5px;
+      font-weight: 600;
       color: var(--text-muted);
       white-space: nowrap;
     }
@@ -644,22 +649,22 @@
       background: var(--primary-soft);
     }
     .quick-item-card .qi { font-size: 20px; }
-    .quick-item-card .qt { font-size: 11px; font-weight: 500; color: var(--text); text-align: center; }
+    .quick-item-card .qt { font-size: 11px; font-weight: 600; color: var(--text); text-align: center; }
 
     .class-progress-list { display: flex; flex-direction: column; gap: 12px; }
     .class-prog-row { display: flex; align-items: center; gap: 10px; font-size: 12px; }
-    .class-prog-title { width: 80px; font-weight: 600; color: var(--text); flex-shrink: 0; }
+    .class-prog-title { width: 80px; font-weight: 700; color: var(--text); flex-shrink: 0; }
     .class-prog-track { flex: 1; height: 8px; background: var(--border-subtle); border-radius: 20px; overflow: hidden; }
     .class-prog-fill { height: 100%; border-radius: 20px; background: linear-gradient(90deg, #3b82f6, #8b5cf6); transition: width 0.9s cubic-bezier(0.2, 0.8, 0.2, 1); }
-    .class-prog-count { width: 38px; text-align: right; font-weight: 600; color: var(--text-muted); }
+    .class-prog-count { width: 38px; text-align: right; font-weight: 700; color: var(--text-muted); }
 
     /* =========================================================
-       🪟 IFRAME VIEW (⚡ កែសម្រួលកុំឱ្យចាប់គាំង TOUCH SCROLL)
+       🪟 IFRAME VIEW
     ========================================================= */
     #iframeView {
       padding: 0;
       background: var(--surface);
-      overflow: hidden !important; /* 🌟 មិនឱ្យ parent ចាប់ Scroll ច្រឡំ */
+      overflow: hidden !important;
     }
     .iframe-container {
       width: 100%;
@@ -798,7 +803,7 @@
       transition: all 0.15s ease;
     }
     .m-nav-item:active { transform: scale(0.92); }
-    .m-nav-item.active { color: var(--primary); font-weight: 600; }
+    .m-nav-item.active { color: var(--primary); font-weight: 700; }
     .m-nav-item .m-icon { font-size: 18px; line-height: 1; }
     .m-nav-item .m-txt { font-size: 10px; line-height: 1; }
 
@@ -865,7 +870,7 @@
 
     .modal-body { padding: 18px; }
     .form-group-field { margin-bottom: 12px; }
-    .form-group-field label { display: block; font-size: 11px; font-weight: 600; margin-bottom: 5px; color: var(--text); }
+    .form-group-field label { display: block; font-size: 11.5px; font-weight: 700; margin-bottom: 5px; color: var(--text); }
     .form-group-field input, .form-group-field select {
       width: 100%;
       padding: 10px 14px;
@@ -888,7 +893,7 @@
       padding: 9px 18px;
       border-radius: 11px;
       font-size: 12.5px;
-      font-weight: 600;
+      font-weight: 700;
       cursor: pointer;
       border: none;
     }
@@ -989,7 +994,6 @@
 
 <div class="app-layout">
 
-  <!-- Mobile Backdrop -->
   <div id="mobileBackdrop" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.55); z-index:80; backdrop-filter:blur(3px);" onclick="closeSidebarMobile()"></div>
 
   <!-- SIDEBAR NAVIGATION -->
@@ -1246,7 +1250,7 @@
     <div class="modal-body">
       <form id="profileForm" onsubmit="return saveMyProfile(event)">
         <div style="text-align:center; margin-bottom:14px;">
-          <label style="font-size:11px; font-weight:600; padding:6px 14px; border-radius:20px; background:var(--primary-soft); color:var(--primary); cursor:pointer;">
+          <label style="font-size:11px; font-weight:700; padding:6px 14px; border-radius:20px; background:var(--primary-soft); color:var(--primary); cursor:pointer;">
             📷 ប្តូររូបថត <input type="file" accept="image/*" style="display:none;" onchange="onProfilePhotoPicked(event)">
           </label>
         </div>
@@ -1488,7 +1492,7 @@
     if (cleanFile === 'dashboard') {
       document.getElementById('iframeView').classList.remove('active');
       document.getElementById('dashboardView').classList.add('active');
-      refreshStats(); // ⚡ ហៅទាញស្ថិតិតែ ១ ដងគត់ត្រង់នេះ
+      refreshStats();
       return;
     }
 
@@ -1730,31 +1734,26 @@
     }
   }
 
-  // ⚡ TURBO BOOT: មិនបាច់ហៅ refreshStats() ត្រង់នេះទេ ព្រោះ navigate(currentPage) នឹងហៅស្វ័យប្រវត្តិ
   function bootAuthenticatedApp() {
     setTodayPill();
     initGreetings();
     navigate(currentPage, null);
   }
 
-  // ⚡ INSTANT SESSION RESTORATION: បង្ហាញ UI ភ្លាមៗ (0ms) មុនពេល Network ឆ្លើយតប
   async function verifySessionBeforeBoot() {
     if (!SESSION_TOKEN) {
       window.location.replace('login.html');
       return;
     }
 
-    // ១. បង្ហាញព័ត៌មានពី Storage ភ្លាមៗ កុំឱ្យអេក្រង់វិលរង់ចាំ
     if (TEACHER_NAME) {
       document.getElementById('userNameLabel').innerText = TEACHER_NAME;
       renderAvatar(TEACHER_PHOTO_URL);
       initAdminTools();
     }
 
-    // ២. បញ្ឆេះកម្មវិធីដំណើរការភ្លាម
     bootAuthenticatedApp();
 
-    // ៣. ផ្ទៀងផ្ទាត់ Session ក្នុង Background ដោយស្ងាត់ៗ (Silent Verification)
     try {
       var session = await callBackendApi('getCurrentSession', { token: SESSION_TOKEN });
       if (!session || !session.loggedIn) {
