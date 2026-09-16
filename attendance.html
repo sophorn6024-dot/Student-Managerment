@@ -6,15 +6,15 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>ស្រង់វត្តមានសិស្ស</title>
   
-  <!-- 🔤 Google Fonts Khmer & FontAwesome -->
+  <!-- 🔤 Google Fonts Khmer (Khmer OS Battambang & Moul) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Battambang:wght@400;600;700;800&family=Kantumruy+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Moul&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Battambang:wght@400;600;700;800&family=Moul&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
   <!-- =========================================================
-       🎨 ផ្នែកទី ១ ៖ CSS STYLESHEET (រចនាបថ & ប្លង់ SCROLL)
+       🎨 ផ្នែកទី ១ ៖ CSS STYLESHEET
   ========================================================= -->
   <style>
     :root, [data-theme="light"] {
@@ -61,10 +61,9 @@
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: 'Kantumruy Pro', 'Khmer OS Battambang', 'Battambang', sans-serif;
+      font-family: 'Khmer OS Battambang', 'Battambang', sans-serif;
     }
 
-    /* 🌟 បើកសិទ្ធិ SCROLL ពេញលេញ មិនឱ្យគាំងលើ TABLET/MOBILE */
     html {
       height: 100%;
       overflow-x: hidden;
@@ -82,10 +81,10 @@
       overflow-x: hidden;
       overflow-y: visible !important;
       -webkit-overflow-scrolling: touch;
-      padding: 14px 16px 140px; /* ផ្ដល់ចន្លោះធំទូលាយ 140px ដើម្បីមើលសិស្សអស់ */
+      padding: 14px 16px 140px;
     }
 
-    .f-moul { font-family: 'Khmer OS Muol Light', 'Moul', cursive; font-weight: normal; }
+    .f-moul { font-family: 'Khmer OS Muol Light', 'Moul', cursive !important; font-weight: normal; }
 
     #saveToast {
       visibility: hidden;
@@ -356,7 +355,6 @@
       cursor: pointer;
     }
 
-    /* 🌟 ប៊ូតុងជ្រើសរើសរហ័សលើជួរឈ្មោះ (P, A, L, C) */
     .quick-status-selector {
       display: flex;
       align-items: center;
@@ -397,7 +395,7 @@
       outline: none;
     }
 
-    /* ================= 🌟 ACTION SHEET MODAL (CENTERED) ================= */
+    /* ACTION SHEET MODAL */
     .action-sheet-backdrop {
       display: none;
       position: fixed !important;
@@ -412,8 +410,8 @@
       backdrop-filter: blur(8px);
       -webkit-backdrop-filter: blur(8px);
       z-index: 999999 !important;
-      align-items: center !important;     /* 🌟 ចំកណ្តាលអេក្រង់បេះបិទ */
-      justify-content: center !important;  /* 🌟 ចំកណ្តាលអេក្រង់បេះបិទ */
+      align-items: center !important;
+      justify-content: center !important;
       padding: 16px !important;
     }
     .action-sheet-backdrop.show { display: flex !important; }
@@ -576,6 +574,10 @@
       z-index: 100;
       box-shadow: var(--card-shadow);
     }
+
+    /* =========================================================
+       🖨️ 🌟 កំណត់ FONT KHMER OS BATTAMBANG ក្នុងរបាយការណ៍បោះពុម្ព
+    ========================================================= */
     .report-paper-container {
       background: #ffffff;
       color: #0f172a;
@@ -587,17 +589,67 @@
       border-radius: 4px;
       box-shadow: 0 10px 35px rgba(0,0,0,0.3);
       font-size: 11px;
+      font-family: 'Khmer OS Battambang', 'Battambang', sans-serif !important;
     }
+
+    /* បង្ខំឱ្យធាតុទាំងអស់ក្នុងរបាយការណ៍ប្រើ Khmer OS Battambang */
+    .report-paper-container *:not(.f-moul) {
+      font-family: 'Khmer OS Battambang', 'Battambang', sans-serif !important;
+    }
+
+    .report-paper-container .f-moul {
+      font-family: 'Khmer OS Muol Light', 'Moul', cursive !important;
+    }
+
     .rpt-header-banner { text-align: center; color: #1e3a8a; margin-bottom: 8px; }
-    .print-table { width: 100%; border-collapse: collapse; font-size: 10px; text-align: center; border: 1px solid #334155; margin: 6px 0; }
-    .print-table th, .print-table td { border: 1px solid #334155; padding: 2.5px 1px; vertical-align: middle; }
+
+    .print-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 10px;
+      text-align: center;
+      border: 1px solid #334155;
+      margin: 6px 0;
+      font-family: 'Khmer OS Battambang', 'Battambang', sans-serif !important;
+    }
+    .print-table th, .print-table td {
+      border: 1px solid #334155;
+      padding: 2.5px 1px;
+      vertical-align: middle;
+      font-family: 'Khmer OS Battambang', 'Battambang', sans-serif !important;
+    }
     .weekend-merged-cell { background: #fce7f3 !important; color: #be185d !important; font-weight: bold; }
     .holiday-cell { background: #fee2e2 !important; color: #b91c1c !important; font-weight: bold; }
+    
     .vertical-sun-box { width: 24px; height: 80px; display: flex; align-items: center; justify-content: center; margin: 0 auto; }
-    .vertical-sun-text { display: inline-block; white-space: nowrap; transform: rotate(-90deg); font-size: 9.5px; font-weight: bold; line-height: 1; }
-    .clean-lunar-input { font-size: 12.5px; font-weight: bold; color: #1e3a8a; border: none !important; background: transparent !important; text-align: center; width: 100%; max-width: 480px; outline: none; margin: 0 auto; display: block; }
+    .vertical-sun-text {
+      display: inline-block;
+      white-space: nowrap;
+      transform: rotate(-90deg);
+      font-size: 9.5px;
+      font-weight: bold;
+      line-height: 1;
+      font-family: 'Khmer OS Battambang', 'Battambang', sans-serif !important;
+    }
+    
+    /* 🌟 ប្រអប់ថ្ងៃខែចន្ទគតិ */
+    .clean-lunar-input {
+      font-family: 'Khmer OS Battambang', 'Battambang', sans-serif !important;
+      font-size: 11px;
+      font-weight: bold;
+      color: #1e3a8a;
+      border: none !important;
+      background: transparent !important;
+      text-align: center;
+      width: 100%;
+      min-width: 370px;
+      outline: none;
+      margin: 0 auto;
+      display: block;
+      white-space: nowrap;
+    }
 
-    /* 🌟 ប្លង់ស្ថិតិសង្ខេបបាតក្រោមតារាងតាមគំរូផ្លូវការក្រសួង */
+    /* 🌟 ប្លង់ស្ថិតិសង្ខេបបាតក្រោមតារាង */
     .report-summary-footer {
       width: 100%;
       margin-top: 8px;
@@ -605,7 +657,7 @@
       font-size: 10.5px;
       color: #000000;
       line-height: 1.8;
-      font-family: 'Khmer OS Battambang', 'Battambang', sans-serif;
+      font-family: 'Khmer OS Battambang', 'Battambang', sans-serif !important;
     }
 
     .footer-row-1 {
@@ -614,16 +666,19 @@
       align-items: center;
       flex-wrap: nowrap;
       gap: 10px;
+      font-family: 'Khmer OS Battambang', 'Battambang', sans-serif !important;
     }
 
     .footer-row-1 span {
       white-space: nowrap;
+      font-family: 'Khmer OS Battambang', 'Battambang', sans-serif !important;
     }
 
     .footer-row-2 {
       text-align: left;
       margin-top: 3px;
       white-space: nowrap;
+      font-family: 'Khmer OS Battambang', 'Battambang', sans-serif !important;
     }
 
     @page { size: A4 landscape; margin: 5mm 6mm; }
@@ -632,10 +687,14 @@
       .top-nav-bar, #tabDailyView, #tabReportsMenu, #saveToast, #statusActionSheetModal, .viewer-top-bar { display: none !important; }
       #reportViewerModal { display: block !important; position: static !important; padding: 0 !important; background: transparent !important; }
       .report-paper-container { width: 100% !important; box-shadow: none !important; padding: 0 !important; }
+      .report-paper-container *:not(.f-moul) {
+        font-family: 'Khmer OS Battambang', 'Battambang', sans-serif !important;
+      }
       .report-summary-footer {
         font-size: 8.8px !important;
         margin-top: 5px !important;
         line-height: 1.6 !important;
+        font-family: 'Khmer OS Battambang', 'Battambang', sans-serif !important;
       }
     }
   </style>
@@ -862,7 +921,7 @@
     </div>
   </div>
 
-  <!-- ================= 🌟 ACTION SHEET MODAL (ចំកណ្តាលអេក្រង់បេះបិទ) ================= -->
+  <!-- ================= 🌟 ACTION SHEET MODAL ================= -->
   <div id="statusActionSheetModal" class="action-sheet-backdrop" onclick="closeStatusActionSheet()">
     <div class="action-sheet-card" onclick="event.stopPropagation()">
       <div class="sheet-header-row">
@@ -907,7 +966,7 @@
   <script src="api.js"></script>
 
   <!-- =========================================================
-       ⚙️ ផ្នែកទី ៣ ៖ JAVASCRIPT (តក្កវិជ្ជា & ស្ថិតិបាតក្រោមតារាង)
+       ⚙️ ផ្នែកទី ៣ ៖ JAVASCRIPT
   ========================================================= -->
   <script>
     function syncThemeWithParent() {
@@ -1063,8 +1122,8 @@
       var solarMonth = KHMER_MONTHS[d.getMonth()];
       var solarYear = toKhmerNum(d.getFullYear());
       return {
-        lunarInputHtml: `<input type="text" class="clean-lunar-input" value="ថ្ងៃពុធ ៤រោច ខែភទ្របទ ឆ្នាំមមី អដ្ឋស័ក ពុទ្ធសករាជ ២៥៧០">`,
-        solarLine: `ធ្វើនៅកំពង់ល្ពៅ,ថ្ងៃទី${solarDay} ខែ${solarMonth} ឆ្នាំ${solarYear}`
+        lunarInputHtml: `<input type="text" class="clean-lunar-input" size="48" value="ថ្ងៃពុធ ៤រោច ខែភទ្របទ ឆ្នាំមមី អដ្ឋស័ក ពុទ្ធសករាជ ២៥៧០">`,
+        solarLine: `ធ្វើនៅកំពង់ល្ពៅ, ថ្ងៃទី${solarDay} ខែ${solarMonth} ឆ្នាំ${solarYear}`
       };
     }
 
@@ -1258,7 +1317,6 @@
                 <span style="font-size:11px; color:var(--text-muted); font-weight:normal;">(${s.sex || 'ប្រុស'})</span>
               </div>
               
-              <!-- 🌟 ជម្រើសចុចផ្ទាល់ P | A | L | C លឿនទាន់ចិត្ត -->
               <div class="quick-status-selector">
                 <button type="button" class="q-btn ${st==='P'?'active-P':''}" onclick="setStudentDirectStatus('${s.id}', 'P')">វត្តមាន</button>
                 <button type="button" class="q-btn ${st==='A'?'active-A':''}" onclick="setStudentDirectStatus('${s.id}', 'A')">អវត្តមាន</button>
@@ -1575,15 +1633,16 @@
           </div>
 
           <!-- 🌟 ផ្នែកហត្ថលេខា (នាយកសាលាទម្លាក់ចុះក្រោម 42px ឱ្យនៅក្រោមគ្រូបន្ទុកថ្នាក់) -->
-          <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-top:20px; padding:0 30px;">
+          <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-top:20px; padding:0 20px;">
             <div style="text-align:center; min-width:180px; margin-top:42px;">
               <div class="f-moul" style="font-size:12px; color:#1e3a8a;">បានឃើញ និងឯកភាព</div>
               <div style="font-size:12px; font-weight:bold; color:#1e3a8a; margin-top:4px;">នាយកសាលា</div>
             </div>
 
-            <div style="text-align:center; min-width:260px;">
+            <!-- 🌟 ប្រអប់គ្រូពង្រីក min-width: 370px ដើម្បីឱ្យឃ្លាចន្ទគតិលាតពេញលេញ -->
+            <div style="text-align:center; min-width:370px;">
               ${khDate.lunarInputHtml}
-              <div style="font-size:11.5px; color:#1e3a8a; margin-top:3px;">${khDate.solarLine}</div>
+              <div style="font-size:11px; color:#1e3a8a; margin-top:3px;">${khDate.solarLine}</div>
               <div class="f-moul" style="font-size:12px; color:#1e3a8a; margin-top:4px;">គ្រូទទួលបន្ទុកថ្នាក់</div>
               <div style="font-size:13px; font-weight:bold; color:#1e3a8a; margin-top:38px;">${TEACHER_NAME || ''}</div>
             </div>
@@ -1695,15 +1754,15 @@
           </table>
 
           <!-- 🌟 ផ្នែកហត្ថលេខា (នាយកសាលាទម្លាក់ចុះក្រោម 42px ឱ្យនៅក្រោមគ្រូបន្ទុកថ្នាក់) -->
-          <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-top:20px; padding:0 30px;">
+          <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-top:20px; padding:0 20px;">
             <div style="text-align:center; min-width:180px; margin-top:42px;">
               <div class="f-moul" style="font-size:12px; color:#1e3a8a;">បានឃើញ និងឯកភាព</div>
               <div style="font-size:12px; font-weight:bold; color:#1e3a8a; margin-top:4px;">នាយកសាលា</div>
             </div>
 
-            <div style="text-align:center; min-width:260px;">
+            <div style="text-align:center; min-width:370px;">
               ${khDate.lunarInputHtml}
-              <div style="font-size:11.5px; color:#1e3a8a; margin-top:3px;">${khDate.solarLine}</div>
+              <div style="font-size:11px; color:#1e3a8a; margin-top:3px;">${khDate.solarLine}</div>
               <div class="f-moul" style="font-size:12px; color:#1e3a8a; margin-top:4px;">គ្រូទទួលបន្ទុកថ្នាក់</div>
               <div style="font-size:13px; font-weight:bold; color:#1e3a8a; margin-top:38px;">${TEACHER_NAME || ''}</div>
             </div>
