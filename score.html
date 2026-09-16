@@ -3,7 +3,7 @@
 <head>
   <base target="_top">
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>ប្រព័ន្ធស្រង់ពិន្ទុ - KrouDigital</title>
   
   <!-- 🔤 Google Fonts Khmer -->
@@ -40,13 +40,15 @@
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
-    body {
+    html, body {
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
       font-family: 'Khmer OS Battambang', 'Battambang', sans-serif;
       background-color: var(--bg);
       color: var(--text);
       font-size: 13px;
       line-height: 1.4;
-      min-height: 100vh;
       -webkit-tap-highlight-color: transparent;
     }
 
@@ -58,6 +60,8 @@
       max-width: 860px;
       margin: 0 auto;
       padding: 40px 20px;
+      height: 100vh;
+      overflow-y: auto;
     }
     .landing-header { margin-bottom: 25px; }
     .landing-header h1 { font-size: 22px; color: var(--primary); margin-bottom: 4px; }
@@ -133,13 +137,22 @@
       color: var(--primary);
     }
 
-    /* ================= MAIN SCORE TABLE UI ================= */
+    /* ================= 🌟 MAIN SCORE TABLE UI (FLEX SCROLL ENGINE) ================= */
     #mainForm {
       display: none;
-      padding: 12px 16px;
-      max-width: 100%;
+      width: 100vw;
+      height: 100vh;
+      padding: 8px 10px 12px;
+      flex-direction: column;
+      box-sizing: border-box;
+      overflow: hidden;
     }
+
     .table-container-card {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      min-height: 0; /* 🌟 សំខាន់បំផុត ដើម្បីឱ្យ Flexbox អនុញ្ញាតឱ្យតារាង Scroll ដល់បាត */
       background: #ffffff;
       border-radius: 16px;
       border: 1px solid #cbd5e1;
@@ -148,27 +161,29 @@
     }
 
     .top-toolbar {
+      flex-shrink: 0; /* 🌟 មិនឱ្យ Toolbar រួញកម្ពស់ឡើយ */
       background: #ffffff;
-      padding: 10px 14px;
+      padding: 8px 12px;
       border-bottom: 1.5px solid #e2e8f0;
       display: flex;
       flex-wrap: wrap;
       align-items: center;
       justify-content: space-between;
-      gap: 10px;
+      gap: 8px;
+      z-index: 50;
     }
     .tb-left, .tb-right {
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
       flex-wrap: wrap;
     }
 
     .pill-select {
       border: 1.5px solid #cbd5e1;
       border-radius: 20px;
-      padding: 6px 14px;
-      font-size: 12.5px;
+      padding: 5px 12px;
+      font-size: 12px;
       font-weight: bold;
       background: #f8fafc;
       color: var(--text);
@@ -188,15 +203,15 @@
       gap: 6px;
       border: 1.5px solid #cbd5e1;
       border-radius: 20px;
-      padding: 5px 14px;
+      padding: 4px 12px;
       background: #f8fafc;
-      min-width: 170px;
+      min-width: 150px;
     }
     .search-input-wrap input {
       border: none;
       background: transparent;
       outline: none;
-      font-size: 12.5px;
+      font-size: 12px;
       font-family: inherit;
       width: 100%;
     }
@@ -204,12 +219,12 @@
     .action-btn {
       display: inline-flex;
       align-items: center;
-      gap: 5px;
-      padding: 6px 14px;
+      gap: 4px;
+      padding: 5px 12px;
       border-radius: 20px;
       border: 1.5px solid #cbd5e1;
       background: #ffffff;
-      font-size: 12.5px;
+      font-size: 12px;
       font-weight: bold;
       cursor: pointer;
       font-family: inherit;
@@ -223,27 +238,29 @@
     .action-btn.btn-back { background: #f1f5f9; border-color: #cbd5e1; color: #334155; }
 
     .autosave-pill {
-      font-size: 11.5px;
+      font-size: 11px;
       font-weight: bold;
-      padding: 5px 12px;
+      padding: 4px 10px;
       border-radius: 20px;
       background: #f1f5f9;
       color: #64748b;
       display: inline-flex;
       align-items: center;
-      gap: 5px;
+      gap: 4px;
       transition: all 0.2s;
     }
     .autosave-pill.saving { background: #fef3c7; color: #b45309; }
     .autosave-pill.saved { background: #dcfce7; color: #15803d; }
     .autosave-pill.error { background: #fee2e2; color: #b91c1c; }
 
-    /* ================= SCORE TABLE ================= */
+    /* ================= 🌟 SCORE TABLE SCROLL ENGINE ================= */
     .table-scroll-wrap {
-      overflow: auto;
-      max-height: calc(100vh - 140px);
+      flex: 1; /* 🌟 ស្រូបយកកម្ពស់ពេញអេក្រង់ដោយស្វ័យប្រវត្តិ */
+      min-height: 0; /* 🌟 អនុញ្ញាតឱ្យរមូរដល់សិស្សក្រោមគេបង្អស់ */
+      overflow: auto; /* Scroll ទាំងបញ្ឈរ និងផ្ដេក */
       position: relative;
       background: #ffffff;
+      -webkit-overflow-scrolling: touch;
     }
 
     .modern-score-table {
@@ -263,6 +280,7 @@
       white-space: nowrap;
     }
 
+    /* STICKY COLUMNS */
     .stk { position: sticky !important; background: #ffffff; z-index: 20; }
     .stk-1 { left: 0; min-width: 45px; max-width: 45px; }
     .stk-2 { left: 45px; min-width: 85px; max-width: 85px; text-align: left; padding-left: 8px; }
@@ -385,6 +403,17 @@
     .focused-row { background-color: #e0f2fe !important; }
     .focused-row .stk { background-color: #e0f2fe !important; }
 
+    /* 🌟 បាតតារាង Buffer សម្រាប់ការពារកុំឱ្យ Scrollbar បាំងសិស្សចុងក្រោយ */
+    .table-footer-buffer {
+      height: 52px !important;
+      background: #f8fafc;
+      color: #64748b;
+      font-weight: 700;
+      font-size: 12px;
+      border: 1px solid #cbd5e1;
+      text-align: center;
+    }
+
     /* ================= 🖨️ REPORT VIEWER ================= */
     #scoreReportModal {
       display: none;
@@ -486,6 +515,7 @@
         padding: 0 !important;
         width: 100% !important;
         height: auto !important;
+        overflow: visible !important;
         -webkit-print-color-adjust: exact !important;
         print-color-adjust: exact !important;
       }
@@ -600,7 +630,7 @@
         </div>
       </div>
 
-      <!-- Table Area -->
+      <!-- Table Scroll Area -->
       <div id="tableArea" class="table-scroll-wrap">
         <div style="text-align:center; padding: 50px; color:#64748b;">កំពុងដំណើរការទិន្នន័យ...</div>
       </div>
@@ -766,7 +796,9 @@
     function openScoreForm(type) {
       scoreType = type;
       document.getElementById('landingPage').style.display = 'none';
-      document.getElementById('mainForm').style.display = 'block';
+      // 🌟 បង្ហាញជា Flex ពេញអេក្រង់
+      var mf = document.getElementById('mainForm');
+      mf.style.display = 'flex';
 
       var mSel = document.getElementById('monthSelect');
       var sSel = document.getElementById('semesterSelect');
@@ -809,7 +841,6 @@
       });
     }
 
-    /* 🌟 មុខងារទាញយកបញ្ជីថ្នាក់ឆ្លាតវៃ (ដោះស្រាយបញ្ហាលោត "មិនមានថ្នាក់" 100%) */
     async function loadClassList() {
       var sel = document.getElementById('classSelect');
       sel.innerHTML = '<option value="">កំពុងទាញយកថ្នាក់...</option>';
@@ -817,10 +848,7 @@
       var classes = [];
 
       try {
-        // ១. សាកល្បងហៅតាម Action ចម្បង
         var res = await apiCall('getClassListForSession', { token: TOKEN });
-        
-        // ស្រង់យកទិន្នន័យ (ទោះបីជា Array ឬ Object ក៏ដោយ)
         if (Array.isArray(res)) {
           classes = res;
         } else if (res && Array.isArray(res.classes)) {
@@ -831,7 +859,6 @@
           classes = res.classList;
         }
 
-        // ២. បើនៅតែពុំទាន់មាន សាកល្បងហៅតាម Action ជំនួស
         if (!classes.length) {
           var fallbackRes = await apiCall('getClasses', { token: TOKEN });
           if (Array.isArray(fallbackRes)) classes = fallbackRes;
@@ -841,17 +868,14 @@
         console.warn("Class list fetch warning:", err);
       }
 
-      // ៣. បើប្រព័ន្ធនៅតែរកមិនឃើញថ្នាក់ (ការពារកុំឱ្យជាប់គាំងទំព័រ)
       if (!classes.length) {
         if (USER_CLASS && USER_CLASS.trim() !== '') {
           classes = [USER_CLASS];
         } else {
-          // ដាក់ជម្រើសថ្នាក់ស្តង់ដារបឋមសិក្សា
           classes = ['១', '២', '៣', '៤', '៥', '៦'];
         }
       }
 
-      // ៤. បញ្ចូលថ្នាក់ទៅក្នុង Select Option
       sel.innerHTML = '';
       classes.forEach(function(c) {
         var val = c.toString().trim();
@@ -1076,6 +1100,7 @@
       }
 
       var ranks = computeRanks();
+      var totalCols = 4 + keys.length + RES_COLS.length;
 
       var h = '<table class="modern-score-table"><thead>';
 
@@ -1128,7 +1153,7 @@
       h += '</thead><tbody>';
 
       if (!list.length) {
-        h += '<tr><td colspan="' + (4 + keys.length + RES_COLS.length) + '" style="padding:30px; color:#ef4444;">⚠️ មិនមានទិន្នន័យសិស្សឡើយ</td></tr>';
+        h += '<tr><td colspan="' + totalCols + '" style="padding:30px; color:#ef4444;">⚠️ មិនមានទិន្នន័យសិស្សឡើយ</td></tr>';
       } else {
         list.forEach((s, idx) => {
           var sc = savedScoresData[s.id] || {};
@@ -1174,7 +1199,20 @@
         });
       }
 
-      h += '</tbody></table>';
+      h += '</tbody>';
+
+      // 🌟 បន្ថែម Buffer Row នៅបាតក្រោមតារាង ដើម្បីកុំឱ្យ Scrollbar បាំងសិស្សចុងក្រោយ
+      if (list.length > 0) {
+        h += `<tfoot>
+          <tr>
+            <td colspan="${totalCols}" class="table-footer-buffer">
+              ✨ បញ្ជីសិស្សសរុប ${toKhmerNum(list.length)} នាក់ (បានរមូរដល់ចុងបញ្ចប់)
+            </td>
+          </tr>
+        </tfoot>`;
+      }
+
+      h += '</table>';
       area.innerHTML = h;
       updateAutoCoef();
     }
@@ -1296,11 +1334,12 @@
       setAutoSaveStatus('⏳ កំពុងរក្សាទុក...', 'saving');
 
       try {
-        var msg = await apiCall('saveMonthlyScoresSecured', { token: TOKEN, payload: buildPayload(), ...buildPayload() });
+        var res = await apiCall('saveMonthlyScoresSecured', { token: TOKEN, payload: buildPayload(), ...buildPayload() });
         btn.textContent = '💾 រក្សាទុក';
         btn.disabled = false;
         setAutoSaveStatus('✓ បានរក្សាទុក', 'saved');
-        alert('✓ ' + (msg || 'រក្សាទុកទិន្នន័យពិន្ទុបានជោគជ័យ'));
+        var msg = (res && res.message) ? res.message : (typeof res === 'string' ? res : 'រក្សាទុកទិន្នន័យពិន្ទុបានជោគជ័យ');
+        alert('✓ ' + msg);
       } catch(err) {
         btn.textContent = '💾 រក្សាទុក';
         btn.disabled = false;
