@@ -41,7 +41,6 @@
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
     
-    /* 🌟 កំណត់ទំហំអេក្រង់ 100% ឱ្យស្មើនឹងទំហំ Iframe ជាក់ស្តែង (លុប 100vh ចោល) */
     html, body {
       width: 100%;
       height: 100%;
@@ -147,7 +146,6 @@
       display: flex;
       flex-direction: column;
       min-height: 0; /* 🌟 ចំណុចគន្លឹះដើម្បីឱ្យរមូរដល់សិស្សចុងក្រោយ */
-      height: 100%;
       background: #ffffff;
       border-radius: 14px;
       border: 1px solid #cbd5e1;
@@ -224,7 +222,6 @@
     .action-btn.btn-save { background: #16a34a; border-color: #15803d; color: #fff; }
     .action-btn.btn-report { background: #0284c7; border-color: #0369a1; color: #fff; }
     .action-btn.btn-back { background: #f1f5f9; color: #334155; }
-    .action-btn.btn-scroll { background: #f3e8ff; border-color: #c084fc; color: #7e22ce; }
 
     .autosave-pill {
       font-size: 11px;
@@ -245,12 +242,24 @@
     .table-scroll-wrap {
       flex: 1;
       min-height: 0;
-      height: 100%;
-      overflow: auto;
+      width: 100%;
+      overflow: auto !important;
       position: relative;
       background: #ffffff;
       -webkit-overflow-scrolling: touch;
       touch-action: pan-x pan-y !important;
+    }
+
+    .table-scroll-wrap::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+    .table-scroll-wrap::-webkit-scrollbar-thumb {
+      background: #cbd5e1;
+      border-radius: 4px;
+    }
+    .table-scroll-wrap::-webkit-scrollbar-thumb:hover {
+      background: #94a3b8;
     }
 
     .modern-score-table {
@@ -401,9 +410,9 @@
     .focused-row { background-color: #e0f2fe !important; }
     .focused-row .stk { background-color: #e0f2fe !important; }
 
-    /* 🌟 បាតតារាង Buffer 60px ធានាមិនបាំងសិស្សចុងក្រោយ */
+    /* 🌟 បាតតារាង Buffer 80px ធានាថាមិនបាំងសិស្សចុងក្រោយឡើយ */
     .table-footer-buffer {
-      height: 60px !important;
+      height: 80px !important;
       background: #f8fafc;
       color: #64748b;
       font-weight: 700;
@@ -621,10 +630,6 @@
         </div>
 
         <div class="tb-right">
-          <!-- 🌟 ប៊ូតុងរំកិលរហ័ស (Quick Scroll) សម្រាប់ Tablet -->
-          <button class="action-btn btn-scroll" onclick="scrollToBottomTable()" title="រំកិលទៅសិស្សក្រោមគេ">⬇️ ក្រោមបង្អស់</button>
-          <button class="action-btn btn-scroll" onclick="scrollToTopTable()" title="រំកិលទៅលើគេ">⬆️ លើបង្អស់</button>
-
           <span id="autoSaveStatus" class="autosave-pill saved">✓ រួចរាល់</span>
           <button class="action-btn btn-report" onclick="openScoreReportModal()">📋 របាយការណ៍ពិន្ទុ</button>
           <button class="action-btn" onclick="toggleLock()" id="btnLock">🔓 ដោះសោ</button>
@@ -793,53 +798,51 @@
 
     window.onload = function() {
       setupArrowKeys();
-      // 🌟 បើកដំណើរការ Touch Scroll Gesture លើ Tablet
-      enableTouchScroll(document.getElementById('tableArea'));
+      attachNativeTouchScroller(document.getElementById('tableArea'));
     };
 
-    /* 🌟 ប៊ូតុងរំកិលរហ័ស ឡើងលើ/ចុះក្រោម */
-    function scrollToBottomTable() {
-      var area = document.getElementById('tableArea');
-      if (area) area.scrollTo({ top: area.scrollHeight, behavior: 'smooth' });
-    }
-    function scrollToTopTable() {
-      var area = document.getElementById('tableArea');
-      if (area) area.scrollTo({ top: 0, behavior: 'smooth' });
-    }
+    /* 🌟 NATIVE TOUCH SCROLLER (ដោះស្រាយបញ្ហា Sticky Column និង Input Blocking លើ Tablet 100%) */
+    function attachNativeTouchScroller(container) {
+      if (!container || container._hasTouchListener) return;
+      container._hasTouchListener = true;
 
-    /* 🌟 TOUCH GESTURE ENGINE (ជួយឱ្យរមូរលើ Tablet បានរលូន 100%) */
-    function enableTouchScroll(el) {
-      if (!el) return;
-      var startX = 0, startY = 0, sLeft = 0, sTop = 0, isDragging = false;
+      var startY = 0, startX = 0, sTop = 0, sLeft = 0, isDragging = false;
 
-      el.addEventListener('touchstart', function(e) {
+      container.addEventListener('touchstart', function(e) {
         if (e.touches.length !== 1) return;
-        startX = e.touches[0].pageX;
-        startY = e.touches[0].pageY;
-        sLeft = el.scrollLeft;
-        sTop = el.scrollTop;
+        startY = e.touches[0].clientY;
+        startX = e.touches[0].clientX;
+        sTop = container.scrollTop;
+        sLeft = container.scrollLeft;
         isDragging = true;
       }, { passive: true });
 
-      el.addEventListener('touchmove', function(e) {
+      container.addEventListener('touchmove', function(e) {
         if (!isDragging || e.touches.length !== 1) return;
-        var diffX = startX - e.touches[0].pageX;
-        var diffY = startY - e.touches[0].pageY;
-        if (Math.abs(diffX) > 4 || Math.abs(diffY) > 4) {
-          el.scrollLeft = sLeft + diffX;
-          el.scrollTop = sTop + diffY;
+        var deltaY = startY - e.touches[0].clientY;
+        var deltaX = startX - e.touches[0].clientX;
+
+        // បើម្រាមដៃកម្រើកលើសពី 5px បញ្ជាក់ថាជាការ Scroll មិនមែន Tap ទេ
+        if (Math.abs(deltaY) > 5 || Math.abs(deltaX) > 5) {
+          container.scrollTop = sTop + deltaY;
+          container.scrollLeft = sLeft + deltaX;
+
+          // ដោះ Keyboard ចេញកុំឱ្យរំខានពេលកំពុងអូសតារាង
+          if (document.activeElement && document.activeElement.tagName === 'INPUT') {
+            document.activeElement.blur();
+          }
         }
       }, { passive: true });
 
-      el.addEventListener('touchend', function() { isDragging = false; }, { passive: true });
-      el.addEventListener('touchcancel', function() { isDragging = false; }, { passive: true });
+      container.addEventListener('touchend', function() { isDragging = false; }, { passive: true });
+      container.addEventListener('touchcancel', function() { isDragging = false; }, { passive: true });
     }
 
     function openScoreForm(type) {
       scoreType = type;
       document.getElementById('landingPage').style.display = 'none';
       var mf = document.getElementById('mainForm');
-      mf.style.display = 'flex'; // 🌟 Flex ពេញកម្ពស់អេក្រង់
+      mf.style.display = 'flex';
 
       var mSel = document.getElementById('monthSelect');
       var sSel = document.getElementById('semesterSelect');
@@ -1220,7 +1223,7 @@
 
       h += '</tbody>';
 
-      // 🌟 ជួរ Buffer បាតក្រោមធានាថាសិស្សចុងក្រោយគេនឹងរុញផុតពីរបារ Scrollbar យ៉ាងស្រស់ស្អាត
+      // 🌟 ជួរ Buffer 80px ធានាថាសិស្សចុងក្រោយគេនឹងរុញផុតពីរបារ Scrollbar យ៉ាងស្រស់ស្អាត
       if (list.length > 0) {
         h += `<tfoot>
           <tr>
@@ -1235,8 +1238,8 @@
       area.innerHTML = h;
       updateAutoCoef();
       
-      // ភ្ជាប់ Touch Gesture
-      enableTouchScroll(area);
+      // 🌟 ភ្ជាប់ Touch Gesture Scroller ទៅលើតារាងភ្លាមៗ
+      attachNativeTouchScroller(area);
     }
 
     function setupArrowKeys() {
