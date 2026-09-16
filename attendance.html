@@ -57,226 +57,86 @@
       --c-bg: rgba(37, 99, 235, 0.22);  --c-txt: #60a5fa; --c-bd: #2563eb;
     }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      font-family: 'Khmer OS Battambang', 'Battambang', sans-serif;
-    }
-
-    html {
-      height: 100%;
-      overflow-x: hidden;
-      overflow-y: auto !important;
-      -webkit-overflow-scrolling: touch;
-    }
-
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Khmer OS Battambang', 'Battambang', sans-serif; }
+    html { height: 100%; overflow-x: hidden; overflow-y: auto !important; -webkit-overflow-scrolling: touch; }
     body {
-      background: var(--bg);
-      color: var(--text);
-      font-size: 13px;
-      line-height: 1.45;
-      min-height: 100%;
-      height: auto !important;
-      overflow-x: hidden;
-      overflow-y: visible !important;
-      -webkit-overflow-scrolling: touch;
-      padding: 14px 16px 140px;
+      background: var(--bg); color: var(--text); font-size: 13px; line-height: 1.45;
+      min-height: 100%; height: auto !important; overflow-x: hidden; overflow-y: visible !important;
+      -webkit-overflow-scrolling: touch; padding: 14px 16px 140px;
     }
-
     .f-moul { font-family: 'Khmer OS Muol Light', 'Moul', cursive !important; font-weight: normal; }
 
     #saveToast {
-      visibility: hidden;
-      min-width: 220px;
-      background: #059669;
-      color: #fff;
-      text-align: center;
-      border-radius: 12px;
-      padding: 10px 18px;
-      position: fixed;
-      z-index: 999999;
-      left: 50%;
-      bottom: 24px;
-      transform: translateX(-50%);
-      font-size: 13px;
-      font-weight: 600;
-      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      opacity: 0;
-      transition: all 0.3s;
+      visibility: hidden; min-width: 220px; background: #059669; color: #fff; text-align: center;
+      border-radius: 12px; padding: 10px 18px; position: fixed; z-index: 999999; left: 50%; bottom: 24px;
+      transform: translateX(-50%); font-size: 13px; font-weight: 600; box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+      display: flex; align-items: center; justify-content: center; gap: 8px; opacity: 0; transition: all 0.3s;
     }
     #saveToast.show { visibility: visible; opacity: 1; transform: translateX(-50%) translateY(-6px); }
 
-    /* TOP BAR */
     .top-nav-bar {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 18px;
-      padding: 10px 16px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      box-shadow: var(--card-shadow);
-      margin-bottom: 16px;
-      gap: 12px;
-      flex-wrap: wrap;
+      background: var(--surface); border: 1px solid var(--border); border-radius: 18px; padding: 10px 16px;
+      display: flex; align-items: center; justify-content: space-between; box-shadow: var(--card-shadow);
+      margin-bottom: 16px; gap: 12px; flex-wrap: wrap;
     }
-
     .tabs-group { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-    
     .tab-pill-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      padding: 8px 16px;
-      border-radius: 12px;
-      font-size: 12.5px;
-      font-weight: 600;
-      cursor: pointer;
-      border: 1px solid transparent;
-      background: var(--surface-elevated);
-      color: var(--text-muted);
+      display: inline-flex; align-items: center; gap: 6px; padding: 8px 16px; border-radius: 12px;
+      font-size: 12.5px; font-weight: 600; cursor: pointer; border: 1px solid transparent;
+      background: var(--surface-elevated); color: var(--text-muted);
     }
     .tab-pill-btn:hover { color: var(--text); }
     .tab-pill-btn.active {
-      background: linear-gradient(135deg, #2563eb, #7c3aed);
-      color: #ffffff;
-      box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3);
+      background: linear-gradient(135deg, #2563eb, #7c3aed); color: #ffffff; box-shadow: 0 4px 14px rgba(37, 99, 235, 0.3);
     }
-
     .date-trigger-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 8px 14px;
-      border-radius: 12px;
-      border: 1px solid var(--border);
-      background: var(--surface-card);
-      color: var(--text);
-      font-size: 12.5px;
-      font-weight: 600;
-      cursor: pointer;
+      display: inline-flex; align-items: center; gap: 8px; padding: 8px 14px; border-radius: 12px;
+      border: 1px solid var(--border); background: var(--surface-card); color: var(--text);
+      font-size: 12.5px; font-weight: 600; cursor: pointer;
     }
-
     .class-select-pill {
-      padding: 8px 16px;
-      border-radius: 12px;
-      border: 1.5px solid var(--border);
-      background: var(--surface);
-      color: var(--text);
-      font-weight: 700;
-      font-size: 13px;
-      outline: none;
-      cursor: pointer;
-      box-shadow: var(--card-shadow);
+      padding: 8px 16px; border-radius: 12px; border: 1.5px solid var(--border); background: var(--surface);
+      color: var(--text); font-weight: 700; font-size: 13px; outline: none; cursor: pointer; box-shadow: var(--card-shadow);
     }
 
-    /* CALENDAR POPUP */
     .calendar-popup {
-      display: none;
-      position: absolute;
-      top: 50px;
-      left: 0;
-      width: 290px;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 18px;
-      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.3);
-      padding: 16px;
-      z-index: 100;
+      display: none; position: absolute; top: 50px; left: 0; width: 290px; background: var(--surface);
+      border: 1px solid var(--border); border-radius: 18px; box-shadow: 0 20px 45px rgba(0, 0, 0, 0.3);
+      padding: 16px; z-index: 100;
     }
     .calendar-popup.show { display: block; }
     .cal-head-selectors { display: flex; justify-content: space-between; gap: 8px; margin-bottom: 10px; }
     .cal-head-selectors select {
-      flex: 1;
-      padding: 6px 8px;
-      border-radius: 10px;
-      border: 1px solid var(--border);
-      background: var(--surface-elevated);
-      color: var(--text);
-      font-size: 12px;
-      font-weight: 600;
-      outline: none;
+      flex: 1; padding: 6px 8px; border-radius: 10px; border: 1px solid var(--border);
+      background: var(--surface-elevated); color: var(--text); font-size: 12px; font-weight: 600; outline: none;
     }
     .cal-month-title { text-align: center; font-weight: 700; font-size: 13.5px; color: var(--primary); margin-bottom: 8px; }
-    .cal-weekdays {
-      display: grid;
-      grid-template-columns: repeat(7, 1fr);
-      text-align: center;
-      font-size: 11px;
-      font-weight: 700;
-      color: var(--text-muted);
-      margin-bottom: 6px;
-    }
+    .cal-weekdays { display: grid; grid-template-columns: repeat(7, 1fr); text-align: center; font-size: 11px; font-weight: 700; color: var(--text-muted); margin-bottom: 6px; }
     .cal-days-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
     .cal-day-cell {
-      height: 32px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 12px;
-      font-weight: 600;
-      border-radius: 50%;
-      cursor: pointer;
+      height: 32px; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 600; border-radius: 50%; cursor: pointer;
     }
     .cal-day-cell:hover { background: var(--primary-soft); color: var(--primary); }
     .cal-day-cell.selected { background: var(--primary) !important; color: #fff !important; }
     .cal-day-cell.muted { color: var(--text-soft); cursor: default; }
 
-    /* LAYOUT GRID */
-    .daily-layout-grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 16px;
-      align-items: start;
-    }
+    .daily-layout-grid { display: grid; grid-template-columns: 1fr; gap: 16px; align-items: start; }
     @media(min-width: 960px) {
       .daily-layout-grid { grid-template-columns: 310px 1fr; }
       .daily-sidebar-card { position: sticky; top: 14px; z-index: 10; }
     }
-    
     .daily-sidebar-card, .daily-list-card, .report-launcher-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 18px 20px;
-      box-shadow: var(--card-shadow);
+      background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 18px 20px; box-shadow: var(--card-shadow);
     }
-
-    .gender-summary-box {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: 8px;
-      margin-top: 10px;
-    }
+    .gender-summary-box { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-top: 10px; }
     .gender-chip {
-      background: var(--surface-elevated);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      padding: 8px 4px;
-      text-align: center;
+      background: var(--surface-elevated); border: 1px solid var(--border); border-radius: 12px; padding: 8px 4px; text-align: center;
     }
     .gender-chip span { display: block; font-size: 11px; color: var(--text-muted); font-weight: 500; }
     .gender-chip strong { display: block; font-size: 16px; font-weight: 700; color: var(--text); margin-top: 2px; }
 
-    .status-counter-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      margin: 14px 0;
-    }
-    .counter-card {
-      border-radius: 14px;
-      padding: 12px 14px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      height: 74px;
-    }
+    .status-counter-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 14px 0; }
+    .counter-card { border-radius: 14px; padding: 12px 14px; display: flex; flex-direction: column; justify-content: space-between; height: 74px; }
     .counter-card.present    { background: var(--p-bg); border: 1px solid var(--p-bd); color: var(--p-txt); }
     .counter-card.absent     { background: var(--a-bg); border: 1px solid var(--a-bd); color: var(--a-txt); }
     .counter-card.late       { background: var(--l-bg); border: 1px solid var(--l-bd); color: var(--l-txt); }
@@ -285,97 +145,30 @@
     .counter-card .c-val { font-size: 22px; font-weight: 800; }
 
     .search-pill-wrap {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      background: var(--surface-elevated);
-      border: 1px solid var(--border);
-      border-radius: 14px;
-      padding: 8px 14px;
-      margin-bottom: 12px;
+      display: flex; align-items: center; gap: 8px; background: var(--surface-elevated); border: 1px solid var(--border); border-radius: 14px; padding: 8px 14px; margin-bottom: 12px;
     }
-    .search-pill-wrap input {
-      border: none;
-      background: transparent;
-      outline: none;
-      font-size: 13px;
-      color: var(--text);
-      width: 100%;
-    }
+    .search-pill-wrap input { border: none; background: transparent; outline: none; font-size: 13px; color: var(--text); width: 100%; }
     
-    .bulk-actions-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
-      margin-bottom: 14px;
-    }
+    .bulk-actions-row { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 14px; }
     .btn-bulk {
-      padding: 9px;
-      border-radius: 12px;
-      font-size: 12.5px;
-      font-weight: 600;
-      border: none;
-      cursor: pointer;
-      color: #fff;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
+      padding: 9px; border-radius: 12px; font-size: 12.5px; font-weight: 600; border: none; cursor: pointer; color: #fff; display: flex; align-items: center; justify-content: center; gap: 6px;
     }
     .btn-bulk.present { background: #059669; }
     .btn-bulk.absent  { background: #dc2626; }
 
-    /* STUDENT CARDS */
     .student-item-card {
-      background: var(--surface-elevated);
-      border: 1px solid var(--border);
-      border-radius: 15px;
-      padding: 12px 14px;
-      margin-bottom: 8px;
-      transition: all 0.15s ease;
+      background: var(--surface-elevated); border: 1px solid var(--border); border-radius: 15px; padding: 12px 14px; margin-bottom: 8px; transition: all 0.15s ease;
     }
-    .student-item-card.has-absent {
-      border-color: rgba(220, 38, 38, 0.4);
-      background: rgba(220, 38, 38, 0.05);
-    }
+    .student-item-card.has-absent { border-color: rgba(220, 38, 38, 0.4); background: rgba(220, 38, 38, 0.05); }
 
-    .st-top-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
-    }
-    .st-name-title {
-      font-size: 14px;
-      font-weight: 700;
-      color: var(--text);
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      cursor: pointer;
-    }
+    .st-top-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+    .st-name-title { font-size: 14px; font-weight: 700; color: var(--text); display: flex; align-items: center; gap: 8px; cursor: pointer; }
 
     .quick-status-selector {
-      display: flex;
-      align-items: center;
-      gap: 4px;
-      background: var(--surface);
-      padding: 3px;
-      border-radius: 10px;
-      border: 1px solid var(--border);
-      flex-shrink: 0;
+      display: flex; align-items: center; gap: 4px; background: var(--surface); padding: 3px; border-radius: 10px; border: 1px solid var(--border); flex-shrink: 0;
     }
-
     .q-btn {
-      padding: 6px 10px;
-      border-radius: 8px;
-      font-size: 11.5px;
-      font-weight: 700;
-      cursor: pointer;
-      border: none;
-      background: transparent;
-      color: var(--text-muted);
-      transition: all 0.15s;
+      padding: 6px 10px; border-radius: 8px; font-size: 11.5px; font-weight: 700; cursor: pointer; border: none; background: transparent; color: var(--text-muted); transition: all 0.15s;
     }
     .q-btn:hover { background: var(--surface-elevated); color: var(--text); }
     .q-btn.active-P { background: var(--p-bg); color: var(--p-txt); font-weight: 800; border: 1px solid var(--p-bd); }
@@ -384,302 +177,92 @@
     .q-btn.active-C { background: var(--c-bg); color: var(--c-txt); font-weight: 800; border: 1px solid var(--c-bd); }
 
     .st-note-input {
-      width: 100%;
-      margin-top: 8px;
-      padding: 7px 12px;
-      border-radius: 10px;
-      border: 1px solid var(--border);
-      background: var(--surface);
-      color: var(--text);
-      font-size: 12px;
-      outline: none;
+      width: 100%; margin-top: 8px; padding: 7px 12px; border-radius: 10px; border: 1px solid var(--border); background: var(--surface); color: var(--text); font-size: 12px; outline: none;
     }
 
-    /* ACTION SHEET MODAL */
     .action-sheet-backdrop {
-      display: none;
-      position: fixed !important;
-      inset: 0 !important;
-      top: 0 !important;
-      left: 0 !important;
-      right: 0 !important;
-      bottom: 0 !important;
-      width: 100vw !important;
-      height: 100vh !important;
-      background: rgba(0, 0, 0, 0.72) !important;
-      backdrop-filter: blur(8px);
-      -webkit-backdrop-filter: blur(8px);
-      z-index: 999999 !important;
-      align-items: center !important;
-      justify-content: center !important;
-      padding: 16px !important;
+      display: none; position: fixed !important; inset: 0 !important; top: 0 !important; left: 0 !important; right: 0 !important; bottom: 0 !important; width: 100vw !important; height: 100vh !important; background: rgba(0, 0, 0, 0.72) !important; backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); z-index: 999999 !important; align-items: center !important; justify-content: center !important; padding: 16px !important;
     }
     .action-sheet-backdrop.show { display: flex !important; }
     
     .action-sheet-card {
-      width: 380px;
-      max-width: 95%;
-      background: var(--surface);
-      border: 1.5px solid var(--border);
-      border-radius: 22px;
-      padding: 20px 22px 22px;
-      box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6);
-      position: relative;
-      margin: auto !important;
-      animation: popZoom 0.2s ease-out;
+      width: 380px; max-width: 95%; background: var(--surface); border: 1.5px solid var(--border); border-radius: 22px; padding: 20px 22px 22px; box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6); position: relative; margin: auto !important; animation: popZoom 0.2s ease-out;
     }
+    @keyframes popZoom { from { transform: scale(0.9); opacity: 0; } to { transform: scale(1); opacity: 1; } }
 
-    @keyframes popZoom {
-      from { transform: scale(0.9); opacity: 0; }
-      to { transform: scale(1); opacity: 1; }
-    }
-
-    .sheet-header-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 16px;
-      padding-bottom: 10px;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .sheet-student-name {
-      font-size: 16px;
-      font-weight: 700;
-      color: var(--text);
-    }
-
+    .sheet-header-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
+    .sheet-student-name { font-size: 16px; font-weight: 700; color: var(--text); }
     .sheet-close-x {
-      background: var(--surface-elevated);
-      border: 1px solid var(--border);
-      color: var(--text-muted);
-      width: 30px;
-      height: 30px;
-      border-radius: 50%;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 14px;
-      font-weight: bold;
+      background: var(--surface-elevated); border: 1px solid var(--border); color: var(--text-muted); width: 30px; height: 30px; border-radius: 50%; cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: bold;
     }
-    .sheet-close-x:hover { color: #dc2626; border-color: #dc2626; }
-
-    .sheet-options-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-      margin-bottom: 14px;
-    }
-
+    .sheet-options-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px; }
     .sheet-choice-btn {
-      padding: 14px 10px;
-      border-radius: 14px;
-      font-size: 13px;
-      font-weight: 700;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 8px;
-      border: 1.5px solid transparent;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+      padding: 14px 10px; border-radius: 14px; font-size: 13px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px; border: 1.5px solid transparent; box-shadow: 0 2px 6px rgba(0,0,0,0.04);
     }
-    .sheet-choice-btn:active { transform: scale(0.95); }
-
     .sheet-choice-btn.p { background: var(--p-bg); color: var(--p-txt); border-color: var(--p-bd); }
     .sheet-choice-btn.a { background: var(--a-bg); color: var(--a-txt); border-color: var(--a-bd); }
     .sheet-choice-btn.l { background: var(--l-bg); color: var(--l-txt); border-color: var(--l-bd); }
     .sheet-choice-btn.c { background: var(--c-bg); color: var(--c-txt); border-color: var(--c-bd); }
-
     .btn-sheet-cancel {
-      width: 100%;
-      padding: 11px;
-      border-radius: 12px;
-      border: 1px solid var(--border);
-      background: var(--surface-elevated);
-      color: var(--text-muted);
-      font-size: 13px;
-      font-weight: 600;
-      cursor: pointer;
+      width: 100%; padding: 11px; border-radius: 12px; border: 1px solid var(--border); background: var(--surface-elevated); color: var(--text-muted); font-size: 13px; font-weight: 600; cursor: pointer;
     }
-    .btn-sheet-cancel:hover { background: var(--border); color: var(--text); }
 
-    /* REPORTS TAB */
     .report-menu-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 14px 18px;
-      border-radius: 14px;
-      background: var(--surface-elevated);
-      border: 1px solid var(--border);
-      margin-top: 10px;
-      gap: 10px;
+      display: flex; align-items: center; justify-content: space-between; padding: 14px 18px; border-radius: 14px; background: var(--surface-elevated); border: 1px solid var(--border); margin-top: 10px; gap: 10px;
     }
     .btn-open-report {
-      padding: 8px 16px;
-      border-radius: 11px;
-      background: var(--primary);
-      color: #fff;
-      font-weight: 600;
-      font-size: 12.5px;
-      border: none;
-      cursor: pointer;
+      padding: 8px 16px; border-radius: 11px; background: var(--primary); color: #fff; font-weight: 600; font-size: 12.5px; border: none; cursor: pointer;
     }
-
     .holiday-config-box {
-      background: var(--surface-elevated);
-      border: 1.5px solid var(--border);
-      border-radius: 16px;
-      padding: 16px;
-      margin-top: 12px;
-      margin-bottom: 14px;
+      background: var(--surface-elevated); border: 1.5px solid var(--border); border-radius: 16px; padding: 16px; margin-top: 12px; margin-bottom: 14px;
     }
     .holiday-tag-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      background: var(--p-bg);
-      color: var(--p-txt);
-      border: 1px solid var(--p-bd);
-      padding: 5px 12px;
-      border-radius: 20px;
-      font-size: 12px;
-      font-weight: 600;
-      margin: 4px;
+      display: inline-flex; align-items: center; gap: 6px; background: var(--p-bg); color: var(--p-txt); border: 1px solid var(--p-bd); padding: 5px 12px; border-radius: 20px; font-size: 12px; font-weight: 600; margin: 4px;
     }
     .holiday-tag-pill i { cursor: pointer; color: #dc2626; }
 
     #reportViewerModal {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: var(--bg);
-      z-index: 2000;
-      overflow-y: auto;
-      padding: 12px 14px 40px;
+      display: none; position: fixed; inset: 0; background: var(--bg); z-index: 2000; overflow-y: auto; padding: 12px 14px 40px;
     }
     .viewer-top-bar {
-      position: sticky;
-      top: 0;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      padding: 10px 18px;
-      border-radius: 14px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 16px;
-      z-index: 100;
-      box-shadow: var(--card-shadow);
+      position: sticky; top: 0; background: var(--surface); border: 1px solid var(--border); padding: 10px 18px; border-radius: 14px; display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; z-index: 100; box-shadow: var(--card-shadow);
     }
-
-    /* =========================================================
-       🖨️ 🌟 កំណត់ FONT KHMER OS BATTAMBANG ក្នុងរបាយការណ៍បោះពុម្ព
-    ========================================================= */
+    
     .report-paper-container {
-      background: #ffffff;
-      color: #0f172a;
-      width: 297mm;
-      max-width: 100%;
-      min-height: 210mm;
-      margin: 0 auto;
-      padding: 8mm 10mm;
-      border-radius: 4px;
-      box-shadow: 0 10px 35px rgba(0,0,0,0.3);
-      font-size: 11px;
+      background: #ffffff; color: #0f172a; width: 297mm; max-width: 100%; min-height: 210mm; margin: 0 auto;
+      padding: 8mm 10mm; border-radius: 4px; box-shadow: 0 10px 35px rgba(0,0,0,0.3); font-size: 11px;
       font-family: 'Khmer OS Battambang', 'Battambang', sans-serif !important;
     }
-
-    /* បង្ខំឱ្យធាតុទាំងអស់ក្នុងរបាយការណ៍ប្រើ Khmer OS Battambang */
-    .report-paper-container *:not(.f-moul) {
-      font-family: 'Khmer OS Battambang', 'Battambang', sans-serif !important;
-    }
-
-    .report-paper-container .f-moul {
-      font-family: 'Khmer OS Muol Light', 'Moul', cursive !important;
-    }
+    .report-paper-container *:not(.f-moul) { font-family: 'Khmer OS Battambang', 'Battambang', sans-serif !important; }
+    .report-paper-container .f-moul { font-family: 'Khmer OS Muol Light', 'Moul', cursive !important; }
 
     .rpt-header-banner { text-align: center; color: #1e3a8a; margin-bottom: 8px; }
-
     .print-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 10px;
-      text-align: center;
-      border: 1px solid #334155;
-      margin: 6px 0;
+      width: 100%; border-collapse: collapse; font-size: 10px; text-align: center; border: 1px solid #334155; margin: 6px 0;
       font-family: 'Khmer OS Battambang', 'Battambang', sans-serif !important;
     }
     .print-table th, .print-table td {
-      border: 1px solid #334155;
-      padding: 2.5px 1px;
-      vertical-align: middle;
-      font-family: 'Khmer OS Battambang', 'Battambang', sans-serif !important;
+      border: 1px solid #334155; padding: 2.5px 1px; vertical-align: middle; font-family: 'Khmer OS Battambang', 'Battambang', sans-serif !important;
     }
     .weekend-merged-cell { background: #fce7f3 !important; color: #be185d !important; font-weight: bold; }
     .holiday-cell { background: #fee2e2 !important; color: #b91c1c !important; font-weight: bold; }
-    
     .vertical-sun-box { width: 24px; height: 80px; display: flex; align-items: center; justify-content: center; margin: 0 auto; }
     .vertical-sun-text {
-      display: inline-block;
-      white-space: nowrap;
-      transform: rotate(-90deg);
-      font-size: 9.5px;
-      font-weight: bold;
-      line-height: 1;
+      display: inline-block; white-space: nowrap; transform: rotate(-90deg); font-size: 9.5px; font-weight: bold; line-height: 1;
       font-family: 'Khmer OS Battambang', 'Battambang', sans-serif !important;
     }
     
-    /* 🌟 ប្រអប់ថ្ងៃខែចន្ទគតិ */
     .clean-lunar-input {
-      font-family: 'Khmer OS Battambang', 'Battambang', sans-serif !important;
-      font-size: 11px;
-      font-weight: bold;
-      color: #1e3a8a;
-      border: none !important;
-      background: transparent !important;
-      text-align: center;
-      width: 100%;
-      min-width: 370px;
-      outline: none;
-      margin: 0 auto;
-      display: block;
-      white-space: nowrap;
+      font-family: 'Khmer OS Battambang', 'Battambang', sans-serif !important; font-size: 11px; font-weight: bold; color: #1e3a8a;
+      border: none !important; background: transparent !important; text-align: center; width: 100%; min-width: 370px; outline: none; margin: 0 auto; display: block; white-space: nowrap;
     }
-
-    /* 🌟 ប្លង់ស្ថិតិសង្ខេបបាតក្រោមតារាង */
     .report-summary-footer {
-      width: 100%;
-      margin-top: 8px;
-      margin-bottom: 6px;
-      font-size: 10.5px;
-      color: #000000;
-      line-height: 1.8;
-      font-family: 'Khmer OS Battambang', 'Battambang', sans-serif !important;
+      width: 100%; margin-top: 8px; margin-bottom: 6px; font-size: 10.5px; color: #000000; line-height: 1.8; font-family: 'Khmer OS Battambang', 'Battambang', sans-serif !important;
     }
-
     .footer-row-1 {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      flex-wrap: nowrap;
-      gap: 10px;
-      font-family: 'Khmer OS Battambang', 'Battambang', sans-serif !important;
+      display: flex; justify-content: space-between; align-items: center; flex-wrap: nowrap; gap: 10px; font-family: 'Khmer OS Battambang', 'Battambang', sans-serif !important;
     }
-
-    .footer-row-1 span {
-      white-space: nowrap;
-      font-family: 'Khmer OS Battambang', 'Battambang', sans-serif !important;
-    }
-
-    .footer-row-2 {
-      text-align: left;
-      margin-top: 3px;
-      white-space: nowrap;
-      font-family: 'Khmer OS Battambang', 'Battambang', sans-serif !important;
-    }
+    .footer-row-2 { text-align: left; margin-top: 3px; white-space: nowrap; font-family: 'Khmer OS Battambang', 'Battambang', sans-serif !important; }
 
     @page { size: A4 landscape; margin: 5mm 6mm; }
     @media print {
@@ -687,28 +270,18 @@
       .top-nav-bar, #tabDailyView, #tabReportsMenu, #saveToast, #statusActionSheetModal, .viewer-top-bar { display: none !important; }
       #reportViewerModal { display: block !important; position: static !important; padding: 0 !important; background: transparent !important; }
       .report-paper-container { width: 100% !important; box-shadow: none !important; padding: 0 !important; }
-      .report-paper-container *:not(.f-moul) {
-        font-family: 'Khmer OS Battambang', 'Battambang', sans-serif !important;
-      }
+      .report-paper-container *:not(.f-moul) { font-family: 'Khmer OS Battambang', 'Battambang', sans-serif !important; }
       .report-summary-footer {
-        font-size: 8.8px !important;
-        margin-top: 5px !important;
-        line-height: 1.6 !important;
-        font-family: 'Khmer OS Battambang', 'Battambang', sans-serif !important;
+        font-size: 8.8px !important; margin-top: 5px !important; line-height: 1.6 !important; font-family: 'Khmer OS Battambang', 'Battambang', sans-serif !important;
       }
     }
   </style>
 </head>
 
-<!-- =========================================================
-     🏛️ ផ្នែកទី ២ ៖ HTML STRUCTURE (តួខ្លួន និង MODAL)
-========================================================= -->
 <body>
 
-  <!-- TOAST -->
   <div id="saveToast"><i class="fa-solid fa-circle-check"></i> បានរក្សាទុកដោយជោគជ័យ</div>
 
-  <!-- TOP BAR -->
   <div class="top-nav-bar">
     <div class="tabs-group">
       <button class="tab-pill-btn active" id="btnTabDaily" onclick="switchNavTab('daily')">
@@ -724,7 +297,6 @@
           <span id="txtDisplayDate">1 កញ្ញា 2026</span>
         </button>
 
-        <!-- CALENDAR POPUP -->
         <div class="calendar-popup" id="calPopup">
           <div class="cal-head-selectors">
             <select id="calMonthSelect" onchange="renderCalendarDays()">
@@ -765,11 +337,9 @@
     </div>
   </div>
 
-  <!-- 1. TAB: វត្តមានប្រចាំថ្ងៃ -->
   <div id="tabDailyView">
     <div class="daily-layout-grid">
       
-      <!-- ផ្នែកសង្ខេបខាងឆ្វេង (Sticky Sidebar) -->
       <div class="daily-sidebar-card">
         <div style="font-size:12px; color:var(--text-muted);">
           <div>កាលបរិច្ឆេទជ្រើសរើស៖</div>
@@ -829,7 +399,6 @@
         </div>
       </div>
 
-      <!-- បញ្ជីសិស្សខាងស្ដាំ (Scrollable Area) -->
       <div class="daily-list-card">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; padding-bottom:10px; border-bottom:1px solid var(--border);">
           <div>
@@ -847,7 +416,6 @@
     </div>
   </div>
 
-  <!-- 2. TAB: របាយការណ៍ & សង្ខេបខែ -->
   <div id="tabReportsMenu" style="display:none;">
     <div class="report-launcher-card" style="max-width: 820px; margin: 0 auto;">
       <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:16px; flex-wrap:wrap; gap:10px;">
@@ -921,7 +489,6 @@
     </div>
   </div>
 
-  <!-- ================= 🌟 ACTION SHEET MODAL ================= -->
   <div id="statusActionSheetModal" class="action-sheet-backdrop" onclick="closeStatusActionSheet()">
     <div class="action-sheet-card" onclick="event.stopPropagation()">
       <div class="sheet-header-row">
@@ -950,7 +517,6 @@
     </div>
   </div>
 
-  <!-- 4. REPORT VIEWER MODAL -->
   <div id="reportViewerModal">
     <div class="viewer-top-bar">
       <button class="tab-pill-btn" onclick="closeReportView()">⬅ ត្រឡប់ក្រោយ</button>
@@ -962,11 +528,10 @@
     <div class="report-paper-container" id="printableReportPaper"></div>
   </div>
 
-  <!-- 🔗 ភ្ជាប់ជាមួយ API ទំនាក់ទំនង Backend -->
   <script src="api.js"></script>
 
   <!-- =========================================================
-       ⚙️ ផ្នែកទី ៣ ៖ JAVASCRIPT
+       ⚙️ ផ្នែកទី ៣ ៖ TURBO ENGINE JAVASCRIPT
   ========================================================= -->
   <script>
     function syncThemeWithParent() {
@@ -988,9 +553,9 @@
     }
 
     var TOKEN = resolveToken();
-    var USER_ROLE = "teacher";
+    var USER_ROLE = (window.parent && window.parent.USER_ROLE) || "teacher";
     var USER_CLASS = "";
-    var TEACHER_NAME = "";
+    var TEACHER_NAME = (window.parent && window.parent.TEACHER_NAME) || "";
 
     var KHMER_MONTHS = ["មករា","កុម្ភៈ","មីនា","មេសា","ឧសភា","មិថុនា","កក្កដា","សីហា","កញ្ញា","តុលា","វិច្ឆិកា","ធ្នូ"];
     var WEEKDAYS_KH = ["អា","ច","អ","ព","ព្រ","សុ","ស"];
@@ -1009,30 +574,13 @@
     function showSaveToast() {
       var toast = document.getElementById("saveToast");
       toast.className = "show";
-      setTimeout(function(){ toast.className = toast.className.replace("show", ""); }, 2200);
+      setTimeout(function(){ toast.className = toast.className.replace("show", ""); }, 1800);
     }
 
     async function saveHolidaysData() {
       try { localStorage.setItem('school_monthly_holidays', JSON.stringify(monthlyHolidaysMap)); } catch(e) {}
       if (typeof callBackendApi === 'function') {
         try { await callBackendApi('saveSchoolHolidays', { holidaysMap: monthlyHolidaysMap }); } catch(e) {}
-      }
-    }
-
-    async function loadHolidaysData() {
-      try {
-        var local = localStorage.getItem('school_monthly_holidays');
-        if (local) monthlyHolidaysMap = Object.assign(monthlyHolidaysMap, JSON.parse(local));
-      } catch(e) {}
-
-      if (typeof callBackendApi === 'function') {
-        try {
-          var serverData = await callBackendApi('getSchoolHolidays');
-          if (serverData && typeof serverData === 'object') {
-            monthlyHolidaysMap = Object.assign(monthlyHolidaysMap, serverData);
-            renderHolidayTagsList();
-          }
-        } catch(e) {}
       }
     }
 
@@ -1133,30 +681,74 @@
     var dailyAttendanceState = {};
     var studentNotesMap = {};
     var activeActionSheetSid = null;
+    var saveDebounceTimer = null;
 
+    // ⚡ TURBO INITIALIZATION: ទាញយកទិន្នន័យចាំបាច់ទាំងអស់ក្នុង ១ Request
     window.onload = async function() {
       syncThemeWithParent();
-      setInterval(syncThemeWithParent, 1500);
+      setInterval(syncThemeWithParent, 2000);
 
       TOKEN = resolveToken();
-      await fetchSessionInfo();
-      loadHolidaysData();
       updateDateUI();
-      initClasses();
-      renderHolidayConfigSection();
-    };
 
-    async function fetchSessionInfo() {
+      // ១. បង្ហាញថ្នាក់ពី Cache លើទូរសព្ទភ្លាមៗ (Instant 0.01 វិនាទី)
       try {
-        if (typeof callBackendApi === 'function' && TOKEN) {
-          var session = await callBackendApi('getCurrentSession', { token: TOKEN });
-          if (session) {
-            USER_ROLE = session.role || 'teacher';
-            USER_CLASS = session.assignedClass || '';
-            TEACHER_NAME = session.name || '';
+        var cachedCls = localStorage.getItem('krou_cached_classes');
+        if (cachedCls) {
+          var cList = JSON.parse(cachedCls);
+          if (cList && cList.length) populateClassSelect(cList);
+        }
+        var localH = localStorage.getItem('school_monthly_holidays');
+        if (localH) monthlyHolidaysMap = Object.assign(monthlyHolidaysMap, JSON.parse(localH));
+      } catch(e) {}
+      renderHolidayConfigSection();
+
+      // ២. បាញ់ 1-Shot Bootstrap ទៅកាន់ Google (ទាញទាំង Session, ថ្នាក់, ថ្ងៃឈប់, និងសិស្ស)
+      try {
+        var mName = KHMER_MONTHS[selectedDate.getMonth()];
+        var boot = await callBackendApi('getAttendanceBootstrap', {
+          token: TOKEN,
+          className: currentClassName,
+          month: mName
+        });
+
+        if (boot && boot.success) {
+          if (boot.session) {
+            USER_ROLE = boot.session.role || USER_ROLE;
+            USER_CLASS = boot.session.assignedClass || '';
+            TEACHER_NAME = boot.session.name || TEACHER_NAME;
+          }
+          if (boot.classes && boot.classes.length) {
+            localStorage.setItem('krou_cached_classes', JSON.stringify(boot.classes));
+            populateClassSelect(boot.classes);
+          }
+          if (boot.holidays) {
+            monthlyHolidaysMap = Object.assign(monthlyHolidaysMap, boot.holidays);
+            renderHolidayTagsList();
+          }
+          if (boot.students) {
+            applyLoadedStudents(boot.students);
           }
         }
-      } catch(e) {}
+      } catch (err) {
+        console.warn('Bootstrap fallback:', err);
+        loadDailyAttendanceData(); // fallback
+      }
+    };
+
+    function populateClassSelect(classes) {
+      var sel = document.getElementById('classSelect');
+      var oldVal = sel.value;
+      sel.innerHTML = '';
+      classes.forEach(function(c) {
+        var opt = document.createElement('option');
+        opt.value = c;
+        opt.textContent = 'ថ្នាក់ទី ' + c;
+        sel.appendChild(opt);
+      });
+      if (oldVal && classes.includes(oldVal)) sel.value = oldVal;
+      else if (USER_CLASS && classes.includes(USER_CLASS)) sel.value = USER_CLASS;
+      currentClassName = sel.value;
     }
 
     function switchNavTab(tab) {
@@ -1165,37 +757,6 @@
       document.getElementById('tabDailyView').style.display = (tab === 'daily') ? 'block' : 'none';
       document.getElementById('tabReportsMenu').style.display = (tab === 'reports') ? 'block' : 'none';
       if(tab === 'reports') renderHolidayConfigSection();
-    }
-
-    async function initClasses() {
-      var sel = document.getElementById('classSelect');
-      sel.innerHTML = '<option value="">កំពុងទាញយក...</option>';
-      TOKEN = resolveToken();
-
-      if (typeof callBackendApi !== 'function') {
-        sel.innerHTML = '<option value="">រកមិនឃើញ api.js</option>';
-        return;
-      }
-
-      try {
-        var res = await callBackendApi('getClassList', { token: TOKEN });
-        var classes = Array.isArray(res) ? res : (res && res.classes ? res.classes : []);
-        sel.innerHTML = '';
-        if (classes && classes.length > 0) {
-          classes.forEach(function(c) {
-            var opt = document.createElement('option');
-            opt.value = c;
-            opt.textContent = 'ថ្នាក់ទី ' + c;
-            sel.appendChild(opt);
-          });
-          if (USER_ROLE !== 'admin' && USER_CLASS) sel.value = USER_CLASS;
-          onClassChange();
-        } else {
-          sel.innerHTML = '<option value="">គ្មានថ្នាក់</option>';
-        }
-      } catch (err) {
-        sel.innerHTML = '<option value="">កំហុសទាញយក</option>';
-      }
     }
 
     function onClassChange() {
@@ -1254,15 +815,26 @@
       loadDailyAttendanceData();
     }
 
+    function applyLoadedStudents(students) {
+      var day = selectedDate.getDate();
+      rawStudentsData = Array.isArray(students) ? students : [];
+      dailyAttendanceState = {};
+
+      rawStudentsData.forEach(function(s) {
+        dailyAttendanceState[s.id] = (s.days && s.days[day]) ? s.days[day] : 'P';
+      });
+      renderDailyList();
+      updateStatsCounters();
+    }
+
     async function loadDailyAttendanceData() {
       var mName = KHMER_MONTHS[selectedDate.getMonth()];
-      var day = selectedDate.getDate();
       TOKEN = resolveToken();
 
       document.getElementById('studentListContainer').innerHTML = `
-        <div style="text-align:center; padding:40px; color:var(--text-muted);">
-          <i class="fa-solid fa-spinner fa-spin fa-2x"></i>
-          <p style="margin-top:10px;">កំពុងទាញយកទិន្នន័យ...</p>
+        <div style="text-align:center; padding:35px; color:var(--text-muted);">
+          <i class="fa-solid fa-spinner fa-spin fa-2x" style="color:var(--primary);"></i>
+          <p style="margin-top:10px; font-weight:600;">កំពុងទាញយកទិន្នន័យ...</p>
         </div>`;
 
       try {
@@ -1271,15 +843,7 @@
           className: currentClassName,
           month: mName
         });
-
-        rawStudentsData = Array.isArray(students) ? students : [];
-        dailyAttendanceState = {};
-
-        rawStudentsData.forEach(function(s) {
-          dailyAttendanceState[s.id] = (s.days && s.days[day]) ? s.days[day] : 'P';
-        });
-        renderDailyList();
-        updateStatsCounters();
+        applyLoadedStudents(students);
       } catch (err) {
         document.getElementById('studentListContainer').innerHTML = `
           <div style="text-align:center; padding:30px; color:#dc2626;">
@@ -1305,7 +869,7 @@
         var noteVal = studentNotesMap[s.id] || '';
 
         var noteInputHtml = !isPresent ? `
-          <input type="text" class="st-note-input" placeholder="មូលហេតុ / ចំណាំ..." value="${noteVal}" oninput="studentNotesMap['${s.id}']=this.value; saveDailyAttendance();">
+          <input type="text" class="st-note-input" placeholder="មូលហេតុ / ចំណាំ..." value="${noteVal}" oninput="studentNotesMap['${s.id}']=this.value; triggerDebouncedSave();">
         ` : '';
 
         html += `
@@ -1336,7 +900,7 @@
       dailyAttendanceState[sid] = code;
       renderDailyList();
       updateStatsCounters();
-      saveDailyAttendance();
+      triggerDebouncedSave();
     }
 
     function openStatusActionSheet(sid, name) {
@@ -1356,7 +920,7 @@
         dailyAttendanceState[activeActionSheetSid] = code;
         renderDailyList();
         updateStatsCounters();
-        saveDailyAttendance();
+        triggerDebouncedSave();
       }
       closeStatusActionSheet();
     }
@@ -1365,7 +929,7 @@
       rawStudentsData.forEach(function(s) { dailyAttendanceState[s.id] = code; });
       renderDailyList();
       updateStatsCounters();
-      saveDailyAttendance();
+      triggerDebouncedSave();
     }
 
     function updateStatsCounters() {
@@ -1389,6 +953,15 @@
       document.getElementById('cntPerm').textContent = c;
     }
 
+    // ⚡ DEBOUNCE SAVE: បង្ហាញ Save ភ្លាមៗ (0ms) និងផ្ញើទៅ Sheet តែម្ដងគត់ (ការពារកកស្ទះ Server)
+    function triggerDebouncedSave() {
+      showSaveToast();
+      clearTimeout(saveDebounceTimer);
+      saveDebounceTimer = setTimeout(function() {
+        saveDailyAttendance();
+      }, 400);
+    }
+
     async function saveDailyAttendance() {
       var mName = KHMER_MONTHS[selectedDate.getMonth()];
       var day = selectedDate.getDate();
@@ -1403,13 +976,8 @@
       try {
         await callBackendApi('saveMonthlyAttendanceForClass', {
           token: TOKEN,
-          payload: {
-            className: currentClassName,
-            month: mName,
-            records: records
-          }
+          payload: { className: currentClassName, month: mName, records: records }
         });
-        showSaveToast();
       } catch(err) {
         console.warn(err);
       }
@@ -1418,25 +986,23 @@
     function openReportView(type) {
       var paper = document.getElementById('printableReportPaper');
       document.getElementById('reportViewerModal').style.display = 'block';
-      paper.innerHTML = '<div style="text-align:center; padding:50px; color:#64748b;"><i class="fa-solid fa-spinner fa-spin fa-2x"></i><p style="margin-top:10px;">កំពុងរៀបចំរបាយការណ៍...</p></div>';
+      paper.innerHTML = '<div style="text-align:center; padding:50px; color:#64748b;"><i class="fa-solid fa-spinner fa-spin fa-2x" style="color:var(--primary);"></i><p style="margin-top:10px;">កំពុងរៀបចំរបាយការណ៍...</p></div>';
 
       if (type === 'monthly') renderMonthlyPrintReport();
       else renderYearlyPrintReport();
     }
 
-    function closeReportView() {
-      document.getElementById('reportViewerModal').style.display = 'none';
-    }
+    function closeReportView() { document.getElementById('reportViewerModal').style.display = 'none'; }
 
     function downloadPDF() {
       var element = document.getElementById('printableReportPaper');
       var mName = document.getElementById('rptMonthSelect').value;
       var opt = {
-        margin:       [4, 6, 4, 6],
-        filename:     'Attendance_Report_' + currentClassName + '_' + mName + '.pdf',
-        image:        { type: 'jpeg', quality: 1.0 },
-        html2canvas:  { scale: 3, useCORS: true },
-        jsPDF:        { unit: 'mm', format: 'a4', orientation: 'landscape' }
+        margin: [4, 6, 4, 6],
+        filename: 'Attendance_Report_' + currentClassName + '_' + mName + '.pdf',
+        image: { type: 'jpeg', quality: 1.0 },
+        html2canvas: { scale: 3, useCORS: true },
+        jsPDF: { unit: 'mm', format: 'a4', orientation: 'landscape' }
       };
       html2pdf().from(element).set(opt).save();
     }
