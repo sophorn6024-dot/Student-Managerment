@@ -92,7 +92,7 @@
     }
 
     /* =========================================================
-       🧭 SIDEBAR
+       🧭 SIDEBAR (គ្មាន Submenu ទៀតទេ)
     ========================================================= */
     .sidebar {
       width: var(--sidebar-w);
@@ -114,11 +114,10 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 14px 16px;
+      padding: 14px 18px;
       border-bottom: 1px solid rgba(255, 255, 255, 0.08);
       white-space: nowrap;
       overflow: hidden;
-      position: relative;
     }
 
     .brand-info { display: flex; align-items: center; gap: 12px; overflow: hidden; }
@@ -140,30 +139,6 @@
     .sidebar.collapsed .brand-meta { opacity: 0; width: 0; display: none; }
     .brand-title { font-size: 13.5px; font-weight: bold; color: #fff; }
     .brand-sub { font-size: 10.5px; color: rgba(255, 255, 255, 0.65); margin-top: 2px; }
-
-    /* 🌟 ប៊ូតុងលាក់/បង្រួមរបាចំហៀងនៅក្បាលម៉ឺនុយ */
-    .sidebar-toggle-top-btn {
-      background: rgba(255, 255, 255, 0.1);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      color: #fff;
-      width: 32px;
-      height: 32px;
-      border-radius: 10px;
-      font-size: 13px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.2s;
-      flex-shrink: 0;
-    }
-    .sidebar-toggle-top-btn:hover {
-      background: rgba(255, 255, 255, 0.2);
-      transform: scale(1.05);
-    }
-    .sidebar.collapsed .sidebar-toggle-top-btn {
-      margin: 0 auto;
-    }
 
     .sidebar-close-mobile-btn {
       display: none;
@@ -236,9 +211,8 @@
     .nav-icon { font-size: 16px; width: 22px; text-align: center; flex-shrink: 0; }
     .sidebar.collapsed .nav-text { opacity: 0; width: 0; display: none; }
 
-    /* 🌟 Footer របាចំហៀង */
     .sidebar-footer {
-      padding: 12px;
+      padding: 14px;
       border-top: 1px solid rgba(255, 255, 255, 0.08);
       display: flex;
       flex-direction: column;
@@ -247,22 +221,19 @@
 
     .collapse-toggle-btn {
       width: 100%;
-      height: 38px;
-      border-radius: 11px;
-      border: 1px solid rgba(255, 255, 255, 0.14);
-      background: rgba(255, 255, 255, 0.08);
+      height: 36px;
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: rgba(255, 255, 255, 0.06);
       color: #fff;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 8px;
       cursor: pointer;
-      font-size: 12.5px;
-      font-weight: 600;
+      font-size: 13px;
       transition: all 0.2s;
     }
-    .collapse-toggle-btn:hover { background: rgba(255, 255, 255, 0.16); }
-    .sidebar.collapsed .collapse-toggle-btn span:last-child { display: none; }
+    .collapse-toggle-btn:hover { background: rgba(255, 255, 255, 0.14); }
 
     .admin-clear-btn {
       width: 100%;
@@ -310,10 +281,8 @@
     }
 
     .topbar-left { display: flex; align-items: center; gap: 12px; min-width: 0; }
-    
-    /* 🌟 ប៊ូតុង Hamburger បង្ហាញជានិច្ចទាំងលើ Desktop និង Mobile */
     .hamburger-btn {
-      display: flex;
+      display: none;
       background: var(--surface);
       border: 1px solid var(--border);
       width: 38px;
@@ -325,13 +294,7 @@
       align-items: center;
       justify-content: center;
       box-shadow: 0 2px 6px rgba(0,0,0,0.03);
-      transition: all 0.2s;
     }
-    .hamburger-btn:hover {
-      border-color: var(--primary);
-      color: var(--primary);
-    }
-
     .page-title {
       font-size: 15.5px;
       font-weight: 700;
@@ -439,7 +402,7 @@
     }
 
     /* =========================================================
-       🌟 1. DASHBOARD VIEW
+       🌟 1. DASHBOARD VIEW (COMPACT & MODERN)
     ========================================================= */
     #dashboardView { padding: 22px 28px 45px; }
     .dash-container {
@@ -534,6 +497,7 @@
     }
     .dash-panel-title { font-size: 14px; font-weight: 700; color: var(--text); display: flex; align-items: center; gap: 8px; }
 
+    /* Bar Chart Area */
     .bar-chart-container {
       width: 100%;
       overflow-x: auto;
@@ -635,7 +599,7 @@
     .class-prog-count { width: 38px; text-align: right; font-weight: 700; color: var(--text-muted); }
 
     /* =========================================================
-       📁 2. REPORTS HUB VIEW
+       📁 2. REPORTS HUB VIEW (បង្ហាញជំនួសផ្ទាំង Dashboard)
     ========================================================= */
     #reportsHubView { padding: 22px 28px 45px; }
 
@@ -972,11 +936,11 @@
         opacity: 1 !important;
         width: auto !important;
       }
-      .sidebar-toggle-top-btn { display: none; }
       .sidebar-close-mobile-btn { display: flex; }
       .collapse-toggle-btn { display: none; }
 
       .topbar { height: 56px; padding: 0 14px; }
+      .hamburger-btn { display: flex; }
       .user-name-txt, .date-badge { display: none; }
       .page-title { font-size: 14px; }
 
@@ -1024,7 +988,7 @@
   <div id="mobileBackdrop" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.55); z-index:80; backdrop-filter:blur(3px);" onclick="closeSidebarMobile()"></div>
 
   <!-- =========================================================
-       🧭 SIDEBAR
+       🧭 SIDEBAR (លុប Dropdown រង គ្មាន Submenu ទៀតទេ)
   ========================================================= -->
   <aside class="sidebar" id="sidebar">
     <div class="brand-box">
@@ -1035,11 +999,6 @@
           <div class="brand-sub">កំពង់ល្ពៅ · គ្រប់គ្រងសិស្ស</div>
         </div>
       </div>
-      <!-- 🌟 ប៊ូតុងបង្រួម/លាក់របាចំហៀងនៅក្បាលម៉ឺនុយ (សម្រាប់ Desktop) -->
-      <button class="sidebar-toggle-top-btn" id="sidebarTopCollapseBtn" onclick="toggleSidebarCollapse()" title="បង្រួម/លាក់របាចំហៀង">
-        ◀
-      </button>
-      <!-- ប៊ូតុងបិទសម្រាប់ Mobile -->
       <button class="sidebar-close-mobile-btn" onclick="closeSidebarMobile()">✕</button>
     </div>
 
@@ -1076,7 +1035,7 @@
         <span class="nav-icon">📊</span><span class="nav-text">ស្រង់ពិន្ទុ</span>
       </div>
 
-      <!-- 🌟 ប៊ូតុងរបាយការណ៍ (បើក Hub ភ្លាមៗ) -->
+      <!-- 🌟 ប៊ូតុងរបាយការណ៍ទោល (ចុចទៅបើក Hub ភ្លាម គ្មានម៉ឺនុយរងវែងអន្លាយ) -->
       <div class="nav-link-btn" data-page="reportsHub" onclick="navigate('reportsHub', this)">
         <span class="nav-icon">📁</span><span class="nav-text">របាយការណ៍</span>
       </div>
@@ -1086,15 +1045,13 @@
       </div>
     </nav>
 
-    <!-- 🌟 Footer របាចំហៀង មានប៊ូតុងបង្រួមច្បាស់ៗ -->
     <div class="sidebar-footer">
       <button class="admin-clear-btn" id="adminClearBtn" onclick="confirmClearAllData()">
         <span>🗑️</span><span>សម្អាតទិន្នន័យទាំងអស់</span>
       </button>
 
-      <button class="collapse-toggle-btn" id="collapseToggleBtn" onclick="toggleSidebarCollapse()" title="បង្រួម/ពង្រីករបាចំហៀង">
-        <span id="collapseIcon">◀</span>
-        <span id="collapseText">បង្រួមម៉ឺនុយ</span>
+      <button class="collapse-toggle-btn" onclick="toggleSidebarCollapse()" title="បង្រួម/ពង្រីក">
+        ◀
       </button>
     </div>
   </aside>
@@ -1107,8 +1064,7 @@
     <!-- Topbar -->
     <header class="topbar">
       <div class="topbar-left">
-        <!-- 🌟 ប៊ូតុង Hamburger អាចចុចលាក់/បើកម៉ឺនុយបានគ្រប់ឧបករណ៍ -->
-        <button class="hamburger-btn" onclick="handleMenuToggle()" title="លាក់/បង្ហាញម៉ឺនុយ">☰</button>
+        <button class="hamburger-btn" onclick="openSidebarMobile()" title="ម៉ឺនុយ">☰</button>
         <div class="page-title" id="pageTitle">🏠 ទំព័រដើម</div>
       </div>
 
@@ -1221,7 +1177,7 @@
       </div>
 
       <!-- =====================================================
-           2️⃣ REPORTS HUB VIEW (បង្ហាញជំនួស Dashboard)
+           2️⃣ REPORTS HUB VIEW (បង្ហាញជំនួស Dashboard ខ្លី ខ្លឹម ស្អាត)
       ====================================================== -->
       <div class="view-panel" id="reportsHubView">
         <div class="dash-container">
@@ -1233,6 +1189,7 @@
             </button>
           </div>
 
+          <!-- កាតមុខងាររបាយការណ៍ ខ្លី ទំនើប គ្មានអក្សររៀបរាប់ច្រើន -->
           <div class="reports-grid-clean">
             <!-- 1. Roster -->
             <div class="report-card-item" onclick="navigate('roster', null)">
@@ -1580,6 +1537,7 @@
       return;
     }
 
+    // 🌟 បង្ហាញផ្ទាំងរបាយការណ៍ជំនួស Dashboard
     if (cleanFile === 'reportsHub') {
       dashboardView.classList.remove('active');
       iframeView.classList.remove('active');
@@ -1587,6 +1545,7 @@
       return;
     }
 
+    // បើកចូលទំព័រអនុវត្តជាក់ស្តែងក្នុង iframe
     dashboardView.classList.remove('active');
     reportsHubView.classList.remove('active');
     iframeView.classList.add('active');
@@ -1604,31 +1563,9 @@
     document.getElementById('loadingOverlay').classList.remove('show');
   });
 
-  /* =========================================================
-     🌟 មុខងារបង្រួម/លាក់របាចំហៀង (TOGGLE SIDEBAR)
-  ========================================================= */
   function toggleSidebarCollapse() {
-    var sidebar = document.getElementById('sidebar');
-    var isCollapsed = sidebar.classList.toggle('collapsed');
-    localStorage.setItem('krou_sidebar_collapsed', isCollapsed ? '1' : '0');
-    updateCollapseUI(isCollapsed);
+    document.getElementById('sidebar').classList.toggle('collapsed');
   }
-
-  function updateCollapseUI(isCollapsed) {
-    var topBtn = document.getElementById('sidebarTopCollapseBtn');
-    var icon = document.getElementById('collapseIcon');
-    if (topBtn) topBtn.innerText = isCollapsed ? '▶' : '◀';
-    if (icon) icon.innerText = isCollapsed ? '▶' : '◀';
-  }
-
-  function handleMenuToggle() {
-    if (window.innerWidth <= 768) {
-      openSidebarMobile();
-    } else {
-      toggleSidebarCollapse();
-    }
-  }
-
   function openSidebarMobile() {
     document.getElementById('sidebar').classList.add('open');
     document.getElementById('mobileBackdrop').style.display = 'block';
@@ -1848,13 +1785,6 @@
   function bootAuthenticatedApp() {
     setTodayPill();
     initGreetings();
-
-    // 🌟 ពិនិត្យទាញយកស្ថានភាពបង្រួមរបាដែលបានរក្សាទុក
-    if (localStorage.getItem('krou_sidebar_collapsed') === '1' && window.innerWidth > 768) {
-      document.getElementById('sidebar').classList.add('collapsed');
-      updateCollapseUI(true);
-    }
-
     navigate(currentPage, null);
   }
 
