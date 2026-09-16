@@ -8,65 +8,70 @@
   <!-- 🔤 Google Fonts Khmer (Khmer OS Battambang & Moul) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Battambang:wght@400;700;900&family=Moul&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Battambang:wght@400;600;700;800;900&family=Moul&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <style>
     /* =========================================================
-       🎨 THEME VARIABLES & FONT SYSTEM
+       🎨 THEME VARIABLES & ULTRA-MODERN PALETTE
     ========================================================= */
-    :root {
+    :root, [data-theme="light"] {
       --primary: #2563eb;
       --primary-hover: #1d4ed8;
       --primary-soft: #eff6ff;
-      --navy: #0f172a;
+      --primary-glow: rgba(37, 99, 235, 0.2);
       
-      /* Light Theme */
-      --bg: #f1f5f9;
+      --bg: #f4f6fb;
       --surface: #ffffff;
-      --surface-elevated: #ffffff;
+      --surface-card: #ffffff;
+      --surface-elevated: #f8fafc;
       --border: #e2e8f0;
-      --border-subtle: #f1f5f9;
+      --border-subtle: #edf2f7;
+      
       --text: #0f172a;
       --text-muted: #64748b;
       --text-soft: #94a3b8;
       
-      --topbar-bg: rgba(255, 255, 255, 0.88);
+      --topbar-bg: rgba(255, 255, 255, 0.9);
       --sidebar-bg: linear-gradient(180deg, #090d16 0%, #0f172a 45%, #1e3a8a 100%);
-      --card-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.06);
-      --card-shadow-hover: 0 12px 30px -4px rgba(15, 23, 42, 0.12);
+      --card-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.05);
+      --card-shadow-hover: 0 12px 30px -4px rgba(37, 99, 235, 0.12);
       
       --sidebar-w: 260px;
       --sidebar-w-collapsed: 78px;
       --bottom-nav-h: 62px;
     }
 
-    /* 🌙 Dark Theme */
     [data-theme="dark"] {
+      --primary: #3b82f6;
+      --primary-hover: #60a5fa;
+      --primary-soft: rgba(59, 130, 246, 0.15);
+      --primary-glow: rgba(59, 130, 246, 0.3);
+      
       --bg: #090d16;
       --surface: #111827;
+      --surface-card: #131d31;
       --surface-elevated: #1e293b;
-      --border: #1f2937;
-      --border-subtle: #1e293b;
+      --border: #1f293d;
+      --border-subtle: #192338;
+      
       --text: #f8fafc;
       --text-muted: #94a3b8;
       --text-soft: #64748b;
       
-      --topbar-bg: rgba(17, 24, 39, 0.88);
+      --topbar-bg: rgba(17, 24, 39, 0.9);
       --sidebar-bg: linear-gradient(180deg, #030712 0%, #0b1120 50%, #0f172a 100%);
-      --card-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.4);
-      --card-shadow-hover: 0 12px 32px -4px rgba(0, 0, 0, 0.6);
-      --primary-soft: rgba(37, 99, 235, 0.15);
+      --card-shadow: 0 6px 24px rgba(0, 0, 0, 0.5);
+      --card-shadow-hover: 0 14px 35px rgba(0, 0, 0, 0.7);
     }
 
-    /* 🌟 កំណត់ FONT KHMER OS BATTAMBANG ទូទាំងប្រព័ន្ធ */
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
       font-family: 'Khmer OS Battambang', 'Battambang', sans-serif;
       -webkit-tap-highlight-color: transparent;
-      transition: background-color 0.25s ease, border-color 0.25s ease, color 0.25s ease;
-      letter-spacing: 0.1px;
+      transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
     }
 
     html, body, button, input, select, textarea {
@@ -97,7 +102,9 @@
       position: relative;
     }
 
-    /* SIDEBAR NAVIGATION */
+    /* =========================================================
+       SIDEBAR NAVIGATION
+    ========================================================= */
     .sidebar {
       width: var(--sidebar-w);
       height: 100vh;
@@ -107,7 +114,7 @@
       flex-direction: column;
       flex-shrink: 0;
       z-index: 60;
-      box-shadow: 5px 0 25px rgba(0,0,0,0.15);
+      box-shadow: 5px 0 25px rgba(0,0,0,0.18);
       transition: width 0.28s cubic-bezier(0.4, 0, 0.2, 1), transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
@@ -146,7 +153,7 @@
 
     .brand-meta { overflow: hidden; }
     .sidebar.collapsed .brand-meta { opacity: 0; width: 0; display: none; }
-    .brand-title { font-size: 13.5px; font-weight: bold; color: #fff; }
+    .brand-title { font-size: 13px; font-weight: bold; color: #fff; }
     .brand-sub { font-size: 10.5px; color: rgba(255, 255, 255, 0.65); margin-top: 2px; }
 
     .sidebar-close-mobile-btn {
@@ -221,7 +228,6 @@
     .nav-icon { font-size: 16px; width: 22px; text-align: center; flex-shrink: 0; }
     .sidebar.collapsed .nav-text { opacity: 0; width: 0; display: none; }
 
-    /* SUBMENU DROPDOWN */
     .nav-dropdown { position: relative; margin-bottom: 4px; }
     .nav-dropdown-toggle { display: flex; align-items: center; justify-content: space-between; }
     .dropdown-chevron { font-size: 11px; transition: transform 0.2s ease; margin-left: auto; opacity: 0.7; }
@@ -310,7 +316,9 @@
     .admin-clear-btn:hover { background: rgba(220, 38, 38, 0.4); color: #fff; }
     .sidebar.collapsed .admin-clear-btn span:last-child { display: none; }
 
-    /* TOPBAR & MAIN AREA */
+    /* =========================================================
+       TOPBAR
+    ========================================================= */
     .main-wrapper {
       flex: 1;
       height: 100vh;
@@ -348,7 +356,6 @@
       cursor: pointer;
       align-items: center;
       justify-content: center;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.03);
     }
     .page-title {
       font-size: 15.5px;
@@ -374,19 +381,15 @@
       font-size: 16px;
       cursor: pointer;
       box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-      transition: all 0.2s ease;
     }
-    .theme-toggle-btn:hover {
-      transform: translateY(-2px);
-      border-color: var(--primary);
-    }
+    .theme-toggle-btn:hover { border-color: var(--primary); transform: translateY(-2px); }
 
     .date-badge {
       background: var(--primary-soft);
       color: var(--primary);
       font-size: 11.5px;
       font-weight: 600;
-      padding: 6px 12px;
+      padding: 6px 14px;
       border-radius: 30px;
       white-space: nowrap;
       border: 1px solid rgba(37, 99, 235, 0.15);
@@ -429,12 +432,13 @@
       font-size: 11.5px;
       font-weight: 700;
       cursor: pointer;
-      transition: all 0.15s;
       white-space: nowrap;
     }
     .btn-logout:hover { background: #ef4444; color: #fff; }
 
-    /* CONTENT AREA */
+    /* =========================================================
+       CONTENT AREA & 🌟 ULTRA-MODERN DASHBOARD
+    ========================================================= */
     .content-area {
       flex: 1;
       min-height: 0;
@@ -459,38 +463,80 @@
       transform: translateY(0);
     }
 
-    /* Dashboard Layout */
-    #dashboardView { padding: 24px 28px 40px; }
+    #dashboardView { padding: 22px 26px 50px; }
     .dash-container {
       max-width: 1440px;
       margin: 0 auto;
       display: flex;
       flex-direction: column;
-      gap: 18px;
+      gap: 20px;
     }
 
+    /* 🌟 ULTRA HERO BANNER */
     .welcome-hero {
       position: relative;
-      border-radius: 22px;
-      padding: 24px 28px;
-      color: #fff;
-      background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 50%, #7c3aed 100%);
-      box-shadow: 0 10px 28px -4px rgba(37, 99, 235, 0.28);
+      border-radius: 24px;
+      padding: 26px 30px;
+      color: #ffffff;
+      background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 55%, #7c3aed 100%);
+      box-shadow: 0 14px 35px -5px rgba(37, 99, 235, 0.35);
       overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
     }
-    .welcome-hero h1 { font-size: 20px; margin-bottom: 6px; position: relative; z-index: 2; line-height: 1.4; font-weight: normal; }
-    .welcome-hero p { font-size: 12.5px; opacity: 0.92; max-width: 680px; line-height: 1.6; position: relative; z-index: 2; font-weight: 400; }
-    .welcome-hero::after {
-      content: "🏫";
+
+    .welcome-hero::before {
+      content: "";
       position: absolute;
-      right: 20px;
-      top: 50%;
-      transform: translateY(-50%);
-      font-size: 90px;
-      opacity: 0.12;
+      top: -50%;
+      right: -20%;
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, rgba(255,255,255,0.18) 0%, rgba(255,255,255,0) 70%);
+      border-radius: 50%;
       pointer-events: none;
     }
 
+    .hero-top-badges {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+      position: relative;
+      z-index: 2;
+    }
+    .hero-chip {
+      background: rgba(255, 255, 255, 0.18);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255, 255, 255, 0.25);
+      border-radius: 20px;
+      padding: 4px 12px;
+      font-size: 11px;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .welcome-hero h1 {
+      font-size: 20px;
+      position: relative;
+      z-index: 2;
+      line-height: 1.45;
+      font-weight: normal;
+    }
+    .welcome-hero p {
+      font-size: 12.5px;
+      opacity: 0.95;
+      max-width: 720px;
+      line-height: 1.6;
+      position: relative;
+      z-index: 2;
+      font-weight: 400;
+    }
+
+    /* 🌟 MODERN STAT CARDS */
     .stat-grid {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
@@ -499,24 +545,32 @@
 
     .stat-card {
       background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 18px;
-      padding: 16px 18px;
+      border: 1.5px solid var(--border);
+      border-radius: 20px;
+      padding: 18px 20px;
       display: flex;
-      align-items: center;
+      flex-direction: column;
+      justify-content: space-between;
       gap: 14px;
       box-shadow: var(--card-shadow);
-      transition: all 0.2s ease;
+      position: relative;
+      overflow: hidden;
     }
     .stat-card:hover {
-      transform: translateY(-3px);
+      transform: translateY(-4px);
       box-shadow: var(--card-shadow-hover);
       border-color: var(--primary);
     }
 
+    .stat-card-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
     .stat-icon-wrap {
-      width: 48px;
-      height: 48px;
+      width: 46px;
+      height: 46px;
       border-radius: 14px;
       display: flex;
       align-items: center;
@@ -524,50 +578,99 @@
       font-size: 20px;
       flex-shrink: 0;
     }
-    .stat-icon-wrap.blue  { background: #eff6ff; color: #2563eb; }
-    .stat-icon-wrap.green { background: #f0fdf4; color: #16a34a; }
-    .stat-icon-wrap.pink  { background: #fdf2f8; color: #db2777; }
-    .stat-icon-wrap.amber { background: #fffbeb; color: #d97706; }
+    .stat-icon-wrap.blue   { background: #eff6ff; color: #2563eb; }
+    .stat-icon-wrap.green  { background: #f0fdf4; color: #16a34a; }
+    .stat-icon-wrap.pink   { background: #fdf2f8; color: #db2777; }
+    .stat-icon-wrap.amber  { background: #fffbeb; color: #d97706; }
 
     [data-theme="dark"] .stat-icon-wrap.blue  { background: rgba(37, 99, 235, 0.2); }
     [data-theme="dark"] .stat-icon-wrap.green { background: rgba(22, 163, 74, 0.2); }
     [data-theme="dark"] .stat-icon-wrap.pink  { background: rgba(219, 39, 119, 0.2); }
     [data-theme="dark"] .stat-icon-wrap.amber { background: rgba(217, 119, 6, 0.2); }
 
-    .stat-digit { font-size: 22px; font-weight: 800; color: var(--text); line-height: 1.2; }
-    .stat-title { font-size: 11.5px; font-weight: 600; color: var(--text-muted); margin-top: 2px; }
+    .stat-sub-pill {
+      font-size: 10px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: 12px;
+      background: var(--surface-elevated);
+      color: var(--text-muted);
+      border: 1px solid var(--border);
+    }
 
+    .stat-digit { font-size: 26px; font-weight: 800; color: var(--text); line-height: 1.15; }
+    .stat-title { font-size: 11.5px; font-weight: 600; color: var(--text-muted); margin-top: 3px; }
+
+    /* 🌟 GENDER PROPORTION BAR (របារយេនឌ័រប្រុស-ស្រី) */
+    .gender-ratio-panel {
+      background: var(--surface);
+      border: 1.5px solid var(--border);
+      border-radius: 20px;
+      padding: 16px 20px;
+      box-shadow: var(--card-shadow);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .gender-ratio-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 12.5px;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .gender-stacked-bar {
+      width: 100%;
+      height: 12px;
+      border-radius: 20px;
+      background: #e2e8f0;
+      overflow: hidden;
+      display: flex;
+    }
+    .male-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #2563eb, #3b82f6);
+      transition: width 0.9s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+    .female-bar-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #ec4899, #f43f5e);
+      transition: width 0.9s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+
+    /* SPLIT GRID */
     .dash-split-grid {
       display: grid;
-      grid-template-columns: 1.3fr 1fr;
-      gap: 18px;
+      grid-template-columns: 1.35fr 1fr;
+      gap: 20px;
     }
 
     .dash-panel {
       background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 20px 22px;
+      border: 1.5px solid var(--border);
+      border-radius: 22px;
+      padding: 20px 24px;
       box-shadow: var(--card-shadow);
     }
     .dash-panel-header {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-bottom: 16px;
+      margin-bottom: 18px;
     }
-    .dash-panel-title { font-size: 14px; font-weight: 700; color: var(--text); display: flex; align-items: center; gap: 8px; }
+    .dash-panel-title { font-size: 14.5px; font-weight: 700; color: var(--text); display: flex; align-items: center; gap: 8px; }
 
-    /* Bar Chart Area */
+    /* BAR CHART */
     .bar-chart-container {
       width: 100%;
       overflow-x: auto;
-      padding-bottom: 6px;
+      padding-bottom: 8px;
       -webkit-overflow-scrolling: touch;
     }
     .bar-chart-stage {
       min-width: 440px;
-      height: 230px;
+      height: 220px;
       display: flex;
       align-items: stretch;
       position: relative;
@@ -591,8 +694,8 @@
       display: flex;
       align-items: flex-end;
       justify-content: space-around;
-      gap: 10px;
-      border-bottom: 1px solid var(--border);
+      gap: 12px;
+      border-bottom: 1.5px solid var(--border);
       height: 100%;
     }
     .bar-col {
@@ -604,82 +707,77 @@
       justify-content: flex-end;
       position: relative;
     }
-    .bar-val-txt { font-size: 10.5px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+    .bar-val-txt { font-size: 11px; font-weight: 800; color: var(--text); margin-bottom: 5px; }
     .bar-fill {
-      width: 24px;
+      width: 26px;
       max-width: 70%;
-      background: linear-gradient(180deg, #3b82f6, #6366f1);
-      border-radius: 6px 6px 2px 2px;
-      box-shadow: 0 4px 10px rgba(59, 130, 246, 0.25);
+      background: linear-gradient(180deg, #3b82f6 0%, #6366f1 100%);
+      border-radius: 8px 8px 3px 3px;
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
       transition: height 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
     }
     .bar-label-txt {
       position: absolute;
       bottom: -24px;
       font-size: 10.5px;
-      font-weight: 600;
+      font-weight: 700;
       color: var(--text-muted);
       white-space: nowrap;
     }
 
+    /* 🌟 MODERN QUICK TILES */
     .quick-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
+      gap: 12px;
     }
     .quick-item-card {
-      min-height: 84px;
+      min-height: 90px;
       background: var(--surface-elevated);
-      border: 1px solid var(--border);
-      border-radius: 15px;
+      border: 1.5px solid var(--border);
+      border-radius: 16px;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      gap: 5px;
+      gap: 6px;
       cursor: pointer;
-      transition: all 0.2s ease;
       text-decoration: none;
+      padding: 10px 6px;
     }
-    .quick-item-card:active { transform: scale(0.96); }
     .quick-item-card:hover {
-      transform: translateY(-2px);
+      transform: translateY(-3px);
       border-color: var(--primary);
-      box-shadow: 0 8px 16px rgba(37, 99, 235, 0.12);
-      background: var(--primary-soft);
+      box-shadow: 0 10px 20px rgba(37, 99, 235, 0.15);
+      background: var(--surface);
     }
-    .quick-item-card .qi { font-size: 20px; }
-    .quick-item-card .qt { font-size: 11px; font-weight: 600; color: var(--text); text-align: center; }
+    .quick-item-card .qi { font-size: 22px; }
+    .quick-item-card .qt { font-size: 11.5px; font-weight: 700; color: var(--text); text-align: center; }
 
+    /* CLASS BREAKDOWN */
     .class-progress-list { display: flex; flex-direction: column; gap: 12px; }
-    .class-prog-row { display: flex; align-items: center; gap: 10px; font-size: 12px; }
-    .class-prog-title { width: 80px; font-weight: 700; color: var(--text); flex-shrink: 0; }
-    .class-prog-track { flex: 1; height: 8px; background: var(--border-subtle); border-radius: 20px; overflow: hidden; }
-    .class-prog-fill { height: 100%; border-radius: 20px; background: linear-gradient(90deg, #3b82f6, #8b5cf6); transition: width 0.9s cubic-bezier(0.2, 0.8, 0.2, 1); }
-    .class-prog-count { width: 38px; text-align: right; font-weight: 700; color: var(--text-muted); }
+    .class-prog-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 8px 12px;
+      border-radius: 14px;
+      background: var(--surface-elevated);
+      border: 1px solid var(--border);
+    }
+    .class-prog-title { width: 85px; font-weight: 700; font-size: 12.5px; color: var(--text); flex-shrink: 0; }
+    .class-prog-track { flex: 1; height: 9px; background: var(--border-subtle); border-radius: 20px; overflow: hidden; }
+    .class-prog-fill { height: 100%; border-radius: 20px; background: linear-gradient(90deg, #2563eb, #8b5cf6); transition: width 0.9s cubic-bezier(0.2, 0.8, 0.2, 1); }
+    .class-badges-group { display: flex; align-items: center; gap: 8px; flex-shrink: 0; }
+    .class-sub-badge { font-size: 10px; font-weight: 700; padding: 2px 6px; border-radius: 6px; }
+    .class-sub-badge.male { background: rgba(37, 99, 235, 0.12); color: #2563eb; }
+    .class-sub-badge.female { background: rgba(236, 72, 153, 0.12); color: #db2777; }
+    .class-prog-count { width: 42px; text-align: right; font-weight: 800; font-size: 13px; color: var(--text); }
 
-    /* =========================================================
-       🪟 IFRAME VIEW
-    ========================================================= */
-    #iframeView {
-      padding: 0;
-      background: var(--surface);
-      overflow: hidden !important;
-    }
-    .iframe-container {
-      width: 100%;
-      height: 100%;
-      position: relative;
-      overflow: hidden;
-    }
-    #pageFrame {
-      width: 100%;
-      height: 100%;
-      border: none;
-      background: var(--surface);
-      overflow-y: auto;
-      -webkit-overflow-scrolling: touch;
-    }
+    /* IFRAME */
+    #iframeView { padding: 0; background: var(--surface); overflow: hidden !important; }
+    .iframe-container { width: 100%; height: 100%; position: relative; overflow: hidden; }
+    #pageFrame { width: 100%; height: 100%; border: none; background: var(--surface); overflow-y: auto; -webkit-overflow-scrolling: touch; }
 
     .loading-glass-overlay {
       position: absolute;
@@ -694,7 +792,6 @@
       opacity: 0;
       visibility: hidden;
       pointer-events: none;
-      transition: all 0.2s;
     }
     .loading-glass-overlay.show { opacity: 1; visibility: visible; pointer-events: auto; }
     .spinner-ring {
@@ -707,217 +804,6 @@
     }
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    /* WELCOME POPUP */
-    .welcome-popup {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      z-index: 9999;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      background: rgba(255, 255, 255, 0.96);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border: 1.5px solid rgba(37, 99, 235, 0.25);
-      border-radius: 18px;
-      padding: 12px 18px 12px 14px;
-      box-shadow: 0 16px 40px rgba(15, 23, 42, 0.16);
-      transform: translateY(-80px) scale(0.92);
-      opacity: 0;
-      pointer-events: none;
-      transition: all 0.45s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-      max-width: 90vw;
-    }
-
-    [data-theme="dark"] .welcome-popup {
-      background: rgba(17, 24, 39, 0.96);
-      border-color: rgba(96, 165, 250, 0.3);
-      box-shadow: 0 16px 45px rgba(0, 0, 0, 0.55);
-    }
-
-    .welcome-popup.show {
-      transform: translateY(0) scale(1);
-      opacity: 1;
-      pointer-events: auto;
-    }
-
-    .welcome-popup-icon {
-      width: 42px;
-      height: 42px;
-      border-radius: 13px;
-      background: linear-gradient(135deg, #2563eb, #8b5cf6);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 20px;
-      color: #fff;
-      flex-shrink: 0;
-    }
-
-    .welcome-popup-content { display: flex; flex-direction: column; gap: 2px; }
-    .welcome-popup-title { font-size: 13px; font-weight: 700; color: var(--text); }
-    .welcome-popup-msg { font-size: 11px; color: var(--text-muted); line-height: 1.4; }
-
-    .welcome-popup-close {
-      background: none;
-      border: none;
-      color: var(--text-muted);
-      cursor: pointer;
-      font-size: 14px;
-      padding: 4px;
-      margin-left: 6px;
-    }
-
-    /* MOBILE BOTTOM NAV */
-    .mobile-bottom-nav {
-      display: none;
-      position: fixed;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      height: var(--bottom-nav-h);
-      background: var(--topbar-bg);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border-top: 1px solid var(--border);
-      z-index: 40;
-      padding: 0 8px;
-      box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.05);
-      align-items: center;
-      justify-content: space-around;
-    }
-
-    .m-nav-item {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 3px;
-      flex: 1;
-      height: 100%;
-      cursor: pointer;
-      color: var(--text-muted);
-      text-decoration: none;
-      border-radius: 10px;
-      transition: all 0.15s ease;
-    }
-    .m-nav-item:active { transform: scale(0.92); }
-    .m-nav-item.active { color: var(--primary); font-weight: 700; }
-    .m-nav-item .m-icon { font-size: 18px; line-height: 1; }
-    .m-nav-item .m-txt { font-size: 10px; line-height: 1; }
-
-    /* MODAL: PROFILE */
-    .modal-backdrop {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.6);
-      backdrop-filter: blur(6px);
-      z-index: 100;
-      align-items: center;
-      justify-content: center;
-      padding: 16px;
-    }
-    .modal-backdrop.show { display: flex; }
-    .modal-dialog {
-      width: 440px;
-      max-width: 100%;
-      max-height: 90vh;
-      overflow-y: auto;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      box-shadow: 0 25px 60px rgba(0,0,0,0.3);
-      -webkit-overflow-scrolling: touch;
-    }
-
-    .modal-head-banner {
-      padding: 20px;
-      background: linear-gradient(135deg, #1e3a8a, #7c3aed);
-      color: #fff;
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-    .modal-close-btn {
-      position: absolute;
-      right: 14px;
-      top: 14px;
-      background: rgba(255,255,255,0.18);
-      border: none;
-      color: #fff;
-      width: 30px;
-      height: 30px;
-      border-radius: 50%;
-      cursor: pointer;
-      font-size: 14px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .modal-avatar-preview {
-      width: 80px;
-      height: 80px;
-      border-radius: 50%;
-      border: 3px solid #fff;
-      box-shadow: 0 6px 16px rgba(0,0,0,0.2);
-      object-fit: cover;
-      margin-top: 8px;
-    }
-
-    .modal-body { padding: 18px; }
-    .form-group-field { margin-bottom: 12px; }
-    .form-group-field label { display: block; font-size: 11.5px; font-weight: 700; margin-bottom: 5px; color: var(--text); }
-    .form-group-field input, .form-group-field select {
-      width: 100%;
-      padding: 10px 14px;
-      border-radius: 11px;
-      border: 1px solid var(--border);
-      background: var(--surface-elevated);
-      color: var(--text);
-      font-size: 13px;
-      outline: none;
-    }
-    .form-group-field input:focus { border-color: var(--primary); }
-
-    .modal-foot-actions {
-      display: flex;
-      justify-content: flex-end;
-      gap: 8px;
-      margin-top: 16px;
-    }
-    .btn-modal {
-      padding: 9px 18px;
-      border-radius: 11px;
-      font-size: 12.5px;
-      font-weight: 700;
-      cursor: pointer;
-      border: none;
-    }
-    .btn-modal.primary { background: var(--primary); color: #fff; }
-    .btn-modal.cancel { background: var(--border-subtle); color: var(--text); }
-
-    .toast-box {
-      position: fixed;
-      right: 20px;
-      bottom: 74px;
-      padding: 10px 16px;
-      border-radius: 12px;
-      background: #0f172a;
-      color: #fff;
-      font-size: 12px;
-      font-weight: 600;
-      z-index: 200;
-      opacity: 0;
-      transform: translateY(12px);
-      transition: all 0.25s;
-      pointer-events: none;
-    }
-    .toast-box.show { opacity: 1; transform: translateY(0); }
-
     /* RESPONSIVE */
     @media (max-width: 1024px) {
       .stat-grid { grid-template-columns: repeat(2, 1fr); }
@@ -926,22 +812,13 @@
 
     @media (max-width: 768px) {
       .sidebar {
-        position: fixed;
-        left: 0;
-        top: 0;
-        bottom: 0;
-        width: 275px !important;
-        transform: translateX(-100%);
-        z-index: 90;
+        position: fixed; left: 0; top: 0; bottom: 0; width: 275px !important;
+        transform: translateX(-100%); z-index: 90;
       }
       .sidebar.open { transform: translateX(0); }
       .sidebar.collapsed { width: 275px !important; }
-      .sidebar.collapsed .brand-meta,
-      .sidebar.collapsed .nav-text,
-      .sidebar.collapsed .dropdown-chevron {
-        display: inline !important;
-        opacity: 1 !important;
-        width: auto !important;
+      .sidebar.collapsed .brand-meta, .sidebar.collapsed .nav-text, .sidebar.collapsed .dropdown-chevron {
+        display: inline !important; opacity: 1 !important; width: auto !important;
       }
       .sidebar-close-mobile-btn { display: flex; }
       .collapse-toggle-btn { display: none; }
@@ -950,29 +827,22 @@
       .hamburger-btn { display: flex; }
       .user-name-txt, .date-badge { display: none; }
       .page-title { font-size: 14px; }
-
       .mobile-bottom-nav { display: flex; }
       
-      #dashboardView { padding: 14px 12px calc(var(--bottom-nav-h) + 14px); }
+      #dashboardView { padding: 14px 12px calc(var(--bottom-nav-h) + 16px); }
       #iframeView { padding-bottom: var(--bottom-nav-h); }
 
-      .welcome-hero { padding: 16px 16px; border-radius: 16px; }
+      .welcome-hero { padding: 18px 18px; border-radius: 18px; }
       .welcome-hero h1 { font-size: 16px; }
-      .welcome-hero p { font-size: 11.5px; }
+      .stat-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+      .stat-card { padding: 14px; gap: 10px; border-radius: 16px; }
+      .stat-digit { font-size: 21px; }
 
-      .stat-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
-      .stat-card { padding: 12px 14px; gap: 10px; border-radius: 14px; }
-      .stat-icon-wrap { width: 38px; height: 38px; font-size: 17px; border-radius: 10px; }
-      .stat-digit { font-size: 19px; }
-      .stat-title { font-size: 10px; }
-
-      .dash-panel { padding: 14px 14px; border-radius: 16px; }
-      .dash-panel-title { font-size: 13px; }
-      
+      .dash-panel { padding: 16px 14px; border-radius: 18px; }
       .quick-grid { grid-template-columns: repeat(3, 1fr); gap: 8px; }
-      .quick-item-card { min-height: 72px; border-radius: 12px; }
-      .quick-item-card .qi { font-size: 19px; }
-      .quick-item-card .qt { font-size: 10px; }
+      .quick-item-card { min-height: 76px; border-radius: 14px; }
+      .quick-item-card .qi { font-size: 20px; }
+      .quick-item-card .qt { font-size: 10.5px; }
 
       .modal-backdrop { align-items: flex-end; padding: 0; }
       .modal-dialog { width: 100%; max-height: 88vh; border-radius: 22px 22px 0 0; margin: 0; }
@@ -982,7 +852,7 @@
 
 <body>
 
-<!-- 🌟 POPUP ស្វាគមន៍ -->
+<!-- POPUP ស្វាគមន៍ -->
 <div id="welcomeGreetingPopup" class="welcome-popup">
   <div class="welcome-popup-icon" id="welcomePopupIcon">🌅</div>
   <div class="welcome-popup-content">
@@ -993,10 +863,9 @@
 </div>
 
 <div class="app-layout">
-
   <div id="mobileBackdrop" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.55); z-index:80; backdrop-filter:blur(3px);" onclick="closeSidebarMobile()"></div>
 
-  <!-- SIDEBAR NAVIGATION -->
+  <!-- SIDEBAR -->
   <aside class="sidebar" id="sidebar">
     <div class="brand-box">
       <div class="brand-info">
@@ -1087,10 +956,8 @@
     </div>
   </aside>
 
-  <!-- MAIN AREA -->
+  <!-- MAIN -->
   <main class="main-wrapper">
-    
-    <!-- Topbar -->
     <header class="topbar">
       <div class="topbar-left">
         <button class="hamburger-btn" onclick="openSidebarMobile()" title="ម៉ឺនុយ">☰</button>
@@ -1106,61 +973,92 @@
 
         <div class="user-profile-widget">
           <span class="user-name-txt" id="userNameLabel">...</span>
-          <div class="avatar-btn" id="userAvatar" onclick="openProfileModal()" title="ព័ត៌មានផ្ទាល់ខ្លួន">
-            👤
-          </div>
+          <div class="avatar-btn" id="userAvatar" onclick="openProfileModal()" title="ព័ត៌មានផ្ទាល់ខ្លួន">👤</div>
           <button class="btn-logout" onclick="doLogout()">ចាកចេញ</button>
         </div>
       </div>
     </header>
 
-    <!-- Content Area -->
     <div class="content-area">
-
-      <!-- DASHBOARD VIEW -->
+      <!-- 🌟 MODERN DASHBOARD VIEW -->
       <div class="view-panel active" id="dashboardView">
         <div class="dash-container">
           
+          <!-- HERO -->
           <div class="welcome-hero">
+            <div class="hero-top-badges">
+              <span class="hero-chip">🟢 ប្រព័ន្ធសកម្មធម្មតា</span>
+              <span class="hero-chip">🏫 ឆ្នាំសិក្សា ២០២៥-២០២៦</span>
+              <span class="hero-chip" id="liveClockBadge">⏰ ថ្ងៃនេះ</span>
+            </div>
             <h1 class="f-moul" id="heroGreeting">សូមស្វាគមន៍មកកាន់ប្រព័ន្ធគ្រប់គ្រងសិស្ស 👋</h1>
-            <p id="heroSubGreeting">តាមដានទិន្នន័យសិស្ស វត្តមាន ពិន្ទុ និងឯកសារផ្សេងៗ របស់សាលាបឋមសិក្សាកំពង់ល្ពៅ បានយ៉ាងងាយស្រួល និងរហ័សទាន់ចិត្ត។</p>
+            <p id="heroSubGreeting">ប្រព័ន្ធគ្រប់គ្រងសិស្ស សាលាបឋមសិក្សាកំពង់ល្ពៅ ជួយសម្រួលការងារកត់ត្រាវត្តមាន ស្រង់ពិន្ទុ និងរៀបចំឯកសាររដ្ឋបាលបានលឿនរហ័ស និងមានប្រសិទ្ធភាពខ្ពស់។</p>
           </div>
 
+          <!-- STATS -->
           <div class="stat-grid">
             <div class="stat-card">
-              <div class="stat-icon-wrap blue">👨‍🎓</div>
+              <div class="stat-card-top">
+                <div class="stat-icon-wrap blue">👨‍🎓</div>
+                <span class="stat-sub-pill">សរុបទាំងអស់</span>
+              </div>
               <div>
                 <div class="stat-digit" id="statTotal">0</div>
-                <div class="stat-title">សិស្សសរុប</div>
+                <div class="stat-title">ចំនួនសិស្សសរុប</div>
               </div>
             </div>
+
             <div class="stat-card">
-              <div class="stat-icon-wrap green">✅</div>
+              <div class="stat-card-top">
+                <div class="stat-icon-wrap green">✅</div>
+                <span class="stat-sub-pill" id="activeRateBadge">100% កំពុងរៀន</span>
+              </div>
               <div>
                 <div class="stat-digit" id="statActive">0</div>
                 <div class="stat-title">សិស្សសកម្ម</div>
               </div>
             </div>
+
             <div class="stat-card">
-              <div class="stat-icon-wrap pink">👧</div>
+              <div class="stat-card-top">
+                <div class="stat-icon-wrap pink">👧</div>
+                <span class="stat-sub-pill" id="femalePercentBadge">0% ស្រី</span>
+              </div>
               <div>
                 <div class="stat-digit" id="statFemale">0</div>
-                <div class="stat-title">សិស្សស្រី</div>
+                <div class="stat-title">សិស្សស្រីសរុប</div>
               </div>
             </div>
+
             <div class="stat-card">
-              <div class="stat-icon-wrap amber">🏫</div>
+              <div class="stat-card-top">
+                <div class="stat-icon-wrap amber">🏫</div>
+                <span class="stat-sub-pill">កម្រិតសិក្សា</span>
+              </div>
               <div>
                 <div class="stat-digit" id="statClasses">0</div>
-                <div class="stat-title">ថ្នាក់រៀន</div>
+                <div class="stat-title">ថ្នាក់រៀនសរុប</div>
               </div>
             </div>
           </div>
 
+          <!-- 🌟 GENDER RATIO VISUAL BAR -->
+          <div class="gender-ratio-panel">
+            <div class="gender-ratio-header">
+              <span>👥 សមាមាត្រយេនឌ័រទូទាំងសាលា</span>
+              <span style="font-size: 11px; color: var(--text-muted);" id="genderRatioText">ប្រុស ០ នាក់ • ស្រី ០ នាក់</span>
+            </div>
+            <div class="gender-stacked-bar">
+              <div class="male-bar-fill" id="maleRatioFill" style="width: 50%;" title="សិស្សប្រុស"></div>
+              <div class="female-bar-fill" id="femaleRatioFill" style="width: 50%;" title="សិស្សស្រី"></div>
+            </div>
+          </div>
+
+          <!-- SPLIT -->
           <div class="dash-split-grid">
             <div class="dash-panel">
               <div class="dash-panel-header">
-                <div class="dash-panel-title">📊 ចំនួនសិស្សតាមថ្នាក់</div>
+                <div class="dash-panel-title">📊 ស្ថិតិចំនួនសិស្សតាមកម្រិតថ្នាក់</div>
               </div>
               <div class="bar-chart-container">
                 <div class="bar-chart-stage" id="barChart">
@@ -1172,72 +1070,66 @@
 
             <div class="dash-panel">
               <div class="dash-panel-header">
-                <div class="dash-panel-title">⚡ ចូលប្រើលឿន</div>
+                <div class="dash-panel-title">⚡ ផ្លូវកាត់ប្រើប្រាស់លឿន</div>
               </div>
               <div class="quick-grid">
-                <div class="quick-item-card" onclick="navigateFromDash('addStudent')"><span class="qi">✍️</span><span class="qt">បញ្ចូលសិស្ស</span></div>
                 <div class="quick-item-card" onclick="navigateFromDash('attendance')"><span class="qi">📅</span><span class="qt">វត្តមាន</span></div>
                 <div class="quick-item-card" onclick="navigateFromDash('score')"><span class="qi">📊</span><span class="qt">ស្រង់ពិន្ទុ</span></div>
-                <div class="quick-item-card" onclick="navigateFromDash('rank')"><span class="qi">🏆</span><span class="qt">ចំណាត់ថ្នាក់</span></div>
+                <div class="quick-item-card" onclick="navigateFromDash('card')"><span class="qi">🪪</span><span class="qt">កាតសិស្ស</span></div>
                 <div class="quick-item-card" onclick="navigateFromDash('roster')"><span class="qi">🗒️</span><span class="qt">បញ្ជីសិស្ស</span></div>
+                <div class="quick-item-card" onclick="navigateFromDash('rank')"><span class="qi">🏆</span><span class="qt">ចំណាត់ថ្នាក់</span></div>
                 <div class="quick-item-card" onclick="navigateFromDash('report')"><span class="qi">📋</span><span class="qt">សៀវភៅតាមដាន</span></div>
               </div>
             </div>
           </div>
 
+          <!-- CLASS PROGRESS LIST -->
           <div class="dash-panel">
             <div class="dash-panel-header">
-              <div class="dash-panel-title">📈 ស្ថិតិសិស្សតាមថ្នាក់</div>
+              <div class="dash-panel-title">📈 ព័ត៌មានលម្អិតសិស្សតាមថ្នាក់នីមួយៗ</div>
             </div>
             <div class="class-progress-list" id="classBreakdownArea">
-              <div style="text-align:center; padding:20px; color:var(--text-muted); font-size:12px;">កំពុងទាញយកទិន្នន័យ...</div>
+              <div style="text-align:center; padding:25px; color:var(--text-muted); font-size:12px;">កំពុងទាញយកទិន្នន័យ...</div>
             </div>
           </div>
 
         </div>
       </div>
 
-      <!-- IFRAME VIEW -->
+      <!-- IFRAME -->
       <div class="view-panel" id="iframeView">
         <div class="iframe-container">
           <div class="loading-glass-overlay" id="loadingOverlay">
             <div class="spinner-ring"></div>
-            <div style="font-size:12px; font-weight:600; color:var(--text-muted);">កំពុងផ្ទុកទំព័រ...</div>
+            <div style="font-size:12px; font-weight:700; color:var(--text-muted);">កំពុងផ្ទុកទំព័រ...</div>
           </div>
           <iframe id="pageFrame" src="about:blank"></iframe>
         </div>
       </div>
-
     </div>
 
-    <!-- MOBILE BOTTOM NAVIGATION -->
+    <!-- MOBILE NAV -->
     <nav class="mobile-bottom-nav">
       <div class="m-nav-item active" id="mNavDash" onclick="navigate('dashboard', null)">
-        <span class="m-icon">🏠</span>
-        <span class="m-txt">ទំព័រដើម</span>
+        <span class="m-icon">🏠</span><span class="m-txt">ទំព័រដើម</span>
       </div>
       <div class="m-nav-item" id="mNavAtt" onclick="navigate('attendance', null)">
-        <span class="m-icon">📅</span>
-        <span class="m-txt">វត្តមាន</span>
+        <span class="m-icon">📅</span><span class="m-txt">វត្តមាន</span>
       </div>
       <div class="m-nav-item" id="mNavScores" onclick="navigate('score', null)">
-        <span class="m-icon">📊</span>
-        <span class="m-txt">ស្រង់ពិន្ទុ</span>
+        <span class="m-icon">📊</span><span class="m-txt">ស្រង់ពិន្ទុ</span>
       </div>
       <div class="m-nav-item" id="mNavReports" onclick="toggleSubmenu('reportsDropdown'); openSidebarMobile();">
-        <span class="m-icon">📁</span>
-        <span class="m-txt">របាយការណ៍</span>
+        <span class="m-icon">📁</span><span class="m-txt">របាយការណ៍</span>
       </div>
       <div class="m-nav-item" onclick="openSidebarMobile()">
-        <span class="m-icon">☰</span>
-        <span class="m-txt">ម៉ឺនុយ</span>
+        <span class="m-icon">☰</span><span class="m-txt">ម៉ឺនុយ</span>
       </div>
     </nav>
-
   </main>
 </div>
 
-<!-- MODAL: USER PROFILE -->
+<!-- MODAL: PROFILE -->
 <div class="modal-backdrop" id="profileModalBackdrop" onclick="if(event.target===this) closeProfileModal()">
   <div class="modal-dialog">
     <div class="modal-head-banner">
@@ -1293,7 +1185,6 @@
 
 <div class="toast-box" id="profileToast"></div>
 
-<!-- 🔗 ភ្ជាប់ API សម្រាប់ទំនាក់ទំនងជាមួយ Google Sheets -->
 <script src="api.js"></script>
 
 <script>
@@ -1304,34 +1195,16 @@
   let IS_ADMIN = String(USER_ROLE).trim().toLowerCase() === 'admin';
   let TEACHER_SEX = localStorage.getItem('krou_teacher_sex') || '';
 
-  // 🌟 ចែករំលែក Session ទៅឱ្យ subpage ក្នុង iframe អានបានភ្លាមៗ (0ms)
   window.SESSION_TOKEN = SESSION_TOKEN;
   window.TEACHER_NAME = TEACHER_NAME;
   window.USER_ROLE = USER_ROLE;
 
   const PAGE_TITLES = {
-    dashboard: "🏠 ទំព័រដើម",
-    roster: "🗒️ បញ្ជីរាយនាមសិស្ស",
-    addStudent: "✍️ បញ្ចូលសិស្សថ្មី",
-    edit: "✏️ កែប្រែ/លុបទិន្នន័យ",
-    editStudent: "✏️ កែប្រែ/លុបទិន្នន័យ",
-    card: "🪪 កាតសិស្ស (ID Card)",
-    cards: "🪪 កាតសិស្ស (ID Card)",
-    group: "👥 បែងចែកជាក្រុម",
-    groups: "👥 បែងចែកជាក្រុម",
-    wheel: "🎡 បង្វិលកង់ជ្រើសរើស",
-    attendance: "📅 ស្រង់វត្តមានសិស្ស",
-    score: "📊 ស្រង់ពិន្ទុសិស្ស",
-    scores: "📊 ស្រង់ពិន្ទុសិស្ស",
-    rank: "🏆 តារាងចំណាត់ថ្នាក់",
-    honor: "🌟 តារាងកិត្តិយស",
-    honorRoll: "🌟 តារាងកិត្តិយស",
-    certificate: "🎖️ បណ្ណសរសើរ",
-    report: "📋 សៀវភៅតាមដាន",
-    remesterrecord: "📘 សៀវភៅសិក្ខាគារិក",
-    semesterRecord: "📘 សៀវភៅសិក្ខាគារិក",
-    teacher: "👨‍🏫 គ្រប់គ្រងគ្រូបង្រៀន",
-    teachers: "👨‍🏫 គ្រប់គ្រងគ្រូបង្រៀន"
+    dashboard: "🏠 ទំព័រដើម", roster: "🗒️ បញ្ជីរាយនាមសិស្ស", addStudent: "✍️ បញ្ចូលសិស្សថ្មី",
+    edit: "✏️ កែប្រែ/លុបទិន្នន័យ", card: "🪪 កាតសិស្ស (ID Card)", group: "👥 បែងចែកជាក្រុម",
+    wheel: "🎡 បង្វិលកង់ជ្រើសរើស", attendance: "📅 ស្រង់វត្តមានសិស្ស", score: "📊 ស្រង់ពិន្ទុសិស្ស",
+    rank: "🏆 តារាងចំណាត់ថ្នាក់", honor: "🌟 តារាងកិត្តិយស", certificate: "🎖️ បណ្ណសរសើរ",
+    report: "📋 សៀវភៅតាមដាន", remesterrecord: "📘 សៀវភៅសិក្ខាគារិក", teacher: "👨‍🏫 គ្រប់គ្រងគ្រូបង្រៀន"
   };
 
   function getTeacherFormalTitle(sex, rawName) {
@@ -1371,7 +1244,7 @@
 
     if (popupEl) {
       setTimeout(() => popupEl.classList.add('show'), 350);
-      setTimeout(() => closeGreetingPopup(), 5000);
+      setTimeout(() => closeGreetingPopup(), 4500);
     }
   }
 
@@ -1430,29 +1303,12 @@
 
   function mapPageToFile(page) {
     var map = {
-      'dashboard': 'dashboard',
-      'addStudent': 'addStudent',
-      'edit': 'edit',
-      'editStudent': 'edit',
-      'card': 'card',
-      'cards': 'card',
-      'group': 'group',
-      'groups': 'group',
-      'wheel': 'wheel',
-      'attendance': 'attendance',
-      'attendancePage': 'attendance',
-      'score': 'score',
-      'scores': 'score',
-      'roster': 'roster',
-      'rank': 'rank',
-      'honor': 'honor',
-      'honorRoll': 'honor',
-      'certificate': 'certificate',
-      'report': 'report',
-      'remesterrecord': 'remesterrecord',
-      'semesterRecord': 'remesterrecord',
-      'teacher': 'teacher',
-      'teachers': 'teacher'
+      'dashboard': 'dashboard', 'addStudent': 'addStudent', 'edit': 'edit', 'editStudent': 'edit',
+      'card': 'card', 'cards': 'card', 'group': 'group', 'groups': 'group', 'wheel': 'wheel',
+      'attendance': 'attendance', 'attendancePage': 'attendance', 'score': 'score', 'scores': 'score',
+      'roster': 'roster', 'rank': 'rank', 'honor': 'honor', 'honorRoll': 'honor',
+      'certificate': 'certificate', 'report': 'report', 'remesterrecord': 'remesterrecord',
+      'semesterRecord': 'remesterrecord', 'teacher': 'teacher', 'teachers': 'teacher'
     };
     return map[page] || page;
   }
@@ -1461,7 +1317,6 @@
     if (!page) return;
     currentPage = page;
     localStorage.setItem('krou_active_page', page);
-    
     var cleanFile = mapPageToFile(page);
 
     document.querySelectorAll('.nav-link-btn, .nav-sub-item').forEach(n => n.classList.remove('active'));
@@ -1470,14 +1325,11 @@
 
     document.querySelectorAll('.m-nav-item').forEach(m => m.classList.remove('active'));
     if (cleanFile === 'dashboard') {
-      var mb = document.getElementById('mNavDash');
-      if (mb) mb.classList.add('active');
+      var mb = document.getElementById('mNavDash'); if (mb) mb.classList.add('active');
     } else if (cleanFile === 'attendance') {
-      var mb = document.getElementById('mNavAtt');
-      if (mb) mb.classList.add('active');
+      var mb = document.getElementById('mNavAtt'); if (mb) mb.classList.add('active');
     } else if (cleanFile === 'score') {
-      var mb = document.getElementById('mNavScores');
-      if (mb) mb.classList.add('active');
+      var mb = document.getElementById('mNavScores'); if (mb) mb.classList.add('active');
     }
 
     var reportPages = ['roster', 'rank', 'honor', 'honorRoll', 'certificate', 'report', 'remesterrecord', 'semesterRecord'];
@@ -1505,7 +1357,7 @@
     iframeView.classList.add('active');
     overlay.classList.add('show');
 
-    // 🌟 ⚡ ANTI-CACHE BUSTER: បង្ខំឱ្យទាញយកកូដថ្មីពី GitHub ជានិច្ច គ្មានថ្ងៃជាប់ CACHE ចាស់ឡើយ
+    // 🌟 Anti-Cache Buster
     frame.src = cleanFile + '.html?v=' + Date.now();
   }
 
@@ -1515,17 +1367,9 @@
     document.getElementById('loadingOverlay').classList.remove('show');
   });
 
-  function toggleSidebarCollapse() {
-    document.getElementById('sidebar').classList.toggle('collapsed');
-  }
-  function openSidebarMobile() {
-    document.getElementById('sidebar').classList.add('open');
-    document.getElementById('mobileBackdrop').style.display = 'block';
-  }
-  function closeSidebarMobile() {
-    document.getElementById('sidebar').classList.remove('open');
-    document.getElementById('mobileBackdrop').style.display = 'none';
-  }
+  function toggleSidebarCollapse() { document.getElementById('sidebar').classList.toggle('collapsed'); }
+  function openSidebarMobile() { document.getElementById('sidebar').classList.add('open'); document.getElementById('mobileBackdrop').style.display = 'block'; }
+  function closeSidebarMobile() { document.getElementById('sidebar').classList.remove('open'); document.getElementById('mobileBackdrop').style.display = 'none'; }
 
   var khDigits = ['០','១','២','៣','៤','៥','៦','៧','៨','៩'];
   var khDays = ["អាទិត្យ","ចន្ទ","អង្គារ","ពុធ","ព្រហស្បតិ៍","សុក្រ","សៅរ៍"];
@@ -1536,6 +1380,8 @@
   function setTodayPill() {
     var d = new Date();
     document.getElementById('todayPill').innerText = 'ថ្ងៃ' + khDays[d.getDay()] + ' ទី' + toKhNum(d.getDate()) + ' ខែ' + khMonths[d.getMonth()] + ' ឆ្នាំ' + toKhNum(d.getFullYear());
+    var clockEl = document.getElementById('liveClockBadge');
+    if (clockEl) clockEl.innerText = 'ថ្ងៃ' + khDays[d.getDay()] + ' ទី' + toKhNum(d.getDate());
   }
 
   function animateCount(id, target) {
@@ -1586,10 +1432,28 @@
       if (typeof callBackendApi !== 'function') return;
       var stats = await callBackendApi('getDashboardStats');
       if (!stats) return;
-      animateCount('statTotal', stats.totalStudents || 0);
-      animateCount('statActive', stats.activeCount || 0);
-      animateCount('statFemale', stats.femaleCount || 0);
+
+      var total = stats.totalStudents || 0;
+      var active = stats.activeCount || 0;
+      var female = stats.femaleCount || 0;
+      var male = stats.maleCount || Math.max(0, total - female);
+
+      animateCount('statTotal', total);
+      animateCount('statActive', active);
+      animateCount('statFemale', female);
       animateCount('statClasses', stats.totalClasses || 0);
+
+      // 🌟 សមាមាត្រយេនឌ័រ
+      var fPct = total > 0 ? Math.round((female / total) * 100) : 0;
+      var mPct = total > 0 ? (100 - fPct) : 0;
+      var actRate = total > 0 ? Math.round((active / total) * 100) : 100;
+
+      document.getElementById('femalePercentBadge').innerText = toKhNum(fPct) + '% ស្រី';
+      document.getElementById('activeRateBadge').innerText = toKhNum(actRate) + '% កំពុងរៀន';
+      document.getElementById('genderRatioText').innerText = `ប្រុស ${toKhNum(male)} នាក់ (${toKhNum(mPct)}%) • ស្រី ${toKhNum(female)} នាក់ (${toKhNum(fPct)}%)`;
+      
+      document.getElementById('maleRatioFill').style.width = mPct + '%';
+      document.getElementById('femaleRatioFill').style.width = fPct + '%';
 
       var data = stats.classBreakdown || [];
       renderBarChart(data);
@@ -1604,10 +1468,15 @@
         var h = '';
         data.forEach(c => {
           var count = Number(c.count || 0), pct = Math.round((count / max) * 100);
+          var mC = c.male || 0, fC = c.female || 0;
           h += `
             <div class="class-prog-row">
               <div class="class-prog-title">ថ្នាក់ទី ${c.className}</div>
               <div class="class-prog-track"><div class="class-prog-fill" style="width:${pct}%;"></div></div>
+              <div class="class-badges-group">
+                <span class="class-sub-badge male">👦 ${toKhNum(mC)}</span>
+                <span class="class-sub-badge female">👧 ${toKhNum(fC)}</span>
+              </div>
               <div class="class-prog-count">${toKhNum(count)}</div>
             </div>
           `;
@@ -1638,9 +1507,7 @@
         document.getElementById('profilePhotoPreview').style.display = 'block';
         document.getElementById('profileAvatarPlaceholder').style.display = 'none';
       }
-    } catch(err) {
-      console.error(err);
-    }
+    } catch(err) { console.error(err); }
   }
 
   function closeProfileModal() { document.getElementById('profileModalBackdrop').classList.remove('show'); }
