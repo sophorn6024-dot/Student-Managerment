@@ -92,7 +92,7 @@
     }
 
     /* =========================================================
-       🧭 SIDEBAR (គ្មាន Submenu ទៀតទេ)
+       🧭 SIDEBAR
     ========================================================= */
     .sidebar {
       width: var(--sidebar-w);
@@ -211,8 +211,11 @@
     .nav-icon { font-size: 16px; width: 22px; text-align: center; flex-shrink: 0; }
     .sidebar.collapsed .nav-text { opacity: 0; width: 0; display: none; }
 
+    /* =========================================================
+       🌟 ដាក់ប៊ូតុងលាក់/បង្រួមនៅខាងក្រោម (FOOTER)
+    ========================================================= */
     .sidebar-footer {
-      padding: 14px;
+      padding: 12px 10px;
       border-top: 1px solid rgba(255, 255, 255, 0.08);
       display: flex;
       flex-direction: column;
@@ -221,19 +224,32 @@
 
     .collapse-toggle-btn {
       width: 100%;
-      height: 36px;
-      border-radius: 10px;
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      background: rgba(255, 255, 255, 0.06);
+      height: 40px;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      background: rgba(255, 255, 255, 0.08);
       color: #fff;
       display: flex;
       align-items: center;
       justify-content: center;
+      gap: 10px;
       cursor: pointer;
       font-size: 13px;
-      transition: all 0.2s;
+      font-weight: 600;
+      transition: all 0.2s ease;
     }
-    .collapse-toggle-btn:hover { background: rgba(255, 255, 255, 0.14); }
+    .collapse-toggle-btn:hover {
+      background: rgba(255, 255, 255, 0.16);
+      border-color: rgba(255, 255, 255, 0.28);
+    }
+    .collapse-icon {
+      font-size: 13px;
+      display: inline-block;
+      transition: transform 0.2s ease;
+    }
+    .sidebar.collapsed .collapse-toggle-btn span:last-child {
+      display: none;
+    }
 
     .admin-clear-btn {
       width: 100%;
@@ -281,8 +297,9 @@
     }
 
     .topbar-left { display: flex; align-items: center; gap: 12px; min-width: 0; }
+    
     .hamburger-btn {
-      display: none;
+      display: flex;
       background: var(--surface);
       border: 1px solid var(--border);
       width: 38px;
@@ -294,7 +311,13 @@
       align-items: center;
       justify-content: center;
       box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+      transition: all 0.2s;
     }
+    .hamburger-btn:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+    }
+
     .page-title {
       font-size: 15.5px;
       font-weight: 700;
@@ -402,7 +425,7 @@
     }
 
     /* =========================================================
-       🌟 1. DASHBOARD VIEW (COMPACT & MODERN)
+       🌟 1. DASHBOARD VIEW
     ========================================================= */
     #dashboardView { padding: 22px 28px 45px; }
     .dash-container {
@@ -497,7 +520,6 @@
     }
     .dash-panel-title { font-size: 14px; font-weight: 700; color: var(--text); display: flex; align-items: center; gap: 8px; }
 
-    /* Bar Chart Area */
     .bar-chart-container {
       width: 100%;
       overflow-x: auto;
@@ -599,7 +621,7 @@
     .class-prog-count { width: 38px; text-align: right; font-weight: 700; color: var(--text-muted); }
 
     /* =========================================================
-       📁 2. REPORTS HUB VIEW (បង្ហាញជំនួសផ្ទាំង Dashboard)
+       📁 2. REPORTS HUB VIEW
     ========================================================= */
     #reportsHubView { padding: 22px 28px 45px; }
 
@@ -940,7 +962,6 @@
       .collapse-toggle-btn { display: none; }
 
       .topbar { height: 56px; padding: 0 14px; }
-      .hamburger-btn { display: flex; }
       .user-name-txt, .date-badge { display: none; }
       .page-title { font-size: 14px; }
 
@@ -988,9 +1009,10 @@
   <div id="mobileBackdrop" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.55); z-index:80; backdrop-filter:blur(3px);" onclick="closeSidebarMobile()"></div>
 
   <!-- =========================================================
-       🧭 SIDEBAR (លុប Dropdown រង គ្មាន Submenu ទៀតទេ)
+       🧭 SIDEBAR
   ========================================================= -->
   <aside class="sidebar" id="sidebar">
+    <!-- Brand Box ស្អាតគ្មានប៊ូតុងខាងលើទៀតទេ -->
     <div class="brand-box">
       <div class="brand-info">
         <div class="brand-logo">🏫</div>
@@ -999,6 +1021,7 @@
           <div class="brand-sub">កំពង់ល្ពៅ · គ្រប់គ្រងសិស្ស</div>
         </div>
       </div>
+      <!-- ប៊ូតុងបិទសម្រាប់ Mobile -->
       <button class="sidebar-close-mobile-btn" onclick="closeSidebarMobile()">✕</button>
     </div>
 
@@ -1035,7 +1058,7 @@
         <span class="nav-icon">📊</span><span class="nav-text">ស្រង់ពិន្ទុ</span>
       </div>
 
-      <!-- 🌟 ប៊ូតុងរបាយការណ៍ទោល (ចុចទៅបើក Hub ភ្លាម គ្មានម៉ឺនុយរងវែងអន្លាយ) -->
+      <!-- 🌟 ប៊ូតុងរបាយការណ៍ (បើក Hub ភ្លាមៗ) -->
       <div class="nav-link-btn" data-page="reportsHub" onclick="navigate('reportsHub', this)">
         <span class="nav-icon">📁</span><span class="nav-text">របាយការណ៍</span>
       </div>
@@ -1045,13 +1068,15 @@
       </div>
     </nav>
 
+    <!-- 🌟 ដាក់ប៊ូតុងលាក់/បង្រួមនៅខាងក្រោមនេះ -->
     <div class="sidebar-footer">
       <button class="admin-clear-btn" id="adminClearBtn" onclick="confirmClearAllData()">
         <span>🗑️</span><span>សម្អាតទិន្នន័យទាំងអស់</span>
       </button>
 
-      <button class="collapse-toggle-btn" onclick="toggleSidebarCollapse()" title="បង្រួម/ពង្រីក">
-        ◀
+      <button class="collapse-toggle-btn" id="collapseToggleBtn" onclick="toggleSidebarCollapse()" title="បង្រួមរបាចំហៀង">
+        <span id="collapseIcon" class="collapse-icon">◀</span>
+        <span id="collapseText" class="nav-text">បង្រួមម៉ឺនុយ</span>
       </button>
     </div>
   </aside>
@@ -1064,7 +1089,7 @@
     <!-- Topbar -->
     <header class="topbar">
       <div class="topbar-left">
-        <button class="hamburger-btn" onclick="openSidebarMobile()" title="ម៉ឺនុយ">☰</button>
+        <button class="hamburger-btn" onclick="handleMenuToggle()" title="លាក់/បង្ហាញម៉ឺនុយ">☰</button>
         <div class="page-title" id="pageTitle">🏠 ទំព័រដើម</div>
       </div>
 
@@ -1088,9 +1113,7 @@
     <!-- Content Area -->
     <div class="content-area">
 
-      <!-- =====================================================
-           1️⃣ DASHBOARD VIEW
-      ====================================================== -->
+      <!-- 1️⃣ DASHBOARD VIEW -->
       <div class="view-panel active" id="dashboardView">
         <div class="dash-container">
           
@@ -1176,9 +1199,7 @@
         </div>
       </div>
 
-      <!-- =====================================================
-           2️⃣ REPORTS HUB VIEW (បង្ហាញជំនួស Dashboard ខ្លី ខ្លឹម ស្អាត)
-      ====================================================== -->
+      <!-- 2️⃣ REPORTS HUB VIEW (ជំនួសផ្ទាំង Dashboard) -->
       <div class="view-panel" id="reportsHubView">
         <div class="dash-container">
           
@@ -1189,9 +1210,7 @@
             </button>
           </div>
 
-          <!-- កាតមុខងាររបាយការណ៍ ខ្លី ទំនើប គ្មានអក្សររៀបរាប់ច្រើន -->
           <div class="reports-grid-clean">
-            <!-- 1. Roster -->
             <div class="report-card-item" onclick="navigate('roster', null)">
               <div class="rci-left">
                 <div class="rci-icon">🗒️</div>
@@ -1200,7 +1219,6 @@
               <div class="rci-arrow">➔</div>
             </div>
 
-            <!-- 2. Rank -->
             <div class="report-card-item" onclick="navigate('rank', null)">
               <div class="rci-left">
                 <div class="rci-icon">🏆</div>
@@ -1209,7 +1227,6 @@
               <div class="rci-arrow">➔</div>
             </div>
 
-            <!-- 3. Honor -->
             <div class="report-card-item" onclick="navigate('honor', null)">
               <div class="rci-left">
                 <div class="rci-icon">🌟</div>
@@ -1218,7 +1235,6 @@
               <div class="rci-arrow">➔</div>
             </div>
 
-            <!-- 4. Certificate -->
             <div class="report-card-item" onclick="navigate('certificate', null)">
               <div class="rci-left">
                 <div class="rci-icon">🎖️</div>
@@ -1227,7 +1243,6 @@
               <div class="rci-arrow">➔</div>
             </div>
 
-            <!-- 5. Report Book -->
             <div class="report-card-item" onclick="navigate('report', null)">
               <div class="rci-left">
                 <div class="rci-icon">📋</div>
@@ -1236,7 +1251,6 @@
               <div class="rci-arrow">➔</div>
             </div>
 
-            <!-- 6. Semester Record -->
             <div class="report-card-item" onclick="navigate('remesterrecord', null)">
               <div class="rci-left">
                 <div class="rci-icon">📘</div>
@@ -1249,9 +1263,7 @@
         </div>
       </div>
 
-      <!-- =====================================================
-           3️⃣ IFRAME VIEW
-      ====================================================== -->
+      <!-- 3️⃣ IFRAME VIEW -->
       <div class="view-panel" id="iframeView">
         <div class="iframe-container">
           <div class="loading-glass-overlay" id="loadingOverlay">
@@ -1264,9 +1276,7 @@
 
     </div>
 
-    <!-- =========================================================
-         📱 MOBILE BOTTOM NAVIGATION
-    ========================================================= -->
+    <!-- MOBILE BOTTOM NAVIGATION -->
     <nav class="mobile-bottom-nav">
       <div class="m-nav-item active" id="mNavDash" onclick="navigate('dashboard', null)">
         <span class="m-icon">🏠</span>
@@ -1537,7 +1547,6 @@
       return;
     }
 
-    // 🌟 បង្ហាញផ្ទាំងរបាយការណ៍ជំនួស Dashboard
     if (cleanFile === 'reportsHub') {
       dashboardView.classList.remove('active');
       iframeView.classList.remove('active');
@@ -1545,7 +1554,6 @@
       return;
     }
 
-    // បើកចូលទំព័រអនុវត្តជាក់ស្តែងក្នុង iframe
     dashboardView.classList.remove('active');
     reportsHubView.classList.remove('active');
     iframeView.classList.add('active');
@@ -1563,9 +1571,31 @@
     document.getElementById('loadingOverlay').classList.remove('show');
   });
 
+  /* =========================================================
+     🌟 មុខងារបង្រួម/លាក់របាចំហៀង (TOGGLE SIDEBAR AT BOTTOM)
+  ========================================================= */
   function toggleSidebarCollapse() {
-    document.getElementById('sidebar').classList.toggle('collapsed');
+    var sidebar = document.getElementById('sidebar');
+    var isCollapsed = sidebar.classList.toggle('collapsed');
+    localStorage.setItem('krou_sidebar_collapsed', isCollapsed ? '1' : '0');
+    updateCollapseUI(isCollapsed);
   }
+
+  function updateCollapseUI(isCollapsed) {
+    var icon = document.getElementById('collapseIcon');
+    var btn = document.getElementById('collapseToggleBtn');
+    if (icon) icon.innerText = isCollapsed ? '▶' : '◀';
+    if (btn) btn.setAttribute('title', isCollapsed ? 'ពង្រីករបាចំហៀង' : 'បង្រួមរបាចំហៀង');
+  }
+
+  function handleMenuToggle() {
+    if (window.innerWidth <= 768) {
+      openSidebarMobile();
+    } else {
+      toggleSidebarCollapse();
+    }
+  }
+
   function openSidebarMobile() {
     document.getElementById('sidebar').classList.add('open');
     document.getElementById('mobileBackdrop').style.display = 'block';
@@ -1785,6 +1815,13 @@
   function bootAuthenticatedApp() {
     setTodayPill();
     initGreetings();
+
+    // ពិនិត្យទាញយកស្ថានភាពបង្រួមរបាដែលបានរក្សាទុក
+    if (localStorage.getItem('krou_sidebar_collapsed') === '1' && window.innerWidth > 768) {
+      document.getElementById('sidebar').classList.add('collapsed');
+      updateCollapseUI(true);
+    }
+
     navigate(currentPage, null);
   }
 
