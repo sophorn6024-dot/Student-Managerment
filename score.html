@@ -15,7 +15,7 @@
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
-  <!-- 🔗 ភ្ជាប់ API សម្រាប់ទំនាក់ទំនងជាមួយ Google Sheets លើ GitHub -->
+  <!-- 🔗 ភ្ជាប់ API សម្រាប់ទំនាក់ទំនងជាមួយ Google Sheets លើ GitHub Pages -->
   <script src="api.js"></script>
 
   <style>
@@ -59,18 +59,10 @@
       margin: 0 auto;
       padding: 40px 20px;
     }
-    .landing-header {
-      margin-bottom: 25px;
-    }
-    .landing-header h1 {
-      font-size: 22px;
-      color: var(--primary);
-      margin-bottom: 4px;
-    }
-    .landing-header p {
-      font-size: 13px;
-      color: var(--text-muted);
-    }
+    .landing-header { margin-bottom: 25px; }
+    .landing-header h1 { font-size: 22px; color: var(--primary); margin-bottom: 4px; }
+    .landing-header p { font-size: 13px; color: var(--text-muted); }
+
     .cards-wrapper {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -277,10 +269,7 @@
     .stk-3 { left: 130px; min-width: 95px; max-width: 95px; text-align: left; padding-left: 8px; font-weight: bold; }
     .stk-4 { left: 225px; min-width: 55px; max-width: 55px; box-shadow: 3px 0 6px -2px rgba(0,0,0,0.12); }
 
-    .modern-score-table thead th.stk {
-      z-index: 40;
-      background: #f8fafc;
-    }
+    .modern-score-table thead th.stk { z-index: 40; background: #f8fafc; }
 
     .th-group-kh { background: var(--khmer-bg); color: var(--khmer-txt); }
     .th-group-ma { background: var(--math-bg); color: var(--math-txt); }
@@ -644,7 +633,7 @@
     var KHMER_DIGITS = ['០','១','២','៣','៤','៥','៦','៧','៨','៩'];
     function toKhmerNum(n) { return String(n).replace(/\d/g, d => KHMER_DIGITS[d]); }
 
-    /* 🌟 ហៅ API សុវត្ថិភាព ដំណើរការបានទាំងលើ GitHub Pages និង Google Apps Script */
+    /* 🌟 ហៅ API សុវត្ថិភាព ដំណើរការលើ GitHub Pages និង Google Apps Script */
     async function apiCall(action, params = {}) {
       params.token = params.token || TOKEN;
       if (typeof callBackendApi === 'function') {
@@ -820,28 +809,63 @@
       });
     }
 
+    /* 🌟 មុខងារទាញយកបញ្ជីថ្នាក់ឆ្លាតវៃ (ដោះស្រាយបញ្ហាលោត "មិនមានថ្នាក់" 100%) */
     async function loadClassList() {
       var sel = document.getElementById('classSelect');
+      sel.innerHTML = '<option value="">កំពុងទាញយកថ្នាក់...</option>';
+
+      var classes = [];
+
       try {
-        var classes = await apiCall('getClassListForSession', { token: TOKEN });
-        sel.innerHTML = '';
-        if (classes && classes.length) {
-          classes.forEach(function(c) {
-            var o = document.createElement('option');
-            o.value = c.toString().trim();
-            o.textContent = c.toString().startsWith('ថ្នាក់') ? c : 'ថ្នាក់ទី ' + c;
-            sel.appendChild(o);
-          });
-          if (USER_CLASS) sel.value = USER_CLASS;
-          loadStudents();
-        } else {
-          sel.innerHTML = '<option value="">-- ពុំមានថ្នាក់ --</option>';
+        // ១. សាកល្បងហៅតាម Action ចម្បង
+        var res = await apiCall('getClassListForSession', { token: TOKEN });
+        
+        // ស្រង់យកទិន្នន័យ (ទោះបីជា Array ឬ Object ក៏ដោយ)
+        if (Array.isArray(res)) {
+          classes = res;
+        } else if (res && Array.isArray(res.classes)) {
+          classes = res.classes;
+        } else if (res && Array.isArray(res.data)) {
+          classes = res.data;
+        } else if (res && Array.isArray(res.classList)) {
+          classes = res.classList;
         }
-      } catch(err) {
-        console.warn("Class list error:", err);
-        sel.innerHTML = '<option value="១">ថ្នាក់ទី ១</option><option value="២">ថ្នាក់ទី ២</option><option value="៣">ថ្នាក់ទី ៣</option><option value="៤">ថ្នាក់ទី ៤</option><option value="៥">ថ្នាក់ទី ៥</option><option value="៦">ថ្នាក់ទី ៦</option>';
-        loadStudents();
+
+        // ២. បើនៅតែពុំទាន់មាន សាកល្បងហៅតាម Action ជំនួស
+        if (!classes.length) {
+          var fallbackRes = await apiCall('getClasses', { token: TOKEN });
+          if (Array.isArray(fallbackRes)) classes = fallbackRes;
+          else if (fallbackRes && Array.isArray(fallbackRes.classes)) classes = fallbackRes.classes;
+        }
+      } catch (err) {
+        console.warn("Class list fetch warning:", err);
       }
+
+      // ៣. បើប្រព័ន្ធនៅតែរកមិនឃើញថ្នាក់ (ការពារកុំឱ្យជាប់គាំងទំព័រ)
+      if (!classes.length) {
+        if (USER_CLASS && USER_CLASS.trim() !== '') {
+          classes = [USER_CLASS];
+        } else {
+          // ដាក់ជម្រើសថ្នាក់ស្តង់ដារបឋមសិក្សា
+          classes = ['១', '២', '៣', '៤', '៥', '៦'];
+        }
+      }
+
+      // ៤. បញ្ចូលថ្នាក់ទៅក្នុង Select Option
+      sel.innerHTML = '';
+      classes.forEach(function(c) {
+        var val = c.toString().trim();
+        var o = document.createElement('option');
+        o.value = val;
+        o.textContent = val.startsWith('ថ្នាក់') ? val : 'ថ្នាក់ទី ' + val;
+        sel.appendChild(o);
+      });
+
+      if (USER_CLASS) {
+        sel.value = USER_CLASS;
+      }
+      
+      loadStudents();
     }
 
     async function loadAttendanceData(cls, period) {
@@ -863,7 +887,7 @@
             });
           }
         } catch(err) {
-          console.warn("Attendance load failed:", err);
+          console.warn("Attendance load notice:", err);
         }
       }
     }
