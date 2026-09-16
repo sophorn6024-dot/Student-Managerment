@@ -6,13 +6,16 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>ស្រង់វត្តមានសិស្ស</title>
   
-  <!-- 🔤 Google Fonts Khmer -->
+  <!-- 🔤 Google Fonts Khmer & FontAwesome -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Battambang:wght@400;600;700;800&family=Kantumruy+Pro:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Moul&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
 
+  <!-- =========================================================
+       🎨 ផ្នែកទី ១ ៖ CSS STYLESHEET (រចនាបថ & ប្លង់ SCROLL)
+  ========================================================= -->
   <style>
     :root, [data-theme="light"] {
       --primary: #2563eb;
@@ -61,7 +64,7 @@
       font-family: 'Kantumruy Pro', 'Khmer OS Battambang', 'Battambang', sans-serif;
     }
 
-    /* 🌟 បើកសិទ្ធិ SCROLL ពេញលេញ មិនឱ្យគាំងឡើយ */
+    /* 🌟 បើកសិទ្ធិ SCROLL ពេញលេញ មិនឱ្យគាំងលើ TABLET/MOBILE */
     html {
       height: 100%;
       overflow-x: hidden;
@@ -79,11 +82,12 @@
       overflow-x: hidden;
       overflow-y: visible !important;
       -webkit-overflow-scrolling: touch;
-      padding: 14px 16px 140px; /* 🌟 ផ្ដល់ចន្លោះធំទូលាយ 140px នៅបាតក្រោមដើម្បីមើលសិស្សអស់ */
+      padding: 14px 16px 140px; /* ផ្ដល់ចន្លោះធំទូលាយ 140px ដើម្បីមើលសិស្សអស់ */
     }
 
     .f-moul { font-family: 'Khmer OS Muol Light', 'Moul', cursive; font-weight: normal; }
 
+    /* TOAST */
     #saveToast {
       visibility: hidden;
       min-width: 220px;
@@ -409,8 +413,8 @@
       backdrop-filter: blur(8px);
       -webkit-backdrop-filter: blur(8px);
       z-index: 999999 !important;
-      align-items: center !important;
-      justify-content: center !important;
+      align-items: center !important;     /* 🌟 ចំកណ្តាលអេក្រង់បេះបិទ */
+      justify-content: center !important;  /* 🌟 ចំកណ្តាលអេក្រង់បេះបិទ */
       padding: 16px !important;
     }
     .action-sheet-backdrop.show { display: flex !important; }
@@ -594,19 +598,59 @@
     .vertical-sun-text { display: inline-block; white-space: nowrap; transform: rotate(-90deg); font-size: 9.5px; font-weight: bold; line-height: 1; }
     .clean-lunar-input { font-size: 12.5px; font-weight: bold; color: #1e3a8a; border: none !important; background: transparent !important; text-align: center; width: 100%; max-width: 480px; outline: none; margin: 0 auto; display: block; }
 
+    /* 🌟 ប្លង់ស្ថិតិសង្ខេបបាតក្រោមតារាងតាមគំរូផ្លូវការក្រសួង */
+    .report-summary-footer {
+      width: 100%;
+      margin-top: 8px;
+      margin-bottom: 6px;
+      font-size: 10.5px;
+      color: #000000;
+      line-height: 1.8;
+      font-family: 'Khmer OS Battambang', 'Battambang', sans-serif;
+    }
+
+    .footer-row-1 {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: nowrap;
+      gap: 10px;
+    }
+
+    .footer-row-1 span {
+      white-space: nowrap;
+    }
+
+    .footer-row-2 {
+      text-align: left;
+      margin-top: 3px;
+      white-space: nowrap;
+    }
+
     @page { size: A4 landscape; margin: 5mm 6mm; }
     @media print {
       body { background: #fff !important; color: #000 !important; padding: 0 !important; }
       .top-nav-bar, #tabDailyView, #tabReportsMenu, #saveToast, #statusActionSheetModal, .viewer-top-bar { display: none !important; }
       #reportViewerModal { display: block !important; position: static !important; padding: 0 !important; background: transparent !important; }
       .report-paper-container { width: 100% !important; box-shadow: none !important; padding: 0 !important; }
+      .report-summary-footer {
+        font-size: 8.8px !important;
+        margin-top: 5px !important;
+        line-height: 1.6 !important;
+      }
     }
   </style>
 </head>
+
+<!-- =========================================================
+     🏛️ ផ្នែកទី ២ ៖ HTML STRUCTURE (តួខ្លួន និង MODAL)
+========================================================= -->
 <body>
 
+  <!-- TOAST -->
   <div id="saveToast"><i class="fa-solid fa-circle-check"></i> បានរក្សាទុកដោយជោគជ័យ</div>
 
+  <!-- TOP BAR -->
   <div class="top-nav-bar">
     <div class="tabs-group">
       <button class="tab-pill-btn active" id="btnTabDaily" onclick="switchNavTab('daily')">
@@ -622,6 +666,7 @@
           <span id="txtDisplayDate">1 កញ្ញា 2026</span>
         </button>
 
+        <!-- CALENDAR POPUP -->
         <div class="calendar-popup" id="calPopup">
           <div class="cal-head-selectors">
             <select id="calMonthSelect" onchange="renderCalendarDays()">
@@ -666,6 +711,7 @@
   <div id="tabDailyView">
     <div class="daily-layout-grid">
       
+      <!-- ផ្នែកសង្ខេបខាងឆ្វេង (Sticky Sidebar) -->
       <div class="daily-sidebar-card">
         <div style="font-size:12px; color:var(--text-muted);">
           <div>កាលបរិច្ឆេទជ្រើសរើស៖</div>
@@ -721,10 +767,11 @@
         </div>
 
         <div style="background:var(--surface-elevated); border-radius:12px; padding:10px; font-size:11.5px; color:var(--text-muted); line-height:1.45;">
-          💡 <b>ចំណាំ៖</b> ចុចលើ [វត្តមាន | អវត្តមាន | យឺត | ច្បាប់] ដើម្បីប្ដូរវត្តមានរហ័ស ឬចុចលើឈ្មោះដើម្បីបើកផ្ទាំងធំ។
+          💡 <b>ចំណាំ៖</b> ចុចលើ [វត្តមាន | អវត្តមាន | យឺត | ច្បាប់] ដើម្បីប្ដូរវត្តមានរហ័ស ឬចុចលើឈ្មោះសិស្សដើម្បីបើកផ្ទាំងជ្រើសរើស។
         </div>
       </div>
 
+      <!-- បញ្ជីសិស្សខាងស្ដាំ (Scrollable Area) -->
       <div class="daily-list-card">
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px; padding-bottom:10px; border-bottom:1px solid var(--border);">
           <div>
@@ -816,7 +863,7 @@
     </div>
   </div>
 
-  <!-- ================= 🌟 ACTION SHEET MODAL (CENTERED DEAD CENTER) ================= -->
+  <!-- ================= 🌟 ACTION SHEET MODAL (ចំកណ្តាលអេក្រង់បេះបិទ) ================= -->
   <div id="statusActionSheetModal" class="action-sheet-backdrop" onclick="closeStatusActionSheet()">
     <div class="action-sheet-card" onclick="event.stopPropagation()">
       <div class="sheet-header-row">
@@ -860,6 +907,9 @@
   <!-- 🔗 ភ្ជាប់ជាមួយ API ទំនាក់ទំនង Backend -->
   <script src="api.js"></script>
 
+  <!-- =========================================================
+       ⚙️ ផ្នែកទី ៣ ៖ JAVASCRIPT (តក្កវិជ្ជា & ស្ថិតិបាតក្រោមតារាង)
+  ========================================================= -->
   <script>
     function syncThemeWithParent() {
       var pTheme = (window.parent && window.parent.document && window.parent.document.documentElement.getAttribute('data-theme'))
@@ -1209,6 +1259,7 @@
                 <span style="font-size:11px; color:var(--text-muted); font-weight:normal;">(${s.sex || 'ប្រុស'})</span>
               </div>
               
+              <!-- 🌟 ជម្រើសចុចផ្ទាល់ P | A | L | C លឿនទាន់ចិត្ត -->
               <div class="quick-status-selector">
                 <button type="button" class="q-btn ${st==='P'?'active-P':''}" onclick="setStudentDirectStatus('${s.id}', 'P')">វត្តមាន</button>
                 <button type="button" class="q-btn ${st==='A'?'active-A':''}" onclick="setStudentDirectStatus('${s.id}', 'A')">អវត្តមាន</button>
@@ -1460,12 +1511,12 @@
           var ss = (s.sex || '').toString().trim().toLowerCase();
           return ss === 'ស្រី' || ss === 'f' || ss === 'female';
         }).length;
-        var maleCount = totalStudents - femaleCount;
         
         var totalSlots = totalStudents * actualSchoolDays;
         var totalAbsenceTimes = totalAllPerm + totalAllAbs;
         var actualPresentTimes = Math.max(0, totalSlots - totalAbsenceTimes);
         var percentAbsent = totalSlots > 0 ? ((totalAbsenceTimes / totalSlots) * 100).toFixed(2) : "0.00";
+        var percentAbsentComma = percentAbsent.replace('.', ',');
 
         var html = `
           <div class="rpt-header-banner">
@@ -1510,9 +1561,18 @@
             </tbody>
           </table>
 
-          <div style="display:flex; justify-content:space-between; margin-top:6px; font-size:10px; line-height:1.5;">
-            <div>សិស្សសរុប ៖ <strong>${totalStudents} នាក់</strong> (ស្រី <strong>${femaleCount}</strong>)</div>
-            <div>ចំនួនថ្ងៃរៀន ៖ <strong>${actualSchoolDays} ថ្ងៃ</strong> • ភាគរយអវត្តមាន ៖ <strong>${percentAbsent}%</strong></div>
+          <!-- 🌟 ស្ថិតិសង្ខេបបាតក្រោមតារាងតាមគំរូរូបភាព ១០០% -->
+          <div class="report-summary-footer">
+            <div class="footer-row-1">
+              <span>បញ្ឈប់បញ្ជីសិស្សត្រឹម &nbsp;&nbsp;<strong>${totalStudents} នាក់/ ស្រី ${femaleCount} នាក់</strong></span>
+              <span>ចំនួនពេលដែលសិស្សត្រូវមករៀន &nbsp;<strong>${totalSlots}</strong></span>
+              <span>ចំនួនពេលអវត្តមាន &nbsp;<strong>${totalAbsenceTimes}</strong></span>
+              <span>ចំនួនពេលដែលសិស្សត្រូវមករៀនពិតប្រាកដ &nbsp;<strong>${actualPresentTimes}</strong></span>
+              <span>ភាគរយអវត្តមាន &nbsp;<strong>${percentAbsentComma}%</strong></span>
+            </div>
+            <div class="footer-row-2">
+              បញ្ឈប់បញ្ជីក្នុងខែនេះនូវ ចំនួន &nbsp;<strong>${actualSchoolDays} ពេល</strong>
+            </div>
           </div>
 
           <div style="display:flex; justify-content:space-between; margin-top:20px; padding:0 30px;">
