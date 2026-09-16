@@ -2,59 +2,60 @@
 <html lang="km" data-theme="light">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>ប្រព័ន្ធគ្រប់គ្រងសិស្ស - KrouDigital</title>
 
-  <!-- 🔤 Google Fonts Khmer (Khmer OS Battambang & Moul) -->
+  <!-- 🔤 Google Fonts Khmer -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Battambang:wght@400;600;700;800;900&family=Moul&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Battambang:wght@400;600;700;900&family=Moul&display=swap" rel="stylesheet">
 
   <style>
-    /* ================= 🎨 THEME VARIABLES ================= */
-    :root, [data-theme="light"] {
+    /* =========================================================
+       🎨 THEME VARIABLES & SYSTEM CONFIG
+    ========================================================= */
+    :root {
       --primary: #2563eb;
       --primary-hover: #1d4ed8;
       --primary-soft: #eff6ff;
-      --bg: #f4f6fb;
+      --navy: #0f172a;
+      
+      /* Light Theme */
+      --bg: #f8fafc;
       --surface: #ffffff;
-      --surface-card: #ffffff;
-      --surface-elevated: #f1f5f9;
+      --surface-elevated: #ffffff;
       --border: #e2e8f0;
       --border-subtle: #f1f5f9;
       --text: #0f172a;
       --text-muted: #64748b;
       --text-soft: #94a3b8;
       
-      --topbar-bg: rgba(255, 255, 255, 0.92);
-      --sidebar-bg: linear-gradient(180deg, #090d16 0%, #0f172a 45%, #1e3a8a 100%);
-      --card-shadow: 0 4px 16px -2px rgba(15, 23, 42, 0.05);
-      --card-shadow-hover: 0 10px 25px -4px rgba(37, 99, 235, 0.12);
+      --topbar-bg: rgba(255, 255, 255, 0.85);
+      --sidebar-bg: linear-gradient(180deg, #090d16 0%, #0f172a 50%, #1e293b 100%);
+      --card-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.05);
+      --card-shadow-hover: 0 12px 30px -4px rgba(37, 99, 235, 0.12);
       
-      --sidebar-w: 250px;
-      --sidebar-w-collapsed: 76px;
+      --sidebar-w: 260px;
+      --sidebar-w-collapsed: 78px;
       --bottom-nav-h: 64px;
     }
 
+    /* 🌙 Dark Theme */
     [data-theme="dark"] {
-      --primary: #3b82f6;
-      --primary-hover: #60a5fa;
-      --primary-soft: rgba(59, 130, 246, 0.15);
-      --bg: #0b1120;
-      --surface: #151f32;
-      --surface-card: #151f32;
+      --bg: #090d16;
+      --surface: #111827;
       --surface-elevated: #1e293b;
-      --border: #23324d;
+      --border: #1f2937;
       --border-subtle: #1e293b;
       --text: #f8fafc;
       --text-muted: #94a3b8;
       --text-soft: #64748b;
       
-      --topbar-bg: rgba(21, 31, 50, 0.92);
+      --topbar-bg: rgba(17, 24, 39, 0.88);
       --sidebar-bg: linear-gradient(180deg, #030712 0%, #0b1120 50%, #0f172a 100%);
-      --card-shadow: 0 6px 20px rgba(0, 0, 0, 0.45);
-      --card-shadow-hover: 0 12px 30px rgba(0, 0, 0, 0.65);
+      --card-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.45);
+      --card-shadow-hover: 0 12px 30px -4px rgba(0, 0, 0, 0.65);
+      --primary-soft: rgba(37, 99, 235, 0.15);
     }
 
     * {
@@ -63,152 +64,319 @@
       padding: 0;
       font-family: 'Khmer OS Battambang', 'Battambang', sans-serif;
       -webkit-tap-highlight-color: transparent;
-      transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+      letter-spacing: 0.1px;
     }
 
-    html, body, button, input, select {
-      font-family: 'Khmer OS Battambang', 'Battambang', sans-serif;
-    }
-
-    /* 🌟 ដោះស្រាយបញ្ហាកម្ពស់អេក្រង់ (100dvh) */
     html, body {
       width: 100vw;
       height: 100vh;
-      height: 100dvh;
       background: var(--bg);
       color: var(--text);
       overflow: hidden;
       position: fixed;
-      font-size: 13px;
+      font-size: 13.5px;
     }
 
     .f-moul { 
       font-family: 'Khmer OS Muol Light', 'Moul', cursive !important; 
       font-weight: normal; 
+      letter-spacing: 0.5px; 
     }
 
     .app-layout {
       display: flex;
       width: 100vw;
       height: 100vh;
-      height: 100dvh;
       overflow: hidden;
       position: relative;
     }
 
-    /* ================= SIDEBAR ================= */
+    /* =========================================================
+       🧭 SIDEBAR (គ្មាន Submenu ទៀតទេ)
+    ========================================================= */
     .sidebar {
       width: var(--sidebar-w);
       height: 100vh;
-      height: 100dvh;
       background: var(--sidebar-bg);
       color: #fff;
       display: flex;
       flex-direction: column;
       flex-shrink: 0;
       z-index: 60;
-      box-shadow: 4px 0 20px rgba(0,0,0,0.15);
-      transition: width 0.25s cubic-bezier(0.4, 0, 0.2, 1), transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 6px 0 25px rgba(0,0,0,0.18);
+      transition: width 0.28s cubic-bezier(0.4, 0, 0.2, 1), transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
     }
+
     .sidebar.collapsed { width: var(--sidebar-w-collapsed); }
 
     .brand-box {
-      min-height: 64px;
+      min-height: 70px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 12px 16px;
+      padding: 14px 18px;
       border-bottom: 1px solid rgba(255, 255, 255, 0.08);
       white-space: nowrap;
       overflow: hidden;
     }
 
     .brand-info { display: flex; align-items: center; gap: 12px; overflow: hidden; }
+
     .brand-logo {
-      width: 38px; height: 38px; border-radius: 11px;
-      background: linear-gradient(135deg, #2563eb, #8b5cf6);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 18px; box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35); flex-shrink: 0;
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      box-shadow: 0 6px 18px rgba(37, 99, 235, 0.35);
+      flex-shrink: 0;
     }
-    .brand-title { font-size: 13px; font-weight: bold; color: #fff; }
-    .brand-sub { font-size: 10.5px; color: rgba(255, 255, 255, 0.65); margin-top: 1px; }
+
+    .brand-meta { overflow: hidden; }
+    .sidebar.collapsed .brand-meta { opacity: 0; width: 0; display: none; }
+    .brand-title { font-size: 13.5px; font-weight: bold; color: #fff; }
+    .brand-sub { font-size: 10.5px; color: rgba(255, 255, 255, 0.65); margin-top: 2px; }
 
     .sidebar-close-mobile-btn {
-      display: none; background: rgba(255, 255, 255, 0.12); border: none; color: #fff;
-      width: 30px; height: 30px; border-radius: 9px; cursor: pointer; align-items: center; justify-content: center;
+      display: none;
+      background: rgba(255, 255, 255, 0.12);
+      border: none;
+      color: #fff;
+      width: 32px;
+      height: 32px;
+      border-radius: 10px;
+      font-size: 16px;
+      cursor: pointer;
+      align-items: center;
+      justify-content: center;
     }
 
     .nav-scrollable {
-      flex: 1; overflow-y: auto; padding: 12px 8px; -webkit-overflow-scrolling: touch;
+      flex: 1;
+      overflow-y: auto;
+      overflow-x: hidden;
+      padding: 14px 10px;
+      -webkit-overflow-scrolling: touch;
     }
+    .nav-scrollable::-webkit-scrollbar { width: 4px; }
+    .nav-scrollable::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.15); border-radius: 4px; }
+
     .nav-link-btn {
-      height: 40px; display: flex; align-items: center; gap: 12px; padding: 0 12px; margin-bottom: 4px;
-      border-radius: 11px; color: rgba(255, 255, 255, 0.75); font-size: 12.5px; font-weight: 600;
-      cursor: pointer; text-decoration: none; white-space: nowrap; position: relative;
+      height: 42px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 0 12px;
+      margin-bottom: 5px;
+      border-radius: 12px;
+      color: rgba(255, 255, 255, 0.76);
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      white-space: nowrap;
+      text-decoration: none;
+      transition: all 0.18s ease;
+      position: relative;
     }
-    .nav-link-btn:hover { background: rgba(255, 255, 255, 0.1); color: #fff; }
+
+    .nav-link-btn:active { transform: scale(0.97); }
+    .nav-link-btn:hover {
+      background: rgba(255, 255, 255, 0.08);
+      color: #ffffff;
+      transform: translateX(2px);
+    }
+
     .nav-link-btn.active {
-      background: linear-gradient(90deg, rgba(37, 99, 235, 0.4), rgba(124, 58, 237, 0.25));
-      color: #fff; font-weight: 700; border: 1px solid rgba(255, 255, 255, 0.12);
+      background: linear-gradient(90deg, rgba(37, 99, 235, 0.45), rgba(124, 58, 237, 0.3));
+      color: #ffffff;
+      font-weight: 700;
+      border: 1px solid rgba(255, 255, 255, 0.14);
     }
+
+    .nav-link-btn.active::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 4px;
+      height: 22px;
+      background: #60a5fa;
+      border-radius: 0 4px 4px 0;
+    }
+
     .nav-icon { font-size: 16px; width: 22px; text-align: center; flex-shrink: 0; }
+    .sidebar.collapsed .nav-text { opacity: 0; width: 0; display: none; }
 
-    .nav-dropdown { position: relative; margin-bottom: 4px; }
-    .dropdown-chevron { font-size: 10px; margin-left: auto; opacity: 0.7; transition: transform 0.2s; }
-    .nav-dropdown.open .dropdown-chevron { transform: rotate(180deg); }
-    .nav-submenu { display: none; flex-direction: column; gap: 2px; padding-left: 18px; margin: 3px 0 6px; }
-    .nav-dropdown.open .nav-submenu { display: flex; }
-    .nav-sub-item {
-      height: 36px; display: flex; align-items: center; gap: 10px; padding: 0 10px; border-radius: 9px;
-      color: rgba(255, 255, 255, 0.7); font-size: 12px; font-weight: 500; cursor: pointer; white-space: nowrap;
+    .sidebar-footer {
+      padding: 14px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
     }
-    .nav-sub-item:hover { background: rgba(255, 255, 255, 0.1); color: #fff; }
-    .nav-sub-item.active { background: rgba(59, 130, 246, 0.35); color: #fff; font-weight: 700; }
 
-    .sidebar-footer { padding: 12px; border-top: 1px solid rgba(255, 255, 255, 0.08); }
     .collapse-toggle-btn {
-      width: 100%; height: 34px; border-radius: 9px; border: 1px solid rgba(255, 255, 255, 0.12);
-      background: rgba(255, 255, 255, 0.06); color: #fff; cursor: pointer; display: flex; align-items: center; justify-content: center;
+      width: 100%;
+      height: 36px;
+      border-radius: 10px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: rgba(255, 255, 255, 0.06);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 13px;
+      transition: all 0.2s;
+    }
+    .collapse-toggle-btn:hover { background: rgba(255, 255, 255, 0.14); }
+
+    .admin-clear-btn {
+      width: 100%;
+      height: 38px;
+      border-radius: 10px;
+      border: 1px solid rgba(239, 68, 68, 0.4);
+      background: linear-gradient(135deg, rgba(185, 28, 28, 0.35), rgba(220, 38, 38, 0.2));
+      color: #fca5a5;
+      font-size: 12px;
+      font-weight: 600;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .admin-clear-btn:hover { background: rgba(220, 38, 38, 0.4); color: #fff; }
+
+    /* =========================================================
+       🖥️ TOPBAR
+    ========================================================= */
+    .main-wrapper {
+      flex: 1;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      min-width: 0;
+      background: var(--bg);
+      position: relative;
     }
 
-    /* ================= TOPBAR ================= */
-    .main-wrapper {
-      flex: 1; height: 100vh; height: 100dvh; display: flex; flex-direction: column; min-width: 0; background: var(--bg); position: relative;
-    }
     .topbar {
-      height: 58px; background: var(--topbar-bg); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between;
-      padding: 0 16px; z-index: 30; flex-shrink: 0;
+      height: 64px;
+      background: var(--topbar-bg);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      z-index: 30;
+      flex-shrink: 0;
     }
-    .topbar-left { display: flex; align-items: center; gap: 10px; min-width: 0; }
+
+    .topbar-left { display: flex; align-items: center; gap: 12px; min-width: 0; }
     .hamburger-btn {
-      display: none; background: var(--surface); border: 1px solid var(--border); width: 36px; height: 36px;
-      border-radius: 10px; font-size: 16px; color: var(--text); cursor: pointer; align-items: center; justify-content: center;
+      display: none;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      width: 38px;
+      height: 38px;
+      border-radius: 11px;
+      font-size: 18px;
+      color: var(--text);
+      cursor: pointer;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.03);
     }
-    .page-title { font-size: 14.5px; font-weight: 700; color: var(--text); white-space: nowrap; }
+    .page-title {
+      font-size: 15.5px;
+      font-weight: 700;
+      color: var(--text);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
 
     .topbar-right { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
+
     .theme-toggle-btn {
-      width: 36px; height: 36px; border-radius: 10px; border: 1px solid var(--border); background: var(--surface);
-      color: var(--text); display: flex; align-items: center; justify-content: center; font-size: 15px; cursor: pointer;
+      width: 38px;
+      height: 38px;
+      border-radius: 11px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      cursor: pointer;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      transition: all 0.2s ease;
     }
+    .theme-toggle-btn:hover { transform: translateY(-2px); border-color: var(--primary); }
+
     .date-badge {
-      background: var(--primary-soft); color: var(--primary); font-size: 11px; font-weight: 700;
-      padding: 5px 12px; border-radius: 20px; white-space: nowrap; border: 1px solid rgba(37, 99, 235, 0.15);
-    }
-    .user-profile-widget { display: flex; align-items: center; gap: 8px; padding-left: 8px; border-left: 1px solid var(--border); }
-    .user-name-txt { font-size: 12px; font-weight: 700; color: var(--text); }
-    .avatar-btn {
-      width: 34px; height: 34px; border-radius: 10px; background: linear-gradient(135deg, #3b82f6, #8b5cf6);
-      color: #fff; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 13px;
-      cursor: pointer; overflow: hidden;
-    }
-    .btn-logout {
-      padding: 5px 10px; border-radius: 8px; border: 1px solid rgba(239, 68, 68, 0.3); background: rgba(239, 68, 68, 0.08);
-      color: #ef4444; font-size: 11px; font-weight: 700; cursor: pointer;
+      background: var(--primary-soft);
+      color: var(--primary);
+      font-size: 11.5px;
+      font-weight: 600;
+      padding: 6px 14px;
+      border-radius: 30px;
+      white-space: nowrap;
+      border: 1px solid rgba(37, 99, 235, 0.15);
     }
 
-    /* ================= CONTENT & 🌟 SCROLL VIEW FIX ================= */
+    .user-profile-widget {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding-left: 8px;
+      border-left: 1px solid var(--border);
+    }
+    .user-name-txt { font-size: 12.5px; font-weight: 700; color: var(--text); }
+
+    .avatar-btn {
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 14px;
+      cursor: pointer;
+      overflow: hidden;
+      border: 2px solid var(--surface);
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
+    }
+    .avatar-btn img { width: 100%; height: 100%; object-fit: cover; }
+
+    .btn-logout {
+      padding: 6px 12px;
+      border-radius: 10px;
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      background: rgba(239, 68, 68, 0.08);
+      color: #ef4444;
+      font-size: 11.5px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+    .btn-logout:hover { background: #ef4444; color: #fff; }
+
+    /* =========================================================
+       📄 VIEW PANELS
+    ========================================================= */
     .content-area {
       flex: 1;
       min-height: 0;
@@ -218,158 +386,404 @@
 
     .view-panel {
       position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
+      inset: 0;
       overflow-y: auto;
       opacity: 0;
       pointer-events: none;
-      transform: translateY(6px);
-      transition: opacity 0.2s ease, transform 0.2s ease;
+      transform: translateY(10px);
+      transition: opacity 0.25s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
       -webkit-overflow-scrolling: touch;
     }
-    .view-panel.active { opacity: 1; pointer-events: auto; transform: translateY(0); }
 
-    /* 🌟 បន្ថែមចន្លោះខាងក្រោម 40px ធានាថាមិនបាត់ជើងក្រោមបង្អស់ */
-    #dashboardView, #reportsHubView {
-      padding: 16px 18px 40px;
+    .view-panel.active {
+      opacity: 1;
+      pointer-events: auto;
+      transform: translateY(0);
     }
+
+    /* =========================================================
+       🌟 1. DASHBOARD VIEW (COMPACT & MODERN)
+    ========================================================= */
+    #dashboardView { padding: 22px 28px 45px; }
     .dash-container {
-      max-width: 1360px;
+      max-width: 1400px;
       margin: 0 auto;
       display: flex;
       flex-direction: column;
+      gap: 18px;
+    }
+
+    .welcome-hero {
+      position: relative;
+      border-radius: 20px;
+      padding: 22px 26px;
+      color: #fff;
+      background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 60%, #7c3aed 100%);
+      box-shadow: 0 10px 25px -4px rgba(37, 99, 235, 0.28);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .welcome-hero h1 { font-size: 19px; line-height: 1.4; font-weight: normal; margin-bottom: 4px; }
+    .welcome-hero p { font-size: 12px; opacity: 0.9; font-weight: 400; }
+    .hero-decor { font-size: 70px; opacity: 0.16; pointer-events: none; }
+
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
       gap: 16px;
     }
 
-    /* HERO COMPACT */
-    .welcome-hero {
-      border-radius: 18px; padding: 18px 22px; color: #ffffff;
-      background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 60%, #7c3aed 100%);
-      box-shadow: 0 8px 20px -4px rgba(37, 99, 235, 0.28);
-      display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px;
+    .stat-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 16px 18px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      box-shadow: var(--card-shadow);
+      transition: all 0.2s ease;
     }
-    .hero-main h1 { font-size: 17px; line-height: 1.4; font-weight: normal; margin-bottom: 2px; }
-    .hero-main p { font-size: 12px; opacity: 0.9; font-weight: 400; }
-    .hero-chips { display: flex; gap: 8px; flex-wrap: wrap; }
-    .hero-chip {
-      background: rgba(255, 255, 255, 0.16); border: 1px solid rgba(255, 255, 255, 0.25);
-      border-radius: 20px; padding: 4px 10px; font-size: 11px; font-weight: 600;
+    .stat-card:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--card-shadow-hover);
+      border-color: rgba(37, 99, 235, 0.3);
     }
 
-    /* STATS */
-    .stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
-    .stat-card {
-      background: var(--surface); border: 1.5px solid var(--border); border-radius: 16px; padding: 12px 14px;
-      display: flex; align-items: center; gap: 12px; box-shadow: var(--card-shadow);
-    }
-    .stat-card:hover { transform: translateY(-2px); border-color: var(--primary); }
     .stat-icon-wrap {
-      width: 42px; height: 42px; border-radius: 11px; display: flex; align-items: center; justify-content: center;
-      font-size: 18px; flex-shrink: 0;
+      width: 46px;
+      height: 46px;
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
     }
     .stat-icon-wrap.blue   { background: #eff6ff; color: #2563eb; }
     .stat-icon-wrap.green  { background: #f0fdf4; color: #16a34a; }
     .stat-icon-wrap.pink   { background: #fdf2f8; color: #db2777; }
     .stat-icon-wrap.amber  { background: #fffbeb; color: #d97706; }
-    .stat-digit { font-size: 21px; font-weight: 800; color: var(--text); line-height: 1.15; }
+
+    [data-theme="dark"] .stat-icon-wrap.blue  { background: rgba(37, 99, 235, 0.2); }
+    [data-theme="dark"] .stat-icon-wrap.green { background: rgba(22, 163, 74, 0.2); }
+    [data-theme="dark"] .stat-icon-wrap.pink  { background: rgba(219, 39, 119, 0.2); }
+    [data-theme="dark"] .stat-icon-wrap.amber { background: rgba(217, 119, 6, 0.2); }
+
+    .stat-digit { font-size: 22px; font-weight: 800; color: var(--text); line-height: 1.2; }
     .stat-title { font-size: 11px; font-weight: 600; color: var(--text-muted); margin-top: 2px; }
 
-    /* GENDER BAR */
-    .gender-ratio-panel {
-      background: var(--surface); border: 1.5px solid var(--border); border-radius: 14px; padding: 12px 16px;
-      box-shadow: var(--card-shadow); display: flex; flex-direction: column; gap: 8px;
+    .dash-split-grid {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr;
+      gap: 18px;
     }
-    .gender-ratio-header { display: flex; justify-content: space-between; font-size: 11.5px; font-weight: 700; color: var(--text); }
-    .gender-stacked-bar { width: 100%; height: 9px; border-radius: 20px; background: #e2e8f0; overflow: hidden; display: flex; }
-    .male-bar-fill { height: 100%; background: #2563eb; transition: width 0.6s; }
-    .female-bar-fill { height: 100%; background: #db2777; transition: width 0.6s; }
 
-    /* SPLIT */
-    .dash-split-grid { display: grid; grid-template-columns: 1.35fr 1fr; gap: 14px; }
-    .dash-panel { background: var(--surface); border: 1.5px solid var(--border); border-radius: 16px; padding: 16px; box-shadow: var(--card-shadow); }
-    .dash-panel-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
-    .dash-panel-title { font-size: 13px; font-weight: 700; color: var(--text); display: flex; align-items: center; gap: 8px; }
+    .dash-panel {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 20px;
+      box-shadow: var(--card-shadow);
+      display: flex;
+      flex-direction: column;
+    }
+    .dash-panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+    .dash-panel-title { font-size: 14px; font-weight: 700; color: var(--text); display: flex; align-items: center; gap: 8px; }
 
-    /* Chart */
-    .bar-chart-container { width: 100%; overflow-x: auto; padding-bottom: 4px; -webkit-overflow-scrolling: touch; }
-    .bar-chart-stage { min-width: 380px; height: 180px; display: flex; align-items: stretch; position: relative; padding: 10px 10px 24px 34px; }
-    .chart-grid-lines { position: absolute; left: 34px; right: 10px; top: 10px; bottom: 24px; display: flex; flex-direction: column; justify-content: space-between; pointer-events: none; }
+    /* Bar Chart Area */
+    .bar-chart-container {
+      width: 100%;
+      overflow-x: auto;
+      padding-bottom: 6px;
+      -webkit-overflow-scrolling: touch;
+    }
+    .bar-chart-stage {
+      min-width: 440px;
+      height: 220px;
+      display: flex;
+      align-items: stretch;
+      position: relative;
+      padding: 10px 10px 26px 38px;
+    }
+    .chart-grid-lines {
+      position: absolute;
+      left: 38px;
+      right: 10px;
+      top: 10px;
+      bottom: 26px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      pointer-events: none;
+    }
     .grid-line-item { width: 100%; height: 1px; background: var(--border-subtle); position: relative; }
-    .grid-line-val { position: absolute; left: -30px; top: -7px; font-size: 9.5px; font-weight: bold; color: var(--text-soft); }
-    .chart-bars-wrap { flex: 1; display: flex; align-items: flex-end; justify-content: space-around; gap: 10px; border-bottom: 1.5px solid var(--border); height: 100%; }
-    .bar-col { flex: 1; height: 100%; display: flex; flex-direction: column; align-items: center; justify-content: flex-end; position: relative; }
-    .bar-val-txt { font-size: 10px; font-weight: 800; color: var(--text); margin-bottom: 4px; }
-    .bar-fill { width: 22px; max-width: 65%; background: linear-gradient(180deg, #3b82f6 0%, #6366f1 100%); border-radius: 6px 6px 2px 2px; transition: height 0.6s; }
-    .bar-label-txt { position: absolute; bottom: -20px; font-size: 10px; font-weight: 700; color: var(--text-muted); white-space: nowrap; }
+    .grid-line-val { position: absolute; left: -34px; top: -7px; font-size: 10px; font-weight: bold; color: var(--text-soft); }
+    .chart-bars-wrap {
+      flex: 1;
+      display: flex;
+      align-items: flex-end;
+      justify-content: space-around;
+      gap: 10px;
+      border-bottom: 1.5px solid var(--border);
+      height: 100%;
+    }
+    .bar-col {
+      flex: 1;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      position: relative;
+    }
+    .bar-val-txt { font-size: 10.5px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+    .bar-fill {
+      width: 24px;
+      max-width: 70%;
+      background: linear-gradient(180deg, #3b82f6 0%, #6366f1 100%);
+      border-radius: 6px 6px 2px 2px;
+      box-shadow: 0 4px 10px rgba(59, 130, 246, 0.25);
+      transition: height 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+    .bar-label-txt {
+      position: absolute;
+      bottom: -22px;
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
 
-    /* Quick Grid */
-    .quick-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+    .quick-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+    }
     .quick-item-card {
-      min-height: 76px; background: var(--surface-elevated); border: 1px solid var(--border); border-radius: 12px;
-      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px; cursor: pointer; padding: 6px 4px;
+      min-height: 84px;
+      background: var(--surface-elevated);
+      border: 1px solid var(--border);
+      border-radius: 15px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-decoration: none;
+      padding: 6px;
     }
-    .quick-item-card:hover { transform: translateY(-2px); border-color: var(--primary); background: var(--surface); }
-    .quick-item-card .qi { font-size: 19px; line-height: 1; }
-    .quick-item-card .qt { font-size: 10.5px; font-weight: 700; color: var(--text); text-align: center; }
+    .quick-item-card:active { transform: scale(0.96); }
+    .quick-item-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--primary);
+      box-shadow: 0 8px 16px rgba(37, 99, 235, 0.12);
+      background: var(--primary-soft);
+    }
+    .quick-item-card .qi { font-size: 22px; }
+    .quick-item-card .qt { font-size: 11px; font-weight: 700; color: var(--text); }
 
-    /* Breakdown */
-    .class-progress-list { display: flex; flex-direction: column; gap: 8px; }
-    .class-prog-row {
-      display: flex; align-items: center; gap: 10px; padding: 7px 10px; border-radius: 10px;
-      background: var(--surface-elevated); border: 1px solid var(--border);
-    }
-    .class-prog-title { width: 75px; font-weight: 700; font-size: 11.5px; color: var(--text); flex-shrink: 0; }
+    .class-progress-list { display: flex; flex-direction: column; gap: 12px; }
+    .class-prog-row { display: flex; align-items: center; gap: 10px; font-size: 12px; }
+    .class-prog-title { width: 80px; font-weight: 700; color: var(--text); flex-shrink: 0; }
     .class-prog-track { flex: 1; height: 8px; background: var(--border-subtle); border-radius: 20px; overflow: hidden; }
-    .class-prog-fill { height: 100%; border-radius: 20px; background: linear-gradient(90deg, #2563eb, #8b5cf6); transition: width 0.8s; }
-    .class-sub-badge { font-size: 9px; font-weight: 700; padding: 2px 5px; border-radius: 5px; }
-    .class-sub-badge.male { background: rgba(37, 99, 235, 0.12); color: #2563eb; }
-    .class-sub-badge.female { background: rgba(219, 39, 119, 0.12); color: #db2777; }
-    .class-prog-count { width: 34px; text-align: right; font-weight: 800; font-size: 11.5px; color: var(--text); }
+    .class-prog-fill { height: 100%; border-radius: 20px; background: linear-gradient(90deg, #3b82f6, #8b5cf6); transition: width 0.9s ease; }
+    .class-prog-count { width: 38px; text-align: right; font-weight: 700; color: var(--text-muted); }
 
-    /* REPORTS HUB */
+    /* =========================================================
+       📁 2. REPORTS HUB VIEW (បង្ហាញជំនួសផ្ទាំង Dashboard)
+    ========================================================= */
+    #reportsHubView { padding: 22px 28px 45px; }
+
     .reports-hub-header {
-      background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 60%, #3b82f6 100%);
-      border-radius: 18px; padding: 18px 20px; color: #ffffff;
-      display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 18px;
     }
-    .reports-hub-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; margin-top: 8px; }
-    .report-card-hub {
-      background: var(--surface); border: 1.5px solid var(--border); border-radius: 14px; padding: 14px;
-      display: flex; align-items: center; justify-content: space-between; gap: 10px; box-shadow: var(--card-shadow); cursor: pointer;
+    .reports-hub-title {
+      font-size: 17px;
+      color: var(--text);
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
-    .report-card-hub:hover { transform: translateY(-2px); border-color: var(--primary); box-shadow: var(--card-shadow-hover); }
-    .report-hub-left { display: flex; align-items: center; gap: 10px; }
-    .report-card-icon {
-      width: 38px; height: 38px; border-radius: 10px; display: flex; align-items: center; justify-content: center;
-      font-size: 18px; flex-shrink: 0; background: var(--surface-elevated); border: 1px solid var(--border);
+    .btn-back-home {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text);
+      padding: 7px 14px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.2s;
     }
-    .report-card-title { font-size: 13px; font-weight: 700; color: var(--text); }
-    .report-card-tag { font-size: 9.5px; font-weight: 600; color: var(--text-muted); margin-top: 1px; }
-    .btn-hub-arrow {
-      width: 28px; height: 28px; border-radius: 50%; background: var(--surface-elevated);
-      display: flex; align-items: center; justify-content: center; color: var(--primary); font-size: 11px; flex-shrink: 0;
+    .btn-back-home:hover {
+      border-color: var(--primary);
+      color: var(--primary);
+      background: var(--primary-soft);
     }
 
-    /* IFRAME */
-    #iframeView { padding: 0; background: var(--surface); overflow: hidden !important; }
-    .iframe-container { width: 100%; height: 100%; position: relative; overflow: hidden; }
-    #pageFrame { width: 100%; height: 100%; border: none; background: var(--surface); overflow-y: auto; -webkit-overflow-scrolling: touch; }
+    .reports-grid-clean {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+    }
+
+    .report-card-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 16px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      box-shadow: var(--card-shadow);
+      transition: all 0.22s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+    .report-card-item:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--card-shadow-hover);
+      border-color: var(--primary);
+      background: var(--surface-elevated);
+    }
+
+    .rci-left { display: flex; align-items: center; gap: 14px; }
+    .rci-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 13px;
+      background: var(--primary-soft);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      flex-shrink: 0;
+    }
+    .rci-name { font-size: 13.5px; font-weight: 700; color: var(--text); }
+    .rci-arrow {
+      width: 30px;
+      height: 30px;
+      border-radius: 10px;
+      background: var(--border-subtle);
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 12px;
+      transition: all 0.2s;
+    }
+    .report-card-item:hover .rci-arrow {
+      background: var(--primary);
+      color: #fff;
+      transform: translateX(2px);
+    }
+
+    /* =========================================================
+       🪟 3. IFRAME VIEW
+    ========================================================= */
+    #iframeView {
+      padding: 0;
+      background: var(--surface);
+      overflow: hidden !important;
+    }
+    .iframe-container {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      overflow: hidden;
+    }
+    #pageFrame {
+      width: 100%;
+      height: 100%;
+      border: none;
+      background: var(--surface);
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
     .loading-glass-overlay {
-      position: absolute; inset: 0; background: var(--bg); display: flex; flex-direction: column;
-      align-items: center; justify-content: center; gap: 10px; z-index: 10; opacity: 0; visibility: hidden; pointer-events: none;
+      position: absolute;
+      inset: 0;
+      background: var(--bg);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      z-index: 10;
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition: all 0.2s;
     }
     .loading-glass-overlay.show { opacity: 1; visibility: visible; pointer-events: auto; }
     .spinner-ring {
-      width: 28px; height: 28px; border: 3px solid var(--border); border-top-color: var(--primary);
-      border-radius: 50%; animation: spin 0.7s linear infinite;
+      width: 32px;
+      height: 32px;
+      border: 3px solid var(--border);
+      border-top-color: var(--primary);
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
     }
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    /* =========================================================
-       📱 🌟 MOBILE BOTTOM NAV
-    ========================================================= */
+    /* POPUP & BOTTOM NAV */
+    .welcome-popup {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 9999;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: rgba(255, 255, 255, 0.96);
+      backdrop-filter: blur(16px);
+      border: 1.5px solid rgba(37, 99, 235, 0.25);
+      border-radius: 18px;
+      padding: 12px 16px;
+      box-shadow: 0 16px 40px rgba(15, 23, 42, 0.16);
+      transform: translateY(-80px) scale(0.92);
+      opacity: 0;
+      pointer-events: none;
+      transition: all 0.4s ease;
+      max-width: 90vw;
+    }
+    [data-theme="dark"] .welcome-popup {
+      background: rgba(17, 24, 39, 0.96);
+      border-color: rgba(96, 165, 250, 0.3);
+      box-shadow: 0 16px 45px rgba(0, 0, 0, 0.55);
+    }
+    .welcome-popup.show { transform: translateY(0) scale(1); opacity: 1; pointer-events: auto; }
+    .welcome-popup-icon {
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #2563eb, #8b5cf6);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 19px;
+      color: #fff;
+    }
+    .welcome-popup-content { display: flex; flex-direction: column; gap: 2px; }
+    .welcome-popup-title { font-size: 12.5px; font-weight: 700; color: var(--text); }
+    .welcome-popup-msg { font-size: 11px; color: var(--text-muted); }
+    .welcome-popup-close { background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 14px; margin-left: 6px; }
+
     .mobile-bottom-nav {
       display: none;
       position: fixed;
@@ -377,89 +791,205 @@
       right: 0;
       bottom: 0;
       height: var(--bottom-nav-h);
-      height: calc(var(--bottom-nav-h) + env(safe-area-inset-bottom, 0px));
-      padding-bottom: env(safe-area-inset-bottom, 0px);
-      background: var(--surface) !important;
-      border-top: 1.5px solid var(--border);
-      z-index: 1000;
-      padding-left: 4px;
-      padding-right: 4px;
-      box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.08);
-      justify-content: space-around;
+      background: var(--topbar-bg);
+      backdrop-filter: blur(16px);
+      border-top: 1px solid var(--border);
+      z-index: 40;
+      padding: 0 8px;
+      box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.05);
       align-items: center;
+      justify-content: space-around;
     }
-
     .m-nav-item {
-      display: flex !important;
-      flex-direction: column !important;
-      align-items: center !important;
-      justify-content: center !important;
-      gap: 3px !important;
-      flex: 1 1 0 !important;
-      height: var(--bottom-nav-h) !important;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 3px;
+      flex: 1;
+      height: 100%;
       cursor: pointer;
       color: var(--text-muted);
-      text-decoration: none;
+      border-radius: 10px;
+      transition: all 0.15s ease;
+    }
+    .m-nav-item:active { transform: scale(0.92); }
+    .m-nav-item.active { color: var(--primary); font-weight: 700; }
+    .m-nav-item .m-icon { font-size: 19px; line-height: 1; }
+    .m-nav-item .m-txt { font-size: 10px; line-height: 1; font-weight: 600; }
+
+    /* Profile Modal */
+    .modal-backdrop {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(6px);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+    .modal-backdrop.show { display: flex; }
+    .modal-dialog {
+      width: 440px;
+      max-width: 100%;
+      max-height: 90vh;
+      overflow-y: auto;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 22px;
+      box-shadow: 0 25px 60px rgba(0,0,0,0.3);
+    }
+    .modal-head-banner {
+      padding: 20px;
+      background: linear-gradient(135deg, #1e3a8a, #7c3aed);
+      color: #fff;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .modal-close-btn {
+      position: absolute;
+      right: 14px;
+      top: 14px;
+      background: rgba(255,255,255,0.18);
+      border: none;
+      color: #fff;
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-avatar-preview {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      border: 3px solid #fff;
+      box-shadow: 0 6px 16px rgba(0,0,0,0.2);
+      object-fit: cover;
+      margin-top: 8px;
+    }
+    .modal-body { padding: 18px; }
+    .form-group-field { margin-bottom: 12px; }
+    .form-group-field label { display: block; font-size: 11.5px; font-weight: 700; margin-bottom: 5px; color: var(--text); }
+    .form-group-field input, .form-group-field select {
+      width: 100%;
+      padding: 10px 14px;
+      border-radius: 11px;
+      border: 1px solid var(--border);
+      background: var(--surface-elevated);
+      color: var(--text);
+      font-size: 13px;
+      outline: none;
+    }
+    .modal-foot-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 16px; }
+    .btn-modal { padding: 9px 18px; border-radius: 11px; font-size: 12.5px; font-weight: 700; cursor: pointer; border: none; }
+    .btn-modal.primary { background: var(--primary); color: #fff; }
+    .btn-modal.cancel { background: var(--border-subtle); color: var(--text); }
+
+    .toast-box {
+      position: fixed;
+      right: 20px;
+      bottom: 74px;
+      padding: 10px 16px;
       border-radius: 12px;
-      user-select: none;
+      background: #0f172a;
+      color: #fff;
+      font-size: 12px;
+      font-weight: 600;
+      z-index: 200;
+      opacity: 0;
+      transform: translateY(12px);
+      transition: all 0.25s;
+      pointer-events: none;
     }
-    .m-nav-item .m-icon { font-size: 19px !important; line-height: 1 !important; display: block !important; }
-    .m-nav-item .m-txt {
-      font-size: 10px !important; font-weight: 600 !important; line-height: 1.2 !important;
-      white-space: nowrap !important; display: block !important; text-align: center !important;
-    }
-    .m-nav-item.active { color: var(--primary) !important; font-weight: 700 !important; }
-    .m-nav-item.active .m-icon { transform: scale(1.12); }
+    .toast-box.show { opacity: 1; transform: translateY(0); }
 
     /* RESPONSIVE */
     @media (max-width: 1024px) {
       .stat-grid { grid-template-columns: repeat(2, 1fr); }
       .dash-split-grid { grid-template-columns: 1fr; }
+      .reports-grid-clean { grid-template-columns: repeat(2, 1fr); }
     }
 
-    @media (max-width: 820px) {
+    @media (max-width: 768px) {
       .sidebar {
-        position: fixed; left: 0; top: 0; bottom: 0; width: 270px !important;
-        transform: translateX(-100%); z-index: 90;
+        position: fixed;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 275px !important;
+        transform: translateX(-100%);
+        z-index: 90;
       }
       .sidebar.open { transform: translateX(0); }
+      .sidebar.collapsed { width: 275px !important; }
+      .sidebar.collapsed .brand-meta,
+      .sidebar.collapsed .nav-text {
+        display: inline !important;
+        opacity: 1 !important;
+        width: auto !important;
+      }
       .sidebar-close-mobile-btn { display: flex; }
       .collapse-toggle-btn { display: none; }
 
-      .topbar { height: 54px; padding: 0 12px; }
+      .topbar { height: 56px; padding: 0 14px; }
       .hamburger-btn { display: flex; }
       .user-name-txt, .date-badge { display: none; }
       .page-title { font-size: 14px; }
 
-      .mobile-bottom-nav { display: flex !important; }
+      .mobile-bottom-nav { display: flex; }
       
-      /* 🌟 គន្លឹះដោះស្រាយបញ្ហា Scroll ៖ បញ្ឈប់ View Panel ត្រឹមខាងលើរបារ Bottom Nav 64px */
-      .view-panel {
-        bottom: calc(var(--bottom-nav-h) + env(safe-area-inset-bottom, 0px)) !important;
-      }
-      
-      #dashboardView, #reportsHubView {
-        padding: 12px 12px 30px;
-      }
+      #dashboardView, #reportsHubView { padding: 14px 14px calc(var(--bottom-nav-h) + 16px); }
+      #iframeView { padding-bottom: var(--bottom-nav-h); }
 
-      .welcome-hero { padding: 14px; border-radius: 14px; }
-      .stat-grid { grid-template-columns: 1fr 1fr; gap: 8px; }
-      .stat-card { padding: 10px; gap: 8px; border-radius: 12px; }
+      .welcome-hero { padding: 16px; border-radius: 16px; }
+      .hero-decor { display: none; }
+      .welcome-hero h1 { font-size: 16px; }
+
+      .stat-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
+      .stat-card { padding: 12px 14px; gap: 10px; border-radius: 14px; }
+      .stat-icon-wrap { width: 40px; height: 40px; font-size: 18px; border-radius: 12px; }
       .stat-digit { font-size: 19px; }
 
-      .dash-panel { padding: 12px; border-radius: 14px; }
-      .quick-grid { grid-template-columns: repeat(3, 1fr); gap: 6px; }
-      .quick-item-card { min-height: 68px; border-radius: 10px; }
+      .dash-panel { padding: 16px; border-radius: 16px; }
+      .quick-grid { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+      .quick-item-card { min-height: 74px; border-radius: 12px; }
+
+      .reports-grid-clean { grid-template-columns: 1fr; gap: 10px; }
+      .report-card-item { padding: 14px 16px; border-radius: 15px; }
+
+      .modal-backdrop { align-items: flex-end; padding: 0; }
+      .modal-dialog { width: 100%; max-height: 88vh; border-radius: 22px 22px 0 0; margin: 0; }
     }
   </style>
 </head>
 
 <body>
 
+<!-- POPUP ស្វាគមន៍ -->
+<div id="welcomeGreetingPopup" class="welcome-popup">
+  <div class="welcome-popup-icon" id="welcomePopupIcon">🌅</div>
+  <div class="welcome-popup-content">
+    <div class="welcome-popup-title" id="welcomePopupTitle">អរុណសួស្ដី!</div>
+    <div class="welcome-popup-msg" id="welcomePopupMsg">រីករាយដែលបានជួបលោកគ្រូ/អ្នកគ្រូ។</div>
+  </div>
+  <button class="welcome-popup-close" onclick="closeGreetingPopup()" title="បិទ">✕</button>
+</div>
+
 <div class="app-layout">
+
   <div id="mobileBackdrop" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.55); z-index:80; backdrop-filter:blur(3px);" onclick="closeSidebarMobile()"></div>
 
-  <!-- SIDEBAR -->
+  <!-- =========================================================
+       🧭 SIDEBAR (លុប Dropdown រង គ្មាន Submenu ទៀតទេ)
+  ========================================================= -->
   <aside class="sidebar" id="sidebar">
     <div class="brand-box">
       <div class="brand-info">
@@ -505,33 +1035,9 @@
         <span class="nav-icon">📊</span><span class="nav-text">ស្រង់ពិន្ទុ</span>
       </div>
 
-      <div class="nav-dropdown" id="reportsDropdown">
-        <div class="nav-link-btn nav-dropdown-toggle" onclick="onReportsMenuClick('reportsDropdown', this)">
-          <span class="nav-icon">📁</span>
-          <span class="nav-text">របាយការណ៍</span>
-          <span class="dropdown-chevron">▾</span>
-        </div>
-        
-        <div class="nav-submenu">
-          <div class="nav-sub-item" data-page="roster" onclick="navigate('roster', this)">
-            <span class="sub-icon">🗒️</span><span class="nav-text">បញ្ជីរាយនាម</span>
-          </div>
-          <div class="nav-sub-item" data-page="rank" onclick="navigate('rank', this)">
-            <span class="sub-icon">🏆</span><span class="nav-text">ចំណាត់ថ្នាក់</span>
-          </div>
-          <div class="nav-sub-item" data-page="honor" onclick="navigate('honor', this)">
-            <span class="sub-icon">🌟</span><span class="nav-text">តារាងកិត្តិយស</span>
-          </div>
-          <div class="nav-sub-item" data-page="certificate" onclick="navigate('certificate', this)">
-            <span class="sub-icon">🎖️</span><span class="nav-text">ប័ណ្ណសរសើរ</span>
-          </div>
-          <div class="nav-sub-item" data-page="report" onclick="navigate('report', this)">
-            <span class="sub-icon">📋</span><span class="nav-text">សៀវភៅតាមដាន</span>
-          </div>
-          <div class="nav-sub-item" data-page="remesterrecord" onclick="navigate('remesterrecord', this)">
-            <span class="sub-icon">📘</span><span class="nav-text">សៀវភៅសិក្ខាគារិក</span>
-          </div>
-        </div>
+      <!-- 🌟 ប៊ូតុងរបាយការណ៍ទោល (ចុចទៅបើក Hub ភ្លាម គ្មានម៉ឺនុយរងវែងអន្លាយ) -->
+      <div class="nav-link-btn" data-page="reportsHub" onclick="navigate('reportsHub', this)">
+        <span class="nav-icon">📁</span><span class="nav-text">របាយការណ៍</span>
       </div>
 
       <div class="nav-link-btn" id="teacherAdminNav" data-page="teacher" onclick="navigate('teacher', this)" style="display:none;">
@@ -540,12 +1046,22 @@
     </nav>
 
     <div class="sidebar-footer">
-      <button class="collapse-toggle-btn" onclick="toggleSidebarCollapse()" title="បង្រួម/ពង្រីក">◀</button>
+      <button class="admin-clear-btn" id="adminClearBtn" onclick="confirmClearAllData()">
+        <span>🗑️</span><span>សម្អាតទិន្នន័យទាំងអស់</span>
+      </button>
+
+      <button class="collapse-toggle-btn" onclick="toggleSidebarCollapse()" title="បង្រួម/ពង្រីក">
+        ◀
+      </button>
     </div>
   </aside>
 
-  <!-- MAIN -->
+  <!-- =========================================================
+       🖥️ MAIN AREA
+  ========================================================= -->
   <main class="main-wrapper">
+    
+    <!-- Topbar -->
     <header class="topbar">
       <div class="topbar-left">
         <button class="hamburger-btn" onclick="openSidebarMobile()" title="ម៉ឺនុយ">☰</button>
@@ -553,7 +1069,7 @@
       </div>
 
       <div class="topbar-right">
-        <button class="theme-toggle-btn" onclick="toggleTheme()" id="themeBtn" title="ប្ដូរ Mode">
+        <button class="theme-toggle-btn" onclick="toggleTheme()" id="themeBtn" title="ប្ដូរ Dark/Light Mode">
           <span id="themeIcon">🌙</span>
         </button>
 
@@ -561,29 +1077,32 @@
 
         <div class="user-profile-widget">
           <span class="user-name-txt" id="userNameLabel">...</span>
-          <div class="avatar-btn" id="userAvatar">👤</div>
+          <div class="avatar-btn" id="userAvatar" onclick="openProfileModal()" title="ព័ត៌មានផ្ទាល់ខ្លួន">
+            👤
+          </div>
           <button class="btn-logout" onclick="doLogout()">ចាកចេញ</button>
         </div>
       </div>
     </header>
 
+    <!-- Content Area -->
     <div class="content-area">
-      
-      <!-- ១. DASHBOARD VIEW -->
+
+      <!-- =====================================================
+           1️⃣ DASHBOARD VIEW
+      ====================================================== -->
       <div class="view-panel active" id="dashboardView">
         <div class="dash-container">
           
           <div class="welcome-hero">
-            <div class="hero-main">
+            <div>
               <h1 class="f-moul" id="heroGreeting">សូមស្វាគមន៍មកកាន់ប្រព័ន្ធគ្រប់គ្រងសិស្ស 👋</h1>
-              <p>សាលាបឋមសិក្សាកំពង់ល្ពៅ · ឆ្នាំសិក្សា ២០២៥-២០២៦</p>
+              <p id="heroSubGreeting">សាលាបឋមសិក្សាកំពង់ល្ពៅ · ប្រព័ន្ធគ្រប់គ្រងទិន្នន័យឌីជីថល</p>
             </div>
-            <div class="hero-chips">
-              <span class="hero-chip">🟢 ប្រព័ន្ធសកម្ម</span>
-              <span class="hero-chip" id="liveClockBadge">ថ្ងៃនេះ</span>
-            </div>
+            <div class="hero-decor">🏫</div>
           </div>
 
+          <!-- Stat Cards -->
           <div class="stat-grid">
             <div class="stat-card">
               <div class="stat-icon-wrap blue">👨‍🎓</div>
@@ -592,7 +1111,6 @@
                 <div class="stat-title">សិស្សសរុប</div>
               </div>
             </div>
-
             <div class="stat-card">
               <div class="stat-icon-wrap green">✅</div>
               <div>
@@ -600,7 +1118,6 @@
                 <div class="stat-title">សិស្សសកម្ម</div>
               </div>
             </div>
-
             <div class="stat-card">
               <div class="stat-icon-wrap pink">👧</div>
               <div>
@@ -608,7 +1125,6 @@
                 <div class="stat-title">សិស្សស្រី</div>
               </div>
             </div>
-
             <div class="stat-card">
               <div class="stat-icon-wrap amber">🏫</div>
               <div>
@@ -618,21 +1134,11 @@
             </div>
           </div>
 
-          <div class="gender-ratio-panel">
-            <div class="gender-ratio-header">
-              <span>👥 សមាមាត្រយេនឌ័រ</span>
-              <span style="font-size:11px; color:var(--text-muted);" id="genderRatioText">ប្រុស ០% • ស្រី ០%</span>
-            </div>
-            <div class="gender-stacked-bar">
-              <div class="male-bar-fill" id="maleRatioFill" style="width:50%;"></div>
-              <div class="female-bar-fill" id="femaleRatioFill" style="width:50%;"></div>
-            </div>
-          </div>
-
+          <!-- Split Grid -->
           <div class="dash-split-grid">
             <div class="dash-panel">
               <div class="dash-panel-header">
-                <div class="dash-panel-title">📊 ចំនួនសិស្សតាមកម្រិតថ្នាក់</div>
+                <div class="dash-panel-title">📊 ចំនួនសិស្សតាមថ្នាក់</div>
               </div>
               <div class="bar-chart-container">
                 <div class="bar-chart-stage" id="barChart">
@@ -644,160 +1150,123 @@
 
             <div class="dash-panel">
               <div class="dash-panel-header">
-                <div class="dash-panel-title">⚡ ផ្លូវកាត់រហ័ស</div>
+                <div class="dash-panel-title">⚡ ចូលប្រើលឿន</div>
               </div>
               <div class="quick-grid">
+                <div class="quick-item-card" onclick="navigateFromDash('addStudent')"><span class="qi">✍️</span><span class="qt">បញ្ចូលសិស្ស</span></div>
                 <div class="quick-item-card" onclick="navigateFromDash('attendance')"><span class="qi">📅</span><span class="qt">វត្តមាន</span></div>
-                <div class="quick-item-card" onclick="navigateFromDash('score')"><span class="qi">📊</span><span class="qt">ពិន្ទុ</span></div>
+                <div class="quick-item-card" onclick="navigateFromDash('score')"><span class="qi">📊</span><span class="qt">ស្រង់ពិន្ទុ</span></div>
                 <div class="quick-item-card" onclick="navigateFromDash('card')"><span class="qi">🪪</span><span class="qt">កាតសិស្ស</span></div>
+                <div class="quick-item-card" onclick="navigateFromDash('group')"><span class="qi">👥</span><span class="qt">បែងចែកក្រុម</span></div>
                 <div class="quick-item-card" onclick="navigateFromDash('reportsHub')"><span class="qi">📁</span><span class="qt">របាយការណ៍</span></div>
-                <div class="quick-item-card" onclick="navigateFromDash('rank')"><span class="qi">🏆</span><span class="qt">ចំណាត់ថ្នាក់</span></div>
-                <div class="quick-item-card" onclick="navigateFromDash('roster')"><span class="qi">🗒️</span><span class="qt">បញ្ជីសិស្ស</span></div>
               </div>
             </div>
           </div>
 
+          <!-- Class Progress Breakdown -->
           <div class="dash-panel">
             <div class="dash-panel-header">
-              <div class="dash-panel-title">📈 ស្ថិតិតាមថ្នាក់នីមួយៗ</div>
+              <div class="dash-panel-title">📈 ស្ថិតិសិស្សតាមថ្នាក់</div>
             </div>
             <div class="class-progress-list" id="classBreakdownArea">
-              <div style="text-align:center; padding:20px; color:var(--text-muted); font-size:12px;">កំពុងទាញយក...</div>
+              <div style="text-align:center; padding:20px; color:var(--text-muted); font-size:12px;">កំពុងទាញយកទិន្នន័យ...</div>
             </div>
           </div>
 
         </div>
       </div>
 
-      <!-- ២. REPORTS HUB VIEW -->
+      <!-- =====================================================
+           2️⃣ REPORTS HUB VIEW (បង្ហាញជំនួស Dashboard ខ្លី ខ្លឹម ស្អាត)
+      ====================================================== -->
       <div class="view-panel" id="reportsHubView">
         <div class="dash-container">
+          
           <div class="reports-hub-header">
-            <div>
-              <h1 class="f-moul" style="font-size:18px;">📁 មជ្ឈមណ្ឌលរបាយការណ៍</h1>
-              <p style="font-size:11.5px; opacity:0.9; margin-top:2px;">ជ្រើសរើសរបាយការណ៍ដែលលោកគ្រូ/អ្នកគ្រូចង់បើកមើល ឬបោះពុម្ព</p>
-            </div>
-            <button onclick="navigate('dashboard', null)" style="padding:7px 14px; border-radius:10px; border:1px solid rgba(255,255,255,0.3); background:rgba(255,255,255,0.15); color:#fff; font-size:11.5px; font-weight:700; cursor:pointer;">
-              ← ត្រឡប់ទៅទំព័រដើម
+            <div class="reports-hub-title f-moul">📁 របាយការណ៍ និងឯកសារសិស្ស</div>
+            <button class="btn-back-home" onclick="navigate('dashboard', null)">
+              <span>🏠</span><span>ទំព័រដើម</span>
             </button>
           </div>
 
-          <div class="reports-hub-grid">
-            <div class="report-card-hub" onclick="navigate('roster', null)">
-              <div class="report-hub-left">
-                <div class="report-card-icon" style="color:#2563eb;">🗒️</div>
-                <div>
-                  <div class="report-card-title">បញ្ជីរាយនាមសិស្ស</div>
-                  <div class="report-card-tag">ទម្រង់ A4 ផ្លូវការ</div>
-                </div>
+          <!-- កាតមុខងាររបាយការណ៍ ខ្លី ទំនើប គ្មានអក្សររៀបរាប់ច្រើន -->
+          <div class="reports-grid-clean">
+            <!-- 1. Roster -->
+            <div class="report-card-item" onclick="navigate('roster', null)">
+              <div class="rci-left">
+                <div class="rci-icon">🗒️</div>
+                <div class="rci-name">បញ្ជីរាយនាមសិស្ស</div>
               </div>
-              <div class="btn-hub-arrow">➔</div>
+              <div class="rci-arrow">➔</div>
             </div>
 
-            <div class="report-card-hub" onclick="navigate('rank', null)">
-              <div class="report-hub-left">
-                <div class="report-card-icon" style="color:#d97706;">🏆</div>
-                <div>
-                  <div class="report-card-title">តារាងចំណាត់ថ្នាក់</div>
-                  <div class="report-card-tag">ប្រចាំខែ / ឆមាស / ឆ្នាំ</div>
-                </div>
+            <!-- 2. Rank -->
+            <div class="report-card-item" onclick="navigate('rank', null)">
+              <div class="rci-left">
+                <div class="rci-icon">🏆</div>
+                <div class="rci-name">តារាងចំណាត់ថ្នាក់</div>
               </div>
-              <div class="btn-hub-arrow">➔</div>
+              <div class="rci-arrow">➔</div>
             </div>
 
-            <div class="report-card-hub" onclick="navigate('honor', null)">
-              <div class="report-hub-left">
-                <div class="report-card-icon" style="color:#eab308;">🌟</div>
-                <div>
-                  <div class="report-card-title">តារាងកិត្តិយស</div>
-                  <div class="report-card-tag">សិស្សឆ្នើម Top 5</div>
-                </div>
+            <!-- 3. Honor -->
+            <div class="report-card-item" onclick="navigate('honor', null)">
+              <div class="rci-left">
+                <div class="rci-icon">🌟</div>
+                <div class="rci-name">តារាងកិត្តិយស</div>
               </div>
-              <div class="btn-hub-arrow">➔</div>
+              <div class="rci-arrow">➔</div>
             </div>
 
-            <div class="report-card-hub" onclick="navigate('certificate', null)">
-              <div class="report-hub-left">
-                <div class="report-card-icon" style="color:#dc2626;">🎖️</div>
-                <div>
-                  <div class="report-card-title">ប័ណ្ណសរសើរ</div>
-                  <div class="report-card-tag">សម្រាប់សិស្សជ័យលាភី</div>
-                </div>
+            <!-- 4. Certificate -->
+            <div class="report-card-item" onclick="navigate('certificate', null)">
+              <div class="rci-left">
+                <div class="rci-icon">🎖️</div>
+                <div class="rci-name">ប័ណ្ណសរសើរ</div>
               </div>
-              <div class="btn-hub-arrow">➔</div>
+              <div class="rci-arrow">➔</div>
             </div>
 
-            <div class="report-card-hub" onclick="navigate('report', null)">
-              <div class="report-hub-left">
-                <div class="report-card-icon" style="color:#059669;">📋</div>
-                <div>
-                  <div class="report-card-title">សៀវភៅតាមដាន</div>
-                  <div class="report-card-tag">តាមដានការសិក្សា</div>
-                </div>
+            <!-- 5. Report Book -->
+            <div class="report-card-item" onclick="navigate('report', null)">
+              <div class="rci-left">
+                <div class="rci-icon">📋</div>
+                <div class="rci-name">សៀវភៅតាមដាន</div>
               </div>
-              <div class="btn-hub-arrow">➔</div>
+              <div class="rci-arrow">➔</div>
             </div>
 
-            <div class="report-card-hub" onclick="navigate('remesterrecord', null)">
-              <div class="report-hub-left">
-                <div class="report-card-icon" style="color:#7c3aed;">📘</div>
-                <div>
-                  <div class="report-card-title">សៀវភៅសិក្ខាគារិក</div>
-                  <div class="report-card-tag">សៀវភៅធំប្រចាំឆ្នាំ</div>
-                </div>
+            <!-- 6. Semester Record -->
+            <div class="report-card-item" onclick="navigate('remesterrecord', null)">
+              <div class="rci-left">
+                <div class="rci-icon">📘</div>
+                <div class="rci-name">សៀវភៅសិក្ខាគារិក</div>
               </div>
-              <div class="btn-hub-arrow">➔</div>
-            </div>
-
-            <div class="report-card-hub" onclick="navigate('attendance', null)">
-              <div class="report-hub-left">
-                <div class="report-card-icon" style="color:#0284c7;">📅</div>
-                <div>
-                  <div class="report-card-title">របាយការណ៍វត្តមាន</div>
-                  <div class="report-card-tag">ទម្រង់ក្រសួង A4</div>
-                </div>
-              </div>
-              <div class="btn-hub-arrow">➔</div>
-            </div>
-
-            <div class="report-card-hub" onclick="navigate('score', null)">
-              <div class="report-hub-left">
-                <div class="report-card-icon" style="color:#6366f1;">📊</div>
-                <div>
-                  <div class="report-card-title">តារាងស្រង់ពិន្ទុ</div>
-                  <div class="report-card-tag">ពិន្ទុ & មធ្យមភាគ</div>
-                </div>
-              </div>
-              <div class="btn-hub-arrow">➔</div>
-            </div>
-
-            <div class="report-card-hub" onclick="navigate('card', null)">
-              <div class="report-hub-left">
-                <div class="report-card-icon" style="color:#ea580c;">🪪</div>
-                <div>
-                  <div class="report-card-title">កាតសិស្ស</div>
-                  <div class="report-card-tag">៦ & ៨ កាត A4</div>
-                </div>
-              </div>
-              <div class="btn-hub-arrow">➔</div>
+              <div class="rci-arrow">➔</div>
             </div>
           </div>
+
         </div>
       </div>
 
-      <!-- ៣. IFRAME VIEW -->
+      <!-- =====================================================
+           3️⃣ IFRAME VIEW
+      ====================================================== -->
       <div class="view-panel" id="iframeView">
         <div class="iframe-container">
           <div class="loading-glass-overlay" id="loadingOverlay">
             <div class="spinner-ring"></div>
-            <div style="font-size:12px; font-weight:700; color:var(--text-muted);">កំពុងផ្ទុកទំព័រ...</div>
+            <div style="font-size:12px; font-weight:600; color:var(--text-muted);">កំពុងផ្ទុក...</div>
           </div>
           <iframe id="pageFrame" src="about:blank"></iframe>
         </div>
       </div>
+
     </div>
 
-    <!-- 📱 BOTTOM NAVIGATION BAR -->
+    <!-- =========================================================
+         📱 MOBILE BOTTOM NAVIGATION
+    ========================================================= -->
     <nav class="mobile-bottom-nav">
       <div class="m-nav-item active" id="mNavDash" onclick="navigate('dashboard', null)">
         <span class="m-icon">🏠</span>
@@ -809,7 +1278,7 @@
       </div>
       <div class="m-nav-item" id="mNavScores" onclick="navigate('score', null)">
         <span class="m-icon">📊</span>
-        <span class="m-txt">ពិន្ទុ</span>
+        <span class="m-txt">ស្រង់ពិន្ទុ</span>
       </div>
       <div class="m-nav-item" id="mNavReports" onclick="navigate('reportsHub', null)">
         <span class="m-icon">📁</span>
@@ -820,14 +1289,73 @@
         <span class="m-txt">ម៉ឺនុយ</span>
       </div>
     </nav>
+
   </main>
 </div>
 
+<!-- MODAL: USER PROFILE -->
+<div class="modal-backdrop" id="profileModalBackdrop" onclick="if(event.target===this) closeProfileModal()">
+  <div class="modal-dialog">
+    <div class="modal-head-banner">
+      <button class="modal-close-btn" onclick="closeProfileModal()">✕</button>
+      <div style="font-size:14.5px; font-weight:bold;">👤 ព័ត៌មានផ្ទាល់ខ្លួន</div>
+      <img id="profilePhotoPreview" class="modal-avatar-preview" src="" style="display:none;">
+      <div id="profileAvatarPlaceholder" class="modal-avatar-preview" style="display:flex; align-items:center; justify-content:center; font-size:28px; background:linear-gradient(135deg,#3b82f6,#8b5cf6);">👤</div>
+    </div>
+
+    <div class="modal-body">
+      <form id="profileForm" onsubmit="return saveMyProfile(event)">
+        <div style="text-align:center; margin-bottom:14px;">
+          <label style="font-size:11px; font-weight:700; padding:6px 14px; border-radius:20px; background:var(--primary-soft); color:var(--primary); cursor:pointer;">
+            📷 ប្តូររូបថត <input type="file" accept="image/*" style="display:none;" onchange="onProfilePhotoPicked(event)">
+          </label>
+        </div>
+
+        <div class="form-group-field">
+          <label>ឈ្មោះគ្រូ</label>
+          <input type="text" id="pfName" required>
+        </div>
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;">
+          <div class="form-group-field">
+            <label>ភេទ</label>
+            <select id="pfSex"><option value="ប្រុស">ប្រុស</option><option value="ស្រី">ស្រី</option></select>
+          </div>
+          <div class="form-group-field">
+            <label>លេខទូរសព្ទ</label>
+            <input type="text" id="pfPhone" required>
+          </div>
+        </div>
+        <div class="form-group-field">
+          <label>ថ្ងៃខែឆ្នាំកំណើត</label>
+          <input type="date" id="pfDob">
+        </div>
+        <div class="form-group-field">
+          <label>ទីកន្លែងបច្ចុប្បន្ន</label>
+          <input type="text" id="pfAddress" required>
+        </div>
+        <div class="form-group-field">
+          <label>ពាក្យសម្ងាត់ថ្មី (ទុកទទេបើមិនប្តូរ)</label>
+          <input type="password" id="pfPassword" placeholder="••••••••">
+        </div>
+
+        <div class="modal-foot-actions">
+          <button type="button" class="btn-modal cancel" onclick="closeProfileModal()">បិទ</button>
+          <button type="submit" class="btn-modal primary" id="profileSaveBtn">💾 រក្សាទុក</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<div class="toast-box" id="profileToast"></div>
+
+<!-- 🔗 ភ្ជាប់ API -->
 <script src="api.js"></script>
 
 <script>
   let SESSION_TOKEN = typeof getStoredToken === 'function' ? getStoredToken() : localStorage.getItem('krou_session_token');
   let TEACHER_NAME = localStorage.getItem('krou_teacher_name') || "";
+  let TEACHER_PHOTO_URL = localStorage.getItem('krou_teacher_photo') || "";
   let USER_ROLE = localStorage.getItem('krou_user_role') || "teacher";
   let IS_ADMIN = String(USER_ROLE).trim().toLowerCase() === 'admin';
   let TEACHER_SEX = localStorage.getItem('krou_teacher_sex') || '';
@@ -837,12 +1365,22 @@
   window.USER_ROLE = USER_ROLE;
 
   const PAGE_TITLES = {
-    dashboard: "🏠 ទំព័រដើម", reportsHub: "📁 របាយការណ៍", roster: "🗒️ បញ្ជីរាយនាមសិស្ស",
-    addStudent: "✍️ បញ្ចូលសិស្សថ្មី", edit: "✏️ កែប្រែទិន្នន័យ", card: "🪪 កាតសិស្ស",
-    group: "👥 បែងចែកជាក្រុម", wheel: "🎡 បង្វិលកង់", attendance: "📅 វត្តមានសិស្ស",
-    score: "📊 ស្រង់ពិន្ទុសិស្ស", rank: "🏆 ចំណាត់ថ្នាក់", honor: "🌟 តារាងកិត្តិយស",
-    certificate: "🎖️ បណ្ណសរសើរ", report: "📋 សៀវភៅតាមដាន", remesterrecord: "📘 សិក្ខាគារិក",
-    teacher: "👨‍🏫 គ្រប់គ្រងគ្រូ"
+    dashboard: "🏠 ទំព័រដើម",
+    reportsHub: "📁 របាយការណ៍",
+    roster: "🗒️ បញ្ជីរាយនាមសិស្ស",
+    addStudent: "✍️ បញ្ចូលសិស្សថ្មី",
+    edit: "✏️ កែប្រែ/លុបទិន្នន័យ",
+    card: "🪪 កាតសិស្ស (ID Card)",
+    group: "👥 បែងចែកជាក្រុម",
+    wheel: "🎡 បង្វិលកង់ជ្រើសរើស",
+    attendance: "📅 ស្រង់វត្តមានសិស្ស",
+    score: "📊 ស្រង់ពិន្ទុសិស្ស",
+    rank: "🏆 តារាងចំណាត់ថ្នាក់",
+    honor: "🌟 តារាងកិត្តិយស",
+    certificate: "🎖️ បណ្ណសរសើរ",
+    report: "📋 សៀវភៅតាមដាន",
+    remesterrecord: "📘 សៀវភៅសិក្ខាគារិក",
+    teacher: "👨‍🏫 គ្រប់គ្រងគ្រូបង្រៀន"
   };
 
   function getTeacherFormalTitle(sex, rawName) {
@@ -853,10 +1391,42 @@
     return n ? ((isFemale ? 'អ្នកគ្រូ ' : 'លោកគ្រូ ') + n) : (isFemale ? 'អ្នកគ្រូ' : 'លោកគ្រូ');
   }
 
+  function getTimeGreeting() {
+    var hour = new Date().getHours();
+    if (hour >= 5 && hour < 12) return { greeting: "អរុណសួស្ដី", icon: "🌅" };
+    if (hour >= 12 && hour < 17) return { greeting: "ទិវាសួស្ដី", icon: "☀️" };
+    if (hour >= 17 && hour < 21) return { greeting: "សាយណ្ហសួស្ដី", icon: "🌇" };
+    return { greeting: "រាត្រីសួស្ដី", icon: "🌙" };
+  }
+
   function initGreetings() {
+    var timeData = getTimeGreeting();
     var formalName = getTeacherFormalTitle(TEACHER_SEX, TEACHER_NAME);
+
     var heroEl = document.getElementById('heroGreeting');
-    if (heroEl) heroEl.innerText = 'សូមស្វាគមន៍' + (formalName ? (' ' + formalName) : '') + ' 👋';
+    if (heroEl) heroEl.innerHTML = timeData.icon + ' ' + timeData.greeting + ' ' + formalName + ' 👋';
+
+    var popIcon = document.getElementById('welcomePopupIcon');
+    var popTitle = document.getElementById('welcomePopupTitle');
+    var popupEl = document.getElementById('welcomeGreetingPopup');
+
+    if (popIcon) popIcon.innerText = timeData.icon;
+    if (popTitle) popTitle.innerText = timeData.greeting + ' ' + formalName + '!';
+
+    if (popupEl) {
+      setTimeout(() => popupEl.classList.add('show'), 350);
+      setTimeout(() => closeGreetingPopup(), 4000);
+    }
+  }
+
+  function closeGreetingPopup() {
+    var popupEl = document.getElementById('welcomeGreetingPopup');
+    if (popupEl) popupEl.classList.remove('show');
+  }
+
+  function getAutoThemeByTime() {
+    var hour = new Date().getHours();
+    return (hour >= 18 || hour < 6) ? 'dark' : 'light';
   }
 
   function applyTheme(theme) {
@@ -872,24 +1442,26 @@
     applyTheme(next);
   }
 
-  applyTheme(localStorage.getItem('krou_theme_manual') || 'light');
-
-  function toggleSubmenu(id) {
-    var el = document.getElementById(id);
-    if (el) el.classList.toggle('open');
-  }
-
-  function onReportsMenuClick(id, el) {
-    toggleSubmenu(id);
-    navigate('reportsHub', el);
-  }
+  applyTheme(localStorage.getItem('krou_theme_manual') || getAutoThemeByTime());
 
   function renderAvatar(photoUrl) {
     var av = document.getElementById('userAvatar');
     if (photoUrl && String(photoUrl).trim() !== "") {
-      av.innerHTML = '<img src="' + photoUrl + '" style="width:100%;height:100%;object-fit:cover;">';
+      av.innerHTML = '<img src="' + photoUrl + '" onerror="this.style.display=\'none\';this.parentNode.innerText=\'' + (TEACHER_NAME ? TEACHER_NAME.charAt(0) : '👤') + '\'">';
     } else {
       av.innerText = TEACHER_NAME ? TEACHER_NAME.charAt(0) : '👤';
+    }
+  }
+
+  function initAdminTools() {
+    var clearBtn = document.getElementById('adminClearBtn');
+    var teacherNav = document.getElementById('teacherAdminNav');
+    if (IS_ADMIN) {
+      if (clearBtn) clearBtn.style.display = 'flex';
+      if (teacherNav) teacherNav.style.display = 'flex';
+    } else {
+      if (clearBtn) clearBtn.style.display = 'none';
+      if (teacherNav) teacherNav.style.display = 'none';
     }
   }
 
@@ -897,13 +1469,22 @@
 
   function mapPageToFile(page) {
     var map = {
-      'dashboard': 'dashboard', 'reportsHub': 'reportsHub', 'reports': 'reportsHub',
-      'addStudent': 'addStudent', 'edit': 'edit', 'editStudent': 'edit',
-      'card': 'card', 'cards': 'card', 'group': 'group', 'groups': 'group', 'wheel': 'wheel',
-      'attendance': 'attendance', 'attendancePage': 'attendance', 'score': 'score', 'scores': 'score',
-      'roster': 'roster', 'rank': 'rank', 'honor': 'honor', 'honorRoll': 'honor',
-      'certificate': 'certificate', 'report': 'report', 'remesterrecord': 'remesterrecord',
-      'semesterRecord': 'remesterrecord', 'teacher': 'teacher', 'teachers': 'teacher'
+      'dashboard': 'dashboard',
+      'reportsHub': 'reportsHub',
+      'addStudent': 'addStudent',
+      'edit': 'edit',
+      'card': 'card',
+      'group': 'group',
+      'wheel': 'wheel',
+      'attendance': 'attendance',
+      'score': 'score',
+      'roster': 'roster',
+      'rank': 'rank',
+      'honor': 'honor',
+      'certificate': 'certificate',
+      'report': 'report',
+      'remesterrecord': 'remesterrecord',
+      'teacher': 'teacher'
     };
     return map[page] || page;
   }
@@ -912,56 +1493,65 @@
     if (!page) return;
     currentPage = page;
     localStorage.setItem('krou_active_page', page);
+    
     var cleanFile = mapPageToFile(page);
 
-    document.querySelectorAll('.nav-link-btn, .nav-sub-item').forEach(n => n.classList.remove('active'));
+    document.querySelectorAll('.nav-link-btn').forEach(n => n.classList.remove('active'));
+    
+    var isReportChild = ['roster', 'rank', 'honor', 'certificate', 'report', 'remesterrecord'].includes(cleanFile);
+    
     var target = el || document.querySelector('[data-page="' + page + '"]') || document.querySelector('[data-page="' + cleanFile + '"]');
+    if (!target && isReportChild) {
+      target = document.querySelector('[data-page="reportsHub"]');
+    }
     if (target) target.classList.add('active');
 
+    // Mobile nav
     document.querySelectorAll('.m-nav-item').forEach(m => m.classList.remove('active'));
     if (cleanFile === 'dashboard') {
-      var mb = document.getElementById('mNavDash'); if (mb) mb.classList.add('active');
+      var mb = document.getElementById('mNavDash');
+      if (mb) mb.classList.add('active');
     } else if (cleanFile === 'attendance') {
-      var mb = document.getElementById('mNavAtt'); if (mb) mb.classList.add('active');
+      var mb = document.getElementById('mNavAtt');
+      if (mb) mb.classList.add('active');
     } else if (cleanFile === 'score') {
-      var mb = document.getElementById('mNavScores'); if (mb) mb.classList.add('active');
-    } else if (cleanFile === 'reportsHub') {
-      var mb = document.getElementById('mNavReports'); if (mb) mb.classList.add('active');
-    }
-
-    var reportPages = ['roster', 'rank', 'honor', 'honorRoll', 'certificate', 'report', 'remesterrecord', 'semesterRecord'];
-    var reportsDropdown = document.getElementById('reportsDropdown');
-    if (reportPages.includes(cleanFile) || reportPages.includes(page)) {
-      if (reportsDropdown) reportsDropdown.classList.add('open');
+      var mb = document.getElementById('mNavScores');
+      if (mb) mb.classList.add('active');
+    } else if (cleanFile === 'reportsHub' || isReportChild) {
+      var mb = document.getElementById('mNavReports');
+      if (mb) mb.classList.add('active');
     }
 
     document.getElementById('pageTitle').innerText = PAGE_TITLES[cleanFile] || PAGE_TITLES[page] || cleanFile;
     closeSidebarMobile();
 
+    var iframeView = document.getElementById('iframeView');
+    var dashboardView = document.getElementById('dashboardView');
+    var reportsHubView = document.getElementById('reportsHubView');
+
     if (cleanFile === 'dashboard') {
-      document.getElementById('iframeView').classList.remove('active');
-      document.getElementById('reportsHubView').classList.remove('active');
-      document.getElementById('dashboardView').classList.add('active');
+      iframeView.classList.remove('active');
+      reportsHubView.classList.remove('active');
+      dashboardView.classList.add('active');
       refreshStats();
       return;
     }
 
+    // 🌟 បង្ហាញផ្ទាំងរបាយការណ៍ជំនួស Dashboard
     if (cleanFile === 'reportsHub') {
-      document.getElementById('dashboardView').classList.remove('active');
-      document.getElementById('iframeView').classList.remove('active');
-      document.getElementById('reportsHubView').classList.add('active');
+      dashboardView.classList.remove('active');
+      iframeView.classList.remove('active');
+      reportsHubView.classList.add('active');
       return;
     }
 
-    var iframeView = document.getElementById('iframeView');
-    var dashboardView = document.getElementById('dashboardView');
-    var reportsHubView = document.getElementById('reportsHubView');
-    var frame = document.getElementById('pageFrame');
-    var overlay = document.getElementById('loadingOverlay');
-
+    // បើកចូលទំព័រអនុវត្តជាក់ស្តែងក្នុង iframe
     dashboardView.classList.remove('active');
     reportsHubView.classList.remove('active');
     iframeView.classList.add('active');
+
+    var frame = document.getElementById('pageFrame');
+    var overlay = document.getElementById('loadingOverlay');
     overlay.classList.add('show');
 
     frame.src = cleanFile + '.html?v=' + Date.now();
@@ -973,23 +1563,39 @@
     document.getElementById('loadingOverlay').classList.remove('show');
   });
 
-  function toggleSidebarCollapse() { document.getElementById('sidebar').classList.toggle('collapsed'); }
-  function openSidebarMobile() { document.getElementById('sidebar').classList.add('open'); document.getElementById('mobileBackdrop').style.display = 'block'; }
-  function closeSidebarMobile() { document.getElementById('sidebar').classList.remove('open'); document.getElementById('mobileBackdrop').style.display = 'none'; }
+  function toggleSidebarCollapse() {
+    document.getElementById('sidebar').classList.toggle('collapsed');
+  }
+  function openSidebarMobile() {
+    document.getElementById('sidebar').classList.add('open');
+    document.getElementById('mobileBackdrop').style.display = 'block';
+  }
+  function closeSidebarMobile() {
+    document.getElementById('sidebar').classList.remove('open');
+    document.getElementById('mobileBackdrop').style.display = 'none';
+  }
+
+  var khDigits = ['០','១','២','៣','៤','៥','៦','៧','៨','៩'];
+  var khDays = ["អាទិត្យ","ចន្ទ","អង្គារ","ពុធ","ព្រហស្បតិ៍","សុក្រ","សៅរ៍"];
+  var khMonths = ["មករា","កុម្ភៈ","មីនា","មេសា","ឧសភា","មិថុនា","កក្កដា","សីហា","កញ្ញា","តុលា","វិច្ឆិកា","ធ្នូ"];
+
+  function toKhNum(n) { return String(n).replace(/\d/g, d => khDigits[d]); }
 
   function setTodayPill() {
-    var khDays = ["អាទិត្យ","ចន្ទ","អង្គារ","ពុធ","ព្រហស្បតិ៍","សុក្រ","សៅរ៍"];
-    var khMonths = ["មករា","កុម្ភៈ","មីនា","មេសា","ឧសភា","មិថុនា","កក្កដា","សីហា","កញ្ញា","តុលា","វិច្ឆិកា","ធ្នូ"];
     var d = new Date();
-    document.getElementById('todayPill').innerText = 'ថ្ងៃ' + khDays[d.getDay()] + ' ទី' + d.getDate() + ' ' + khMonths[d.getMonth()];
-    var clockEl = document.getElementById('liveClockBadge');
-    if (clockEl) clockEl.innerText = 'ថ្ងៃ' + khDays[d.getDay()] + ' ទី' + d.getDate();
+    document.getElementById('todayPill').innerText = 'ថ្ងៃ' + khDays[d.getDay()] + ' ទី' + toKhNum(d.getDate()) + ' ' + khMonths[d.getMonth()] + ' ' + toKhNum(d.getFullYear());
   }
 
   function animateCount(id, target) {
-    var el = document.getElementById(id);
+    var el = document.getElementById(id), start = 0, duration = 600, startTime = null;
     if (!el) return;
-    el.innerText = target;
+    function step(ts) {
+      if (!startTime) startTime = ts;
+      var progress = Math.min((ts - startTime) / duration, 1);
+      el.innerText = toKhNum(Math.round(progress * target));
+      if (progress < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
   }
 
   function renderBarChart(classData) {
@@ -997,84 +1603,155 @@
     if (!barsArea || !grid) return;
     barsArea.innerHTML = ''; grid.innerHTML = '';
     if (!classData || !classData.length) {
-      barsArea.innerHTML = '<div style="color:var(--text-muted); font-size:11px; margin:auto;">មិនទាន់មានទិន្នន័យសិស្ស</div>';
+      barsArea.innerHTML = '<div style="color:var(--text-muted); font-size:11.5px; margin:auto;">មិនទាន់មានទិន្នន័យ</div>';
       return;
     }
     var max = Math.max.apply(null, classData.map(c => Number(c.count || 0))) || 1;
 
     for (var i = 5; i >= 0; i--) {
       var val = Math.ceil((max * i) / 5);
-      grid.innerHTML += `<div class="grid-line-item"><span class="grid-line-val">${val}</span></div>`;
+      grid.innerHTML += `<div class="grid-line-item"><span class="grid-line-val">${toKhNum(val)}</span></div>`;
     }
 
     classData.forEach((c) => {
       var count = Number(c.count || 0), pct = (count / max) * 100;
       barsArea.innerHTML += `
         <div class="bar-col">
-          <span class="bar-val-txt">${count}</span>
-          <div class="bar-fill" style="height:${pct}%;"></div>
+          <span class="bar-val-txt">${toKhNum(count)}</span>
+          <div class="bar-fill" style="height:0%;" data-h="${pct}%"></div>
           <span class="bar-label-txt">ថ្នាក់ទី ${c.className}</span>
         </div>
       `;
     });
+
+    setTimeout(() => {
+      document.querySelectorAll('.bar-fill').forEach(el => el.style.height = el.getAttribute('data-h'));
+    }, 60);
   }
 
   async function refreshStats() {
     try {
-      var cachedStats = localStorage.getItem('krou_cached_stats');
-      if (cachedStats) applyStatsData(JSON.parse(cachedStats));
-    } catch(e) {}
-
-    try {
       if (typeof callBackendApi !== 'function') return;
       var stats = await callBackendApi('getDashboardStats');
       if (!stats) return;
-      localStorage.setItem('krou_cached_stats', JSON.stringify(stats));
-      applyStatsData(stats);
+      animateCount('statTotal', stats.totalStudents || 0);
+      animateCount('statActive', stats.activeCount || 0);
+      animateCount('statFemale', stats.femaleCount || 0);
+      animateCount('statClasses', stats.totalClasses || 0);
+
+      var data = stats.classBreakdown || [];
+      renderBarChart(data);
+
+      var area = document.getElementById('classBreakdownArea');
+      if (area) {
+        if (!data.length) {
+          area.innerHTML = '<div style="text-align:center; color:var(--text-muted); padding:10px; font-size:12px;">មិនទាន់មានទិន្នន័យ</div>';
+          return;
+        }
+        var max = Math.max.apply(null, data.map(c => Number(c.count || 0))) || 1;
+        var h = '';
+        data.forEach(c => {
+          var count = Number(c.count || 0), pct = Math.round((count / max) * 100);
+          h += `
+            <div class="class-prog-row">
+              <div class="class-prog-title">ថ្នាក់ទី ${c.className}</div>
+              <div class="class-prog-track"><div class="class-prog-fill" style="width:${pct}%;"></div></div>
+              <div class="class-prog-count">${toKhNum(count)}</div>
+            </div>
+          `;
+        });
+        area.innerHTML = h;
+      }
     } catch(e) {
-      console.warn(e);
+      console.error("កំហុសទាញយកស្ថិតិ:", e);
     }
   }
 
-  function applyStatsData(stats) {
-    var total = stats.totalStudents || 0;
-    var active = stats.activeCount || 0;
-    var female = stats.femaleCount || 0;
-    var male = stats.maleCount || Math.max(0, total - female);
+  var profilePickedPhotoBase64 = null;
 
-    animateCount('statTotal', total);
-    animateCount('statActive', active);
-    animateCount('statFemale', female);
-    animateCount('statClasses', stats.totalClasses || 0);
-
-    var fPct = total > 0 ? Math.round((female / total) * 100) : 0;
-    var mPct = total > 0 ? (100 - fPct) : 0;
-
-    document.getElementById('genderRatioText').innerText = `ប្រុស ${mPct}% • ស្រី ${fPct}%`;
-    document.getElementById('maleRatioFill').style.width = mPct + '%';
-    document.getElementById('femaleRatioFill').style.width = fPct + '%';
-
-    var data = stats.classBreakdown || [];
-    renderBarChart(data);
-
-    var area = document.getElementById('classBreakdownArea');
-    if (area && data.length) {
-      var max = Math.max.apply(null, data.map(c => Number(c.count || 0))) || 1;
-      var h = '';
-      data.forEach(c => {
-        var count = Number(c.count || 0), pct = Math.round((count / max) * 100);
-        h += `
-          <div class="class-prog-row">
-            <div class="class-prog-title">ថ្នាក់ទី ${c.className}</div>
-            <div class="class-prog-track"><div class="class-prog-fill" style="width:${pct}%;"></div></div>
-            <div class="class-sub-badge male">👦 ${c.male || 0}</div>
-            <div class="class-sub-badge female">👧 ${c.female || 0}</div>
-            <div class="class-prog-count">${count}</div>
-          </div>
-        `;
-      });
-      area.innerHTML = h;
+  async function openProfileModal() {
+    document.getElementById('profileForm').reset();
+    document.getElementById('profileModalBackdrop').classList.add('show');
+    try {
+      if (typeof callBackendApi !== 'function') return;
+      var p = await callBackendApi('getMyProfile', { token: SESSION_TOKEN });
+      if (!p) return;
+      document.getElementById('pfName').value = p.name || '';
+      document.getElementById('pfSex').value = p.sex || 'ប្រុស';
+      document.getElementById('pfPhone').value = p.phone || '';
+      document.getElementById('pfDob').value = p.dobIso || '';
+      document.getElementById('pfAddress').value = p.address || '';
+      if (p.photoUrl) {
+        document.getElementById('profilePhotoPreview').src = p.photoUrl;
+        document.getElementById('profilePhotoPreview').style.display = 'block';
+        document.getElementById('profileAvatarPlaceholder').style.display = 'none';
+      }
+    } catch(err) {
+      console.error(err);
     }
+  }
+
+  function closeProfileModal() { document.getElementById('profileModalBackdrop').classList.remove('show'); }
+
+  function onProfilePhotoPicked(ev) {
+    var file = ev.target.files[0];
+    if (!file) return;
+    var reader = new FileReader();
+    reader.onload = function(e) {
+      profilePickedPhotoBase64 = e.target.result;
+      document.getElementById('profilePhotoPreview').src = profilePickedPhotoBase64;
+      document.getElementById('profilePhotoPreview').style.display = 'block';
+      document.getElementById('profileAvatarPlaceholder').style.display = 'none';
+    };
+    reader.readAsDataURL(file);
+  }
+
+  async function saveMyProfile(ev) {
+    ev.preventDefault();
+    var btn = document.getElementById('profileSaveBtn');
+    btn.innerText = '⏳ កំពុងរក្សា...';
+    btn.disabled = true;
+
+    var data = {
+      name: document.getElementById('pfName').value.trim(),
+      sex: document.getElementById('pfSex').value,
+      phone: document.getElementById('pfPhone').value.trim(),
+      dob: document.getElementById('pfDob').value,
+      address: document.getElementById('pfAddress').value.trim(),
+      password: document.getElementById('pfPassword').value
+    };
+    if (profilePickedPhotoBase64) data.photoFile = { base64: profilePickedPhotoBase64 };
+
+    try {
+      var res = await callBackendApi('updateMyProfile', { token: SESSION_TOKEN, profileData: data });
+      btn.innerText = '💾 រក្សាទុក';
+      btn.disabled = false;
+      closeProfileModal();
+      showToast('✅ រក្សាទុកព័ត៌មានជោគជ័យ');
+      if (res && res.teacher) {
+        TEACHER_NAME = res.teacher.name || TEACHER_NAME;
+        TEACHER_SEX = res.teacher.sex || TEACHER_SEX;
+        localStorage.setItem('krou_teacher_name', TEACHER_NAME);
+        localStorage.setItem('krou_teacher_sex', TEACHER_SEX);
+        if (res.teacher.photoUrl) localStorage.setItem('krou_teacher_photo', res.teacher.photoUrl);
+        document.getElementById('userNameLabel').innerText = TEACHER_NAME;
+        renderAvatar(res.teacher.photoUrl || '');
+        initGreetings();
+      }
+    } catch(err) {
+      btn.innerText = '💾 រក្សាទុក';
+      btn.disabled = false;
+      alert('❌ កំហុស៖ ' + err.message);
+    }
+    return false;
+  }
+
+  function showToast(msg) {
+    var t = document.getElementById('profileToast');
+    if (!t) return;
+    t.innerText = msg;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2600);
   }
 
   async function doLogout() {
@@ -1084,8 +1761,31 @@
         await callBackendApi('logoutSession', { token: SESSION_TOKEN }); 
       }
     } catch(e) {}
-    localStorage.clear();
+    localStorage.removeItem('krou_session_token');
+    localStorage.removeItem('krou_teacher_name');
+    localStorage.removeItem('krou_user_role');
+    localStorage.removeItem('krou_teacher_photo');
+    if (typeof removeStoredToken === 'function') removeStoredToken();
     window.location.replace('login.html');
+  }
+
+  async function confirmClearAllData() {
+    if (!IS_ADMIN) return;
+    if (!confirm('⚠️ ព្រមាន៖ តើអ្នកពិតជាចង់សម្អាតទិន្នន័យទាំងអស់មែនទេ?')) return;
+    if (prompt('ដើម្បីបញ្ជាក់ សូមវាយ៖ DELETE') !== 'DELETE') return;
+    try {
+      await callBackendApi('clearAllSystemData', { token: SESSION_TOKEN });
+      alert('✅ សម្អាតទិន្នន័យបានជោគជ័យ');
+      location.reload();
+    } catch(err) {
+      alert('កំហុស៖ ' + err.message);
+    }
+  }
+
+  function bootAuthenticatedApp() {
+    setTodayPill();
+    initGreetings();
+    navigate(currentPage, null);
   }
 
   async function verifySessionBeforeBoot() {
@@ -1096,17 +1796,16 @@
 
     if (TEACHER_NAME) {
       document.getElementById('userNameLabel').innerText = TEACHER_NAME;
-      renderAvatar(localStorage.getItem('krou_teacher_photo') || '');
+      renderAvatar(TEACHER_PHOTO_URL);
+      initAdminTools();
     }
 
-    setTodayPill();
-    initGreetings();
-    navigate(currentPage, null);
+    bootAuthenticatedApp();
 
     try {
       var session = await callBackendApi('getCurrentSession', { token: SESSION_TOKEN });
       if (!session || !session.loggedIn) {
-        localStorage.clear();
+        localStorage.removeItem('krou_session_token');
         window.location.replace('login.html');
         return;
       }
@@ -1120,10 +1819,14 @@
       localStorage.setItem('krou_teacher_sex', TEACHER_SEX);
       if (session.photoUrl) localStorage.setItem('krou_teacher_photo', session.photoUrl);
 
+      window.TEACHER_NAME = TEACHER_NAME;
+      window.USER_ROLE = USER_ROLE;
+
       document.getElementById('userNameLabel').innerText = TEACHER_NAME;
       renderAvatar(session.photoUrl || '');
+      initAdminTools();
     } catch(err) {
-      console.warn(err);
+      console.warn('Silent session check failed:', err);
     }
   }
 
