@@ -40,9 +40,11 @@
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    /* 🌟 កំណត់ទំហំអេក្រង់ 100% ឱ្យស្មើនឹងទំហំ Iframe ជាក់ស្តែង (លុប 100vh ចោល) */
     html, body {
-      width: 100vw;
-      height: 100vh;
+      width: 100%;
+      height: 100%;
       overflow: hidden;
       font-family: 'Khmer OS Battambang', 'Battambang', sans-serif;
       background-color: var(--bg);
@@ -59,23 +61,23 @@
     #landingPage {
       max-width: 860px;
       margin: 0 auto;
-      padding: 40px 20px;
-      height: 100vh;
+      padding: 30px 20px;
+      height: 100%;
       overflow-y: auto;
     }
-    .landing-header { margin-bottom: 25px; }
+    .landing-header { margin-bottom: 20px; }
     .landing-header h1 { font-size: 22px; color: var(--primary); margin-bottom: 4px; }
     .landing-header p { font-size: 13px; color: var(--text-muted); }
 
     .cards-wrapper {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 18px;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 16px;
     }
     .score-card {
       background: #ffffff;
       border-radius: 18px;
-      padding: 22px 20px;
+      padding: 20px;
       cursor: pointer;
       border: 1px solid #e2e8f0;
       box-shadow: 0 4px 18px rgba(15, 23, 42, 0.05);
@@ -85,7 +87,7 @@
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      min-height: 160px;
+      min-height: 150px;
     }
     .score-card:hover {
       transform: translateY(-3px);
@@ -96,53 +98,45 @@
     
     .card-top { display: flex; align-items: flex-start; gap: 14px; }
     .card-icon {
-      width: 46px;
-      height: 46px;
-      border-radius: 13px;
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 22px;
+      font-size: 20px;
       flex-shrink: 0;
     }
     .card-icon.m { background: #e0f2fe; color: #0284c7; }
     .card-icon.s { background: #ede9fe; color: #7c3aed; }
     
-    .card-info h2 { font-size: 16px; margin-bottom: 4px; }
-    .card-info p { font-size: 12px; color: var(--text-muted); }
+    .card-info h2 { font-size: 15px; margin-bottom: 3px; }
+    .card-info p { font-size: 11.5px; color: var(--text-muted); }
     
     .card-bottom {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-top: 18px;
-      padding-top: 12px;
+      margin-top: 14px;
+      padding-top: 10px;
       border-top: 1px dashed #e2e8f0;
     }
     .card-badge {
-      font-size: 11px;
+      font-size: 10.5px;
       font-weight: bold;
-      padding: 4px 10px;
+      padding: 3px 8px;
       border-radius: 20px;
       background: #f1f5f9;
       color: #334155;
     }
-    .card-arrow {
-      font-size: 16px;
-      color: #94a3b8;
-      transition: transform 0.2s;
-    }
-    .score-card:hover .card-arrow {
-      transform: translateX(3px);
-      color: var(--primary);
-    }
+    .card-arrow { font-size: 15px; color: #94a3b8; }
 
-    /* ================= 🌟 MAIN SCORE TABLE UI (FLEX SCROLL ENGINE) ================= */
+    /* ================= 🌟 MAIN FORM CONTAINER (FLEX ENGINE) ================= */
     #mainForm {
       display: none;
-      width: 100vw;
-      height: 100vh;
-      padding: 8px 10px 12px;
+      width: 100%;
+      height: 100%;
+      padding: 8px 10px 10px;
       flex-direction: column;
       box-sizing: border-box;
       overflow: hidden;
@@ -152,16 +146,17 @@
       flex: 1;
       display: flex;
       flex-direction: column;
-      min-height: 0; /* 🌟 សំខាន់បំផុត ដើម្បីឱ្យ Flexbox អនុញ្ញាតឱ្យតារាង Scroll ដល់បាត */
+      min-height: 0; /* 🌟 ចំណុចគន្លឹះដើម្បីឱ្យរមូរដល់សិស្សចុងក្រោយ */
+      height: 100%;
       background: #ffffff;
-      border-radius: 16px;
+      border-radius: 14px;
       border: 1px solid #cbd5e1;
       box-shadow: 0 4px 20px rgba(0,0,0,0.05);
       overflow: hidden;
     }
 
     .top-toolbar {
-      flex-shrink: 0; /* 🌟 មិនឱ្យ Toolbar រួញកម្ពស់ឡើយ */
+      flex-shrink: 0;
       background: #ffffff;
       padding: 8px 12px;
       border-bottom: 1.5px solid #e2e8f0;
@@ -169,7 +164,7 @@
       flex-wrap: wrap;
       align-items: center;
       justify-content: space-between;
-      gap: 8px;
+      gap: 6px;
       z-index: 50;
     }
     .tb-left, .tb-right {
@@ -182,19 +177,14 @@
     .pill-select {
       border: 1.5px solid #cbd5e1;
       border-radius: 20px;
-      padding: 5px 12px;
-      font-size: 12px;
+      padding: 5px 10px;
+      font-size: 11.5px;
       font-weight: bold;
       background: #f8fafc;
       color: var(--text);
       font-family: inherit;
       cursor: pointer;
       outline: none;
-      transition: border 0.15s;
-    }
-    .pill-select:focus, .pill-select:hover {
-      border-color: var(--primary);
-      background: #fff;
     }
 
     .search-input-wrap {
@@ -203,15 +193,15 @@
       gap: 6px;
       border: 1.5px solid #cbd5e1;
       border-radius: 20px;
-      padding: 4px 12px;
+      padding: 4px 10px;
       background: #f8fafc;
-      min-width: 150px;
+      min-width: 140px;
     }
     .search-input-wrap input {
       border: none;
       background: transparent;
       outline: none;
-      font-size: 12px;
+      font-size: 11.5px;
       font-family: inherit;
       width: 100%;
     }
@@ -220,47 +210,47 @@
       display: inline-flex;
       align-items: center;
       gap: 4px;
-      padding: 5px 12px;
+      padding: 5px 11px;
       border-radius: 20px;
       border: 1.5px solid #cbd5e1;
       background: #ffffff;
-      font-size: 12px;
+      font-size: 11.5px;
       font-weight: bold;
       cursor: pointer;
       font-family: inherit;
       transition: all 0.15s;
     }
-    .action-btn:hover { background: #f1f5f9; border-color: #94a3b8; }
+    .action-btn:hover { background: #f1f5f9; }
     .action-btn.btn-save { background: #16a34a; border-color: #15803d; color: #fff; }
-    .action-btn.btn-save:hover { background: #15803d; }
     .action-btn.btn-report { background: #0284c7; border-color: #0369a1; color: #fff; }
-    .action-btn.btn-report:hover { background: #0369a1; }
-    .action-btn.btn-back { background: #f1f5f9; border-color: #cbd5e1; color: #334155; }
+    .action-btn.btn-back { background: #f1f5f9; color: #334155; }
+    .action-btn.btn-scroll { background: #f3e8ff; border-color: #c084fc; color: #7e22ce; }
 
     .autosave-pill {
       font-size: 11px;
       font-weight: bold;
-      padding: 4px 10px;
+      padding: 4px 8px;
       border-radius: 20px;
       background: #f1f5f9;
       color: #64748b;
       display: inline-flex;
       align-items: center;
       gap: 4px;
-      transition: all 0.2s;
     }
     .autosave-pill.saving { background: #fef3c7; color: #b45309; }
     .autosave-pill.saved { background: #dcfce7; color: #15803d; }
     .autosave-pill.error { background: #fee2e2; color: #b91c1c; }
 
-    /* ================= 🌟 SCORE TABLE SCROLL ENGINE ================= */
+    /* ================= 🌟 TABLE SCROLL ENGINE (100% RESPONSIVE) ================= */
     .table-scroll-wrap {
-      flex: 1; /* 🌟 ស្រូបយកកម្ពស់ពេញអេក្រង់ដោយស្វ័យប្រវត្តិ */
-      min-height: 0; /* 🌟 អនុញ្ញាតឱ្យរមូរដល់សិស្សក្រោមគេបង្អស់ */
-      overflow: auto; /* Scroll ទាំងបញ្ឈរ និងផ្ដេក */
+      flex: 1;
+      min-height: 0;
+      height: 100%;
+      overflow: auto;
       position: relative;
       background: #ffffff;
       -webkit-overflow-scrolling: touch;
+      touch-action: pan-x pan-y !important;
     }
 
     .modern-score-table {
@@ -270,22 +260,29 @@
       font-size: 12.5px;
       text-align: center;
       border: 1px solid #cbd5e1;
+      touch-action: pan-x pan-y !important;
     }
 
     .modern-score-table th, .modern-score-table td {
       border: 1px solid #cbd5e1;
-      padding: 4px 2px;
+      padding: 3px 2px;
       height: 38px;
       vertical-align: middle;
       white-space: nowrap;
+      touch-action: pan-x pan-y !important;
     }
 
-    /* STICKY COLUMNS */
-    .stk { position: sticky !important; background: #ffffff; z-index: 20; }
-    .stk-1 { left: 0; min-width: 45px; max-width: 45px; }
-    .stk-2 { left: 45px; min-width: 85px; max-width: 85px; text-align: left; padding-left: 8px; }
-    .stk-3 { left: 130px; min-width: 95px; max-width: 95px; text-align: left; padding-left: 8px; font-weight: bold; }
-    .stk-4 { left: 225px; min-width: 55px; max-width: 55px; box-shadow: 3px 0 6px -2px rgba(0,0,0,0.12); }
+    /* 🌟 Sticky Columns អាចអូស Touch បានដោយសេរី */
+    .stk {
+      position: sticky !important;
+      background: #ffffff;
+      z-index: 20;
+      touch-action: pan-x pan-y !important;
+    }
+    .stk-1 { left: 0; min-width: 42px; max-width: 42px; }
+    .stk-2 { left: 42px; min-width: 80px; max-width: 80px; text-align: left; padding-left: 6px; }
+    .stk-3 { left: 122px; min-width: 90px; max-width: 90px; text-align: left; padding-left: 6px; font-weight: bold; }
+    .stk-4 { left: 212px; min-width: 50px; max-width: 50px; box-shadow: 3px 0 6px -2px rgba(0,0,0,0.12); }
 
     .modern-score-table thead th.stk { z-index: 40; background: #f8fafc; }
 
@@ -298,11 +295,11 @@
     .th-group-res { background: var(--res-bg); color: var(--res-txt); }
 
     .th-vertical-cell {
-      height: 125px !important;
-      max-height: 125px;
+      height: 120px !important;
+      max-height: 120px;
       vertical-align: middle !important;
       text-align: center;
-      padding: 4px 1px !important;
+      padding: 3px 1px !important;
       position: relative;
     }
 
@@ -310,7 +307,7 @@
       display: inline-block;
       white-space: nowrap;
       transform: rotate(-90deg);
-      font-size: 11.5px;
+      font-size: 11px;
       font-weight: bold;
       letter-spacing: 0.3px;
       margin: 0 auto;
@@ -327,14 +324,14 @@
 
     .coef-row {
       background: #f8fafc;
-      font-size: 11.5px;
+      font-size: 11px;
       font-weight: bold;
       color: #64748b;
-      height: 34px;
+      height: 32px;
     }
     .coef-tag {
       display: inline-block;
-      padding: 1px 6px;
+      padding: 1px 5px;
       border-radius: 4px;
       font-weight: bold;
     }
@@ -353,6 +350,7 @@
       outline: none;
       transition: all 0.15s ease;
       background: #ffffff;
+      touch-action: manipulation;
     }
     .score-box:focus {
       border-color: #2563eb !important;
@@ -373,19 +371,19 @@
       color: #92400e;
     }
 
-    .col-res-tot   { min-width: 78px !important; font-size: 13px; color: #475569; }
-    .col-res-avg   { min-width: 78px !important; font-size: 14px; font-weight: bold; color: #0f172a; }
-    .col-res-rank  { min-width: 78px !important; font-size: 14px; font-weight: bold; color: #dc2626; }
-    .col-res-grade { min-width: 90px !important; }
-    .col-res-note  { min-width: 78px !important; font-size: 13px; }
-    .col-res-abs   { min-width: 70px !important; font-size: 13px; color: #b91c1c; font-weight: bold; }
+    .col-res-tot   { min-width: 75px !important; font-size: 13px; color: #475569; }
+    .col-res-avg   { min-width: 75px !important; font-size: 13.5px; font-weight: bold; color: #0f172a; }
+    .col-res-rank  { min-width: 75px !important; font-size: 13.5px; font-weight: bold; color: #dc2626; }
+    .col-res-grade { min-width: 85px !important; }
+    .col-res-note  { min-width: 75px !important; font-size: 12.5px; }
+    .col-res-abs   { min-width: 65px !important; font-size: 12.5px; color: #b91c1c; font-weight: bold; }
     
     .badge-grade {
       display: inline-block;
-      padding: 3px 10px;
+      padding: 2px 8px;
       border-radius: 6px;
       font-weight: bold;
-      font-size: 12px;
+      font-size: 11.5px;
       white-space: nowrap;
     }
     .grade-a { background: #dcfce7; color: #15803d; }
@@ -403,15 +401,16 @@
     .focused-row { background-color: #e0f2fe !important; }
     .focused-row .stk { background-color: #e0f2fe !important; }
 
-    /* 🌟 បាតតារាង Buffer សម្រាប់ការពារកុំឱ្យ Scrollbar បាំងសិស្សចុងក្រោយ */
+    /* 🌟 បាតតារាង Buffer 60px ធានាមិនបាំងសិស្សចុងក្រោយ */
     .table-footer-buffer {
-      height: 52px !important;
+      height: 60px !important;
       background: #f8fafc;
       color: #64748b;
       font-weight: 700;
       font-size: 12px;
       border: 1px solid #cbd5e1;
       text-align: center;
+      vertical-align: middle;
     }
 
     /* ================= 🖨️ REPORT VIEWER ================= */
@@ -622,6 +621,10 @@
         </div>
 
         <div class="tb-right">
+          <!-- 🌟 ប៊ូតុងរំកិលរហ័ស (Quick Scroll) សម្រាប់ Tablet -->
+          <button class="action-btn btn-scroll" onclick="scrollToBottomTable()" title="រំកិលទៅសិស្សក្រោមគេ">⬇️ ក្រោមបង្អស់</button>
+          <button class="action-btn btn-scroll" onclick="scrollToTopTable()" title="រំកិលទៅលើគេ">⬆️ លើបង្អស់</button>
+
           <span id="autoSaveStatus" class="autosave-pill saved">✓ រួចរាល់</span>
           <button class="action-btn btn-report" onclick="openScoreReportModal()">📋 របាយការណ៍ពិន្ទុ</button>
           <button class="action-btn" onclick="toggleLock()" id="btnLock">🔓 ដោះសោ</button>
@@ -653,7 +656,7 @@
 
   <script>
     /* =========================================================
-       🔑 កំណត់ SESSION & AUTH សម្រាប់ GITHUB PAGES
+       🔑 កំណត់ SESSION & AUTH
     ========================================================= */
     var TOKEN = (window.parent && window.parent.SESSION_TOKEN) || localStorage.getItem('krou_session_token') || "";
     var USER_ROLE = (window.parent && window.parent.USER_ROLE) || localStorage.getItem('krou_user_role') || "teacher";
@@ -663,7 +666,6 @@
     var KHMER_DIGITS = ['០','១','២','៣','៤','៥','៦','៧','៨','៩'];
     function toKhmerNum(n) { return String(n).replace(/\d/g, d => KHMER_DIGITS[d]); }
 
-    /* 🌟 ហៅ API សុវត្ថិភាព ដំណើរការលើ GitHub Pages និង Google Apps Script */
     async function apiCall(action, params = {}) {
       params.token = params.token || TOKEN;
       if (typeof callBackendApi === 'function') {
@@ -791,14 +793,53 @@
 
     window.onload = function() {
       setupArrowKeys();
+      // 🌟 បើកដំណើរការ Touch Scroll Gesture លើ Tablet
+      enableTouchScroll(document.getElementById('tableArea'));
     };
+
+    /* 🌟 ប៊ូតុងរំកិលរហ័ស ឡើងលើ/ចុះក្រោម */
+    function scrollToBottomTable() {
+      var area = document.getElementById('tableArea');
+      if (area) area.scrollTo({ top: area.scrollHeight, behavior: 'smooth' });
+    }
+    function scrollToTopTable() {
+      var area = document.getElementById('tableArea');
+      if (area) area.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    /* 🌟 TOUCH GESTURE ENGINE (ជួយឱ្យរមូរលើ Tablet បានរលូន 100%) */
+    function enableTouchScroll(el) {
+      if (!el) return;
+      var startX = 0, startY = 0, sLeft = 0, sTop = 0, isDragging = false;
+
+      el.addEventListener('touchstart', function(e) {
+        if (e.touches.length !== 1) return;
+        startX = e.touches[0].pageX;
+        startY = e.touches[0].pageY;
+        sLeft = el.scrollLeft;
+        sTop = el.scrollTop;
+        isDragging = true;
+      }, { passive: true });
+
+      el.addEventListener('touchmove', function(e) {
+        if (!isDragging || e.touches.length !== 1) return;
+        var diffX = startX - e.touches[0].pageX;
+        var diffY = startY - e.touches[0].pageY;
+        if (Math.abs(diffX) > 4 || Math.abs(diffY) > 4) {
+          el.scrollLeft = sLeft + diffX;
+          el.scrollTop = sTop + diffY;
+        }
+      }, { passive: true });
+
+      el.addEventListener('touchend', function() { isDragging = false; }, { passive: true });
+      el.addEventListener('touchcancel', function() { isDragging = false; }, { passive: true });
+    }
 
     function openScoreForm(type) {
       scoreType = type;
       document.getElementById('landingPage').style.display = 'none';
-      // 🌟 បង្ហាញជា Flex ពេញអេក្រង់
       var mf = document.getElementById('mainForm');
-      mf.style.display = 'flex';
+      mf.style.display = 'flex'; // 🌟 Flex ពេញកម្ពស់អេក្រង់
 
       var mSel = document.getElementById('monthSelect');
       var sSel = document.getElementById('semesterSelect');
@@ -844,20 +885,14 @@
     async function loadClassList() {
       var sel = document.getElementById('classSelect');
       sel.innerHTML = '<option value="">កំពុងទាញយកថ្នាក់...</option>';
-
       var classes = [];
 
       try {
         var res = await apiCall('getClassListForSession', { token: TOKEN });
-        if (Array.isArray(res)) {
-          classes = res;
-        } else if (res && Array.isArray(res.classes)) {
-          classes = res.classes;
-        } else if (res && Array.isArray(res.data)) {
-          classes = res.data;
-        } else if (res && Array.isArray(res.classList)) {
-          classes = res.classList;
-        }
+        if (Array.isArray(res)) classes = res;
+        else if (res && Array.isArray(res.classes)) classes = res.classes;
+        else if (res && Array.isArray(res.data)) classes = res.data;
+        else if (res && Array.isArray(res.classList)) classes = res.classList;
 
         if (!classes.length) {
           var fallbackRes = await apiCall('getClasses', { token: TOKEN });
@@ -869,11 +904,7 @@
       }
 
       if (!classes.length) {
-        if (USER_CLASS && USER_CLASS.trim() !== '') {
-          classes = [USER_CLASS];
-        } else {
-          classes = ['១', '២', '៣', '៤', '៥', '៦'];
-        }
+        classes = (USER_CLASS && USER_CLASS.trim() !== '') ? [USER_CLASS] : ['១', '២', '៣', '៤', '៥', '៦'];
       }
 
       sel.innerHTML = '';
@@ -885,10 +916,7 @@
         sel.appendChild(o);
       });
 
-      if (USER_CLASS) {
-        sel.value = USER_CLASS;
-      }
-      
+      if (USER_CLASS) sel.value = USER_CLASS;
       loadStudents();
     }
 
@@ -948,11 +976,8 @@
         v = v.slice(0, firstDot + 1) + v.slice(firstDot + 1).replace(/\./g, '');
       }
       input.value = v;
-      if (v !== '' && v !== '.') {
-        input.classList.add('filled');
-      } else {
-        input.classList.remove('filled');
-      }
+      if (v !== '' && v !== '.') input.classList.add('filled');
+      else input.classList.remove('filled');
     }
 
     function validateScore(input) {
@@ -969,18 +994,13 @@
       }
       var sid = input.getAttribute('data-sid');
       var key = input.getAttribute('data-key');
-      if (sid && key) {
-        syncScore(sid, key, input.value);
-      }
+      if (sid && key) syncScore(sid, key, input.value);
     }
 
     function syncScore(sid, key, val) {
       if (!savedScoresData[sid]) savedScoresData[sid] = {};
-      if (val === '' || val === '.') {
-        delete savedScoresData[sid][key];
-      } else {
-        savedScoresData[sid][key] = val;
-      }
+      if (val === '' || val === '.') delete savedScoresData[sid][key];
+      else savedScoresData[sid][key] = val;
       updateRowTotals(sid);
       updateAutoCoef();
       scheduleAutoSave();
@@ -1081,9 +1101,8 @@
       displayedStudents.forEach(s => {
         var rEl = document.getElementById('rr-' + s.id);
         if (rEl) {
-          var rVal = ranks[s.id];
           var aVal = calcAvg(s.id);
-          rEl.textContent = aVal > 0 ? rVal : '—';
+          rEl.textContent = aVal > 0 ? (ranks[s.id] || '') : '—';
         }
       });
     }
@@ -1113,13 +1132,13 @@
       
       grps.forEach(g => {
         if (g.cols.length > 1) {
-          h += '<th class="th-group-' + g.grp + ' f-bold" colspan="' + g.cols.length + '" style="font-size:13.5px; height:36px;">' + g.label + '</th>';
+          h += '<th class="th-group-' + g.grp + ' f-bold" colspan="' + g.cols.length + '" style="font-size:13px; height:34px;">' + g.label + '</th>';
         } else {
           h += '<th class="th-group-' + g.grp + ' th-vertical-cell" rowspan="2"><div class="th-vertical-wrap">' + g.cols[0].label + '</div></th>';
         }
       });
 
-      h += '<th class="th-group-res f-bold" colspan="' + RES_COLS.length + '" style="font-size:13.5px; height:36px;">' + (scoreType === 'monthly' ? 'លទ្ធផលខែ' : 'លទ្ធផលឆមាស') + '</th>'
+      h += '<th class="th-group-res f-bold" colspan="' + RES_COLS.length + '" style="font-size:13px; height:34px;">' + (scoreType === 'monthly' ? 'លទ្ធផលខែ' : 'លទ្ធផលឆមាស') + '</th>'
         +  '</tr>';
 
       // ── Row 2: Sub-headers ──
@@ -1138,7 +1157,7 @@
 
       // ── Row 3: Coefficient Row ──
       h += '<tr class="coef-row">'
-        +  '<td colspan="4" class="stk stk-1" style="text-align:right; padding-right:12px; font-weight:bold;">មេគុណតាមមុខវិជ្ជា</td>';
+        +  '<td colspan="4" class="stk stk-1" style="text-align:right; padding-right:10px; font-weight:bold;">មេគុណតាមមុខវិជ្ជា</td>';
 
       grps.forEach(g => {
         g.cols.forEach(c => {
@@ -1201,12 +1220,12 @@
 
       h += '</tbody>';
 
-      // 🌟 បន្ថែម Buffer Row នៅបាតក្រោមតារាង ដើម្បីកុំឱ្យ Scrollbar បាំងសិស្សចុងក្រោយ
+      // 🌟 ជួរ Buffer បាតក្រោមធានាថាសិស្សចុងក្រោយគេនឹងរុញផុតពីរបារ Scrollbar យ៉ាងស្រស់ស្អាត
       if (list.length > 0) {
         h += `<tfoot>
           <tr>
             <td colspan="${totalCols}" class="table-footer-buffer">
-              ✨ បញ្ជីសិស្សសរុប ${toKhmerNum(list.length)} នាក់ (បានរមូរដល់ចុងបញ្ចប់)
+              ✨ បញ្ជីសិស្សសរុប ${toKhmerNum(list.length)} នាក់ (បានរមូរដល់បាតក្រោមបង្អស់)
             </td>
           </tr>
         </tfoot>`;
@@ -1215,6 +1234,9 @@
       h += '</table>';
       area.innerHTML = h;
       updateAutoCoef();
+      
+      // ភ្ជាប់ Touch Gesture
+      enableTouchScroll(area);
     }
 
     function setupArrowKeys() {
@@ -1348,7 +1370,7 @@
       }
     }
 
-    /* ================= 🖨️ 4. SCORE REPORT GENERATION & PRINT ================= */
+    /* ================= 🖨️ REPORT GENERATION & PRINT ================= */
     function openScoreReportModal() {
       var cls = document.getElementById('classSelect').value;
       if (!cls || !displayedStudents.length) {
