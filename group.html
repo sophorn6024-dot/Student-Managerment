@@ -715,6 +715,7 @@ async function apiCall(action, data = {}) {
 var currentStudents = [];
 var currentGroups = [];
 var savedLeadership = null;
+var currentSession = null;
 
 var daysOfWeek = [
   "ថ្ងៃចន្ទ",
@@ -726,25 +727,54 @@ var daysOfWeek = [
 ];
 
 window.onload = async function () {
-  if (!getToken()) {
+  const token = getToken();
+
+  if (!token) {
     status(
       '⚠️ មិនទាន់រកឃើញ Session Token។ សូម Login ពីប្រព័ន្ធមេជាមុនសិន។',
       'orange'
     );
-  } else {
-    status('⏳ កំពុងទាញយកបញ្ជីថ្នាក់...', 'blue');
+    document.getElementById('classSelect').disabled = true;
+    return;
   }
 
+  status('⏳ កំពុងផ្ទៀងផ្ទាត់គណនី និងថ្នាក់...', 'blue');
+
   try {
-    const classes = await apiCall('getClassListForSession');
-    populateClasses(classes || []);
-    status(
-      classes && classes.length
-        ? '✅ បានទាញយកបញ្ជីថ្នាក់រួចរាល់'
-        : '⚠️ មិនទាន់មានថ្នាក់',
-      classes && classes.length ? 'green' : 'orange'
-    );
+    // 1) ទាញ Session ពិតពី Backend
+    currentSession = await apiCall('getCurrentSession', { token: token });
+
+    if (!currentSession || !currentSession.loggedIn) {
+      throw new Error('Session ផុតកំណត់ សូម Login ឡើងវិញ។');
+    }
+
+    // 2) ទាញថ្នាក់តាម Session
+    const classes = await apiCall('getClassListForSession', { token: token });
+    populateClasses(classes || [], currentSession);
+
+    const classSelect = document.getElementById('classSelect');
+    const role = String(currentSession.role || 'teacher').toLowerCase();
+    const assignedClass = String(currentSession.assignedClass || '').trim();
+
+    if (role !== 'admin') {
+      // Teacher ត្រូវប្រើ assignedClass ពី Session ប៉ុណ្ណោះ
+      if (!assignedClass) {
+        throw new Error('គណនីគ្រូនេះមិនទាន់មានថ្នាក់ដែលបានកំណត់ទេ។');
+      }
+
+      classSelect.value = assignedClass;
+      classSelect.disabled = true;
+      await onClassChange();
+    } else if (classes && classes.length === 1) {
+      classSelect.value = classes[0];
+      await onClassChange();
+    } else {
+      classSelect.disabled = false;
+      status('✅ បានផ្ទៀងផ្ទាត់សិទ្ធិរួចរាល់ — សូមជ្រើសរើសថ្នាក់', 'green');
+    }
+
   } catch (e) {
+    document.getElementById('classSelect').disabled = true;
     status('❌ ' + e.message, 'red');
   }
 };
@@ -756,7 +786,7 @@ function status(msg, color) {
   el.style.color = color || '#334155';
 }
 
-function populateClasses(classes) {
+function populateClasses(classes, session) {
   const s = document.getElementById('classSelect');
   s.innerHTML = '<option value="">-- ជ្រើសរើសថ្នាក់ --</option>';
 
@@ -766,6 +796,17 @@ function populateClasses(classes) {
     o.textContent = 'ថ្នាក់ទី ' + c;
     s.appendChild(o);
   });
+
+  // Teacher → បង្ហាញតែថ្នាក់ដែល Backend អនុញ្ញាត
+  if (session && String(session.role || 'teacher').toLowerCase() !== 'admin') {
+    const assignedClass = String(session.assignedClass || '').trim();
+    if (assignedClass) {
+      s.value = assignedClass;
+      s.disabled = true;
+    }
+  } else {
+    s.disabled = false;
+  }
 }
 
 function clearRoles() {
@@ -853,7 +894,19 @@ function updateRoleSummary() {
 }
 
 async function onClassChange() {
-  const c = document.getElementById('classSelect').value;
+  let c = document.getElementById('classSelect').value;
+
+  // Frontend ក៏បង្ខំតាម Session ជាន់លើទៀត ដើម្បីកុំឱ្យ UI ប្តូរថ្នាក់គ្រូ
+  if (currentSession && String(currentSession.role || 'teacher').toLowerCase() !== 'admin') {
+    const assignedClass = String(currentSession.assignedClass || '').trim();
+    if (!assignedClass) {
+      status('❌ គណនីគ្រូនេះមិនទាន់មានថ្នាក់ដែលបានកំណត់ទេ។', 'red');
+      return;
+    }
+    c = assignedClass;
+    document.getElementById('classSelect').value = assignedClass;
+    document.getElementById('classSelect').disabled = true;
+  }
 
   currentGroups = [];
   document.getElementById('groupsContainer').innerHTML = '';
@@ -979,7 +1032,10 @@ function rotateLeadership() {
 }
 
 async function saveLeadership() {
-  const c = document.getElementById('classSelect').value;
+  let c = document.getElementById('classSelect').value;
+  if (currentSession && String(currentSession.role || 'teacher').toLowerCase() !== 'admin') {
+    c = String(currentSession.assignedClass || '').trim();
+  }
 
   if (!c) {
     alert('សូមជ្រើសរើសថ្នាក់សិន!');
@@ -1041,7 +1097,12 @@ function getExcludedKeys() {
 }
 
 async function generateGroups() {
-  const c = document.getElementById('classSelect').value;
+  let c = document.getElementById('classSelect').value;
+
+  if (currentSession && String(currentSession.role || 'teacher').toLowerCase() !== 'admin') {
+    c = String(currentSession.assignedClass || '').trim();
+    document.getElementById('classSelect').value = c;
+  }
   const m = document.getElementById('splitMode').value;
   const n = parseInt(
     document.getElementById('splitValue').value,
@@ -1202,7 +1263,10 @@ function renderGroups(groups) {
 }
 
 async function saveToSheet() {
-  const c = document.getElementById('classSelect').value;
+  let c = document.getElementById('classSelect').value;
+  if (currentSession && String(currentSession.role || 'teacher').toLowerCase() !== 'admin') {
+    c = String(currentSession.assignedClass || '').trim();
+  }
 
   if (!c) {
     alert('សូមជ្រើសរើសថ្នាក់សិន!');
