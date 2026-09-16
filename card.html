@@ -1,966 +1,919 @@
 <!DOCTYPE html>
 <html lang="km">
 <head>
+  <base target="_top">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>កាតសម្គាល់ខ្លួនសិស្ស (៦កាត & ៨កាត)</title>
-  
-  <!-- Google Fonts ខ្មែរផ្លូវការ -->
+  <title>បែងចែកសិស្សតាមវេន - សាលាបឋមសិក្សាកំពង់ល្ពៅ</title>
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Battambang:wght@400;700;900&family=Moul&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Khmer&family=Moul&family=Siemreap&family=Battambang:wght@400;700&display=swap" rel="stylesheet">
+
+  <!-- 🔗 ភ្ជាប់ API សម្រាប់ទំនាក់ទំនងជាមួយ Google Sheets លើ GitHub Pages -->
+  <script src="api.js"></script>
 
   <style>
-    :root {
-      --c-blue: #001fd1;
-      --c-green: #009639;
-      --c-orange: #c85000;
-      --c-red: #e60000;
-      --c-border: #0022cc;
-      --stamp-w: 36mm;
-      --stamp-h: 26mm;
-      --stamp-top: -3px;
-      --stamp-left: 0px;
+    body{
+      font-family:'Siemreap','Khmer OS Battambang',Arial,sans-serif;
+      background:#f1f5f9;
+      padding:15px;
+      font-size:13px;
+      color:#334155;
+      margin:0
     }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      -webkit-print-color-adjust: exact !important;
-      print-color-adjust: exact !important;
+    .khmer-moul{
+      font-family:'Moul','Khmer OS Muol Light',serif
     }
 
-    body {
-      font-family: 'Battambang', sans-serif;
-      background-color: #f1f5f9;
-      color: #0f172a;
-      padding-bottom: 50px;
+    .card{
+      background:#fff;
+      padding:20px;
+      border-radius:8px;
+      box-shadow:0 2px 4px rgba(0,0,0,.1);
+      margin-bottom:15px
     }
 
-    /* របារបញ្ជា (Toolbar Control) */
-    .no-print-toolbar {
-      position: sticky;
-      top: 0;
-      z-index: 1000;
-      background: #ffffff;
-      padding: 10px 18px;
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-      box-shadow: 0 4px 6px -1px rgba(0,0,0,0.08);
-      border-bottom: 1.5px solid #e2e8f0;
+    .header-title{
+      text-align:center;
+      color:#b91c1c;
+      font-weight:bold;
+      font-size:18px;
+      margin-bottom:15px;
+      border-bottom:2px solid #b91c1c;
+      padding-bottom:8px
     }
 
-    .toolbar-row {
-      display: flex;
-      flex-wrap: wrap;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
+    .controls{
+      display:flex;
+      gap:12px;
+      align-items:flex-end;
+      flex-wrap:wrap;
+      background:#f8fafc;
+      padding:12px;
+      border-radius:6px;
+      border:1px solid #e2e8f0
     }
 
-    .toolbar-group {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      flex-wrap: wrap;
+    .col{
+      flex:1;
+      min-width:150px;
+      display:flex;
+      flex-direction:column
     }
 
-    .form-control {
-      padding: 6px 9px;
-      font-family: 'Battambang', sans-serif;
-      font-size: 13px;
-      border: 1.5px solid #cbd5e1;
-      border-radius: 6px;
-      outline: none;
-      background: #fff;
+    label{
+      font-weight:bold;
+      margin-bottom:5px;
+      color:#475569
     }
 
-    .btn {
-      padding: 6px 12px;
-      font-family: 'Battambang', sans-serif;
-      font-size: 13px;
-      font-weight: 700;
-      border-radius: 6px;
-      border: none;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
-      transition: all 0.2s;
+    select,
+    input[type=number]{
+      padding:8px;
+      border:1px solid #cbd5e1;
+      border-radius:4px;
+      font-size:13px;
+      font-family:inherit;
+      background:white
     }
 
-    .btn-primary { background: #2563eb; color: #ffffff; }
-    .btn-primary:hover { background: #1d4ed8; }
-
-    .btn-success { background: #16a34a; color: #ffffff; }
-    .btn-success:hover { background: #15803d; }
-
-    .btn-danger { background: #fee2e2; color: #dc2626; border: 1.5px solid #fca5a5; }
-    .btn-danger:hover { background: #fecaca; }
-
-    .btn-outline {
-      background: #ffffff;
-      border: 1.5px solid #cbd5e1;
-      color: #334155;
-    }
-    .btn-outline:hover {
-      background: #f8fafc;
-      border-color: #94a3b8;
+    .btn{
+      padding:8px 16px;
+      font-weight:bold;
+      border-radius:4px;
+      border:none;
+      cursor:pointer;
+      transition:.2s;
+      font-family:inherit
     }
 
-    /* ផ្ទាំងក្រដាស A4 Landscape */
-    .print-area {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      margin-top: 15px;
-      gap: 20px;
+    .btn:hover{
+      filter:brightness(.95);
+      transform:translateY(-1px)
     }
 
-    .a4-page {
-      width: 297mm;
-      height: 210mm;
-      background: #ffffff;
-      box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-      page-break-after: always;
-      break-after: page;
-      overflow: hidden;
-      box-sizing: border-box;
+    .btn-group{
+      background:#15803d;
+      color:#fff
     }
 
-    .a4-page.layout-6 {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-      align-content: center;
-      gap: 4mm 6mm;
-      padding: 3mm 5mm;
-    }
-    .a4-page.layout-6 .student-card {
-      width: 70mm;
-      height: 100mm;
-      flex-shrink: 0;
+    .btn-save{
+      background:#d97706;
+      color:#fff;
+      display:none
     }
 
-    .a4-page.layout-8 {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      grid-template-rows: repeat(2, 1fr);
-      gap: 3.5mm 3.2mm;
-      padding: 4.5mm 5.5mm;
-    }
-    .a4-page.layout-8 .student-card {
-      width: 100%;
-      height: 100%;
+    .btn-print{
+      background:#2563eb;
+      color:#fff;
+      display:none
     }
 
-    .student-card {
-      border: 2px solid var(--c-border);
-      background: #ffffff;
-      display: flex;
-      flex-direction: column;
-      position: relative;
-      overflow: hidden;
-      box-sizing: border-box;
+    .btn-role{
+      background:#7c3aed;
+      color:#fff
     }
 
-    .card-top-header {
-      position: relative;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-bottom: 2px solid var(--c-border);
-      padding: 2px 5px;
-      background: #ffffff;
-      height: 41px;
+    .btn-rotate{
+      background:#0891b2;
+      color:#fff
     }
 
-    .header-logo-box {
-      position: absolute;
-      left: 7px;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 35px;
-      height: 35px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 2;
+    .roles-card{
+      background:#fff7ed;
+      border:1px solid #fed7aa;
+      border-radius:7px;
+      padding:14px;
+      margin-top:15px
     }
 
-    .header-logo-img {
-      width: 35px;
-      height: 35px;
-      object-fit: contain;
+    .roles-grid{
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:12px
     }
 
-    .header-kingdom {
-      width: 100%;
-      text-align: center;
-      line-height: 1.25;
-      z-index: 1;
+    .role-item{
+      background:white;
+      border:1px solid #cbd5e1;
+      border-radius:6px;
+      padding:10px
     }
 
-    .kingdom-title {
-      font-family: 'Moul', cursive;
-      font-size: 9.2px;
-      color: #000000;
-      letter-spacing: -0.1px;
+    .role-item.president{
+      border-left:4px solid #b91c1c
     }
 
-    .kingdom-subtitle {
-      font-family: 'Moul', cursive;
-      font-size: 8.5px;
-      color: #000000;
-      margin-top: 1px;
+    .role-item.deputy1{
+      border-left:4px solid #0369a1
     }
 
-    .kingdom-divider {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin-top: 1px;
+    .role-item.deputy2{
+      border-left:4px solid #15803d
     }
 
-    .kingdom-divider svg {
-      width: 85px;
-      height: 5px;
+    .role-item select{
+      width:100%
     }
 
-    .card-main-body {
-      flex: 1;
-      padding: 4px 8px 3px 8px;
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
+    .section-title{
+      font-family:'Moul','Khmer OS Muol Light',serif;
+      color:#991b1b;
+      margin-bottom:10px
     }
 
-    .card-watermark {
-      position: absolute;
-      top: 52%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      width: 53mm;
-      height: 53mm;
-      opacity: 0.22;
-      pointer-events: none;
-      z-index: 0;
-      object-fit: contain;
-      transition: opacity 0.2s;
+    .summary{
+      margin-top:10px;
+      background:#fff;
+      padding:8px;
+      border:1px solid #fed7aa;
+      border-radius:5px;
+      line-height:1.8
     }
 
-    .card-titles {
-      position: relative;
-      z-index: 1;
-      text-align: center;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 2px;
-      margin-bottom: 1px;
+    #status{
+      text-align:center;
+      margin-top:10px;
+      font-weight:bold;
+      min-height:20px
     }
 
-    .title-badge {
-      font-family: 'Moul', cursive;
-      font-size: 11.2px;
-      color: var(--c-blue);
-      letter-spacing: 0.2px;
-      line-height: 1.45;
+    .groups-container{
+      display:grid;
+      grid-template-columns:repeat(auto-fill,minmax(240px,1fr));
+      gap:15px;
+      margin-top:15px
     }
 
-    .title-school {
-      font-family: 'Moul', cursive;
-      font-size: 9.8px;
-      color: var(--c-green);
-      line-height: 1.45;
+    .group-box{
+      background:#fff;
+      border:1px solid #cbd5e1;
+      border-radius:6px;
+      overflow:hidden;
+      box-shadow:0 1px 3px rgba(0,0,0,.05)
     }
 
-    .title-id {
-      font-family: 'Moul', cursive;
-      font-size: 10.5px;
-      color: var(--c-orange);
-      line-height: 1.45;
+    .group-header{
+      background:#b91c1c;
+      color:#fff;
+      font-weight:bold;
+      padding:8px 12px;
+      text-align:center;
+      font-size:14px
     }
 
-    .title-student-name-center {
-      font-family: 'Moul', cursive;
-      font-size: 14px;
-      color: var(--c-blue);
-      text-align: center;
-      line-height: 1.65;
-      padding-top: 4px;
-      padding-bottom: 2px;
-      width: 100%;
-      white-space: nowrap;
-      overflow: visible;
-      letter-spacing: 0.2px;
-      margin-top: 0px;
-      margin-bottom: 2px;
+    .group-list{
+      list-style:none;
+      padding:0;
+      margin:0
     }
 
-    .content-container {
-      position: relative;
-      z-index: 1;
-      display: flex;
-      flex-direction: column;
-      margin-top: 0px;
+    .group-list li{
+      padding:6px 12px;
+      border-bottom:1px solid #f1f5f9;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:6px
     }
 
-    .mid-split {
-      display: flex;
-      justify-content: space-between;
-      align-items: stretch;
-      gap: 6px;
-      height: 25mm;
+    .group-list li:nth-child(even){
+      background:#f8fafc
     }
 
-    .left-profile-block {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      height: 100%;
+    .student-sex{
+      color:#64748b;
+      font-size:11px;
+      white-space:nowrap
     }
 
-    .info-table-top {
-      width: 100%;
-      height: 100%;
-      border-collapse: collapse;
-      font-size: 9.5px;
-      line-height: 1.35;
+    .role-badge{
+      font-size:10px;
+      font-weight:bold;
+      padding:1px 5px;
+      border-radius:3px;
+      margin-left:4px
     }
 
-    .info-table-top tr { height: 20%; }
-
-    .info-table-bottom {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 9.5px;
-      line-height: 1.35;
-      margin-top: 2px;
+    .role-leader{
+      background:#fef3c7;
+      color:#b45309;
+      border:1px solid #fde68a
     }
 
-    .info-table-bottom tr { height: 18px; }
-
-    .lbl-col {
-      width: 76px;
-      color: var(--c-red);
-      font-weight: 700;
-      white-space: nowrap;
-      text-align: left;
+    .role-sub{
+      background:#e0f2fe;
+      color:#0369a1;
+      border:1px solid #bae6fd
     }
 
-    .cln-col {
-      width: 12px;
-      color: var(--c-red);
-      font-weight: 700;
-      text-align: center;
-      padding-right: 2px;
+    .count-info{
+      margin-top:8px;
+      color:#475569
     }
 
-    .val-col {
-      font-weight: 700;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      text-align: left;
-      font-size: 10px;
+    .print-header,
+    .print-footer{
+      display:none
     }
 
-    .val-blue { color: var(--c-blue); }
-    .val-green { color: var(--c-green); }
-
-    .student-photo-box {
-      width: 20mm;
-      height: 25mm;
-      border: 2px solid #000000;
-      border-radius: 8px;
-      background: #ffffff;
-      overflow: hidden;
-      flex-shrink: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .student-photo-box img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    .student-photo-box i {
-      font-size: 26px;
-      color: #cbd5e1;
-    }
-
-    .card-bottom-signature {
-      position: relative;
-      z-index: 2;
-      display: flex;
-      justify-content: flex-start;
-      padding-left: 6px;
-      margin-top: 1px;
-    }
-
-    .signature-box {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      position: relative;
-      width: 48mm;
-      text-align: center;
-    }
-
-    .sig-date {
-      font-family: 'Battambang', sans-serif;
-      font-weight: 700;
-      font-size: 7.2px;
-      color: #000000;
-      line-height: 1.25;
-      white-space: nowrap;
-      text-align: center;
-    }
-
-    .sig-stamp-wrapper {
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      width: 100%;
-      margin-top: 1px;
-      min-height: 26mm;
-    }
-
-    .sig-title {
-      font-family: 'Moul', cursive;
-      font-size: 8.2px;
-      color: #000000;
-      line-height: 1.35;
-      margin-top: 1px;
-      white-space: nowrap;
-      text-align: center;
-      position: relative;
-      z-index: 2;
-    }
-
-    .sig-role {
-      font-family: 'Moul', cursive;
-      font-size: 8px;
-      color: #000000;
-      line-height: 1.35;
-      margin-top: 1px;
-      white-space: nowrap;
-      text-align: center;
-      position: relative;
-      z-index: 2;
-    }
-
-    .stamp-overlay-box {
-      position: absolute;
-      top: var(--stamp-top);
-      left: calc(50% + var(--stamp-left));
-      transform: translateX(-50%);
-      width: var(--stamp-w);
-      height: var(--stamp-h);
-      pointer-events: none;
-      z-index: 6;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .stamp-overlay-box img {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-      mix-blend-mode: multiply;
-    }
-
-    @media print {
-      body { background: transparent !important; padding: 0 !important; }
-      .no-print-toolbar { display: none !important; }
-      .print-area { margin: 0 !important; gap: 0 !important; }
-      .a4-page {
-        box-shadow: none !important;
-        margin: 0 !important;
-        border: none !important;
-        width: 297mm !important;
-        height: 210mm !important;
+    @media(max-width:700px){
+      .roles-grid{
+        grid-template-columns:1fr
       }
-      @page { size: A4 landscape; margin: 0; }
+      .controls{
+        flex-direction:column;
+        align-items:stretch
+      }
+      .col{
+        width:100%
+      }
+    }
+
+    @media print{
+      body{
+        background:#fff;
+        padding:0;
+        font-family:'Siemreap','Khmer OS Battambang',serif
+      }
+      .card{
+        display:none!important
+      }
+      .print-header{
+        display:block;
+        margin-bottom:20px
+      }
+      .print-header .kingdom{
+        font-size:13px;
+        text-align:center;
+        margin-bottom:10px;
+        line-height:1.8
+      }
+      .print-header .school-info{
+        text-align:left;
+        font-size:13px;
+        color:#b91c1c;
+        line-height:1.6
+      }
+      .print-header .doc-title{
+        font-size:16px;
+        text-align:center;
+        margin-top:10px;
+        color:#000
+      }
+      .print-header .doc-sub{
+        font-size:12px;
+        color:#475569;
+        text-align:center;
+        margin-top:3px
+      }
+      .groups-container{
+        display:flex!important;
+        flex-wrap:wrap!important;
+        justify-content:center!important;
+        gap:12px!important
+      }
+      .group-box{
+        width:31%!important;
+        page-break-inside:avoid;
+        border:1px solid #b91c1c;
+        box-sizing:border-box
+      }
+      .group-header{
+        background:#b91c1c!important;
+        color:#fff!important;
+        -webkit-print-color-adjust:exact;
+        print-color-adjust:exact
+      }
+      .print-footer{
+        display:flex;
+        justify-content:space-between;
+        align-items:flex-start;
+        margin-top:25px;
+        page-break-inside:avoid;
+        font-size:13px
+      }
+      .footer-left{
+        text-align:center;
+        width:40%;
+        margin-top:50px
+      }
+      .footer-right{
+        text-align:center;
+        width:45%
+      }
+      .signature-space{
+        height:75px
+      }
+      body *{
+        visibility:hidden
+      }
+      #printableArea,
+      #printableArea *{
+        visibility:visible
+      }
+      #printableArea{
+        position:absolute;
+        left:0;
+        top:0;
+        width:100%
+      }
     }
   </style>
 </head>
+
 <body>
 
-  <!-- របារបញ្ជា (Toolbar) -->
-  <div class="no-print-toolbar">
-    <div class="toolbar-row">
-      <div class="toolbar-group">
-        <label style="font-weight:700; font-size:13px;">ថ្នាក់៖</label>
-        <select id="classSelect" class="form-control" onchange="loadStudents()">
-          <option value="">កំពុងទាញយក...</option>
+  <div class="card">
+    <div class="header-title khmer-moul">
+      👥 ប្រព័ន្ធបែងចែកសិស្សតាមវេន - សាលាបឋមសិក្សាកំពង់ល្ពៅ
+    </div>
+
+    <div class="controls">
+      <div class="col">
+        <label>ជ្រើសរើសថ្នាក់ ៖</label>
+        <select id="classSelect" onchange="onClassChange()">
+          <option value="">-- កំពុងទាញយកថ្នាក់ --</option>
         </select>
-
-        <label style="font-weight:700; font-size:13px; color:#1e40af;">ទម្រង់កាត៖</label>
-        <select id="layoutSelect" class="form-control" onchange="switchLayout(this.value)" style="font-weight:700; color:#1e3a8a; background:#eff6ff; border:1.5px solid #60a5fa; cursor:pointer;">
-          <option value="6">១ សន្លឹក = ៦ កាត (ខ្នាត 7cm × 10cm)</option>
-          <option value="8">១ សន្លឹក = ៨ កាត (ខ្នាតសន្សំក្រដាស)</option>
-        </select>
-
-        <label style="font-weight:700; font-size:13px;">សាលា៖</label>
-        <input type="text" id="schoolName" class="form-control" value="សាលាបឋមសិក្សាកំពង់ល្ពៅ" style="width:160px;" oninput="refreshDisplay()">
-
-        <label style="font-weight:700; font-size:13px;">ឆ្នាំសិក្សា៖</label>
-        <input type="text" id="schoolYear" class="form-control" value="២០២៥~២០២៦" style="width:100px;" oninput="refreshDisplay()">
-      </div>
-
-      <div class="toolbar-group">
-        <button class="btn btn-primary" onclick="initClassDropdown()" title="ទាញយកទិន្នន័យឡើងវិញ">
-          <i class="fa-solid fa-rotate"></i> ផ្ទុកឡើងវិញ
-        </button>
-        <button class="btn btn-success" onclick="window.print()">
-          <i class="fa-solid fa-print"></i> បោះពុម្ព A4
-        </button>
       </div>
     </div>
 
-    <!-- ជួរទី ២៖ គ្រប់គ្រង Logo និងសារ៉េទីតាំងត្រា -->
-    <div class="toolbar-row" style="background:#f8fafc; padding:6px 10px; border-radius:8px; border:1px solid #e2e8f0;">
-      <div class="toolbar-group">
-        <label class="btn btn-outline" style="cursor:pointer;" title="ជ្រើសរើសរូប Logo ពីកុំព្យូទ័រ/ទូរសព្ទ">
-          <i class="fa-solid fa-cloud-arrow-up" style="color:#2563eb;"></i> ប្តូរ Logo
-          <input type="file" id="logoUploadInput" accept="image/*" style="display:none;" onchange="handleCustomLogo(event)">
-        </label>
-        <button class="btn btn-danger" onclick="clearCustomLogo()" title="លុប Logo និង Watermark ចេញ">
-          <i class="fa-solid fa-trash-can"></i> លុប Logo
-        </button>
-
-        <label style="font-size:12px; font-weight:700; color:#475569; margin-left:6px;" title="កម្រិតភាពច្បាស់ Watermark">Watermark:</label>
-        <input type="range" id="opacitySlider" min="0.10" max="0.35" step="0.02" value="0.22" style="width:55px; cursor:pointer;" oninput="updateWatermarkOpacity(this.value)">
+    <div class="roles-card">
+      <div class="section-title">
+        👑 តួនាទីអចិន្ត្រៃយ៍ក្នុងថ្នាក់
       </div>
 
-      <div class="toolbar-group">
-        <label class="btn btn-outline" style="cursor:pointer; border-color:#fca5a5; color:#b91c1c;" title="បញ្ចូលរូបត្រានាយកសាលា">
-          <i class="fa-solid fa-stamp" style="color:#dc2626;"></i> បញ្ចូលត្រា
-          <input type="file" id="stampUploadInput" accept="image/*" style="display:none;" onchange="handleCustomStamp(event)">
-        </label>
-        <button class="btn btn-danger" onclick="clearCustomStamp()" title="លុបត្រានាយកចេញវិញ">
-          <i class="fa-solid fa-trash-can"></i> លុបត្រា
+      <div class="roles-grid">
+        <div class="role-item president">
+          <label>🚩 ប្រធានថ្នាក់</label>
+          <select id="presidentSelect" onchange="onRoleChange()"></select>
+        </div>
+
+        <div class="role-item deputy1">
+          <label>🚩 អនុប្រធានទី១</label>
+          <select id="deputy1Select" onchange="onRoleChange()"></select>
+        </div>
+
+        <div class="role-item deputy2">
+          <label>🚩 អនុប្រធានទី២</label>
+          <select id="deputy2Select" onchange="onRoleChange()"></select>
+        </div>
+      </div>
+
+      <div class="controls" style="margin-top:10px">
+        <button type="button" class="btn btn-role" onclick="randomLeadership()">
+          🎲 រើសប្រធាន/អនុប្រធាន
         </button>
 
-        <span style="font-size:11.5px; font-weight:700; color:#475569; margin-left:6px;">ទំហំត្រា:</span>
-        <input type="range" id="stampSizeSlider" min="20" max="55" value="36" style="width:60px; cursor:pointer;" oninput="updateStampSize(this.value)" title="សារ៉េទំហំត្រា">
+        <button type="button" class="btn btn-rotate" onclick="rotateLeadership()">
+          🔄 កំណត់តាមវេន (បន្ទាប់)
+        </button>
 
-        <span style="font-size:11.5px; font-weight:700; color:#475569;">លើ/ក្រោម:</span>
-        <input type="range" id="stampTopSlider" min="-60" max="60" value="-3" style="width:70px; cursor:pointer;" oninput="updateStampTop(this.value)" title="រំកិលត្រា លើ ឬក្រោម">
-
-        <span style="font-size:11.5px; font-weight:700; color:#2563eb;">ឆ្វេង/ស្តាំ:</span>
-        <input type="range" id="stampLeftSlider" min="-120" max="120" value="0" style="width:85px; cursor:pointer;" oninput="updateStampLeft(this.value)" title="រំកិលត្រា ឆ្វេង ឬស្តាំ">
-
-        <button class="btn btn-outline" onclick="resetStampPosition()" title="កំណត់ត្រាមកចំកណ្តាលដើមវិញ" style="padding: 5px 8px; font-size: 11.5px;">
-          🎯 ចំកណ្តាលដើម
+        <button type="button" class="btn btn-role" onclick="saveLeadership()">
+          💾 រក្សាទុកតួនាទីថ្នាក់
         </button>
       </div>
+
+      <div id="roleSummary" class="summary">
+        សូមជ្រើសរើសថ្នាក់ជាមុនសិន។
+      </div>
+    </div>
+
+    <div class="card" style="margin-top:15px">
+      <div class="section-title">
+        🧹 បែងចែកសិស្សសម្រាប់វេនសម្អាត
+      </div>
+
+      <div class="controls">
+        <div class="col">
+          <label>របៀបបែងចែក ៖</label>
+          <select id="splitMode" onchange="toggleModeInput()">
+            <option value="numGroups">កំណត់ចំនួនវេន</option>
+            <option value="groupSize">កំណត់ចំនួនសិស្សក្នុង១វេន</option>
+          </select>
+        </div>
+
+        <div class="col">
+          <label id="inputLabel">ចំនួនវេន ៖</label>
+          <input type="number" id="splitValue" min="1" value="4">
+        </div>
+
+        <button type="button" class="btn btn-group" onclick="generateGroups()">
+          🎲 បែងចែកវេន
+        </button>
+
+        <button type="button" class="btn btn-save" id="saveBtn" onclick="saveToSheet()">
+          💾 រក្សាទុកក្នុង Sheet
+        </button>
+
+        <button type="button" class="btn btn-print" id="printBtn" onclick="window.print()">
+          🖨️ បោះពុម្ព
+        </button>
+      </div>
+
+      <div id="countInfo" class="count-info"></div>
+      <div id="status"></div>
     </div>
   </div>
 
-  <!-- កន្លែងបង្ហាញសន្លឹក A4 -->
-  <div class="print-area" id="printArea">
-    <div style="text-align:center; padding:50px; color:#64748b;">
-      <i class="fa-solid fa-spinner fa-spin fa-2x"></i>
-      <p style="margin-top:10px;">សូមរង់ចាំ កំពុងទាញយកបញ្ជីសិស្ស...</p>
+  <div id="printableArea">
+    <div class="print-header">
+      <div class="kingdom khmer-moul">
+        ព្រះរាជាណាចក្រកម្ពុជា<br>
+        ជាតិ សាសនា ព្រះមហាក្សត្រ
+      </div>
+
+      <div class="school-info khmer-moul">
+        <div>សាលាបឋមសិក្សាកំពង់ល្ពៅ</div>
+        <div>កម្រងសាលារៀនអូរជាំ</div>
+      </div>
+
+      <div class="doc-title khmer-moul">
+        តារាងវេនសម្អាតថ្នាក់រៀន
+      </div>
+
+      <div class="doc-sub" id="printClassName">
+        ថ្នាក់រៀន ៖ ...
+      </div>
+
+      <div class="doc-sub" id="printRoles"></div>
+    </div>
+
+    <div id="groupsContainer" class="groups-container"></div>
+
+    <div class="print-footer">
+      <div class="footer-left">
+        <b class="khmer-moul" style="font-size:12px">បានឃើញ និងឯកភាព</b><br>
+        <b class="khmer-moul" style="font-size:12px">នាយកសាលា</b>
+        <div class="signature-space"></div>
+      </div>
+
+      <div class="footer-right">
+        <div>ថ្ងៃ..................ខែ..........ឆ្នាំ............ព.ស.២៥៦...</div>
+        <div>ធ្វើនៅ កំពង់ល្ពៅ, ថ្ងៃទី....... ខែ....... ឆ្នាំ២០២...</div>
+        <b class="khmer-moul" style="margin-top:5px;display:inline-block;font-size:12px">គ្រូបន្ទុកថ្នាក់</b>
+        <div class="signature-space"></div>
+      </div>
     </div>
   </div>
-
-  <!-- 🔗 ភ្ជាប់ API សម្រាប់ទំនាក់ទំនងជាមួយ Google Apps Script លើ GitHub -->
-  <script src="api.js"></script>
 
   <script>
-    var OFFICIAL_MOEYS_LOGO = 'https://images.weserv.nl/?url=upload.wikimedia.org/wikipedia/commons/thumb/8/85/Emblem_of_the_Ministry_of_Education%2C_Youth_and_Sport_%28Cambodia%29.svg/300px-Emblem_of_the_Ministry_of_Education%2C_Youth_and_Sport_%28Cambodia%29.svg.png';
+    /* 🌟 កំណត់ Session លើ GitHub Pages */
+    var TOKEN = (window.parent && window.parent.SESSION_TOKEN) || localStorage.getItem('krou_session_token') || "";
+    var USER_ROLE = (window.parent && window.parent.USER_ROLE) || localStorage.getItem('krou_user_role') || "teacher";
+    var USER_CLASS = localStorage.getItem('krou_user_class') || "";
 
-    var customImageUrl = localStorage.getItem('school_user_logo_url') || OFFICIAL_MOEYS_LOGO;
-    var customStampUrl = localStorage.getItem('school_principal_stamp_url') || '';
-    var currentOpacity = '0.22';
+    var currentStudents = [];
+    var currentGroups = [];
+    var savedLeadership = null;
 
-    var currentLayout = parseInt(localStorage.getItem('school_cards_layout') || '6');
-    var stampSettings = JSON.parse(localStorage.getItem('school_stamp_settings') || '{"size":"36","top":"-3","left":"0"}');
+    var daysOfWeek = [
+      "ថ្ងៃចន្ទ", "ថ្ងៃអង្គារ", "ថ្ងៃពុធ", "ថ្ងៃព្រហស្បតិ៍", "ថ្ងៃសុក្រ", "ថ្ងៃសៅរ៍"
+    ];
 
-    // 🌟 ទាញយក Token (ស្វែងរកគ្រប់កន្លែង៖ api.js, parent window, ឬ localStorage)
-    function resolveToken() {
-      if (typeof getStoredToken === 'function') {
-        var t = getStoredToken();
-        if (t) return t;
+    /* 🌟 ហៅ API សុវត្ថិភាព ដំណើរការលើ GitHub Pages */
+    async function apiCall(action, params = {}) {
+      params.token = params.token || TOKEN;
+      if (typeof callBackendApi === 'function') {
+        return await callBackendApi(action, params);
       }
-      if (window.parent && window.parent.SESSION_TOKEN) {
-        return window.parent.SESSION_TOKEN;
+      if (typeof google !== 'undefined' && google.script && google.script.run) {
+        return new Promise((resolve, reject) => {
+          google.script.run
+            .withSuccessHandler(resolve)
+            .withFailureHandler(reject)[action](params);
+        });
       }
-      return localStorage.getItem('krou_session_token') || localStorage.getItem('token') || '';
+      throw new Error("ពុំទាន់ភ្ជាប់ API ឡើយ។");
     }
 
-    var token = resolveToken();
-    var userClass = '';
-    var userRole = 'teacher';
-    var allStudents = [];
+    window.onload = async function(){
+      try {
+        var classes = await apiCall('getClassListForSession');
+        populateClasses(classes);
+      } catch(e) {
+        status('❌ ' + e.message, 'red');
+      }
+    };
 
-    function toKhmerNum(num) {
-      if (num === null || num === undefined || num === '') return '';
-      var khmerDigits = ['០','១','២','៣','៤','៥','៦','៧','៨','៩'];
-      return num.toString().replace(/[0-9]/g, function(d) {
-        return khmerDigits[parseInt(d)];
+    function status(msg, color){
+      var el = document.getElementById('status');
+      if (el) {
+        el.innerText = msg || '';
+        el.style.color = color || '#334155';
+      }
+    }
+
+    function populateClasses(classes){
+      var s = document.getElementById('classSelect');
+      s.innerHTML = '<option value="">-- ជ្រើសរើសថ្នាក់ --</option>';
+
+      (classes || []).forEach(function(c){
+        var o = document.createElement('option');
+        o.value = c;
+        o.textContent = c.toString().startsWith('ថ្នាក់') ? c : 'ថ្នាក់ទី ' + c;
+        s.appendChild(o);
+      });
+
+      if (USER_CLASS && USER_ROLE !== 'admin') {
+        s.value = USER_CLASS;
+        onClassChange();
+      }
+    }
+
+    function clearRoles(){
+      ['presidentSelect', 'deputy1Select', 'deputy2Select'].forEach(function(id){
+        document.getElementById(id).innerHTML = '<option value="">-- ជ្រើសរើសសិស្ស --</option>';
       });
     }
 
-    function getAutoKhmerDate() {
-      var now = new Date();
-      var khmerMonths = ['មករា','កុម្ភៈ','មីនា','មេសា','ឧសភា','មិថុនា','កក្កដា','សីហា','កញ្ញា','តុលា','វិច្ឆិកា','ធ្នូ'];
-      var d = toKhmerNum(now.getDate());
-      var m = khmerMonths[now.getMonth()];
-      var y = toKhmerNum(now.getFullYear());
-      return 'ធ្វើនៅកំពង់ល្ពៅ ថ្ងៃទី' + d + ' ខែ' + m + ' ឆ្នាំ' + y;
+    function studentKey(s){
+      return (s.id || s.name || '').toString().trim();
     }
 
-    function handleCustomLogo(event) {
-      var file = event.target.files[0];
-      if (!file) return;
-
-      var reader = new FileReader();
-      reader.onload = function(e) {
-        customImageUrl = e.target.result;
-        try {
-          localStorage.setItem('school_user_logo_url', customImageUrl);
-        } catch (err) {
-          console.warn('LocalStorage: ' + err);
-        }
-        renderCards();
-      };
-      reader.readAsDataURL(file);
+    function findStudent(key){
+      return currentStudents.find(function(s){
+        return studentKey(s) === key || s.name === key;
+      }) || null;
     }
 
-    function clearCustomLogo() {
-      customImageUrl = '';
-      localStorage.removeItem('school_user_logo_url');
-      document.getElementById('logoUploadInput').value = '';
-      renderCards();
-    }
+    function populateRoles(){
+      clearRoles();
 
-    function handleCustomStamp(event) {
-      var file = event.target.files[0];
-      if (!file) return;
-
-      var reader = new FileReader();
-      reader.onload = function(e) {
-        customStampUrl = e.target.result;
-        try {
-          localStorage.setItem('school_principal_stamp_url', customStampUrl);
-        } catch (err) {
-          console.warn('LocalStorage stamp: ' + err);
-        }
-        renderCards();
-      };
-      reader.readAsDataURL(file);
-    }
-
-    function clearCustomStamp() {
-      customStampUrl = '';
-      localStorage.removeItem('school_principal_stamp_url');
-      document.getElementById('stampUploadInput').value = '';
-      renderCards();
-    }
-
-    function updateWatermarkOpacity(val) {
-      currentOpacity = val;
-      var marks = document.querySelectorAll('.card-watermark');
-      marks.forEach(function(m) {
-        m.style.opacity = val;
+      currentStudents.forEach(function(s){
+        ['presidentSelect', 'deputy1Select', 'deputy2Select'].forEach(function(id){
+          var o = document.createElement('option');
+          o.value = studentKey(s);
+          o.textContent = s.name + (s.sex ? ' (' + s.sex + ')' : '');
+          document.getElementById(id).appendChild(o);
+        });
       });
+
+      enforceUnique();
+      updateRoleSummary();
     }
 
-    function applyStampStyles() {
-      document.documentElement.style.setProperty('--stamp-w', stampSettings.size + 'mm');
-      document.documentElement.style.setProperty('--stamp-h', (stampSettings.size * 0.72) + 'mm');
-      document.documentElement.style.setProperty('--stamp-top', stampSettings.top + 'px');
-      document.documentElement.style.setProperty('--stamp-left', stampSettings.left + 'px');
-      localStorage.setItem('school_stamp_settings', JSON.stringify(stampSettings));
-    }
+    function enforceUnique(){
+      var ids = ['presidentSelect', 'deputy1Select', 'deputy2Select'];
+      var chosen = ids.map(function(id){
+        return document.getElementById(id).value;
+      });
 
-    function updateStampSize(val) {
-      stampSettings.size = val;
-      applyStampStyles();
-    }
+      ids.forEach(function(id, idx){
+        var sel = document.getElementById(id);
+        var my = sel.value;
 
-    function updateStampTop(val) {
-      stampSettings.top = val;
-      applyStampStyles();
-    }
-
-    function updateStampLeft(val) {
-      stampSettings.left = val;
-      applyStampStyles();
-    }
-
-    function resetStampPosition() {
-      stampSettings = { size: "36", top: "-3", left: "0" };
-      document.getElementById('stampSizeSlider').value = 36;
-      document.getElementById('stampTopSlider').value = -3;
-      document.getElementById('stampLeftSlider').value = 0;
-      applyStampStyles();
-    }
-
-    function switchLayout(val) {
-      currentLayout = parseInt(val);
-      localStorage.setItem('school_cards_layout', currentLayout);
-      renderCards();
-    }
-
-    window.addEventListener('DOMContentLoaded', function() {
-      document.getElementById('stampSizeSlider').value = stampSettings.size;
-      document.getElementById('stampTopSlider').value = stampSettings.top;
-      document.getElementById('stampLeftSlider').value = stampSettings.left;
-      document.getElementById('layoutSelect').value = currentLayout;
-      applyStampStyles();
-      
-      initClassDropdown();
-    });
-
-    // 🌟 ទាញយកបញ្ជីថ្នាក់
-    async function initClassDropdown() {
-      var sel = document.getElementById('classSelect');
-      sel.innerHTML = '<option value="">កំពុងទាញយក...</option>';
-      token = resolveToken();
-
-      if (typeof callBackendApi !== 'function') {
-        sel.innerHTML = '<option value="">រកមិនឃើញ api.js</option>';
-        document.getElementById('printArea').innerHTML = `
-          <div style="color:#dc2626; text-align:center; padding:40px; font-size:14px;">
-            ⚠️ មិនអាចទាក់ទង Backend បានទេ ដោយសាររកមិនឃើញឯកសារ <b>api.js</b>។
-          </div>`;
-        return;
-      }
-
-      try {
-        if (token) {
-          var session = await callBackendApi('getCurrentSession', { token: token });
-          if (session) {
-            userRole = session.role || 'teacher';
-            userClass = session.assignedClass || '';
-          }
-        }
-      } catch (e) {
-        console.warn('Session verification error:', e);
-      }
-
-      try {
-        var res = await callBackendApi('getClassList', { token: token });
-        var classes = Array.isArray(res) ? res : (res && res.classes ? res.classes : []);
-        
-        sel.innerHTML = '';
-        
-        if (classes && classes.length > 0) {
-          classes.forEach(function(c) {
-            var opt = document.createElement('option');
-            opt.value = c;
-            opt.textContent = 'ថ្នាក់ទី ' + c;
-            sel.appendChild(opt);
+        Array.prototype.forEach.call(sel.options, function(o){
+          if(!o.value){ o.hidden = false; return; }
+          o.hidden = chosen.some(function(v, i){
+            return i !== idx && v === o.value;
           });
+        });
 
-          if (userRole !== 'admin' && userClass) {
-            sel.value = userClass;
-          }
-
-          loadStudents();
-        } else {
-          sel.innerHTML = '<option value="">គ្មានថ្នាក់</option>';
-          document.getElementById('printArea').innerHTML = '<div style="text-align:center; padding:50px; color:#64748b;">មិនទាន់មានថ្នាក់រៀនក្នុង Sheet ឡើយ</div>';
-        }
-      } catch (err) {
-        console.error(err);
-        sel.innerHTML = '<option value="">កំហុសទាញយក</option>';
-        document.getElementById('printArea').innerHTML = `
-          <div style="color:#dc2626; text-align:center; padding:40px; font-size:14px;">
-            ⚠️ មិនអាចទាញយកបញ្ជីថ្នាក់បានទេ៖ ${err.message || err}
-          </div>`;
-      }
+        sel.value = my;
+      });
     }
 
-    // 🌟 ទាញយកទិន្នន័យសិស្ស
-    async function loadStudents() {
-      var cls = document.getElementById('classSelect').value;
-      if (!cls) return;
-
-      document.getElementById('printArea').innerHTML = `
-        <div style="text-align:center; padding:50px; color:#64748b;">
-          <i class="fa-solid fa-spinner fa-spin fa-2x"></i>
-          <p style="margin-top:10px;">កំពុងទាញយកទិន្នន័យសិស្សថ្នាក់ទី ${cls}...</p>
-        </div>`;
-
-      try {
-        token = resolveToken();
-        var res = await callBackendApi('getAllStudentsCardData', { token: token, classFilter: cls });
-        allStudents = Array.isArray(res) ? res : (res && res.students ? res.students : (res && res.data ? res.data : []));
-        renderCards();
-      } catch (err) {
-        document.getElementById('printArea').innerHTML = `
-          <div style="color:#dc2626; text-align:center; padding:40px; font-size:14px;">
-            ⚠️ កំហុសក្នុងការទាញយកទិន្នន័យសិស្ស៖ ${err.message || err}
-          </div>`;
-      }
+    function onRoleChange(){
+      enforceUnique();
+      updateRoleSummary();
     }
 
-    function refreshDisplay() {
-      renderCards();
+    function updateRoleSummary(){
+      var p = findStudent(document.getElementById('presidentSelect').value);
+      var d1 = findStudent(document.getElementById('deputy1Select').value);
+      var d2 = findStudent(document.getElementById('deputy2Select').value);
+
+      document.getElementById('roleSummary').innerHTML =
+        '👑 <b>ប្រធានថ្នាក់៖</b> ' + (p ? p.name : 'មិនទាន់ជ្រើសរើស') +
+        '<br>⭐ <b>អនុប្រធានទី១៖</b> ' + (d1 ? d1.name : 'មិនទាន់ជ្រើសរើស') +
+        '<br>⭐ <b>អនុប្រធានទី២៖</b> ' + (d2 ? d2.name : 'មិនទាន់ជ្រើសរើស') +
+        '<br><small>ℹ️ សិស្សទាំង ៣ តួនាទីនេះនឹងមិនចូលវេនសម្អាតទេ។</small>';
     }
 
-    // បង្ហាញកាតសិស្ស
-    function renderCards() {
-      var container = document.getElementById('printArea');
-      if (!allStudents || allStudents.length === 0) {
-        container.innerHTML = '<div style="text-align:center; padding:50px; color:#64748b; font-size:14px;">មិនមានទិន្នន័យសិស្សក្នុងថ្នាក់នេះទេ</div>';
+    async function onClassChange(){
+      var c = document.getElementById('classSelect').value;
+
+      currentGroups = [];
+      document.getElementById('groupsContainer').innerHTML = '';
+      document.getElementById('saveBtn').style.display = 'none';
+      document.getElementById('printBtn').style.display = 'none';
+      clearRoles();
+
+      if(!c){
+        currentStudents = [];
+        savedLeadership = null;
+        updateRoleSummary();
         return;
       }
 
-      var schoolName = document.getElementById('schoolName').value || 'សាលាបឋមសិក្សាកំពង់ល្ពៅ';
-      var schoolYear = document.getElementById('schoolYear').value || '២០២៥~២០២៦';
-      var autoDateText = getAutoKhmerDate();
+      status('⏳ កំពុងទាញយកសិស្ស និងតួនាទី...', 'blue');
 
-      var cardsPerPage = currentLayout;
-      var layoutClass = (cardsPerPage === 6) ? 'layout-6' : 'layout-8';
-      var totalPages = Math.ceil(allStudents.length / cardsPerPage);
-      var html = '';
+      try {
+        var students = await apiCall('getStudentsByClass', { className: c });
+        currentStudents = students || [];
+        populateRoles();
 
-      for (var p = 0; p < totalPages; p++) {
-        html += `<div class="a4-page ${layoutClass}">`;
-        
-        var pageStudents = allStudents.slice(p * cardsPerPage, (p + 1) * cardsPerPage);
-        for (var i = 0; i < pageStudents.length; i++) {
-          var s = pageStudents[i];
-          var khmerId = toKhmerNum(s.id);
-          var dobFormatted = s.dob || '';
-          var addressText = s.address || s.pob || 'ស្វាយជ្រុំ កំពង់ល្ពៅ សំឡូត បាត់ដំបង';
+        try {
+          var ex = await apiCall('getClassLeadership', { className: c });
+          savedLeadership = ex || null;
 
-          var photoHtml = (s.imageUrl && s.imageUrl.length > 5)
-            ? `<img src="${s.imageUrl}" alt="រូបថត" onerror="this.src=''">`
-            : `<i class="fa-solid fa-user"></i>`;
-
-          var stampHtml = customStampUrl 
-            ? `<div class="stamp-overlay-box"><img src="${customStampUrl}" alt="ត្រានាយក"></div>`
-            : '';
-
-          var headerLogoHtml = customImageUrl 
-            ? `<img src="${customImageUrl}" class="header-logo-img" alt="Logo" onerror="this.style.display='none'">`
-            : '';
-
-          var watermarkHtml = customImageUrl 
-            ? `<img src="${customImageUrl}" class="card-watermark" style="opacity:${currentOpacity};" alt="Watermark" onerror="this.style.display='none'">`
-            : '';
-
-          html += `
-            <div class="student-card">
-              <div class="card-top-header">
-                <div class="header-logo-box">
-                  ${headerLogoHtml}
-                </div>
-                <div class="header-kingdom">
-                  <div class="kingdom-title">ព្រះរាជាណាចក្រកម្ពុជា</div>
-                  <div class="kingdom-subtitle">ជាតិ សាសនា ព្រះមហាក្សត្រ</div>
-                  <div class="kingdom-divider">
-                    <svg viewBox="0 0 140 8">
-                      <line x1="10" y1="4" x2="60" y2="4" stroke="#000" stroke-width="0.8"/>
-                      <circle cx="8" cy="4" r="1.4" fill="#000"/>
-                      <polygon points="70,1 74,4 70,7 66,4" fill="#000"/>
-                      <circle cx="63" cy="4" r="1.2" fill="#000"/>
-                      <circle cx="77" cy="4" r="1.2" fill="#000"/>
-                      <line x1="80" y1="4" x2="130" y2="4" stroke="#000" stroke-width="0.8"/>
-                      <circle cx="132" cy="4" r="1.4" fill="#000"/>
-                    </svg>
-                  </div>
-                </div>
-              </div>
-
-              <div class="card-main-body">
-                ${watermarkHtml}
-
-                <div class="card-titles">
-                  <div class="title-badge">កាតសម្គាល់ខ្លួនសិស្ស</div>
-                  <div class="title-school">${schoolName}</div>
-                  <div class="title-id">អត្តលេខ៖ ${khmerId}</div>
-                  <div class="title-student-name-center">${s.name || ''}</div>
-                </div>
-
-                <div class="content-container">
-                  <div class="mid-split">
-                    <div class="left-profile-block">
-                      <table class="info-table-top">
-                        <tr>
-                          <td class="lbl-col">ភេទ</td>
-                          <td class="cln-col">៖</td>
-                          <td class="val-col val-blue">${s.sex || ''}</td>
-                        </tr>
-                        <tr>
-                          <td class="lbl-col">ថ្ងៃខែឆ្នាំកំណើត</td>
-                          <td class="cln-col">៖</td>
-                          <td class="val-col val-blue">${dobFormatted}</td>
-                        </tr>
-                        <tr>
-                          <td class="lbl-col">ថ្នាក់ទី</td>
-                          <td class="cln-col">៖</td>
-                          <td class="val-col val-blue">${toKhmerNum(s.grade || '')}</td>
-                        </tr>
-                        <tr>
-                          <td class="lbl-col">ឈ្មោះឪពុក</td>
-                          <td class="cln-col">៖</td>
-                          <td class="val-col val-green">${s.father || '—'}</td>
-                        </tr>
-                        <tr>
-                          <td class="lbl-col">ឈ្មោះម្តាយ</td>
-                          <td class="cln-col">៖</td>
-                          <td class="val-col val-green">${s.mother || '—'}</td>
-                        </tr>
-                      </table>
-                    </div>
-
-                    <div class="student-photo-box">
-                      ${photoHtml}
-                    </div>
-                  </div>
-
-                  <table class="info-table-bottom">
-                    <tr>
-                      <td class="lbl-col" style="width: 76px;">អាសយដ្ឋានបច្ចុប្បន្ន</td>
-                      <td class="cln-col">៖</td>
-                      <td class="val-col val-blue" style="font-size: 9.2px;">${addressText}</td>
-                    </tr>
-                    <tr>
-                      <td class="lbl-col">ឆ្នាំសិក្សា</td>
-                      <td class="cln-col">៖</td>
-                      <td class="val-col val-green">${toKhmerNum(schoolYear)}</td>
-                    </tr>
-                  </table>
-                </div>
-
-                <div class="card-bottom-signature">
-                  <div class="signature-box">
-                    <div class="sig-date">${autoDateText}</div>
-                    <div class="sig-stamp-wrapper">
-                      <div class="sig-title">បានឃើញ និងឯកភាព</div>
-                      <div class="sig-role">នាយកសាលា</div>
-                      ${stampHtml}
-                    </div>
-                  </div>
-                </div>
-
-              </div>
-            </div>
-          `;
+          if(ex){
+            if(ex.president) document.getElementById('presidentSelect').value = studentKey(ex.president);
+            if(ex.deputy1) document.getElementById('deputy1Select').value = studentKey(ex.deputy1);
+            if(ex.deputy2) document.getElementById('deputy2Select').value = studentKey(ex.deputy2);
+            enforceUnique();
+            updateRoleSummary();
+          }
+          status('✅ បានទាញយកទិន្នន័យរួចរាល់', 'green');
+        } catch(err) {
+          status('⚠️ បានទាញយកសិស្ស ប៉ុន្តែមិនមានតួនាទីចាស់', 'orange');
         }
-        html += '</div>';
+      } catch(e) {
+        status('❌ ' + e.message, 'red');
+      }
+    }
+
+    function randomLeadership(){
+      if(currentStudents.length < 3){
+        alert('ថ្នាក់នេះត្រូវមានសិស្សយ៉ាងតិច ៣ នាក់!');
+        return;
       }
 
-      container.innerHTML = html;
+      var a = currentStudents.slice().sort(() => Math.random() - .5);
+      document.getElementById('presidentSelect').value = studentKey(a[0]);
+      document.getElementById('deputy1Select').value = studentKey(a[1]);
+      document.getElementById('deputy2Select').value = studentKey(a[2]);
+
+      enforceUnique();
+      updateRoleSummary();
+    }
+
+    function rotateLeadership(){
+      if(currentStudents.length < 3){
+        alert('ថ្នាក់នេះត្រូវមានសិស្សយ៉ាងតិច ៣ នាក់!');
+        return;
+      }
+
+      var n = currentStudents.length;
+      var startIndex = 0;
+      var curPresidentKey = document.getElementById('presidentSelect').value;
+
+      if(curPresidentKey){
+        var curIdx = currentStudents.findIndex(s => studentKey(s) === curPresidentKey);
+        if(curIdx !== -1) startIndex = (curIdx + 1) % n;
+      }
+
+      var picked = [];
+      for(var i = 0; i < 3; i++){
+        picked.push(currentStudents[(startIndex + i) % n]);
+      }
+
+      document.getElementById('presidentSelect').value = studentKey(picked[0]);
+      document.getElementById('deputy1Select').value = studentKey(picked[1]);
+      document.getElementById('deputy2Select').value = studentKey(picked[2]);
+
+      enforceUnique();
+      updateRoleSummary();
+      status('🔄 បានកំណត់តួនាទីតាមវេន — កុំភ្លេចចុច "រក្សាទុកតួនាទីថ្នាក់"!', 'blue');
+    }
+
+    async function saveLeadership(){
+      var c = document.getElementById('classSelect').value;
+      if(!c){ alert('សូមជ្រើសរើសថ្នាក់សិន!'); return; }
+
+      var p = findStudent(document.getElementById('presidentSelect').value);
+      var d1 = findStudent(document.getElementById('deputy1Select').value);
+      var d2 = findStudent(document.getElementById('deputy2Select').value);
+
+      var arr = [p, d1, d2].filter(Boolean).map(studentKey);
+      if(new Set(arr).size !== arr.length){
+        alert('សិស្សម្នាក់មិនអាចកាន់តួនាទីពីរបានទេ!');
+        return;
+      }
+
+      status('⏳ កំពុងរក្សាទុក...', 'blue');
+
+      try {
+        var r = await apiCall('saveClassLeadership', {
+          payload: { className: c, president: p, deputy1: d1, deputy2: d2 }
+        });
+        status('✅ ' + (r.message || 'បានរក្សាទុកតួនាទីថ្នាក់រួចរាល់!'), 'green');
+      } catch(e) {
+        status('❌ ' + e.message, 'red');
+      }
+    }
+
+    function toggleModeInput(){
+      var m = document.getElementById('splitMode').value;
+      document.getElementById('inputLabel').innerText = m === 'numGroups' ? 'ចំនួនវេន ៖' : 'ចំនួនសិស្ស/វេន ៖';
+      document.getElementById('splitValue').value = m === 'numGroups' ? 4 : 5;
+    }
+
+    function getExcludedKeys(){
+      return [
+        document.getElementById('presidentSelect').value,
+        document.getElementById('deputy1Select').value,
+        document.getElementById('deputy2Select').value
+      ].filter(Boolean);
+    }
+
+    async function generateGroups(){
+      var c = document.getElementById('classSelect').value;
+      var m = document.getElementById('splitMode').value;
+      var n = parseInt(document.getElementById('splitValue').value, 10);
+
+      if(!c){ alert('សូមជ្រើសរើសថ្នាក់រៀន!'); return; }
+      if(!n || n < 1){ alert('សូមបញ្ចូលចំនួនឱ្យបានត្រឹមត្រូវ!'); return; }
+
+      status('⏳ កំពុងបែងចែកសិស្ស...', 'blue');
+      document.getElementById('groupsContainer').innerHTML = '';
+
+      try {
+        var students = await apiCall('getStudentsByClass', { className: c });
+        var excluded = getExcludedKeys();
+        var cleaning = students.filter(s => excluded.indexOf(studentKey(s)) === -1);
+
+        if(!cleaning.length){
+          status('❌ មិនមានសិស្សសម្រាប់វេនសម្អាតទេ!', 'red');
+          return;
+        }
+
+        if(m === 'numGroups' && n > cleaning.length){
+          alert('ចំនួនវេនមិនអាចលើសចំនួនសិស្សដែលត្រូវសម្អាតបានទេ!');
+          return;
+        }
+
+        for(var i = cleaning.length - 1; i > 0; i--){
+          var j = Math.floor(Math.random() * (i + 1));
+          var t = cleaning[i];
+          cleaning[i] = cleaning[j];
+          cleaning[j] = t;
+        }
+
+        var groups = [];
+        if(m === 'numGroups'){
+          for(i = 0; i < n; i++) groups.push([]);
+          cleaning.forEach((s, idx) => groups[idx % n].push(s));
+        } else {
+          for(i = 0; i < cleaning.length; i += n){
+            groups.push(cleaning.slice(i, i + n));
+          }
+        }
+
+        currentGroups = groups;
+        document.getElementById('printClassName').innerText = 'ប្រចាំ ថ្នាក់ទី ' + c;
+        updatePrintRoles();
+        renderGroups(groups);
+
+        document.getElementById('countInfo').innerText =
+          '👥 សិស្សសរុប៖ ' + students.length + ' នាក់ | 🚫 មិនចូលវេន៖ ' + excluded.length + ' នាក់ | 🧹 ចូលវេនសម្អាត៖ ' + cleaning.length + ' នាក់';
+      } catch(e) {
+        status('❌ ' + e.message, 'red');
+      }
+    }
+
+    function updatePrintRoles(){
+      var p = findStudent(document.getElementById('presidentSelect').value);
+      var d1 = findStudent(document.getElementById('deputy1Select').value);
+      var d2 = findStudent(document.getElementById('deputy2Select').value);
+
+      document.getElementById('printRoles').innerText =
+        'ប្រធានថ្នាក់៖ ' + (p ? p.name : '........') +
+        ' | អនុប្រធានទី១៖ ' + (d1 ? d1.name : '........') +
+        ' | អនុប្រធានទី២៖ ' + (d2 ? d2.name : '........');
+    }
+
+    function renderGroups(groups){
+      var c = document.getElementById('groupsContainer');
+      c.innerHTML = '';
+
+      groups.forEach(function(group, index){
+        if(!group.length) return;
+
+        var box = document.createElement('div');
+        box.className = 'group-box';
+
+        var h = document.createElement('div');
+        h.className = 'group-header';
+        h.innerText = '🚩 ' + (daysOfWeek[index] || ('ក្រុមទី ' + (index + 1))) + ' (' + group.length + ' នាក់)';
+        box.appendChild(h);
+
+        var ul = document.createElement('ul');
+        ul.className = 'group-list';
+
+        group.forEach(function(s, i){
+          var li = document.createElement('li');
+          var left = document.createElement('span');
+          left.innerHTML = '<b>' + (i + 1) + '.</b> ' + escapeHtml(s.name);
+
+          if(i === 0){
+            var badgeLead = document.createElement('span');
+            badgeLead.className = 'role-badge role-leader';
+            badgeLead.innerText = '👑 ប្រធាន';
+            left.appendChild(badgeLead);
+          } else if(i === 1){
+            var badgeSub = document.createElement('span');
+            badgeSub.className = 'role-badge role-sub';
+            badgeSub.innerText = '⭐ អនុប្រធាន';
+            left.appendChild(badgeSub);
+          }
+
+          var sex = document.createElement('span');
+          sex.className = 'student-sex';
+          sex.textContent = '(' + (s.sex || 'មិនបានដាក់') + ')';
+
+          li.appendChild(left);
+          li.appendChild(sex);
+          ul.appendChild(li);
+        });
+
+        box.appendChild(ul);
+        c.appendChild(box);
+      });
+
+      status('🎉 បែងចែកវេនបានជោគជ័យ!', 'green');
+      document.getElementById('saveBtn').style.display = 'inline-block';
+      document.getElementById('printBtn').style.display = 'inline-block';
+    }
+
+    async function saveToSheet(){
+      var c = document.getElementById('classSelect').value;
+      if(!currentGroups.length){ alert('សូមបែងចែកវេនសិន!'); return; }
+
+      var p = findStudent(document.getElementById('presidentSelect').value);
+      var d1 = findStudent(document.getElementById('deputy1Select').value);
+      var d2 = findStudent(document.getElementById('deputy2Select').value);
+
+      status('⏳ កំពុងរក្សាទុក...', 'blue');
+
+      try {
+        var r = await apiCall('saveGroupsToSheet', {
+          payload: {
+            className: c,
+            groups: currentGroups,
+            classRoles: {
+              president: p ? p.name : '',
+              deputy1: d1 ? d1.name : '',
+              deputy2: d2 ? d2.name : ''
+            }
+          }
+        });
+        status('✅ ' + (r.message || 'បានរក្សាទុកកាលវិភាគក្រុមរួចរាល់!'), 'green');
+      } catch(e) {
+        status('❌ ' + e.message, 'red');
+      }
+    }
+
+    function escapeHtml(s){
+      return String(s || '')
+        .replace(/&/g,'&amp;')
+        .replace(/</g,'&lt;')
+        .replace(/>/g,'&gt;')
+        .replace(/"/g,'&quot;')
+        .replace(/'/g,'&#039;');
     }
   </script>
 </body>
