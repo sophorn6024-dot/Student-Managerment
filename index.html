@@ -653,10 +653,28 @@
     .class-prog-fill { height: 100%; border-radius: 20px; background: linear-gradient(90deg, #3b82f6, #8b5cf6); transition: width 0.9s cubic-bezier(0.2, 0.8, 0.2, 1); }
     .class-prog-count { width: 38px; text-align: right; font-weight: 600; color: var(--text-muted); }
 
-    /* IFRAME VIEW */
-    #iframeView { padding: 0; background: var(--surface); }
-    .iframe-container { width: 100%; height: 100%; position: relative; }
-    #pageFrame { width: 100%; height: 100%; border: none; background: var(--surface); }
+    /* =========================================================
+       🪟 IFRAME VIEW (⚡ កែសម្រួលកុំឱ្យចាប់គាំង TOUCH SCROLL)
+    ========================================================= */
+    #iframeView {
+      padding: 0;
+      background: var(--surface);
+      overflow: hidden !important; /* 🌟 មិនឱ្យ parent ចាប់ Scroll ច្រឡំ */
+    }
+    .iframe-container {
+      width: 100%;
+      height: 100%;
+      position: relative;
+      overflow: hidden;
+    }
+    #pageFrame {
+      width: 100%;
+      height: 100%;
+      border: none;
+      background: var(--surface);
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+    }
 
     .loading-glass-overlay {
       position: absolute;
@@ -1276,11 +1294,16 @@
 
 <script>
   let SESSION_TOKEN = typeof getStoredToken === 'function' ? getStoredToken() : localStorage.getItem('krou_session_token');
-  let TEACHER_NAME = "";
-  let TEACHER_PHOTO_URL = "";
-  let USER_ROLE = "teacher";
-  let IS_ADMIN = false;
+  let TEACHER_NAME = localStorage.getItem('krou_teacher_name') || "";
+  let TEACHER_PHOTO_URL = localStorage.getItem('krou_teacher_photo') || "";
+  let USER_ROLE = localStorage.getItem('krou_user_role') || "teacher";
+  let IS_ADMIN = String(USER_ROLE).trim().toLowerCase() === 'admin';
   let TEACHER_SEX = localStorage.getItem('krou_teacher_sex') || '';
+
+  // 🌟 ចែករំលែក Session ទៅឱ្យ subpage ក្នុង iframe អានបានភ្លាមៗ (0ms)
+  window.SESSION_TOKEN = SESSION_TOKEN;
+  window.TEACHER_NAME = TEACHER_NAME;
+  window.USER_ROLE = USER_ROLE;
 
   const PAGE_TITLES = {
     dashboard: "🏠 ទំព័រដើម",
@@ -1399,11 +1422,9 @@
     }
   }
 
-  // 🌟 គ្រប់គ្រង Navigation និងផ្គូផ្គងឈ្មោះឯកសារលើ GitHub
   var currentPage = localStorage.getItem('krou_active_page') || 'dashboard';
 
   function mapPageToFile(page) {
-    // ផែនទីផ្គូផ្គងឈ្មោះប៊ូតុង ទៅឈ្មោះ File HTML ជាក់ស្ដែងលើ GitHub
     var map = {
       'dashboard': 'dashboard',
       'addStudent': 'addStudent',
@@ -1467,7 +1488,7 @@
     if (cleanFile === 'dashboard') {
       document.getElementById('iframeView').classList.remove('active');
       document.getElementById('dashboardView').classList.add('active');
-      refreshStats();
+      refreshStats(); // ⚡ ហៅទាញស្ថិតិតែ ១ ដងគត់ត្រង់នេះ
       return;
     }
 
@@ -1480,8 +1501,8 @@
     iframeView.classList.add('active');
     overlay.classList.add('show');
 
-    // 🌟 ផ្ទុកទំព័ររង (Subpages) លើ GitHub តាមឈ្មោះឯកសារពិតប្រាកដ
-    frame.src = cleanFile + '.html';
+    // 🌟 ⚡ ANTI-CACHE BUSTER: បង្ខំឱ្យទាញយកកូដថ្មីពី GitHub ជានិច្ច គ្មានថ្ងៃជាប់ CACHE ចាស់ឡើយ
+    frame.src = cleanFile + '.html?v=' + Date.now();
   }
 
   function navigateFromDash(page) { navigate(page, null); }
@@ -1658,7 +1679,9 @@
       if (res && res.teacher) {
         TEACHER_NAME = res.teacher.name || TEACHER_NAME;
         TEACHER_SEX = res.teacher.sex || TEACHER_SEX;
+        localStorage.setItem('krou_teacher_name', TEACHER_NAME);
         localStorage.setItem('krou_teacher_sex', TEACHER_SEX);
+        if (res.teacher.photoUrl) localStorage.setItem('krou_teacher_photo', res.teacher.photoUrl);
         document.getElementById('userNameLabel').innerText = TEACHER_NAME;
         renderAvatar(res.teacher.photoUrl || '');
         initGreetings();
@@ -1686,8 +1709,11 @@
         await callBackendApi('logoutSession', { token: SESSION_TOKEN }); 
       }
     } catch(e) {}
+    localStorage.removeItem('krou_session_token');
+    localStorage.removeItem('krou_teacher_name');
+    localStorage.removeItem('krou_user_role');
+    localStorage.removeItem('krou_teacher_photo');
     if (typeof removeStoredToken === 'function') removeStoredToken();
-    else localStorage.removeItem('krou_session_token');
     window.location.replace('login.html');
   }
 
@@ -1704,37 +1730,56 @@
     }
   }
 
+  // ⚡ TURBO BOOT: មិនបាច់ហៅ refreshStats() ត្រង់នេះទេ ព្រោះ navigate(currentPage) នឹងហៅស្វ័យប្រវត្តិ
   function bootAuthenticatedApp() {
     setTodayPill();
-    refreshStats();
     initGreetings();
     navigate(currentPage, null);
   }
 
+  // ⚡ INSTANT SESSION RESTORATION: បង្ហាញ UI ភ្លាមៗ (0ms) មុនពេល Network ឆ្លើយតប
   async function verifySessionBeforeBoot() {
     if (!SESSION_TOKEN) {
       window.location.replace('login.html');
       return;
     }
+
+    // ១. បង្ហាញព័ត៌មានពី Storage ភ្លាមៗ កុំឱ្យអេក្រង់វិលរង់ចាំ
+    if (TEACHER_NAME) {
+      document.getElementById('userNameLabel').innerText = TEACHER_NAME;
+      renderAvatar(TEACHER_PHOTO_URL);
+      initAdminTools();
+    }
+
+    // ២. បញ្ឆេះកម្មវិធីដំណើរការភ្លាម
+    bootAuthenticatedApp();
+
+    // ៣. ផ្ទៀងផ្ទាត់ Session ក្នុង Background ដោយស្ងាត់ៗ (Silent Verification)
     try {
       var session = await callBackendApi('getCurrentSession', { token: SESSION_TOKEN });
       if (!session || !session.loggedIn) {
-        if (typeof removeStoredToken === 'function') removeStoredToken();
-        else localStorage.removeItem('krou_session_token');
+        localStorage.removeItem('krou_session_token');
         window.location.replace('login.html');
         return;
       }
-      TEACHER_NAME = session.name || '';
-      USER_ROLE = session.role || 'teacher';
+      TEACHER_NAME = session.name || TEACHER_NAME;
+      USER_ROLE = session.role || USER_ROLE;
       IS_ADMIN = String(USER_ROLE).trim().toLowerCase() === 'admin';
       if (session.sex) TEACHER_SEX = session.sex;
-      
+
+      localStorage.setItem('krou_teacher_name', TEACHER_NAME);
+      localStorage.setItem('krou_user_role', USER_ROLE);
+      localStorage.setItem('krou_teacher_sex', TEACHER_SEX);
+      if (session.photoUrl) localStorage.setItem('krou_teacher_photo', session.photoUrl);
+
+      window.TEACHER_NAME = TEACHER_NAME;
+      window.USER_ROLE = USER_ROLE;
+
       document.getElementById('userNameLabel').innerText = TEACHER_NAME;
       renderAvatar(session.photoUrl || '');
       initAdminTools();
-      bootAuthenticatedApp();
     } catch(err) {
-      window.location.replace('login.html');
+      console.warn('Silent session check failed:', err);
     }
   }
 
