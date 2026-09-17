@@ -10,7 +10,6 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Battambang:wght@400;700;900&family=Moul&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <script src="api.js"></script>
   <style>
     :root {
       --c-blue: #001fd1;
@@ -122,7 +121,7 @@
 
     .a4-page {
       width: 297mm;
-      height: 209mm; /* កាត់បន្ថយ 1mm ការពារ browser micro-pixel rounding បង្កើតទំព័រទទេ */
+      height: 209mm;
       background: #ffffff;
       box-shadow: 0 10px 20px rgba(0,0,0,0.1);
       page-break-after: always;
@@ -164,7 +163,6 @@
       height: 100%;
     }
 
-    /* ផ្នែកក្បាលកាត */
     .card-top-header {
       position: relative;
       display: flex;
@@ -229,7 +227,6 @@
       height: 4px;
     }
 
-    /* ផ្នែកតួខ្លួនកាត (Body) */
     .card-main-body {
       flex: 1;
       padding: 3px 6px 2px 6px;
@@ -239,7 +236,6 @@
       justify-content: space-between;
     }
 
-    /* Watermark */
     .card-watermark {
       position: absolute;
       top: 52%;
@@ -254,7 +250,6 @@
       transition: opacity 0.2s;
     }
 
-    /* ចំណងជើងកាតផ្នែកកណ្តាល */
     .card-titles {
       position: relative;
       z-index: 1;
@@ -302,7 +297,6 @@
       letter-spacing: 0.2px;
     }
 
-    /* ផ្នែកព័ត៌មាន និងរូបថត */
     .content-container {
       position: relative;
       z-index: 1;
@@ -334,9 +328,7 @@
       line-height: 1.3;
     }
 
-    .info-table-top tr {
-      height: 20%;
-    }
+    .info-table-top tr { height: 20%; }
 
     .info-table-bottom {
       width: 100%;
@@ -346,9 +338,7 @@
       margin-top: 2px;
     }
 
-    .info-table-bottom tr {
-      height: 16px;
-    }
+    .info-table-bottom tr { height: 16px; }
 
     .lbl-col {
       width: 74px;
@@ -378,7 +368,6 @@
     .val-blue { color: var(--c-blue); }
     .val-green { color: var(--c-green); }
 
-    /* ប្រអប់រូបថតសិស្ស (2cm x 2.4cm) */
     .student-photo-box {
       width: 20mm;
       height: 24mm;
@@ -403,7 +392,6 @@
       color: #cbd5e1;
     }
 
-    /* ផ្នែកហត្ថលេខាខាងក្រោម */
     .card-bottom-signature {
       position: relative;
       z-index: 2;
@@ -466,7 +454,6 @@
       z-index: 2;
     }
 
-    /* ត្រានាយកសាលា */
     .stamp-overlay-box {
       position: absolute;
       top: var(--stamp-top);
@@ -488,7 +475,6 @@
       mix-blend-mode: multiply;
     }
 
-    /* លក្ខខណ្ឌបោះពុម្ព A4 Landscape */
     @media print {
       body {
         background: transparent !important;
@@ -540,7 +526,7 @@
       </div>
 
       <div class="toolbar-group">
-        <button class="btn btn-primary" onclick="loadStudents()" title="ទាញយកទិន្នន័យឡើងវិញ">
+        <button class="btn btn-primary" onclick="initClassDropdown()" title="ទាញយកបញ្ជីថ្នាក់ឡើងវិញ">
           <i class="fa-solid fa-rotate"></i> ផ្ទុកឡើងវិញ
         </button>
         <button class="btn btn-success" onclick="window.print()">
@@ -552,25 +538,25 @@
     <div class="toolbar-row" style="background:#f8fafc; padding:6px 10px; border-radius:8px; border:1px solid #e2e8f0;">
       <!-- Logo Control -->
       <div class="toolbar-group">
-        <label class="btn btn-outline" style="cursor:pointer;" title="ជ្រើសរើសរូប Logo ពីកុំព្យូទ័រ/ទូរសព្ទ">
+        <label class="btn btn-outline" style="cursor:pointer;" title="ជ្រើសរើសរូប Logo">
           <i class="fa-solid fa-cloud-arrow-up" style="color:#2563eb;"></i> ប្តូរ Logo
           <input type="file" id="logoUploadInput" accept="image/*" style="display:none;" onchange="handleCustomLogo(event)">
         </label>
-        <button class="btn btn-danger" onclick="clearCustomLogo()" title="លុប Logo និង Watermark ចេញ">
+        <button class="btn btn-danger" onclick="clearCustomLogo()" title="លុប Logo">
           <i class="fa-solid fa-trash-can"></i> លុប Logo
         </button>
 
-        <label style="font-size:12px; font-weight:700; color:#475569; margin-left:6px;" title="កម្រិតភាពច្បាស់ Watermark">Watermark:</label>
+        <label style="font-size:12px; font-weight:700; color:#475569; margin-left:6px;">Watermark:</label>
         <input type="range" id="opacitySlider" min="0.10" max="0.35" step="0.02" value="0.22" style="width:55px; cursor:pointer;" oninput="updateWatermarkOpacity(this.value)">
       </div>
 
       <!-- Stamp Control -->
       <div class="toolbar-group">
-        <label class="btn btn-outline" style="cursor:pointer; border-color:#fca5a5; color:#b91c1c;" title="បញ្ចូលរូបត្រានាយកសាលា">
+        <label class="btn btn-outline" style="cursor:pointer; border-color:#fca5a5; color:#b91c1c;" title="បញ្ចូលត្រានាយក">
           <i class="fa-solid fa-stamp" style="color:#dc2626;"></i> បញ្ចូលត្រា
           <input type="file" id="stampUploadInput" accept="image/*" style="display:none;" onchange="handleCustomStamp(event)">
         </label>
-        <button class="btn btn-danger" onclick="clearCustomStamp()" title="លុបត្រានាយកចេញវិញ">
+        <button class="btn btn-danger" onclick="clearCustomStamp()" title="លុបត្រា">
           <i class="fa-solid fa-trash-can"></i> លុបត្រា
         </button>
 
@@ -583,7 +569,7 @@
         <span style="font-size:11.5px; font-weight:700; color:#475569;">ឆ្វេង/ស្តាំ:</span>
         <input type="range" id="stampLeftSlider" min="-120" max="120" value="0" style="width:85px; cursor:pointer;" oninput="updateStampLeft(this.value)">
 
-        <button class="btn btn-outline" onclick="resetStampPosition()" title="កំណត់ត្រាមកចំកណ្តាលដើមវិញ" style="padding: 5px 8px; font-size: 11.5px;">
+        <button class="btn btn-outline" onclick="resetStampPosition()" title="កណ្តាលដើម" style="padding: 5px 8px; font-size: 11.5px;">
           🎯 កណ្តាលដើម
         </button>
       </div>
@@ -594,11 +580,13 @@
   <div class="print-area" id="printArea">
     <div style="text-align:center; padding:50px; color:#64748b;">
       <i class="fa-solid fa-spinner fa-spin fa-2x"></i>
-      <p style="margin-top:10px;">សូមរង់ចាំ កំពុងទាញយកបញ្ជីសិស្ស...</p>
+      <p style="margin-top:10px;">សូមរង់ចាំ កំពុងទាញយកបញ្ជីថ្នាក់...</p>
     </div>
   </div>
 
   <script>
+    // 🌟 URL របស់ Google Apps Script របស់លោកអ្នក
+    var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxe6vrQshGAPglgmmZykljXazDNh1ZwWSRdFDAip1WWWRky24lmBo-qicLK3_i10AvT/exec';
     var OFFICIAL_MOEYS_LOGO = 'https://images.weserv.nl/?url=upload.wikimedia.org/wikipedia/commons/thumb/8/85/Emblem_of_the_Ministry_of_Education%2C_Youth_and_Sport_%28Cambodia%29.svg/300px-Emblem_of_the_Ministry_of_Education%2C_Youth_and_Sport_%28Cambodia%29.svg.png';
 
     var customImageUrl = localStorage.getItem('school_user_logo_url') || OFFICIAL_MOEYS_LOGO;
@@ -608,17 +596,12 @@
     var currentLayout = parseInt(localStorage.getItem('school_cards_layout') || '8');
     var stampSettings = JSON.parse(localStorage.getItem('school_stamp_settings') || '{"size":"34","top":"-3","left":"0"}');
 
-    // គាំទ្រទាំង Apps Script Template និង Local/GitHub Storage
-    var token = (typeof <?= typeof token !== 'undefined' ? JSON.stringify(token) : '""' ?> !== 'undefined' && <?= typeof token !== 'undefined' ? JSON.stringify(token) : '""' ?>) 
-                || localStorage.getItem('school_token') || sessionStorage.getItem('token') || '';
-    var userClass = (typeof <?= typeof userClass !== 'undefined' ? JSON.stringify(userClass) : '""' ?> !== 'undefined' && <?= typeof userClass !== 'undefined' ? JSON.stringify(userClass) : '""' ?>) 
-                || localStorage.getItem('school_user_class') || '';
-    var userRole = (typeof <?= typeof userRole !== 'undefined' ? JSON.stringify(userRole) : '""' ?> !== 'undefined' && <?= typeof userRole !== 'undefined' ? JSON.stringify(userRole) : '""' ?>) 
-                || localStorage.getItem('school_user_role') || 'teacher';
+    var token = localStorage.getItem('school_token') || sessionStorage.getItem('token') || '';
+    var userClass = localStorage.getItem('school_user_class') || '';
+    var userRole = localStorage.getItem('school_user_role') || 'teacher';
     
     var allStudents = [];
 
-    // បំប្លែងលេខអារ៉ាប់ជាលេខខ្មែរ
     function toKhmerNum(num) {
       if (num === null || num === undefined || num === '') return '';
       var khmerDigits = ['០','១','២','៣','៤','៥','៦','៧','៨','៩'];
@@ -636,51 +619,52 @@
       return 'ធ្វើនៅកំពង់ល្ពៅ ថ្ងៃទី' + d + ' ខែ' + m + ' ឆ្នាំ' + y;
     }
 
-    // 🌟 មុខងារ Universal Bridge (ហៅបានទាំងក្នុង GAS និង Web API/GitHub)
+    // 🌟 អនុគមន៍ហៅទិន្នន័យពី Apps Script
     function executeBackendCall(action, payload, onSuccess, onFailure) {
+      // ប្រសិនបើរត់ផ្ទាល់ក្នុង Google Apps Script Environment
       if (typeof google !== 'undefined' && google.script && google.script.run) {
         var runner = google.script.run
           .withSuccessHandler(onSuccess)
           .withFailureHandler(onFailure || function(err){ console.error(err); });
 
         if (action === 'getClassList') {
-          runner.getClassListForSession(token);
+          if (typeof runner.getClassListForSession === 'function') {
+            runner.getClassListForSession(token);
+          } else if (typeof runner.getClassList === 'function') {
+            runner.getClassList();
+          }
         } else if (action === 'getAllStudentsCardData') {
-          runner.getAllStudentsCardDataSecured(token, payload.className);
+          if (typeof runner.getAllStudentsCardDataSecured === 'function') {
+            runner.getAllStudentsCardDataSecured(token, payload.className);
+          } else if (typeof runner.getAllStudentsCardData === 'function') {
+            runner.getAllStudentsCardData(payload.className);
+          }
         }
         return;
       }
 
-      // ប្រើសម្រាប់ GitHub Pages ឬ Frontend ក្រៅ
-      if (typeof api !== 'undefined' && typeof api.request === 'function') {
-        api.request(action, Object.assign({ token: token }, payload))
-          .then(onSuccess)
-          .catch(onFailure);
-        return;
-      }
-
-      var backendUrl = localStorage.getItem('gas_backend_url') || (typeof API_BASE_URL !== 'undefined' ? API_BASE_URL : '');
-      if (backendUrl) {
-        fetch(backendUrl, {
-          method: 'POST',
-          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-          body: JSON.stringify(Object.assign({ action: action, token: token }, payload))
-        })
-        .then(function(r){ return r.json(); })
-        .then(function(res){
-          if (res && res.error) throw new Error(res.error);
-          onSuccess(res.data !== undefined ? res.data : res);
-        })
-        .catch(onFailure);
-      } else {
-        console.error("ពុំមាន connection ទៅកាន់ Apps Script ឡើយ");
-      }
+      // ហៅតាម HTTP POST ទៅកាន់ Apps Script Web App
+      fetch(SCRIPT_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify(Object.assign({ action: action, token: token }, payload))
+      })
+      .then(function(r) { return r.json(); })
+      .then(function(res) {
+        if (res && res.error) {
+          throw new Error(res.error);
+        }
+        var data = res.data !== undefined ? res.data : (res.classes !== undefined ? res.classes : res);
+        onSuccess(data);
+      })
+      .catch(function(err) {
+        if (typeof onFailure === 'function') onFailure(err);
+      });
     }
 
     function handleCustomLogo(event) {
       var file = event.target.files[0];
       if (!file) return;
-
       var reader = new FileReader();
       reader.onload = function(e) {
         customImageUrl = e.target.result;
@@ -700,7 +684,6 @@
     function handleCustomStamp(event) {
       var file = event.target.files[0];
       if (!file) return;
-
       var reader = new FileReader();
       reader.onload = function(e) {
         customStampUrl = e.target.result;
@@ -759,11 +742,16 @@
     });
 
     function initClassDropdown() {
+      var sel = document.getElementById('classSelect');
+      sel.innerHTML = '<option value="">កំពុងទាញយក...</option>';
+
       executeBackendCall('getClassList', {}, function(classes) {
-        var sel = document.getElementById('classSelect');
         sel.innerHTML = '';
+        if (typeof classes === 'string') {
+          try { classes = JSON.parse(classes); } catch(e) {}
+        }
         
-        if (classes && classes.length > 0) {
+        if (Array.isArray(classes) && classes.length > 0) {
           classes.forEach(function(c) {
             var opt = document.createElement('option');
             opt.value = c;
@@ -776,9 +764,16 @@
           loadStudents();
         } else {
           sel.innerHTML = '<option value="">គ្មានថ្នាក់</option>';
+          document.getElementById('printArea').innerHTML = '<div style="text-align:center; padding:50px; color:#64748b;">មិនមានទិន្នន័យថ្នាក់ឡើយ</div>';
         }
       }, function(err) {
         console.error("មិនអាចទាញបញ្ជីថ្នាក់:", err);
+        sel.innerHTML = '<option value="">បរាជ័យក្នុងការទាញយក</option>';
+        document.getElementById('printArea').innerHTML = `
+          <div style="color:red; text-align:center; padding:30px;">
+            <p style="font-weight:bold;">មិនអាចទាញបញ្ជីថ្នាក់បានឡើយ!</p>
+            <p style="font-size:12px; margin-top:6px;">មូលហេតុ៖ ${err.message || err}</p>
+          </div>`;
       });
     }
 
@@ -825,8 +820,8 @@
 
       for (var p = 0; p < totalPages; p++) {
         html += `<div class="a4-page ${layoutClass}">`;
-        
         var pageStudents = allStudents.slice(p * cardsPerPage, (p + 1) * cardsPerPage);
+        
         for (var i = 0; i < pageStudents.length; i++) {
           var s = pageStudents[i];
           var khmerId = toKhmerNum(s.id);
@@ -852,11 +847,8 @@
 
           html += `
             <div class="student-card">
-              <!-- ក្បាលកាត -->
               <div class="card-top-header">
-                <div class="header-logo-box">
-                  ${headerLogoHtml}
-                </div>
+                <div class="header-logo-box">${headerLogoHtml}</div>
                 <div class="header-kingdom">
                   <div class="kingdom-title">ព្រះរាជាណាចក្រកម្ពុជា</div>
                   <div class="kingdom-subtitle">ជាតិ សាសនា ព្រះមហាក្សត្រ</div>
@@ -874,11 +866,9 @@
                 </div>
               </div>
 
-              <!-- តួខ្លួនកាត -->
               <div class="card-main-body">
                 ${watermarkHtml}
 
-                <!-- ចំណងជើងកណ្តាល -->
                 <div class="card-titles">
                   <div class="title-badge">កាតសម្គាល់ខ្លួនសិស្ស</div>
                   <div class="title-school">${schoolName}</div>
@@ -886,7 +876,6 @@
                   <div class="title-student-name-center">${s.name || ''}</div>
                 </div>
 
-                <!-- ផ្នែកព័ត៌មាន និងរូបថត -->
                 <div class="content-container">
                   <div class="mid-split">
                     <div class="left-profile-block">
@@ -919,12 +908,9 @@
                       </table>
                     </div>
 
-                    <div class="student-photo-box">
-                      ${photoHtml}
-                    </div>
+                    <div class="student-photo-box">${photoHtml}</div>
                   </div>
 
-                  <!-- ជួរព័ត៌មានពេញទទឹងខាងក្រោម -->
                   <table class="info-table-bottom">
                     <tr>
                       <td class="lbl-col">អាសយដ្ឋានបច្ចុប្បន្ន</td>
@@ -939,7 +925,6 @@
                   </table>
                 </div>
 
-                <!-- ផ្នែកហត្ថលេខាខាងក្រោមឆ្វេង -->
                 <div class="card-bottom-signature">
                   <div class="signature-box">
                     <div class="sig-date">${autoDateText}</div>
