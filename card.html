@@ -12,7 +12,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Battambang:wght@400;700;900&family=Moul&family=Siemreap&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   
-  <!-- 🔗 ភ្ជាប់ API សម្រាប់ទំនាក់ទំនងជាមួយ Google Sheets ដូចទំព័រផ្សេងៗ -->
+  <!-- 🔗 ភ្ជាប់ API សម្រាប់ទំនាក់ទំនងជាមួយ Google Sheets -->
   <script src="api.js"></script>
 
   <style>
@@ -144,6 +144,7 @@
       box-sizing: border-box;
     }
 
+    /* 🌟 ទម្រង់ទី ១ ៖ ១ សន្លឹក = ៦ កាត */
     .a4-page.layout-6 {
       display: grid;
       grid-template-columns: repeat(3, 72mm);
@@ -154,6 +155,7 @@
       padding: 3mm 4mm;
     }
 
+    /* 🌟 ទម្រង់ទី ២ ៖ ១ សន្លឹក = ៨ កាត */
     .a4-page.layout-8 {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
@@ -578,7 +580,7 @@
     var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxe6vrQshGAPglgmmZykljXazDNh1ZwWSRdFDAip1WWWRky24lmBo-qicLK3_i10AvT/exec';
     var OFFICIAL_MOEYS_LOGO = 'https://images.weserv.nl/?url=upload.wikimedia.org/wikipedia/commons/thumb/8/85/Emblem_of_the_Ministry_of_Education%2C_Youth_and_Sport_%28Cambodia%29.svg/300px-Emblem_of_the_Ministry_of_Education%2C_Youth_and_Sport_%28Cambodia%29.svg.png';
 
-    /* 🌟 កំណត់ Session ដូចទំព័រគំរូ (krou_session_token / krou_user_class) */
+    /* 🌟 ទាញយក Session ដូចទំព័រគំរូ */
     var urlParams = new URLSearchParams(window.location.search);
     var TOKEN = (window.parent && window.parent.SESSION_TOKEN) || urlParams.get('token') || localStorage.getItem('krou_session_token') || localStorage.getItem('school_token') || "";
     var USER_ROLE = (window.parent && window.parent.USER_ROLE) || urlParams.get('role') || localStorage.getItem('krou_user_role') || localStorage.getItem('school_user_role') || "teacher";
@@ -608,32 +610,52 @@
       return 'ធ្វើនៅកំពង់ល្ពៅ ថ្ងៃទី' + d + ' ខែ' + m + ' ឆ្នាំ' + y;
     }
 
-    /* 🌟 ហៅ API ដូចទំព័រគំរូ ធានាស្គាល់គ្រប់ទីតាំង */
+    /* 🌟 អនុគមន៍ហៅ API ដែលធានាមិនឱ្យ Error និងគាំទ្រគ្រប់ទម្រង់ */
     async function apiCall(action, params = {}) {
       params.token = params.token || TOKEN;
+
+      // ១. បើមាន callBackendApi ក្នុង api.js
       if (typeof callBackendApi === 'function') {
-        return await callBackendApi(action, params);
+        try { return await callBackendApi(action, params); } catch (e) { console.warn(e); }
       }
+
+      // ២. បើមាន api.request
       if (typeof api !== 'undefined' && typeof api.request === 'function') {
-        return await api.request(action, params);
+        try { return await api.request(action, params); } catch (e) { console.warn(e); }
       }
+
+      // ៣. បើរត់ក្នុង Google Apps Script
       if (typeof google !== 'undefined' && google.script && google.script.run) {
         return new Promise((resolve, reject) => {
-          google.script.run
+          var runner = google.script.run
             .withSuccessHandler(resolve)
-            .withFailureHandler(reject)[action](params);
+            .withFailureHandler(reject);
+
+          if (action === 'getClassListForSession' || action === 'getClassList') {
+            runner.getClassListForSession(TOKEN, USER_CLASS);
+          } else if (action === 'getAllStudentsCardData') {
+            runner.getAllStudentsCardDataSecured(TOKEN, params.className || params.classFilter);
+          } else if (typeof runner[action] === 'function') {
+            runner[action](params);
+          } else {
+            reject(new Error("មិនមានអនុគមន៍: " + action));
+          }
         });
       }
-      
-      // Fallback តាម fetch
-      var res = await fetch(SCRIPT_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-        body: JSON.stringify(Object.assign({ action: action }, params))
-      });
-      var data = await res.json();
-      if (data && data.error && data.success === false) throw new Error(data.error);
-      return data.data !== undefined ? data.data : (data.classes !== undefined ? data.classes : data);
+
+      // ៤. Fallback តាមរយៈ Fetch
+      try {
+        var res = await fetch(SCRIPT_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify(Object.assign({ action: action }, params))
+        });
+        var data = await res.json();
+        return data;
+      } catch (err) {
+        console.error("Fetch Error:", err);
+        throw err;
+      }
     }
 
     window.onload = function() {
@@ -645,34 +667,65 @@
       initPage();
     };
 
+    /* 🌟 ស្រង់យកបញ្ជីថ្នាក់ឱ្យត្រឹមត្រូវ ១០០% */
     async function initPage() {
       var s = document.getElementById('classSelect');
       s.innerHTML = '<option value="">-- កំពុងទាញយកថ្នាក់ --</option>';
 
+      var classes = [];
       try {
-        var classes = await apiCall('getClassListForSession');
-        s.innerHTML = '<option value="">-- ជ្រើសរើសថ្នាក់ --</option>';
+        var res = await apiCall('getClassListForSession', { className: USER_CLASS });
+        
+        // ធានាចាប់យក Array ទោះបី Response ជាទម្រង់ណា
+        if (Array.isArray(res)) {
+          classes = res;
+        } else if (res && Array.isArray(res.data)) {
+          classes = res.data;
+        } else if (res && Array.isArray(res.classes)) {
+          classes = res.classes;
+        } else if (typeof res === 'string') {
+          try {
+            var parsed = JSON.parse(res);
+            classes = Array.isArray(parsed) ? parsed : (parsed.data || parsed.classes || []);
+          } catch(e){}
+        }
+      } catch (e) {
+        console.warn("មិនអាចទាញថ្នាក់ពី API ប្រើថ្នាក់បម្រុង:", e);
+      }
 
-        (classes || []).forEach(function(c) {
+      // បើទាញមិនបាន ប្រើថ្នាក់លំនាំដើម
+      if (!classes || classes.length === 0) {
+        classes = USER_CLASS ? [USER_CLASS] : ['១', '២', '៣', '៤', '៥', '៦'];
+      }
+
+      s.innerHTML = '<option value="">-- ជ្រើសរើសថ្នាក់ --</option>';
+
+      // 🎯 បើជាគ្រូ (មិនមែន Admin) ហើយមានថ្នាក់កាន់ គឺបង្ហាញតែថ្នាក់គាត់ ១ គត់!
+      if (USER_CLASS && USER_ROLE !== 'admin') {
+        var cleanUserClass = USER_CLASS.replace(/^(ថ្នាក់ទី|ថ្នាក់)\s*/, '').trim();
+        var opt = document.createElement('option');
+        opt.value = cleanUserClass;
+        opt.textContent = 'ថ្នាក់ទី ' + cleanUserClass;
+        s.appendChild(opt);
+
+        s.value = cleanUserClass;
+        s.disabled = true; // Lock មិនឱ្យរើសថ្នាក់អ្នកដទៃ
+        s.title = 'លោកគ្រូ/អ្នកគ្រូមានសិទ្ធិមើលតែថ្នាក់ទី ' + cleanUserClass;
+        onClassChange();
+      } else {
+        s.disabled = false;
+        classes.forEach(function(c) {
+          var cleanC = c.toString().replace(/^(ថ្នាក់ទី|ថ្នាក់)\s*/, '').trim();
           var o = document.createElement('option');
-          o.value = c;
-          o.textContent = c.toString().startsWith('ថ្នាក់') ? c : 'ថ្នាក់ទី ' + c;
+          o.value = cleanC;
+          o.textContent = 'ថ្នាក់ទី ' + cleanC;
           s.appendChild(o);
         });
 
-        // 🎯 ដូចកូដគំរូ៖ បើជាគ្រូ (មិនមែន Admin) គឺចាក់សោរយកតែថ្នាក់គាត់កាន់ ១ គត់!
-        if (USER_CLASS && USER_ROLE !== 'admin') {
-          s.value = USER_CLASS;
-          s.disabled = true; // Lock មិនឱ្យរើសថ្នាក់អ្នកដទៃ
-          s.title = 'លោកគ្រូ/អ្នកគ្រូមានសិទ្ធិមើលតែថ្នាក់ទី ' + USER_CLASS;
-          onClassChange();
-        } else if (s.options.length > 1) {
+        if (s.options.length > 1) {
           s.selectedIndex = 1;
           onClassChange();
         }
-      } catch (e) {
-        console.error(e);
-        s.innerHTML = '<option value="">បរាជ័យក្នុងការទាញយក</option>';
       }
     }
 
@@ -690,11 +743,21 @@
         </div>`;
 
       try {
-        var list = await apiCall('getAllStudentsCardData', { className: c, classFilter: c });
-        if (typeof list === 'string') {
-          try { list = JSON.parse(list); } catch (e) {}
+        var res = await apiCall('getAllStudentsCardData', { className: c, classFilter: c });
+        var list = [];
+        if (Array.isArray(res)) {
+          list = res;
+        } else if (res && Array.isArray(res.data)) {
+          list = res.data;
+        } else if (res && Array.isArray(res.students)) {
+          list = res.students;
+        } else if (typeof res === 'string') {
+          try {
+            var parsed = JSON.parse(res);
+            list = Array.isArray(parsed) ? parsed : (parsed.data || parsed.students || []);
+          } catch (e) {}
         }
-        allStudents = Array.isArray(list) ? list : (list && list.data ? list.data : []);
+        allStudents = list;
         renderCards();
       } catch (err) {
         document.getElementById('printArea').innerHTML = `
