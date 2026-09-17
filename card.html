@@ -3,8 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <base target="_top">
-  <title>កាតសម្គាល់ខ្លួនសិស្ស</title>
+  <title>កាតសម្គាល់ខ្លួនសិស្ស (៦កាត & ៨កាត)</title>
   
+  <!-- Google Fonts ខ្មែរផ្លូវការ -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Battambang:wght@400;700;900&family=Moul&display=swap" rel="stylesheet">
@@ -37,6 +38,7 @@
       padding-bottom: 50px;
     }
 
+    /* របារបញ្ជា (Toolbar Control) */
     .no-print-toolbar {
       position: sticky;
       top: 0;
@@ -76,9 +78,10 @@
     }
 
     .form-control:disabled {
-      background: #f1f5f9;
-      color: #475569;
+      background: #e2e8f0;
+      color: #334155;
       cursor: not-allowed;
+      font-weight: 700;
       border-color: #94a3b8;
     }
 
@@ -115,6 +118,7 @@
       border-color: #94a3b8;
     }
 
+    /* ផ្ទាំងក្រដាស A4 Landscape */
     .print-area {
       display: flex;
       flex-direction: column;
@@ -135,6 +139,7 @@
       box-sizing: border-box;
     }
 
+    /* 🌟 ទម្រង់ទី ១ ៖ ១ សន្លឹក = ៦ កាត */
     .a4-page.layout-6 {
       display: grid;
       grid-template-columns: repeat(3, 72mm);
@@ -145,6 +150,7 @@
       padding: 3mm 4mm;
     }
 
+    /* 🌟 ទម្រង់ទី ២ ៖ ១ សន្លឹក = ៨ កាត */
     .a4-page.layout-8 {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
@@ -153,6 +159,7 @@
       padding: 4mm 5mm;
     }
 
+    /* រចនាប័ទ្មកាតសិស្សម្នាក់ៗ */
     .student-card {
       border: 2px solid var(--c-border);
       background: #ffffff;
@@ -486,6 +493,13 @@
 </head>
 <body>
 
+  <!-- Data Bridge រវាង Apps Script Server និង Frontend -->
+  <div id="gasServerBridge" 
+       data-token="<?= typeof urlToken !== 'undefined' ? urlToken : '' ?>" 
+       data-class="<?= typeof urlClass !== 'undefined' ? urlClass : '' ?>" 
+       data-role="<?= typeof urlRole !== 'undefined' ? urlRole : '' ?>" 
+       style="display:none;"></div>
+
   <!-- របារបញ្ជា (Toolbar) -->
   <div class="no-print-toolbar">
     <div class="toolbar-row">
@@ -575,11 +589,16 @@
     var currentLayout = parseInt(localStorage.getItem('school_cards_layout') || '8');
     var stampSettings = JSON.parse(localStorage.getItem('school_stamp_settings') || '{"size":"34","top":"-3","left":"0"}');
 
-    // 🌟 ទាញយក Token, Role និង ថ្នាក់ដែលគ្រូកាន់ (ពិនិត្យទាំង URL និង Storage)
+    // 🌟 ទាញយកទិន្នន័យ Session / ថ្នាក់ដែលគ្រូកាន់
+    var bridge = document.getElementById('gasServerBridge');
+    var bToken = (bridge && bridge.dataset.token && !bridge.dataset.token.startsWith('<?')) ? bridge.dataset.token : '';
+    var bClass = (bridge && bridge.dataset.class && !bridge.dataset.class.startsWith('<?')) ? bridge.dataset.class : '';
+    var bRole = (bridge && bridge.dataset.role && !bridge.dataset.role.startsWith('<?')) ? bridge.dataset.role : '';
+
     var urlParams = new URLSearchParams(window.location.search);
-    var token = urlParams.get('token') || localStorage.getItem('school_token') || sessionStorage.getItem('token') || '';
-    var userClass = urlParams.get('cls') || urlParams.get('class') || localStorage.getItem('school_user_class') || '';
-    var userRole = urlParams.get('role') || localStorage.getItem('school_user_role') || 'teacher';
+    var token = bToken || urlParams.get('token') || localStorage.getItem('school_token') || sessionStorage.getItem('token') || '';
+    var userClass = bClass || urlParams.get('cls') || urlParams.get('class') || localStorage.getItem('school_user_class') || '';
+    var userRole = bRole || urlParams.get('role') || localStorage.getItem('school_user_role') || 'teacher';
     
     var allStudents = [];
 
@@ -609,7 +628,7 @@
         if (action === 'getCurrentSession') {
           runner.getCurrentSession(token);
         } else if (action === 'getClassList') {
-          runner.getClassListForSession(token);
+          runner.getClassListForSession(token, userClass);
         } else if (action === 'getAllStudentsCardData') {
           runner.getAllStudentsCardDataSecured(token, payload.className || payload.classFilter);
         }
@@ -619,7 +638,7 @@
       fetch(SCRIPT_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-        body: JSON.stringify(Object.assign({ action: action, token: token }, payload))
+        body: JSON.stringify(Object.assign({ action: action, token: token, userClass: userClass, className: userClass }, payload))
       })
       .then(function(r) { return r.json(); })
       .then(function(res) {
@@ -710,21 +729,21 @@
       document.getElementById('stampLeftSlider').value = stampSettings.left;
       document.getElementById('layoutSelect').value = currentLayout;
       applyStampStyles();
-
-      // បញ្ជាក់ Session គ្រូមុននឹងទាញថ្នាក់
       verifyUserSessionThenLoad();
     });
 
-    // 🌟 ផ្ទៀងផ្ទាត់ថ្នាក់របស់គ្រូតាម Token ជាមុន
     function verifyUserSessionThenLoad() {
       if (token) {
         executeBackendCall('getCurrentSession', {}, function(res) {
           if (res && res.loggedIn) {
             userRole = res.role || 'teacher';
-            if (res.assignedClass) userClass = res.assignedClass.trim();
+            if (res.assignedClass) {
+              userClass = res.assignedClass.trim();
+              try { localStorage.setItem('school_user_class', userClass); } catch(e){}
+            }
           }
           initClassDropdown();
-        }, function(err) {
+        }, function() {
           initClassDropdown();
         });
       } else {
@@ -732,22 +751,22 @@
       }
     }
 
-    // 🌟 មុខងារទាញយកតែថ្នាក់ដែលគ្រូកាន់
+    // 🌟 ទាញយក និងបង្ហាញតែថ្នាក់ដែលគ្រូកាន់
     function initClassDropdown() {
       var sel = document.getElementById('classSelect');
       sel.innerHTML = '<option value="">កំពុងទាញយក...</option>';
 
-      executeBackendCall('getClassList', {}, function(classes) {
+      executeBackendCall('getClassList', { className: userClass }, function(classes) {
         sel.innerHTML = '';
         if (typeof classes === 'string') {
           try { classes = JSON.parse(classes); } catch(e) {}
         }
         var classArr = Array.isArray(classes) ? classes : (classes && classes.data ? classes.data : []);
 
-        // 🎯 លក្ខខណ្ឌចម្រាញ់៖ បើជាគ្រូ (មិនមែន Admin) ហើយមានកំណត់ថ្នាក់កាន់ ត្រូវបង្ហាញតែថ្នាក់នោះមួយគត់
+        // 🎯 លក្ខខណ្ឌចម្រាញ់៖ បើជាគ្រូ (មិនមែន Admin) គឺបង្ហាញតែថ្នាក់របស់គាត់ ១ គត់ និង Lock Dropdown
         if (userRole !== 'admin' && userClass) {
           classArr = [userClass];
-          sel.disabled = true; // Lock មិនឱ្យរើសថ្នាក់ផ្សេង
+          sel.disabled = true;
           sel.title = 'លោកគ្រូ/អ្នកគ្រូមានសិទ្ធិមើលតែថ្នាក់ទី ' + userClass;
         } else {
           sel.disabled = false;
