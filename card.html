@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <base target="_top">
-  <title>កាតសម្គាល់ខ្លួនសិស្ស (៦កាត & ៨កាត)</title>
+  <title>កាតសម្គាល់ខ្លួនសិស្ស</title>
   
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -73,6 +73,13 @@
       border-radius: 6px;
       outline: none;
       background: #fff;
+    }
+
+    .form-control:disabled {
+      background: #f1f5f9;
+      color: #475569;
+      cursor: not-allowed;
+      border-color: #94a3b8;
     }
 
     .btn {
@@ -550,7 +557,6 @@
     </div>
   </div>
 
-  <!-- Print Area -->
   <div class="print-area" id="printArea">
     <div style="text-align:center; padding:50px; color:#64748b;">
       <i class="fa-solid fa-spinner fa-spin fa-2x"></i>
@@ -569,9 +575,11 @@
     var currentLayout = parseInt(localStorage.getItem('school_cards_layout') || '8');
     var stampSettings = JSON.parse(localStorage.getItem('school_stamp_settings') || '{"size":"34","top":"-3","left":"0"}');
 
-    var token = localStorage.getItem('school_token') || sessionStorage.getItem('token') || '';
-    var userClass = localStorage.getItem('school_user_class') || '';
-    var userRole = localStorage.getItem('school_user_role') || 'teacher';
+    // 🌟 ទាញយក Token, Role និង ថ្នាក់ដែលគ្រូកាន់ (ពិនិត្យទាំង URL និង Storage)
+    var urlParams = new URLSearchParams(window.location.search);
+    var token = urlParams.get('token') || localStorage.getItem('school_token') || sessionStorage.getItem('token') || '';
+    var userClass = urlParams.get('cls') || urlParams.get('class') || localStorage.getItem('school_user_class') || '';
+    var userRole = urlParams.get('role') || localStorage.getItem('school_user_role') || 'teacher';
     
     var allStudents = [];
 
@@ -598,7 +606,9 @@
           .withSuccessHandler(onSuccess)
           .withFailureHandler(onFailure || function(err){ console.error(err); });
 
-        if (action === 'getClassList') {
+        if (action === 'getCurrentSession') {
+          runner.getCurrentSession(token);
+        } else if (action === 'getClassList') {
           runner.getClassListForSession(token);
         } else if (action === 'getAllStudentsCardData') {
           runner.getAllStudentsCardDataSecured(token, payload.className || payload.classFilter);
@@ -700,9 +710,29 @@
       document.getElementById('stampLeftSlider').value = stampSettings.left;
       document.getElementById('layoutSelect').value = currentLayout;
       applyStampStyles();
-      initClassDropdown();
+
+      // បញ្ជាក់ Session គ្រូមុននឹងទាញថ្នាក់
+      verifyUserSessionThenLoad();
     });
 
+    // 🌟 ផ្ទៀងផ្ទាត់ថ្នាក់របស់គ្រូតាម Token ជាមុន
+    function verifyUserSessionThenLoad() {
+      if (token) {
+        executeBackendCall('getCurrentSession', {}, function(res) {
+          if (res && res.loggedIn) {
+            userRole = res.role || 'teacher';
+            if (res.assignedClass) userClass = res.assignedClass.trim();
+          }
+          initClassDropdown();
+        }, function(err) {
+          initClassDropdown();
+        });
+      } else {
+        initClassDropdown();
+      }
+    }
+
+    // 🌟 មុខងារទាញយកតែថ្នាក់ដែលគ្រូកាន់
     function initClassDropdown() {
       var sel = document.getElementById('classSelect');
       sel.innerHTML = '<option value="">កំពុងទាញយក...</option>';
@@ -714,6 +744,15 @@
         }
         var classArr = Array.isArray(classes) ? classes : (classes && classes.data ? classes.data : []);
 
+        // 🎯 លក្ខខណ្ឌចម្រាញ់៖ បើជាគ្រូ (មិនមែន Admin) ហើយមានកំណត់ថ្នាក់កាន់ ត្រូវបង្ហាញតែថ្នាក់នោះមួយគត់
+        if (userRole !== 'admin' && userClass) {
+          classArr = [userClass];
+          sel.disabled = true; // Lock មិនឱ្យរើសថ្នាក់ផ្សេង
+          sel.title = 'លោកគ្រូ/អ្នកគ្រូមានសិទ្ធិមើលតែថ្នាក់ទី ' + userClass;
+        } else {
+          sel.disabled = false;
+        }
+
         if (classArr.length > 0) {
           classArr.forEach(function(c) {
             var opt = document.createElement('option');
@@ -721,7 +760,8 @@
             opt.textContent = 'ថ្នាក់ទី ' + c;
             sel.appendChild(opt);
           });
-          if (userRole !== 'admin' && userClass) {
+
+          if (userClass) {
             sel.value = userClass;
           }
           loadStudents();
@@ -732,16 +772,11 @@
       }, function(err) {
         console.error("មិនអាចទាញបញ្ជីថ្នាក់:", err);
         sel.innerHTML = '<option value="">បរាជ័យក្នុងការទាញយក</option>';
-        document.getElementById('printArea').innerHTML = `
-          <div style="color:red; text-align:center; padding:30px;">
-            <p style="font-weight:bold;">មិនអាចទាញបញ្ជីថ្នាក់បានឡើយ!</p>
-            <p style="font-size:12px; margin-top:6px;">មូលហេតុ៖ ${err.message || err}</p>
-          </div>`;
       });
     }
 
     function loadStudents() {
-      var cls = document.getElementById('classSelect').value;
+      var cls = document.getElementById('classSelect').value || userClass;
       if (!cls) return;
 
       document.getElementById('printArea').innerHTML = `
