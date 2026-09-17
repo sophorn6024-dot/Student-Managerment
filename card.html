@@ -3,13 +3,18 @@
 <head>
   <meta charset="UTF-8">
   <base target="_top">
-  <title>កាតសម្គាល់ខ្លួនសិស្ស (៦កាត & ៨កាត)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>កាតសម្គាល់ខ្លួនសិស្ស - សាលាបឋមសិក្សាកំពង់ល្ពៅ</title>
   
   <!-- Google Fonts ខ្មែរផ្លូវការ -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Battambang:wght@400;700;900&family=Moul&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Battambang:wght@400;700;900&family=Moul&family=Siemreap&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- 🔗 ភ្ជាប់ API សម្រាប់ទំនាក់ទំនងជាមួយ Google Sheets ដូចទំព័រផ្សេងៗ -->
+  <script src="api.js"></script>
+
   <style>
     :root {
       --c-blue: #001fd1;
@@ -32,7 +37,7 @@
     }
 
     body {
-      font-family: 'Battambang', sans-serif;
+      font-family: 'Siemreap', 'Battambang', Arial, sans-serif;
       background-color: #f1f5f9;
       color: #0f172a;
       padding-bottom: 50px;
@@ -69,7 +74,7 @@
 
     .form-control {
       padding: 6px 9px;
-      font-family: 'Battambang', sans-serif;
+      font-family: inherit;
       font-size: 13px;
       border: 1.5px solid #cbd5e1;
       border-radius: 6px;
@@ -79,7 +84,7 @@
 
     .form-control:disabled {
       background: #e2e8f0;
-      color: #334155;
+      color: #1e3a8a;
       cursor: not-allowed;
       font-weight: 700;
       border-color: #94a3b8;
@@ -87,7 +92,7 @@
 
     .btn {
       padding: 6px 12px;
-      font-family: 'Battambang', sans-serif;
+      font-family: inherit;
       font-size: 13px;
       font-weight: 700;
       border-radius: 6px;
@@ -139,7 +144,6 @@
       box-sizing: border-box;
     }
 
-    /* 🌟 ទម្រង់ទី ១ ៖ ១ សន្លឹក = ៦ កាត */
     .a4-page.layout-6 {
       display: grid;
       grid-template-columns: repeat(3, 72mm);
@@ -150,7 +154,6 @@
       padding: 3mm 4mm;
     }
 
-    /* 🌟 ទម្រង់ទី ២ ៖ ១ សន្លឹក = ៨ កាត */
     .a4-page.layout-8 {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
@@ -159,7 +162,6 @@
       padding: 4mm 5mm;
     }
 
-    /* រចនាប័ទ្មកាតសិស្សម្នាក់ៗ */
     .student-card {
       border: 2px solid var(--c-border);
       background: #ffffff;
@@ -210,14 +212,14 @@
     }
 
     .kingdom-title {
-      font-family: 'Moul', cursive;
+      font-family: 'Moul', serif;
       font-size: 8.8px;
       color: #000000;
       letter-spacing: -0.1px;
     }
 
     .kingdom-subtitle {
-      font-family: 'Moul', cursive;
+      font-family: 'Moul', serif;
       font-size: 8px;
       color: #000000;
       margin-top: 1px;
@@ -269,7 +271,7 @@
     }
 
     .title-badge {
-      font-family: 'Moul', cursive;
+      font-family: 'Moul', serif;
       font-size: 10.5px;
       color: var(--c-blue);
       letter-spacing: 0.2px;
@@ -277,21 +279,21 @@
     }
 
     .title-school {
-      font-family: 'Moul', cursive;
+      font-family: 'Moul', serif;
       font-size: 9.2px;
       color: var(--c-green);
       line-height: 1.35;
     }
 
     .title-id {
-      font-family: 'Moul', cursive;
+      font-family: 'Moul', serif;
       font-size: 9.8px;
       color: var(--c-orange);
       line-height: 1.35;
     }
 
     .title-student-name-center {
-      font-family: 'Moul', cursive;
+      font-family: 'Moul', serif;
       font-size: 13.5px;
       color: var(--c-blue);
       text-align: center;
@@ -418,7 +420,7 @@
     }
 
     .sig-date {
-      font-family: 'Battambang', sans-serif;
+      font-family: inherit;
       font-weight: 700;
       font-size: 7px;
       color: #000000;
@@ -438,7 +440,7 @@
     }
 
     .sig-title {
-      font-family: 'Moul', cursive;
+      font-family: 'Moul', serif;
       font-size: 7.8px;
       color: #000000;
       line-height: 1.3;
@@ -450,7 +452,7 @@
     }
 
     .sig-role {
-      font-family: 'Moul', cursive;
+      font-family: 'Moul', serif;
       font-size: 7.5px;
       color: #000000;
       line-height: 1.3;
@@ -493,19 +495,12 @@
 </head>
 <body>
 
-  <!-- Data Bridge រវាង Apps Script Server និង Frontend -->
-  <div id="gasServerBridge" 
-       data-token="<?= typeof urlToken !== 'undefined' ? urlToken : '' ?>" 
-       data-class="<?= typeof urlClass !== 'undefined' ? urlClass : '' ?>" 
-       data-role="<?= typeof urlRole !== 'undefined' ? urlRole : '' ?>" 
-       style="display:none;"></div>
-
   <!-- របារបញ្ជា (Toolbar) -->
   <div class="no-print-toolbar">
     <div class="toolbar-row">
       <div class="toolbar-group">
         <label style="font-weight:700; font-size:13px;">ថ្នាក់៖</label>
-        <select id="classSelect" class="form-control" onchange="loadStudents()">
+        <select id="classSelect" class="form-control" onchange="onClassChange()">
           <option value="">កំពុងទាញយក...</option>
         </select>
 
@@ -523,7 +518,7 @@
       </div>
 
       <div class="toolbar-group">
-        <button class="btn btn-primary" onclick="initClassDropdown()" title="ទាញយកបញ្ជីថ្នាក់ឡើងវិញ">
+        <button class="btn btn-primary" onclick="initPage()" title="ទាញយកទិន្នន័យឡើងវិញ">
           <i class="fa-solid fa-rotate"></i> ផ្ទុកឡើងវិញ
         </button>
         <button class="btn btn-success" onclick="window.print()">
@@ -571,16 +566,23 @@
     </div>
   </div>
 
+  <!-- Print Area -->
   <div class="print-area" id="printArea">
     <div style="text-align:center; padding:50px; color:#64748b;">
       <i class="fa-solid fa-spinner fa-spin fa-2x"></i>
-      <p style="margin-top:10px;">សូមរង់ចាំ កំពុងទាញយកបញ្ជីថ្នាក់...</p>
+      <p style="margin-top:10px;">សូមរង់ចាំ កំពុងទាញយកទិន្នន័យ...</p>
     </div>
   </div>
 
   <script>
     var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxe6vrQshGAPglgmmZykljXazDNh1ZwWSRdFDAip1WWWRky24lmBo-qicLK3_i10AvT/exec';
     var OFFICIAL_MOEYS_LOGO = 'https://images.weserv.nl/?url=upload.wikimedia.org/wikipedia/commons/thumb/8/85/Emblem_of_the_Ministry_of_Education%2C_Youth_and_Sport_%28Cambodia%29.svg/300px-Emblem_of_the_Ministry_of_Education%2C_Youth_and_Sport_%28Cambodia%29.svg.png';
+
+    /* 🌟 កំណត់ Session ដូចទំព័រគំរូ (krou_session_token / krou_user_class) */
+    var urlParams = new URLSearchParams(window.location.search);
+    var TOKEN = (window.parent && window.parent.SESSION_TOKEN) || urlParams.get('token') || localStorage.getItem('krou_session_token') || localStorage.getItem('school_token') || "";
+    var USER_ROLE = (window.parent && window.parent.USER_ROLE) || urlParams.get('role') || localStorage.getItem('krou_user_role') || localStorage.getItem('school_user_role') || "teacher";
+    var USER_CLASS = urlParams.get('cls') || urlParams.get('class') || localStorage.getItem('krou_user_class') || localStorage.getItem('school_user_class') || "";
 
     var customImageUrl = localStorage.getItem('school_user_logo_url') || OFFICIAL_MOEYS_LOGO;
     var customStampUrl = localStorage.getItem('school_principal_stamp_url') || '';
@@ -589,25 +591,12 @@
     var currentLayout = parseInt(localStorage.getItem('school_cards_layout') || '8');
     var stampSettings = JSON.parse(localStorage.getItem('school_stamp_settings') || '{"size":"34","top":"-3","left":"0"}');
 
-    // 🌟 ទាញយកទិន្នន័យ Session / ថ្នាក់ដែលគ្រូកាន់
-    var bridge = document.getElementById('gasServerBridge');
-    var bToken = (bridge && bridge.dataset.token && !bridge.dataset.token.startsWith('<?')) ? bridge.dataset.token : '';
-    var bClass = (bridge && bridge.dataset.class && !bridge.dataset.class.startsWith('<?')) ? bridge.dataset.class : '';
-    var bRole = (bridge && bridge.dataset.role && !bridge.dataset.role.startsWith('<?')) ? bridge.dataset.role : '';
-
-    var urlParams = new URLSearchParams(window.location.search);
-    var token = bToken || urlParams.get('token') || localStorage.getItem('school_token') || sessionStorage.getItem('token') || '';
-    var userClass = bClass || urlParams.get('cls') || urlParams.get('class') || localStorage.getItem('school_user_class') || '';
-    var userRole = bRole || urlParams.get('role') || localStorage.getItem('school_user_role') || 'teacher';
-    
     var allStudents = [];
 
     function toKhmerNum(num) {
       if (num === null || num === undefined || num === '') return '';
       var khmerDigits = ['០','១','២','៣','៤','៥','៦','៧','៨','៩'];
-      return num.toString().replace(/[0-9]/g, function(d) {
-        return khmerDigits[parseInt(d)];
-      });
+      return num.toString().replace(/[0-9]/g, function(d) { return khmerDigits[parseInt(d)]; });
     }
 
     function getAutoKhmerDate() {
@@ -619,38 +608,100 @@
       return 'ធ្វើនៅកំពង់ល្ពៅ ថ្ងៃទី' + d + ' ខែ' + m + ' ឆ្នាំ' + y;
     }
 
-    function executeBackendCall(action, payload, onSuccess, onFailure) {
+    /* 🌟 ហៅ API ដូចទំព័រគំរូ ធានាស្គាល់គ្រប់ទីតាំង */
+    async function apiCall(action, params = {}) {
+      params.token = params.token || TOKEN;
+      if (typeof callBackendApi === 'function') {
+        return await callBackendApi(action, params);
+      }
+      if (typeof api !== 'undefined' && typeof api.request === 'function') {
+        return await api.request(action, params);
+      }
       if (typeof google !== 'undefined' && google.script && google.script.run) {
-        var runner = google.script.run
-          .withSuccessHandler(onSuccess)
-          .withFailureHandler(onFailure || function(err){ console.error(err); });
+        return new Promise((resolve, reject) => {
+          google.script.run
+            .withSuccessHandler(resolve)
+            .withFailureHandler(reject)[action](params);
+        });
+      }
+      
+      // Fallback តាម fetch
+      var res = await fetch(SCRIPT_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify(Object.assign({ action: action }, params))
+      });
+      var data = await res.json();
+      if (data && data.error && data.success === false) throw new Error(data.error);
+      return data.data !== undefined ? data.data : (data.classes !== undefined ? data.classes : data);
+    }
 
-        if (action === 'getCurrentSession') {
-          runner.getCurrentSession(token);
-        } else if (action === 'getClassList') {
-          runner.getClassListForSession(token, userClass);
-        } else if (action === 'getAllStudentsCardData') {
-          runner.getAllStudentsCardDataSecured(token, payload.className || payload.classFilter);
+    window.onload = function() {
+      document.getElementById('stampSizeSlider').value = stampSettings.size;
+      document.getElementById('stampTopSlider').value = stampSettings.top;
+      document.getElementById('stampLeftSlider').value = stampSettings.left;
+      document.getElementById('layoutSelect').value = currentLayout;
+      applyStampStyles();
+      initPage();
+    };
+
+    async function initPage() {
+      var s = document.getElementById('classSelect');
+      s.innerHTML = '<option value="">-- កំពុងទាញយកថ្នាក់ --</option>';
+
+      try {
+        var classes = await apiCall('getClassListForSession');
+        s.innerHTML = '<option value="">-- ជ្រើសរើសថ្នាក់ --</option>';
+
+        (classes || []).forEach(function(c) {
+          var o = document.createElement('option');
+          o.value = c;
+          o.textContent = c.toString().startsWith('ថ្នាក់') ? c : 'ថ្នាក់ទី ' + c;
+          s.appendChild(o);
+        });
+
+        // 🎯 ដូចកូដគំរូ៖ បើជាគ្រូ (មិនមែន Admin) គឺចាក់សោរយកតែថ្នាក់គាត់កាន់ ១ គត់!
+        if (USER_CLASS && USER_ROLE !== 'admin') {
+          s.value = USER_CLASS;
+          s.disabled = true; // Lock មិនឱ្យរើសថ្នាក់អ្នកដទៃ
+          s.title = 'លោកគ្រូ/អ្នកគ្រូមានសិទ្ធិមើលតែថ្នាក់ទី ' + USER_CLASS;
+          onClassChange();
+        } else if (s.options.length > 1) {
+          s.selectedIndex = 1;
+          onClassChange();
         }
+      } catch (e) {
+        console.error(e);
+        s.innerHTML = '<option value="">បរាជ័យក្នុងការទាញយក</option>';
+      }
+    }
+
+    async function onClassChange() {
+      var c = document.getElementById('classSelect').value || USER_CLASS;
+      if (!c) {
+        document.getElementById('printArea').innerHTML = '<div style="text-align:center; padding:50px; color:#64748b;">សូមជ្រើសរើសថ្នាក់</div>';
         return;
       }
 
-      fetch(SCRIPT_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-        body: JSON.stringify(Object.assign({ action: action, token: token, userClass: userClass, className: userClass }, payload))
-      })
-      .then(function(r) { return r.json(); })
-      .then(function(res) {
-        if (res && res.error && res.success === false) {
-          throw new Error(res.error);
+      document.getElementById('printArea').innerHTML = `
+        <div style="text-align:center; padding:50px; color:#64748b;">
+          <i class="fa-solid fa-spinner fa-spin fa-2x"></i>
+          <p style="margin-top:10px;">កំពុងទាញយកទិន្នន័យសិស្សថ្នាក់ទី ${c}...</p>
+        </div>`;
+
+      try {
+        var list = await apiCall('getAllStudentsCardData', { className: c, classFilter: c });
+        if (typeof list === 'string') {
+          try { list = JSON.parse(list); } catch (e) {}
         }
-        var data = res.data !== undefined ? res.data : (res.classes !== undefined ? res.classes : res);
-        onSuccess(data);
-      })
-      .catch(function(err) {
-        if (typeof onFailure === 'function') onFailure(err);
-      });
+        allStudents = Array.isArray(list) ? list : (list && list.data ? list.data : []);
+        renderCards();
+      } catch (err) {
+        document.getElementById('printArea').innerHTML = `
+          <div style="color:red; text-align:center; padding:30px;">
+            កំហុសក្នុងការទាញយកទិន្នន័យ៖ ${err.message || err}
+          </div>`;
+      }
     }
 
     function handleCustomLogo(event) {
@@ -721,101 +772,6 @@
       currentLayout = parseInt(val);
       localStorage.setItem('school_cards_layout', currentLayout);
       renderCards();
-    }
-
-    window.addEventListener('DOMContentLoaded', function() {
-      document.getElementById('stampSizeSlider').value = stampSettings.size;
-      document.getElementById('stampTopSlider').value = stampSettings.top;
-      document.getElementById('stampLeftSlider').value = stampSettings.left;
-      document.getElementById('layoutSelect').value = currentLayout;
-      applyStampStyles();
-      verifyUserSessionThenLoad();
-    });
-
-    function verifyUserSessionThenLoad() {
-      if (token) {
-        executeBackendCall('getCurrentSession', {}, function(res) {
-          if (res && res.loggedIn) {
-            userRole = res.role || 'teacher';
-            if (res.assignedClass) {
-              userClass = res.assignedClass.trim();
-              try { localStorage.setItem('school_user_class', userClass); } catch(e){}
-            }
-          }
-          initClassDropdown();
-        }, function() {
-          initClassDropdown();
-        });
-      } else {
-        initClassDropdown();
-      }
-    }
-
-    // 🌟 ទាញយក និងបង្ហាញតែថ្នាក់ដែលគ្រូកាន់
-    function initClassDropdown() {
-      var sel = document.getElementById('classSelect');
-      sel.innerHTML = '<option value="">កំពុងទាញយក...</option>';
-
-      executeBackendCall('getClassList', { className: userClass }, function(classes) {
-        sel.innerHTML = '';
-        if (typeof classes === 'string') {
-          try { classes = JSON.parse(classes); } catch(e) {}
-        }
-        var classArr = Array.isArray(classes) ? classes : (classes && classes.data ? classes.data : []);
-
-        // 🎯 លក្ខខណ្ឌចម្រាញ់៖ បើជាគ្រូ (មិនមែន Admin) គឺបង្ហាញតែថ្នាក់របស់គាត់ ១ គត់ និង Lock Dropdown
-        if (userRole !== 'admin' && userClass) {
-          classArr = [userClass];
-          sel.disabled = true;
-          sel.title = 'លោកគ្រូ/អ្នកគ្រូមានសិទ្ធិមើលតែថ្នាក់ទី ' + userClass;
-        } else {
-          sel.disabled = false;
-        }
-
-        if (classArr.length > 0) {
-          classArr.forEach(function(c) {
-            var opt = document.createElement('option');
-            opt.value = c;
-            opt.textContent = 'ថ្នាក់ទី ' + c;
-            sel.appendChild(opt);
-          });
-
-          if (userClass) {
-            sel.value = userClass;
-          }
-          loadStudents();
-        } else {
-          sel.innerHTML = '<option value="">គ្មានថ្នាក់</option>';
-          document.getElementById('printArea').innerHTML = '<div style="text-align:center; padding:50px; color:#64748b;">មិនមានទិន្នន័យថ្នាក់ឡើយ</div>';
-        }
-      }, function(err) {
-        console.error("មិនអាចទាញបញ្ជីថ្នាក់:", err);
-        sel.innerHTML = '<option value="">បរាជ័យក្នុងការទាញយក</option>';
-      });
-    }
-
-    function loadStudents() {
-      var cls = document.getElementById('classSelect').value || userClass;
-      if (!cls) return;
-
-      document.getElementById('printArea').innerHTML = `
-        <div style="text-align:center; padding:50px; color:#64748b;">
-          <i class="fa-solid fa-spinner fa-spin fa-2x"></i>
-          <p style="margin-top:10px;">កំពុងទាញយកទិន្នន័យសិស្សថ្នាក់ទី ${cls}...</p>
-        </div>`;
-
-      executeBackendCall('getAllStudentsCardData', { className: cls, classFilter: cls }, function(list) {
-        if (typeof list === 'string') {
-          try { list = JSON.parse(list); } catch(e) {}
-        }
-        allStudents = Array.isArray(list) ? list : (list && list.data ? list.data : []);
-        renderCards();
-      }, function(err) {
-        document.getElementById('printArea').innerHTML = `
-          <div style="color:red; text-align:center; padding:30px;">
-            កំហុសក្នុងការទាញយកទិន្នន័យ៖ ${err.message || err}
-          </div>`;
-      });
     }
 
     function refreshDisplay() {
