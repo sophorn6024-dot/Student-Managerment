@@ -102,8 +102,7 @@
       flex-direction: column;
       align-items: center;
       gap: 20px;
-      transform-origin: top center;
-      transition: transform 0.2s ease;
+      transition: zoom 0.2s ease;
     }
 
     .booklet-container {
@@ -119,6 +118,7 @@
       page-break-after: always;
       position: relative;
       overflow: hidden;
+      flex-shrink: 0;
     }
 
     .page-box {
@@ -191,7 +191,7 @@
     @media print {
       html, body { background: none; padding: 0; margin: 0; width: 297mm; height: 210mm; }
       .no-print-bar { display: none !important; }
-      .preview-wrapper { padding: 0; gap: 0; transform: none !important; }
+      .preview-wrapper { padding: 0; gap: 0; zoom: 1 !important; transform: none !important; }
       .booklet-container {
         box-shadow: none; margin: 0; width: 297mm; height: 210mm; max-height: 210mm; min-height: 210mm; padding: 6mm 7.5mm; page-break-after: always; break-after: page; page-break-inside: avoid;
       }
@@ -201,6 +201,7 @@
 </head>
 <body>
 
+  <!-- Top Action Toolbar -->
   <div class="no-print-bar">
     <div class="tool-group">
       <button class="btn" onclick="window.history.back()">⬅ ត្រឡប់</button>
@@ -232,7 +233,7 @@
         <option value="ALL">🏫 ទាំងថ្នាក់ (ទាំងអស់)</option>
       </select>
 
-      <button class="btn btn-primary" onclick="window.print()">🖨️ បោះពុម្ព (Print)</button>
+      <button class="btn btn-primary" onclick="doPrint()">🖨️ បោះពុម្ព (Print)</button>
     </div>
   </div>
 
@@ -240,19 +241,51 @@
     <div style="color: #fff; text-align: center; padding: 40px; font-size: 14px;">⚡ កំពុងរៀបចំទាញទិន្នន័យ...</div>
   </div>
 
-  <script>
-    var TOKEN = "<?= token ?>";
-    var USER_ROLE = "<?= userRole ?>";
-    var USER_CLASS = "<?= userClass ?>";
-    var TEACHER_NAME = "<?= typeof teacherName !== 'undefined' ? teacherName : '' ?>";
-    var TEACHER_SEX = "<?= typeof teacherSex !== 'undefined' ? teacherSex : '' ?>";
+  <!-- 🔗 ភ្ជាប់ api.js (បើមាន) -->
+  <script src="api.js"></script>
 
-    function getTeacherFormalTitle(sex, rawName) {
-      var s = (sex || '').toString().trim().toLowerCase();
-      var n = (rawName || '').toString().trim();
-      if (n.indexOf('លោកគ្រូ') === 0 || n.indexOf('អ្នកគ្រូ') === 0) return n;
-      var isFemale = (s === 'ស្រី' || s === 'f' || s === 'female');
-      return n ? ((isFemale ? 'អ្នកគ្រូ ' : 'លោកគ្រូ ') + n) : (isFemale ? 'អ្នកគ្រូ' : 'លោកគ្រូ');
+  <script>
+    // =========================================================
+    // ⚙️ CONFIG & GITHUB/APPS SCRIPT BRIDGING
+    // =========================================================
+    var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxe6vrQshGAPglgmmZykljXazDNh1ZwWSRdFDAip1WWWRky24lmBo-qicLK3_i10AvT/exec';
+
+    var _urlParams = new URLSearchParams(window.location.search);
+    function _get(key) { try { return localStorage.getItem(key) || ''; } catch(e) { return ''; } }
+
+    var TOKEN        = (window.parent && window.parent.SESSION_TOKEN) || _urlParams.get('token') || _get('krou_session_token') || _get('school_token') || '';
+    var USER_ROLE    = (window.parent && window.parent.USER_ROLE)     || _urlParams.get('role')  || _get('krou_user_role')    || _get('school_user_role')  || 'teacher';
+    var USER_CLASS   = _urlParams.get('cls') || _urlParams.get('class') || _get('krou_user_class') || _get('school_user_class') || '';
+    var TEACHER_NAME = (window.parent && window.parent.TEACHER_NAME) || _get('krou_teacher_name') || '';
+    var TEACHER_SEX  = (window.parent && window.parent.TEACHER_SEX)  || _get('krou_teacher_sex') || '';
+
+    // ── Universal API Caller ──
+    async function apiCall(action, params) {
+      params = params || {};
+      if (TOKEN) params.token = params.token || TOKEN;
+
+      if (typeof google !== 'undefined' && google.script && google.script.run) {
+        return new Promise(function(resolve, reject) {
+          google.script.run
+            .withSuccessHandler(resolve)
+            .withFailureHandler(reject)[action](params);
+        });
+      }
+
+      if (typeof callBackendApi === 'function') {
+        return callBackendApi(action, params);
+      }
+
+      var res = await fetch(SCRIPT_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify(Object.assign({ action: action }, params))
+      });
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      var json = await res.json();
+      if (json && json.success === false) throw new Error(json.error || json.message || 'Server error');
+      if (json && json.data !== undefined) return json.data;
+      return json;
     }
 
     var SUBJECTS = [
@@ -297,12 +330,21 @@
     }
 
     function setZoom(scale, btnId) {
-      document.getElementById('reportContainer').style.transform = 'scale(' + scale + ')';
+      var container = document.getElementById('reportContainer');
+      if (container) container.style.zoom = scale;
       ['z100', 'z75', 'z50'].forEach(id => {
         var el = document.getElementById(id);
         if (el) el.classList.remove('active');
       });
-      document.getElementById(btnId).classList.add('active');
+      var matched = document.getElementById(btnId);
+      if (matched) matched.classList.add('active');
+    }
+
+    function doPrint() {
+      window.focus();
+      setTimeout(function() {
+        try { window.print(); } catch(e) { window.parent.print(); }
+      }, 100);
     }
 
     function toggleCover() {
@@ -317,23 +359,37 @@
       });
     }
 
-    function initClasses() {
-      google.script.run.withSuccessHandler(function(classes) {
-        var sel = document.getElementById('classSelect');
+    async function initClasses() {
+      var sel = document.getElementById('classSelect');
+      sel.innerHTML = '<option value="">កំពុងទាញយក...</option>';
+
+      try {
+        var res = await apiCall('getClassListForSession', { token: TOKEN });
+        var classes = Array.isArray(res) ? res : (res && res.classes ? res.classes : []);
         sel.innerHTML = '';
+
         if (!classes || classes.length === 0) {
           sel.innerHTML = '<option value="">គ្មានថ្នាក់</option>';
           return;
         }
+
         classes.forEach(function(c) {
           var opt = document.createElement('option');
           opt.value = c;
           opt.textContent = 'ថ្នាក់ទី ' + c;
           sel.appendChild(opt);
         });
-        if (USER_CLASS) sel.value = USER_CLASS;
+
+        if (USER_CLASS && USER_ROLE !== 'admin') {
+          sel.value = USER_CLASS;
+          sel.disabled = true;
+        }
+
         onClassChange();
-      }).getClassListForSession(TOKEN);
+      } catch(err) {
+        console.error(err);
+        sel.innerHTML = '<option value="">បរាជ័យក្នុងការទាញយក</option>';
+      }
     }
 
     function onClassChange() {
@@ -342,16 +398,17 @@
       loadReportData();
     }
 
-    function loadReportData() {
+    async function loadReportData() {
       var cls = document.getElementById('classSelect').value;
       var month = document.getElementById('monthSelect').value;
       if (!cls || !month) return;
 
       document.getElementById('reportContainer').innerHTML = '<div style="color: #fff; text-align: center; padding: 40px; font-size: 14px;">⚡ កំពុងទាញយកទិន្នន័យយ៉ាងរហ័ស...</div>';
 
-      google.script.run.withSuccessHandler(function(res) {
-        if (!res || !res.success) {
-          document.getElementById('reportContainer').innerHTML = '<div style="color: #f87171; text-align: center; padding: 40px;">កំហុស៖ ' + (res.error || 'មិនអាចទាញទិន្នន័យ') + '</div>';
+      try {
+        var res = await apiCall('getReportBundleSecured', { token: TOKEN, className: cls, cls: cls, month: month });
+        if (!res || res.success === false) {
+          document.getElementById('reportContainer').innerHTML = '<div style="color: #f87171; text-align: center; padding: 40px;">កំហុស៖ ' + (res ? (res.error || res.message) : 'មិនអាចទាញទិន្នន័យ') + '</div>';
           return;
         }
 
@@ -369,7 +426,9 @@
         });
 
         renderFilteredView();
-      }).getReportBundleSecured(TOKEN, cls, month);
+      } catch(err) {
+        document.getElementById('reportContainer').innerHTML = '<div style="color: #f87171; text-align: center; padding: 40px;">កំហុស Server: ' + (err.message || err) + '</div>';
+      }
     }
 
     function renderFilteredView() {
@@ -381,7 +440,7 @@
 
       var targetList = (selectedSid === 'ALL') ? allStudentsData : allStudentsData.filter(s => s.id === selectedSid);
 
-      if (targetList.length === 0) {
+      if (!targetList || targetList.length === 0) {
         container.innerHTML = '<div style="color: #fff; text-align: center; padding: 40px;">មិនមានទិន្នន័យសិស្សឡើយ</div>';
         return;
       }
@@ -588,7 +647,7 @@
                   <div class="sig-solar">ត្រូវនឹងថ្ងៃទី...... ខែ${month} ឆ្នាំ ២០២៦</div>
                   <div class="sig-title" style="margin-top: 3px;">គ្រូទទួលបន្ទុកថ្នាក់</div>
                 </div>
-                <div class=\"sig-name\">${TEACHER_NAME || ''}</div>
+                <div class="sig-name">${TEACHER_NAME || ''}</div>
               </div>
             </div>
           </div>
