@@ -185,7 +185,7 @@
     .kingdom-divider svg { width: 72px; height: 3.5px; }
 
     .card-main-body {
-      flex: 1; padding: 2px 5px 2px 5px; position: relative;
+      flex: 1; padding: 3px 5px 2px 5px; position: relative;
       display: flex; flex-direction: column; justify-content: space-between;
     }
     .card-watermark {
@@ -193,59 +193,69 @@
       width: 44mm; height: 44mm; opacity: .22; pointer-events: none; z-index: 0; object-fit: contain;
     }
 
+    /* ── 🌟 ពង្រីកគម្លាតចំណងជើងលើក្រោម មិនឱ្យជាន់គ្នា ── */
     .card-titles {
       position: relative; z-index: 1; text-align: center;
-      display: flex; flex-direction: column; align-items: center; gap: 0.2px; margin-bottom: 1px;
+      display: flex; flex-direction: column; align-items: center;
+      gap: 2px;
+      margin-bottom: 3px;
     }
-    .title-badge        { font-family: 'Moul', serif; font-size: 9.5px; color: var(--c-blue); letter-spacing: .2px; line-height: 1.25; }
-    .title-school       { font-family: 'Moul', serif; font-size: 8.5px; color: var(--c-green); line-height: 1.25; }
-    .title-id           { font-family: 'Moul', serif; font-size: 9px; color: var(--c-orange); line-height: 1.25; }
+    .title-badge        { font-family: 'Moul', serif; font-size: 9.2px; color: var(--c-blue); letter-spacing: .2px; line-height: 1.4; }
+    .title-school       { font-family: 'Moul', serif; font-size: 8.3px; color: var(--c-green); line-height: 1.4; }
+    .title-id           { font-family: 'Moul', serif; font-size: 8.8px; color: var(--c-orange); line-height: 1.4; }
     .title-student-name-center {
       font-family: 'Moul', serif; font-size: 12px; color: var(--c-blue);
-      text-align: center; line-height: 1.35; padding: 1px 0;
+      text-align: center; line-height: 1.5; padding: 2px 0 3px;
       width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; letter-spacing: .2px;
     }
 
-    .content-container { position: relative; z-index: 1; display: flex; flex-direction: column; margin-top: 0; }
-    .mid-split         { display: flex; justify-content: space-between; align-items: stretch; gap: 4px; height: 22mm; }
+    .content-container { position: relative; z-index: 1; display: flex; flex-direction: column; margin-top: 1px; }
+    
+    /* ── 🌟 ពង្រីកកម្ពស់ផ្នែកកណ្តាល ពី 22mm មក 25mm ដើម្បីឱ្យជួរអក្សរទូលាយ ── */
+    .mid-split         { display: flex; justify-content: space-between; align-items: stretch; gap: 5px; height: 25.5mm; }
     .left-profile-block { flex: 1; display: flex; flex-direction: column; height: 100%; overflow: hidden; }
 
-    .info-table-top  { width: 100%; height: 100%; border-collapse: collapse; font-size: 8.6px; line-height: 1.2; }
+    /* ── 🌟 ពង្រីកគម្លាតអក្សរក្នុងតារាងលើក្រោម (Line-height & Padding) ── */
+    .info-table-top  { width: 100%; height: 100%; border-collapse: collapse; font-size: 8.8px; line-height: 1.42; }
     .info-table-top tr { height: 20%; }
-    .info-table-bottom { width: 100%; border-collapse: collapse; font-size: 8.6px; line-height: 1.2; margin-top: 1px; }
-    .info-table-bottom tr { height: 13.5px; }
+    .info-table-top td { padding: 1.2px 0; vertical-align: middle; }
+
+    .info-table-bottom { width: 100%; border-collapse: collapse; font-size: 8.8px; line-height: 1.42; margin-top: 3px; }
+    .info-table-bottom tr { height: 15.5px; }
+    .info-table-bottom td { padding: 1.2px 0; vertical-align: middle; }
 
     .lbl-col { width: 68px; color: var(--c-red); font-weight: 700; white-space: nowrap; text-align: left; }
-    .cln-col { width: 7px; color: var(--c-red); font-weight: 700; text-align: center; padding-right: 1px; }
-    .val-col { font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: left; font-size: 8.8px; }
+    .cln-col { width: 8px; color: var(--c-red); font-weight: 700; text-align: center; padding-right: 1px; }
+    .val-col { font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: left; font-size: 9px; }
     .val-blue  { color: var(--c-blue); }
     .val-green { color: var(--c-green); }
 
+    /* ── រូបថតសិស្សសមាមាត្រនឹងតារាង ── */
     .student-photo-box {
-      width: 18.5mm; height: 22mm; border: 1.5px solid #000;
+      width: 19mm; height: 25.5mm; border: 1.5px solid #000;
       border-radius: 4px; background: #fff; overflow: hidden; flex-shrink: 0;
       display: flex; align-items: center; justify-content: center;
     }
     .student-photo-box img { width: 100%; height: 100%; object-fit: cover; }
-    .student-photo-box i { font-size: 22px; color: #cbd5e1; }
+    .student-photo-box i { font-size: 24px; color: #cbd5e1; }
 
-    /* ── 🌟 លើកផ្នែកខាងក្រោមឡើងលើបន្តិច ទុកកន្លែងសម្រាប់បោះត្រា ── */
+    /* ── ផ្នែកខាងក្រោម (ហត្ថលេខា & ត្រា) ── */
     .card-bottom-signature {
       position: relative; z-index: 2;
       display: flex; justify-content: flex-start;
       padding-left: 3px;
-      margin-top: 1px;
-      margin-bottom: 4.5mm; /* លើកឡើងលើ 4.5mm មិនឱ្យប៉ះបាតក្រោម */
+      margin-top: 2px;
+      margin-bottom: 3.5mm;
     }
     .signature-box { display: flex; flex-direction: column; align-items: center; position: relative; width: 44mm; text-align: center; }
-    .sig-date { font-family: inherit; font-weight: 700; font-size: 6.8px; color: #000; line-height: 1.1; white-space: nowrap; text-align: center; }
+    .sig-date { font-family: inherit; font-weight: 700; font-size: 6.8px; color: #000; line-height: 1.15; white-space: nowrap; text-align: center; }
 
     .sig-stamp-wrapper {
       position: relative; display: flex; flex-direction: column; align-items: center;
-      width: 100%; margin-top: 1px; min-height: 22mm; /* បន្ថែមទំហំកម្ពស់សម្រាប់ត្រា */
+      width: 100%; margin-top: 1px; min-height: 20mm;
     }
-    .sig-title { font-family: 'Moul', serif; font-size: 7.2px; color: #000; line-height: 1.2; margin-top: 1px; white-space: nowrap; text-align: center; position: relative; z-index: 2; }
-    .sig-role  { font-family: 'Moul', serif; font-size: 7px; color: #000; line-height: 1.2; margin-top: 1px; white-space: nowrap; text-align: center; position: relative; z-index: 2; }
+    .sig-title { font-family: 'Moul', serif; font-size: 7.2px; color: #000; line-height: 1.25; margin-top: 1px; white-space: nowrap; text-align: center; position: relative; z-index: 2; }
+    .sig-role  { font-family: 'Moul', serif; font-size: 7px; color: #000; line-height: 1.25; margin-top: 1px; white-space: nowrap; text-align: center; position: relative; z-index: 2; }
 
     .stamp-overlay-box {
       position: absolute;
@@ -325,7 +335,7 @@
     </div>
 
     <div class="toolbar-group">
-      <!-- 🔍 ZOOM BUTTONS (100% / 75% / 50%) -->
+      <!-- 🔍 ZOOM BUTTONS -->
       <div class="zoom-btn-group" title="ពង្រីក/បង្រួមទំហំមើលកាតលើអេក្រង់">
         <button type="button" class="zoom-btn active" data-zoom="1" onclick="setZoom(1, this)">100%</button>
         <button type="button" class="zoom-btn" data-zoom="0.75" onclick="setZoom(0.75, this)">75%</button>
@@ -469,7 +479,7 @@ async function apiCall(action, params) {
   return json;
 }
 
-// ── 🔍 មុខងារ ZOOM (100% / 75% / 50%) ──
+// ── 🔍 មុខងារ ZOOM ──
 function setZoom(scale, btnEl) {
   currentZoom = scale;
   var printArea = document.getElementById('printArea');
@@ -760,7 +770,7 @@ function renderCards() {
                 <tr>
                   <td class="lbl-col">អាសយដ្ឋាន</td>
                   <td class="cln-col">៖</td>
-                  <td class="val-col val-blue" style="font-size: 8.5px;" title="${addressText}">${addressText}</td>
+                  <td class="val-col val-blue" style="font-size: 8.6px;" title="${addressText}">${addressText}</td>
                 </tr>
                 <tr>
                   <td class="lbl-col">ឆ្នាំសិក្សា</td>
