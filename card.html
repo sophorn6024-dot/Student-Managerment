@@ -32,11 +32,19 @@
       print-color-adjust: exact !important;
     }
 
+    /* ── 🌟 បន្ថែម padding-bottom និង scroll រលូនដើម្បីមើលសិស្សចុងក្រោយបាន ── */
+    html, body {
+      min-height: 100%;
+      overflow-x: auto;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
     body {
       font-family: 'Siemreap', 'Battambang', Arial, sans-serif;
       background-color: #f1f5f9;
       color: #0f172a;
-      padding-bottom: 50px;
+      padding-bottom: 120px; /* ទុកចន្លោះធំខាងក្រោមឱ្យអូសផុតស្រួល */
     }
 
     /* ── Toolbar ── */
@@ -110,6 +118,7 @@
     .print-area {
       display: flex; flex-direction: column; align-items: center;
       margin-top: 15px; gap: 20px;
+      padding-bottom: 80px; /* ធានាថាមើលសិស្សចុងក្រោយឃើញពេញ */
       transition: transform 0.2s ease, zoom 0.2s ease;
     }
 
@@ -124,6 +133,7 @@
       break-inside: avoid;
       overflow: hidden;
       box-sizing: border-box;
+      flex-shrink: 0; /* ការពារកុំឱ្យទំព័រចុងក្រោយត្រូវគេកៀបរួមតូច */
     }
 
     /* ── 3x2 (6 កាត) រក្សាទំហំ 7cm × 10cm ── */
@@ -184,43 +194,56 @@
     .kingdom-divider  { display: flex; align-items: center; justify-content: center; margin-top: 1px; }
     .kingdom-divider svg { width: 72px; height: 3.5px; }
 
+    /* ── 🌟 កែប្រែមកជា flex-start ដើម្បីកុំឱ្យមានចន្លោះទំនេរធំក្រោមឈ្មោះសិស្ស ── */
     .card-main-body {
-      flex: 1; padding: 3px 5px 2px 5px; position: relative;
-      display: flex; flex-direction: column; justify-content: space-between;
+      flex: 1; padding: 2px 5px 2px 5px; position: relative;
+      display: flex; flex-direction: column; justify-content: flex-start;
     }
     .card-watermark {
       position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
       width: 44mm; height: 44mm; opacity: .22; pointer-events: none; z-index: 0; object-fit: contain;
     }
 
-    /* ── 🌟 ពង្រីកគម្លាតចំណងជើងលើក្រោម មិនឱ្យជាន់គ្នា ── */
+    /* ── ផ្នែកចំណងជើង ── */
     .card-titles {
       position: relative; z-index: 1; text-align: center;
       display: flex; flex-direction: column; align-items: center;
-      gap: 2px;
-      margin-bottom: 3px;
+      gap: 1.5px;
+      margin-bottom: 1px;
     }
-    .title-badge        { font-family: 'Moul', serif; font-size: 9.2px; color: var(--c-blue); letter-spacing: .2px; line-height: 1.4; }
-    .title-school       { font-family: 'Moul', serif; font-size: 8.3px; color: var(--c-green); line-height: 1.4; }
-    .title-id           { font-family: 'Moul', serif; font-size: 8.8px; color: var(--c-orange); line-height: 1.4; }
+    .title-badge        { font-family: 'Moul', serif; font-size: 9.2px; color: var(--c-blue); letter-spacing: .2px; line-height: 1.35; }
+    .title-school       { font-family: 'Moul', serif; font-size: 8.3px; color: var(--c-green); line-height: 1.35; }
+    .title-id           { font-family: 'Moul', serif; font-size: 8.8px; color: var(--c-orange); line-height: 1.35; }
     .title-student-name-center {
-      font-family: 'Moul', serif; font-size: 12px; color: var(--c-blue);
-      text-align: center; line-height: 1.5; padding: 2px 0 3px;
+      font-family: 'Moul', serif; font-size: 12.2px; color: var(--c-blue);
+      text-align: center; line-height: 1.45; padding: 1px 0 2px;
       width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; letter-spacing: .2px;
     }
 
-    .content-container { position: relative; z-index: 1; display: flex; flex-direction: column; margin-top: 1px; }
+    /* ── 🌟 លើកតារាងព័ត៌មានឱ្យមកនៅកៀកក្បែរក្រោមឈ្មោះសិស្សភ្លាមៗ ── */
+    .content-container { 
+      position: relative; 
+      z-index: 1; 
+      display: flex; 
+      flex-direction: column; 
+      margin-top: 1px; /* កៀកឈ្មោះសិស្សស្អាត */
+    }
     
-    /* ── 🌟 ពង្រីកកម្ពស់ផ្នែកកណ្តាល ពី 22mm មក 25mm ដើម្បីឱ្យជួរអក្សរទូលាយ ── */
-    .mid-split         { display: flex; justify-content: space-between; align-items: stretch; gap: 5px; height: 25.5mm; }
+    .mid-split { 
+      display: flex; 
+      justify-content: space-between; 
+      align-items: stretch; 
+      gap: 5px; 
+      height: 25.5mm; 
+    }
     .left-profile-block { flex: 1; display: flex; flex-direction: column; height: 100%; overflow: hidden; }
 
-    /* ── 🌟 ពង្រីកគម្លាតអក្សរក្នុងតារាងលើក្រោម (Line-height & Padding) ── */
+    /* ── គម្លាតជួរអក្សរក្នុងតារាងលើក្រោម ── */
     .info-table-top  { width: 100%; height: 100%; border-collapse: collapse; font-size: 8.8px; line-height: 1.42; }
     .info-table-top tr { height: 20%; }
     .info-table-top td { padding: 1.2px 0; vertical-align: middle; }
 
-    .info-table-bottom { width: 100%; border-collapse: collapse; font-size: 8.8px; line-height: 1.42; margin-top: 3px; }
+    .info-table-bottom { width: 100%; border-collapse: collapse; font-size: 8.8px; line-height: 1.42; margin-top: 2.5px; }
     .info-table-bottom tr { height: 15.5px; }
     .info-table-bottom td { padding: 1.2px 0; vertical-align: middle; }
 
@@ -230,7 +253,7 @@
     .val-blue  { color: var(--c-blue); }
     .val-green { color: var(--c-green); }
 
-    /* ── រូបថតសិស្សសមាមាត្រនឹងតារាង ── */
+    /* ── រូបថតសិស្ស ── */
     .student-photo-box {
       width: 19mm; height: 25.5mm; border: 1.5px solid #000;
       border-radius: 4px; background: #fff; overflow: hidden; flex-shrink: 0;
@@ -239,20 +262,20 @@
     .student-photo-box img { width: 100%; height: 100%; object-fit: cover; }
     .student-photo-box i { font-size: 24px; color: #cbd5e1; }
 
-    /* ── ផ្នែកខាងក្រោម (ហត្ថលេខា & ត្រា) ── */
+    /* ── 🌟 ប្រើ margin-top: auto ដើម្បីរុញកន្លែងបោះត្រាឱ្យមានផ្ទៃទំនេរធំទូលាយ ── */
     .card-bottom-signature {
       position: relative; z-index: 2;
       display: flex; justify-content: flex-start;
       padding-left: 3px;
-      margin-top: 2px;
-      margin-bottom: 3.5mm;
+      margin-top: auto; /* រុញចុះក្រោមដោយស្វ័យប្រវត្តិ បង្កើតកន្លែងបោះត្រាធំ */
+      margin-bottom: 3.5mm; /* លើកឡើងលើ 3.5mm មិនឱ្យប៉ះបាតក្រោម */
     }
     .signature-box { display: flex; flex-direction: column; align-items: center; position: relative; width: 44mm; text-align: center; }
     .sig-date { font-family: inherit; font-weight: 700; font-size: 6.8px; color: #000; line-height: 1.15; white-space: nowrap; text-align: center; }
 
     .sig-stamp-wrapper {
       position: relative; display: flex; flex-direction: column; align-items: center;
-      width: 100%; margin-top: 1px; min-height: 20mm;
+      width: 100%; margin-top: 1px; min-height: 21mm;
     }
     .sig-title { font-family: 'Moul', serif; font-size: 7.2px; color: #000; line-height: 1.25; margin-top: 1px; white-space: nowrap; text-align: center; position: relative; z-index: 2; }
     .sig-role  { font-family: 'Moul', serif; font-size: 7px; color: #000; line-height: 1.25; margin-top: 1px; white-space: nowrap; text-align: center; position: relative; z-index: 2; }
