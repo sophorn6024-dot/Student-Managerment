@@ -73,10 +73,44 @@
     .btn-outline  { background: #fff; border: 1.5px solid #cbd5e1; color: #334155; }
     .btn-outline:hover  { background: #f8fafc; border-color: #94a3b8; }
 
+    /* ── 🌟 STYLES FOR ZOOM BUTTONS (ដូចក្នុងរូបភាព) ── */
+    .zoom-btn-group {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      background: #0f172a;
+      padding: 4px 6px;
+      border-radius: 10px;
+      border: 1px solid #334155;
+    }
+    .zoom-btn {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid #334155;
+      color: #f8fafc;
+      padding: 5px 12px;
+      border-radius: 8px;
+      font-size: 12.5px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-family: inherit;
+    }
+    .zoom-btn:hover {
+      background: rgba(255, 255, 255, 0.15);
+      border-color: #64748b;
+    }
+    .zoom-btn.active {
+      background: #2563eb !important;
+      border-color: #3b82f6 !important;
+      color: #ffffff !important;
+      box-shadow: 0 2px 10px rgba(37, 99, 235, 0.45);
+    }
+
     /* ── Print area ── */
     .print-area {
       display: flex; flex-direction: column; align-items: center;
       margin-top: 15px; gap: 20px;
+      transition: transform 0.2s ease, zoom 0.2s ease;
     }
 
     .a4-page {
@@ -87,30 +121,37 @@
       page-break-after: always;
       break-after: page;
       page-break-inside: avoid;
+      break-inside: avoid;
       overflow: hidden;
       box-sizing: border-box;
     }
+
+    /* ── 3x2 (6 កាត) រក្សាទំហំ 7cm × 10cm ── */
     .a4-page.layout-6 {
       display: grid;
-      grid-template-columns: repeat(3, 88mm);
-      grid-template-rows: repeat(2, 98mm);
+      grid-template-columns: repeat(3, 70mm);
+      grid-template-rows: repeat(2, 100mm);
       justify-content: center;
       align-content: center;
-      gap: 4mm 6mm;
-      padding: 3mm 4mm;
+      gap: 3mm 14mm;
+      padding: 2mm 4mm;
     }
+
+    /* ── 4x2 (8 កាត) ទំហំ 7cm × 10cm ── */
     .a4-page.layout-8 {
       display: grid;
       grid-template-columns: repeat(4, 70mm);
-      grid-template-rows: repeat(2, 98mm);
+      grid-template-rows: repeat(2, 100mm);
       justify-content: center;
       align-content: center;
       gap: 3mm 3mm;
-      padding: 3mm 4mm;
+      padding: 2mm 4mm;
     }
 
     /* ── Student Card ── */
     .student-card {
+      width: 70mm;
+      height: 100mm;
       border: 1.8px solid var(--c-border);
       background: #fff;
       display: flex;
@@ -118,7 +159,7 @@
       position: relative;
       overflow: hidden;
       border-radius: 4px;
-      height: 100%;
+      box-sizing: border-box;
     }
 
     .card-top-header {
@@ -221,14 +262,23 @@
     }
     @media print {
       html, body {
-        width: 297mm !important;
-        height: 209mm !important;
+        width: 100% !important;
+        height: auto !important;
         margin: 0 !important;
         padding: 0 !important;
         background: transparent !important;
+        overflow: visible !important;
       }
       .no-print-toolbar { display: none !important; }
-      .print-area { margin: 0 !important; gap: 0 !important; padding: 0 !important; }
+      /* 🌟 ពេល Print គឺត្រូវកំណត់ Zoom មក 1 (100%) ដាច់ខាត */
+      .print-area {
+        zoom: 1 !important;
+        transform: none !important;
+        margin: 0 !important;
+        gap: 0 !important;
+        padding: 0 !important;
+        width: 100% !important;
+      }
       .a4-page {
         box-shadow: none !important;
         margin: 0 !important;
@@ -237,6 +287,8 @@
         height: 209mm !important;
         page-break-after: always !important;
         break-after: page !important;
+        page-break-inside: avoid !important;
+        break-inside: avoid !important;
         overflow: hidden !important;
       }
     }
@@ -256,8 +308,8 @@
       <label style="font-weight:700;font-size:13px;color:#1e40af;">ទម្រង់កាត៖</label>
       <select id="layoutSelect" class="form-control" onchange="switchLayout(this.value)"
               style="font-weight:700;color:#1e3a8a;background:#eff6ff;border:1.5px solid #60a5fa;cursor:pointer;">
-        <option value="8">៨ កាត (ស្តង់ដារ ៤×២)</option>
-        <option value="6">៦ កាត (ធំ ៣×២)</option>
+        <option value="8">៨ កាត (៧×១០ សង់ទីម៉ែត្រ ៤×២)</option>
+        <option value="6">៦ កាត (៧×១០ សង់ទីម៉ែត្រ ៣×២)</option>
       </select>
 
       <label style="font-weight:700;font-size:13px;">សាលា៖</label>
@@ -270,10 +322,17 @@
     </div>
 
     <div class="toolbar-group">
+      <!-- 🌟 ប៊ូតុង ZOOM 100% / 75% / 50% ដូចក្នុងរូបភាព -->
+      <div class="zoom-btn-group" title="ពង្រីក/បង្រួមទំហំមើលកាតលើអេក្រង់">
+        <button type="button" class="zoom-btn active" data-zoom="1" onclick="setZoom(1, this)">100%</button>
+        <button type="button" class="zoom-btn" data-zoom="0.75" onclick="setZoom(0.75, this)">75%</button>
+        <button type="button" class="zoom-btn" data-zoom="0.5" onclick="setZoom(0.5, this)">50%</button>
+      </div>
+
       <button class="btn btn-primary" onclick="initPage()">
         <i class="fa-solid fa-rotate"></i> ផ្ទុកឡើងវិញ
       </button>
-      <button class="btn btn-success" onclick="window.print()">
+      <button class="btn btn-success" onclick="doPrintCards()">
         <i class="fa-solid fa-print"></i> បោះពុម្ព A4
       </button>
     </div>
@@ -352,6 +411,7 @@ var customLogoUrl  = _get('school_user_logo_url')       || OFFICIAL_LOGO;
 var customStampUrl = _get('school_principal_stamp_url') || '';
 var currentOpacity = '0.22';
 var currentLayout  = parseInt(_get('school_cards_layout') || '8');
+var currentZoom    = parseFloat(_get('school_cards_zoom') || '1');
 
 var stampSettings = { size: '34', top: '-3', left: '0' };
 try {
@@ -381,7 +441,6 @@ async function apiCall(action, params) {
   params = params || {};
   if (TOKEN) params.token = params.token || TOKEN;
 
-  // 1) Apps Script iframe run
   if (typeof google !== 'undefined' && google.script && google.script.run) {
     return new Promise(function(resolve, reject) {
       google.script.run
@@ -390,11 +449,9 @@ async function apiCall(action, params) {
     });
   }
 
-  // 2) External helper functions
   if (typeof callBackendApi === 'function') return callBackendApi(action, params);
   if (typeof api !== 'undefined' && typeof api.request === 'function') return api.request(action, params);
 
-  // 3) Direct Fetch
   var res = await fetch(SCRIPT_URL, {
     method: 'POST',
     headers: { 'Content-Type': 'text/plain;charset=utf-8' },
@@ -407,6 +464,28 @@ async function apiCall(action, params) {
   if (json && json.data !== undefined)    return json.data;
   if (json && json.classes !== undefined) return json.classes;
   return json;
+}
+
+// ── 🔍 មុខងារ ZOOM (100% / 75% / 50%) ──
+function setZoom(scale, btnEl) {
+  currentZoom = scale;
+  var printArea = document.getElementById('printArea');
+  if (printArea) {
+    printArea.style.zoom = scale;
+  }
+
+  document.querySelectorAll('.zoom-btn').forEach(function(b) {
+    b.classList.remove('active');
+  });
+
+  if (btnEl) {
+    btnEl.classList.add('active');
+  } else {
+    var matchedBtn = document.querySelector('.zoom-btn[data-zoom="' + scale + '"]');
+    if (matchedBtn) matchedBtn.classList.add('active');
+  }
+
+  _set('school_cards_zoom', scale);
 }
 
 // ── Stamp Styles ──
@@ -479,6 +558,22 @@ function switchLayout(val) {
 }
 function refreshDisplay() { renderCards(); }
 
+// ── 🖨️ មុខងារបោះពុម្ពកាត ──
+function doPrintCards() {
+  if (!allStudents || allStudents.length === 0) {
+    alert('⚠️ សូមជ្រើសរើសថ្នាក់ និងរង់ចាំឱ្យទិន្នន័យកាតបង្ហាញសិន ទើបអាចបោះពុម្ពបាន!');
+    return;
+  }
+  window.focus();
+  setTimeout(function() {
+    try {
+      window.print();
+    } catch(err) {
+      window.parent.print();
+    }
+  }, 100);
+}
+
 // ── Init & Life Cycle ──
 window.onload = function() {
   document.getElementById('stampSizeSlider').value = stampSettings.size;
@@ -486,6 +581,7 @@ window.onload = function() {
   document.getElementById('stampLeftSlider').value = stampSettings.left;
   document.getElementById('layoutSelect').value    = currentLayout;
   applyStampStyles();
+  setZoom(currentZoom);
   initPage();
 };
 
@@ -504,7 +600,6 @@ async function initPage() {
       s.appendChild(o);
     });
 
-    // ចាក់សោរបើជាគ្រូបន្ទុកថ្នាក់
     if (USER_CLASS && USER_ROLE !== 'admin') {
       s.value = USER_CLASS;
       s.disabled = true;
