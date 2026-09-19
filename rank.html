@@ -1,8 +1,10 @@
 <!DOCTYPE html>
-<html>
+<html lang="km">
 <head>
   <base target="_top">
+  <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>តារាងចំណាត់ថ្នាក់សិស្ស</title>
   <link href="https://fonts.googleapis.com/css2?family=Moul&family=Kantumruy+Pro:wght@400;500;600;700&family=Noto+Sans+Khmer:wght@400;500;600;700&family=Noto+Serif+Khmer:wght@400;500;600;700&display=swap" rel="stylesheet">
 
   <style>
@@ -74,6 +76,7 @@
     }
     .teacher-name-display:hover { border-color: #93c5fd; background: rgba(59,130,246,0.06); }
     .teacher-name-display.dragging { border-color: #2563eb; background: rgba(37,99,235,0.10); }
+    
     .control-panel { margin-bottom: 15px; background: #eff6ff; padding: 10px 15px; border-radius: 8px; display: flex; flex-direction: column; gap: 12px; border: 1px solid #bfdbfe; }
     .control-row { display: flex; gap: 15px; align-items: center; justify-content: space-between; flex-wrap: wrap; }
     .cp-select-group { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
@@ -86,6 +89,42 @@
     .layout-switcher { display: flex; gap: 6px; }
     .layout-btn { padding: 6px 12px; border: 1px solid #93c5fd; border-radius: 5px; background: white; color: #1e3a8a; cursor: pointer; font-family: 'Noto Serif Khmer', 'Kantumruy Pro'; font-weight: 700; }
     .layout-btn.active { background: #2563eb; color: white; border-color: #2563eb; }
+
+    /* ── 🌟 STYLES FOR ZOOM BUTTONS ── */
+    .zoom-btn-group {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: #0f172a;
+      padding: 3px 6px;
+      border-radius: 8px;
+      border: 1px solid #334155;
+    }
+    .zoom-btn {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid #334155;
+      color: #f8fafc;
+      padding: 5px 10px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      font-family: 'Kantumruy Pro', sans-serif;
+    }
+    .zoom-btn:hover { background: rgba(255, 255, 255, 0.18); }
+    .zoom-btn.active {
+      background: #2563eb !important;
+      border-color: #3b82f6 !important;
+      color: #ffffff !important;
+      box-shadow: 0 2px 8px rgba(37, 99, 235, 0.4);
+    }
+
+    #printPage {
+      position: relative;
+      transition: zoom 0.2s ease;
+    }
+
     @media screen and (max-width: 768px) {
       body { padding: 6px; }
       .control-row { flex-direction: column; align-items: stretch; gap: 10px; }
@@ -98,6 +137,8 @@
       .control-panel .cp-actions button { width: 100%; }
       .layout-switcher { width: 100%; }
       .layout-switcher .layout-btn { flex: 1; }
+      .zoom-btn-group { width: 100%; justify-content: center; }
+      .zoom-btn { flex: 1; text-align: center; }
     }
     @media screen and (max-width: 480px) {
       .document-header { margin-bottom: 6px; }
@@ -120,6 +161,7 @@
     @media print {
       .no-print { display: none !important; }
       body { padding: 0; background: white; }
+      #printPage { zoom: 1 !important; transform: none !important; }
       table.data-table { page-break-inside: auto; break-inside: auto; }
       table.data-table tr, table.data-table thead, table.data-table tbody tr { page-break-inside: avoid !important; break-inside: avoid !important; }
       table.data-table thead { display: table-header-group; }
@@ -160,11 +202,20 @@
           <option value="">-- កំពុងទាញយក... --</option>
         </select>
       </div>
+
       <div class="cp-select-group">
         <label><b>👤 គ្រូបន្ទុកថ្នាក់ (កែបាន)៖</b></label>
         <input type="text" id="teacherNameCtrl" placeholder="ឈ្មោះគ្រូ..." oninput="syncTeacherName(this.value)">
       </div>
-      <div class="cp-actions" style="display:flex; gap:10px;">
+
+      <div class="cp-actions" style="display:flex; gap:8px; align-items:center;">
+        <!-- 🔍 ZOOM BUTTONS (100% / 75% / 50%) -->
+        <div class="zoom-btn-group" title="ពង្រីក/បង្រួមទំហំមើល">
+          <button type="button" class="zoom-btn active" data-zoom="1" onclick="setZoom(1, this)">100%</button>
+          <button type="button" class="zoom-btn" data-zoom="0.75" onclick="setZoom(0.75, this)">75%</button>
+          <button type="button" class="zoom-btn" data-zoom="0.5" onclick="setZoom(0.5, this)">50%</button>
+        </div>
+
         <div class="layout-switcher">
           <button id="layout1Btn" class="layout-btn active" onclick="setRankLayout(1)">ទម្រង់ទី ១</button>
           <button id="layout2Btn" class="layout-btn" onclick="setRankLayout(2)">ទម្រង់ទី ២ (ចែកជា២)</button>
@@ -302,19 +353,85 @@
   </div>
   </div>
 
+  <!-- 🔗 ភ្ជាប់ api.js (បើមាន) -->
+  <script src="api.js"></script>
+
   <script>
-    // ✅ TOKEN ទទួលចេញពី doGet() template variable
-    var TOKEN = "<?= token ?>";
+    // =========================================================
+    // ⚙️ CONFIG & GITHUB/APPS SCRIPT BRIDGING
+    // =========================================================
+    var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxe6vrQshGAPglgmmZykljXazDNh1ZwWSRdFDAip1WWWRky24lmBo-qicLK3_i10AvT/exec';
+
+    var _urlParams = new URLSearchParams(window.location.search);
+    function _get(key) { try { return localStorage.getItem(key) || ''; } catch(e) { return ''; } }
+    function _set(key, val) { try { localStorage.setItem(key, val); } catch(e) {} }
+
+    var TOKEN        = (window.parent && window.parent.SESSION_TOKEN) || _urlParams.get('token') || _get('krou_session_token') || _get('school_token') || '';
+    var USER_ROLE    = (window.parent && window.parent.USER_ROLE)     || _urlParams.get('role')  || _get('krou_user_role')    || _get('school_user_role')  || 'teacher';
+    var USER_CLASS   = (window.parent && window.parent.USER_CLASS)    || _urlParams.get('cls')   || _urlParams.get('class')   || _get('krou_user_class')    || _get('school_user_class') || '';
+    var TEACHER_NAME = (window.parent && window.parent.TEACHER_NAME) || _get('krou_teacher_name') || '';
+
+    // ── Universal API Caller ──
+    async function apiCall(action, params) {
+      params = params || {};
+      if (TOKEN) params.token = params.token || TOKEN;
+
+      if (typeof google !== 'undefined' && google.script && google.script.run) {
+        return new Promise(function(resolve, reject) {
+          google.script.run
+            .withSuccessHandler(resolve)
+            .withFailureHandler(reject)[action](params);
+        });
+      }
+
+      if (typeof callBackendApi === 'function') {
+        return callBackendApi(action, params);
+      }
+
+      var res = await fetch(SCRIPT_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify(Object.assign({ action: action }, params))
+      });
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      var json = await res.json();
+      if (json && json.success === false) throw new Error(json.error || json.message || 'Server error');
+      if (json && json.data !== undefined) return json.data;
+      return json;
+    }
+
+    // ── 🔍 មុខងារ ZOOM (100% / 75% / 50%) ──
+    function setZoom(scale, btnEl) {
+      var el = document.getElementById('printPage');
+      if (el) el.style.zoom = scale;
+
+      document.querySelectorAll('.zoom-btn').forEach(b => b.classList.remove('active'));
+      if (btnEl) {
+        btnEl.classList.add('active');
+      } else {
+        var matched = document.querySelector('.zoom-btn[data-zoom="' + scale + '"]');
+        if (matched) matched.classList.add('active');
+      }
+
+      _set('rank_zoom_level', scale);
+    }
 
     window.onload = function() {
       setCurrentKhmerYear();
       setCurrentKhmerDay();
       initDraggableTeacherName();
       loadClassList();
+      initTeacherSession();
+
       const savedLayout = localStorage.getItem('rankLayout');
       setRankLayout(savedLayout === '2' ? 2 : 1);
       const savedType = localStorage.getItem('periodType');
       setPeriodType(savedType === 'semester' ? 'semester' : 'month', true);
+
+      // ស្តារកម្រិត Zoom ដែលបានរក្សាទុក
+      var savedZoom = parseFloat(_get('rank_zoom_level') || '1');
+      setZoom(savedZoom);
+
       if (document.fonts && document.fonts.ready) {
         Promise.all([
           document.fonts.load("400 12px 'Noto Serif Khmer'"),
@@ -324,35 +441,33 @@
           document.fonts.load("400 12px 'Noto Sans Khmer'")
         ]).catch(function() {});
       }
-
-      // ✅ ចាប់ឈ្មោះគ្រូបន្ទុកថ្នាក់ដោយស្វ័យប្រវត្តិពីគណនីគ្រូដែល login (session.name)
-      google.script.run
-        .withSuccessHandler(function(session) {
-          if (session && session.loggedIn && session.name) {
-            document.getElementById('teacherNameCtrl').value = session.name;
-            document.getElementById('teacherNameDisplay').textContent = session.name;
-          }
-        })
-        .withFailureHandler(function() {})
-        .getCurrentSession(TOKEN);
     };
 
-    // sync ឈ្មោះគ្រូ control → div ក្នុងទំព័រ
+    async function initTeacherSession() {
+      if (TEACHER_NAME) {
+        document.getElementById('teacherNameCtrl').value = TEACHER_NAME;
+        document.getElementById('teacherNameDisplay').textContent = TEACHER_NAME;
+      }
+      try {
+        var session = await apiCall('getCurrentSession', { token: TOKEN });
+        if (session && session.loggedIn && session.name) {
+          document.getElementById('teacherNameCtrl').value = session.name;
+          document.getElementById('teacherNameDisplay').textContent = session.name;
+        }
+      } catch (e) {}
+    }
+
     function syncTeacherName(val) {
       document.getElementById('teacherNameDisplay').textContent = val || '';
     }
 
-    // ✅ ថ្ងៃទីនៅផ្នែកចុះហត្ថលេខា ចាប់តាមថ្ងៃបច្ចុប្បន្ន (លេខខ្មែរ)
     function setCurrentKhmerDay() {
       var dayEl = document.getElementById('dayInput');
       if (dayEl) dayEl.value = toKhmerNum(new Date().getDate());
     }
 
     // ==========================================================================
-    // 🖱️ ឈ្មោះគ្រូបន្ទុកថ្នាក់ — អូសដាក់កន្លែងណាក៏បានលើទំព័រ ដើម្បីងាយស្រួល
-    // ✅ ទីតាំងគណនាជា % ធៀបនឹង #printPage (មិនមែនធៀបនឹងអេក្រង់/scroll ទេ)
-    //    ដូច្នេះកន្លែងអូសដាក់នៅលើអេក្រង់ និងកន្លែងបោះពុម្ពនឹងដូចគ្នាជានិច្ច
-    //    ទោះបីផ្ទាំងគ្រប់គ្រង (control panel) ត្រូវលាក់ពេលបោះពុម្ពក៏ដោយ
+    // 🖱️ ឈ្មោះគ្រូបន្ទុកថ្នាក់ — អូសផ្លាស់ប្តូរទីតាំង
     // ==========================================================================
     var TEACHER_POS_KEY = 'teacherNameDragPosPct';
 
@@ -361,7 +476,6 @@
       var page = document.getElementById('printPage');
       if (!el || !page) return;
 
-      // ស្តារទីតាំងចាស់ដែលធ្លាប់អូសទុក (ជា % ធៀបនឹង #printPage)
       try {
         var saved = JSON.parse(localStorage.getItem(TEACHER_POS_KEY) || 'null');
         if (saved && typeof saved.leftPct === 'number' && typeof saved.topPct === 'number') {
@@ -404,7 +518,6 @@
         isDragging = false;
         el.classList.remove('dragging');
 
-        // ✅ បំប្លែងទីតាំងចុងក្រោយពី px ទៅជា % ធៀបនឹង #printPage រួចរក្សាទុកជា %
         var pageRect = page.getBoundingClientRect();
         var elRect = el.getBoundingClientRect();
         var leftPct = pageRect.width  > 0 ? ((elRect.left - pageRect.left) / pageRect.width)  * 100 : 0;
@@ -445,16 +558,22 @@
 
     function printWhenFontsReady() {
       var btn = document.getElementById('printBtn');
-      if (!document.fonts || !document.fonts.ready) { window.print(); return; }
+      window.focus();
+      if (!document.fonts || !document.fonts.ready) {
+        setTimeout(function() {
+          try { window.print(); } catch(e) { window.parent.print(); }
+        }, 100);
+        return;
+      }
       if (btn) { btn.disabled = true; btn.textContent = '⏳ កំពុងរៀបចំ...'; }
       document.fonts.ready.then(function() {
         setTimeout(function() {
           if (btn) { btn.disabled = false; btn.textContent = '🖨️ បោះពុម្ព'; }
-          window.print();
+          try { window.print(); } catch(e) { window.parent.print(); }
         }, 150);
       }).catch(function() {
         if (btn) { btn.disabled = false; btn.textContent = '🖨️ បោះពុម្ព'; }
-        window.print();
+        try { window.print(); } catch(e) { window.parent.print(); }
       });
     }
 
@@ -494,26 +613,33 @@
         : document.getElementById('monthSelect').value;
     }
 
-    // ✅ ជំនួស getClassList() → getClassListForSession(TOKEN)
-    function loadClassList() {
-      google.script.run
-        .withSuccessHandler(function(classes) {
-          let select = document.getElementById('classSelect');
-          select.innerHTML = '';
-          if (classes && classes.length > 0) {
-            classes.forEach(function(c) {
-              let opt = document.createElement('option');
-              opt.value = c.toString().trim();
-              opt.textContent = c.toString().startsWith("ថ្នាក់") ? c : "ថ្នាក់ទី " + c;
-              select.appendChild(opt);
-            });
+    async function loadClassList() {
+      let select = document.getElementById('classSelect');
+      select.innerHTML = '<option value="">-- កំពុងទាញយក... --</option>';
+
+      try {
+        var res = await apiCall('getClassListForSession', { token: TOKEN });
+        var classes = Array.isArray(res) ? res : (res && res.classes ? res.classes : (res && res.data ? res.data : []));
+
+        select.innerHTML = '';
+        if (classes && classes.length > 0) {
+          classes.forEach(function(c) {
+            let opt = document.createElement('option');
+            opt.value = c.toString().trim();
+            opt.textContent = c.toString().startsWith("ថ្នាក់") ? c : "ថ្នាក់ទី " + c;
+            select.appendChild(opt);
+          });
+
+          if (USER_CLASS && USER_ROLE !== 'admin') {
+            select.value = USER_CLASS;
+            select.disabled = true;
           }
-          loadRankData();
-        })
-        .withFailureHandler(function(err) {
-          console.error('getClassListForSession error:', err);
-        })
-        .getClassListForSession(TOKEN);
+        }
+        loadRankData();
+      } catch (err) {
+        console.error('loadClassList error:', err);
+        select.innerHTML = '<option value="">បរាជ័យក្នុងការទាញយក</option>';
+      }
     }
 
     function getPeriodTitle(period) {
@@ -527,9 +653,8 @@
       return titles[period] || ("ចំណាត់ថ្នាក់ប្រចាំខែ" + period);
     }
 
-    // ✅ ជំនួស getRankData() → getRankDataSecured(TOKEN, ...)
-    function loadRankData() {
-      let selectedClass = document.getElementById('classSelect').value;
+    async function loadRankData() {
+      let selectedClass = document.getElementById('classSelect').value || USER_CLASS;
       let selectedMonth = getSelectedPeriod();
       if (!selectedClass) return;
 
@@ -545,12 +670,19 @@
       document.getElementById('thTotalHeader').textContent = SUMMARY_TOTAL_AS_AVG_PERIODS.includes(selectedMonth) ? "មធ្យមភាគសរុប" : "ពិន្ទុសរុប";
       document.getElementById('rankBody').innerHTML = '<tr><td colspan="9" style="padding:20px;">កំពុងទាញយកទិន្នន័យ...</td></tr>';
 
-      google.script.run
-        .withSuccessHandler(function(data) { renderRankTable(data); })
-        .withFailureHandler(function(err) {
-          document.getElementById('rankBody').innerHTML = '<tr><td colspan="9" style="padding:20px; color:#ef4444;">មានបញ្ហា៖ ' + (err.message || err) + '</td></tr>';
-        })
-        .getRankDataSecured(TOKEN, selectedClass, selectedMonth);
+      try {
+        var res = await apiCall('getRankDataSecured', {
+          token: TOKEN,
+          className: selectedClass,
+          cls: selectedClass,
+          period: selectedMonth,
+          month: selectedMonth
+        });
+        var data = Array.isArray(res) ? res : (res && res.data ? res.data : []);
+        renderRankTable(data);
+      } catch (err) {
+        document.getElementById('rankBody').innerHTML = '<tr><td colspan="9" style="padding:20px; color:#ef4444;">មានបញ្ហា៖ ' + (err.message || err) + '</td></tr>';
+      }
     }
 
     function getRankTableHeader() {
@@ -588,7 +720,7 @@
     }
 
     function getGradeColor(code) {
-      const colors = { A:'#0070C0', B:'#92D050', C:'#FFFF00', D:'#7030A0', E:'#00FFFF', F:'#FF0000' };
+      const colors = { A:'#0070C0', B:'#92D050', C:'#b45309', D:'#7030A0', E:'#0891b2', F:'#FF0000' };
       return colors[code] || '#000000';
     }
 
