@@ -10,14 +10,30 @@
   <style>
     @page { size: A4 portrait; margin: 8mm; }
     * { box-sizing: border-box; }
-    html { height: 100%; -webkit-text-size-adjust: 100%; -moz-text-size-adjust: 100%; text-size-adjust: 100%; }
+    
+    /* ── 🌟 កែប្រែដើម្បីឱ្យអូស Scroll ចុះក្រោមបានស្រួល ១០០% ── */
+    html { 
+      height: auto !important; 
+      min-height: 100%; 
+      -webkit-text-size-adjust: 100%; 
+      -moz-text-size-adjust: 100%; 
+      text-size-adjust: 100%; 
+    }
     body {
       font-family: 'Noto Serif Khmer', 'Kantumruy Pro', 'Noto Sans Khmer', 'Khmer OS', 'Khmer OS System', sans-serif;
-      margin: 0; padding: 0; background: white; color: #000; line-height: 1.4;
-      min-height: 100%; overflow-x: hidden; overflow-y: auto;
-      -webkit-overflow-scrolling: touch; touch-action: pan-y;
+      margin: 0; 
+      padding: 0 0 120px 0 !important; /* បន្ថែម padding ខាងក្រោមឱ្យអូសផុត */
+      background: white; 
+      color: #000; 
+      line-height: 1.4;
+      min-height: 100%; 
+      height: auto !important;
+      overflow-x: auto; 
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
       position: relative;
     }
+
     .khmer-moul { font-family: 'Moul', cursive; }
     .document-header { position: relative; width: 100%; margin-bottom: 12px; padding-top: 0px; }
     .school-info { position: absolute; left: 0; top: 25px; text-align: center; font-size: 12px; line-height: 1.6; }
@@ -90,7 +106,7 @@
     .layout-btn { padding: 6px 12px; border: 1px solid #93c5fd; border-radius: 5px; background: white; color: #1e3a8a; cursor: pointer; font-family: 'Noto Serif Khmer', 'Kantumruy Pro'; font-weight: 700; }
     .layout-btn.active { background: #2563eb; color: white; border-color: #2563eb; }
 
-    /* ── 🌟 STYLES FOR ZOOM BUTTONS ── */
+    /* ── STYLES FOR ZOOM BUTTONS ── */
     .zoom-btn-group {
       display: inline-flex;
       align-items: center;
@@ -123,10 +139,11 @@
     #printPage {
       position: relative;
       transition: zoom 0.2s ease;
+      padding-bottom: 20px;
     }
 
     @media screen and (max-width: 768px) {
-      body { padding: 6px; }
+      body { padding: 6px 6px 140px 6px !important; }
       .control-row { flex-direction: column; align-items: stretch; gap: 10px; }
       .control-panel .cp-select-group { flex-direction: column !important; align-items: stretch !important; width: 100%; gap: 8px; }
       .control-panel .cp-select-group select, .control-panel .cp-select-group input { width: 100%; }
@@ -140,28 +157,11 @@
       .zoom-btn-group { width: 100%; justify-content: center; }
       .zoom-btn { flex: 1; text-align: center; }
     }
-    @media screen and (max-width: 480px) {
-      .document-header { margin-bottom: 6px; }
-      .school-info { font-size: 8px; top: 18px; line-height: 1.4; }
-      table.data-table { font-size: 7px; margin-top: 4px; }
-      table.data-table th { font-size: 6.5px; padding: 3px 1px; }
-      table.data-table td { padding: 3px 1px; }
-      table.data-table td.col-name { font-size: 7px; white-space: normal; word-break: break-word; padding-left: 3px; }
-      .rank-two-columns { gap: 4px; }
-      .rank-two-columns table.data-table { font-size: 6px; }
-      .rank-two-columns table.data-table th { font-size: 5.5px; padding: 2px 1px; }
-      .rank-two-columns table.data-table td.col-name { font-size: 6px; }
-      .summary-section { flex-direction: column; gap: 6px; font-size: 8px; margin-top: 8px; padding-top: 6px; }
-      .summary-boxes { flex-direction: column; gap: 6px; font-size: 8px; }
-      .footer-container { font-size: 8.5px; margin-top: 8px; }
-      .footer-left { width: 38%; margin-top: 55px; }
-      .footer-right { width: 58%; }
-      .inline-input { font-size: 8px; padding: 1px 3px; }
-    }
+
     @media print {
       .no-print { display: none !important; }
-      body { padding: 0; background: white; }
-      #printPage { zoom: 1 !important; transform: none !important; }
+      body { padding: 0 !important; background: white; }
+      #printPage { zoom: 1 !important; transform: none !important; padding-bottom: 0 !important; }
       table.data-table { page-break-inside: auto; break-inside: auto; }
       table.data-table tr, table.data-table thead, table.data-table tbody tr { page-break-inside: avoid !important; break-inside: avoid !important; }
       table.data-table thead { display: table-header-group; }
@@ -428,7 +428,6 @@
       const savedType = localStorage.getItem('periodType');
       setPeriodType(savedType === 'semester' ? 'semester' : 'month', true);
 
-      // ស្តារកម្រិត Zoom ដែលបានរក្សាទុក
       var savedZoom = parseFloat(_get('rank_zoom_level') || '1');
       setZoom(savedZoom);
 
@@ -466,9 +465,6 @@
       if (dayEl) dayEl.value = toKhmerNum(new Date().getDate());
     }
 
-    // ==========================================================================
-    // 🖱️ ឈ្មោះគ្រូបន្ទុកថ្នាក់ — អូសផ្លាស់ប្តូរទីតាំង
-    // ==========================================================================
     var TEACHER_POS_KEY = 'teacherNameDragPosPct';
 
     function initDraggableTeacherName() {
