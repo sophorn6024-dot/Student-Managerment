@@ -543,7 +543,7 @@
           } else if (action === 'getCurrentSession') {
             runner.getCurrentSession(params.token);
           } else if (action === 'setStudentDropout') {
-            runner.setStudentDropout(params.studentId || params.id, params.semester, params.token);
+            runner.setStudentDropout(params.studentId || params.id, params.semester);
           } else if (typeof runner[action] === 'function') {
             runner[action](params);
           } else {
@@ -654,7 +654,7 @@
       }
 
       el.addEventListener('mousedown', function(e) { startDrag(e.clientX, e.clientY); e.preventDefault(); });
-      document.addEventListener('mousemove', function(e) { moveDrag(e.clientX, e.clientY, e); });
+      document.addEventListener('mousemove', function(e) { moveDrag(e.clientX, e.clientY); });
       document.addEventListener('mouseup', endDrag);
 
       el.addEventListener('touchstart', function(e) {
@@ -815,7 +815,7 @@
       }
     }
 
-    // ── 🌟 ប្រព័ន្ធស្កេនទិន្នន័យបោះបង់ឆ្លាតវៃ (ស្កេនគ្រប់ Column រួមទាំង Column ផ្សេងៗ) ──
+    // ── 🌟 ស្កេនទិន្នន័យបោះបង់ឆ្លាតវៃ ──
     function parseDropoutStatus(s) {
       var candidates = [
         s.dropoutSemester,
@@ -838,7 +838,6 @@
         return { isDropped: false, semester: '', label: '' };
       }
 
-      // លុបចន្លោះដកឃ្លា និងបំប្លែងលេខអារ៉ាប់ 1,2 ទៅជាលេខខ្មែរ ១,២
       var norm = combined.replace(/\s+/g, '').replace(/1/g, '១').replace(/2/g, '២');
 
       var hasDropWord = norm.includes('បោះបង់') || norm.includes('ឈប់') || norm.includes('កាត់ឈ្មោះ') || norm.includes('drop') || norm === 'true';
@@ -856,7 +855,6 @@
       return { isDropped: false, semester: '', label: '' };
     }
 
-    // ── 🌟 RENDER ROSTER ──
     function renderRoster(students) {
       var tbody = document.getElementById('rosterBody');
       if (!students || students.length === 0) {
@@ -890,7 +888,6 @@
       tbody.innerHTML = html;
     }
 
-    // ── 🌟 ON DROPOUT CHANGE (OPTIMISTIC UPDATE មិនឱ្យលោតត្រឡប់វិញ) ──
     async function onDropoutChange(selectEl) {
       var studentId = selectEl.dataset.id;
       var semester  = selectEl.value;
@@ -905,7 +902,7 @@
         return;
       }
 
-      // 🌟 OPTIMISTIC UI: កែប្រែពណ៌ និងអក្សរលើតារាងភ្លាមៗ មិនបាច់រង់ចាំ Server
+      // Optimistic UI Update ធ្វើឱ្យឃើញលទ្ធផលភ្លាមៗ
       var row = document.getElementById('row_' + studentId);
       var noteCell = row ? row.querySelector('.note-cell') : null;
 
@@ -933,7 +930,7 @@
       } catch (err) {
         selectEl.disabled = false;
         alert('មានបញ្ហាក្នុងការរក្សាទុក៖ ' + (err.message || err));
-        loadRoster(); // Reload វិញតែពេលមាន Error
+        loadRoster();
       }
     }
   </script>
