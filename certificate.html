@@ -5,7 +5,7 @@
   <base target="_top">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>បណ្ណសរសើរសិស្ស (លេខ១ ដល់ ៥)</title>
+  <title>បណ្ណសរសើរសិស្ស (ប្រចាំឆ្នាំ លេខ១ ដល់ ៥)</title>
 
   <!-- Khmer Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Moul&family=Siemreap&family=Kantumruy+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -477,7 +477,7 @@
 <body>
 
   <!-- =====================================================
-       CONTROL TOOLBAR
+       CONTROL TOOLBAR (សម្រាប់តែ «ប្រចាំឆ្នាំ»)
   ===================================================== -->
   <div class="no-print-toolbar">
     <div class="toolbar-row">
@@ -489,31 +489,9 @@
       </div>
 
       <div class="toolbar-group">
-        <label>ថ្នាក់:</label>
+        <label>ជ្រើសរើសថ្នាក់:</label>
         <select id="selectClass" onchange="loadTopStudents()">
           <option value="">កំពុងទាញយក...</option>
-        </select>
-      </div>
-
-      <!-- 🌟 បន្ថែមប្រអប់ជ្រើសរើសខែ / ឆមាស / ប្រចាំឆ្នាំ ត្រង់នេះ -->
-      <div class="toolbar-group">
-        <label>ប្រភេទ/ខែ:</label>
-        <select id="selectPeriod" onchange="loadTopStudents()">
-          <option value="កុម្ភៈ" selected>ខែកុម្ភៈ</option>
-          <option value="មករា">ខែមករា</option>
-          <option value="មីនា">ខែមីនា</option>
-          <option value="មេសា">ខែមេសា</option>
-          <option value="ឧសភា">ខែឧសភា</option>
-          <option value="មិថុនា">ខែមិថុនា</option>
-          <option value="កក្កដា">ខែកក្កដា</option>
-          <option value="សីហា">ខែសីហា</option>
-          <option value="កញ្ញា">ខែកញ្ញា</option>
-          <option value="តុលា">ខែតុលា</option>
-          <option value="វិច្ឆិកា">ខែវិច្ឆិកា</option>
-          <option value="ធ្នូ">ខែធ្នូ</option>
-          <option value="ឆមាសទី១">ឆមាសទី១</option>
-          <option value="ឆមាសទី២">ឆមាសទី២</option>
-          <option value="ប្រចាំឆ្នាំ">ប្រចាំឆ្នាំ</option>
         </select>
       </div>
 
@@ -561,14 +539,14 @@
         <textarea id="inDate" rows="2" style="width:100%; max-width:600px; resize:vertical; font-family:'Kantumruy Pro',sans-serif; font-size:12.5px; padding:5px 10px; border:1px solid #ccc; border-radius:4px;" oninput="updateAllCertText()">ថ្ងៃព្រហស្បតិ៍ ១៤កើត ខែស្រាពណ៍ ឆ្នាំមមី អដ្ឋស័ក ព.ស ២៥៧០
 កំពង់ល្ពៅ ថ្ងៃទី២៧ ខែសីហា ឆ្នាំ២០២៦</textarea>
         <span id="roleNotice" style="font-size:12px; color:#0d6efd; font-weight:bold; margin-left:10px;">
-          ★ បង្ហាញសិស្សពូកែលំដាប់លេខ ១ ដល់ ៥
+          ★ បង្ហាញសិស្សពូកែប្រចាំឆ្នាំ លេខ១ ដល់លេខ ៥
         </span>
       </div>
     </div>
   </div>
 
   <!-- =====================================================
-       CERTIFICATES LIST (កន្លែងបង្ហាញបណ្ណសរសើរទាំងអស់)
+       CERTIFICATES LIST
   ===================================================== -->
   <div id="certificateList" class="certificate-list">
     <div style="text-align:center; padding:50px; font-size:16px; color:#666;">
@@ -712,6 +690,7 @@
       }
     };
 
+    // 🌟 ទាញយកពិន្ទុសិស្សពូកែប្រចាំឆ្នាំ
     async function loadTopStudents() {
       if (!classesLoaded) return;
       let selectedClass = document.getElementById('selectClass').value || userClass;
@@ -720,20 +699,17 @@
       }
       if (!selectedClass) return;
 
-      const selectedPeriod = document.getElementById('selectPeriod') ? document.getElementById('selectPeriod').value : 'កុម្ភៈ';
-
       document.getElementById('certificateList').innerHTML = 
-        `<div style="text-align:center; padding:50px; font-size:16px; color:#666;">កំពុងទាញយកទិន្នន័យសិស្សពូកែលេខ ១ ដល់ ៥ (${selectedPeriod} ថ្នាក់ទី ${selectedClass})...</div>`;
+        `<div style="text-align:center; padding:50px; font-size:16px; color:#666;">កំពុងទាញយកទិន្នន័យសិស្សពូកែលេខ ១ ដល់ ៥ ប្រចាំឆ្នាំ (ថ្នាក់ទី ${selectedClass})...</div>`;
 
       try {
-        // 🌟 ហៅទាញយកពិន្ទុតាមខែ ឬឆមាសដែលបានជ្រើសរើស
         const [rankRes, cardRes] = await Promise.all([
           apiCall('getTopStudentsDataSecured', { 
             token: token, 
             className: selectedClass, 
             cls: selectedClass, 
-            period: selectedPeriod, 
-            month: selectedPeriod, 
+            period: 'ប្រចាំឆ្នាំ', 
+            month: 'ប្រចាំឆ្នាំ', 
             limit: 5 
           }),
           apiCall('getAllStudentsCardData', { 
@@ -744,8 +720,13 @@
           }).catch(() => [])
         ]);
 
-        var rankData = Array.isArray(rankRes) ? rankRes : (rankRes && rankRes.scores ? rankRes.scores : (rankRes && rankRes.data ? rankRes.data : []));
-        var cardData = Array.isArray(cardRes) ? cardRes : (cardRes && cardRes.data ? cardRes.data : []);
+        var rankData = Array.isArray(rankRes) 
+          ? rankRes 
+          : (rankRes && rankRes.scores ? rankRes.scores : (rankRes && rankRes.data ? rankRes.data : []));
+        
+        var cardData = Array.isArray(cardRes) 
+          ? cardRes 
+          : (cardRes && cardRes.data ? cardRes.data : []);
 
         const studentInfoMap = {};
         cardData.forEach(s => {
@@ -756,32 +737,29 @@
           success: true, 
           scores: rankData, 
           studentMap: studentInfoMap, 
-          selectedClass: selectedClass,
-          selectedPeriod: selectedPeriod
+          selectedClass: selectedClass
         });
       } catch (err) {
         document.getElementById('certificateList').innerHTML = 
-          '<div style="text-align:center; padding:50px; color:red;">កំហុស៖ ' + err.message + '</div>';
+          '<div style="text-align:center; padding:50px; color:red;">កំហុស៖ ' + (err.message || err) + '</div>';
       }
     }
 
     function renderAllCertificates(res) {
       const container = document.getElementById('certificateList');
-      if (!res || !res.success || !res.scores || res.scores.length === 0) {
-        const periodName = res.selectedPeriod || 'នេះ';
-        container.innerHTML = `<div style="text-align:center; padding:50px; color:#666; font-size:16px;">ពុំទាន់មានទិន្នន័យពិន្ទុសម្រាប់ <strong>${periodName}</strong> ក្នុងថ្នាក់នេះនៅឡើយទេ (សូមជ្រើសរើសខែផ្សេងដែលមានពិន្ទុ)។</div>`;
+      const studentList = (res && res.scores) ? res.scores : (Array.isArray(res) ? res : []);
+
+      if (!studentList || studentList.length === 0) {
+        container.innerHTML = `<div style="text-align:center; padding:50px; color:#666; font-size:16px;">ពុំទាន់មានទិន្នន័យពិន្ទុសម្រាប់ <strong>ប្រចាំឆ្នាំ</strong> ក្នុងថ្នាក់នេះនៅឡើយទេ (សូមប្រាកដថាបានដាក់កូដជំហានទី ១ ក្នុង Code.gs រួច Deploy)។</div>`;
         return;
       }
 
-      fetchedStudents = res.scores;
+      fetchedStudents = studentList;
       const studentMap = res.studentMap || {};
       const selectedClass = res.selectedClass || document.getElementById('selectClass').value;
-      const selectedPeriod = res.selectedPeriod || 'ប្រចាំឆ្នាំ';
       const schoolInput = document.getElementById('inSchool').value || 'សាលាបឋមសិក្សាកំពង់ល្ពៅ';
       const yearInput = document.getElementById('inYear').value || defaultAcademicYear();
       const dateInput = document.getElementById('inDate').value || '';
-
-      const periodText = (selectedPeriod === 'ប្រចាំឆ្នាំ') ? 'ប្រចាំឆ្នាំ' : ('ប្រចាំ' + (selectedPeriod.startsWith('ខែ') ? selectedPeriod : 'ខែ' + selectedPeriod));
 
       let html = '';
 
@@ -827,7 +805,7 @@
                 <div class="cert-subtitle-school">នាយក${schoolInput}</div>
               </div>
 
-              <!-- BODY -->
+              <!-- BODY (សម្រាប់តែប្រចាំឆ្នាំ) -->
               <div class="cert-body">
                 សូមសរសើរចំពោះសិស្សឈ្មោះ
                 <div class="student-name">${sName}</div>
@@ -841,7 +819,7 @@
                   មធ្យមភាគ <span class="field-highlight">${toKhmerDigits(sAvg)}</span>
                 </span>
                 <br>
-                <span class="nowrap-group"><strong>${periodText}</strong> ក្នុងឆ្នាំសិក្សា <span class="field-highlight cert-out-year">${toKhmerDigits(yearInput)}</span></span> ។
+                <span class="nowrap-group">ក្នុងឆ្នាំសិក្សា <span class="field-highlight cert-out-year">${toKhmerDigits(yearInput)}</span></span> ។
                 <br>
                 បណ្ណសរសើរនេះប្រគល់ជូនសាមីខ្លួនប្រើប្រាស់តាមការដែលអាចប្រើបាន ។
               </div>
