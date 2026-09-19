@@ -32,7 +32,7 @@
       print-color-adjust: exact !important;
     }
 
-    /* ── 🌟 បន្ថែម padding-bottom និង scroll រលូនដើម្បីមើលសិស្សចុងក្រោយបាន ── */
+    /* ── អូស Scroll មើលសិស្សចុងក្រោយបាន ── */
     html, body {
       min-height: 100%;
       overflow-x: auto;
@@ -44,7 +44,7 @@
       font-family: 'Siemreap', 'Battambang', Arial, sans-serif;
       background-color: #f1f5f9;
       color: #0f172a;
-      padding-bottom: 120px; /* ទុកចន្លោះធំខាងក្រោមឱ្យអូសផុតស្រួល */
+      padding-bottom: 120px;
     }
 
     /* ── Toolbar ── */
@@ -118,7 +118,7 @@
     .print-area {
       display: flex; flex-direction: column; align-items: center;
       margin-top: 15px; gap: 20px;
-      padding-bottom: 80px; /* ធានាថាមើលសិស្សចុងក្រោយឃើញពេញ */
+      padding-bottom: 80px;
       transition: transform 0.2s ease, zoom 0.2s ease;
     }
 
@@ -133,7 +133,7 @@
       break-inside: avoid;
       overflow: hidden;
       box-sizing: border-box;
-      flex-shrink: 0; /* ការពារកុំឱ្យទំព័រចុងក្រោយត្រូវគេកៀបរួមតូច */
+      flex-shrink: 0;
     }
 
     /* ── 3x2 (6 កាត) រក្សាទំហំ 7cm × 10cm ── */
@@ -194,9 +194,9 @@
     .kingdom-divider  { display: flex; align-items: center; justify-content: center; margin-top: 1px; }
     .kingdom-divider svg { width: 72px; height: 3.5px; }
 
-    /* ── 🌟 កែប្រែមកជា flex-start ដើម្បីកុំឱ្យមានចន្លោះទំនេរធំក្រោមឈ្មោះសិស្ស ── */
+    /* ── តួខ្លួនកាត ── */
     .card-main-body {
-      flex: 1; padding: 2px 5px 2px 5px; position: relative;
+      flex: 1; padding: 3px 5px 2px 5px; position: relative;
       display: flex; flex-direction: column; justify-content: flex-start;
     }
     .card-watermark {
@@ -204,29 +204,24 @@
       width: 44mm; height: 44mm; opacity: .22; pointer-events: none; z-index: 0; object-fit: contain;
     }
 
-    /* ── ផ្នែកចំណងជើង ── */
+    /* ── ផ្នែកចំណងជើង (លែងមានឈ្មោះសិស្សចំកណ្តាលទៀតហើយ) ── */
     .card-titles {
       position: relative; z-index: 1; text-align: center;
       display: flex; flex-direction: column; align-items: center;
       gap: 1.5px;
-      margin-bottom: 1px;
+      margin-bottom: 3px;
     }
-    .title-badge        { font-family: 'Moul', serif; font-size: 9.2px; color: var(--c-blue); letter-spacing: .2px; line-height: 1.35; }
-    .title-school       { font-family: 'Moul', serif; font-size: 8.3px; color: var(--c-green); line-height: 1.35; }
-    .title-id           { font-family: 'Moul', serif; font-size: 8.8px; color: var(--c-orange); line-height: 1.35; }
-    .title-student-name-center {
-      font-family: 'Moul', serif; font-size: 12.2px; color: var(--c-blue);
-      text-align: center; line-height: 1.45; padding: 1px 0 2px;
-      width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; letter-spacing: .2px;
-    }
+    .title-badge        { font-family: 'Moul', serif; font-size: 9.3px; color: var(--c-blue); letter-spacing: .2px; line-height: 1.35; }
+    .title-school       { font-family: 'Moul', serif; font-size: 8.4px; color: var(--c-green); line-height: 1.35; }
+    .title-id           { font-family: 'Moul', serif; font-size: 9px; color: var(--c-orange); line-height: 1.35; }
 
-    /* ── 🌟 លើកតារាងព័ត៌មានឱ្យមកនៅកៀកក្បែរក្រោមឈ្មោះសិស្សភ្លាមៗ ── */
+    /* ── ផ្ទុកតារាងព័ត៌មាន និងរូបថត ── */
     .content-container { 
       position: relative; 
       z-index: 1; 
       display: flex; 
       flex-direction: column; 
-      margin-top: 1px; /* កៀកឈ្មោះសិស្សស្អាត */
+      margin-top: 2px;
     }
     
     .mid-split { 
@@ -234,17 +229,17 @@
       justify-content: space-between; 
       align-items: stretch; 
       gap: 5px; 
-      height: 25.5mm; 
+      height: 26mm; 
     }
     .left-profile-block { flex: 1; display: flex; flex-direction: column; height: 100%; overflow: hidden; }
 
     /* ── គម្លាតជួរអក្សរក្នុងតារាងលើក្រោម ── */
-    .info-table-top  { width: 100%; height: 100%; border-collapse: collapse; font-size: 8.8px; line-height: 1.42; }
+    .info-table-top  { width: 100%; height: 100%; border-collapse: collapse; font-size: 8.8px; line-height: 1.45; }
     .info-table-top tr { height: 20%; }
     .info-table-top td { padding: 1.2px 0; vertical-align: middle; }
 
-    .info-table-bottom { width: 100%; border-collapse: collapse; font-size: 8.8px; line-height: 1.42; margin-top: 2.5px; }
-    .info-table-bottom tr { height: 15.5px; }
+    .info-table-bottom { width: 100%; border-collapse: collapse; font-size: 8.8px; line-height: 1.45; margin-top: 3px; }
+    .info-table-bottom tr { height: 16px; }
     .info-table-bottom td { padding: 1.2px 0; vertical-align: middle; }
 
     .lbl-col { width: 68px; color: var(--c-red); font-weight: 700; white-space: nowrap; text-align: left; }
@@ -255,20 +250,20 @@
 
     /* ── រូបថតសិស្ស ── */
     .student-photo-box {
-      width: 19mm; height: 25.5mm; border: 1.5px solid #000;
+      width: 19mm; height: 26mm; border: 1.5px solid #000;
       border-radius: 4px; background: #fff; overflow: hidden; flex-shrink: 0;
       display: flex; align-items: center; justify-content: center;
     }
     .student-photo-box img { width: 100%; height: 100%; object-fit: cover; }
     .student-photo-box i { font-size: 24px; color: #cbd5e1; }
 
-    /* ── 🌟 ប្រើ margin-top: auto ដើម្បីរុញកន្លែងបោះត្រាឱ្យមានផ្ទៃទំនេរធំទូលាយ ── */
+    /* ── ផ្នែកខាងក្រោម (ហត្ថលេខា & ត្រា មានផ្ទៃទំនេរធំទូលាយ) ── */
     .card-bottom-signature {
       position: relative; z-index: 2;
       display: flex; justify-content: flex-start;
       padding-left: 3px;
-      margin-top: auto; /* រុញចុះក្រោមដោយស្វ័យប្រវត្តិ បង្កើតកន្លែងបោះត្រាធំ */
-      margin-bottom: 3.5mm; /* លើកឡើងលើ 3.5mm មិនឱ្យប៉ះបាតក្រោម */
+      margin-top: auto; /* រុញចុះក្រោមដោយស្វ័យប្រវត្តិ */
+      margin-bottom: 3.5mm;
     }
     .signature-box { display: flex; flex-direction: column; align-items: center; position: relative; width: 44mm; text-align: center; }
     .sig-date { font-family: inherit; font-weight: 700; font-size: 6.8px; color: #000; line-height: 1.15; white-space: nowrap; text-align: center; }
@@ -747,11 +742,11 @@ function renderCards() {
           <div class="card-main-body">
             ${watermarkHtml}
 
+            <!-- 🌟 ផ្នែកចំណងជើង (បានដកឈ្មោះសិស្សចេញ) -->
             <div class="card-titles">
               <div class="title-badge">កាតសម្គាល់ខ្លួនសិស្ស</div>
               <div class="title-school">${schoolName}</div>
               <div class="title-id">អត្តលេខ៖ ${khmerId}</div>
-              <div class="title-student-name-center">${s.name || ''}</div>
             </div>
 
             <div class="content-container">
@@ -793,7 +788,7 @@ function renderCards() {
                 <tr>
                   <td class="lbl-col">អាសយដ្ឋាន</td>
                   <td class="cln-col">៖</td>
-                  <td class="val-col val-blue" style="font-size: 8.6px;" title="${addressText}">${addressText}</td>
+                  <td class="val-col val-blue" style="font-size: 8.8px;" title="${addressText}">${addressText}</td>
                 </tr>
                 <tr>
                   <td class="lbl-col">ឆ្នាំសិក្សា</td>
