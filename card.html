@@ -214,22 +214,22 @@
     .title-school       { font-family: 'Moul', serif; font-size: 8.3px; color: var(--c-green); line-height: 1.35; }
     .title-id           { font-family: 'Moul', serif; font-size: 8.8px; color: var(--c-orange); line-height: 1.35; }
 
-    /* ── 🌟 កែសម្រួលឈ្មោះសិស្ស៖ មិនឱ្យដាច់ស្រៈខាងលើ (ស្រៈ ី, ឺ, ើ, ័, ៍...) ── */
+    /* ── ឈ្មោះសិស្ស (មិនដាច់ស្រៈលើ) ── */
     .title-student-name-center {
       font-family: 'Moul', 'Khmer OS Muol Light', serif;
       font-size: 12.2px;
       color: var(--c-blue);
       text-align: center;
-      line-height: 1.65; /* ផ្តល់គម្លាតកម្ពស់ឱ្យស្រៈលើខ្ពស់ស្រឡះ */
-      padding-top: 4px;   /* ធានាថាមិនប៉ះគែមលើដែលនាំឱ្យដាច់ស្រៈ */
+      line-height: 1.65;
+      padding-top: 4px;
       padding-bottom: 1px;
       width: 100%;
       white-space: nowrap;
-      overflow: visible;  /* ការពារកុំឱ្យកាត់ក្បាលស្រៈ */
+      overflow: visible;
       letter-spacing: .2px;
     }
 
-    /* ── លើកតារាងព័ត៌មានឱ្យកៀកនឹងឈ្មោះសិស្ស ── */
+    /* ── តារាងព័ត៌មាន និងរូបថត ── */
     .content-container { 
       position: relative; 
       z-index: 1; 
@@ -247,7 +247,7 @@
     }
     .left-profile-block { flex: 1; display: flex; flex-direction: column; height: 100%; overflow: hidden; }
 
-    /* ── គម្លាតជួរអក្សរក្នុងតារាងលើក្រោម ── */
+    /* ── គម្លាតជួរអក្សរក្នុងតារាង ── */
     .info-table-top  { width: 100%; height: 100%; border-collapse: collapse; font-size: 8.8px; line-height: 1.42; }
     .info-table-top tr { height: 20%; }
     .info-table-top td { padding: 1.2px 0; vertical-align: middle; }
@@ -271,20 +271,21 @@
     .student-photo-box img { width: 100%; height: 100%; object-fit: cover; }
     .student-photo-box i { font-size: 24px; color: #cbd5e1; }
 
-    /* ── ផ្នែកខាងក្រោម (ហត្ថលេខា & ត្រា មានផ្ទៃទំនេរធំទូលាយ) ── */
+    /* ── 🌟 លើកឱ្យជាប់នឹងជួរ «ឆ្នាំសិក្សា» ភ្លាមៗ (margin-top: 2px) ── */
     .card-bottom-signature {
-      position: relative; z-index: 2;
-      display: flex; justify-content: flex-start;
+      position: relative; 
+      z-index: 2;
+      display: flex; 
+      justify-content: flex-start;
       padding-left: 3px;
-      margin-top: auto;
-      margin-bottom: 3.5mm;
+      margin-top: 2px; /* លើកឡើងលើមកនៅជាប់ឆ្នាំសិក្សាភ្លាមៗ */
     }
     .signature-box { display: flex; flex-direction: column; align-items: center; position: relative; width: 44mm; text-align: center; }
     .sig-date { font-family: inherit; font-weight: 700; font-size: 6.8px; color: #000; line-height: 1.15; white-space: nowrap; text-align: center; }
 
     .sig-stamp-wrapper {
       position: relative; display: flex; flex-direction: column; align-items: center;
-      width: 100%; margin-top: 1px; min-height: 21mm;
+      width: 100%; margin-top: 1px; min-height: 22mm; /* បន្សល់កន្លែងទំនេរធំខាងក្រោមសម្រាប់ចុះហត្ថលេខា និងវាយត្រា */
     }
     .sig-title { font-family: 'Moul', serif; font-size: 7.2px; color: #000; line-height: 1.25; margin-top: 1px; white-space: nowrap; text-align: center; position: relative; z-index: 2; }
     .sig-role  { font-family: 'Moul', serif; font-size: 7px; color: #000; line-height: 1.25; margin-top: 1px; white-space: nowrap; text-align: center; position: relative; z-index: 2; }
@@ -756,7 +757,7 @@ function renderCards() {
           <div class="card-main-body">
             ${watermarkHtml}
 
-            <!-- 🌟 ផ្នែកចំណងជើង និងឈ្មោះសិស្ស (មិនដាច់ស្រៈខាងលើ) -->
+            <!-- ផ្នែកចំណងជើង និងឈ្មោះសិស្ស -->
             <div class="card-titles">
               <div class="title-badge">កាតសម្គាល់ខ្លួនសិស្ស</div>
               <div class="title-school">${schoolName}</div>
@@ -764,6 +765,7 @@ function renderCards() {
               <div class="title-student-name-center">${s.name || ''}</div>
             </div>
 
+            <!-- តារាងព័ត៌មាន និងរូបថត -->
             <div class="content-container">
               <div class="mid-split">
                 <div class="left-profile-block">
@@ -813,6 +815,7 @@ function renderCards() {
               </table>
             </div>
 
+            <!-- 🌟 ផ្នែកហត្ថលេខា និងត្រា (នៅជាប់ក្រោម «ឆ្នាំសិក្សា» ភ្លាមៗ) -->
             <div class="card-bottom-signature">
               <div class="signature-box">
                 <div class="sig-date">${autoDateText}</div>
