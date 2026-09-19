@@ -32,7 +32,7 @@
       print-color-adjust: exact !important;
     }
 
-    /* ── អូស Scroll មើលសិស្សចុងក្រោយបាន ── */
+    /* ── អូស Scroll មើលសិស្សចុងក្រោយបានរលូន ── */
     html, body {
       min-height: 100%;
       overflow-x: auto;
@@ -194,9 +194,8 @@
     .kingdom-divider  { display: flex; align-items: center; justify-content: center; margin-top: 1px; }
     .kingdom-divider svg { width: 72px; height: 3.5px; }
 
-    /* ── តួខ្លួនកាត ── */
     .card-main-body {
-      flex: 1; padding: 3px 5px 2px 5px; position: relative;
+      flex: 1; padding: 2px 5px 2px 5px; position: relative;
       display: flex; flex-direction: column; justify-content: flex-start;
     }
     .card-watermark {
@@ -204,24 +203,39 @@
       width: 44mm; height: 44mm; opacity: .22; pointer-events: none; z-index: 0; object-fit: contain;
     }
 
-    /* ── ផ្នែកចំណងជើង (លែងមានឈ្មោះសិស្សចំកណ្តាលទៀតហើយ) ── */
+    /* ── ផ្នែកចំណងជើង ── */
     .card-titles {
       position: relative; z-index: 1; text-align: center;
       display: flex; flex-direction: column; align-items: center;
-      gap: 1.5px;
-      margin-bottom: 3px;
+      gap: 1px;
+      margin-bottom: 1px;
     }
-    .title-badge        { font-family: 'Moul', serif; font-size: 9.3px; color: var(--c-blue); letter-spacing: .2px; line-height: 1.35; }
-    .title-school       { font-family: 'Moul', serif; font-size: 8.4px; color: var(--c-green); line-height: 1.35; }
-    .title-id           { font-family: 'Moul', serif; font-size: 9px; color: var(--c-orange); line-height: 1.35; }
+    .title-badge        { font-family: 'Moul', serif; font-size: 9.2px; color: var(--c-blue); letter-spacing: .2px; line-height: 1.35; }
+    .title-school       { font-family: 'Moul', serif; font-size: 8.3px; color: var(--c-green); line-height: 1.35; }
+    .title-id           { font-family: 'Moul', serif; font-size: 8.8px; color: var(--c-orange); line-height: 1.35; }
 
-    /* ── ផ្ទុកតារាងព័ត៌មាន និងរូបថត ── */
+    /* ── 🌟 កែសម្រួលឈ្មោះសិស្ស៖ មិនឱ្យដាច់ស្រៈខាងលើ (ស្រៈ ី, ឺ, ើ, ័, ៍...) ── */
+    .title-student-name-center {
+      font-family: 'Moul', 'Khmer OS Muol Light', serif;
+      font-size: 12.2px;
+      color: var(--c-blue);
+      text-align: center;
+      line-height: 1.65; /* ផ្តល់គម្លាតកម្ពស់ឱ្យស្រៈលើខ្ពស់ស្រឡះ */
+      padding-top: 4px;   /* ធានាថាមិនប៉ះគែមលើដែលនាំឱ្យដាច់ស្រៈ */
+      padding-bottom: 1px;
+      width: 100%;
+      white-space: nowrap;
+      overflow: visible;  /* ការពារកុំឱ្យកាត់ក្បាលស្រៈ */
+      letter-spacing: .2px;
+    }
+
+    /* ── លើកតារាងព័ត៌មានឱ្យកៀកនឹងឈ្មោះសិស្ស ── */
     .content-container { 
       position: relative; 
       z-index: 1; 
       display: flex; 
       flex-direction: column; 
-      margin-top: 2px;
+      margin-top: 1px; 
     }
     
     .mid-split { 
@@ -229,17 +243,17 @@
       justify-content: space-between; 
       align-items: stretch; 
       gap: 5px; 
-      height: 26mm; 
+      height: 25.5mm; 
     }
     .left-profile-block { flex: 1; display: flex; flex-direction: column; height: 100%; overflow: hidden; }
 
     /* ── គម្លាតជួរអក្សរក្នុងតារាងលើក្រោម ── */
-    .info-table-top  { width: 100%; height: 100%; border-collapse: collapse; font-size: 8.8px; line-height: 1.45; }
+    .info-table-top  { width: 100%; height: 100%; border-collapse: collapse; font-size: 8.8px; line-height: 1.42; }
     .info-table-top tr { height: 20%; }
     .info-table-top td { padding: 1.2px 0; vertical-align: middle; }
 
-    .info-table-bottom { width: 100%; border-collapse: collapse; font-size: 8.8px; line-height: 1.45; margin-top: 3px; }
-    .info-table-bottom tr { height: 16px; }
+    .info-table-bottom { width: 100%; border-collapse: collapse; font-size: 8.8px; line-height: 1.42; margin-top: 2.5px; }
+    .info-table-bottom tr { height: 15.5px; }
     .info-table-bottom td { padding: 1.2px 0; vertical-align: middle; }
 
     .lbl-col { width: 68px; color: var(--c-red); font-weight: 700; white-space: nowrap; text-align: left; }
@@ -250,7 +264,7 @@
 
     /* ── រូបថតសិស្ស ── */
     .student-photo-box {
-      width: 19mm; height: 26mm; border: 1.5px solid #000;
+      width: 19mm; height: 25.5mm; border: 1.5px solid #000;
       border-radius: 4px; background: #fff; overflow: hidden; flex-shrink: 0;
       display: flex; align-items: center; justify-content: center;
     }
@@ -262,7 +276,7 @@
       position: relative; z-index: 2;
       display: flex; justify-content: flex-start;
       padding-left: 3px;
-      margin-top: auto; /* រុញចុះក្រោមដោយស្វ័យប្រវត្តិ */
+      margin-top: auto;
       margin-bottom: 3.5mm;
     }
     .signature-box { display: flex; flex-direction: column; align-items: center; position: relative; width: 44mm; text-align: center; }
@@ -742,11 +756,12 @@ function renderCards() {
           <div class="card-main-body">
             ${watermarkHtml}
 
-            <!-- 🌟 ផ្នែកចំណងជើង (បានដកឈ្មោះសិស្សចេញ) -->
+            <!-- 🌟 ផ្នែកចំណងជើង និងឈ្មោះសិស្ស (មិនដាច់ស្រៈខាងលើ) -->
             <div class="card-titles">
               <div class="title-badge">កាតសម្គាល់ខ្លួនសិស្ស</div>
               <div class="title-school">${schoolName}</div>
               <div class="title-id">អត្តលេខ៖ ${khmerId}</div>
+              <div class="title-student-name-center">${s.name || ''}</div>
             </div>
 
             <div class="content-container">
