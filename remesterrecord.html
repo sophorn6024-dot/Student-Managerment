@@ -66,18 +66,55 @@
     .btn:hover { background: #374151; }
     .btn-primary { background: #2563eb; border-color: #1d4ed8; color: #fff; font-weight: bold; }
 
+    /* ── STYLES FOR ZOOM BUTTONS ── */
+    .zoom-btn-group {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: #1e293b;
+      padding: 3px 5px;
+      border-radius: 8px;
+      border: 1px solid #475569;
+    }
+    .zoom-btn {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid #475569;
+      color: #f8fafc;
+      padding: 4px 9px;
+      border-radius: 6px;
+      font-size: 11.5px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      font-family: 'Kantumruy Pro', sans-serif;
+    }
+    .zoom-btn:hover { background: rgba(255, 255, 255, 0.18); }
+    .zoom-btn.active {
+      background: #2563eb !important;
+      border-color: #3b82f6 !important;
+      color: #ffffff !important;
+      box-shadow: 0 2px 8px rgba(37, 99, 235, 0.4);
+    }
+
     select {
       font-family: 'Kantumruy Pro', sans-serif; font-size: 11.5px; padding: 4px 8px;
       border-radius: 6px; background: #1f2937; color: #fff; border: 1px solid #4b5563; outline: none;
     }
 
     .preview-wrapper {
-      padding: 20px 10px; display: flex; flex-direction: column; align-items: center; gap: 20px;
+      padding: 20px 10px; 
+      display: flex; 
+      flex-direction: column; 
+      align-items: center; 
+      gap: 20px;
+      transition: zoom 0.2s ease;
     }
+
     .sheet-page {
       background: #ffffff; width: 297mm; height: 210mm; max-height: 210mm;
       padding: 6mm 7.5mm; display: grid; grid-template-columns: 1fr 1fr; gap: 7mm;
       box-shadow: 0 10px 28px rgba(0,0,0,0.5); page-break-after: always; position: relative; overflow: hidden;
+      flex-shrink: 0;
     }
     .page-box {
       border: 3.5px double var(--navy); padding: 14px 18px 12px 18px; display: flex;
@@ -144,7 +181,7 @@
     @media print {
       html, body { background: none; padding: 0; margin: 0; width: 297mm; height: 210mm; }
       .no-print-bar { display: none !important; }
-      .preview-wrapper { padding: 0; gap: 0; }
+      .preview-wrapper { padding: 0; gap: 0; zoom: 1 !important; transform: none !important; }
       .sheet-page { box-shadow: none; margin: 0; width: 297mm; height: 210mm; padding: 6mm 7.5mm; page-break-after: always; break-after: page; page-break-inside: avoid; }
       @page { size: A4 landscape; margin: 0; }
     }
@@ -156,6 +193,13 @@
   <div class="no-print-bar">
     <div class="tool-group">
       <button class="btn" onclick="window.history.back()">⬅ ត្រឡប់</button>
+
+      <!-- 🔍 ZOOM BUTTONS -->
+      <div class="zoom-btn-group" title="ពង្រីក/បង្រួមទំហំ">
+        <button type="button" class="zoom-btn active" data-zoom="1" onclick="setZoom(1, this)">100%</button>
+        <button type="button" class="zoom-btn" data-zoom="0.75" onclick="setZoom(0.75, this)">75%</button>
+        <button type="button" class="zoom-btn" data-zoom="0.5" onclick="setZoom(0.5, this)">50%</button>
+      </div>
       
       <label>ថ្នាក់:</label>
       <select id="classSelect" onchange="onClassSelectChange()">
@@ -177,7 +221,7 @@
     </div>
 
     <div class="tool-group">
-      <button class="btn btn-primary" onclick="window.print()">🖨️ បោះពុម្ព (Print)</button>
+      <button class="btn btn-primary" onclick="doPrint()">🖨️ បោះពុម្ព (Print)</button>
     </div>
   </div>
 
@@ -185,19 +229,51 @@
     <div style="color: #fff; text-align: center; padding: 40px; font-size: 14px;">⚡ កំពុងទាញយកទិន្នន័យ...</div>
   </div>
 
-  <script>
-    var TOKEN = "<?= token ?>";
-    var USER_ROLE = "<?= userRole ?>";
-    var USER_CLASS = "<?= userClass ?>";
-    var TEACHER_NAME = "<?= typeof teacherName !== 'undefined' ? teacherName : '' ?>";
-    var TEACHER_SEX = "<?= typeof teacherSex !== 'undefined' ? teacherSex : '' ?>";
+  <!-- 🔗 ភ្ជាប់ api.js (បើមាន) -->
+  <script src="api.js"></script>
 
-    function getTeacherFormalTitle(sex, rawName) {
-      var s = (sex || '').toString().trim().toLowerCase();
-      var n = (rawName || '').toString().trim();
-      if (n.indexOf('លោកគ្រូ') === 0 || n.indexOf('អ្នកគ្រូ') === 0) return n;
-      var isFemale = (s === 'ស្រី' || s === 'f' || s === 'female');
-      return n ? ((isFemale ? 'អ្នកគ្រូ ' : 'លោកគ្រូ ') + n) : (isFemale ? 'អ្នកគ្រូ' : 'លោកគ្រូ');
+  <script>
+    // =========================================================
+    // ⚙️ CONFIG & GITHUB/APPS SCRIPT BRIDGING
+    // =========================================================
+    var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxe6vrQshGAPglgmmZykljXazDNh1ZwWSRdFDAip1WWWRky24lmBo-qicLK3_i10AvT/exec';
+
+    var _urlParams = new URLSearchParams(window.location.search);
+    function _get(key) { try { return localStorage.getItem(key) || ''; } catch(e) { return ''; } }
+
+    var TOKEN        = (window.parent && window.parent.SESSION_TOKEN) || _urlParams.get('token') || _get('krou_session_token') || _get('school_token') || '';
+    var USER_ROLE    = (window.parent && window.parent.USER_ROLE)     || _urlParams.get('role')  || _get('krou_user_role')    || _get('school_user_role')  || 'teacher';
+    var USER_CLASS   = _urlParams.get('cls') || _urlParams.get('class') || _get('krou_user_class') || _get('school_user_class') || '';
+    var TEACHER_NAME = (window.parent && window.parent.TEACHER_NAME) || _get('krou_teacher_name') || '';
+    var TEACHER_SEX  = (window.parent && window.parent.TEACHER_SEX)  || _get('krou_teacher_sex') || '';
+
+    // ── Universal API Caller ──
+    async function apiCall(action, params) {
+      params = params || {};
+      if (TOKEN) params.token = params.token || TOKEN;
+
+      if (typeof google !== 'undefined' && google.script && google.script.run) {
+        return new Promise(function(resolve, reject) {
+          google.script.run
+            .withSuccessHandler(resolve)
+            .withFailureHandler(reject)[action](params);
+        });
+      }
+
+      if (typeof callBackendApi === 'function') {
+        return callBackendApi(action, params);
+      }
+
+      var res = await fetch(SCRIPT_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify(Object.assign({ action: action }, params))
+      });
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      var json = await res.json();
+      if (json && json.success === false) throw new Error(json.error || json.message || 'Server error');
+      if (json && json.data !== undefined) return json.data;
+      return json;
     }
 
     var SEMESTER_SUBJECTS = [
@@ -220,26 +296,54 @@
       initClasses();
     };
 
-    function initClasses() {
-      google.script.run.withSuccessHandler(function(classes) {
-        var sel = document.getElementById('classSelect');
+    function setZoom(scale, btnEl) {
+      var container = document.getElementById('semesterContainer');
+      if (container) container.style.zoom = scale;
+
+      document.querySelectorAll('.zoom-btn').forEach(b => b.classList.remove('active'));
+      if (btnEl) btnEl.classList.add('active');
+    }
+
+    function doPrint() {
+      window.focus();
+      setTimeout(function() {
+        try { window.print(); } catch(e) { window.parent.print(); }
+      }, 100);
+    }
+
+    async function initClasses() {
+      var sel = document.getElementById('classSelect');
+      sel.innerHTML = '<option value="">កំពុងទាញយក...</option>';
+
+      try {
+        var res = await apiCall('getClassListForSession', { token: TOKEN });
+        var classes = Array.isArray(res) ? res : (res && res.classes ? res.classes : []);
         sel.innerHTML = '';
+
         if (!classes || classes.length === 0) {
           sel.innerHTML = '<option value="">គ្មានថ្នាក់</option>';
           loadSemesterData('');
           return;
         }
+
         classes.forEach(function(c) {
           var opt = document.createElement('option');
           opt.value = c;
           opt.textContent = 'ថ្នាក់ទី ' + c;
           sel.appendChild(opt);
         });
-        if (USER_CLASS) sel.value = USER_CLASS;
+
+        if (USER_CLASS && USER_ROLE !== 'admin') {
+          sel.value = USER_CLASS;
+          sel.disabled = true;
+        }
+
         loadSemesterData(sel.value);
-      }).withFailureHandler(function(err) {
+      } catch (err) {
+        console.error(err);
+        sel.innerHTML = '<option value="">បរាជ័យក្នុងការទាញយក</option>';
         loadSemesterData('');
-      }).getClassListForSession(TOKEN);
+      }
     }
 
     function onClassSelectChange() {
@@ -247,47 +351,46 @@
       loadSemesterData(cls);
     }
 
-    function loadSemesterData(cls) {
-      document.getElementById('semesterContainer').innerHTML = '<div style="color: #fff; text-align: center; padding: 40px; font-size: 14px;">⚡ កំពុងទាញយកទិន្នន័យថ្នាក់ ' + (cls || '') + '...</div>';
+    async function loadSemesterData(cls) {
+      var container = document.getElementById('semesterContainer');
+      container.innerHTML = '<div style="color: #fff; text-align: center; padding: 40px; font-size: 14px;">⚡ កំពុងទាញយកទិន្នន័យថ្នាក់ ' + (cls || '') + '...</div>';
 
-      google.script.run
-        .withSuccessHandler(function(res) {
-          if (!res || !res.success) {
-            document.getElementById('semesterContainer').innerHTML = '<div style="color: #f87171; text-align: center; padding: 40px; font-size: 14px;">កំហុស៖ ' + (res.error || 'មិនមានទិន្នន័យថ្នាក់នេះឡើយ') + '</div>';
-            return;
+      try {
+        var res = await apiCall('getSemesterRecordBundleSecured', { token: TOKEN, className: cls, cls: cls });
+        if (!res || res.success === false) {
+          container.innerHTML = '<div style="color: #f87171; text-align: center; padding: 40px; font-size: 14px;">កំហុស៖ ' + (res ? (res.error || res.message) : 'មិនមានទិន្នន័យថ្នាក់នេះឡើយ') + '</div>';
+          return;
+        }
+
+        bundleData = res;
+
+        if (bundleData.classes && bundleData.classes.length > 0) {
+          var sel = document.getElementById('classSelect');
+          if (sel.options.length <= 1) {
+            sel.innerHTML = '';
+            bundleData.classes.forEach(function(c) {
+              var opt = document.createElement('option');
+              opt.value = c;
+              opt.textContent = 'ថ្នាក់ទី ' + c;
+              sel.appendChild(opt);
+            });
+            sel.value = bundleData.className || cls;
           }
+        }
 
-          bundleData = res;
+        var sSelect = document.getElementById('studentSelect');
+        sSelect.innerHTML = '<option value="ALL">🏫 ទាំងថ្នាក់</option>';
+        (bundleData.students || []).forEach(function(s) {
+          var opt = document.createElement('option');
+          opt.value = s.id;
+          opt.textContent = s.id + ' - ' + s.name;
+          sSelect.appendChild(opt);
+        });
 
-          if (bundleData.classes && bundleData.classes.length > 0) {
-            var sel = document.getElementById('classSelect');
-            if (sel.options.length <= 1) {
-              sel.innerHTML = '';
-              bundleData.classes.forEach(function(c) {
-                var opt = document.createElement('option');
-                opt.value = c;
-                opt.textContent = 'ថ្នាក់ទី ' + c;
-                sel.appendChild(opt);
-              });
-              sel.value = bundleData.className;
-            }
-          }
-
-          var sSelect = document.getElementById('studentSelect');
-          sSelect.innerHTML = '<option value="ALL">🏫 ទាំងថ្នាក់</option>';
-          (bundleData.students || []).forEach(function(s) {
-            var opt = document.createElement('option');
-            opt.value = s.id;
-            opt.textContent = s.id + ' - ' + s.name;
-            sSelect.appendChild(opt);
-          });
-
-          renderSemesterView();
-        })
-        .withFailureHandler(function(err) {
-          document.getElementById('semesterContainer').innerHTML = '<div style="color: #f87171; text-align: center; padding: 40px; font-size: 14px;">កំហុស Server: ' + err.toString() + '</div>';
-        })
-        .getSemesterRecordBundleSecured(TOKEN, cls);
+        renderSemesterView();
+      } catch (err) {
+        container.innerHTML = '<div style="color: #f87171; text-align: center; padding: 40px; font-size: 14px;">កំហុស Server: ' + (err.message || err) + '</div>';
+      }
     }
 
     function renderSemesterView() {
@@ -308,19 +411,18 @@
       var totalClassCount = bundleData.students.length;
 
       targetStudents.forEach(function(student) {
-        var s1Score = bundleData.sem1Scores[student.id] || {};
-        var s2Score = bundleData.sem2Scores[student.id] || {};
+        var s1Score = (bundleData.sem1Scores && bundleData.sem1Scores[student.id]) ? bundleData.sem1Scores[student.id] : {};
+        var s2Score = (bundleData.sem2Scores && bundleData.sem2Scores[student.id]) ? bundleData.sem2Scores[student.id] : {};
         var s1SubRanks = bundleData.sem1SubRanks || {};
         var s2SubRanks = bundleData.sem2SubRanks || {};
         var s1TotRanks = bundleData.sem1TotalRanks || {};
         var s2TotRanks = bundleData.sem2TotalRanks || {};
 
-        var s1Rank = bundleData.sem1RankMap[student.id] || { avg: 0, rank: '-' };
-        var s2Rank = bundleData.sem2RankMap[student.id] || { avg: 0, rank: '-' };
-        var yRank  = bundleData.yearRankMap[student.id]  || { avg: 0, rank: '-', grade: '-' };
-        var att    = bundleData.attMap[student.id]       || { sem1_p:0, sem1_a:0, sem2_p:0, sem2_a:0 };
+        var s1Rank = (bundleData.sem1RankMap && bundleData.sem1RankMap[student.id]) ? bundleData.sem1RankMap[student.id] : { avg: 0, rank: '-' };
+        var s2Rank = (bundleData.sem2RankMap && bundleData.sem2RankMap[student.id]) ? bundleData.sem2RankMap[student.id] : { avg: 0, rank: '-' };
+        var yRank  = (bundleData.yearRankMap && bundleData.yearRankMap[student.id]) ? bundleData.yearRankMap[student.id] : { avg: 0, rank: '-', grade: '-' };
+        var att    = (bundleData.attMap && bundleData.attMap[student.id]) ? bundleData.attMap[student.id] : { sem1_p:0, sem1_a:0, sem2_p:0, sem2_a:0 };
 
-        // 🌟 ទាញយកមធ្យមភាគប្រចាំខែពី Backend Bundle
         var s1MonthlyVal = (bundleData.s1MonthlyAvgMap && bundleData.s1MonthlyAvgMap[student.id]) ? bundleData.s1MonthlyAvgMap[student.id] : '';
         var s2MonthlyVal = (bundleData.s2MonthlyAvgMap && bundleData.s2MonthlyAvgMap[student.id]) ? bundleData.s2MonthlyAvgMap[student.id] : '';
 
@@ -348,7 +450,7 @@
                   <div class="cover-info-block">
                     <div class="cover-dotted-row">
                       <span class="cover-dotted-label">សាលាបឋមសិក្សា ៖</span>
-                      <span class="cover-dotted-space">${bundleData.schoolName || ''}</span>
+                      <span class="cover-dotted-space">${bundleData.schoolName || 'កំពង់ល្ពៅ'}</span>
                     </div>
                     <div class="cover-dotted-row">
                       <span class="cover-dotted-label">ឃុំ/សង្កាត់</span>
@@ -432,8 +534,8 @@
                   <div class="dotted-row"><span class="dotted-label">នាមត្រកូល និងនាមខ្លួន ៖</span><span class="dotted-space">${student.name}</span></div>
                   <div class="dotted-row"><span class="dotted-label">ថ្ងៃ ខែ ឆ្នាំកំណើត ៖</span><span class="dotted-space">${student.dob || ''}</span></div>
                   <div class="dotted-row"><span class="dotted-label">ទីកន្លែងកំណើត ៖</span><span class="dotted-space">${student.pob || ''}</span></div>
-                  <div class="dotted-row"><span class="dotted-label">ឈ្មោះ និងមុខរបរឪពុក ៖</span><span class="dotted-space">${student.father ? student.father + ' (' + student.fatherJob + ')' : ''}</span></div>
-                  <div class="dotted-row"><span class="dotted-label">ឈ្មោះ និងមុខរបរម្តាយ ៖</span><span class="dotted-space">${student.mother ? student.mother + ' (' + student.motherJob + ')' : ''}</span></div>
+                  <div class="dotted-row"><span class="dotted-label">ឈ្មោះ និងមុខរបរឪពុក ៖</span><span class="dotted-space">${student.father ? student.father + (student.fatherJob ? ' (' + student.fatherJob + ')' : '') : ''}</span></div>
+                  <div class="dotted-row"><span class="dotted-label">ឈ្មោះ និងមុខរបរម្តាយ ៖</span><span class="dotted-space">${student.mother ? student.mother + (student.motherJob ? ' (' + student.motherJob + ')' : '') : ''}</span></div>
                   <div class="dotted-row"><span class="dotted-label">អាសយដ្ឋានបច្ចុប្បន្ន ៖</span><span class="dotted-space">${student.address || ''}</span></div>
                 </div>
 
@@ -460,7 +562,7 @@
                   <tr>
                     <td>២០២៦-២០២៧</td>
                     <td>${cls}</td>
-                    <td>${bundleData.schoolName || ''}</td>
+                    <td>${bundleData.schoolName || 'កំពង់ល្ពៅ'}</td>
                     <td>០១ វិច្ឆិកា ២០២៦</td>
                     <td>៣១ តុលា ២០២៧</td>
                     <td>${student.id}</td>
@@ -586,11 +688,11 @@
                   </thead>
                   <tbody>
                     <tr>
-                      <td>${att.sem1_p}</td>
-                      <td>${att.sem1_a}</td>
-                      <td>${att.sem2_p}</td>
-                      <td>${att.sem2_a}</td>
-                      <td class="f-bold red-bold">${att.sem1_p + att.sem1_a + att.sem2_p + att.sem2_a}</td>
+                      <td>${att.sem1_p || 0}</td>
+                      <td>${att.sem1_a || 0}</td>
+                      <td>${att.sem2_p || 0}</td>
+                      <td>${att.sem2_a || 0}</td>
+                      <td class="f-bold red-bold">${(att.sem1_p || 0) + (att.sem1_a || 0) + (att.sem2_p || 0) + (att.sem2_a || 0)}</td>
                     </tr>
                   </tbody>
                 </table>
@@ -600,7 +702,7 @@
             <div class="page-box">
               <div>
                 <div style="display: flex; justify-content: space-between; font-size: 13.5px; margin-bottom: 4px;" class="f-bold">
-                  <div>សាលា ៖ ${bundleData.schoolName || ''}</div>
+                  <div>សាលា ៖ ${bundleData.schoolName || 'កំពង់ល្ពៅ'}</div>
                   <div>ឆ្នាំសិក្សា ៖ ២០២៦-២០២៧</div>
                 </div>
 
