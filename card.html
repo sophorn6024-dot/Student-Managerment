@@ -73,7 +73,7 @@
     .btn-outline  { background: #fff; border: 1.5px solid #cbd5e1; color: #334155; }
     .btn-outline:hover  { background: #f8fafc; border-color: #94a3b8; }
 
-    /* ── 🌟 STYLES FOR ZOOM BUTTONS (ដូចក្នុងរូបភាព) ── */
+    /* ── STYLES FOR ZOOM BUTTONS ── */
     .zoom-btn-group {
       display: inline-flex;
       align-items: center;
@@ -168,77 +168,81 @@
       align-items: center;
       justify-content: center;
       border-bottom: 1.8px solid var(--c-border);
-      padding: 2px 4px;
+      padding: 1px 4px;
       background: #fff;
-      height: 36px;
+      height: 33px;
       flex-shrink: 0;
     }
     .header-logo-box {
       position: absolute; left: 5px; top: 50%; transform: translateY(-50%);
-      width: 28px; height: 28px; display: flex; align-items: center; justify-content: center; z-index: 2;
+      width: 26px; height: 26px; display: flex; align-items: center; justify-content: center; z-index: 2;
     }
-    .header-logo-img { width: 28px; height: 28px; object-fit: contain; }
-    .header-kingdom { width: 100%; text-align: center; line-height: 1.2; z-index: 1; }
-    .kingdom-title    { font-family: 'Moul', serif; font-size: 8.5px; color: #000; letter-spacing: -.1px; }
-    .kingdom-subtitle { font-family: 'Moul', serif; font-size: 7.8px; color: #000; margin-top: 1px; }
+    .header-logo-img { width: 26px; height: 26px; object-fit: contain; }
+    .header-kingdom { width: 100%; text-align: center; line-height: 1.15; z-index: 1; }
+    .kingdom-title    { font-family: 'Moul', serif; font-size: 8.2px; color: #000; letter-spacing: -.1px; }
+    .kingdom-subtitle { font-family: 'Moul', serif; font-size: 7.5px; color: #000; margin-top: 1px; }
     .kingdom-divider  { display: flex; align-items: center; justify-content: center; margin-top: 1px; }
-    .kingdom-divider svg { width: 75px; height: 4px; }
+    .kingdom-divider svg { width: 72px; height: 3.5px; }
 
     .card-main-body {
       flex: 1; padding: 2px 5px 2px 5px; position: relative;
       display: flex; flex-direction: column; justify-content: space-between;
     }
     .card-watermark {
-      position: absolute; top: 52%; left: 50%; transform: translate(-50%,-50%);
+      position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
       width: 44mm; height: 44mm; opacity: .22; pointer-events: none; z-index: 0; object-fit: contain;
     }
 
     .card-titles {
       position: relative; z-index: 1; text-align: center;
-      display: flex; flex-direction: column; align-items: center; gap: 0.5px; margin-bottom: 1px;
+      display: flex; flex-direction: column; align-items: center; gap: 0.2px; margin-bottom: 1px;
     }
-    .title-badge        { font-family: 'Moul', serif; font-size: 9.8px; color: var(--c-blue); letter-spacing: .2px; line-height: 1.3; }
-    .title-school       { font-family: 'Moul', serif; font-size: 8.6px; color: var(--c-green); line-height: 1.3; }
-    .title-id           { font-family: 'Moul', serif; font-size: 9.2px; color: var(--c-orange); line-height: 1.3; }
+    .title-badge        { font-family: 'Moul', serif; font-size: 9.5px; color: var(--c-blue); letter-spacing: .2px; line-height: 1.25; }
+    .title-school       { font-family: 'Moul', serif; font-size: 8.5px; color: var(--c-green); line-height: 1.25; }
+    .title-id           { font-family: 'Moul', serif; font-size: 9px; color: var(--c-orange); line-height: 1.25; }
     .title-student-name-center {
-      font-family: 'Moul', serif; font-size: 12.5px; color: var(--c-blue);
-      text-align: center; line-height: 1.45; padding: 2px 0 1px;
+      font-family: 'Moul', serif; font-size: 12px; color: var(--c-blue);
+      text-align: center; line-height: 1.35; padding: 1px 0;
       width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; letter-spacing: .2px;
     }
 
     .content-container { position: relative; z-index: 1; display: flex; flex-direction: column; margin-top: 0; }
-    .mid-split         { display: flex; justify-content: space-between; align-items: stretch; gap: 4px; height: 23mm; }
+    .mid-split         { display: flex; justify-content: space-between; align-items: stretch; gap: 4px; height: 22mm; }
     .left-profile-block { flex: 1; display: flex; flex-direction: column; height: 100%; overflow: hidden; }
 
-    .info-table-top  { width: 100%; height: 100%; border-collapse: collapse; font-size: 8.8px; line-height: 1.25; }
+    .info-table-top  { width: 100%; height: 100%; border-collapse: collapse; font-size: 8.6px; line-height: 1.2; }
     .info-table-top tr { height: 20%; }
-    .info-table-bottom { width: 100%; border-collapse: collapse; font-size: 8.8px; line-height: 1.25; margin-top: 2px; }
-    .info-table-bottom tr { height: 15px; }
+    .info-table-bottom { width: 100%; border-collapse: collapse; font-size: 8.6px; line-height: 1.2; margin-top: 1px; }
+    .info-table-bottom tr { height: 13.5px; }
 
-    .lbl-col { width: 70px; color: var(--c-red); font-weight: 700; white-space: nowrap; text-align: left; }
-    .cln-col { width: 8px; color: var(--c-red); font-weight: 700; text-align: center; padding-right: 1px; }
-    .val-col { font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: left; font-size: 9px; }
+    .lbl-col { width: 68px; color: var(--c-red); font-weight: 700; white-space: nowrap; text-align: left; }
+    .cln-col { width: 7px; color: var(--c-red); font-weight: 700; text-align: center; padding-right: 1px; }
+    .val-col { font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: left; font-size: 8.8px; }
     .val-blue  { color: var(--c-blue); }
     .val-green { color: var(--c-green); }
 
     .student-photo-box {
-      width: 19mm; height: 23mm; border: 1.5px solid #000;
+      width: 18.5mm; height: 22mm; border: 1.5px solid #000;
       border-radius: 4px; background: #fff; overflow: hidden; flex-shrink: 0;
       display: flex; align-items: center; justify-content: center;
     }
     .student-photo-box img { width: 100%; height: 100%; object-fit: cover; }
     .student-photo-box i { font-size: 22px; color: #cbd5e1; }
 
+    /* ── 🌟 លើកផ្នែកខាងក្រោមឡើងលើបន្តិច ទុកកន្លែងសម្រាប់បោះត្រា ── */
     .card-bottom-signature {
       position: relative; z-index: 2;
-      display: flex; justify-content: flex-start; padding-left: 2px; margin-top: 1px;
+      display: flex; justify-content: flex-start;
+      padding-left: 3px;
+      margin-top: 1px;
+      margin-bottom: 4.5mm; /* លើកឡើងលើ 4.5mm មិនឱ្យប៉ះបាតក្រោម */
     }
     .signature-box { display: flex; flex-direction: column; align-items: center; position: relative; width: 44mm; text-align: center; }
     .sig-date { font-family: inherit; font-weight: 700; font-size: 6.8px; color: #000; line-height: 1.1; white-space: nowrap; text-align: center; }
 
     .sig-stamp-wrapper {
       position: relative; display: flex; flex-direction: column; align-items: center;
-      width: 100%; margin-top: 1px; min-height: 20mm;
+      width: 100%; margin-top: 1px; min-height: 22mm; /* បន្ថែមទំហំកម្ពស់សម្រាប់ត្រា */
     }
     .sig-title { font-family: 'Moul', serif; font-size: 7.2px; color: #000; line-height: 1.2; margin-top: 1px; white-space: nowrap; text-align: center; position: relative; z-index: 2; }
     .sig-role  { font-family: 'Moul', serif; font-size: 7px; color: #000; line-height: 1.2; margin-top: 1px; white-space: nowrap; text-align: center; position: relative; z-index: 2; }
@@ -270,7 +274,6 @@
         overflow: visible !important;
       }
       .no-print-toolbar { display: none !important; }
-      /* 🌟 ពេល Print គឺត្រូវកំណត់ Zoom មក 1 (100%) ដាច់ខាត */
       .print-area {
         zoom: 1 !important;
         transform: none !important;
@@ -322,7 +325,7 @@
     </div>
 
     <div class="toolbar-group">
-      <!-- 🌟 ប៊ូតុង ZOOM 100% / 75% / 50% ដូចក្នុងរូបភាព -->
+      <!-- 🔍 ZOOM BUTTONS (100% / 75% / 50%) -->
       <div class="zoom-btn-group" title="ពង្រីក/បង្រួមទំហំមើលកាតលើអេក្រង់">
         <button type="button" class="zoom-btn active" data-zoom="1" onclick="setZoom(1, this)">100%</button>
         <button type="button" class="zoom-btn" data-zoom="0.75" onclick="setZoom(0.75, this)">75%</button>
