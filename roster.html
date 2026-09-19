@@ -33,7 +33,7 @@
 
     .khmer-moul { font-family: 'Moul', cursive; }
 
-    /* ============ CONTROLS (DESKTOP & MOBILE) ============ */
+    /* ============ CONTROLS ============ */
     .control-panel {
       max-width: 860px;
       margin: 0 auto 12px auto;
@@ -232,18 +232,19 @@
       width: 100%;
       padding: 4px 2px;
       border-radius: 4px;
-      border: 1px solid #cbd5e1;
+      border: 1.5px solid #cbd5e1;
       font-size: 11px;
       font-family: 'Kantumruy Pro', sans-serif;
       background: #fff;
       color: #334155;
       min-height: 30px;
+      font-weight: 600;
     }
     .dropout-select.is-dropped {
       background: #fee2e2 !important;
       color: #991b1b !important;
       font-weight: 700 !important;
-      border-color: #fca5a5 !important;
+      border-color: #ef4444 !important;
     }
     tr.row-dropped td {
       color: #dc2626 !important;
@@ -316,11 +317,8 @@
       }
       .school-info { position: static; text-align: center; margin-top: 6px; }
 
-      .document-container {
-        padding: 12px 10px;
-      }
+      .document-container { padding: 12px 10px; }
 
-      /* របារប៊ូតុងជាប់ខាងក្រោមងាយស្រួលចុច */
       .cp-actions {
         position: fixed;
         bottom: 0;
@@ -358,18 +356,9 @@
       .document-header { position: relative !important; display: block !important; }
       .school-info { position: absolute !important; left: 0 !important; top: 18px !important; text-align: left !important; }
 
-      .table-scroll-wrap {
-        border: none !important;
-        overflow: visible !important;
-      }
-      table.roster-table {
-        min-width: 100% !important;
-        width: 100% !important;
-        page-break-inside: auto;
-      }
-      table.roster-table tr, table.roster-table thead, table.roster-table tbody tr {
-        page-break-inside: avoid !important;
-      }
+      .table-scroll-wrap { border: none !important; overflow: visible !important; }
+      table.roster-table { min-width: 100% !important; width: 100% !important; page-break-inside: auto; }
+      table.roster-table tr, table.roster-table thead, table.roster-table tbody tr { page-break-inside: avoid !important; }
       table.roster-table thead { display: table-header-group; }
       table.roster-table tbody { display: table-row-group; }
       table.roster-table th { background: #f1f5f9 !important; }
@@ -425,7 +414,6 @@
       </div>
 
       <div class="cp-actions">
-        <!-- 🔍 ZOOM BUTTONS (សម / 75% / 100%) -->
         <div class="zoom-btn-group" title="ពង្រីក/បង្រួម">
           <button type="button" class="zoom-btn" id="btnZoomFit" onclick="setFitZoom(this)">សម</button>
           <button type="button" class="zoom-btn" data-zoom="0.75" onclick="setZoom(0.75, this)">75%</button>
@@ -461,7 +449,6 @@
 
     <div class="table-scroll-hint no-print">👉 អូសតារាងទៅឆ្វេង-ស្ដាំ</div>
 
-    <!-- ប្រអប់ Scroll តារាងដោយឡែក មិនធ្វើឱ្យរអិលទំព័រទាំងមូល -->
     <div class="table-scroll-wrap">
       <table class="roster-table">
         <colgroup>
@@ -488,13 +475,11 @@
 
     <!-- FOOTER -->
     <div class="footer-container">
-      <!-- ឆ្វេង: នាយកសាលា -->
       <div class="footer-left">
         <div>បានឃើញ និងឯកភាព</div>
         <div class="khmer-moul" style="font-size:12px; margin-top:5px;">នាយកសាលា</div>
       </div>
 
-      <!-- ស្ដាំ: គ្រូបន្ទុកថ្នាក់ -->
       <div class="footer-right">
         <div style="font-size:11px; font-weight:500; text-align:center; margin-bottom:4px;">
           <input type="text" id="lunarInput" value="" class="inline-input" style="width:100%;" placeholder="វាយបញ្ចូលថ្ងៃចន្ទគតិទីនេះ...">
@@ -511,7 +496,6 @@
 
   </div>
 
-  <!-- 🔗 ភ្ជាប់ api.js (បើមាន) -->
   <script src="api.js"></script>
 
   <script>
@@ -544,7 +528,7 @@
         .replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
     }
 
-    // ── Universal API Caller: គាំទ្រទាំង Apps Script & GitHub ──
+    // ── Universal API Caller ──
     async function apiCall(action, params) {
       params = params || {};
       if (TOKEN) params.token = params.token || TOKEN;
@@ -601,13 +585,13 @@
 
     function setFitZoom(btnEl) {
       var screenW = window.innerWidth;
-      var targetScale = (screenW - 16) / 820;
+      var targetScale = (screenW - 16) / 860;
       if (targetScale > 1) targetScale = 1;
       if (targetScale < 0.45) targetScale = 0.45;
       setZoom(targetScale, btnEl);
     }
 
-    // ── ឈ្មោះគ្រូ DRAGGABLE (មិនប៉ះពាល់ដល់ការ Scroll) ──
+    // ── ឈ្មោះគ្រូ DRAGGABLE ──
     var TEACHER_POS_KEY = 'rosterTeacherNameDragPosPct';
 
     function initDraggableTeacherName() {
@@ -831,7 +815,48 @@
       }
     }
 
-    // ── 🌟 RENDERING ROSTER (ដោះស្រាយបញ្ហាសិស្សបោះបង់ចេញ «សកម្ម») ──
+    // ── 🌟 ប្រព័ន្ធស្កេនទិន្នន័យបោះបង់ឆ្លាតវៃ (ស្កេនគ្រប់ Column រួមទាំង Column ផ្សេងៗ) ──
+    function parseDropoutStatus(s) {
+      var candidates = [
+        s.dropoutSemester,
+        s.dropout,
+        s.dropOut,
+        s.dropout_semester,
+        s.status,
+        s.note,
+        s.other,
+        s.remark,
+        s.remarks
+      ];
+
+      var combined = candidates
+        .filter(function(v) { return v !== null && v !== undefined && v !== false; })
+        .map(function(v) { return String(v).trim(); })
+        .join(' ');
+
+      if (!combined) {
+        return { isDropped: false, semester: '', label: '' };
+      }
+
+      // លុបចន្លោះដកឃ្លា និងបំប្លែងលេខអារ៉ាប់ 1,2 ទៅជាលេខខ្មែរ ១,២
+      var norm = combined.replace(/\s+/g, '').replace(/1/g, '១').replace(/2/g, '២');
+
+      var hasDropWord = norm.includes('បោះបង់') || norm.includes('ឈប់') || norm.includes('កាត់ឈ្មោះ') || norm.includes('drop') || norm === 'true';
+      var hasSem1 = norm.includes('ឆមាស១') || norm.includes('ឆមាសទី១') || norm === '១';
+      var hasSem2 = norm.includes('ឆមាស២') || norm.includes('ឆមាសទី២') || norm === '២';
+
+      if (hasSem2) {
+        return { isDropped: true, semester: 'ឆមាសទី២', label: 'បោះបង់ (ឆមាសទី២)' };
+      } else if (hasSem1) {
+        return { isDropped: true, semester: 'ឆមាសទី១', label: 'បោះបង់ (ឆមាសទី១)' };
+      } else if (hasDropWord) {
+        return { isDropped: true, semester: 'ឆមាសទី១', label: 'បោះបង់ (ឆមាសទី១)' };
+      }
+
+      return { isDropped: false, semester: '', label: '' };
+    }
+
+    // ── 🌟 RENDER ROSTER ──
     function renderRoster(students) {
       var tbody = document.getElementById('rosterBody');
       if (!students || students.length === 0) {
@@ -840,20 +865,12 @@
       }
       var html = '';
       students.forEach(function(s, idx) {
-        // ស្វែងរកគ្រប់ Property ដែលអាចបញ្ជូនមកពី Apps Script
-        var rawVal = String(s.dropoutSemester || s.dropout || s.status || s.note || '').trim();
-
-        // ផ្ទៀងផ្ទាត់ដោយបត់បែន ទោះបីសរសេរ ឆមាស១, ឆមាសទី១ ឬ បោះបង់ឆមាស១
-        var isSem1 = rawVal.includes('ឆមាសទី១') || rawVal.includes('ឆមាស១') || rawVal === '1';
-        var isSem2 = rawVal.includes('ឆមាសទី២') || rawVal.includes('ឆមាស២') || rawVal === '2';
-        var isDropped = isSem1 || isSem2;
-
-        var droppedText = isSem1 ? 'ឆមាសទី១' : (isSem2 ? 'ឆមាសទី២' : '');
-        var noteText = isDropped ? ('បោះបង់ (' + droppedText + ')') : '';
-        var rowClass = isDropped ? 'row-dropped' : '';
+        var status = parseDropoutStatus(s);
+        var rowClass = status.isDropped ? 'row-dropped' : '';
+        var noteText = status.isDropped ? status.label : (s.note || '');
 
         html +=
-          '<tr class="' + rowClass + '">' +
+          '<tr class="' + rowClass + '" id="row_' + escapeHtml(s.id) + '">' +
           '<td>' + toKhmerNum(idx + 1) + '</td>' +
           '<td>' + escapeHtml(s.id) + '</td>' +
           '<td class="name-cell">' + escapeHtml(s.name) + '</td>' +
@@ -862,39 +879,61 @@
           '<td>' + escapeHtml(s.fromClass || '') + '</td>' +
           '<td class="note-cell">' + escapeHtml(noteText) + '</td>' +
           '<td class="no-print-col">' +
-            '<select class="dropout-select ' + (isDropped ? 'is-dropped' : '') + '" ' +
+            '<select class="dropout-select ' + (status.isDropped ? 'is-dropped' : '') + '" ' +
               'data-id="' + escapeHtml(s.id) + '" onchange="onDropoutChange(this)">' +
-              '<option value=""'          + (!isDropped ? ' selected' : '') + '>សកម្ម</option>' +
-              '<option value="ឆមាសទី១"' + (isSem1     ? ' selected' : '') + '>បោះបង់ ឆមាស១</option>' +
-              '<option value="ឆមាសទី២"' + (isSem2     ? ' selected' : '') + '>បោះបង់ ឆមាស២</option>' +
+              '<option value=""'          + (!status.isDropped ? ' selected' : '') + '>សកម្ម</option>' +
+              '<option value="ឆមាសទី១"' + (status.semester === 'ឆមាសទី១' ? ' selected' : '') + '>បោះបង់ ឆមាស១</option>' +
+              '<option value="ឆមាសទី២"' + (status.semester === 'ឆមាសទី២' ? ' selected' : '') + '>បោះបង់ ឆមាស២</option>' +
             '</select>' +
           '</td></tr>';
       });
       tbody.innerHTML = html;
     }
 
+    // ── 🌟 ON DROPOUT CHANGE (OPTIMISTIC UPDATE មិនឱ្យលោតត្រឡប់វិញ) ──
     async function onDropoutChange(selectEl) {
       var studentId = selectEl.dataset.id;
       var semester  = selectEl.value;
+      var previousVal = selectEl.classList.contains('is-dropped') ? (selectEl.querySelector('option[selected]') ? selectEl.querySelector('option[selected]').value : 'ឆមាសទី១') : '';
+
       var label = semester
-        ? 'តើអ្នកប្រាកដថាចង់កត់ត្រាថាសិស្សនេះបានបោះបង់ការសិក្សា (' + semester + ') មែនទេ?\nសិស្សនឹងលែងបង្ហាញនៅក្នុងទម្រង់ផ្សេងៗ (វត្តមាន/ពិន្ទុ) សម្រាប់ខែឆមាសបន្ទាប់ទៀត'
+        ? 'តើអ្នកប្រាកដថាចង់កត់ត្រាថាសិស្សនេះបានបោះបង់ការសិក្សា (' + semester + ') មែនទេ?'
         : 'តើអ្នកប្រាកដថាចង់ត្រឡប់សិស្សនេះទៅជាសកម្មវិញមែនទេ?';
-      if (!confirm(label)) { loadRoster(); return; }
+
+      if (!confirm(label)) {
+        selectEl.value = previousVal;
+        return;
+      }
+
+      // 🌟 OPTIMISTIC UI: កែប្រែពណ៌ និងអក្សរលើតារាងភ្លាមៗ មិនបាច់រង់ចាំ Server
+      var row = document.getElementById('row_' + studentId);
+      var noteCell = row ? row.querySelector('.note-cell') : null;
+
+      if (semester) {
+        selectEl.classList.add('is-dropped');
+        if (row) row.classList.add('row-dropped');
+        if (noteCell) noteCell.textContent = 'បោះបង់ (' + semester + ')';
+      } else {
+        selectEl.classList.remove('is-dropped');
+        if (row) row.classList.remove('row-dropped');
+        if (noteCell) noteCell.textContent = '';
+      }
+
       selectEl.disabled = true;
 
       try {
-        var res = await apiCall('setStudentDropout', {
+        await apiCall('setStudentDropout', {
           token: TOKEN,
           studentId: studentId,
           id: studentId,
-          semester: semester
+          semester: semester,
+          className: document.getElementById('classSelect').value || USER_CLASS
         });
-        alert(typeof res === 'string' ? res : 'បានកែប្រែដោយជោគជ័យ!');
-        loadRoster();
+        selectEl.disabled = false;
       } catch (err) {
         selectEl.disabled = false;
-        alert('មានបញ្ហា៖ ' + (err.message || err));
-        loadRoster();
+        alert('មានបញ្ហាក្នុងការរក្សាទុក៖ ' + (err.message || err));
+        loadRoster(); // Reload វិញតែពេលមាន Error
       }
     }
   </script>
