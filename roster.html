@@ -9,83 +9,77 @@
 
   <style>
     @page { size: A4 portrait; margin: 10mm 12mm; }
-    * { box-sizing: border-box; }
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
-    /* ── SCROLL & BASE ── */
-    html {
-      height: auto !important;
+    /* ── SCROLL & BASE: អូសរលូនលើទូរស័ព្ទ មិនរអិលទទឹង ── */
+    html, body {
+      width: 100%;
       min-height: 100%;
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden !important;
+      touch-action: pan-y;
+      background: #f1f5f9;
+      color: #1e1b2e;
+      font-family: 'Noto Serif Khmer', 'Kantumruy Pro', 'Noto Sans Khmer', sans-serif;
+      line-height: 1.4;
       -webkit-text-size-adjust: 100%;
       text-size-adjust: 100%;
     }
+
     body {
-      font-family: 'Noto Serif Khmer', 'Kantumruy Pro', 'Noto Sans Khmer', sans-serif;
-      margin: 0;
-      padding: 10px 10px 140px 10px;
-      background: #f1f5f9;
-      color: #1e1b2e;
-      line-height: 1.4;
-      min-height: 100%;
-      overflow-x: hidden;
-      overflow-y: auto;
-      -webkit-overflow-scrolling: touch;
+      padding: 8px 8px 120px 8px;
     }
 
     .khmer-moul { font-family: 'Moul', cursive; }
 
     /* ============ CONTROLS (DESKTOP & MOBILE) ============ */
     .control-panel {
-      max-width: 900px;
-      margin: 0 auto 14px auto;
+      max-width: 860px;
+      margin: 0 auto 12px auto;
       background: #ffffff;
-      padding: 14px 16px;
-      border-radius: 12px;
+      padding: 12px 14px;
+      border-radius: 10px;
       display: flex;
       flex-direction: column;
-      gap: 12px;
+      gap: 10px;
       border: 1px solid #e2e8f0;
-      box-shadow: 0 4px 14px rgba(0,0,0,0.04);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
     }
     .control-row {
       display: flex;
-      gap: 12px;
+      gap: 10px;
       align-items: center;
       justify-content: space-between;
       flex-wrap: wrap;
     }
     .cp-select-group {
       display: flex;
-      gap: 8px;
+      gap: 6px;
       align-items: center;
-      flex-wrap: wrap;
       flex: 1;
-      min-width: 160px;
+      min-width: 140px;
     }
     .cp-select-group label {
       font-size: 13px;
       font-weight: 700;
       color: #1e3a8a;
-      display: flex;
-      align-items: center;
-      gap: 4px;
+      white-space: nowrap;
     }
     .cp-select-group select, .cp-select-group input {
-      padding: 9px 12px;
-      border-radius: 8px;
+      padding: 8px 10px;
+      border-radius: 6px;
       border: 1.5px solid #cbd5e1;
       font-family: 'Noto Serif Khmer', 'Kantumruy Pro', sans-serif;
-      font-size: 13.5px;
+      font-size: 13px;
       background: #fff;
       color: #0f172a;
-      flex: 1;
-      min-width: 120px;
-      min-height: 42px; /* Touch target */
+      width: 100%;
+      min-height: 38px;
       outline: none;
-      transition: border-color 0.15s;
     }
     .cp-select-group select:focus, .cp-select-group input:focus {
       border-color: #2563eb;
-      box-shadow: 0 0 0 3px rgba(37,99,235,0.12);
     }
 
     /* ── ZOOM BUTTONS ── */
@@ -94,102 +88,74 @@
       align-items: center;
       gap: 4px;
       background: #0f172a;
-      padding: 4px 6px;
-      border-radius: 8px;
+      padding: 3px 5px;
+      border-radius: 6px;
       border: 1px solid #334155;
     }
     .zoom-btn {
       background: rgba(255, 255, 255, 0.08);
       border: 1px solid #334155;
       color: #f8fafc;
-      padding: 6px 11px;
-      border-radius: 6px;
-      font-size: 12px;
+      padding: 5px 9px;
+      border-radius: 4px;
+      font-size: 11.5px;
       font-weight: 700;
       cursor: pointer;
-      transition: all 0.15s ease;
       font-family: 'Kantumruy Pro', sans-serif;
-      min-height: 34px;
+      min-height: 30px;
     }
     .zoom-btn:hover { background: rgba(255, 255, 255, 0.18); }
     .zoom-btn.active {
       background: #2563eb !important;
       border-color: #3b82f6 !important;
       color: #ffffff !important;
-      box-shadow: 0 2px 8px rgba(37, 99, 235, 0.4);
     }
 
     .btn-action {
-      padding: 9px 15px;
+      padding: 8px 14px;
       border: none;
-      border-radius: 8px;
+      border-radius: 6px;
       cursor: pointer;
       font-weight: bold;
       font-family: 'Noto Serif Khmer', 'Kantumruy Pro', sans-serif;
       font-size: 13px;
-      min-height: 42px;
+      min-height: 38px;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 6px;
-      transition: all 0.15s ease;
+      gap: 5px;
     }
     .btn-print { background: #16a34a; color: white; }
     .btn-print:hover { background: #15803d; }
     .btn-reset-pos { background: #64748b; color: white; }
     .btn-reset-pos:hover { background: #475569; }
 
-    /* ── MOBILE SCROLL HINT ── */
-    .mobile-scroll-hint {
-      display: none;
-      background: #e0f2fe;
-      color: #0369a1;
-      border: 1px dashed #7dd3fc;
-      padding: 7px 12px;
-      border-radius: 8px;
-      font-size: 11.5px;
-      font-weight: 600;
-      text-align: center;
-      margin: 0 auto 10px auto;
-      max-width: 900px;
-    }
-
-    /* ============ A4 PAGE CONTAINER ============ */
-    .page-wrapper {
+    /* ============ A4 DOCUMENT CONTAINER ============ */
+    .document-container {
       width: 100%;
-      overflow-x: auto;
-      overflow-y: visible;
-      padding: 4px 0 30px 0;
-      -webkit-overflow-scrolling: touch;
-    }
-    .page-wrapper::-webkit-scrollbar { height: 8px; }
-    .page-wrapper::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
-
-    #printPage {
-      width: 210mm;
-      min-height: 297mm;
+      max-width: 860px;
       margin: 0 auto;
       background: #fff;
-      padding: 14mm 16mm 20mm 16mm;
-      box-shadow: 0 8px 24px rgba(15,23,42,0.08);
+      padding: 16mm 14mm;
+      border-radius: 8px;
+      box-shadow: 0 4px 16px rgba(15,23,42,0.06);
       position: relative;
-      transform-origin: top center;
-      transition: zoom 0.2s ease, transform 0.2s ease;
     }
 
-    .document-header { position: relative; width: 100%; margin-bottom: 10px; }
-    .school-info { position: absolute; left: 0; top: 20px; text-align: left; font-size: 12px; line-height: 1.6; }
+    .document-header { position: relative; width: 100%; margin-bottom: 8px; }
+    .school-info { position: absolute; left: 0; top: 18px; text-align: left; font-size: 12px; line-height: 1.5; }
     .school-info .underline { text-decoration: underline; }
     .nation-info { text-align: center; width: 100%; }
-    .nation-info .t1 { font-size: 16px; line-height: 1.5; }
-    .nation-info .t2 { font-size: 13px; margin-top: 2px; }
-    .ornament { text-align: center; margin: 4px 0 10px 0; font-size: 12px; letter-spacing: 3px; }
+    .nation-info .t1 { font-size: 15px; }
+    .nation-info .t2 { font-size: 12.5px; margin-top: 2px; }
+    .ornament { text-align: center; margin: 3px 0 8px 0; font-size: 11px; letter-spacing: 2px; }
 
     .roster-title {
       text-align: center;
-      font-size: 14px;
+      font-size: 13.5px;
       font-weight: 700;
-      margin: 18px 0 14px 0;
+      margin: 12px 0 10px 0;
+      line-height: 1.8;
     }
     .roster-title .class-input, .roster-title .year-input {
       border: none;
@@ -197,22 +163,38 @@
       background: transparent;
       font-family: 'Noto Serif Khmer', 'Kantumruy Pro', sans-serif;
       font-weight: 700;
-      font-size: 14px;
+      font-size: 13.5px;
       color: #1e3a8a;
       text-align: center;
       outline: none;
       padding: 0 4px;
     }
-    .roster-title .class-input { width: 60px; }
-    .roster-title .year-input  { width: 110px; }
+    .roster-title .class-input { width: 55px; }
+    .roster-title .year-input  { width: 105px; }
+
+    /* ── ប្រអប់ Scroll តារាងដាច់ដោយឡែក ── */
+    .table-scroll-wrap {
+      width: 100%;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      border: 1px solid #000;
+      background: #fff;
+    }
+    .table-scroll-hint {
+      display: none;
+      font-size: 11px;
+      color: #0284c7;
+      text-align: right;
+      padding: 4px 2px;
+      font-weight: 600;
+    }
 
     /* ============ TABLE ============ */
     table.roster-table {
       width: 100%;
       border-collapse: collapse;
       font-size: 12px;
-      table-layout: fixed;
-      min-width: 660px;
+      min-width: 640px;
     }
     table.roster-table th, table.roster-table td {
       border: 1px solid #000;
@@ -220,17 +202,12 @@
       text-align: center;
       vertical-align: middle;
       line-height: 1.35;
-      overflow-wrap: break-word;
     }
     table.roster-table th {
       background-color: #f1f5f9;
       color: #000;
-      font-family: 'Noto Serif Khmer', 'Kantumruy Pro', sans-serif;
       font-size: 11px;
-      padding: 7px 2px;
       font-weight: 700;
-      -webkit-print-color-adjust: exact;
-      print-color-adjust: exact;
     }
     table.roster-table td.name-cell {
       text-align: left;
@@ -253,43 +230,54 @@
     th.no-print-col, td.no-print-col { background: #fef9c3; }
     .dropout-select {
       width: 100%;
-      padding: 5px 3px;
-      border-radius: 5px;
+      padding: 4px 2px;
+      border-radius: 4px;
       border: 1px solid #cbd5e1;
-      font-size: 11.5px;
+      font-size: 11px;
       font-family: 'Kantumruy Pro', sans-serif;
       background: #fff;
       color: #334155;
-      min-height: 32px;
+      min-height: 30px;
     }
-    .dropout-select.is-dropped { background: #fee2e2; color: #991b1b; font-weight: 700; border-color: #fecaca; }
-    tr.row-dropped td { color: #dc2626; font-weight: 700; }
-    tr.row-dropped td.no-print-col { color: #334155; font-weight: 400; }
-    .empty-note { text-align: center; padding: 24px; color: #64748b; font-size: 13px; }
+    .dropout-select.is-dropped {
+      background: #fee2e2 !important;
+      color: #991b1b !important;
+      font-weight: 700 !important;
+      border-color: #fca5a5 !important;
+    }
+    tr.row-dropped td {
+      color: #dc2626 !important;
+      font-weight: 700;
+      background-color: #fff1f2;
+    }
+    tr.row-dropped td.no-print-col {
+      color: #334155 !important;
+      font-weight: normal;
+      background-color: #fef9c3;
+    }
+    .empty-note { text-align: center; padding: 22px; color: #64748b; font-size: 13px; }
 
     /* ============ FOOTER ============ */
     .footer-container {
-      margin-top: 24px;
+      margin-top: 20px;
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
       font-size: 12px;
       position: relative;
     }
-    .footer-left { text-align: center; width: 42%; margin-top: 52px; font-weight: 700; }
-    .footer-right { text-align: center; width: 55%; font-weight: 700; }
+    .footer-left { text-align: center; width: 44%; margin-top: 50px; font-weight: 700; }
+    .footer-right { text-align: center; width: 54%; font-weight: 700; }
 
     .inline-input {
       border: 1px dashed #94a3b8;
-      border-radius: 4px;
-      padding: 3px 5px;
+      border-radius: 3px;
+      padding: 2px 4px;
       font-family: 'Noto Serif Khmer', 'Kantumruy Pro', sans-serif;
-      font-size: 11.5px;
+      font-size: 11px;
       text-align: center;
       background-color: #f8fafc;
-      color: #000;
       font-weight: 600;
-      min-height: 28px;
     }
 
     /* ── ឈ្មោះគ្រូ DRAGGABLE ── */
@@ -297,113 +285,90 @@
       font-family: 'Moul', cursive;
       font-size: 12px;
       color: #000;
-      margin-top: 8px;
-      min-height: 22px;
+      margin-top: 6px;
+      min-height: 20px;
       text-align: center;
       display: inline-block;
-      cursor: move;
+      cursor: grab;
       user-select: none;
       -webkit-user-select: none;
-      padding: 6px 12px;
+      padding: 4px 8px;
       border: 1px dashed transparent;
-      border-radius: 6px;
+      border-radius: 4px;
       touch-action: none;
     }
     .teacher-name-display:hover { border-color: #93c5fd; background: rgba(59,130,246,0.06); }
-    .teacher-name-display.dragging { border-color: #2563eb; background: rgba(37,99,235,0.12); box-shadow: 0 4px 12px rgba(37,99,235,0.2); }
+    .teacher-name-display.dragging { border-color: #2563eb; background: rgba(37,99,235,0.15); cursor: grabbing; }
 
-    /* ========================================================
-       📱 RWD: OPTIMIZED SPECIFICALLY FOR MOBILE DEVICES
-    ======================================================== */
+    /* ============ MOBILE OPTIMIZATION ============ */
     @media screen and (max-width: 768px) {
-      body {
-        padding: 8px 8px 110px 8px !important;
-        background: #f8fafc;
-      }
-      .mobile-scroll-hint { display: block; }
+      body { padding: 6px 6px 95px 6px; }
+      .table-scroll-hint { display: block; }
+      .control-panel { padding: 10px; margin-bottom: 8px; }
+      .control-row { flex-direction: column; align-items: stretch; gap: 8px; }
+      .cp-select-group { width: 100%; }
 
-      .control-panel {
-        padding: 12px;
-        margin-bottom: 10px;
-        border-radius: 10px;
+      .document-header {
+        display: flex;
+        flex-direction: column-reverse;
+        align-items: center;
+        text-align: center;
       }
-      .control-row {
-        flex-direction: column;
-        align-items: stretch;
-        gap: 10px;
-      }
-      .cp-select-group {
-        width: 100%;
-        flex-direction: column;
-        align-items: flex-start;
-        gap: 4px;
-      }
-      .cp-select-group select, .cp-select-group input {
-        width: 100%;
+      .school-info { position: static; text-align: center; margin-top: 6px; }
+
+      .document-container {
+        padding: 12px 10px;
       }
 
-      /* ── FLOATING STICKY ACTION BAR FOR MOBILE ── */
+      /* របារប៊ូតុងជាប់ខាងក្រោមងាយស្រួលចុច */
       .cp-actions {
         position: fixed;
         bottom: 0;
         left: 0;
         right: 0;
         background: #ffffff;
-        padding: 10px 14px;
-        box-shadow: 0 -4px 16px rgba(0,0,0,0.12);
-        z-index: 999;
+        padding: 8px 12px;
+        box-shadow: 0 -3px 12px rgba(0,0,0,0.1);
+        z-index: 1000;
         display: flex;
         align-items: center;
         justify-content: space-between;
-        gap: 8px;
+        gap: 6px;
         border-top: 1px solid #e2e8f0;
       }
-      .zoom-btn-group {
-        flex: 1.2;
-        justify-content: space-around;
-        padding: 2px 4px;
-      }
-      .zoom-btn {
-        flex: 1;
-        padding: 6px 4px;
-        font-size: 11px;
-        text-align: center;
-      }
-      .btn-reset-pos {
-        flex: 0.9;
-        padding: 8px 6px;
-        font-size: 11.5px;
-      }
-      .btn-print {
-        flex: 1.1;
-        padding: 8px 10px;
-        font-size: 13px;
-      }
-
-      .page-wrapper {
-        padding-bottom: 20px;
-      }
+      .zoom-btn-group { flex: 1.1; justify-content: space-around; }
+      .btn-reset-pos { flex: 0.9; font-size: 11.5px; }
+      .btn-print { flex: 1.2; font-size: 13.5px; }
     }
 
     /* ============ PRINT STYLES ============ */
     @media print {
       * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
-      .no-print, .mobile-scroll-hint { display: none !important; }
-      html, body { background: #fff !important; padding: 0 !important; margin: 0 !important; }
-      .page-wrapper { overflow: visible !important; padding: 0 !important; }
-      #printPage {
+      .no-print, .table-scroll-hint { display: none !important; }
+      html, body { background: #fff !important; padding: 0 !important; margin: 0 !important; width: 100% !important; }
+      .document-container {
         box-shadow: none !important;
         width: 100% !important;
-        min-height: 0 !important;
+        max-width: 100% !important;
         padding: 0 !important;
         margin: 0 !important;
+        border-radius: 0 !important;
         zoom: 1 !important;
-        transform: none !important;
       }
-      table.roster-table { min-width: 100% !important; page-break-inside: auto; break-inside: auto; }
+      .document-header { position: relative !important; display: block !important; }
+      .school-info { position: absolute !important; left: 0 !important; top: 18px !important; text-align: left !important; }
+
+      .table-scroll-wrap {
+        border: none !important;
+        overflow: visible !important;
+      }
+      table.roster-table {
+        min-width: 100% !important;
+        width: 100% !important;
+        page-break-inside: auto;
+      }
       table.roster-table tr, table.roster-table thead, table.roster-table tbody tr {
         page-break-inside: avoid !important;
-        break-inside: avoid !important;
       }
       table.roster-table thead { display: table-header-group; }
       table.roster-table tbody { display: table-row-group; }
@@ -425,7 +390,7 @@
         padding: 0 !important;
         outline: none !important;
       }
-      .footer-left { margin-top: 52px !important; }
+      .footer-left { margin-top: 50px !important; }
       .teacher-name-display {
         font-family: 'Moul', cursive !important;
         font-size: 12px !important;
@@ -467,40 +432,37 @@
           <button type="button" class="zoom-btn active" data-zoom="1" onclick="setZoom(1, this)">100%</button>
         </div>
 
-        <button type="button" id="resetTeacherPosBtn" class="btn-action btn-reset-pos" onclick="resetTeacherNamePosition()" title="ដាក់ឈ្មោះគ្រូបន្ទុកថ្នាក់ត្រឡប់ទីតាំងដើមវិញ">↺ ទីតាំង</button>
+        <button type="button" id="resetTeacherPosBtn" class="btn-action btn-reset-pos" onclick="resetTeacherNamePosition()">↺ ទីតាំង</button>
         <button type="button" id="printBtn" class="btn-action btn-print" onclick="printWhenFontsReady()">🖨️ បោះពុម្ព</button>
       </div>
     </div>
   </div>
 
-  <!-- 📱 MOBILE SCROLL NOTICE -->
-  <div class="mobile-scroll-hint no-print">
-    👆 អូសទៅឆ្វេង ឬស្ដាំ ដើម្បីមើលព័ត៌មានតារាងពេញលេញ
-  </div>
+  <div class="document-container" id="printPage">
 
-  <!-- ============ A4 PAGE CONTENT ============ -->
-  <div class="page-wrapper">
-    <div id="printPage">
-
-      <div class="document-header">
-        <div class="school-info">
-          <div class="underline" style="font-weight:700;">រដ្ឋបាលស្រុកសំឡូត</div>
-          <div>ការិយាល័យអប់រំ យុវជន និងកីឡានៃរដ្ឋបាលស្រុកសំឡូត</div>
-          <div>សាលាបឋមសិក្សា ៖ <b>កំពង់ល្ពៅ</b></div>
-        </div>
-        <div class="nation-info">
-          <div class="khmer-moul t1">ព្រះរាជាណាចក្រកម្ពុជា</div>
-          <div class="khmer-moul t2">ជាតិ សាសនា ព្រះមហាក្សត្រ</div>
-        </div>
+    <div class="document-header">
+      <div class="school-info">
+        <div class="underline" style="font-weight:700;">រដ្ឋបាលស្រុកសំឡូត</div>
+        <div>ការិយាល័យអប់រំ យុវជន និងកីឡានៃរដ្ឋបាលស្រុកសំឡូត</div>
+        <div>សាលាបឋមសិក្សា ៖ <b>កំពង់ល្ពៅ</b></div>
       </div>
-
-      <div class="ornament">◆</div>
-
-      <div class="roster-title">
-        បញ្ជីរាយនាមសិស្សថ្នាក់ទី<input type="text" id="titleClass" class="class-input" value="...">
-        ឆ្នាំសិក្សា<input type="text" id="titleYear" class="year-input" value="...">
+      <div class="nation-info">
+        <div class="khmer-moul t1">ព្រះរាជាណាចក្រកម្ពុជា</div>
+        <div class="khmer-moul t2">ជាតិ សាសនា ព្រះមហាក្សត្រ</div>
       </div>
+    </div>
 
+    <div class="ornament">◆</div>
+
+    <div class="roster-title">
+      បញ្ជីរាយនាមសិស្សថ្នាក់ទី<input type="text" id="titleClass" class="class-input" value="...">
+      ឆ្នាំសិក្សា<input type="text" id="titleYear" class="year-input" value="...">
+    </div>
+
+    <div class="table-scroll-hint no-print">👉 អូសតារាងទៅឆ្វេង-ស្ដាំ</div>
+
+    <!-- ប្រអប់ Scroll តារាងដោយឡែក មិនធ្វើឱ្យរអិលទំព័រទាំងមូល -->
+    <div class="table-scroll-wrap">
       <table class="roster-table">
         <colgroup>
           <col class="col-no"><col class="col-id"><col class="col-name"><col class="col-sex">
@@ -522,31 +484,31 @@
           <tr><td colspan="8" class="empty-note">សូមជ្រើសរើសថ្នាក់</td></tr>
         </tbody>
       </table>
+    </div>
 
-      <!-- FOOTER -->
-      <div class="footer-container">
-        <!-- ឆ្វេង: នាយកសាលា -->
-        <div class="footer-left">
-          <div>បានឃើញ និងឯកភាព</div>
-          <div class="khmer-moul" style="font-size:12px; margin-top:5px;">នាយកសាលា</div>
-        </div>
-
-        <!-- ស្ដាំ: គ្រូបន្ទុកថ្នាក់ -->
-        <div class="footer-right">
-          <div style="font-size:11px; font-weight:500; text-align:center; margin-bottom:4px;">
-            <input type="text" id="lunarInput" value="" class="inline-input" style="width:100%;" placeholder="វាយបញ្ចូលថ្ងៃចន្ទគតិទីនេះ...">
-          </div>
-          <div style="margin-top:4px; font-size:11.5px;">
-            ធ្វើនៅកំពង់ល្ពៅ, ថ្ងៃទី<input type="text" id="dayInput" value="" class="inline-input" style="width:38px; margin:0 4px;" placeholder="...">
-            ខែ<input type="text" id="monthInput" value="" class="inline-input" style="width:70px; margin:0 4px;" placeholder="...">
-            ឆ្នាំ<span id="currentYearTxt">២០២៦</span>
-          </div>
-          <div class="khmer-moul" style="font-size:12px; margin-top:6px;">គ្រូបន្ទុកថ្នាក់</div>
-          <div class="teacher-name-display" id="teacherNameDisplay" title="អូសដើម្បីផ្លាស់ទីតាំង">&nbsp;</div>
-        </div>
+    <!-- FOOTER -->
+    <div class="footer-container">
+      <!-- ឆ្វេង: នាយកសាលា -->
+      <div class="footer-left">
+        <div>បានឃើញ និងឯកភាព</div>
+        <div class="khmer-moul" style="font-size:12px; margin-top:5px;">នាយកសាលា</div>
       </div>
 
+      <!-- ស្ដាំ: គ្រូបន្ទុកថ្នាក់ -->
+      <div class="footer-right">
+        <div style="font-size:11px; font-weight:500; text-align:center; margin-bottom:4px;">
+          <input type="text" id="lunarInput" value="" class="inline-input" style="width:100%;" placeholder="វាយបញ្ចូលថ្ងៃចន្ទគតិទីនេះ...">
+        </div>
+        <div style="margin-top:4px; font-size:11.5px;">
+          ធ្វើនៅកំពង់ល្ពៅ, ថ្ងៃទី<input type="text" id="dayInput" value="" class="inline-input" style="width:36px; margin:0 3px;">
+          ខែ<input type="text" id="monthInput" value="" class="inline-input" style="width:65px; margin:0 3px;">
+          ឆ្នាំ<span id="currentYearTxt">២០២៦</span>
+        </div>
+        <div class="khmer-moul" style="font-size:12px; margin-top:6px;">គ្រូបន្ទុកថ្នាក់</div>
+        <div class="teacher-name-display" id="teacherNameDisplay" title="ប៉ះឱ្យជាប់ដើម្បីអូសផ្លាស់ទី">&nbsp;</div>
+      </div>
     </div>
+
   </div>
 
   <!-- 🔗 ភ្ជាប់ api.js (បើមាន) -->
@@ -582,16 +544,27 @@
         .replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
     }
 
-    // ── Universal API Bridge ──
+    // ── Universal API Caller: គាំទ្រទាំង Apps Script & GitHub ──
     async function apiCall(action, params) {
       params = params || {};
       if (TOKEN) params.token = params.token || TOKEN;
 
       if (typeof google !== 'undefined' && google.script && google.script.run) {
         return new Promise(function(resolve, reject) {
-          google.script.run
-            .withSuccessHandler(resolve)
-            .withFailureHandler(reject)[action](params.token, params.className || params.cls);
+          var runner = google.script.run.withSuccessHandler(resolve).withFailureHandler(reject);
+          if (action === 'getStudentRosterByClassSecured') {
+            runner.getStudentRosterByClassSecured(params.token, params.className || params.cls);
+          } else if (action === 'getClassListForSession') {
+            runner.getClassListForSession(params.token);
+          } else if (action === 'getCurrentSession') {
+            runner.getCurrentSession(params.token);
+          } else if (action === 'setStudentDropout') {
+            runner.setStudentDropout(params.studentId || params.id, params.semester, params.token);
+          } else if (typeof runner[action] === 'function') {
+            runner[action](params);
+          } else {
+            reject(new Error('Function ' + action + ' not found in Apps Script'));
+          }
         });
       }
 
@@ -611,12 +584,10 @@
       return json;
     }
 
-    // ── 🔍 SMART ZOOM (FIT SCREEN / 75% / 100%) ──
+    // ── ZOOM FUNCTIONS ──
     function setZoom(scale, btnEl) {
       var el = document.getElementById('printPage');
-      if (el) {
-        el.style.zoom = scale;
-      }
+      if (el) el.style.zoom = scale;
 
       document.querySelectorAll('.zoom-btn').forEach(function(b) { b.classList.remove('active'); });
       if (btnEl) {
@@ -625,21 +596,18 @@
         var matched = document.querySelector('.zoom-btn[data-zoom="' + scale + '"]');
         if (matched) matched.classList.add('active');
       }
-
       _set('roster_zoom_level', scale);
     }
 
     function setFitZoom(btnEl) {
       var screenW = window.innerWidth;
-      // 210mm ≈ 794px at standard 96 DPI
-      var targetScale = (screenW - 20) / 794;
+      var targetScale = (screenW - 16) / 820;
       if (targetScale > 1) targetScale = 1;
-      if (targetScale < 0.4) targetScale = 0.4;
-
+      if (targetScale < 0.45) targetScale = 0.45;
       setZoom(targetScale, btnEl);
     }
 
-    // ── ឈ្មោះគ្រូ DRAGGABLE & POSITION PERSISTENCE (MOUSE & TOUCH) ──
+    // ── ឈ្មោះគ្រូ DRAGGABLE (មិនប៉ះពាល់ដល់ការ Scroll) ──
     var TEACHER_POS_KEY = 'rosterTeacherNameDragPosPct';
 
     function initDraggableTeacherName() {
@@ -677,7 +645,7 @@
 
       function moveDrag(clientX, clientY, e) {
         if (!isDragging) return;
-        if (e && e.cancelable) e.preventDefault(); // ការពារកុំឱ្យ scroll អេក្រង់ពេលកំពុងអូសឈ្មោះ
+        if (e && e.cancelable) e.preventDefault();
         var pageRect = page.getBoundingClientRect();
         var leftPx = clientX - offsetX - pageRect.left;
         var topPx = clientY - offsetY - pageRect.top;
@@ -701,12 +669,10 @@
         localStorage.setItem(TEACHER_POS_KEY, JSON.stringify({ leftPct: leftPct, topPct: topPct }));
       }
 
-      // Desktop Mouse
       el.addEventListener('mousedown', function(e) { startDrag(e.clientX, e.clientY); e.preventDefault(); });
       document.addEventListener('mousemove', function(e) { moveDrag(e.clientX, e.clientY, e); });
       document.addEventListener('mouseup', endDrag);
 
-      // Mobile Touch
       el.addEventListener('touchstart', function(e) {
         if (e.touches.length === 1) {
           var t = e.touches[0];
@@ -771,7 +737,6 @@
       initTeacherSession();
       loadClassList();
 
-      // បើកលើទូរស័ព្ទដៃកំណត់យក Fit Zoom ជាមុន
       if (window.innerWidth <= 768) {
         var fitBtn = document.getElementById('btnZoomFit');
         setFitZoom(fitBtn);
@@ -866,6 +831,7 @@
       }
     }
 
+    // ── 🌟 RENDERING ROSTER (ដោះស្រាយបញ្ហាសិស្សបោះបង់ចេញ «សកម្ម») ──
     function renderRoster(students) {
       var tbody = document.getElementById('rosterBody');
       if (!students || students.length === 0) {
@@ -874,9 +840,18 @@
       }
       var html = '';
       students.forEach(function(s, idx) {
-        var dropped  = s.dropoutSemester || '';
-        var noteText = dropped ? ('បោះបង់ (' + dropped + ')') : '';
-        var rowClass = dropped ? 'row-dropped' : '';
+        // ស្វែងរកគ្រប់ Property ដែលអាចបញ្ជូនមកពី Apps Script
+        var rawVal = String(s.dropoutSemester || s.dropout || s.status || s.note || '').trim();
+
+        // ផ្ទៀងផ្ទាត់ដោយបត់បែន ទោះបីសរសេរ ឆមាស១, ឆមាសទី១ ឬ បោះបង់ឆមាស១
+        var isSem1 = rawVal.includes('ឆមាសទី១') || rawVal.includes('ឆមាស១') || rawVal === '1';
+        var isSem2 = rawVal.includes('ឆមាសទី២') || rawVal.includes('ឆមាស២') || rawVal === '2';
+        var isDropped = isSem1 || isSem2;
+
+        var droppedText = isSem1 ? 'ឆមាសទី១' : (isSem2 ? 'ឆមាសទី២' : '');
+        var noteText = isDropped ? ('បោះបង់ (' + droppedText + ')') : '';
+        var rowClass = isDropped ? 'row-dropped' : '';
+
         html +=
           '<tr class="' + rowClass + '">' +
           '<td>' + toKhmerNum(idx + 1) + '</td>' +
@@ -887,11 +862,11 @@
           '<td>' + escapeHtml(s.fromClass || '') + '</td>' +
           '<td class="note-cell">' + escapeHtml(noteText) + '</td>' +
           '<td class="no-print-col">' +
-            '<select class="dropout-select ' + (dropped ? 'is-dropped' : '') + '" ' +
+            '<select class="dropout-select ' + (isDropped ? 'is-dropped' : '') + '" ' +
               'data-id="' + escapeHtml(s.id) + '" onchange="onDropoutChange(this)">' +
-              '<option value=""'           + (!dropped               ? ' selected' : '') + '>សកម្ម</option>' +
-              '<option value="ឆមាសទី១"'  + (dropped==='ឆមាសទី១' ? ' selected' : '') + '>បោះបង់ ឆមាស១</option>' +
-              '<option value="ឆមាសទី២"'  + (dropped==='ឆមាសទី២' ? ' selected' : '') + '>បោះបង់ ឆមាស២</option>' +
+              '<option value=""'          + (!isDropped ? ' selected' : '') + '>សកម្ម</option>' +
+              '<option value="ឆមាសទី១"' + (isSem1     ? ' selected' : '') + '>បោះបង់ ឆមាស១</option>' +
+              '<option value="ឆមាសទី២"' + (isSem2     ? ' selected' : '') + '>បោះបង់ ឆមាស២</option>' +
             '</select>' +
           '</td></tr>';
       });
