@@ -33,7 +33,7 @@
 
     .khmer-moul { font-family: 'Moul', cursive; }
 
-    /* ============ 🌟 MODERN & BEAUTIFUL CONTROL PANEL ============ */
+    /* ============ MODERN CONTROL PANEL ============ */
     .control-panel {
       max-width: 860px;
       margin: 0 auto 16px auto;
@@ -47,7 +47,7 @@
       box-shadow: 0 4px 16px rgba(15, 23, 42, 0.05);
     }
 
-    /* ជួរទី ១: Input Fields (រៀបជា Grid មានសណ្ដាប់ធ្នាប់ មិនរួញតូចចង្អៀត) */
+    /* ជួរទី ១៖ Filter Grid */
     .filter-grid {
       display: grid;
       grid-template-columns: 170px 180px 1fr;
@@ -89,7 +89,7 @@
       box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
     }
 
-    /* ជួរទី ២: Action Toolbar (Zoom, Reset, Print) */
+    /* ជួរទី ២៖ Toolbar Row */
     .toolbar-row {
       display: flex;
       justify-content: space-between;
@@ -335,25 +335,32 @@
       font-weight: 600;
     }
 
-    /* ── ឈ្មោះគ្រូ DRAGGABLE ── */
+    /* ── 🌟 ឈ្មោះគ្រូ DRAGGABLE (ច្បាស់ មិនបាត់ មិនលិចក្រោយគេ) ── */
     .teacher-name-display {
       font-family: 'Moul', cursive;
       font-size: 12px;
       color: #000;
       margin-top: 6px;
-      min-height: 20px;
+      min-height: 22px;
       text-align: center;
       display: inline-block;
       cursor: grab;
       user-select: none;
       -webkit-user-select: none;
-      padding: 4px 8px;
+      padding: 4px 10px;
       border: 1px dashed transparent;
       border-radius: 4px;
       touch-action: none;
+      white-space: nowrap !important;
+      z-index: 50 !important; /* ធានាថានៅលើគេជានិច្ច មិនលិចក្រោយតារាង */
     }
     .teacher-name-display:hover { border-color: #93c5fd; background: rgba(59,130,246,0.06); }
-    .teacher-name-display.dragging { border-color: #2563eb; background: rgba(37,99,235,0.15); cursor: grabbing; }
+    .teacher-name-display.dragging {
+      border-color: #2563eb !important;
+      background: rgba(37,99,235,0.15) !important;
+      cursor: grabbing !important;
+      box-shadow: 0 4px 14px rgba(37,99,235,0.25);
+    }
 
     /* ============ 📱 RESPONSIVE ADJUSTMENTS ============ */
     @media screen and (max-width: 768px) {
@@ -365,7 +372,7 @@
         grid-template-columns: 1fr 1fr;
       }
       .filter-grid .form-group:nth-child(3) {
-        grid-column: span 2; /* ឈ្មោះគ្រូពេញមួយជួរនៅខាងក្រោម */
+        grid-column: span 2;
       }
 
       .document-header {
@@ -377,7 +384,6 @@
       .school-info { position: static; text-align: center; margin-top: 6px; }
       .document-container { padding: 12px 10px; }
 
-      /* របារឧបករណ៍ជាប់ខាងក្រោមអេក្រង់ទូរស័ព្ទ */
       .toolbar-row {
         position: fixed;
         bottom: 0;
@@ -450,10 +456,9 @@
 </head>
 <body>
 
-  <!-- ============ 🌟 MODERN CONTROL PANEL ============ -->
+  <!-- ============ CONTROL PANEL ============ -->
   <div class="no-print control-panel">
     
-    <!-- ជួរទី ១៖ ព័ត៌មានជ្រើសរើស (ទូលាយ ស្រឡះ មិនបាំងអក្សរ) -->
     <div class="filter-grid">
       <div class="form-group">
         <label for="classSelect">🏫 ជ្រើសរើសថ្នាក់</label>
@@ -473,7 +478,6 @@
       </div>
     </div>
 
-    <!-- ជួរទី ២៖ របារប៊ូតុង និងទំហំមើល (ស្អាត និងមានរបៀប) -->
     <div class="toolbar-row">
       <div class="toolbar-left">
         <span class="toolbar-label">🔍 ទំហំមើល៖</span>
@@ -658,50 +662,91 @@
       setZoom(targetScale, btnEl);
     }
 
-    // ── ឈ្មោះគ្រូ DRAGGABLE ──
+    // ── 🌟 ឈ្មោះគ្រូ DRAGGABLE (ដោះស្រាយបញ្ហាហោះបាត់ឈ្មោះជាស្ថាពរ) ──
     var TEACHER_POS_KEY = 'rosterTeacherNameDragPosPct';
+
+    function getPageZoom() {
+      var page = document.getElementById('printPage');
+      if (!page) return 1;
+      var z = parseFloat(page.style.zoom);
+      return (Number.isFinite(z) && z > 0) ? z : 1;
+    }
 
     function initDraggableTeacherName() {
       var el = document.getElementById('teacherNameDisplay');
       var page = document.getElementById('printPage');
       if (!el || !page) return;
 
+      // ស្ដារទីតាំងពី LocalStorage (ធានាកុំឱ្យទិន្នន័យខូចធ្វើឱ្យបាត់ឈ្មោះ)
       try {
         var saved = JSON.parse(localStorage.getItem(TEACHER_POS_KEY) || 'null');
         if (saved && typeof saved.leftPct === 'number' && typeof saved.topPct === 'number') {
-          el.style.position = 'absolute';
-          el.style.left = saved.leftPct + '%';
-          el.style.top = saved.topPct + '%';
-          el.style.margin = '0';
+          // ប្រសិនបើកូអរដោនេស្ថិតក្នុងទំព័រ (0% ដល់ 95%) ទើបទទួលស្គាល់
+          if (saved.leftPct >= 0 && saved.leftPct <= 95 && saved.topPct >= 0 && saved.topPct <= 98) {
+            el.style.position = 'absolute';
+            el.style.left = saved.leftPct + '%';
+            el.style.top = saved.topPct + '%';
+            el.style.margin = '0';
+          } else {
+            localStorage.removeItem(TEACHER_POS_KEY);
+          }
         }
-      } catch (e) {}
+      } catch (e) {
+        localStorage.removeItem(TEACHER_POS_KEY);
+      }
 
-      var isDragging = false, offsetX = 0, offsetY = 0;
+      var isDragging = false;
+      var offsetX = 0, offsetY = 0;
 
       function startDrag(clientX, clientY) {
         isDragging = true;
         el.classList.add('dragging');
-        if (el.style.position !== 'absolute') {
-          var pageRect = page.getBoundingClientRect();
-          var rect = el.getBoundingClientRect();
-          el.style.position = 'absolute';
-          el.style.left = (rect.left - pageRect.left) + 'px';
-          el.style.top = (rect.top - pageRect.top) + 'px';
-          el.style.margin = '0';
-        }
-        var rect2 = el.getBoundingClientRect();
-        offsetX = clientX - rect2.left;
-        offsetY = clientY - rect2.top;
+
+        var zoom = getPageZoom();
+        var pageRect = page.getBoundingClientRect();
+        var rect = el.getBoundingClientRect();
+
+        // គណនាទីតាំង Unzoomed ពិតប្រាកដក្នុងទំព័រ A4
+        var unzoomedLeft = (rect.left - pageRect.left) / zoom;
+        var unzoomedTop  = (rect.top  - pageRect.top)  / zoom;
+
+        el.style.position = 'absolute';
+        el.style.left = unzoomedLeft + 'px';
+        el.style.top = unzoomedTop + 'px';
+        el.style.margin = '0';
+
+        // ចម្ងាយរវាងមេដៃ និងចំណុចកំពូលឆ្វេងនៃឈ្មោះ
+        var pointerPageX = (clientX - pageRect.left) / zoom;
+        var pointerPageY = (clientY - pageRect.top)  / zoom;
+
+        offsetX = pointerPageX - unzoomedLeft;
+        offsetY = pointerPageY - unzoomedTop;
       }
 
       function moveDrag(clientX, clientY, e) {
         if (!isDragging) return;
         if (e && e.cancelable) e.preventDefault();
+
+        var zoom = getPageZoom();
         var pageRect = page.getBoundingClientRect();
-        var leftPx = clientX - offsetX - pageRect.left;
-        var topPx = clientY - offsetY - pageRect.top;
-        el.style.left = leftPx + 'px';
-        el.style.top = topPx + 'px';
+
+        var pointerPageX = (clientX - pageRect.left) / zoom;
+        var pointerPageY = (clientY - pageRect.top)  / zoom;
+
+        var newLeft = pointerPageX - offsetX;
+        var newTop  = pointerPageY - offsetY;
+
+        // 🌟 ចាក់សោព្រំដែន (Clamp): ធានាថាមិនអាចហោះចេញក្រៅក្រដាស A4 ដាច់ខាត!
+        var unzoomedPageW = pageRect.width / zoom;
+        var unzoomedPageH = pageRect.height / zoom;
+        var elW = el.offsetWidth || 140;
+        var elH = el.offsetHeight || 26;
+
+        newLeft = Math.max(5, Math.min(newLeft, unzoomedPageW - elW - 10));
+        newTop  = Math.max(5, Math.min(newTop, unzoomedPageH - elH - 10));
+
+        el.style.left = newLeft + 'px';
+        el.style.top = newTop + 'px';
       }
 
       function endDrag() {
@@ -709,10 +754,19 @@
         isDragging = false;
         el.classList.remove('dragging');
 
+        var zoom = getPageZoom();
         var pageRect = page.getBoundingClientRect();
-        var elRect = el.getBoundingClientRect();
-        var leftPct = pageRect.width  > 0 ? ((elRect.left - pageRect.left) / pageRect.width)  * 100 : 0;
-        var topPct  = pageRect.height > 0 ? ((elRect.top  - pageRect.top)  / pageRect.height) * 100 : 0;
+        var unzoomedPageW = pageRect.width / zoom;
+        var unzoomedPageH = pageRect.height / zoom;
+
+        var currentLeft = parseFloat(el.style.left) || 0;
+        var currentTop  = parseFloat(el.style.top)  || 0;
+
+        var leftPct = (currentLeft / unzoomedPageW) * 100;
+        var topPct  = (currentTop  / unzoomedPageH) * 100;
+
+        leftPct = Math.max(0, Math.min(leftPct, 95));
+        topPct  = Math.max(0, Math.min(topPct, 98));
 
         el.style.left = leftPct + '%';
         el.style.top = topPct + '%';
@@ -720,10 +774,17 @@
         localStorage.setItem(TEACHER_POS_KEY, JSON.stringify({ leftPct: leftPct, topPct: topPct }));
       }
 
-      el.addEventListener('mousedown', function(e) { startDrag(e.clientX, e.clientY); e.preventDefault(); });
-      document.addEventListener('mousemove', function(e) { moveDrag(e.clientX, e.clientY); });
+      // Mouse Events
+      el.addEventListener('mousedown', function(e) {
+        startDrag(e.clientX, e.clientY);
+        e.preventDefault();
+      });
+      document.addEventListener('mousemove', function(e) {
+        moveDrag(e.clientX, e.clientY, e);
+      });
       document.addEventListener('mouseup', endDrag);
 
+      // Touch Events (Mobile)
       el.addEventListener('touchstart', function(e) {
         if (e.touches.length === 1) {
           var t = e.touches[0];
