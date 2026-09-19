@@ -11,7 +11,7 @@
     @page { size: A4 portrait; margin: 10mm 12mm; }
     * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
-    /* ── SCROLL & BASE: អូសរលូនលើទូរស័ព្ទ មិនរអិលទទឹង ── */
+    /* ── SCROLL & BASE ── */
     html, body {
       width: 100%;
       min-height: 100%;
@@ -28,107 +28,161 @@
     }
 
     body {
-      padding: 8px 8px 120px 8px;
+      padding: 12px 10px 120px 10px;
     }
 
     .khmer-moul { font-family: 'Moul', cursive; }
 
-    /* ============ CONTROLS ============ */
+    /* ============ 🌟 MODERN & BEAUTIFUL CONTROL PANEL ============ */
     .control-panel {
       max-width: 860px;
-      margin: 0 auto 12px auto;
+      margin: 0 auto 16px auto;
       background: #ffffff;
-      padding: 12px 14px;
-      border-radius: 10px;
+      padding: 14px 18px;
+      border-radius: 12px;
       display: flex;
       flex-direction: column;
-      gap: 10px;
+      gap: 12px;
       border: 1px solid #e2e8f0;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+      box-shadow: 0 4px 16px rgba(15, 23, 42, 0.05);
     }
-    .control-row {
+
+    /* ជួរទី ១: Input Fields (រៀបជា Grid មានសណ្ដាប់ធ្នាប់ មិនរួញតូចចង្អៀត) */
+    .filter-grid {
+      display: grid;
+      grid-template-columns: 170px 180px 1fr;
+      gap: 12px;
+      width: 100%;
+    }
+
+    .form-group {
       display: flex;
-      gap: 10px;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: wrap;
+      flex-direction: column;
+      gap: 5px;
     }
-    .cp-select-group {
-      display: flex;
-      gap: 6px;
-      align-items: center;
-      flex: 1;
-      min-width: 140px;
-    }
-    .cp-select-group label {
-      font-size: 13px;
+
+    .form-group label {
+      font-size: 12.5px;
       font-weight: 700;
       color: #1e3a8a;
-      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 4px;
     }
-    .cp-select-group select, .cp-select-group input {
-      padding: 8px 10px;
-      border-radius: 6px;
+
+    .form-control {
+      padding: 8px 12px;
+      border-radius: 7px;
       border: 1.5px solid #cbd5e1;
       font-family: 'Noto Serif Khmer', 'Kantumruy Pro', sans-serif;
       font-size: 13px;
       background: #fff;
       color: #0f172a;
       width: 100%;
-      min-height: 38px;
+      height: 40px;
       outline: none;
+      transition: all 0.2s ease;
     }
-    .cp-select-group select:focus, .cp-select-group input:focus {
+
+    .form-control:focus {
       border-color: #2563eb;
+      box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+    }
+
+    /* ជួរទី ២: Action Toolbar (Zoom, Reset, Print) */
+    .toolbar-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      padding-top: 10px;
+      border-top: 1px solid #f1f5f9;
+    }
+
+    .toolbar-left, .toolbar-right {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .toolbar-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: #475569;
     }
 
     /* ── ZOOM BUTTONS ── */
     .zoom-btn-group {
       display: inline-flex;
       align-items: center;
-      gap: 4px;
+      gap: 3px;
       background: #0f172a;
       padding: 3px 5px;
-      border-radius: 6px;
+      border-radius: 7px;
       border: 1px solid #334155;
     }
+
     .zoom-btn {
       background: rgba(255, 255, 255, 0.08);
-      border: 1px solid #334155;
+      border: 1px solid transparent;
       color: #f8fafc;
-      padding: 5px 9px;
-      border-radius: 4px;
+      padding: 5px 11px;
+      border-radius: 5px;
       font-size: 11.5px;
       font-weight: 700;
       cursor: pointer;
       font-family: 'Kantumruy Pro', sans-serif;
-      min-height: 30px;
+      height: 30px;
+      transition: all 0.15s ease;
     }
+
     .zoom-btn:hover { background: rgba(255, 255, 255, 0.18); }
     .zoom-btn.active {
       background: #2563eb !important;
-      border-color: #3b82f6 !important;
       color: #ffffff !important;
+      box-shadow: 0 2px 6px rgba(37, 99, 235, 0.4);
     }
 
+    /* ── BUTTON ACTIONS ── */
     .btn-action {
-      padding: 8px 14px;
+      padding: 8px 16px;
       border: none;
-      border-radius: 6px;
+      border-radius: 7px;
       cursor: pointer;
-      font-weight: bold;
+      font-weight: 700;
       font-family: 'Noto Serif Khmer', 'Kantumruy Pro', sans-serif;
-      font-size: 13px;
-      min-height: 38px;
+      font-size: 12.5px;
+      height: 38px;
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 5px;
+      gap: 6px;
+      transition: all 0.15s ease;
     }
-    .btn-print { background: #16a34a; color: white; }
-    .btn-print:hover { background: #15803d; }
-    .btn-reset-pos { background: #64748b; color: white; }
-    .btn-reset-pos:hover { background: #475569; }
+
+    .btn-reset-pos {
+      background: #f1f5f9;
+      color: #334155;
+      border: 1px solid #cbd5e1;
+    }
+
+    .btn-reset-pos:hover {
+      background: #e2e8f0;
+      color: #0f172a;
+    }
+
+    .btn-print {
+      background: #16a34a;
+      color: white;
+      box-shadow: 0 2px 8px rgba(22, 163, 74, 0.25);
+    }
+
+    .btn-print:hover {
+      background: #15803d;
+      box-shadow: 0 3px 10px rgba(22, 163, 74, 0.35);
+    }
 
     /* ============ A4 DOCUMENT CONTAINER ============ */
     .document-container {
@@ -172,7 +226,7 @@
     .roster-title .class-input { width: 55px; }
     .roster-title .year-input  { width: 105px; }
 
-    /* ── ប្រអប់ Scroll តារាងដាច់ដោយឡែក ── */
+    /* ── ប្រអប់ Scroll តារាង ── */
     .table-scroll-wrap {
       width: 100%;
       overflow-x: auto;
@@ -301,13 +355,18 @@
     .teacher-name-display:hover { border-color: #93c5fd; background: rgba(59,130,246,0.06); }
     .teacher-name-display.dragging { border-color: #2563eb; background: rgba(37,99,235,0.15); cursor: grabbing; }
 
-    /* ============ MOBILE OPTIMIZATION ============ */
+    /* ============ 📱 RESPONSIVE ADJUSTMENTS ============ */
     @media screen and (max-width: 768px) {
-      body { padding: 6px 6px 95px 6px; }
+      body { padding: 8px 8px 95px 8px; }
       .table-scroll-hint { display: block; }
-      .control-panel { padding: 10px; margin-bottom: 8px; }
-      .control-row { flex-direction: column; align-items: stretch; gap: 8px; }
-      .cp-select-group { width: 100%; }
+      .control-panel { padding: 12px; }
+
+      .filter-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+      .filter-grid .form-group:nth-child(3) {
+        grid-column: span 2; /* ឈ្មោះគ្រូពេញមួយជួរនៅខាងក្រោម */
+      }
 
       .document-header {
         display: flex;
@@ -316,10 +375,10 @@
         text-align: center;
       }
       .school-info { position: static; text-align: center; margin-top: 6px; }
-
       .document-container { padding: 12px 10px; }
 
-      .cp-actions {
+      /* របារឧបករណ៍ជាប់ខាងក្រោមអេក្រង់ទូរស័ព្ទ */
+      .toolbar-row {
         position: fixed;
         bottom: 0;
         left: 0;
@@ -328,15 +387,13 @@
         padding: 8px 12px;
         box-shadow: 0 -3px 12px rgba(0,0,0,0.1);
         z-index: 1000;
-        display: flex;
-        align-items: center;
         justify-content: space-between;
-        gap: 6px;
         border-top: 1px solid #e2e8f0;
       }
-      .zoom-btn-group { flex: 1.1; justify-content: space-around; }
-      .btn-reset-pos { flex: 0.9; font-size: 11.5px; }
-      .btn-print { flex: 1.2; font-size: 13.5px; }
+      .toolbar-left { flex: 1.1; justify-content: space-around; }
+      .toolbar-right { flex: 1.9; justify-content: flex-end; }
+      .btn-reset-pos { flex: 1; padding: 8px 6px; font-size: 11.5px; }
+      .btn-print { flex: 1.3; font-size: 13px; }
     }
 
     /* ============ PRINT STYLES ============ */
@@ -393,39 +450,49 @@
 </head>
 <body>
 
-  <!-- ============ CONTROL PANEL ============ -->
+  <!-- ============ 🌟 MODERN CONTROL PANEL ============ -->
   <div class="no-print control-panel">
-    <div class="control-row">
-      <div class="cp-select-group">
-        <label>🏫 ជ្រើសរើសថ្នាក់៖</label>
-        <select id="classSelect" onchange="loadRoster()">
+    
+    <!-- ជួរទី ១៖ ព័ត៌មានជ្រើសរើស (ទូលាយ ស្រឡះ មិនបាំងអក្សរ) -->
+    <div class="filter-grid">
+      <div class="form-group">
+        <label for="classSelect">🏫 ជ្រើសរើសថ្នាក់</label>
+        <select id="classSelect" class="form-control" onchange="loadRoster()">
           <option value="">-- កំពុងទាញយក... --</option>
         </select>
       </div>
 
-      <div class="cp-select-group">
-        <label>📅 ឆ្នាំសិក្សា៖</label>
-        <input type="text" id="yearInput" oninput="syncTitleYear()">
+      <div class="form-group">
+        <label for="yearInput">📅 ឆ្នាំសិក្សា</label>
+        <input type="text" id="yearInput" class="form-control" oninput="syncTitleYear()">
       </div>
 
-      <div class="cp-select-group">
-        <label>👤 គ្រូបន្ទុកថ្នាក់ (កែបាន)៖</label>
-        <input type="text" id="teacherNameCtrl" placeholder="ឈ្មោះគ្រូ..." oninput="syncTeacherName(this.value)">
+      <div class="form-group">
+        <label for="teacherNameCtrl">👤 ឈ្មោះគ្រូបន្ទុកថ្នាក់ (កែបាន)</label>
+        <input type="text" id="teacherNameCtrl" class="form-control" placeholder="វាយឈ្មោះគ្រូ..." oninput="syncTeacherName(this.value)">
       </div>
+    </div>
 
-      <div class="cp-actions">
-        <div class="zoom-btn-group" title="ពង្រីក/បង្រួម">
+    <!-- ជួរទី ២៖ របារប៊ូតុង និងទំហំមើល (ស្អាត និងមានរបៀប) -->
+    <div class="toolbar-row">
+      <div class="toolbar-left">
+        <span class="toolbar-label">🔍 ទំហំមើល៖</span>
+        <div class="zoom-btn-group">
           <button type="button" class="zoom-btn" id="btnZoomFit" onclick="setFitZoom(this)">សម</button>
           <button type="button" class="zoom-btn" data-zoom="0.75" onclick="setZoom(0.75, this)">75%</button>
           <button type="button" class="zoom-btn active" data-zoom="1" onclick="setZoom(1, this)">100%</button>
         </div>
+      </div>
 
-        <button type="button" id="resetTeacherPosBtn" class="btn-action btn-reset-pos" onclick="resetTeacherNamePosition()">↺ ទីតាំង</button>
-        <button type="button" id="printBtn" class="btn-action btn-print" onclick="printWhenFontsReady()">🖨️ បោះពុម្ព</button>
+      <div class="toolbar-right">
+        <button type="button" id="resetTeacherPosBtn" class="btn-action btn-reset-pos" onclick="resetTeacherNamePosition()">↺ ទីតាំងឈ្មោះ</button>
+        <button type="button" id="printBtn" class="btn-action btn-print" onclick="printWhenFontsReady()">🖨️ បោះពុម្ពបញ្ជី</button>
       </div>
     </div>
+
   </div>
 
+  <!-- ============ A4 DOCUMENT ============ -->
   <div class="document-container" id="printPage">
 
     <div class="document-header">
@@ -696,11 +763,11 @@
       if (btn) { btn.disabled = true; btn.textContent = '⏳ កំពុងរៀបចំ...'; }
       document.fonts.ready.then(function() {
         setTimeout(function() {
-          if (btn) { btn.disabled = false; btn.innerHTML = '🖨️ បោះពុម្ព'; }
+          if (btn) { btn.disabled = false; btn.innerHTML = '🖨️ បោះពុម្ពបញ្ជី'; }
           try { window.print(); } catch(e) { window.parent.print(); }
         }, 150);
       }).catch(function() {
-        if (btn) { btn.disabled = false; btn.innerHTML = '🖨️ បោះពុម្ព'; }
+        if (btn) { btn.disabled = false; btn.innerHTML = '🖨️ បោះពុម្ពបញ្ជី'; }
         try { window.print(); } catch(e) { window.parent.print(); }
       });
     }
