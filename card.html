@@ -214,7 +214,7 @@
     .title-school       { font-family: 'Moul', serif; font-size: 8.3px; color: var(--c-green); line-height: 1.35; }
     .title-id           { font-family: 'Moul', serif; font-size: 8.8px; color: var(--c-orange); line-height: 1.35; }
 
-    /* ── ឈ្មោះសិស្ស (មិនដាច់ស្រៈលើ) ── */
+    /* ── ឈ្មោះសិស្ស (មិនដាច់ស្រៈខាងលើ) ── */
     .title-student-name-center {
       font-family: 'Moul', 'Khmer OS Muol Light', serif;
       font-size: 12.2px;
@@ -247,7 +247,7 @@
     }
     .left-profile-block { flex: 1; display: flex; flex-direction: column; height: 100%; overflow: hidden; }
 
-    /* ── គម្លាតជួរអក្សរក្នុងតារាង ── */
+    /* ── គម្លាតជួរអក្សរក្នុងតារាងលើក្រោម ── */
     .info-table-top  { width: 100%; height: 100%; border-collapse: collapse; font-size: 8.8px; line-height: 1.42; }
     .info-table-top tr { height: 20%; }
     .info-table-top td { padding: 1.2px 0; vertical-align: middle; }
@@ -271,21 +271,22 @@
     .student-photo-box img { width: 100%; height: 100%; object-fit: cover; }
     .student-photo-box i { font-size: 24px; color: #cbd5e1; }
 
-    /* ── 🌟 លើកឱ្យជាប់នឹងជួរ «ឆ្នាំសិក្សា» ភ្លាមៗ (margin-top: 2px) ── */
+    /* ── 🌟 ផ្នែកហត្ថលេខា និងត្រា (ទម្លាក់ចុះក្រោមបន្តិច គម្លាត 3.5mm ពីឆ្នាំសិក្សា) ── */
     .card-bottom-signature {
       position: relative; 
       z-index: 2;
       display: flex; 
       justify-content: flex-start;
       padding-left: 3px;
-      margin-top: 2px; /* លើកឡើងលើមកនៅជាប់ឆ្នាំសិក្សាភ្លាមៗ */
+      margin-top: 3.5mm; /* ទម្លាក់ចុះក្រោមបន្តិច កុំឱ្យជាប់នឹងឆ្នាំសិក្សាពេក */
+      margin-bottom: 2.5mm;
     }
     .signature-box { display: flex; flex-direction: column; align-items: center; position: relative; width: 44mm; text-align: center; }
-    .sig-date { font-family: inherit; font-weight: 700; font-size: 6.8px; color: #000; line-height: 1.15; white-space: nowrap; text-align: center; }
+    .sig-date { font-family: inherit; font-weight: 700; font-size: 6.8px; color: #000; line-height: 1.2; white-space: nowrap; text-align: center; }
 
     .sig-stamp-wrapper {
       position: relative; display: flex; flex-direction: column; align-items: center;
-      width: 100%; margin-top: 1px; min-height: 22mm; /* បន្សល់កន្លែងទំនេរធំខាងក្រោមសម្រាប់ចុះហត្ថលេខា និងវាយត្រា */
+      width: 100%; margin-top: 1.5px; min-height: 22mm;
     }
     .sig-title { font-family: 'Moul', serif; font-size: 7.2px; color: #000; line-height: 1.25; margin-top: 1px; white-space: nowrap; text-align: center; position: relative; z-index: 2; }
     .sig-role  { font-family: 'Moul', serif; font-size: 7px; color: #000; line-height: 1.25; margin-top: 1px; white-space: nowrap; text-align: center; position: relative; z-index: 2; }
@@ -815,7 +816,7 @@ function renderCards() {
               </table>
             </div>
 
-            <!-- 🌟 ផ្នែកហត្ថលេខា និងត្រា (នៅជាប់ក្រោម «ឆ្នាំសិក្សា» ភ្លាមៗ) -->
+            <!-- 🌟 ផ្នែកហត្ថលេខា និងត្រា (ទម្លាក់ចុះក្រោម គម្លាត 3.5mm ពីឆ្នាំសិក្សា) -->
             <div class="card-bottom-signature">
               <div class="signature-box">
                 <div class="sig-date">${autoDateText}</div>
