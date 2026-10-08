@@ -20,7 +20,6 @@
       -webkit-font-smoothing: antialiased;
     }
 
-    /* ── 🌟 រៀបចំ Layout ឱ្យជាប់ស្មើក្នុងផ្ទៃមើល Tablet ១០០% ── */
     .chat-app-wrapper {
       width: 100%;
       height: 100%;
@@ -94,7 +93,6 @@
       letter-spacing: 0.2px;
     }
 
-    /* 🌟 ប៊ូតុង 🔍 និង 👥 រចនាធំ ងាយស្រួលចុចលើ Tablet */
     .room-right {
       display: flex;
       align-items: center;
@@ -112,7 +110,6 @@
       align-items: center;
       justify-content: center;
       transition: all 0.2s ease;
-      touch-action: manipulation;
     }
     .room-action-btn:hover, .room-action-btn:active {
       color: #38bdf8;
@@ -149,7 +146,7 @@
     .chat-messages {
       flex: 1 1 auto;
       min-height: 0;
-      padding: 12px 16px;
+      padding: 12px 16px 85px 16px;
       overflow-y: auto;
       display: flex;
       flex-direction: column;
@@ -216,17 +213,21 @@
     .chat-img-thumb { max-width: 250px; max-height: 250px; border-radius: 8px; display: block; margin-bottom: 4px; cursor: pointer; }
     .chat-audio-player { width: 220px; height: 34px; margin-top: 4px; outline: none; }
 
-    /* ============ 3. 🌟 BOTTOM INPUT BAR (បង្ហាញច្បាស់នៅបាតក្រោម ១០០%) ============ */
+    /* ============ 3. 🌟 BOTTOM INPUT BAR (ចាក់សោជាប់បាតក្រោមជានិច្ច) ============ */
     .chat-bottom-bar {
-      flex: 0 0 auto;
-      width: 100%;
-      height: 66px;
-      padding: 8px 14px 12px 14px;
-      background: #05131b;
-      border-top: 2px solid #102a3a;
-      z-index: 50;
-      display: flex;
-      align-items: center;
+      position: fixed !important;
+      bottom: 0 !important;
+      left: 0 !important;
+      right: 0 !important;
+      width: 100% !important;
+      height: 66px !important;
+      padding: 8px 14px 12px 14px !important;
+      background: #05131b !important;
+      border-top: 2px solid #102a3a !important;
+      z-index: 100 !important;
+      display: flex !important;
+      align-items: center !important;
+      box-shadow: 0 -6px 20px rgba(0, 0, 0, 0.6) !important;
     }
     .input-capsule {
       width: 100%;
@@ -286,17 +287,44 @@
     .modal-head-title { font-size: 14.5px; font-weight: 700; color: #fff; }
     .modal-close-btn { background: none; border: none; color: #94a3b8; font-size: 18px; cursor: pointer; padding: 4px; }
     .members-list { padding: 12px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; }
+
+    /* សមាជិកទូទៅ */
     .member-item {
-      display: flex; align-items: center; gap: 12px; padding: 8px 12px;
-      background: #11222e; border-radius: 10px; border: 1px solid #162f40;
+      display: flex; align-items: center; gap: 12px; padding: 10px 12px;
+      background: #11222e; border-radius: 12px; border: 1px solid #162f40;
+      transition: all 0.2s;
     }
+
+    /* 🌟 គណនីដែលកំពុងប្រើប្រាស់ (Active Account Highlight) */
+    .member-item.is-current-user {
+      background: #092638 !important;
+      border: 1.5px solid #0284c7 !important;
+      box-shadow: 0 0 14px rgba(2, 132, 199, 0.25) !important;
+    }
+
     .member-avatar {
       width: 36px; height: 36px; border-radius: 50%;
       background: #0284c7; color: #fff; font-weight: 700;
       display: flex; align-items: center; justify-content: center; font-size: 14px;
+      flex-shrink: 0;
     }
-    .member-info .m-name { font-size: 13.5px; font-weight: 700; color: #f8fafc; }
+    .member-info { flex: 1; min-width: 0; }
+    .member-info .m-name {
+      font-size: 13.5px; font-weight: 700; color: #f8fafc;
+      display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
+    }
     .member-info .m-sub { font-size: 11px; color: #38bdf8; margin-top: 2px; }
+
+    /* ស្លាកគណនីបច្ចុប្បន្ន */
+    .badge-current-user {
+      background: #059669;
+      color: #ffffff;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 7px;
+      border-radius: 20px;
+      letter-spacing: 0.2px;
+    }
 
     /* Loading Gate */
     .loading-gate {
@@ -339,7 +367,7 @@
           <span class="room-title-text" id="roomTitle">ក្រុមពិគ្រោះ និងដោះស្រាយចម្ងល់</span>
         </div>
 
-        <!-- 🌟 ប៊ូតុង ស្វែងរក 🔍 និង សមាជិក 👥 (ចុចដើរ ១០០% លើ Tablet) -->
+        <!-- 🌟 ប៊ូតុង ស្វែងរក 🔍 និង សមាជិក 👥 -->
         <div class="room-right">
           <button type="button" class="room-action-btn" onclick="toggleSearch()" title="ស្វែងរកសារ">
             <svg class="icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
@@ -368,7 +396,7 @@
       <div style="text-align:center; padding:30px; color:#64748b;">⏳ កំពុងទាញយកសារ...</div>
     </div>
 
-    <!-- 3. 🌟 BOTTOM INPUT CAPSULE (បង្ហាញនៅបាតក្រោម ១០០% មិនលិចបាត់ទៀតឡើយ) -->
+    <!-- 3. 🌟 BOTTOM INPUT CAPSULE (បង្ហាញនៅបាតក្រោមជាប់ជានិច្ច ១០០%) -->
     <div class="chat-bottom-bar" id="chatBottomBar">
       <div class="input-capsule">
         
@@ -425,7 +453,7 @@
 
   </div>
 
-  <!-- 👥 4. MEMBERS MODAL DIALOG -->
+  <!-- 👥 4. MEMBERS MODAL DIALOG (បង្ហាញតែគណនីពិតប្រាកដ) -->
   <div class="modal-overlay" id="membersModal" onclick="if(event.target===this) closeMembersModal()">
     <div class="modal-card">
       <div class="modal-head">
@@ -457,23 +485,17 @@
     var CURRENT_USER = null;
     var allCachedMessages = [];
 
-    // ── 🌟 មុខងារស្វ័យប្រវត្តិតម្រឹមផ្ទៃមើល Tablet កុំឱ្យរុញប្រអប់ផ្ញើសារធ្លាក់ចុះក្រោម ──
-    function syncVisibleHeight() {
+    // ── 🌟 មុខងារចងកម្ពស់ Dashboard មេ កុំឱ្យរុញប្រអប់ផ្ញើសារធ្លាក់ចុះក្រោម ──
+    function fixParentLayout() {
       try {
-        var h = window.innerHeight;
         if (window.parent && window.parent !== window) {
-          var frame = window.parent.document.getElementById('pageFrame');
-          if (frame) {
-            var r = frame.getBoundingClientRect();
-            var avail = window.parent.innerHeight - r.top;
-            if (avail > 200) {
-              h = avail;
-            }
+          var pWin = window.parent;
+          var pDoc = window.parent.document;
+          var mainWrap = pDoc.querySelector('.main-wrapper');
+          if (mainWrap) {
+            mainWrap.style.height = pWin.innerHeight + 'px';
+            mainWrap.style.maxHeight = pWin.innerHeight + 'px';
           }
-        }
-        var app = document.getElementById('chatApp');
-        if (app) {
-          app.style.height = h + 'px';
         }
       } catch(e) {}
     }
@@ -495,8 +517,10 @@
     }
 
     window.onload = async function() {
-      syncVisibleHeight();
-      window.addEventListener('resize', syncVisibleHeight);
+      fixParentLayout();
+      if (window.parent) {
+        window.parent.addEventListener('resize', fixParentLayout);
+      }
       await verifyAuthentication();
     };
 
@@ -511,7 +535,6 @@
         if (sess && sess.loggedIn) {
           CURRENT_USER = sess;
           document.getElementById('loadingGate').style.display = 'none';
-          syncVisibleHeight();
 
           await loadMessages();
           setInterval(loadMessages, 6000);
@@ -560,7 +583,7 @@
       renderMessages(filtered);
     }
 
-    // ── 👥 មុខងារសមាជិកក្រុម (ដំណើរការ ១០០% សម្រាប់គ្រូ & Admin) ──
+    // ── 👥 មុខងារសមាជិកក្រុម (បង្ហាញតែគណនីពិត + Highlight គណនីបច្ចុប្បន្ន) ──
     async function openMembersModal() {
       var modal = document.getElementById('membersModal');
       var area = document.getElementById('membersListArea');
@@ -571,68 +594,58 @@
         var res = await apiCall('getAllTeachers', { token: TOKEN });
         var teachers = (res && res.teachers && Array.isArray(res.teachers)) ? res.teachers : [];
 
-        var html = `
-          <div class="member-item">
-            <div class="member-avatar" style="background:#9333ea;">S</div>
-            <div class="member-info">
-              <div class="m-name" style="color:#facc15;">KrouDigital • System Owner</div>
-              <div class="m-sub">អ្នកគ្រប់គ្រងប្រព័ន្ធ (Admin)</div>
-            </div>
-          </div>
-        `;
-
-        if (teachers.length > 0) {
-          teachers.forEach(function(t) {
-            var isAdm = String(t.role).toLowerCase() === 'admin';
-            var initial = t.name ? t.name.charAt(0) : 'U';
-            html += `
-              <div class="member-item">
-                <div class="member-avatar" style="background:${isAdm ? '#9333ea' : '#059669'};">${initial}</div>
-                <div class="member-info">
-                  <div class="m-name" style="${isAdm ? 'color:#facc15;' : ''}">${escapeHtml(t.name)}</div>
-                  <div class="m-sub">${isAdm ? 'អ្នកគ្រប់គ្រងប្រព័ន្ធ (Admin)' : (t.assignedClass ? 'គ្រូថ្នាក់ទី ' + t.assignedClass : 'គ្រូបង្រៀន')}</div>
-                </div>
-              </div>
-            `;
-          });
-        } else {
-          if (CURRENT_USER) {
-            var initial = CURRENT_USER.name ? CURRENT_USER.name.charAt(0) : 'U';
-            html += `
-              <div class="member-item">
-                <div class="member-avatar" style="background:#059669;">${initial}</div>
-                <div class="member-info">
-                  <div class="m-name">${escapeHtml(CURRENT_USER.name)}</div>
-                  <div class="m-sub">${CURRENT_USER.role === 'admin' ? 'អ្នកគ្រប់គ្រង' : (CURRENT_USER.assignedClass ? 'គ្រូថ្នាក់ទី ' + CURRENT_USER.assignedClass : 'គ្រូបង្រៀន')}</div>
-                </div>
-              </div>
-            `;
-          }
+        if (teachers.length === 0) {
+          area.innerHTML = '<div style="text-align:center; padding:20px; color:#94a3b8;">មិនមានបញ្ជីសមាជិកឡើយ</div>';
+          return;
         }
 
-        area.innerHTML = html;
-      } catch (err) {
-        var html = `
-          <div class="member-item">
-            <div class="member-avatar" style="background:#9333ea;">S</div>
-            <div class="member-info">
-              <div class="m-name" style="color:#facc15;">KrouDigital • System Owner</div>
-              <div class="m-sub">អ្នកគ្រប់គ្រងប្រព័ន្ធ (Admin)</div>
-            </div>
-          </div>
-        `;
-        if (CURRENT_USER) {
+        var html = '';
+        teachers.forEach(function(t) {
+          var isAdm = String(t.role).toLowerCase() === 'admin';
+          var initial = t.name ? t.name.charAt(0) : (t.username ? t.username.charAt(0) : 'U');
+
+          // 🌟 ផ្ទៀងផ្ទាត់ថាតើជាគណនីដែលកំពុង Login ប្រើប្រាស់ឬទេ
+          var isCurrent = CURRENT_USER && (
+            (t.username && t.username.toLowerCase() === (CURRENT_USER.username || '').toLowerCase()) ||
+            (t.code && t.code === CURRENT_USER.code) ||
+            (t.name && t.name === CURRENT_USER.name)
+          );
+
+          var activeClass = isCurrent ? 'is-current-user' : '';
+          var roleSub = isAdm 
+            ? 'អ្នកគ្រប់គ្រងប្រព័ន្ធ (Admin)' 
+            : (t.assignedClass ? 'គ្រូថ្នាក់ទី ' + t.assignedClass : 'គ្រូបង្រៀន');
+
           html += `
-            <div class="member-item">
-              <div class="member-avatar" style="background:#059669;">${CURRENT_USER.name.charAt(0)}</div>
+            <div class="member-item ${activeClass}">
+              <div class="member-avatar" style="background:${isAdm ? '#9333ea' : '#059669'};">${initial}</div>
               <div class="member-info">
-                <div class="m-name">${escapeHtml(CURRENT_USER.name)}</div>
-                <div class="m-sub">${CURRENT_USER.assignedClass ? 'គ្រូថ្នាក់ទី ' + CURRENT_USER.assignedClass : 'គ្រូបង្រៀន'}</div>
+                <div class="m-name" style="${isAdm ? 'color:#facc15;' : ''}">
+                  ${escapeHtml(t.name || t.username)}
+                  ${isCurrent ? '<span class="badge-current-user">🟢 គណនីរបស់អ្នក (កំពុងប្រើ)</span>' : ''}
+                </div>
+                <div class="m-sub">${roleSub}</div>
               </div>
             </div>
           `;
-        }
+        });
+
         area.innerHTML = html;
+      } catch (err) {
+        // Fallback ប្រសិនបើទាញយកមិនបាន
+        if (CURRENT_USER) {
+          area.innerHTML = `
+            <div class="member-item is-current-user">
+              <div class="member-avatar" style="background:#059669;">${CURRENT_USER.name.charAt(0)}</div>
+              <div class="member-info">
+                <div class="m-name">${escapeHtml(CURRENT_USER.name)} <span class="badge-current-user">🟢 គណនីរបស់អ្នក (កំពុងប្រើ)</span></div>
+                <div class="m-sub">${CURRENT_USER.role === 'admin' ? 'អ្នកគ្រប់គ្រង' : (CURRENT_USER.assignedClass ? 'គ្រូថ្នាក់ទី ' + CURRENT_USER.assignedClass : 'គ្រូបង្រៀន')}</div>
+              </div>
+            </div>
+          `;
+        } else {
+          area.innerHTML = '<div style="text-align:center; color:#ef4444; padding:15px;">មិនអាចទាញយកបញ្ជីបានទេ</div>';
+        }
       }
     }
 
@@ -647,12 +660,13 @@
       input.focus();
     }
 
-    // ── 🌟 ទាញយកសារពិតប្រាកដ (កាត់ចោលសារស្វាគមន៍ចាស់ស្វ័យប្រវត្តិ) ──
+    // ── 🌟 ទាញយកសារពិតប្រាកដ (លុបសារស្វាគមន៍ចាស់ចោលស្វ័យប្រវត្តិ) ──
     async function loadMessages() {
       if (!CURRENT_USER) return;
       try {
         var res = await apiCall('getChatMessages', { roomId: CURRENT_ROOM, token: TOKEN });
         if (res && res.success && Array.isArray(res.messages)) {
+          // ❌ Auto-filter លុបសារស្វាគមន៍ចាស់ចោល មិនឱ្យបង្ហាញឡើយ
           allCachedMessages = res.messages.filter(function(m) {
             var c = String(m.content || m.text || '').trim();
             return c.indexOf('សូមស្វាគមន៍') === -1;
@@ -673,18 +687,19 @@
 
       var html = '';
       messages.forEach(function(m) {
+        // ផ្ទៀងផ្ទាត់សារផ្ទាល់ខ្លួន
         var isMe = CURRENT_USER && (m.senderCode === CURRENT_USER.code || m.senderCode === CURRENT_USER.username || m.senderName === CURRENT_USER.name);
         var rowClass = isMe ? 'outgoing' : 'incoming';
         
-        var isOwner = (m.senderRole === 'admin' || m.senderName.includes('KrouDigital') || m.senderName.includes('Owner'));
-        var avatarClass = isOwner ? 'purple-s' : 'green-l';
-        var senderClass = isOwner ? 'owner-gold' : 'teacher-grey';
-        var initial = isOwner ? 'S' : (m.senderName ? m.senderName.charAt(0) : 'U');
+        var isAdm = (m.senderRole === 'admin');
+        var avatarClass = isAdm ? 'purple-s' : 'green-l';
+        var senderClass = isAdm ? 'owner-gold' : 'teacher-grey';
+        var initial = m.senderName ? m.senderName.charAt(0) : 'U';
 
         var senderTitle = m.senderName;
         if (m.caption) {
           senderTitle += ' • ' + m.caption;
-        } else if (isOwner) {
+        } else if (isAdm) {
           senderTitle += ' • Admin';
         }
 
@@ -738,7 +753,7 @@
       }
     }
 
-    // ── ផ្ញើសារអក្សរ (ភ្ជាប់គណនីគ្រូពិតប្រាកដ) ──
+    // ── ផ្ញើសារអក្សរ ──
     async function sendMsg() {
       if (!CURRENT_USER) { redirectToLogin(); return; }
       var input = document.getElementById('msgInput');
