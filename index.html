@@ -211,9 +211,7 @@
     .nav-icon { font-size: 16px; width: 22px; text-align: center; flex-shrink: 0; }
     .sidebar.collapsed .nav-text { opacity: 0; width: 0; display: none; }
 
-    /* =========================================================
-       🌟 ដាក់ប៊ូតុងលាក់/បង្រួមនៅខាងក្រោម (FOOTER)
-    ========================================================= */
+    /* ============ SIDEBAR FOOTER ============ */
     .sidebar-footer {
       padding: 12px 10px;
       border-top: 1px solid rgba(255, 255, 255, 0.08);
@@ -269,9 +267,7 @@
     }
     .admin-clear-btn:hover { background: rgba(220, 38, 38, 0.4); color: #fff; }
 
-    /* =========================================================
-       🖥️ TOPBAR
-    ========================================================= */
+    /* ============ MAIN TOPBAR ============ */
     .main-wrapper {
       flex: 1;
       height: 100vh;
@@ -397,9 +393,7 @@
     }
     .btn-logout:hover { background: #ef4444; color: #fff; }
 
-    /* =========================================================
-       📄 VIEW PANELS
-    ========================================================= */
+    /* ============ VIEW PANELS ============ */
     .content-area {
       flex: 1;
       min-height: 0;
@@ -424,9 +418,7 @@
       transform: translateY(0);
     }
 
-    /* =========================================================
-       🌟 1. DASHBOARD VIEW
-    ========================================================= */
+    /* ============ 1. DASHBOARD VIEW ============ */
     #dashboardView { padding: 22px 28px 45px; }
     .dash-container {
       max-width: 1400px;
@@ -583,6 +575,7 @@
       white-space: nowrap;
     }
 
+    /* 🌟 Quick Grid រៀបចំស្អាត 7 មុខងារ (មានទាំង Chat) */
     .quick-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -620,11 +613,8 @@
     .class-prog-fill { height: 100%; border-radius: 20px; background: linear-gradient(90deg, #3b82f6, #8b5cf6); transition: width 0.9s ease; }
     .class-prog-count { width: 38px; text-align: right; font-weight: 700; color: var(--text-muted); }
 
-    /* =========================================================
-       📁 2. REPORTS HUB VIEW
-    ========================================================= */
+    /* ============ 2. REPORTS HUB VIEW ============ */
     #reportsHubView { padding: 22px 28px 45px; }
-
     .reports-hub-header {
       display: flex;
       align-items: center;
@@ -714,9 +704,7 @@
       transform: translateX(2px);
     }
 
-    /* =========================================================
-       🪟 3. IFRAME VIEW
-    ========================================================= */
+    /* ============ 3. IFRAME VIEW ============ */
     #iframeView {
       padding: 0;
       background: var(--surface);
@@ -1008,11 +996,8 @@
 
   <div id="mobileBackdrop" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.55); z-index:80; backdrop-filter:blur(3px);" onclick="closeSidebarMobile()"></div>
 
-  <!-- =========================================================
-       🧭 SIDEBAR
-  ========================================================= -->
+  <!-- ============ 🧭 SIDEBAR ============ -->
   <aside class="sidebar" id="sidebar">
-    <!-- Brand Box ស្អាតគ្មានប៊ូតុងខាងលើទៀតទេ -->
     <div class="brand-box">
       <div class="brand-info">
         <div class="brand-logo">🏫</div>
@@ -1021,7 +1006,6 @@
           <div class="brand-sub">កំពង់ល្ពៅ · គ្រប់គ្រងសិស្ស</div>
         </div>
       </div>
-      <!-- ប៊ូតុងបិទសម្រាប់ Mobile -->
       <button class="sidebar-close-mobile-btn" onclick="closeSidebarMobile()">✕</button>
     </div>
 
@@ -1058,7 +1042,12 @@
         <span class="nav-icon">📊</span><span class="nav-text">ស្រង់ពិន្ទុ</span>
       </div>
 
-      <!-- 🌟 ប៊ូតុងរបាយការណ៍ (បើក Hub ភ្លាមៗ) -->
+      <!-- 🌟 មុខងារថ្មី៖ សារសន្ទនា (Chat) ក្នុង Sidebar -->
+      <div class="nav-link-btn" data-page="chat" onclick="navigate('chat', this)">
+        <span class="nav-icon">💬</span><span class="nav-text">សារសន្ទនា</span>
+      </div>
+
+      <!-- 🌟 ប៊ូតុងរបាយការណ៍ -->
       <div class="nav-link-btn" data-page="reportsHub" onclick="navigate('reportsHub', this)">
         <span class="nav-icon">📁</span><span class="nav-text">របាយការណ៍</span>
       </div>
@@ -1068,7 +1057,7 @@
       </div>
     </nav>
 
-    <!-- 🌟 ដាក់ប៊ូតុងលាក់/បង្រួមនៅខាងក្រោមនេះ -->
+    <!-- 🌟 ប៊ូតុងលាក់/បង្រួមនៅខាងក្រោម -->
     <div class="sidebar-footer">
       <button class="admin-clear-btn" id="adminClearBtn" onclick="confirmClearAllData()">
         <span>🗑️</span><span>សម្អាតទិន្នន័យទាំងអស់</span>
@@ -1081,9 +1070,7 @@
     </div>
   </aside>
 
-  <!-- =========================================================
-       🖥️ MAIN AREA
-  ========================================================= -->
+  <!-- ============ 🖥️ MAIN AREA ============ -->
   <main class="main-wrapper">
     
     <!-- Topbar -->
@@ -1175,12 +1162,13 @@
               <div class="dash-panel-header">
                 <div class="dash-panel-title">⚡ ចូលប្រើលឿន</div>
               </div>
+              <!-- 🌟 Quick Grid (មានមុខងារ Chat ថ្មី) -->
               <div class="quick-grid">
                 <div class="quick-item-card" onclick="navigateFromDash('addStudent')"><span class="qi">✍️</span><span class="qt">បញ្ចូលសិស្ស</span></div>
                 <div class="quick-item-card" onclick="navigateFromDash('attendance')"><span class="qi">📅</span><span class="qt">វត្តមាន</span></div>
                 <div class="quick-item-card" onclick="navigateFromDash('score')"><span class="qi">📊</span><span class="qt">ស្រង់ពិន្ទុ</span></div>
                 <div class="quick-item-card" onclick="navigateFromDash('card')"><span class="qi">🪪</span><span class="qt">កាតសិស្ស</span></div>
-                <div class="quick-item-card" onclick="navigateFromDash('group')"><span class="qi">👥</span><span class="qt">បែងចែកក្រុម</span></div>
+                <div class="quick-item-card" onclick="navigateFromDash('chat')"><span class="qi">💬</span><span class="qt">សារសន្ទនា</span></div>
                 <div class="quick-item-card" onclick="navigateFromDash('reportsHub')"><span class="qi">📁</span><span class="qt">របាយការណ៍</span></div>
               </div>
             </div>
@@ -1199,7 +1187,7 @@
         </div>
       </div>
 
-      <!-- 2️⃣ REPORTS HUB VIEW (ជំនួសផ្ទាំង Dashboard) -->
+      <!-- 2️⃣ REPORTS HUB VIEW -->
       <div class="view-panel" id="reportsHubView">
         <div class="dash-container">
           
@@ -1290,9 +1278,10 @@
         <span class="m-icon">📊</span>
         <span class="m-txt">ស្រង់ពិន្ទុ</span>
       </div>
-      <div class="m-nav-item" id="mNavReports" onclick="navigate('reportsHub', null)">
-        <span class="m-icon">📁</span>
-        <span class="m-txt">របាយការណ៍</span>
+      <!-- 🌟 Bottom Nav ផ្លូវកាត់ទៅ Chat -->
+      <div class="m-nav-item" id="mNavChat" onclick="navigate('chat', null)">
+        <span class="m-icon">💬</span>
+        <span class="m-txt">សារសន្ទនា</span>
       </div>
       <div class="m-nav-item" onclick="openSidebarMobile()">
         <span class="m-icon">☰</span>
@@ -1374,6 +1363,7 @@
   window.TEACHER_NAME = TEACHER_NAME;
   window.USER_ROLE = USER_ROLE;
 
+  // 🌟 បន្ថែមចំណងជើងទំព័រ Chat
   const PAGE_TITLES = {
     dashboard: "🏠 ទំព័រដើម",
     reportsHub: "📁 របាយការណ៍",
@@ -1385,6 +1375,7 @@
     wheel: "🎡 បង្វិលកង់ជ្រើសរើស",
     attendance: "📅 ស្រង់វត្តមានសិស្ស",
     score: "📊 ស្រង់ពិន្ទុសិស្ស",
+    chat: "💬 សារសន្ទនា", // 👈 មុខងារសារសន្ទនា
     rank: "🏆 តារាងចំណាត់ថ្នាក់",
     honor: "🌟 តារាងកិត្តិយស",
     certificate: "🎖️ បណ្ណសរសើរ",
@@ -1477,6 +1468,7 @@
 
   var currentPage = localStorage.getItem('krou_active_page') || 'dashboard';
 
+  // 🌟 Map ឈ្មោះទំព័រទៅកាន់ឈ្មោះ File .html
   function mapPageToFile(page) {
     var map = {
       'dashboard': 'dashboard',
@@ -1488,6 +1480,7 @@
       'wheel': 'wheel',
       'attendance': 'attendance',
       'score': 'score',
+      'chat': 'chat', // 👈 ភ្ជាប់ chat.html
       'roster': 'roster',
       'rank': 'rank',
       'honor': 'honor',
@@ -1527,6 +1520,9 @@
     } else if (cleanFile === 'score') {
       var mb = document.getElementById('mNavScores');
       if (mb) mb.classList.add('active');
+    } else if (cleanFile === 'chat') {
+      var mb = document.getElementById('mNavChat');
+      if (mb) mb.classList.add('active');
     } else if (cleanFile === 'reportsHub' || isReportChild) {
       var mb = document.getElementById('mNavReports');
       if (mb) mb.classList.add('active');
@@ -1562,7 +1558,8 @@
     var overlay = document.getElementById('loadingOverlay');
     overlay.classList.add('show');
 
-    frame.src = cleanFile + '.html?v=' + Date.now();
+    // 🌟 បញ្ជូន Token តាម Query String ទៅកាន់ Iframe (រួមទាំង chat.html)
+    frame.src = cleanFile + '.html?token=' + encodeURIComponent(SESSION_TOKEN || '') + '&v=' + Date.now();
   }
 
   function navigateFromDash(page) { navigate(page, null); }
@@ -1571,9 +1568,6 @@
     document.getElementById('loadingOverlay').classList.remove('show');
   });
 
-  /* =========================================================
-     🌟 មុខងារបង្រួម/លាក់របាចំហៀង (TOGGLE SIDEBAR AT BOTTOM)
-  ========================================================= */
   function toggleSidebarCollapse() {
     var sidebar = document.getElementById('sidebar');
     var isCollapsed = sidebar.classList.toggle('collapsed');
@@ -1816,7 +1810,6 @@
     setTodayPill();
     initGreetings();
 
-    // ពិនិត្យទាញយកស្ថានភាពបង្រួមរបាដែលបានរក្សាទុក
     if (localStorage.getItem('krou_sidebar_collapsed') === '1' && window.innerWidth > 768) {
       document.getElementById('sidebar').classList.add('collapsed');
       updateCollapseUI(true);
