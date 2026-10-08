@@ -11,18 +11,16 @@
     @page { size: A4 portrait; margin: 8mm; }
     * { box-sizing: border-box; }
     
-    /* ── 🌟 កែប្រែដើម្បីឱ្យអូស Scroll ចុះក្រោមបានស្រួល ១០០% ── */
     html { 
       height: auto !important; 
       min-height: 100%; 
       -webkit-text-size-adjust: 100%; 
-      -moz-text-size-adjust: 100%; 
       text-size-adjust: 100%; 
     }
     body {
-      font-family: 'Noto Serif Khmer', 'Kantumruy Pro', 'Noto Sans Khmer', 'Khmer OS', 'Khmer OS System', sans-serif;
+      font-family: 'Noto Serif Khmer', 'Kantumruy Pro', 'Noto Sans Khmer', 'Khmer OS', sans-serif;
       margin: 0; 
-      padding: 0 0 120px 0 !important; /* បន្ថែម padding ខាងក្រោមឱ្យអូសផុត */
+      padding: 0 0 120px 0 !important;
       background: white; 
       color: #000; 
       line-height: 1.4;
@@ -74,24 +72,33 @@
       font-family: 'Noto Serif Khmer', 'Kantumruy Pro'; font-size: 11.5px;
       text-align: center; background-color: #f8fafc; color: #000; font-weight: 600;
     }
+    
+    /* ── ឈ្មោះគ្រូ DRAGGABLE (ច្បាស់ មិនបាត់ មិនលិចក្រោយគេ) ── */
     .teacher-name-display {
       font-family: 'Moul', cursive;
       font-size: 12px;
       color: #000;
       margin-top: 6px;
-      min-height: 18px;
+      min-height: 20px;
       text-align: center;
       display: inline-block;
-      cursor: move;
+      cursor: grab;
       user-select: none;
       -webkit-user-select: none;
-      padding: 10px 8px;
+      padding: 4px 10px;
       border: 1px dashed transparent;
       border-radius: 4px;
       touch-action: none;
+      white-space: nowrap !important;
+      z-index: 50 !important;
     }
     .teacher-name-display:hover { border-color: #93c5fd; background: rgba(59,130,246,0.06); }
-    .teacher-name-display.dragging { border-color: #2563eb; background: rgba(37,99,235,0.10); }
+    .teacher-name-display.dragging { 
+      border-color: #2563eb !important; 
+      background: rgba(37,99,235,0.15) !important;
+      cursor: grabbing !important;
+      box-shadow: 0 4px 14px rgba(37,99,235,0.25);
+    }
     
     .control-panel { margin-bottom: 15px; background: #eff6ff; padding: 10px 15px; border-radius: 8px; display: flex; flex-direction: column; gap: 12px; border: 1px solid #bfdbfe; }
     .control-row { display: flex; gap: 15px; align-items: center; justify-content: space-between; flex-wrap: wrap; }
@@ -106,7 +113,6 @@
     .layout-btn { padding: 6px 12px; border: 1px solid #93c5fd; border-radius: 5px; background: white; color: #1e3a8a; cursor: pointer; font-family: 'Noto Serif Khmer', 'Kantumruy Pro'; font-weight: 700; }
     .layout-btn.active { background: #2563eb; color: white; border-color: #2563eb; }
 
-    /* ── STYLES FOR ZOOM BUTTONS ── */
     .zoom-btn-group {
       display: inline-flex;
       align-items: center;
@@ -209,7 +215,6 @@
       </div>
 
       <div class="cp-actions" style="display:flex; gap:8px; align-items:center;">
-        <!-- 🔍 ZOOM BUTTONS (100% / 75% / 50%) -->
         <div class="zoom-btn-group" title="ពង្រីក/បង្រួមទំហំមើល">
           <button type="button" class="zoom-btn active" data-zoom="1" onclick="setZoom(1, this)">100%</button>
           <button type="button" class="zoom-btn" data-zoom="0.75" onclick="setZoom(0.75, this)">75%</button>
@@ -262,98 +267,97 @@
   </div>
 
   <div id="printPage" style="position:relative;">
-  <div class="document-header">
-    <div class="school-info">
-      <span style="font-weight:700;">រដ្ឋបាល ស្រុកសំឡូត</span><br>
-      <span style="font-weight:700;">សាលាបឋមសិក្សាកំពង់ល្ពៅ</span>
+    <div class="document-header">
+      <div class="school-info">
+        <span style="font-weight:700;">រដ្ឋបាល ស្រុកសំឡូត</span><br>
+        <span style="font-weight:700;">សាលាបឋមសិក្សាកំពង់ល្ពៅ</span>
+      </div>
+      <div class="nation-info">
+        <div class="khmer-moul" style="font-size:14px;">ព្រះរាជាណាចក្រកម្ពុជា</div>
+        <div class="khmer-moul" style="font-size:12px; margin-top:3px;">ជាតិ សាសនា ព្រះមហាក្សត្រ</div>
+      </div>
     </div>
-    <div class="nation-info">
-      <div class="khmer-moul" style="font-size:14px;">ព្រះរាជាណាចក្រកម្ពុជា</div>
-      <div class="khmer-moul" style="font-size:12px; margin-top:3px;">ជាតិ សាសនា ព្រះមហាក្សត្រ</div>
+
+    <div style="text-align:center; margin-top:10px; margin-bottom:8px;">
+      <span id="txtClassHeader" class="khmer-moul" style="font-size:13px; color:#1e3a8a;">ថ្នាក់ទី...</span><br>
+      <span id="txtTitleHeader" class="khmer-moul" style="font-size:14px; margin-top:3px; display:inline-block;">ចំណាត់ថ្នាក់</span>
     </div>
-  </div>
 
-  <div style="text-align:center; margin-top:10px; margin-bottom:8px;">
-    <span id="txtClassHeader" class="khmer-moul" style="font-size:13px; color:#1e3a8a;">ថ្នាក់ទី...</span><br>
-    <span id="txtTitleHeader" class="khmer-moul" style="font-size:14px; margin-top:3px; display:inline-block;">ចំណាត់ថ្នាក់</span>
-  </div>
-
-  <div id="rankLayout1" class="rank-layout active">
-    <table class="data-table">
-      <thead>
-        <tr>
-          <th style="width:5.8%;">ល.រ</th>
-          <th style="width:9%;">អត្តលេខ</th>
-          <th style="width:27.1%;">គោត្តនាម និងនាម</th>
-          <th style="width:6.3%;">ភេទ</th>
-          <th id="thTotalHeader" style="width:9.9%;">ពិន្ទុសរុប</th>
-          <th style="width:9.9%;">មធ្យមភាគ</th>
-          <th style="width:10.7%;">ចំណាត់ថ្នាក់</th>
-          <th style="width:13.2%;">និទ្ទេស</th>
-          <th style="width:8.2%;">លទ្ធផល</th>
-        </tr>
-      </thead>
-      <tbody id="rankBody">
-        <tr><td colspan="9" style="padding:20px; color:#64748b;">កំពុងទាញយកទិន្នន័យ...</td></tr>
-      </tbody>
-    </table>
-  </div>
-
-  <div id="rankLayout2" class="rank-layout">
-    <div class="rank-two-columns">
+    <div id="rankLayout1" class="rank-layout active">
       <table class="data-table">
-        <thead id="rankHeadLeft"></thead>
-        <tbody id="rankBodyLeft">
-          <tr><td colspan="9" style="padding:15px; color:#64748b;">កំពុងទាញយកទិន្នន័យ...</td></tr>
-        </tbody>
-      </table>
-      <table class="data-table">
-        <thead id="rankHeadRight"></thead>
-        <tbody id="rankBodyRight">
-          <tr><td colspan="9" style="padding:15px; color:#64748b;">កំពុងទាញយកទិន្នន័យ...</td></tr>
+        <thead>
+          <tr>
+            <th style="width:5.8%;">ល.រ</th>
+            <th style="width:9%;">អត្តលេខ</th>
+            <th style="width:27.1%;">គោត្តនាម និងនាម</th>
+            <th style="width:6.3%;">ភេទ</th>
+            <th id="thTotalHeader" style="width:9.9%;">ពិន្ទុសរុប</th>
+            <th style="width:9.9%;">មធ្យមភាគ</th>
+            <th style="width:10.7%;">ចំណាត់ថ្នាក់</th>
+            <th style="width:13.2%;">និទ្ទេស</th>
+            <th style="width:8.2%;">លទ្ធផល</th>
+          </tr>
+        </thead>
+        <tbody id="rankBody">
+          <tr><td colspan="9" style="padding:20px; color:#64748b;">កំពុងទាញយកទិន្នន័យ...</td></tr>
         </tbody>
       </table>
     </div>
-  </div>
 
-  <div class="summary-boxes">
-    <div class="summary-box-left">
-      • សិស្សជាប់មធ្យមភាគ ៖ <span id="stPass">0</span> នាក់ (ស្រី <span id="stPassFemale">0</span>) <span id="pPass" class="grade-percent">0.00%</span><br>
-      • សិស្សធ្លាក់មធ្យមភាគ ៖ <span id="stFail">0</span> នាក់ (ស្រី <span id="stFailFemale">0</span>) <span id="pFail" class="grade-percent">0.00%</span>
-    </div>
-    <div class="summary-box-left">
-      • និទ្ទេស A ៖ <span id="cA">0</span> នាក់ (ស្រី <span id="fA">0</span>) <span id="pA" class="grade-percent">0.00%</span><br>
-      • និទ្ទេស B ៖ <span id="cB">0</span> នាក់ (ស្រី <span id="fB">0</span>) <span id="pB" class="grade-percent">0.00%</span><br>
-      • និទ្ទេស C ៖ <span id="cC">0</span> នាក់ (ស្រី <span id="fC">0</span>) <span id="pC" class="grade-percent">0.00%</span>
-    </div>
-    <div class="summary-box-right">
-      • និទ្ទេស D ៖ <span id="cD">0</span> នាក់ (ស្រី <span id="fD">0</span>) <span id="pD" class="grade-percent">0.00%</span><br>
-      • និទ្ទេស E ៖ <span id="cE">0</span> នាក់ (ស្រី <span id="fE">0</span>) <span id="pE" class="grade-percent">0.00%</span><br>
-      • និទ្ទេស F ៖ <span id="cF">0</span> នាក់ (ស្រី <span id="fF">0</span>) <span id="pF" class="grade-percent">0.00%</span>
-    </div>
-  </div>
-
-  <div class="footer-container">
-    <div class="footer-left">
-      បានឃើញ និងឯកភាព<br>
-      <div class="khmer-moul" style="font-size:12px; margin-top:5px;">នាយកសាលា</div>
-    </div>
-    <div class="footer-right">
-      <div style="font-size:11px; font-weight:500; text-align:center; margin-bottom:4px;">
-        <input type="text" id="lunarInput" value="" class="inline-input" style="width:100%;" placeholder="វាយបញ្ចូលថ្ងៃចន្ទគតិទីនេះ...">
+    <div id="rankLayout2" class="rank-layout">
+      <div class="rank-two-columns">
+        <table class="data-table">
+          <thead id="rankHeadLeft"></thead>
+          <tbody id="rankBodyLeft">
+            <tr><td colspan="9" style="padding:15px; color:#64748b;">កំពុងទាញយកទិន្នន័យ...</td></tr>
+          </tbody>
+        </table>
+        <table class="data-table">
+          <thead id="rankHeadRight"></thead>
+          <tbody id="rankBodyRight">
+            <tr><td colspan="9" style="padding:15px; color:#64748b;">កំពុងទាញយកទិន្នន័យ...</td></tr>
+          </tbody>
+        </table>
       </div>
-      <div style="margin-top:4px; font-size:11.5px;">
-        ធ្វើនៅកំពង់ល្ពៅ, ថ្ងៃទី<input type="text" id="dayInput" value="" class="inline-input" style="width:40px; margin:0 4px;" placeholder="...">
-        ខែ<span id="selectedMonthTxt" style="font-weight:600; padding:0 4px;">...</span>
-        ឆ្នាំ<span id="currentYearTxt">២០២៦</span>
+    </div>
+
+    <div class="summary-boxes">
+      <div class="summary-box-left">
+        • សិស្សជាប់មធ្យមភាគ ៖ <span id="stPass">0</span> នាក់ (ស្រី <span id="stPassFemale">0</span>) <span id="pPass" class="grade-percent">0.00%</span><br>
+        • សិស្សធ្លាក់មធ្យមភាគ ៖ <span id="stFail">0</span> នាក់ (ស្រី <span id="stFailFemale">0</span>) <span id="pFail" class="grade-percent">0.00%</span>
       </div>
-      <div class="khmer-moul" style="font-size:12px; margin-top:6px;">គ្រូបន្ទុកថ្នាក់</div>
-      <div class="teacher-name-display" id="teacherNameDisplay" title="អូសដើម្បីផ្លាស់ទីតាំង">&nbsp;</div>
+      <div class="summary-box-left">
+        • និទ្ទេស A ៖ <span id="cA">0</span> នាក់ (ស្រី <span id="fA">0</span>) <span id="pA" class="grade-percent">0.00%</span><br>
+        • និទ្ទេស B ៖ <span id="cB">0</span> នាក់ (ស្រី <span id="fB">0</span>) <span id="pB" class="grade-percent">0.00%</span><br>
+        • និទ្ទេស C ៖ <span id="cC">0</span> នាក់ (ស្រី <span id="fC">0</span>) <span id="pC" class="grade-percent">0.00%</span>
+      </div>
+      <div class="summary-box-right">
+        • និទ្ទេស D ៖ <span id="cD">0</span> នាក់ (ស្រី <span id="fD">0</span>) <span id="pD" class="grade-percent">0.00%</span><br>
+        • និទ្ទេស E ៖ <span id="cE">0</span> នាក់ (ស្រី <span id="fE">0</span>) <span id="pE" class="grade-percent">0.00%</span><br>
+        • និទ្ទេស F ៖ <span id="cF">0</span> នាក់ (ស្រី <span id="fF">0</span>) <span id="pF" class="grade-percent">0.00%</span>
+      </div>
+    </div>
+
+    <div class="footer-container">
+      <div class="footer-left">
+        បានឃើញ និងឯកភាព<br>
+        <div class="khmer-moul" style="font-size:12px; margin-top:5px;">នាយកសាលា</div>
+      </div>
+      <div class="footer-right">
+        <div style="font-size:11px; font-weight:500; text-align:center; margin-bottom:4px;">
+          <input type="text" id="lunarInput" value="" class="inline-input" style="width:100%;" placeholder="វាយបញ្ចូលថ្ងៃចន្ទគតិទីនេះ...">
+        </div>
+        <div style="margin-top:4px; font-size:11.5px;">
+          ធ្វើនៅកំពង់ល្ពៅ, ថ្ងៃទី<input type="text" id="dayInput" value="" class="inline-input" style="width:40px; margin:0 4px;" placeholder="...">
+          ខែ<span id="selectedMonthTxt" style="font-weight:600; padding:0 4px;">...</span>
+          ឆ្នាំ<span id="currentYearTxt">២០២៦</span>
+        </div>
+        <div class="khmer-moul" style="font-size:12px; margin-top:6px;">គ្រូបន្ទុកថ្នាក់</div>
+        <div class="teacher-name-display" id="teacherNameDisplay" title="អូសដើម្បីផ្លាស់ទីតាំង">&nbsp;</div>
+      </div>
     </div>
   </div>
-  </div>
 
-  <!-- 🔗 ភ្ជាប់ api.js (បើមាន) -->
   <script src="api.js"></script>
 
   <script>
@@ -400,7 +404,7 @@
       return json;
     }
 
-    // ── 🔍 មុខងារ ZOOM (100% / 75% / 50%) ──
+    // ── 🔍 មុខងារ ZOOM ──
     function setZoom(scale, btnEl) {
       var el = document.getElementById('printPage');
       if (el) el.style.zoom = scale;
@@ -416,12 +420,19 @@
       _set('rank_zoom_level', scale);
     }
 
+    function getPageZoom() {
+      var page = document.getElementById('printPage');
+      if (!page) return 1;
+      var z = parseFloat(page.style.zoom);
+      return (Number.isFinite(z) && z > 0) ? z : 1;
+    }
+
     window.onload = function() {
       setCurrentKhmerYear();
       setCurrentKhmerDay();
       initDraggableTeacherName();
-      loadClassList();
       initTeacherSession();
+      loadClassListFast(); // ⚡ បង្កើនល្បឿនទាញយក
 
       const savedLayout = localStorage.getItem('rankLayout');
       setRankLayout(savedLayout === '2' ? 2 : 1);
@@ -465,6 +476,7 @@
       if (dayEl) dayEl.value = toKhmerNum(new Date().getDate());
     }
 
+    // ── 🌟 ឈ្មោះគ្រូ DRAGGABLE (ដោះស្រាយកំហុសហោះបាត់ឈ្មោះពេល ZOOM) ──
     var TEACHER_POS_KEY = 'teacherNameDragPosPct';
 
     function initDraggableTeacherName() {
@@ -475,38 +487,67 @@
       try {
         var saved = JSON.parse(localStorage.getItem(TEACHER_POS_KEY) || 'null');
         if (saved && typeof saved.leftPct === 'number' && typeof saved.topPct === 'number') {
-          el.style.position = 'absolute';
-          el.style.left = saved.leftPct + '%';
-          el.style.top = saved.topPct + '%';
-          el.style.margin = '0';
+          if (saved.leftPct >= 0 && saved.leftPct <= 95 && saved.topPct >= 0 && saved.topPct <= 98) {
+            el.style.position = 'absolute';
+            el.style.left = saved.leftPct + '%';
+            el.style.top = saved.topPct + '%';
+            el.style.margin = '0';
+          } else {
+            localStorage.removeItem(TEACHER_POS_KEY);
+          }
         }
-      } catch (e) {}
+      } catch (e) {
+        localStorage.removeItem(TEACHER_POS_KEY);
+      }
 
       var isDragging = false, offsetX = 0, offsetY = 0;
 
       function startDrag(clientX, clientY) {
         isDragging = true;
         el.classList.add('dragging');
-        if (el.style.position !== 'absolute') {
-          var pageRect = page.getBoundingClientRect();
-          var rect = el.getBoundingClientRect();
-          el.style.position = 'absolute';
-          el.style.left = (rect.left - pageRect.left) + 'px';
-          el.style.top = (rect.top - pageRect.top) + 'px';
-          el.style.margin = '0';
-        }
-        var rect2 = el.getBoundingClientRect();
-        offsetX = clientX - rect2.left;
-        offsetY = clientY - rect2.top;
+
+        var zoom = getPageZoom();
+        var pageRect = page.getBoundingClientRect();
+        var rect = el.getBoundingClientRect();
+
+        var unzoomedLeft = (rect.left - pageRect.left) / zoom;
+        var unzoomedTop  = (rect.top  - pageRect.top)  / zoom;
+
+        el.style.position = 'absolute';
+        el.style.left = unzoomedLeft + 'px';
+        el.style.top = unzoomedTop + 'px';
+        el.style.margin = '0';
+
+        var pointerPageX = (clientX - pageRect.left) / zoom;
+        var pointerPageY = (clientY - pageRect.top)  / zoom;
+
+        offsetX = pointerPageX - unzoomedLeft;
+        offsetY = pointerPageY - unzoomedTop;
       }
 
-      function moveDrag(clientX, clientY) {
+      function moveDrag(clientX, clientY, e) {
         if (!isDragging) return;
+        if (e && e.cancelable) e.preventDefault();
+
+        var zoom = getPageZoom();
         var pageRect = page.getBoundingClientRect();
-        var leftPx = clientX - offsetX - pageRect.left;
-        var topPx = clientY - offsetY - pageRect.top;
-        el.style.left = leftPx + 'px';
-        el.style.top = topPx + 'px';
+
+        var pointerPageX = (clientX - pageRect.left) / zoom;
+        var pointerPageY = (clientY - pageRect.top)  / zoom;
+
+        var newLeft = pointerPageX - offsetX;
+        var newTop  = pointerPageY - offsetY;
+
+        var unzoomedPageW = pageRect.width / zoom;
+        var unzoomedPageH = pageRect.height / zoom;
+        var elW = el.offsetWidth || 140;
+        var elH = el.offsetHeight || 26;
+
+        newLeft = Math.max(5, Math.min(newLeft, unzoomedPageW - elW - 10));
+        newTop  = Math.max(5, Math.min(newTop, unzoomedPageH - elH - 10));
+
+        el.style.left = newLeft + 'px';
+        el.style.top = newTop + 'px';
       }
 
       function endDrag() {
@@ -514,10 +555,19 @@
         isDragging = false;
         el.classList.remove('dragging');
 
+        var zoom = getPageZoom();
         var pageRect = page.getBoundingClientRect();
-        var elRect = el.getBoundingClientRect();
-        var leftPct = pageRect.width  > 0 ? ((elRect.left - pageRect.left) / pageRect.width)  * 100 : 0;
-        var topPct  = pageRect.height > 0 ? ((elRect.top  - pageRect.top)  / pageRect.height) * 100 : 0;
+        var unzoomedPageW = pageRect.width / zoom;
+        var unzoomedPageH = pageRect.height / zoom;
+
+        var currentLeft = parseFloat(el.style.left) || 0;
+        var currentTop  = parseFloat(el.style.top)  || 0;
+
+        var leftPct = (currentLeft / unzoomedPageW) * 100;
+        var topPct  = (currentTop  / unzoomedPageH) * 100;
+
+        leftPct = Math.max(0, Math.min(leftPct, 95));
+        topPct  = Math.max(0, Math.min(topPct, 98));
 
         el.style.left = leftPct + '%';
         el.style.top = topPct + '%';
@@ -526,18 +576,19 @@
       }
 
       el.addEventListener('mousedown', function(e) { startDrag(e.clientX, e.clientY); e.preventDefault(); });
-      document.addEventListener('mousemove', function(e) { moveDrag(e.clientX, e.clientY); });
+      document.addEventListener('mousemove', function(e) { moveDrag(e.clientX, e.clientY, e); });
       document.addEventListener('mouseup', endDrag);
 
       el.addEventListener('touchstart', function(e) {
-        var t = e.touches[0];
-        startDrag(t.clientX, t.clientY);
-      }, { passive: true });
+        if (e.touches.length === 1) {
+          startDrag(e.touches[0].clientX, e.touches[0].clientY);
+        }
+      }, { passive: false });
       document.addEventListener('touchmove', function(e) {
         if (!isDragging) return;
         var t = e.touches[0];
-        moveDrag(t.clientX, t.clientY);
-      }, { passive: true });
+        moveDrag(t.clientX, t.clientY, e);
+      }, { passive: false });
       document.addEventListener('touchend', endDrag);
     }
 
@@ -609,32 +660,46 @@
         : document.getElementById('monthSelect').value;
     }
 
-    async function loadClassList() {
+    // ⚡ បង្កើនល្បឿនដោយប្រើប្រាស់ Cache បញ្ជីថ្នាក់ក្នុង LocalStorage
+    async function loadClassListFast() {
       let select = document.getElementById('classSelect');
-      select.innerHTML = '<option value="">-- កំពុងទាញយក... --</option>';
+      var cachedClasses = _get('krou_cached_classes');
+
+      if (cachedClasses) {
+        try {
+          var arr = JSON.parse(cachedClasses);
+          renderClassOptions(arr);
+          loadRankData();
+        } catch(e){}
+      }
 
       try {
         var res = await apiCall('getClassListForSession', { token: TOKEN });
         var classes = Array.isArray(res) ? res : (res && res.classes ? res.classes : (res && res.data ? res.data : []));
 
-        select.innerHTML = '';
         if (classes && classes.length > 0) {
-          classes.forEach(function(c) {
-            let opt = document.createElement('option');
-            opt.value = c.toString().trim();
-            opt.textContent = c.toString().startsWith("ថ្នាក់") ? c : "ថ្នាក់ទី " + c;
-            select.appendChild(opt);
-          });
-
-          if (USER_CLASS && USER_ROLE !== 'admin') {
-            select.value = USER_CLASS;
-            select.disabled = true;
-          }
+          _set('krou_cached_classes', JSON.stringify(classes));
+          renderClassOptions(classes);
+          if (!cachedClasses) loadRankData();
         }
-        loadRankData();
       } catch (err) {
-        console.error('loadClassList error:', err);
-        select.innerHTML = '<option value="">បរាជ័យក្នុងការទាញយក</option>';
+        if (!cachedClasses) select.innerHTML = '<option value="">បរាជ័យក្នុងការទាញយក</option>';
+      }
+    }
+
+    function renderClassOptions(classes) {
+      let select = document.getElementById('classSelect');
+      select.innerHTML = '';
+      classes.forEach(function(c) {
+        let opt = document.createElement('option');
+        opt.value = c.toString().trim();
+        opt.textContent = c.toString().startsWith("ថ្នាក់") ? c : "ថ្នាក់ទី " + c;
+        select.appendChild(opt);
+      });
+
+      if (USER_CLASS && USER_ROLE !== 'admin') {
+        select.value = USER_CLASS;
+        select.disabled = true;
       }
     }
 
@@ -664,7 +729,7 @@
       document.getElementById('txtClassHeader').textContent = selectedClass.startsWith("ថ្នាក់") ? selectedClass : "ថ្នាក់ទី " + selectedClass;
       document.getElementById('txtTitleHeader').textContent = getPeriodTitle(selectedMonth);
       document.getElementById('thTotalHeader').textContent = SUMMARY_TOTAL_AS_AVG_PERIODS.includes(selectedMonth) ? "មធ្យមភាគសរុប" : "ពិន្ទុសរុប";
-      document.getElementById('rankBody').innerHTML = '<tr><td colspan="9" style="padding:20px;">កំពុងទាញយកទិន្នន័យ...</td></tr>';
+      document.getElementById('rankBody').innerHTML = '<tr><td colspan="9" style="padding:20px; color:#1e40af;">⏳ កំពុងទាញយកទិន្នន័យ...</td></tr>';
 
       try {
         var res = await apiCall('getRankDataSecured', {
