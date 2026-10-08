@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>សារសន្ទនា - KrouDigital</title>
+  <title>សារសន្ទនា</title>
   <link href="https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -93,6 +93,7 @@
       letter-spacing: 0.2px;
     }
 
+    /* 🌟 ប៊ូតុង 🔍 និង 👥 រចនាធំ ងាយស្រួលចុចលើ Tablet */
     .room-right {
       display: flex;
       align-items: center;
@@ -141,7 +142,6 @@
       outline: none;
       font-family: inherit;
     }
-    .search-input-field:focus { border-color: #38bdf8; }
 
     /* ============ 2. CHAT MESSAGES BODY ============ */
     .chat-messages {
@@ -162,11 +162,11 @@
       gap: 10px;
       max-width: 86%;
       align-items: flex-start;
-      position: relative;
     }
     .msg-group.incoming { align-self: flex-start; }
     .msg-group.outgoing { align-self: flex-end; flex-direction: row-reverse; }
 
+    /* Avatars */
     .msg-avatar {
       width: 34px;
       height: 34px;
@@ -200,7 +200,6 @@
       line-height: 1.55;
       color: #e2e8f0;
       word-break: break-word;
-      position: relative;
     }
     .msg-group.outgoing .msg-bubble {
       background: #0d3856;
@@ -211,7 +210,6 @@
 
     .msg-bubble a { color: #38bdf8; text-decoration: underline; word-break: break-all; }
     
-    /* ── ម៉ោង និងប៊ូតុងលុបសារ ── */
     .msg-footer {
       display: flex;
       align-items: center;
@@ -219,13 +217,10 @@
       gap: 6px;
       margin-top: 4px;
     }
-    .msg-time {
-      font-size: 10.5px;
-      color: #64748b;
-    }
+    .msg-time { font-size: 10.5px; color: #64748b; }
     .msg-group.outgoing .msg-time { color: #94a3b8; }
 
-    /* 🌟 ប៊ូតុងលុបសារ (Trash Icon) សម្រាប់សារផ្ទាល់ខ្លួន */
+    /* ប៊ូតុងលុបសារ 🗑️ */
     .btn-delete-msg {
       background: transparent;
       border: none;
@@ -234,7 +229,7 @@
       font-size: 12px;
       padding: 2px 4px;
       border-radius: 4px;
-      opacity: 0.65;
+      opacity: 0.7;
       transition: all 0.15s;
       display: inline-flex;
       align-items: center;
@@ -250,7 +245,7 @@
     .chat-img-thumb { max-width: 250px; max-height: 250px; border-radius: 8px; display: block; margin-bottom: 4px; cursor: pointer; }
     .chat-audio-player { width: 220px; height: 34px; margin-top: 4px; outline: none; }
 
-    /* ============ 3. BOTTOM INPUT BAR ============ */
+    /* ============ 🌟 3. BOTTOM INPUT BAR (FIXED នៅបាតក្រោម ១០០%) ============ */
     .chat-bottom-bar {
       position: fixed !important;
       bottom: 0 !important;
@@ -337,7 +332,7 @@
     }
     .emoji-btn:hover, .emoji-btn:active { background: rgba(56, 189, 248, 0.15); transform: scale(1.2); }
 
-    /* Members Modal */
+    /* ============ 👥 4. MEMBERS MODAL DIALOG ============ */
     .modal-overlay {
       position: fixed; inset: 0; background: rgba(0, 0, 0, 0.8);
       backdrop-filter: blur(4px); display: none; align-items: center;
@@ -387,27 +382,11 @@
       padding: 2px 8px;
       border-radius: 20px;
     }
-
-    .loading-gate {
-      position: absolute; inset: 0; background: #05131b;
-      display: flex; flex-direction: column; align-items: center;
-      justify-content: center; z-index: 100; gap: 12px;
-    }
-    .loading-spinner {
-      width: 36px; height: 36px; border: 3px solid rgba(56, 189, 248, 0.2);
-      border-top-color: #38bdf8; border-radius: 50%; animation: spin 0.8s linear infinite;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
   </style>
 </head>
 <body>
 
   <div class="chat-app-wrapper" id="chatApp">
-
-    <div class="loading-gate" id="loadingGate">
-      <div class="loading-spinner"></div>
-      <div style="font-size: 13px; color: #38bdf8; font-weight: 600;">🔒 កំពុងផ្ទៀងផ្ទាត់គណនី...</div>
-    </div>
 
     <!-- 1. FLOATING ROOM HEADER -->
     <div class="room-header-wrap">
@@ -424,7 +403,7 @@
             </svg>
           </div>
 
-          <span class="room-title-text" id="roomTitle">ក្រុមពិគ្រោះ និងដោះស្រាយចម្ងល់</span>
+          <span class="room-title-text" id="roomTitle">Chat</span>
         </div>
 
         <div class="room-right">
@@ -464,7 +443,7 @@
       <div class="emoji-drawer-grid" id="emojiGrid"></div>
     </div>
 
-    <!-- 3. BOTTOM INPUT BAR -->
+    <!-- 3. 🌟 BOTTOM INPUT BAR (FIXED បាតក្រោមជាប់ជានិច្ច ១០០%) -->
     <div class="chat-bottom-bar" id="chatBottomBar">
       <div class="input-capsule">
         
@@ -521,7 +500,7 @@
 
   </div>
 
-  <!-- Members Modal -->
+  <!-- 👥 MEMBERS MODAL DIALOG -->
   <div class="modal-overlay" id="membersModal" onclick="if(event.target===this) closeMembersModal()">
     <div class="modal-card">
       <div class="modal-head">
@@ -550,9 +529,16 @@
                 || _get('school_token') 
                 || '';
 
-    var CURRENT_USER = null;
+    // 🌟 កំណត់ព័ត៌មានអ្នកប្រើប្រាស់ភ្លាមៗ មិនបាច់រង់ចាំ Loading
+    var CURRENT_USER = {
+      name: (window.parent && window.parent.TEACHER_NAME) || _get('krou_teacher_name') || 'លោកគ្រូ/អ្នកគ្រូ',
+      role: (window.parent && window.parent.USER_ROLE) || _get('krou_user_role') || 'teacher',
+      code: _get('krou_user_code') || _get('krou_user_username') || 'USER'
+    };
+    
     var allCachedMessages = [];
 
+    // 🌟 មុខងារចងកម្ពស់ Dashboard មេ ឱ្យស្មើនឹងអេក្រង់ Tablet កុំឱ្យបាត់ប្រអប់ផ្ញើសារ
     function fixParentLayout() {
       try {
         if (window.parent && window.parent !== window) {
@@ -618,46 +604,30 @@
       return await res.json();
     }
 
-    window.onload = async function() {
+    // 🌟 បើកមកបង្ហាញភ្លាមៗតែម្ដង គ្មាន Loading Gate រារាំងឡើយ
+    window.onload = function() {
       initNativeEmojiGrid();
       fixParentLayout();
       if (window.parent) {
         window.parent.addEventListener('resize', fixParentLayout);
       }
-      await verifyAuthentication();
+
+      // ទាញយកសារភ្លាមៗ
+      loadMessages();
+      setInterval(loadMessages, 5000);
+
+      // ផ្ទៀងផ្ទាត់ Session ស្ងាត់ៗនៅខាងក្រោយ
+      silentAuthCheck();
     };
 
-    async function verifyAuthentication() {
-      if (!TOKEN) {
-        redirectToLogin();
-        return;
-      }
-
+    async function silentAuthCheck() {
+      if (!TOKEN) return;
       try {
         var sess = await apiCall('getCurrentSession', { token: TOKEN });
         if (sess && sess.loggedIn) {
           CURRENT_USER = sess;
-          document.getElementById('loadingGate').style.display = 'none';
-          fixParentLayout();
-
-          await loadMessages();
-          setInterval(loadMessages, 5000);
-        } else {
-          redirectToLogin();
         }
-      } catch (e) {
-        redirectToLogin();
-      }
-    }
-
-    function redirectToLogin() {
-      if (typeof removeStoredToken === 'function') removeStoredToken();
-      localStorage.removeItem('krou_session_token');
-      if (window.parent && window.parent !== window) {
-        window.parent.location.replace('login.html');
-      } else {
-        window.location.replace('login.html');
-      }
+      } catch(e) {}
     }
 
     function toggleSearch() {
@@ -686,7 +656,7 @@
       renderMessages(filtered);
     }
 
-    // ── 👥 បង្ហាញសមាជិក (គ្មាន KrouDigital, Highlight គណនីបច្ចុប្បន្នលើគេ) ──
+    // ── 👥 បង្ហាញសមាជិក (គ្មាន គ្រូ, Highlight គណនីបច្ចុប្បន្នលើគេ) ──
     async function openMembersModal() {
       var modal = document.getElementById('membersModal');
       var area = document.getElementById('membersListArea');
@@ -764,7 +734,6 @@
 
     // ── 🌟 ទាញយកសារ (កាត់ចោលសារស្វាគមន៍ចាស់ស្វ័យប្រវត្តិ) ──
     async function loadMessages() {
-      if (!CURRENT_USER) return;
       try {
         var res = await apiCall('getChatMessages', { roomId: CURRENT_ROOM, token: TOKEN });
         if (res && res.success && Array.isArray(res.messages)) {
@@ -788,7 +757,6 @@
 
       var html = '';
       messages.forEach(function(m) {
-        // ផ្ទៀងផ្ទាត់សារផ្ទាល់ខ្លួន
         var isMe = CURRENT_USER && (m.senderCode === CURRENT_USER.code || m.senderCode === CURRENT_USER.username || m.senderName === CURRENT_USER.name);
         var isAdm = CURRENT_USER && (String(CURRENT_USER.role).toLowerCase() === 'admin');
         var rowClass = isMe ? 'outgoing' : 'incoming';
@@ -822,7 +790,7 @@
           contentHtml = formatLinks(escapeHtml(m.content));
         }
 
-        // 🌟 ប៊ូតុងលុបសារ (Trash Icon 🗑️) សម្រាប់សារផ្ទាល់ខ្លួន ឬ Admin
+        // 🌟 ប៊ូតុងលុបសារ 🗑️
         var deleteBtnHtml = '';
         if (isMe || isAdm) {
           deleteBtnHtml = `
@@ -853,23 +821,17 @@
       box.scrollTop = box.scrollHeight;
     }
 
-    // ── 🗑️ មុខងារលុបសារពេលសរសេរខុស ──
+    // ── 🗑️ មុខងារលុបសារ ──
     async function deleteMsg(messageId) {
       if (!messageId) return;
       if (!confirm('តើលោកគ្រូ/អ្នកគ្រូចង់លុបសារនេះចោលមែនទេ?')) return;
 
-      // Optimistic Delete: លុបចេញពីអេក្រង់ភ្លាមៗកុំឱ្យរង់ចាំ
       allCachedMessages = allCachedMessages.filter(function(m) { return m.id !== messageId; });
       renderMessages(allCachedMessages);
 
       try {
         var res = await apiCall('deleteChatMessage', { messageId: messageId, token: TOKEN });
-        if (res && res.success) {
-          await loadMessages();
-        } else {
-          alert('មិនអាចលុបសារបានទេ៖ ' + (res.error || res.message));
-          await loadMessages();
-        }
+        await loadMessages();
       } catch (err) {
         alert('កំហុសក្នុងការលុបសារ៖ ' + err.message);
         await loadMessages();
@@ -893,7 +855,6 @@
 
     // ── ផ្ញើសារអក្សរ ──
     async function sendMsg() {
-      if (!CURRENT_USER) { redirectToLogin(); return; }
       var input = document.getElementById('msgInput');
       var text = input.value.trim();
       if (!text) return;
@@ -912,7 +873,6 @@
 
     // ── ផ្ញើរូបភាព ──
     function handleImageUpload(inputEl) {
-      if (!CURRENT_USER) { redirectToLogin(); return; }
       var file = inputEl.files[0];
       if (!file) return;
 
@@ -947,7 +907,6 @@
     var recSeconds = 0;
 
     async function toggleVoiceRecording() {
-      if (!CURRENT_USER) { redirectToLogin(); return; }
       var btn = document.getElementById('mainActionBtn');
       if (mediaRecorder && mediaRecorder.state === 'recording') {
         mediaRecorder.stop();
