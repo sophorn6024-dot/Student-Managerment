@@ -24,7 +24,6 @@
     .chat-app-wrapper {
       width: 100%;
       height: 100%;
-      max-height: 100%;
       display: flex;
       flex-direction: column;
       position: relative;
@@ -47,6 +46,7 @@
     .room-header-wrap {
       padding: 8px 16px 4px 16px;
       flex: 0 0 auto;
+      z-index: 20;
     }
     .room-header-card {
       background: #0e202c;
@@ -56,7 +56,7 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
     }
     .room-left {
       display: flex;
@@ -82,7 +82,10 @@
       flex-shrink: 0;
       box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
     }
-    .room-badge-logo svg { width: 22px; height: 22px; }
+    .room-badge-logo svg {
+      width: 22px;
+      height: 22px;
+    }
     .room-title-text {
       font-size: 14px;
       font-weight: 700;
@@ -100,8 +103,8 @@
       width: 38px;
       height: 38px;
       border-radius: 50%;
-      background: rgba(255, 255, 255, 0.06);
-      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
       color: #cbd5e1;
       cursor: pointer;
       display: flex;
@@ -111,7 +114,7 @@
     }
     .room-action-circle-btn:hover, .room-action-circle-btn:active {
       color: #38bdf8;
-      background: rgba(56, 189, 248, 0.2);
+      background: rgba(56, 189, 248, 0.25);
       border-color: #38bdf8;
       transform: scale(1.06);
     }
@@ -125,6 +128,7 @@
       align-items: center;
       gap: 10px;
       flex: 0 0 auto;
+      z-index: 20;
     }
     .search-input-field {
       flex: 1;
@@ -143,7 +147,7 @@
     .chat-messages {
       flex: 1 1 auto;
       min-height: 0;
-      padding: 12px 16px;
+      padding: 12px 16px 85px 16px; /* ទុកចន្លោះ 85px ខាងក្រោមដើម្បីកុំឱ្យសារលិចបាំងដោយ Input Bar */
       overflow-y: auto;
       display: flex;
       flex-direction: column;
@@ -212,18 +216,18 @@
     .chat-img-thumb { max-width: 250px; max-height: 250px; border-radius: 8px; display: block; margin-bottom: 4px; cursor: pointer; }
     .chat-audio-player { width: 220px; height: 34px; margin-top: 4px; outline: none; }
 
-    /* ============ 3. 🌟 BOTTOM INPUT CAPSULE (បង្ហាញច្បាស់នៅបាតក្រោម ១០០%) ============ */
+    /* ============ 3. 🌟 BOTTOM INPUT CAPSULE (FIXED នៅបាតក្រោម ១០០% មិនអាចបាត់ទៀតឡើយ) ============ */
     .chat-bottom-bar {
-      flex: 0 0 auto;
-      position: sticky;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      width: 100%;
-      padding: 8px 16px 14px 16px;
-      background: #05131b;
-      border-top: 1px solid #0d222e;
-      z-index: 50;
+      position: fixed !important;
+      bottom: 0 !important;
+      left: 0 !important;
+      right: 0 !important;
+      width: 100% !important;
+      padding: 8px 16px 12px 16px !important;
+      background: #05131b !important;
+      border-top: 1.5px solid #0e2636 !important;
+      z-index: 999 !important; /* អណ្តែតលើគេជានិច្ច */
+      box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.5);
     }
     .input-capsule {
       background: #0e202c;
@@ -268,7 +272,7 @@
     .modal-overlay {
       position: fixed; inset: 0; background: rgba(0, 0, 0, 0.75);
       backdrop-filter: blur(4px); display: none; align-items: center;
-      justify-content: center; z-index: 999; padding: 16px;
+      justify-content: center; z-index: 1000; padding: 16px;
     }
     .modal-card {
       width: 100%; max-width: 420px; background: #0e202c; border: 1px solid #1a354a;
@@ -364,8 +368,8 @@
       <div style="text-align:center; padding:30px; color:#64748b;">⏳ កំពុងទាញយកសារ...</div>
     </div>
 
-    <!-- 3. 🌟 BOTTOM INPUT CAPSULE (ធានាថាបង្ហាញនៅបាតក្រោម ១០០% មិនលិចបាត់ទៀតឡើយ) -->
-    <div class="chat-bottom-bar">
+    <!-- 3. 🌟 BOTTOM INPUT CAPSULE (FIXED នៅបាតក្រោម ១០០% មិនលិចបាត់ទៀតឡើយ) -->
+    <div class="chat-bottom-bar" id="chatBottomBar">
       <div class="input-capsule">
         
         <div class="left-actions">
@@ -599,16 +603,16 @@
       input.focus();
     }
 
-    // ── ទាញយកសារពិតប្រាកដចេញពី Google Sheets ──
+    // ── 🌟 ទាញយកសារពិតប្រាកដចេញពី Google Sheets (លុបសារស្វាគមន៍ចាស់ចោលស្វ័យប្រវត្តិ) ──
     async function loadMessages() {
       if (!CURRENT_USER) return;
       try {
         var res = await apiCall('getChatMessages', { roomId: CURRENT_ROOM, token: TOKEN });
         if (res && res.success && Array.isArray(res.messages)) {
-          // 🌟 លុបសារស្វាគមន៍ចាស់ៗចោលដោយស្វ័យប្រវត្តិ
+          // ❌ Auto-filter លុបសារស្វាគមន៍គំរូទាំងអស់ចោល មិនឱ្យបង្ហាញឡើយ
           allCachedMessages = res.messages.filter(function(m) {
-            var c = String(m.content || '').trim();
-            return c.indexOf('សូមស្វាគមន៍! លោកគ្រូអ្នកគ្រូអាចផ្ញើសារ') === -1;
+            var c = String(m.content || m.text || '').trim();
+            return c.indexOf('សូមស្វាគមន៍') === -1;
           });
           renderMessages(allCachedMessages);
         }
@@ -626,6 +630,7 @@
 
       var html = '';
       messages.forEach(function(m) {
+        // ផ្ទៀងផ្ទាត់សារផ្ទាល់ខ្លួន
         var isMe = CURRENT_USER && (m.senderCode === CURRENT_USER.code || m.senderCode === CURRENT_USER.username || m.senderName === CURRENT_USER.name);
         var rowClass = isMe ? 'outgoing' : 'incoming';
         
@@ -691,7 +696,7 @@
       }
     }
 
-    // ── ផ្ញើសារអក្សរ (ភ្ជាប់ Session ពិតប្រាកដ) ──
+    // ── ផ្ញើសារអក្សរ ──
     async function sendMsg() {
       if (!CURRENT_USER) { redirectToLogin(); return; }
       var input = document.getElementById('msgInput');
