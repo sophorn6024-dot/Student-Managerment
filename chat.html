@@ -8,7 +8,7 @@
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     
-    /* ── 🌟 កែកម្ពស់ឱ្យត្រូវនឹង IFRAME ១០០% ធានាមិនបាត់ប្រអប់ផ្ញើសារ ── */
+    /* ── 🌟 កែកម្ពស់ឱ្យត្រូវនឹង IFRAME ១០០% ធានាមិនបាត់ប្រអប់ផ្ញើសារដាច់ខាត ── */
     html, body {
       width: 100%;
       height: 100%;
@@ -23,7 +23,8 @@
 
     .chat-app-wrapper {
       width: 100%;
-      height: 100%; /* ប្រើ 100% នៃ Iframe មិនប្រើ 100vh ឡើយ */
+      height: 100%;
+      max-height: 100%;
       display: flex;
       flex-direction: column;
       position: relative;
@@ -42,34 +43,10 @@
       display: inline-block;
     }
 
-    /* ============ 1. TOP NAVBAR (លាក់ក្នុង Iframe) ============ */
-    .top-navbar {
-      height: 44px;
-      padding: 0 16px;
-      background: #06151e;
-      border-bottom: 1px solid #0d222e;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-shrink: 0;
-    }
-    body.in-iframe .top-navbar { display: none !important; }
-
-    .nav-back-link {
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      color: #38bdf8;
-      text-decoration: none;
-      font-size: 14px;
-      font-weight: 700;
-      cursor: pointer;
-    }
-
-    /* ============ 2. FLOATING ROOM HEADER ============ */
+    /* ============ 1. FLOATING ROOM HEADER ============ */
     .room-header-wrap {
       padding: 8px 16px 4px 16px;
-      flex-shrink: 0;
+      flex: 0 0 auto;
     }
     .room-header-card {
       background: #0e202c;
@@ -105,29 +82,26 @@
       flex-shrink: 0;
       box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
     }
-    .room-badge-logo svg {
-      width: 22px;
-      height: 22px;
-    }
+    .room-badge-logo svg { width: 22px; height: 22px; }
     .room-title-text {
       font-size: 14px;
       font-weight: 700;
       color: #f8fafc;
       letter-spacing: 0.2px;
     }
+
+    /* 🌟 ប៊ូតុង 🔍 និង 👥 រចនាជារង្វង់ ៣៨px ងាយស្រួលចុចលើ Tablet */
     .room-right {
       display: flex;
       align-items: center;
       gap: 10px;
     }
-
-    /* 🌟 ប៊ូតុង 🔍 និង 👥 រចនាជាប៊ូតុងធំ ងាយស្រួលចុចលើ Tablet */
     .room-action-circle-btn {
-      width: 36px;
-      height: 36px;
+      width: 38px;
+      height: 38px;
       border-radius: 50%;
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.1);
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.12);
       color: #cbd5e1;
       cursor: pointer;
       display: flex;
@@ -137,9 +111,9 @@
     }
     .room-action-circle-btn:hover, .room-action-circle-btn:active {
       color: #38bdf8;
-      background: rgba(56, 189, 248, 0.15);
+      background: rgba(56, 189, 248, 0.2);
       border-color: #38bdf8;
-      transform: scale(1.05);
+      transform: scale(1.06);
     }
 
     /* ── 🔍 Search Bar ── */
@@ -150,7 +124,7 @@
       border-bottom: 1px solid #162f40;
       align-items: center;
       gap: 10px;
-      flex-shrink: 0;
+      flex: 0 0 auto;
     }
     .search-input-field {
       flex: 1;
@@ -165,9 +139,9 @@
     }
     .search-input-field:focus { border-color: #38bdf8; }
 
-    /* ============ 3. CHAT MESSAGES BODY ============ */
+    /* ============ 2. CHAT MESSAGES BODY ============ */
     .chat-messages {
-      flex: 1 1 0%; /* ធានាថាយកទំហំកណ្តាល មិនរុញបាតក្រោម */
+      flex: 1 1 auto;
       min-height: 0;
       padding: 12px 16px;
       overflow-y: auto;
@@ -188,6 +162,7 @@
     .msg-group.incoming { align-self: flex-start; }
     .msg-group.outgoing { align-self: flex-end; flex-direction: row-reverse; }
 
+    /* Avatars */
     .msg-avatar {
       width: 34px;
       height: 34px;
@@ -237,9 +212,14 @@
     .chat-img-thumb { max-width: 250px; max-height: 250px; border-radius: 8px; display: block; margin-bottom: 4px; cursor: pointer; }
     .chat-audio-player { width: 220px; height: 34px; margin-top: 4px; outline: none; }
 
-    /* ============ 4. 🌟 BOTTOM INPUT CAPSULE (ចាក់សោជាប់បាតក្រោមជានិច្ច) ============ */
+    /* ============ 3. 🌟 BOTTOM INPUT CAPSULE (បង្ហាញច្បាស់នៅបាតក្រោម ១០០%) ============ */
     .chat-bottom-bar {
-      flex-shrink: 0 !important; /* មិនឱ្យរួញ ឬធ្លាក់បាត់ដាច់ខាត */
+      flex: 0 0 auto;
+      position: sticky;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      width: 100%;
       padding: 8px 16px 14px 16px;
       background: #05131b;
       border-top: 1px solid #0d222e;
@@ -253,7 +233,7 @@
       display: flex;
       align-items: center;
       gap: 10px;
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.35);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
     }
     .input-capsule:focus-within { border-color: #0284c7; }
 
@@ -284,7 +264,7 @@
 
     .recording-banner { display: none; align-items: center; gap: 8px; color: #ef4444; font-size: 12.5px; font-weight: 700; flex: 1; }
 
-    /* ============ 👥 5. MEMBERS MODAL DIALOG ============ */
+    /* ============ 👥 4. MEMBERS MODAL DIALOG ============ */
     .modal-overlay {
       position: fixed; inset: 0; background: rgba(0, 0, 0, 0.75);
       backdrop-filter: blur(4px); display: none; align-items: center;
@@ -337,15 +317,7 @@
       <div style="font-size: 13px; color: #38bdf8; font-weight: 600;">🔒 កំពុងផ្ទៀងផ្ទាត់គណនីគ្រូ / Admin...</div>
     </div>
 
-    <!-- 1. TOP NAVBAR -->
-    <header class="top-navbar" id="topNavbar">
-      <div class="nav-back-link" onclick="history.back()">
-        <svg class="icon" viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
-        <span>សារសន្ទនា</span>
-      </div>
-    </header>
-
-    <!-- 2. FLOATING ROOM HEADER -->
+    <!-- 1. FLOATING ROOM HEADER -->
     <div class="room-header-wrap">
       <div class="room-header-card">
         <div class="room-left">
@@ -387,12 +359,12 @@
       <button type="button" onclick="toggleSearch()" style="background:none; border:none; color:#ef4444; font-size:16px; cursor:pointer; padding:4px;">✕</button>
     </div>
 
-    <!-- 3. CHAT MESSAGES BODY -->
+    <!-- 2. CHAT MESSAGES BODY (បង្ហាញតែសារពិតប្រាកដចេញពី Google Sheets គ្មានសារ Mock) -->
     <div class="chat-messages" id="chatBox">
       <div style="text-align:center; padding:30px; color:#64748b;">⏳ កំពុងទាញយកសារ...</div>
     </div>
 
-    <!-- 4. 🌟 BOTTOM INPUT CAPSULE (បង្ហាញនៅបាតក្រោម ១០០% មិនលិចបាត់ទៀតឡើយ) -->
+    <!-- 3. 🌟 BOTTOM INPUT CAPSULE (ធានាថាបង្ហាញនៅបាតក្រោម ១០០% មិនលិចបាត់ទៀតឡើយ) -->
     <div class="chat-bottom-bar">
       <div class="input-capsule">
         
@@ -449,7 +421,7 @@
 
   </div>
 
-  <!-- 👥 5. MEMBERS MODAL DIALOG (បង្ហាញបញ្ជីគ្រូ និង Admin ពេលចុច 👥) -->
+  <!-- 👥 4. MEMBERS MODAL DIALOG -->
   <div class="modal-overlay" id="membersModal" onclick="if(event.target===this) closeMembersModal()">
     <div class="modal-card">
       <div class="modal-head">
@@ -498,9 +470,6 @@
     }
 
     window.onload = async function() {
-      if (window.self !== window.top) {
-        document.body.classList.add('in-iframe');
-      }
       await verifyAuthentication();
     };
 
@@ -563,7 +532,7 @@
       renderMessages(filtered);
     }
 
-    // ── 👥 មុខងារសមាជិកក្រុម (Members List ចុចដើរ ១០០% សម្រាប់គ្រូ & Admin) ──
+    // ── 👥 មុខងារសមាជិកក្រុម (Members List) ──
     async function openMembersModal() {
       var modal = document.getElementById('membersModal');
       var area = document.getElementById('membersListArea');
@@ -571,7 +540,6 @@
       area.innerHTML = '<div style="text-align:center; padding:20px; color:#94a3b8; font-size:12px;">⏳ កំពុងទាញយកសមាជិក...</div>';
 
       try {
-        // ទាញបញ្ជីគ្រូ (បើជាប់សិទ្ធិ Admin វានឹងរៀបចំបង្ហាញតាម Chat Participant ដោយស្វ័យប្រវត្តិ)
         var res = await apiCall('getAllTeachers', { token: TOKEN });
         var teachers = (res && res.teachers && Array.isArray(res.teachers)) ? res.teachers : [];
 
@@ -600,7 +568,6 @@
             `;
           });
         } else {
-          // បង្ហាញគណនីបច្ចុប្បន្នដែលកំពុង Login
           if (CURRENT_USER) {
             var initial = CURRENT_USER.name ? CURRENT_USER.name.charAt(0) : 'U';
             html += `
@@ -638,8 +605,12 @@
       try {
         var res = await apiCall('getChatMessages', { roomId: CURRENT_ROOM, token: TOKEN });
         if (res && res.success && Array.isArray(res.messages)) {
-          allCachedMessages = res.messages;
-          renderMessages(res.messages);
+          // 🌟 លុបសារស្វាគមន៍ចាស់ៗចោលដោយស្វ័យប្រវត្តិ
+          allCachedMessages = res.messages.filter(function(m) {
+            var c = String(m.content || '').trim();
+            return c.indexOf('សូមស្វាគមន៍! លោកគ្រូអ្នកគ្រូអាចផ្ញើសារ') === -1;
+          });
+          renderMessages(allCachedMessages);
         }
       } catch (e) {
         console.warn('loadMessages error:', e);
