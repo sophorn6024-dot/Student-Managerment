@@ -20,12 +20,14 @@
       -webkit-font-smoothing: antialiased;
     }
 
-    /* ── 🌟 រៀបចំ Layout ជា 3 ផ្នែកដាច់ពីគ្នា (មិនឱ្យរុញបាត់ប្រអប់ផ្ញើសារដាច់ខាត) ── */
-    .chat-layout {
-      position: absolute;
-      inset: 0;
+    /* ── 🌟 រៀបចំ Layout ឱ្យជាប់ស្មើក្នុងផ្ទៃមើល Tablet ១០០% ── */
+    .chat-app-wrapper {
       width: 100%;
       height: 100%;
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
       overflow: hidden;
       background: #05131b;
     }
@@ -42,15 +44,11 @@
       display: inline-block;
     }
 
-    /* ============ 1. ផ្នែកខាងលើ៖ ROOM HEADER (ជាប់នៅខាងលើ) ============ */
-    .chat-top-header {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 58px;
-      padding: 8px 16px;
-      z-index: 50;
+    /* ============ 1. ROOM HEADER ============ */
+    .room-header-wrap {
+      flex: 0 0 auto;
+      padding: 8px 14px 4px 14px;
+      z-index: 30;
       background: #05131b;
     }
     .room-header-card {
@@ -58,7 +56,6 @@
       border: 1px solid #162f40;
       border-radius: 9999px;
       padding: 6px 14px;
-      height: 100%;
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -68,6 +65,7 @@
       display: flex;
       align-items: center;
       gap: 10px;
+      cursor: pointer;
     }
     .room-arrow-btn {
       color: #cbd5e1;
@@ -96,7 +94,7 @@
       letter-spacing: 0.2px;
     }
 
-    /* 🌟 ប៊ូតុង 🔍 និង 👥 ចុចស្រួលលើ Tablet */
+    /* 🌟 ប៊ូតុង 🔍 និង 👥 រចនាធំ ងាយស្រួលចុចលើ Tablet */
     .room-right {
       display: flex;
       align-items: center;
@@ -114,49 +112,43 @@
       align-items: center;
       justify-content: center;
       transition: all 0.2s ease;
+      touch-action: manipulation;
     }
     .room-action-btn:hover, .room-action-btn:active {
       color: #38bdf8;
       background: rgba(56, 189, 248, 0.25);
       border-color: #38bdf8;
-      transform: scale(1.06);
+      transform: scale(1.08);
     }
 
-    /* 🔍 Search Bar Overlay */
-    .search-bar-dropdown {
-      position: absolute;
-      top: 58px;
-      left: 16px;
-      right: 16px;
-      background: #0a1824;
-      border: 1px solid #162f40;
-      border-radius: 12px;
-      padding: 8px 14px;
+    /* 🔍 Search Bar */
+    .search-bar-inline {
       display: none;
+      padding: 8px 16px;
+      background: #0a1824;
+      border-bottom: 1px solid #162f40;
       align-items: center;
       gap: 10px;
-      z-index: 60;
-      box-shadow: 0 6px 20px rgba(0,0,0,0.5);
+      flex: 0 0 auto;
+      z-index: 30;
     }
     .search-input-field {
       flex: 1;
       background: #0e202c;
-      border: 1px solid #1d3a50;
+      border: 1.5px solid #1d3a50;
       border-radius: 20px;
-      padding: 7px 14px;
+      padding: 7px 16px;
       color: #fff;
       font-size: 13.5px;
       outline: none;
       font-family: inherit;
     }
+    .search-input-field:focus { border-color: #38bdf8; }
 
-    /* ============ 2. ផ្នែកកណ្តាល៖ CHAT MESSAGES BODY (រត់កណ្តាលស្រួល Scroll) ============ */
+    /* ============ 2. CHAT MESSAGES BODY ============ */
     .chat-messages {
-      position: absolute;
-      top: 58px;
-      bottom: 68px; /* ទុកកម្ពស់ 68px សម្រាប់ Input Bar ខាងក្រោម */
-      left: 0;
-      right: 0;
+      flex: 1 1 auto;
+      min-height: 0;
       padding: 12px 16px;
       overflow-y: auto;
       display: flex;
@@ -224,16 +216,14 @@
     .chat-img-thumb { max-width: 250px; max-height: 250px; border-radius: 8px; display: block; margin-bottom: 4px; cursor: pointer; }
     .chat-audio-player { width: 220px; height: 34px; margin-top: 4px; outline: none; }
 
-    /* ============ 3. 🌟 ផ្នែកខាងក្រោម៖ BOTTOM INPUT BAR (ចាក់សោជាប់បាតក្រោមជានិច្ច ១០០%) ============ */
+    /* ============ 3. 🌟 BOTTOM INPUT BAR (បង្ហាញច្បាស់នៅបាតក្រោម ១០០%) ============ */
     .chat-bottom-bar {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      height: 68px;
+      flex: 0 0 auto;
+      width: 100%;
+      height: 66px;
+      padding: 8px 14px 12px 14px;
       background: #05131b;
-      border-top: 1.5px solid #0e2636;
-      padding: 10px 16px 14px 16px;
+      border-top: 2px solid #102a3a;
       z-index: 50;
       display: flex;
       align-items: center;
@@ -323,7 +313,7 @@
 </head>
 <body>
 
-  <div class="chat-layout">
+  <div class="chat-app-wrapper" id="chatApp">
 
     <!-- Loading Gate -->
     <div class="loading-gate" id="loadingGate">
@@ -332,10 +322,10 @@
     </div>
 
     <!-- 1. FLOATING ROOM HEADER -->
-    <div class="chat-top-header">
+    <div class="room-header-wrap">
       <div class="room-header-card">
-        <div class="room-left">
-          <span class="room-arrow-btn" onclick="history.back()" title="ថយក្រោយ">
+        <div class="room-left" onclick="openMembersModal()" title="មើលព័ត៌មានបន្ទប់">
+          <span class="room-arrow-btn" onclick="event.stopPropagation(); history.back();" title="ថយក្រោយ">
             <svg class="icon" viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
           </span>
 
@@ -368,17 +358,17 @@
     </div>
 
     <!-- 🔍 ប្រអប់ស្វែងរកសារ -->
-    <div class="search-bar-dropdown" id="searchBar">
+    <div class="search-bar-inline" id="searchBar">
       <input type="text" id="searchInput" class="search-input-field" placeholder="វាយពាក្យស្វែងរកសារ..." oninput="filterMessages(this.value)">
       <button type="button" onclick="toggleSearch()" style="background:none; border:none; color:#ef4444; font-size:16px; cursor:pointer; padding:4px;">✕</button>
     </div>
 
-    <!-- 2. CHAT MESSAGES BODY (ទាញយកសារពិតប្រាកដចេញពី Google Sheets គ្មានសារ Mock) -->
+    <!-- 2. CHAT MESSAGES BODY -->
     <div class="chat-messages" id="chatBox">
       <div style="text-align:center; padding:30px; color:#64748b;">⏳ កំពុងទាញយកសារ...</div>
     </div>
 
-    <!-- 3. 🌟 BOTTOM INPUT CAPSULE (ចាក់សោនៅបាតក្រោម ១០០% ធានាមិនបាត់ដាច់ខាត) -->
+    <!-- 3. 🌟 BOTTOM INPUT CAPSULE (បង្ហាញនៅបាតក្រោម ១០០% មិនលិចបាត់ទៀតឡើយ) -->
     <div class="chat-bottom-bar" id="chatBottomBar">
       <div class="input-capsule">
         
@@ -467,6 +457,27 @@
     var CURRENT_USER = null;
     var allCachedMessages = [];
 
+    // ── 🌟 មុខងារស្វ័យប្រវត្តិតម្រឹមផ្ទៃមើល Tablet កុំឱ្យរុញប្រអប់ផ្ញើសារធ្លាក់ចុះក្រោម ──
+    function syncVisibleHeight() {
+      try {
+        var h = window.innerHeight;
+        if (window.parent && window.parent !== window) {
+          var frame = window.parent.document.getElementById('pageFrame');
+          if (frame) {
+            var r = frame.getBoundingClientRect();
+            var avail = window.parent.innerHeight - r.top;
+            if (avail > 200) {
+              h = avail;
+            }
+          }
+        }
+        var app = document.getElementById('chatApp');
+        if (app) {
+          app.style.height = h + 'px';
+        }
+      } catch(e) {}
+    }
+
     async function apiCall(action, params) {
       params = params || {};
       if (TOKEN) params.token = TOKEN;
@@ -484,6 +495,8 @@
     }
 
     window.onload = async function() {
+      syncVisibleHeight();
+      window.addEventListener('resize', syncVisibleHeight);
       await verifyAuthentication();
     };
 
@@ -498,6 +511,7 @@
         if (sess && sess.loggedIn) {
           CURRENT_USER = sess;
           document.getElementById('loadingGate').style.display = 'none';
+          syncVisibleHeight();
 
           await loadMessages();
           setInterval(loadMessages, 6000);
@@ -598,7 +612,6 @@
 
         area.innerHTML = html;
       } catch (err) {
-        // Fallback បើជាប់សិទ្ធិ Admin
         var html = `
           <div class="member-item">
             <div class="member-avatar" style="background:#9333ea;">S</div>
@@ -634,13 +647,12 @@
       input.focus();
     }
 
-    // ── 🌟 ទាញយកសារពិតប្រាកដចេញពី Google Sheets (លុបសារស្វាគមន៍ចាស់ចោលស្វ័យប្រវត្តិ) ──
+    // ── 🌟 ទាញយកសារពិតប្រាកដ (កាត់ចោលសារស្វាគមន៍ចាស់ស្វ័យប្រវត្តិ) ──
     async function loadMessages() {
       if (!CURRENT_USER) return;
       try {
         var res = await apiCall('getChatMessages', { roomId: CURRENT_ROOM, token: TOKEN });
         if (res && res.success && Array.isArray(res.messages)) {
-          // ❌ Auto-filter លុបសារស្វាគមន៍ចាស់ចោល មិនឱ្យបង្ហាញឡើយ
           allCachedMessages = res.messages.filter(function(m) {
             var c = String(m.content || m.text || '').trim();
             return c.indexOf('សូមស្វាគមន៍') === -1;
@@ -726,7 +738,7 @@
       }
     }
 
-    // ── ផ្ញើសារអក្សរ ──
+    // ── ផ្ញើសារអក្សរ (ភ្ជាប់គណនីគ្រូពិតប្រាកដ) ──
     async function sendMsg() {
       if (!CURRENT_USER) { redirectToLogin(); return; }
       var input = document.getElementById('msgInput');
