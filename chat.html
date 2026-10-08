@@ -3,23 +3,24 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>សារសន្ទនា - KrouDigital4.0</title>
-  <link href="https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@400;500;600;700&family=Moul&display=swap" rel="stylesheet">
+  <title>សារសន្ទនា - KrouDigital</title>
+  <link href="https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: 'Kantumruy Pro', sans-serif;
-      background: #091122;
+      background: #05131b;
       color: #e2e8f0;
-      display: flex;
       height: 100vh;
+      display: flex;
+      flex-direction: column;
       overflow: hidden;
+      -webkit-font-smoothing: antialiased;
     }
 
-    /* ── SVG ICON UTILITY ── */
     .icon {
-      width: 19px;
-      height: 19px;
+      width: 20px;
+      height: 20px;
       stroke: currentColor;
       stroke-width: 2;
       stroke-linecap: round;
@@ -27,200 +28,86 @@
       fill: none;
       flex-shrink: 0;
       display: inline-block;
-      vertical-align: middle;
-    }
-    .icon-sm { width: 16px; height: 16px; }
-    .icon-lg { width: 22px; height: 22px; }
-
-    /* ============ SIDEBAR ឆ្វេង ============ */
-    .sidebar {
-      width: 255px;
-      background: #0d162b;
-      border-right: 1px solid #162444;
-      display: flex;
-      flex-direction: column;
-      flex-shrink: 0;
-      position: relative;
     }
 
-    /* Brand Header */
-    .brand-box {
-      padding: 16px 18px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      border-bottom: 1px solid #162444;
-    }
-    .brand-icon-wrap {
-      width: 42px;
-      height: 42px;
-      border-radius: 12px;
-      background: #0284c7;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: #ffffff;
-      box-shadow: 0 4px 12px rgba(2, 132, 199, 0.35);
-    }
-    .brand-icon-wrap .icon { width: 24px; height: 24px; }
-    .brand-title { font-size: 15px; font-weight: 700; color: #ffffff; letter-spacing: 0.3px; }
-    .brand-subtitle { font-size: 11px; color: #94a3b8; margin-top: 1px; }
-
-    /* User Profile Badge */
-    .user-profile-box {
-      padding: 12px 14px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      background: #111e38;
-      margin: 12px 14px 6px 14px;
-      border-radius: 10px;
-      border: 1px solid #1b2d52;
-    }
-    .user-avatar {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      background: #059669;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 700;
-      color: #ffffff;
-      font-size: 16px;
-      box-shadow: 0 2px 8px rgba(5, 150, 105, 0.3);
-    }
-    .user-info .name { font-size: 13.5px; font-weight: 700; color: #f8fafc; }
-    .user-info .role { font-size: 11.5px; color: #38bdf8; font-weight: 500; }
-
-    /* Class Badge */
-    .class-badge-box {
-      padding: 8px 14px;
-      margin: 4px 14px 8px 14px;
-      background: #13223f;
-      border-radius: 8px;
-      border: 1px solid #1e335e;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 12px;
-      color: #cbd5e1;
-      font-weight: 600;
-    }
-    .class-badge-box .icon { width: 16px; height: 16px; color: #94a3b8; }
-
-    /* Navigation Menu */
-    .menu-list {
-      list-style: none;
-      padding: 6px 12px;
-      flex: 1;
-      overflow-y: auto;
-    }
-    .menu-list::-webkit-scrollbar { width: 4px; }
-    .menu-list::-webkit-scrollbar-thumb { background: #1e293b; border-radius: 2px; }
-
-    .menu-item {
-      padding: 10px 14px;
-      border-radius: 9px;
-      font-size: 13px;
-      font-weight: 600;
-      color: #94a3b8;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      cursor: pointer;
-      margin-bottom: 4px;
-      transition: all 0.15s ease;
-      text-decoration: none;
-    }
-    .menu-item:hover {
-      background: #152445;
-      color: #f1f5f9;
-    }
-    .menu-item.active {
-      background: #1d4ed8;
-      color: #ffffff;
-      box-shadow: 0 4px 14px rgba(29, 78, 216, 0.4);
-    }
-    .menu-item.active .icon { color: #ffffff; }
-
-    .menu-footer-item {
-      border-top: 1px solid #162444;
-      padding-top: 8px;
-      margin-top: 8px;
-    }
-
-    /* ============ CHAT CONTAINER (កណ្ដាល) ============ */
-    .chat-container {
-      flex: 1;
-      display: flex;
-      flex-direction: column;
-      background: #091122;
-      position: relative;
-    }
-
-    /* Top Navigation Bar */
+    /* ============ 1. TOP NAVBAR ============ */
     .top-navbar {
       height: 48px;
-      padding: 0 20px;
-      background: #0d162b;
-      border-bottom: 1px solid #162444;
+      padding: 0 16px;
+      background: #06151e;
+      border-bottom: 1px solid #0d222e;
       display: flex;
       align-items: center;
       justify-content: space-between;
+      flex-shrink: 0;
     }
-    .top-nav-left {
+    .nav-back-link {
       display: flex;
       align-items: center;
-      gap: 8px;
-      font-size: 13.5px;
-      font-weight: 700;
+      gap: 6px;
       color: #38bdf8;
+      text-decoration: none;
+      font-size: 14.5px;
+      font-weight: 700;
       cursor: pointer;
     }
-    .top-nav-right {
+    .top-navbar-right {
       display: flex;
       align-items: center;
-      gap: 16px;
+      gap: 14px;
+      color: #94a3b8;
     }
-    .nav-icon-btn {
+    .user-pill-tag {
+      background: #0e202c;
+      border: 1px solid #162f40;
+      padding: 4px 10px;
+      border-radius: 20px;
+      font-size: 11.5px;
+      color: #38bdf8;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .icon-btn {
       background: transparent;
       border: none;
-      color: #94a3b8;
+      color: inherit;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
       transition: color 0.15s;
     }
-    .nav-icon-btn:hover { color: #f8fafc; }
+    .icon-btn:hover { color: #f8fafc; }
 
-    /* Floating Room Header (ដូចក្នុងរូបថត) */
+    /* ============ 2. FLOATING ROOM HEADER ============ */
+    .room-header-wrap {
+      padding: 10px 16px 6px 16px;
+      flex-shrink: 0;
+    }
     .room-header-card {
-      margin: 12px 20px 0 20px;
-      padding: 8px 16px;
-      background: #111d38;
-      border: 1px solid #1d2f59;
-      border-radius: 30px;
+      background: #0e202c;
+      border: 1px solid #162f40;
+      border-radius: 9999px;
+      padding: 6px 16px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
     }
     .room-left {
       display: flex;
       align-items: center;
       gap: 12px;
     }
-    .room-back-btn {
-      background: transparent;
-      border: none;
-      color: #94a3b8;
+    .room-arrow-btn {
+      color: #cbd5e1;
       cursor: pointer;
       display: flex;
       align-items: center;
     }
-    .room-logo {
+    .room-badge-logo {
       width: 32px;
       height: 32px;
       border-radius: 50%;
@@ -229,168 +116,173 @@
       align-items: center;
       justify-content: center;
       overflow: hidden;
+      flex-shrink: 0;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
     }
-    .room-title {
-      font-size: 13.5px;
+    .room-badge-logo svg {
+      width: 22px;
+      height: 22px;
+    }
+    .room-title-text {
+      font-size: 14px;
       font-weight: 700;
       color: #f8fafc;
+      letter-spacing: 0.2px;
     }
     .room-right {
       display: flex;
       align-items: center;
-      gap: 14px;
-    }
-    .room-action-btn {
-      background: transparent;
-      border: none;
+      gap: 16px;
       color: #94a3b8;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
     }
-    .room-action-btn:hover { color: #38bdf8; }
 
-    /* Chat Messages Box */
+    /* ============ 3. CHAT MESSAGES BODY ============ */
     .chat-messages {
       flex: 1;
-      padding: 16px 24px;
+      padding: 12px 16px;
       overflow-y: auto;
       display: flex;
       flex-direction: column;
       gap: 14px;
+      -webkit-overflow-scrolling: touch;
     }
     .chat-messages::-webkit-scrollbar { width: 5px; }
-    .chat-messages::-webkit-scrollbar-thumb { background: #1a294d; border-radius: 3px; }
+    .chat-messages::-webkit-scrollbar-thumb { background: #132a38; border-radius: 4px; }
 
-    .msg-row {
+    .msg-group {
       display: flex;
       gap: 10px;
-      max-width: 78%;
+      max-width: 86%;
       align-items: flex-start;
     }
-    .msg-row.incoming { align-self: flex-start; }
-    .msg-row.outgoing { align-self: flex-end; flex-direction: row-reverse; }
+    .msg-group.incoming { align-self: flex-start; }
+    .msg-group.outgoing { align-self: flex-end; flex-direction: row-reverse; }
 
+    /* Avatars */
     .msg-avatar {
-      width: 32px;
-      height: 32px;
+      width: 34px;
+      height: 34px;
       border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
       font-weight: 700;
-      font-size: 12px;
+      font-size: 13.5px;
       color: #ffffff;
       flex-shrink: 0;
       margin-top: 2px;
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
     }
-    .msg-avatar.owner { background: #7c3aed; }
-    .msg-avatar.teacher { background: #059669; }
+    .msg-avatar.purple-s { background: #9333ea; }  /* S Avatar ដូចរូប */
+    .msg-avatar.green-l  { background: #059669; }  /* ល Avatar ដូចរូប */
 
-    .msg-body { display: flex; flex-direction: column; gap: 3px; }
-    .msg-sender { font-size: 11px; font-weight: 700; color: #94a3b8; }
-    .msg-row.outgoing .msg-sender { text-align: right; }
+    .msg-content-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+    }
+    
+    /* Sender Label */
+    .msg-sender-label {
+      font-size: 11.5px;
+      font-weight: 700;
+      line-height: 1.3;
+    }
+    .msg-sender-label.owner-gold { color: #facc15; } /* ពណ៌លឿងមាសសម្រាប់ Owner ដូចរូប */
+    .msg-sender-label.teacher-grey { color: #94a3b8; } /* ពណ៌ប្រផេះសម្រាប់គ្រូ */
+    .msg-group.outgoing .msg-sender-label { text-align: right; color: #38bdf8; }
 
+    /* Bubble */
     .msg-bubble {
+      background: #11222e;
+      border: 1px solid #162f40;
+      border-radius: 14px;
+      border-top-left-radius: 3px;
       padding: 9px 14px;
-      border-radius: 12px;
-      font-size: 13px;
-      line-height: 1.5;
+      font-size: 13.5px;
+      line-height: 1.55;
+      color: #e2e8f0;
       word-break: break-word;
       position: relative;
     }
-    .msg-row.incoming .msg-bubble {
-      background: #14213d;
-      color: #f1f5f9;
-      border: 1px solid #1e335e;
-      border-top-left-radius: 3px;
-    }
-    .msg-row.outgoing .msg-bubble {
-      background: #1d4ed8;
-      color: #ffffff;
+    .msg-group.outgoing .msg-bubble {
+      background: #0d3856;
+      border-color: #175480;
+      border-top-left-radius: 14px;
       border-top-right-radius: 3px;
-      box-shadow: 0 4px 14px rgba(29, 78, 216, 0.25);
     }
 
     .msg-bubble a {
       color: #38bdf8;
       text-decoration: underline;
-    }
-    .msg-row.outgoing .msg-bubble a {
-      color: #bae6fd;
+      word-break: break-all;
     }
 
+    /* Timestamp inside bubble */
     .msg-time {
-      font-size: 10px;
+      font-size: 10.5px;
       color: #64748b;
       margin-top: 3px;
       text-align: right;
     }
-    .msg-row.outgoing .msg-time { color: #cbd5e1; }
+    .msg-group.outgoing .msg-time { color: #94a3b8; }
 
     .chat-img-thumb {
-      max-width: 240px;
-      max-height: 240px;
+      max-width: 250px;
+      max-height: 250px;
       border-radius: 8px;
       display: block;
       margin-bottom: 4px;
       cursor: pointer;
     }
     .chat-audio-player {
-      width: 210px;
+      width: 220px;
       height: 34px;
       margin-top: 4px;
       outline: none;
     }
 
-    /* ============ 🌟 BOTTOM CHAT INPUT BAR (ដូចរូបថត ១០០%) ============ */
-    .chat-bottom-wrapper {
-      padding: 10px 20px 14px 20px;
-      background: transparent;
+    /* ============ 4. BOTTOM INPUT CAPSULE ============ */
+    .chat-bottom-bar {
+      padding: 8px 16px 14px 16px;
+      flex-shrink: 0;
     }
-    .chat-input-capsule {
-      background: #111d38;
-      border: 1px solid #1d2f59;
-      border-radius: 30px;
-      padding: 5px 14px;
+    .input-capsule {
+      background: #0e202c;
+      border: 1px solid #183345;
+      border-radius: 9999px;
+      padding: 4px 6px 4px 12px;
       display: flex;
       align-items: center;
       gap: 10px;
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
     }
-    .chat-input-capsule:focus-within {
-      border-color: #2563eb;
+    .input-capsule:focus-within {
+      border-color: #0284c7;
     }
 
-    /* Action Icon Buttons ខាងឆ្វេង (Emoji, Video, Gallery) */
-    .input-action-btn {
+    /* 3 Icons on the left: Emoji, Video, Gallery */
+    .left-actions {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: #94a3b8;
+    }
+    .left-action-btn {
       background: transparent;
       border: none;
-      color: #94a3b8;
+      color: inherit;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 4px;
+      padding: 3px;
       border-radius: 50%;
-      transition: all 0.15s ease;
+      transition: color 0.15s;
     }
-    .input-action-btn:hover {
-      color: #38bdf8;
-      background: rgba(56, 189, 248, 0.1);
-    }
-    .input-action-btn.recording {
-      color: #ef4444;
-      animation: pulse 1s infinite;
-    }
+    .left-action-btn:hover { color: #38bdf8; }
 
-    @keyframes pulse {
-      0% { transform: scale(1); }
-      50% { transform: scale(1.15); }
-      100% { transform: scale(1); }
-    }
-
-    .chat-text-input {
+    .chat-input-field {
       flex: 1;
       background: transparent;
       border: none;
@@ -398,27 +290,39 @@
       color: #f8fafc;
       font-family: 'Kantumruy Pro', sans-serif;
       font-size: 13.5px;
-      padding: 6px 4px;
+      padding: 6px 2px;
     }
-    .chat-text-input::placeholder {
+    .chat-input-field::placeholder {
       color: #64748b;
     }
 
-    .btn-send-msg {
-      background: transparent;
+    /* Right Round Cyan Action Button (Mic / Send) */
+    .right-circle-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: #0284c7;
       border: none;
-      color: #38bdf8;
+      color: #ffffff;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 6px;
-      border-radius: 50%;
+      flex-shrink: 0;
       transition: all 0.15s ease;
+      box-shadow: 0 2px 8px rgba(2, 132, 199, 0.4);
     }
-    .btn-send-msg:hover {
-      color: #ffffff;
-      background: #1d4ed8;
+    .right-circle-btn:hover {
+      background: #0369a1;
+      transform: scale(1.03);
+    }
+    .right-circle-btn.recording {
+      background: #ef4444;
+      animation: pulseRec 1s infinite;
+    }
+    @keyframes pulseRec {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.1); }
     }
 
     .recording-banner {
@@ -429,204 +333,165 @@
       font-size: 12.5px;
       font-weight: 700;
       flex: 1;
-      padding-left: 6px;
     }
 
-    /* ── RESPONSIVE MOBILE ── */
-    @media screen and (max-width: 820px) {
-      .sidebar { display: none; }
-      .room-header-card { margin: 8px 10px 0 10px; }
-      .chat-bottom-wrapper { padding: 8px 10px 12px 10px; }
-      .msg-row { max-width: 90%; }
+    /* Loading Overlay */
+    .loading-gate {
+      position: fixed; inset: 0; background: #05131b;
+      display: flex; flex-direction: column; align-items: center;
+      justify-content: center; z-index: 100; gap: 12px;
     }
+    .loading-spinner {
+      width: 36px; height: 36px; border: 3px solid rgba(56, 189, 248, 0.2);
+      border-top-color: #38bdf8; border-radius: 50%; animation: spin 0.8s linear infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
   </style>
 </head>
 <body>
 
-  <!-- ============ SIDEBAR ឆ្វេង ============ -->
-  <aside class="sidebar">
-    <!-- Brand -->
-    <div class="brand-box">
-      <div class="brand-icon-wrap">
-        <!-- Graduation Cap Icon -->
-        <svg class="icon" viewBox="0 0 24 24"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
-      </div>
-      <div>
-        <div class="brand-title">KrouDigital4.0</div>
-        <div class="brand-subtitle">គ្រប់គ្រងពិន្ទុ និងថ្នាក់</div>
-      </div>
+  <!-- 🔒 ផ្ទាំងត្រួតពិនិត្យគណនីពេលទើបបើក -->
+  <div class="loading-gate" id="loadingGate">
+    <div class="loading-spinner"></div>
+    <div style="font-size: 13px; color: #38bdf8; font-weight: 600;">🔒 កំពុងផ្ទៀងផ្ទាត់គណនី...</div>
+  </div>
+
+  <!-- 1. TOP NAVBAR -->
+  <header class="top-navbar">
+    <div class="nav-back-link" onclick="history.back()">
+      <svg class="icon" viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
+      <span>សារសន្ទនា</span>
     </div>
 
-    <!-- User Profile Badge -->
-    <div class="user-profile-box">
-      <div class="user-avatar" id="sidebarAvatar">ស</div>
-      <div class="user-info">
-        <div class="name" id="sidebarName">សេង សុភាវី</div>
-        <div class="role" id="sidebarRole">គ្រូបង្រៀន</div>
+    <div class="top-navbar-right">
+      <div class="user-pill-tag" id="userBadge" style="display:none;">
+        <span id="userBadgeName">...</span>
+        <button onclick="handleLogout()" title="ចាកចេញ" style="background:none; border:none; color:#ef4444; cursor:pointer; font-weight:bold;">✕</button>
       </div>
+
+      <button class="icon-btn" title="ប្ដូរពន្លឺ">
+        <svg class="icon" viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="4"/>
+          <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>
+        </svg>
+      </button>
+
+      <button class="icon-btn" title="ការជូនដំណឹង">
+        <svg class="icon" viewBox="0 0 24 24">
+          <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+          <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+        </svg>
+      </button>
     </div>
+  </header>
 
-    <!-- Class Selector Badge -->
-    <div class="class-badge-box">
-      <!-- School / Building Icon -->
-      <svg class="icon" viewBox="0 0 24 24"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 10h1M14 10h1M9 14h1M14 14h1M9 18h1M14 18h1"/></svg>
-      <span id="sidebarClass">ថ្នាក់ទី4ក • 2026-2027</span>
-    </div>
-
-    <!-- Menu Items (ដូចក្នុងរូបថត) -->
-    <ul class="menu-list">
-      <!-- ស្រង់ពិន្ទុ -->
-      <li class="menu-item" onclick="location.href='index.html'">
-        <svg class="icon" viewBox="0 0 24 24"><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><rect x="8" y="2" width="8" height="4" rx="1" ry="1"/><path d="M9 12h6M9 16h6"/></svg>
-        <span>ស្រង់ពិន្ទុ</span>
-      </li>
-
-      <!-- លទ្ធផលសិក្សា -->
-      <li class="menu-item" onclick="location.href='rank.html'">
-        <svg class="icon" viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
-        <span>លទ្ធផលសិក្សា</span>
-      </li>
-
-      <!-- សំណើសុំច្បាប់សិស្ស -->
-      <li class="menu-item" onclick="location.href='attendance.html'">
-        <svg class="icon" viewBox="0 0 24 24"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
-        <span>សំណើសុំច្បាប់សិស្ស</span>
-      </li>
-
-      <!-- របាយការណ៍ -->
-      <li class="menu-item">
-        <svg class="icon" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
-        <span>របាយការណ៍</span>
-      </li>
-
-      <!-- ការងារ -->
-      <li class="menu-item">
-        <svg class="icon" viewBox="0 0 24 24"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M7 15h0M2 9.5h20"/></svg>
-        <span>ការងារ</span>
-      </li>
-
-      <!-- បណ្ណាល័យឯកសារ -->
-      <li class="menu-item">
-        <svg class="icon" viewBox="0 0 24 24"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg>
-        <span>បណ្ណាល័យឯកសារ</span>
-      </li>
-
-      <!-- សារសន្ទនា (ACTIVE) -->
-      <li class="menu-item active">
-        <svg class="icon" viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-        <span>សារសន្ទនា</span>
-      </li>
-
-      <!-- អំពី និងជំនួយ -->
-      <li class="menu-item menu-footer-item">
-        <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
-        <span>អំពី និងជំនួយ</span>
-      </li>
-    </ul>
-  </aside>
-
-  <!-- ============ CHAT CONTAINER ============ -->
-  <main class="chat-container">
-
-    <!-- Top Navbar -->
-    <header class="top-navbar">
-      <div class="top-nav-left" onclick="history.back()">
-        <!-- Chevron Left Icon -->
-        <svg class="icon" viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg>
-        <span>សារសន្ទនា</span>
-      </div>
-
-      <div class="top-nav-right">
-        <!-- Sun / Brightness Toggle Icon -->
-        <button class="nav-icon-btn" title="ប្ដូរពន្លឺ">
-          <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
-        </button>
-
-        <!-- Notification Bell Icon -->
-        <button class="nav-icon-btn" title="ការជូនដំណឹង">
-          <svg class="icon" viewBox="0 0 24 24"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>
-        </button>
-      </div>
-    </header>
-
-    <!-- Floating Chat Room Header (ដូចក្នុងរូបថត) -->
+  <!-- 2. FLOATING ROOM HEADER -->
+  <div class="room-header-wrap">
     <div class="room-header-card">
       <div class="room-left">
-        <button class="room-back-btn" title="ថយក្រោយ">
-          <svg class="icon-sm" viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
-        </button>
-        <div class="room-logo">
-          <!-- Room Badge Icon -->
-          <svg style="width:20px; height:20px; color:#1d4ed8;" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/></svg>
+        <span class="room-arrow-btn" onclick="history.back()" title="ថយក្រោយ">
+          <svg class="icon" viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+        </span>
+
+        <div class="room-badge-logo">
+          <svg viewBox="0 0 24 24" fill="none">
+            <circle cx="12" cy="12" r="10" stroke="#0284c7" stroke-width="2"/>
+            <path d="M8 12l3 3 5-5" stroke="#059669" stroke-width="2" stroke-linecap="round"/>
+          </svg>
         </div>
-        <div class="room-title" id="roomTitle">ក្រុមពិគ្រោះ និងដោះស្រាយចម្ងល់</div>
+
+        <span class="room-title-text" id="roomTitle">ក្រុមពិគ្រោះ និងដោះស្រាយចម្ងល់</span>
       </div>
 
       <div class="room-right">
-        <!-- Search Magnifying Glass Icon -->
-        <button class="room-action-btn" title="ស្វែងរកសារ">
+        <button class="icon-btn" title="ស្វែងរកសារ">
           <svg class="icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
         </button>
 
-        <!-- Group / Users Icon -->
-        <button class="room-action-btn" title="សមាជិកក្រុម">
-          <svg class="icon" viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        <button class="icon-btn" title="សមាជិកក្រុម">
+          <svg class="icon" viewBox="0 0 24 24">
+            <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
+            <circle cx="9" cy="7" r="4"/>
+            <path d="M23 21v-2a4 4 0 0 0-3-3.87"/>
+            <path d="M16 3.13a4 4 0 0 1 0 7.75"/>
+          </svg>
         </button>
       </div>
     </div>
+  </div>
 
-    <!-- Chat Messages Body -->
-    <div class="chat-messages" id="chatBox">
-      <div style="text-align:center; padding:30px; color:#64748b;">⏳ កំពុងទាញយកសារ...</div>
-    </div>
+  <!-- 3. CHAT MESSAGES BODY -->
+  <div class="chat-messages" id="chatBox">
+    <div style="text-align:center; padding:30px; color:#64748b;">⏳ កំពុងទាញយកសារ...</div>
+  </div>
 
-    <!-- 🌟 BOTTOM CHAT INPUT BAR (ICON ដូចរូបថត ១០០%) -->
-    <div class="chat-bottom-wrapper">
-      <div class="chat-input-capsule">
-        
-        <!-- 1. Emoji / Smiley Face Icon -->
-        <button class="input-action-btn" title="Emoji">
-          <svg class="icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/></svg>
+  <!-- 4. BOTTOM INPUT CAPSULE -->
+  <div class="chat-bottom-bar">
+    <div class="input-capsule">
+      
+      <div class="left-actions">
+        <!-- 1. Emoji Icon -->
+        <button class="left-action-btn" title="Emoji">
+          <svg class="icon" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="10"/>
+            <path d="M8 14s1.5 2 4 2 4-2 4-2"/>
+            <line x1="9" y1="9" x2="9.01" y2="9"/>
+            <line x1="15" y1="9" x2="15.01" y2="9"/>
+          </svg>
         </button>
 
         <!-- 2. Video Camera Icon -->
-        <button class="input-action-btn" title="វីដេអូ">
-          <svg class="icon" viewBox="0 0 24 24"><polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2" ry="2"/></svg>
+        <button class="left-action-btn" title="វីដេអូ">
+          <svg class="icon" viewBox="0 0 24 24">
+            <polygon points="23 7 16 12 23 17 23 7"/>
+            <rect x="1" y="5" width="15" height="14" rx="2" ry="2"/>
+          </svg>
         </button>
 
-        <!-- 3. Image / Gallery Landscape Icon -->
-        <button class="input-action-btn" onclick="document.getElementById('imageFileInput').click()" title="ផ្ញើរូបភាព">
-          <svg class="icon" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+        <!-- 3. Image Gallery Icon -->
+        <button class="left-action-btn" onclick="document.getElementById('imageFileInput').click()" title="ផ្ញើរូបភាព">
+          <svg class="icon" viewBox="0 0 24 24">
+            <rect x="3" y="3" width="18" height="18" rx="2" ry="2"/>
+            <circle cx="8.5" cy="8.5" r="1.5"/>
+            <polyline points="21 15 16 10 5 21"/>
+          </svg>
         </button>
         <input type="file" id="imageFileInput" accept="image/*" style="display:none" onchange="handleImageUpload(this)">
-
-        <!-- Recording Banner (បង្ហាញពេលថតសំឡេង) -->
-        <div class="recording-banner" id="recIndicator">
-          <span>🔴 កំពុងថតសំឡេង... (<span id="recTimer">0:00</span>)</span>
-          <button onclick="cancelRecording()" style="background:transparent; border:none; color:#94a3b8; cursor:pointer; font-size:11px;">[បោះបង់]</button>
-        </div>
-
-        <!-- Text Input (Placeholder: ផ្ញើសារ ដូចរូបថត) -->
-        <input type="text" id="msgInput" class="chat-text-input" placeholder="ផ្ញើសារ" onkeydown="if(event.key==='Enter') sendMsg()">
-
-        <!-- 4. Microphone Voice Recording Icon -->
-        <button class="input-action-btn" id="recordBtn" onclick="toggleVoiceRecording()" title="ថតសំឡេង">
-          <svg class="icon" viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
-        </button>
-
-        <!-- 5. Send Plane Icon -->
-        <button class="btn-send-msg" onclick="sendMsg()" title="ផ្ញើសារ">
-          <svg class="icon" viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-        </button>
-
       </div>
-    </div>
 
-  </main>
+      <!-- Recording Banner -->
+      <div class="recording-banner" id="recIndicator">
+        <span>🔴 កំពុងថតសំឡេង... (<span id="recTimer">0:00</span>)</span>
+        <button onclick="cancelRecording()" style="background:transparent; border:none; color:#94a3b8; cursor:pointer; font-size:11px;">[បោះបង់]</button>
+      </div>
+
+      <!-- Text Input Field (Placeholder: ផ្ញើសារ) -->
+      <input type="text" id="msgInput" class="chat-text-input" placeholder="ផ្ញើសារ" oninput="handleInputState(this.value)" onkeydown="if(event.key==='Enter') sendMsg()">
+
+      <!-- Right Circular Cyan Button (Mic 🎙️ / Send ➤) -->
+      <button class="right-circle-btn" id="mainActionBtn" onclick="handleMainAction()" title="ផ្ញើសារ / ថតសំឡេង">
+        <svg class="icon" id="micIcon" viewBox="0 0 24 24">
+          <path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/>
+          <path d="M19 10v2a7 7 0 0 1-14 0v-2"/>
+          <line x1="12" y1="19" x2="12" y2="23"/>
+          <line x1="8" y1="23" x2="16" y2="23"/>
+        </svg>
+
+        <svg class="icon" id="sendIcon" style="display:none;" viewBox="0 0 24 24">
+          <line x1="22" y1="2" x2="11" y2="13"/>
+          <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+        </svg>
+      </button>
+
+    </div>
+  </div>
+
+  <!-- 🔗 ភ្ជាប់ api.js ដូចទម្រង់ Login របស់អ្នក -->
+  <script src="api.js"></script>
 
   <script>
     // =========================================================
-    // ⚙️ API CONFIG
+    // ⚙️ API CONFIG & SESSION AUTH INTEGRATION
     // =========================================================
     var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxe6vrQshGAPglgmmZykljXazDNh1ZwWSRdFDAip1WWWRky24lmBo-qicLK3_i10AvT/exec';
     var CURRENT_ROOM = 'global';
@@ -634,12 +499,23 @@
     var _urlParams = new URLSearchParams(window.location.search);
     function _get(k) { try { return localStorage.getItem(k) || ''; } catch(e) { return ''; } }
 
-    var TOKEN = _urlParams.get('token') || _get('krou_session_token') || _get('school_token') || '';
-    var CURRENT_USER = { name: _get('krou_teacher_name') || 'អ្នកប្រើប្រាស់', code: 'USER', role: 'teacher' };
+    // ទាញ Token ពី api.js (getStoredToken) ឬ URL ឬ localStorage
+    var TOKEN = (typeof getStoredToken === 'function' ? getStoredToken() : '') 
+                || _urlParams.get('token') 
+                || _get('krou_session_token') 
+                || _get('school_token') 
+                || '';
+
+    var CURRENT_USER = null;
 
     async function apiCall(action, params) {
       params = params || {};
       if (TOKEN) params.token = TOKEN;
+
+      if (typeof callBackendApi === 'function') {
+        return callBackendApi(action, params);
+      }
+
       var res = await fetch(SCRIPT_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'text/plain;charset=utf-8' },
@@ -648,34 +524,63 @@
       return await res.json();
     }
 
+    // ── 🔒 ត្រួតពិនិត្យគណនីពេលចាប់ផ្ដើម (បើគ្មានគណនី -> ទៅ login.html) ──
     window.onload = async function() {
-      try {
-        var sess = await apiCall('getCurrentSession');
-        if (sess && sess.loggedIn) {
-          CURRENT_USER.name = sess.name;
-          CURRENT_USER.code = sess.code;
-          CURRENT_USER.role = sess.role;
-          document.getElementById('sidebarName').textContent = sess.name;
-          document.getElementById('sidebarRole').textContent = sess.role === 'admin' ? 'អ្នកគ្រប់គ្រង' : 'គ្រូបង្រៀន';
-          document.getElementById('sidebarAvatar').textContent = sess.name.charAt(0);
-          if (sess.assignedClass) {
-            document.getElementById('sidebarClass').textContent = 'ថ្នាក់ទី' + sess.assignedClass + ' • 2026-2027';
-          }
-        }
-      } catch(e) {}
-
-      loadMessages();
-      setInterval(loadMessages, 8000);
+      await verifyAuthentication();
     };
 
-    async function loadMessages() {
+    async function verifyAuthentication() {
+      if (!TOKEN) {
+        redirectToLogin();
+        return;
+      }
+
       try {
-        var res = await apiCall('getChatMessages', { roomId: CURRENT_ROOM });
+        var sess = await apiCall('getCurrentSession', { token: TOKEN });
+        if (sess && sess.loggedIn) {
+          CURRENT_USER = sess;
+          document.getElementById('loadingGate').style.display = 'none';
+
+          // បង្ហាញឈ្មោះអ្នក Login នៅរបារកំពូល
+          var badge = document.getElementById('userBadge');
+          var nameSpan = document.getElementById('userBadgeName');
+          badge.style.display = 'flex';
+          nameSpan.textContent = sess.name + (sess.role === 'admin' ? ' (Admin)' : '');
+
+          loadMessages();
+          setInterval(loadMessages, 6000); // ផ្ទុកសារថ្មីរៀងរាល់ ៦ វិនាទី
+        } else {
+          redirectToLogin();
+        }
+      } catch (e) {
+        redirectToLogin();
+      }
+    }
+
+    function redirectToLogin() {
+      // បញ្ជូនទៅកាន់ login.html របស់អ្នកដោយស្វ័យប្រវត្តិ
+      if (typeof removeStoredToken === 'function') removeStoredToken();
+      localStorage.removeItem('krou_session_token');
+      window.location.replace('login.html');
+    }
+
+    function handleLogout() {
+      if (confirm('តើអ្នកពិតជាចង់ចាកចេញពីគណនីមែនទេ?')) {
+        apiCall('logoutSession', { token: TOKEN });
+        redirectToLogin();
+      }
+    }
+
+    // ── ទាញយកសារ ──
+    async function loadMessages() {
+      if (!CURRENT_USER) return;
+      try {
+        var res = await apiCall('getChatMessages', { roomId: CURRENT_ROOM, token: TOKEN });
         if (res && res.success && Array.isArray(res.messages)) {
           renderMessages(res.messages);
         }
       } catch (e) {
-        console.error('loadMessages error:', e);
+        console.warn('loadMessages error:', e);
       }
     }
 
@@ -688,12 +593,14 @@
 
       var html = '';
       messages.forEach(function(m) {
-        var isMe = (m.senderName === CURRENT_USER.name) || (m.senderCode === CURRENT_USER.code);
+        // បើសារនោះផ្ញើដោយខ្លួនឯង -> រុញទៅខាងស្ដាំ (Outgoing)
+        var isMe = CURRENT_USER && (m.senderCode === CURRENT_USER.code || m.senderName === CURRENT_USER.name);
         var rowClass = isMe ? 'outgoing' : 'incoming';
-        var avatarClass = (m.senderRole === 'admin' || m.senderName.includes('KrouDigital')) ? 'owner' : 'teacher';
         
-        // ជ្រើសរើសអក្សរកាត់លើរូប Avatar (ដូចក្នុងរូប "S" ពណ៌ស្វាយ ឬ "ល" ពណ៌បៃតង)
-        var initial = (m.senderName.includes('KrouDigital') || m.senderName.includes('Owner')) ? 'S' : (m.senderName.charAt(0) || 'U');
+        var isOwner = (m.senderRole === 'admin' || m.senderName.includes('KrouDigital') || m.senderName.includes('Owner'));
+        var avatarClass = isOwner ? 'purple-s' : 'green-l';
+        var senderClass = isOwner ? 'owner-gold' : 'teacher-grey';
+        var initial = isOwner ? 'S' : (m.senderName ? m.senderName.charAt(0) : 'U');
 
         var contentHtml = '';
         if (m.type === 'image') {
@@ -709,15 +616,14 @@
             <audio src="${m.content}" controls class="chat-audio-player"></audio>
           `;
         } else {
-          // ស្វែងរក Link ដើម្បីចុចបើកបាន (ដូច Link Telegram ក្នុងរូបថត)
           contentHtml = formatLinks(escapeHtml(m.content));
         }
 
         html += `
-          <div class="msg-row ${rowClass}">
+          <div class="msg-group ${rowClass}">
             <div class="msg-avatar ${avatarClass}">${initial}</div>
-            <div class="msg-body">
-              <div class="msg-sender">${escapeHtml(m.senderName)}</div>
+            <div class="msg-content-wrap">
+              <div class="msg-sender-label ${senderClass}">${escapeHtml(m.senderName)}</div>
               <div class="msg-bubble">
                 ${contentHtml}
                 <div class="msg-time">${m.time || ''}</div>
@@ -731,28 +637,42 @@
       box.scrollTop = box.scrollHeight;
     }
 
+    function handleInputState(val) {
+      var hasText = val.trim().length > 0;
+      document.getElementById('micIcon').style.display = hasText ? 'none' : 'inline-block';
+      document.getElementById('sendIcon').style.display = hasText ? 'inline-block' : 'none';
+    }
+
+    function handleMainAction() {
+      var text = document.getElementById('msgInput').value.trim();
+      if (text) {
+        sendMsg();
+      } else {
+        toggleVoiceRecording();
+      }
+    }
+
     // ── ផ្ញើសារជាអក្សរ ──
     async function sendMsg() {
+      if (!CURRENT_USER) { redirectToLogin(); return; }
       var input = document.getElementById('msgInput');
       var text = input.value.trim();
       if (!text) return;
 
       input.value = '';
-      input.disabled = true;
+      handleInputState('');
 
       try {
-        await apiCall('sendChatMessage', { roomId: CURRENT_ROOM, text: text });
+        await apiCall('sendChatMessage', { roomId: CURRENT_ROOM, text: text, token: TOKEN });
         await loadMessages();
       } catch (err) {
         alert('មិនអាចផ្ញើសារបានទេ៖ ' + err.message);
-      } finally {
-        input.disabled = false;
-        input.focus();
       }
     }
 
-    // ── ផ្ញើរូបភាព (Image Upload) ──
+    // ── ផ្ញើរូបភាព ──
     function handleImageUpload(inputEl) {
+      if (!CURRENT_USER) { redirectToLogin(); return; }
       var file = inputEl.files[0];
       if (!file) return;
 
@@ -761,34 +681,34 @@
         var base64 = e.target.result;
         var caption = prompt('បញ្ចូលចំណងជើងរូបភាព (ប្រសិនបើមាន)៖') || '';
         
-        document.getElementById('msgInput').placeholder = '⏳ កំពុងផ្ញើរូបភាព...';
         try {
           await apiCall('sendChatMedia', {
             roomId: CURRENT_ROOM,
             mediaType: 'image',
             base64Data: base64,
             fileName: file.name,
-            caption: caption
+            caption: caption,
+            token: TOKEN
           });
-          await loadMessages();
+          loadMessages();
         } catch (err) {
           alert('កំហុសផ្ញើរូបភាព៖ ' + err.message);
         } finally {
-          document.getElementById('msgInput').placeholder = 'ផ្ញើសារ';
           inputEl.value = '';
         }
       };
       reader.readAsDataURL(file);
     }
 
-    // ── ថតសំឡេង (Voice Recording) ──
+    // ── ថតសំឡេង ──
     var mediaRecorder = null;
     var audioChunks = [];
     var recInterval = null;
     var recSeconds = 0;
 
     async function toggleVoiceRecording() {
-      var btn = document.getElementById('recordBtn');
+      if (!CURRENT_USER) { redirectToLogin(); return; }
+      var btn = document.getElementById('mainActionBtn');
       if (mediaRecorder && mediaRecorder.state === 'recording') {
         mediaRecorder.stop();
         btn.classList.remove('recording');
@@ -797,7 +717,7 @@
         document.getElementById('msgInput').style.display = 'block';
       } else {
         if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
-          alert('Browser របស់អ្នកមិនគាំទ្រការថតសំឡេងឡើយ');
+          alert('ឧបករណ៍របស់អ្នកមិនគាំទ្រការថតសំឡេងឡើយ');
           return;
         }
 
@@ -806,29 +726,24 @@
           audioChunks = [];
           mediaRecorder = new MediaRecorder(stream);
 
-          mediaRecorder.ondataavailable = function(e) {
-            audioChunks.push(e.data);
-          };
-
+          mediaRecorder.ondataavailable = function(e) { audioChunks.push(e.data); };
           mediaRecorder.onstop = async function() {
             var audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
             var reader = new FileReader();
             reader.onloadend = async function() {
               var base64Audio = reader.result;
-              document.getElementById('msgInput').placeholder = '⏳ កំពុងផ្ញើសំឡេង...';
               try {
                 await apiCall('sendChatMedia', {
                   roomId: CURRENT_ROOM,
                   mediaType: 'audio',
                   base64Data: base64Audio,
                   fileName: 'voice.webm',
-                  caption: ''
+                  caption: '',
+                  token: TOKEN
                 });
-                await loadMessages();
+                loadMessages();
               } catch (err) {
                 alert('កំហុសផ្ញើសំឡេង៖ ' + err.message);
-              } finally {
-                document.getElementById('msgInput').placeholder = 'ផ្ញើសារ';
               }
             };
             reader.readAsDataURL(audioBlob);
@@ -859,7 +774,7 @@
         mediaRecorder.onstop = null;
         mediaRecorder.stop();
       }
-      document.getElementById('recordBtn').classList.remove('recording');
+      document.getElementById('mainActionBtn').classList.remove('recording');
       clearInterval(recInterval);
       document.getElementById('recIndicator').style.display = 'none';
       document.getElementById('msgInput').style.display = 'block';
