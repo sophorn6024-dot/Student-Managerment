@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>សារសន្ទនា</title>
+  <title>សារសន្ទនា - KrouDigital</title>
   <link href="https://fonts.googleapis.com/css2?family=Kantumruy+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -23,12 +23,10 @@
     .chat-app-wrapper {
       width: 100%;
       height: 100%;
-      position: absolute;
-      inset: 0;
       display: flex;
       flex-direction: column;
+      position: relative;
       overflow: hidden;
-      background: #05131b;
     }
 
     .icon {
@@ -110,6 +108,7 @@
       align-items: center;
       justify-content: center;
       transition: all 0.2s ease;
+      touch-action: manipulation;
     }
     .room-action-btn:hover, .room-action-btn:active {
       color: #38bdf8;
@@ -213,7 +212,68 @@
     .chat-img-thumb { max-width: 250px; max-height: 250px; border-radius: 8px; display: block; margin-bottom: 4px; cursor: pointer; }
     .chat-audio-player { width: 220px; height: 34px; margin-top: 4px; outline: none; }
 
-    /* ============ 3. 🌟 BOTTOM INPUT BAR (ចាក់សោជាប់បាតក្រោមជានិច្ច) ============ */
+    /* ============ 🌟 3. NATIVE EMOJI PICKER POPUP ============ */
+    .emoji-picker-drawer {
+      position: absolute;
+      bottom: 74px;
+      left: 16px;
+      width: min(360px, calc(100% - 32px));
+      background: #0e202c;
+      border: 1.5px solid #183345;
+      border-radius: 18px;
+      box-shadow: 0 12px 35px rgba(0, 0, 0, 0.65);
+      z-index: 90;
+      display: none;
+      flex-direction: column;
+      overflow: hidden;
+      animation: popEmoji 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+    }
+    @keyframes popEmoji {
+      from { transform: scale(0.92) translateY(10px); opacity: 0; }
+      to { transform: scale(1) translateY(0); opacity: 1; }
+    }
+    .emoji-drawer-header {
+      padding: 8px 12px;
+      background: #0a1824;
+      border-bottom: 1px solid #162f40;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 11.5px;
+      font-weight: 700;
+      color: #94a3b8;
+    }
+    .emoji-drawer-grid {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 6px;
+      padding: 10px;
+      max-height: 220px;
+      overflow-y: auto;
+      font-family: 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', sans-serif;
+    }
+    .emoji-drawer-grid::-webkit-scrollbar { width: 4px; }
+    .emoji-drawer-grid::-webkit-scrollbar-thumb { background: #162f40; border-radius: 4px; }
+    .emoji-btn {
+      font-size: 24px;
+      line-height: 1.2;
+      background: transparent;
+      border: none;
+      cursor: pointer;
+      border-radius: 8px;
+      padding: 4px;
+      transition: transform 0.12s, background 0.12s;
+      user-select: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .emoji-btn:hover, .emoji-btn:active {
+      background: rgba(56, 189, 248, 0.15);
+      transform: scale(1.2);
+    }
+
+    /* ============ 4. BOTTOM INPUT BAR ============ */
     .chat-bottom-bar {
       position: fixed !important;
       bottom: 0 !important;
@@ -269,7 +329,7 @@
 
     .recording-banner { display: none; align-items: center; gap: 8px; color: #ef4444; font-size: 12.5px; font-weight: 700; flex: 1; }
 
-    /* ============ 👥 4. MEMBERS MODAL DIALOG ============ */
+    /* ============ 👥 5. MEMBERS MODAL DIALOG ============ */
     .modal-overlay {
       position: fixed; inset: 0; background: rgba(0, 0, 0, 0.8);
       backdrop-filter: blur(4px); display: none; align-items: center;
@@ -288,20 +348,16 @@
     .modal-close-btn { background: none; border: none; color: #94a3b8; font-size: 18px; cursor: pointer; padding: 4px; }
     .members-list { padding: 12px; overflow-y: auto; display: flex; flex-direction: column; gap: 8px; }
 
-    /* សមាជិកទូទៅ */
     .member-item {
       display: flex; align-items: center; gap: 12px; padding: 10px 12px;
       background: #11222e; border-radius: 12px; border: 1px solid #162f40;
       transition: all 0.2s;
     }
-
-    /* 🌟 គណនីដែលកំពុងប្រើប្រាស់ (Active Account Highlight) */
     .member-item.is-current-user {
       background: #092638 !important;
       border: 1.5px solid #0284c7 !important;
       box-shadow: 0 0 14px rgba(2, 132, 199, 0.25) !important;
     }
-
     .member-avatar {
       width: 36px; height: 36px; border-radius: 50%;
       background: #0284c7; color: #fff; font-weight: 700;
@@ -315,7 +371,6 @@
     }
     .member-info .m-sub { font-size: 11px; color: #38bdf8; margin-top: 2px; }
 
-    /* ស្លាកគណនីបច្ចុប្បន្ន */
     .badge-current-user {
       background: #059669;
       color: #ffffff;
@@ -323,7 +378,6 @@
       font-weight: 700;
       padding: 2px 7px;
       border-radius: 20px;
-      letter-spacing: 0.2px;
     }
 
     /* Loading Gate */
@@ -367,7 +421,6 @@
           <span class="room-title-text" id="roomTitle">ក្រុមពិគ្រោះ និងដោះស្រាយចម្ងល់</span>
         </div>
 
-        <!-- 🌟 ប៊ូតុង ស្វែងរក 🔍 និង សមាជិក 👥 -->
         <div class="room-right">
           <button type="button" class="room-action-btn" onclick="toggleSearch()" title="ស្វែងរកសារ">
             <svg class="icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
@@ -385,7 +438,7 @@
       </div>
     </div>
 
-    <!-- 🔍 ប្រអប់ស្វែងរកសារ -->
+    <!-- Search Bar -->
     <div class="search-bar-inline" id="searchBar">
       <input type="text" id="searchInput" class="search-input-field" placeholder="វាយពាក្យស្វែងរកសារ..." oninput="filterMessages(this.value)">
       <button type="button" onclick="toggleSearch()" style="background:none; border:none; color:#ef4444; font-size:16px; cursor:pointer; padding:4px;">✕</button>
@@ -396,12 +449,24 @@
       <div style="text-align:center; padding:30px; color:#64748b;">⏳ កំពុងទាញយកសារ...</div>
     </div>
 
-    <!-- 3. 🌟 BOTTOM INPUT CAPSULE (បង្ហាញនៅបាតក្រោមជាប់ជានិច្ច ១០០%) -->
+    <!-- 🌟 3. NATIVE EMOJI PICKER POPUP (ទាញចេញពី Emojis ដើមរបស់ទូរស័ព្ទ) -->
+    <div class="emoji-picker-drawer" id="emojiDrawer">
+      <div class="emoji-drawer-header">
+        <span>😀 រូបសញ្ញា EMOJI</span>
+        <button type="button" onclick="toggleEmojiPicker()" style="background:none; border:none; color:#94a3b8; cursor:pointer; font-size:14px;">✕</button>
+      </div>
+      <div class="emoji-drawer-grid" id="emojiGrid">
+        <!-- បញ្ជី Emoji ដើមពេញនិយម -->
+      </div>
+    </div>
+
+    <!-- 4. BOTTOM INPUT CAPSULE -->
     <div class="chat-bottom-bar" id="chatBottomBar">
       <div class="input-capsule">
         
         <div class="left-actions">
-          <button class="left-action-btn" type="button" onclick="insertEmoji('😊')" title="Emoji">
+          <!-- 🌟 ប៊ូតុង Emoji (បើកក្ដារ Emoji ដើមរបស់ទូរស័ព្ទ) -->
+          <button class="left-action-btn" type="button" onclick="toggleEmojiPicker()" title="Emoji">
             <svg class="icon" viewBox="0 0 24 24">
               <circle cx="12" cy="12" r="10"/>
               <path d="M8 14s1.5 2 4 2 4-2 4-2"/>
@@ -432,7 +497,7 @@
           <button type="button" onclick="cancelRecording()" style="background:transparent; border:none; color:#94a3b8; cursor:pointer; font-size:11px;">[បោះបង់]</button>
         </div>
 
-        <input type="text" id="msgInput" class="chat-input-field" placeholder="ផ្ញើសារ" oninput="handleInputState(this.value)" onkeydown="if(event.key==='Enter') sendMsg()">
+        <input type="text" id="msgInput" class="chat-input-field" placeholder="ផ្ញើសារ" onfocus="closeEmojiPicker()" oninput="handleInputState(this.value)" onkeydown="if(event.key==='Enter') sendMsg()">
 
         <button class="right-circle-btn" id="mainActionBtn" type="button" onclick="handleMainAction()" title="ផ្ញើសារ / ថតសំឡេង">
           <svg class="icon" id="micIcon" viewBox="0 0 24 24">
@@ -453,7 +518,7 @@
 
   </div>
 
-  <!-- 👥 4. MEMBERS MODAL DIALOG (បង្ហាញតែគណនីពិតប្រាកដ) -->
+  <!-- 👥 5. MEMBERS MODAL DIALOG -->
   <div class="modal-overlay" id="membersModal" onclick="if(event.target===this) closeMembersModal()">
     <div class="modal-card">
       <div class="modal-head">
@@ -485,18 +550,56 @@
     var CURRENT_USER = null;
     var allCachedMessages = [];
 
-    // ── 🌟 មុខងារចងកម្ពស់ Dashboard មេ កុំឱ្យរុញប្រអប់ផ្ញើសារធ្លាក់ចុះក្រោម ──
-    function fixParentLayout() {
+    // 🌟 បញ្ជី Emoji ដើមរបស់ទូរស័ព្ទ (Unicode Native Emojis)
+    var NATIVE_EMOJIS = [
+      "😀","😃","😄","😁","😆","😅","😂","🤣","🙂","🙃","😉","😊","😇","🥰","😍","🤩","😘","😗","😚","😋","😛","😜","🤪","😝","🤗","🤭","🤫","🤔","🤐","🤨","😐","😑","😶","😏","😒","🙄","😬","🤥","😌","😔","😪","🤤","😴","😷","🤒","🤕","🤢","🤮","🤧","🥵","🥶","🥴","😵","🤯","🤠","🥳","😎","🤓","🧐","👍","👎","👏","🙌","🤝","👊","✊","🤛","🤜","🤞","✌️","🤟","🤘","👌","🤏","👈","👉","👆","👇","☝️","✋","🤚","🖐️","🖖","👋","🤙","💪","🙏","❤️","🧡","💛","💚","💙","💜","🖤","🤍","🤎","💔","❣️","💕","💞","💓","💗","💖","💘","💝","💟","🔥","💯","✨","🎉","🎊","⭐","🌟","💡","☕","✅","❌","❓","❗"
+    ];
+
+    function initNativeEmojiGrid() {
+      var grid = document.getElementById('emojiGrid');
+      if (!grid) return;
+      var html = '';
+      NATIVE_EMOJIS.forEach(function(em) {
+        html += `<button type="button" class="emoji-btn" onclick="selectEmoji('${em}')">${em}</button>`;
+      });
+      grid.innerHTML = html;
+    }
+
+    function toggleEmojiPicker() {
+      var drawer = document.getElementById('emojiDrawer');
+      if (drawer.style.display === 'flex') {
+        drawer.style.display = 'none';
+      } else {
+        drawer.style.display = 'flex';
+      }
+    }
+
+    function closeEmojiPicker() {
+      var drawer = document.getElementById('emojiDrawer');
+      if (drawer) drawer.style.display = 'none';
+    }
+
+    function selectEmoji(em) {
+      var input = document.getElementById('msgInput');
+      input.value += em;
+      handleInputState(input.value);
+      input.focus();
+    }
+
+    // ── 🌟 មុខងារស្វ័យប្រវត្តិតម្រឹមផ្ទៃមើល Tablet កុំឱ្យរុញប្រអប់ផ្ញើសារធ្លាក់ចុះក្រោម ──
+    function syncVisibleHeight() {
       try {
+        var h = window.innerHeight;
         if (window.parent && window.parent !== window) {
-          var pWin = window.parent;
-          var pDoc = window.parent.document;
-          var mainWrap = pDoc.querySelector('.main-wrapper');
-          if (mainWrap) {
-            mainWrap.style.height = pWin.innerHeight + 'px';
-            mainWrap.style.maxHeight = pWin.innerHeight + 'px';
+          var frame = window.parent.document.getElementById('pageFrame');
+          if (frame) {
+            var r = frame.getBoundingClientRect();
+            var avail = window.parent.innerHeight - r.top;
+            if (avail > 200) h = avail;
           }
         }
+        var app = document.getElementById('chatApp');
+        if (app) app.style.height = h + 'px';
       } catch(e) {}
     }
 
@@ -517,10 +620,9 @@
     }
 
     window.onload = async function() {
-      fixParentLayout();
-      if (window.parent) {
-        window.parent.addEventListener('resize', fixParentLayout);
-      }
+      initNativeEmojiGrid();
+      syncVisibleHeight();
+      window.addEventListener('resize', syncVisibleHeight);
       await verifyAuthentication();
     };
 
@@ -535,6 +637,7 @@
         if (sess && sess.loggedIn) {
           CURRENT_USER = sess;
           document.getElementById('loadingGate').style.display = 'none';
+          syncVisibleHeight();
 
           await loadMessages();
           setInterval(loadMessages, 6000);
@@ -556,7 +659,6 @@
       }
     }
 
-    // ── 🔍 មុខងារស្វែងរកសារ (Search) ──
     function toggleSearch() {
       var bar = document.getElementById('searchBar');
       var input = document.getElementById('searchInput');
@@ -604,7 +706,6 @@
           var isAdm = String(t.role).toLowerCase() === 'admin';
           var initial = t.name ? t.name.charAt(0) : (t.username ? t.username.charAt(0) : 'U');
 
-          // 🌟 ផ្ទៀងផ្ទាត់ថាតើជាគណនីដែលកំពុង Login ប្រើប្រាស់ឬទេ
           var isCurrent = CURRENT_USER && (
             (t.username && t.username.toLowerCase() === (CURRENT_USER.username || '').toLowerCase()) ||
             (t.code && t.code === CURRENT_USER.code) ||
@@ -632,7 +733,6 @@
 
         area.innerHTML = html;
       } catch (err) {
-        // Fallback ប្រសិនបើទាញយកមិនបាន
         if (CURRENT_USER) {
           area.innerHTML = `
             <div class="member-item is-current-user">
@@ -653,20 +753,12 @@
       document.getElementById('membersModal').style.display = 'none';
     }
 
-    function insertEmoji(emo) {
-      var input = document.getElementById('msgInput');
-      input.value += emo;
-      handleInputState(input.value);
-      input.focus();
-    }
-
     // ── 🌟 ទាញយកសារពិតប្រាកដ (លុបសារស្វាគមន៍ចាស់ចោលស្វ័យប្រវត្តិ) ──
     async function loadMessages() {
       if (!CURRENT_USER) return;
       try {
         var res = await apiCall('getChatMessages', { roomId: CURRENT_ROOM, token: TOKEN });
         if (res && res.success && Array.isArray(res.messages)) {
-          // ❌ Auto-filter លុបសារស្វាគមន៍ចាស់ចោល មិនឱ្យបង្ហាញឡើយ
           allCachedMessages = res.messages.filter(function(m) {
             var c = String(m.content || m.text || '').trim();
             return c.indexOf('សូមស្វាគមន៍') === -1;
@@ -687,7 +779,6 @@
 
       var html = '';
       messages.forEach(function(m) {
-        // ផ្ទៀងផ្ទាត់សារផ្ទាល់ខ្លួន
         var isMe = CURRENT_USER && (m.senderCode === CURRENT_USER.code || m.senderCode === CURRENT_USER.username || m.senderName === CURRENT_USER.name);
         var rowClass = isMe ? 'outgoing' : 'incoming';
         
@@ -762,6 +853,7 @@
 
       input.value = '';
       handleInputState('');
+      closeEmojiPicker();
 
       try {
         await apiCall('sendChatMessage', { roomId: CURRENT_ROOM, text: text, token: TOKEN });
