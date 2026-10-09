@@ -32,7 +32,7 @@
       background-color: #edf6fc;
       color: #0f172a;
       font-size: 13px;
-      padding: 10px 12px 90px; /* Space for bottom bar */
+      padding: 10px 12px 60px;
       min-height: 100vh;
       -webkit-font-smoothing: antialiased;
     }
@@ -113,12 +113,14 @@
       background: #f8fafc; border: 1.5px solid var(--border-soft); border-radius: 22px;
       height: 38px; padding: 0 16px; display: flex; align-items: center; gap: 6px;
       cursor: pointer; font-size: 12.5px; font-weight: 700; color: #334155; white-space: nowrap;
+      transition: all 0.15s;
     }
 
     .bottom-toolbar { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; position: relative; }
     .btn-action {
       height: 36px; padding: 0 14px; border-radius: 8px; border: none; font-size: 12.5px;
       font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 6px;
+      transition: all 0.15s;
     }
     .btn-add { background: #0284c7; color: white; }
     .btn-add .count-box { background: #0369a1; padding: 2px 8px; border-radius: 4px; margin-left: 4px; font-size: 11.5px; }
@@ -148,7 +150,7 @@
     /* 📊 TABLE CONTAINER & STICKY SCROLL BEHAVIOR */
     .table-container {
       background: white; border-radius: 14px; border: 1px solid var(--border-soft);
-      overflow: auto; max-height: calc(100vh - 250px);
+      overflow: auto; max-height: calc(100vh - 210px);
       -webkit-overflow-scrolling: touch; position: relative;
     }
     table { width: 100%; border-collapse: separate; border-spacing: 0; min-width: 1750px; text-align: center; }
@@ -159,7 +161,7 @@
       border-bottom: 1px solid var(--border-soft); vertical-align: middle; white-space: nowrap;
     }
 
-    /* 📌 STICKY LEFT COLUMNS */
+    /* 📌 STICKY LEFT COLUMNS (ល.រ ➔ អត្តលេខ ➔ គោត្តនាម ➔ នាម) */
     .sticky-col-1 { position: sticky; left: 0px; z-index: 20; background: var(--bg-sticky); width: 50px; min-width: 50px; }
     .sticky-col-2 { position: sticky; left: 50px; z-index: 20; background: var(--bg-sticky); width: 75px; min-width: 75px; }
     .sticky-col-3 { position: sticky; left: 125px; z-index: 20; background: var(--bg-sticky); width: 70px; min-width: 70px; }
@@ -221,30 +223,20 @@
     }
     .id-badge-btn:hover { transform: scale(1.15); background-color: #db2777; }
 
-    /* ✕ CANCEL DRAFT ROW BUTTON (ដូចរូបភាពជួរទី ២) */
     .btn-cancel-draft {
       background: none; border: none; color: #64748b; font-size: 13px; font-weight: 700;
       cursor: pointer; padding: 2px 4px; border-radius: 4px; transition: color 0.15s;
     }
     .btn-cancel-draft:hover { color: #ef4444; background: #fee2e2; }
 
-    /* 🌟 GENDER PILL STYLES */
     .gender-pill {
       border-radius: 12px; font-size: 11px; font-weight: 700; padding: 2px 8px;
       border: 1px solid; outline: none; background: transparent; cursor: pointer;
     }
     .gender-f { color: #db2777; border-color: #fbcfe8; background: #fdf2f8; }
     .gender-m { color: #0284c7; border-color: #bae6fd; background: #f0f9ff; }
-    
-    /* 🌟 GENDER DASH (–) FOR NEW ROW */
-    .gender-dash {
-      color: #ea580c; border-color: #fed7aa; background: #fff7ed; font-weight: 700; padding: 2px 8px;
-    }
-
-    /* 🌟 NEW BADGE IN ACTION CELL (ដូចរូបភាពពាក្យ «ថ្មី») */
-    .badge-new-action {
-      color: #475569; font-weight: 700; font-size: 13px; display: inline-block;
-    }
+    .gender-dash { color: #ea580c; border-color: #fed7aa; background: #fff7ed; font-weight: 700; padding: 2px 8px; }
+    .badge-new-action { color: #475569; font-weight: 700; font-size: 13px; display: inline-block; }
 
     .action-icons { display: flex; align-items: center; justify-content: center; gap: 5px; }
     .btn-circle {
@@ -269,7 +261,7 @@
     .action-item:hover { background: #f1f5f9; color: var(--primary-cyan); }
     .action-item.delete { color: #ef4444; border-top: 1px solid #f1f5f9; }
 
-    .status-row { text-align: center; padding: 36px 14px; color: #64748b; font-size: 13.5px; }
+    .status-row { text-align: center; padding: 36px 14px; color: #64748b; font-size: 13.5px; font-weight: 700; }
     .spinner {
       width: 16px; height: 16px; border: 2px solid rgba(2,132,199,0.2);
       border-top-color: #0284c7; border-radius: 50%; animation: spin 0.6s linear infinite; display: inline-block;
@@ -277,32 +269,33 @@
     @keyframes spin { to { transform: rotate(360deg); } }
 
     /* ========================================================================= */
-    /* 📱 BOTTOM NAVIGATION BAR (ដូចរូបភាពខាងក្រោម) */
+    /* 📱 ARROW KEY BOTTOM BAR */
     /* ========================================================================= */
     .bottom-nav-bar {
-      position: fixed; bottom: 8px; left: 12px; right: 12px;
+      position: fixed; bottom: 12px; left: 12px; right: 12px;
       background: #ffffff; border: 1.5px solid var(--border-subtle);
-      border-radius: 14px; box-shadow: 0 8px 24px rgba(15, 23, 42, 0.12);
+      border-radius: 16px; box-shadow: 0 12px 36px rgba(15, 23, 42, 0.2);
       padding: 6px 12px; display: flex; align-items: center; justify-content: space-between;
-      gap: 8px; z-index: 990;
+      gap: 8px; z-index: 995; transform: translateY(130%); opacity: 0; pointer-events: none;
+      transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease;
     }
+    .bottom-nav-bar.visible { transform: translateY(0); opacity: 1; pointer-events: auto; }
+
     .bottom-nav-btn {
       height: 38px; padding: 0 16px; border-radius: 8px; font-size: 13px; font-weight: 700;
       cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px;
-      border: none; transition: opacity 0.15s, transform 0.15s;
+      border: none; user-select: none;
     }
     .bottom-nav-btn:active { transform: scale(0.97); }
-    .bottom-nav-primary {
-      background: #0284c7; color: white; flex: 1;
-    }
+    .bottom-nav-primary { background: #0284c7; color: white; flex: 1; }
     .bottom-nav-icon-btn {
       width: 38px; height: 38px; background: #f8fafc; border: 1.5px solid var(--border-soft);
       border-radius: 8px; display: flex; align-items: center; justify-content: center;
-      cursor: pointer; font-size: 15px; color: #334155; font-weight: 700;
+      cursor: pointer; font-size: 15px; color: #334155; font-weight: 700; user-select: none;
     }
     .bottom-nav-icon-btn:hover { background: #e2e8f0; }
 
-    /* ⚠️ MISSING MODAL & EDIT MODAL */
+    /* ⚠️ MISSING & EDIT MODALS */
     .missing-modal-overlay, .edit-modal-overlay {
       display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
       background: rgba(15, 23, 42, 0.55); backdrop-filter: blur(3px);
@@ -414,8 +407,8 @@
         <input type="text" id="searchInput" placeholder="ស្វែងរក..." oninput="handleSearch()">
       </div>
 
-      <div class="chip-btn" id="syncStatus" onclick="loadStudentData()">
-        <span>🔄</span> <span>ស្វ័យប្រវត្តិ</span>
+      <div class="chip-btn" id="syncStatus" onclick="refreshDataForce()" title="ចុចដើម្បី Update ឡើងវិញ">
+        <span>⚡</span> <span id="syncStatusText">រៀបចំរួចរាល់</span>
       </div>
 
       <div class="chip-btn" onclick="toggleLockTable()">
@@ -424,7 +417,6 @@
     </div>
 
     <div class="bottom-toolbar">
-      <!-- ➕ ប៊ូតុងបន្ថែមបានម្តងមួយ -->
       <button class="btn-action btn-add" id="btnAddRow" onclick="addNewRow()">
         <span>➕</span> <span>បន្ថែមជួរ</span>
         <span class="count-box" id="newRowCount">1</span>
@@ -438,7 +430,6 @@
         <span>⊞</span> <span>ជួរឈរ</span>
       </button>
 
-      <!-- 📋 DROPDOWN MENU -->
       <div class="column-dropdown" id="columnDropdown">
         <div class="dropdown-title">ជ្រើសជួរឈរ</div>
         <label class="col-option"><input type="checkbox" checked onchange="toggleColumn('col-id', this.checked)"> អត្តលេខ</label>
@@ -471,13 +462,8 @@
 
           <th rowspan="2" class="col-gender" style="width: 60px;"><div class="th-vertical">ភេទ</div></th>
 
-          <!-- Category 1: ទីកន្លែងកំណើតសិស្ស -->
           <th colspan="4" class="th-pob-main col-pob">ទីកន្លែងកំណើតសិស្ស</th>
-
-          <!-- Category 2: អាសយដ្ឋានបច្ចុប្បន្នសិស្ស -->
           <th colspan="4" class="th-addr-main col-address">អាសយដ្ឋានបច្ចុប្បន្នសិស្ស</th>
-
-          <!-- Category 3: ព័ត៌មានសិស្ស -->
           <th colspan="4" class="th-academic col-info">ព័ត៌មានសិស្ស</th>
 
           <!-- 📌 STICKY RIGHT COLUMN - សកម្មភាព -->
@@ -504,20 +490,20 @@
       <tbody id="tableBody">
         <tr>
           <td colspan="17" class="status-row">
-            <span class="spinner"></span> កំពុងទាញយកទិន្នន័យពី Google Sheet...
+            <span class="spinner"></span> កំពុងរៀបចំទិន្នន័យ...
           </td>
         </tr>
       </tbody>
     </table>
   </div>
 
-  <!-- 📱 BOTTOM NAVIGATION BAR (ដូចរូបភាព) -->
-  <div class="bottom-nav-bar">
-    <button class="bottom-nav-icon-btn" onclick="navigateTable('up')" title="ឡើងលើ">↑</button>
-    <button class="bottom-nav-icon-btn" onclick="navigateTable('left')" title="ទៅឆ្វេង">←</button>
-    <button class="bottom-nav-btn bottom-nav-primary" onclick="navigateTable('down')">↵ ចុះក្រោម</button>
-    <button class="bottom-nav-btn bottom-nav-primary" onclick="navigateTable('right')">→| ទៅមុខ</button>
-    <button class="bottom-nav-icon-btn" style="color:#16a34a; font-size:17px;" onclick="saveAllRows()" title="រក្សាទុក">✓</button>
+  <!-- 📱 ARROW KEY NAVIGATION BAR (បង្ហាញឡើងតែពេលបញ្ចូលទិន្នន័យ) -->
+  <div class="bottom-nav-bar" id="bottomNavBar">
+    <button class="bottom-nav-icon-btn" onmousedown="event.preventDefault()" onclick="navigateTable('up')" title="ឡើងលើ">↑</button>
+    <button class="bottom-nav-icon-btn" onmousedown="event.preventDefault()" onclick="navigateTable('left')" title="ទៅឆ្វេង">←</button>
+    <button class="bottom-nav-btn bottom-nav-primary" onmousedown="event.preventDefault()" onclick="navigateTable('down')">↵ ចុះក្រោម</button>
+    <button class="bottom-nav-btn bottom-nav-primary" onmousedown="event.preventDefault()" onclick="navigateTable('right')">→| ទៅមុខ</button>
+    <button class="bottom-nav-icon-btn" onmousedown="event.preventDefault()" style="color:#16a34a; font-size:17px;" onclick="saveAllRows()" title="រក្សាទុក">✓</button>
   </div>
 
   <!-- 💬 POPUP ACTION MENU -->
@@ -605,7 +591,13 @@
   </div>
 
   <script>
+    // ⚙️ BACKEND API URL
     const BACKEND_URL = "https://script.google.com/macros/s/AKfycbxe6vrQshGAPglgmmZykljXazDNh1ZwWSRdFDAip1WWWRky24lmBo-qicLK3_i10AvT/exec";
+
+    // ⚡ CACHE KEYS សម្រាប់រក្សាទុកក្នុង Browser Storage (បង្ហាញភ្លាមៗ)
+    const CACHE_KEY_STUDENTS = 'cache_students_data_fast_v2';
+    const CACHE_KEY_CLASSES  = 'cache_classes_list_fast_v2';
+    const CACHE_KEY_ROWNUMS  = 'cache_rownum_map_fast_v2';
 
     let studentsList = [];
     let rowNumMap = {};
@@ -614,6 +606,7 @@
     let modalPhotoBase64 = null;
     let currentStatusFilter = 'កំពុងសិក្សា';
     let isMissingFilterActive = false;
+    let searchDebounceTimer = null;
 
     function getAuthToken() {
       const urlParams = new URLSearchParams(window.location.search);
@@ -640,49 +633,136 @@
       }
     }
 
-    window.addEventListener('DOMContentLoaded', async () => {
-      await loadClassList();
-      await loadStudentData();
+    /* ========================================================================= */
+    /* 🚀 INSTANT LOAD ARCHITECTURE (បង្ហាញភ្លាមៗក្នុងពេល < 0.05 វិនាទី) */
+    /* ========================================================================= */
+    window.addEventListener('DOMContentLoaded', () => {
+      // ⚡ ជំហានទី ១៖ បង្ហាញទិន្នន័យពី Cache ភ្លាមៗ (0 វិនាទី គ្មានរង់ចាំ Spinner)
+      const hasCachedData = restoreDataFromInstantCache();
+
+      // ⚡ ជំហានទី ២៖ ទាញទិន្នន័យស្របគ្នាពី Sheet នៅផ្ទៃខាងក្រោយដើម្បី Update ឱ្យទាន់សម័យ
+      syncWithBackendParallel(!hasCachedData);
+
+      initArrowKeyVisibilityEvents();
     });
 
-    async function loadClassList() {
-      const res = await apiRequest('getClassList');
-      if (res && res.classes) {
-        const modalSelect = document.getElementById('modalGrade');
-        modalSelect.innerHTML = '';
-        res.classes.forEach(cls => {
-          modalSelect.innerHTML += `<option value="ថ្នាក់ទី${cls}">ថ្នាក់ទី ${cls}</option>`;
-        });
+    function restoreDataFromInstantCache() {
+      try {
+        const cachedStudents = localStorage.getItem(CACHE_KEY_STUDENTS);
+        const cachedClasses  = localStorage.getItem(CACHE_KEY_CLASSES);
+        const cachedRowNums  = localStorage.getItem(CACHE_KEY_ROWNUMS);
+
+        if (cachedClasses) {
+          populateClassSelect(JSON.parse(cachedClasses));
+        }
+        if (cachedRowNums) {
+          rowNumMap = JSON.parse(cachedRowNums);
+        }
+        if (cachedStudents) {
+          studentsList = JSON.parse(cachedStudents);
+          applyFilterAndRender();
+          setSyncStatusBadge("⚡ បង្ហាញភ្លាមៗ", "#0284c7");
+          return true;
+        }
+      } catch (e) {
+        console.warn("Cache restore error:", e);
+      }
+      return false;
+    }
+
+    function populateClassSelect(classes) {
+      const modalSelect = document.getElementById('modalGrade');
+      if (!modalSelect) return;
+      modalSelect.innerHTML = '';
+      classes.forEach(cls => {
+        modalSelect.innerHTML += `<option value="ថ្នាក់ទី${cls}">ថ្នាក់ទី ${cls}</option>`;
+      });
+    }
+
+    function setSyncStatusBadge(text, color = "#0284c7") {
+      const badge = document.getElementById('syncStatusText');
+      if (badge) {
+        badge.innerText = text;
+        badge.style.color = color;
       }
     }
 
-    async function loadStudentData() {
-      const tbody = document.getElementById('tableBody');
-      tbody.innerHTML = `<tr><td colspan="17" class="status-row"><span class="spinner"></span> កំពុងទាញយកទិន្នន័យពី Google Sheet...</td></tr>`;
-
-      const [rosterRes, dropRes] = await Promise.all([
-        apiRequest('getStudentRosterByClass', { className: '' }),
-        apiRequest('getStudentsDropdownList')
-      ]);
-
-      if (Array.isArray(dropRes)) {
-        rowNumMap = {};
-        dropRes.forEach(item => { if (item.id) rowNumMap[item.id] = item.rowNum; });
+    async function syncWithBackendParallel(showLoadingRow = false) {
+      if (showLoadingRow) {
+        const tbody = document.getElementById('tableBody');
+        tbody.innerHTML = `<tr><td colspan="17" class="status-row"><span class="spinner"></span> កំពុងទាញទិន្នន័យពី Google Sheet...</td></tr>`;
       }
 
-      if (Array.isArray(rosterRes)) {
-        studentsList = rosterRes.map(s => ({
-          ...s,
-          rowNum: rowNumMap[s.id] || null,
-          isDraft: false
-        }));
-      } else {
-        studentsList = [];
+      setSyncStatusBadge("🔄 កំពុងពិនិត្យ...");
+
+      try {
+        // ⚡ ហៅ Request ស្របគ្នាទាំងអស់ក្នុងពេលតែមួយ (Parallel 3x Faster)
+        const [classesRes, rosterRes, dropRes] = await Promise.all([
+          apiRequest('getClassList'),
+          apiRequest('getStudentRosterByClass', { className: '' }),
+          apiRequest('getStudentsDropdownList')
+        ]);
+
+        if (classesRes && classesRes.classes) {
+          localStorage.setItem(CACHE_KEY_CLASSES, JSON.stringify(classesRes.classes));
+          populateClassSelect(classesRes.classes);
+        }
+
+        if (Array.isArray(dropRes)) {
+          rowNumMap = {};
+          dropRes.forEach(item => { if (item.id) rowNumMap[item.id] = item.rowNum; });
+          localStorage.setItem(CACHE_KEY_ROWNUMS, JSON.stringify(rowNumMap));
+        }
+
+        if (Array.isArray(rosterRes)) {
+          studentsList = rosterRes.map(s => ({
+            ...s,
+            rowNum: rowNumMap[s.id] || null,
+            isDraft: false
+          }));
+          // រក្សាទុកក្នុង Cache សម្រាប់បើកលើកក្រោយបង្ហាញភ្លាមៗ
+          localStorage.setItem(CACHE_KEY_STUDENTS, JSON.stringify(studentsList));
+          applyFilterAndRender();
+          setSyncStatusBadge("⚡ ទាន់សម័យ", "#16a34a");
+        }
+      } catch (err) {
+        setSyncStatusBadge("⚠️ ក្រៅបណ្ដាញ", "#ea580c");
       }
-      applyFilterAndRender();
     }
 
-    /* ➕ បន្ថែមជួរថ្មី (អនុញ្ញាតតែម្តងមួយជួរដេកប៉ុណ្ណោះ) */
+    function refreshDataForce() {
+      syncWithBackendParallel(true);
+    }
+
+    /* ========================================================================= */
+    /* 📱 ARROW KEY BAR VISIBILITY */
+    /* ========================================================================= */
+    function showBottomNavBar() {
+      const bar = document.getElementById('bottomNavBar');
+      if (bar) bar.classList.add('visible');
+    }
+
+    function hideBottomNavBar() {
+      const bar = document.getElementById('bottomNavBar');
+      if (bar) bar.classList.remove('visible');
+    }
+
+    function initArrowKeyVisibilityEvents() {
+      const tableBody = document.getElementById('tableBody');
+      tableBody.addEventListener('focusin', (e) => {
+        if (e.target.matches('input, select')) showBottomNavBar();
+      });
+
+      document.addEventListener('focusout', () => {
+        setTimeout(() => {
+          const activeEl = document.activeElement;
+          const isInTable = activeEl && activeEl.closest('#tableBody');
+          const isInBottomBar = activeEl && activeEl.closest('#bottomNavBar');
+          if (!isInTable && !isInBottomBar) hideBottomNavBar();
+        }, 120);
+      });
+    }
+
     function addNewRow() {
       const hasDraft = studentsList.some(s => s.isDraft);
       if (hasDraft) {
@@ -694,7 +774,7 @@
         isDraft: true,
         id: '',
         name: '',
-        sex: '', // shows '-'
+        sex: '',
         dob: '',
         grade: 'ថ្នាក់ទី៤ក',
         phone: '',
@@ -704,18 +784,20 @@
       });
 
       applyFilterAndRender();
+      showBottomNavBar();
 
-      // រំកិលទៅជួរដេកថ្មីនោះដោយស្វ័យប្រវត្តិ
       setTimeout(() => {
         const tableContainer = document.getElementById('tableContainer');
         tableContainer.scrollTop = tableContainer.scrollHeight;
-      }, 100);
+        const newRowInputs = document.querySelectorAll('#tableBody tr:last-child input.table-input');
+        if (newRowInputs.length > 0) newRowInputs[0].focus();
+      }, 80);
     }
 
-    /* ✕ លុបជួរដេកដែលទើបបន្ថែម (Cancel Draft Row) */
     function cancelDraftRow(idx) {
       studentsList.splice(idx, 1);
       applyFilterAndRender();
+      hideBottomNavBar();
     }
 
     function toggleStatusDropdown(e) {
@@ -800,6 +882,13 @@
       applyFilterAndRender();
     }
 
+    function handleSearch() {
+      clearTimeout(searchDebounceTimer);
+      searchDebounceTimer = setTimeout(() => {
+        applyFilterAndRender();
+      }, 70); // ⚡ Ultra-fast debounce
+    }
+
     function applyFilterAndRender() {
       const q = document.getElementById('searchInput').value.toLowerCase().trim();
 
@@ -835,10 +924,9 @@
       return age > 0 ? age : '';
     }
 
-    // 🎨 RENDER TABLE (ជាមួយជួរថ្មីដូចរូបភាព Row 2)
+    /* 🚀 HIGH-SPEED TABLE RENDERING (ARRAY JOIN BUFFER) */
     function renderTable(list) {
       const tbody = document.getElementById('tableBody');
-      tbody.innerHTML = '';
 
       if (list.length === 0) {
         tbody.innerHTML = `<tr><td colspan="17" class="status-row">គ្មានទិន្នន័យសិស្សត្រូវបង្ហាញឡើយ! ចុច «➕ បន្ថែមជួរ» ដើម្បីបញ្ចូលថ្មី។</td></tr>`;
@@ -847,20 +935,22 @@
       }
 
       let femaleCount = 0;
+      const rowsHtml = [];
 
-      list.forEach((s, idx) => {
+      for (let idx = 0; idx < list.length; idx++) {
+        const s = list[idx];
         const isF = (s.sex || '').indexOf('ស្រី') !== -1;
         if (isF) femaleCount++;
 
-        let fullName = (s.name || '').trim();
-        let parts = fullName.split(' ');
-        let lastName = parts[0] || '';
-        let firstName = parts.slice(1).join(' ') || '';
+        const fullName = (s.name || '').trim();
+        const parts = fullName.split(' ');
+        const lastName = parts[0] || '';
+        const firstName = parts.slice(1).join(' ') || '';
         const initialBadge = firstName ? firstName.charAt(0) : (lastName ? lastName.charAt(0) : 'ក');
         const age = calculateAge(s.dob);
 
-        let pobParts = (s.pob || '').split(',');
-        let addrParts = (s.address || '').split(',');
+        const pobParts = (s.pob || '').split(',');
+        const addrParts = (s.address || '').split(',');
 
         const hasMissingDob = !s.isDraft && (!s.dob || s.dob.trim() === '');
         const hasMissingPhone = !s.isDraft && (!s.phone || s.phone.trim() === '');
@@ -868,18 +958,13 @@
         const hasMissingAddr = !s.isDraft && (!s.address || s.address.trim() === '');
         const hasMissingId = !s.isDraft && (!s.id || s.id.trim() === '');
 
-        // 🌟 ពិនិត្យថាជាជួរថ្មី (Row 2 ដូចរូបភាព) ឬជាជួរទិន្នន័យធម្មតា
-        let col1Content = '';
-        let genderContent = '';
-        let actionContent = '';
+        let col1Content, genderContent, actionContent;
 
         if (s.isDraft) {
-          // ជួរថ្មី៖ លេខរៀង + ប៊ូតុង ✕
           col1Content = `
             <span style="font-weight:700; margin-right:3px;">${idx + 1}</span>
-            <button class="btn-cancel-draft" onclick="cancelDraftRow(${idx})" title="បោះបង់ជួរថ្មីនេះ">✕</button>
+            <button class="btn-cancel-draft" onclick="cancelDraftRow(${idx})" title="បោះបង់ជួរថ្មី">✕</button>
           `;
-          // ភេទមានសញ្ញា – (Gender Dash)
           genderContent = `
             <select class="gender-pill gender-dash" data-field="sex">
               <option value="">–</option>
@@ -887,10 +972,8 @@
               <option value="ប្រុស">ប្រុស</option>
             </select>
           `;
-          // សកម្មភាពបង្ហាញពាក្យ «ថ្មី»
           actionContent = `<span class="badge-new-action">ថ្មី</span>`;
         } else {
-          // ជួរធម្មតា៖ លេខរៀង + Badge ផ្កាឈូក
           col1Content = `
             <span style="font-weight:700; margin-right:3px;">${idx + 1}</span>
             <button class="id-badge-btn" onclick="openEditModal(${idx})" title="ចុចដើម្បីកែប្រែ">${initialBadge}</button>
@@ -909,51 +992,41 @@
           `;
         }
 
-        const tr = document.createElement('tr');
-        tr.dataset.index = idx;
-        tr.innerHTML = `
-          <!-- 📌 ជួរឈរបង្កកនៅខាងឆ្វេង -->
-          <td class="sticky-col-1">${col1Content}</td>
-          <td class="sticky-col-2 col-id">
-            <input type="text" class="table-input ${hasMissingId ? 'cell-missing' : ''}" value="${s.id || ''}" data-field="id">
-          </td>
-          <td class="sticky-col-3">
-            <input type="text" class="table-input input-left" value="${lastName}" data-field="lastName" style="font-weight:700;">
-          </td>
-          <td class="sticky-col-4">
-            <input type="text" class="table-input input-left" value="${firstName}" data-field="firstName" style="font-weight:700;">
-          </td>
+        rowsHtml.push(`
+          <tr data-index="${idx}">
+            <td class="sticky-col-1">${col1Content}</td>
+            <td class="sticky-col-2 col-id">
+              <input type="text" class="table-input ${hasMissingId ? 'cell-missing' : ''}" value="${s.id || ''}" data-field="id">
+            </td>
+            <td class="sticky-col-3">
+              <input type="text" class="table-input input-left" value="${lastName}" data-field="lastName" style="font-weight:700;">
+            </td>
+            <td class="sticky-col-4">
+              <input type="text" class="table-input input-left" value="${firstName}" data-field="firstName" style="font-weight:700;">
+            </td>
+            <td class="col-gender">${genderContent}</td>
+            <td class="col-pob"><input type="text" class="table-input ${hasMissingPob ? 'cell-missing' : ''}" value="${pobParts[3] ? pobParts[3].trim() : (pobParts[0]||'').trim()}" data-field="pob_province"></td>
+            <td class="col-pob"><input type="text" class="table-input" value="${pobParts[2] ? pobParts[2].trim() : ''}" data-field="pob_district"></td>
+            <td class="col-pob"><input type="text" class="table-input" value="${pobParts[1] ? pobParts[1].trim() : ''}" data-field="pob_commune"></td>
+            <td class="col-pob"><input type="text" class="table-input" value="${pobParts[0] ? pobParts[0].trim() : ''}" data-field="pob_village"></td>
+            <td class="col-address"><input type="text" class="table-input ${hasMissingAddr ? 'cell-missing' : ''}" value="${addrParts[3] ? addrParts[3].trim() : (addrParts[0]||'').trim()}" data-field="addr_province"></td>
+            <td class="col-address"><input type="text" class="table-input" value="${addrParts[2] ? addrParts[2].trim() : ''}" data-field="addr_district"></td>
+            <td class="col-address"><input type="text" class="table-input" value="${addrParts[1] ? addrParts[1].trim() : ''}" data-field="addr_commune"></td>
+            <td class="col-address"><input type="text" class="table-input" value="${addrParts[0] ? addrParts[0].trim() : ''}" data-field="addr_village"></td>
+            <td class="col-info">
+              <input type="date" class="table-input ${hasMissingDob ? 'cell-missing' : ''}" value="${s.dob || ''}" data-field="dob" onchange="updateRowAge(this)">
+            </td>
+            <td class="col-info"><span class="age-text" style="font-weight:700;">${age}</span></td>
+            <td class="col-info"><input type="text" class="table-input" value="${s.grade || 'ថ្នាក់ទី៤ក'}" data-field="grade"></td>
+            <td class="col-info">
+              <input type="tel" class="table-input ${hasMissingPhone ? 'cell-missing' : ''}" value="${s.phone || ''}" data-field="phone">
+            </td>
+            <td class="sticky-action">${actionContent}</td>
+          </tr>
+        `);
+      }
 
-          <td class="col-gender">${genderContent}</td>
-
-          <!-- ទីកន្លែងកំណើតសិស្ស -->
-          <td class="col-pob"><input type="text" class="table-input ${hasMissingPob ? 'cell-missing' : ''}" value="${pobParts[3] ? pobParts[3].trim() : (pobParts[0]||'').trim()}" data-field="pob_province"></td>
-          <td class="col-pob"><input type="text" class="table-input" value="${pobParts[2] ? pobParts[2].trim() : ''}" data-field="pob_district"></td>
-          <td class="col-pob"><input type="text" class="table-input" value="${pobParts[1] ? pobParts[1].trim() : ''}" data-field="pob_commune"></td>
-          <td class="col-pob"><input type="text" class="table-input" value="${pobParts[0] ? pobParts[0].trim() : ''}" data-field="pob_village"></td>
-
-          <!-- អាសយដ្ឋានបច្ចុប្បន្នសិស្ស -->
-          <td class="col-address"><input type="text" class="table-input ${hasMissingAddr ? 'cell-missing' : ''}" value="${addrParts[3] ? addrParts[3].trim() : (addrParts[0]||'').trim()}" data-field="addr_province"></td>
-          <td class="col-address"><input type="text" class="table-input" value="${addrParts[2] ? addrParts[2].trim() : ''}" data-field="addr_district"></td>
-          <td class="col-address"><input type="text" class="table-input" value="${addrParts[1] ? addrParts[1].trim() : ''}" data-field="addr_commune"></td>
-          <td class="col-address"><input type="text" class="table-input" value="${addrParts[0] ? addrParts[0].trim() : ''}" data-field="addr_village"></td>
-
-          <!-- ព័ត៌មានសិស្ស -->
-          <td class="col-info">
-            <input type="date" class="table-input ${hasMissingDob ? 'cell-missing' : ''}" value="${s.dob || ''}" data-field="dob" onchange="updateRowAge(this)">
-          </td>
-          <td class="col-info"><span class="age-text" style="font-weight:700;">${age}</span></td>
-          <td class="col-info"><input type="text" class="table-input" value="${s.grade || 'ថ្នាក់ទី៤ក'}" data-field="grade"></td>
-          <td class="col-info">
-            <input type="tel" class="table-input ${hasMissingPhone ? 'cell-missing' : ''}" value="${s.phone || ''}" data-field="phone">
-          </td>
-
-          <!-- 📌 ជួរឈរបង្កកនៅខាងស្ដាំ -->
-          <td class="sticky-action">${actionContent}</td>
-        `;
-        tbody.appendChild(tr);
-      });
-
+      tbody.innerHTML = rowsHtml.join('');
       updateCounters(list.length, femaleCount);
     }
 
@@ -969,7 +1042,6 @@
       ageBox.innerText = calculateAge(input.value);
     }
 
-    /* 📱 មុខងាររុករករវាងក្រឡាតាមប៊ូតុងខាងក្រោម */
     function navigateTable(direction) {
       const activeEl = document.activeElement;
       const allInputs = Array.from(document.querySelectorAll('#tableBody input.table-input, #tableBody select'));
@@ -985,7 +1057,7 @@
       } else if (direction === 'left' && currentIndex > 0) {
         allInputs[currentIndex - 1].focus();
       } else if (direction === 'down') {
-        const nextRowInput = allInputs[currentIndex + 12]; // Jump row
+        const nextRowInput = allInputs[currentIndex + 12];
         if (nextRowInput) nextRowInput.focus();
       } else if (direction === 'up') {
         const prevRowInput = allInputs[currentIndex - 12];
@@ -997,11 +1069,11 @@
       activeRowIndex = idx;
       const s = studentsList[idx];
 
-      let fullName = (s.name || '').trim();
-      let parts = fullName.split(' ');
-      let lastName = parts[0] || '';
-      let firstName = parts.slice(1).join(' ') || '';
-      let initial = firstName ? firstName.charAt(0) : (lastName ? lastName.charAt(0) : 'ក');
+      const fullName = (s.name || '').trim();
+      const parts = fullName.split(' ');
+      const lastName = parts[0] || '';
+      const firstName = parts.slice(1).join(' ') || '';
+      const initial = firstName ? firstName.charAt(0) : (lastName ? lastName.charAt(0) : 'ក');
 
       document.getElementById('modalHeaderSub').innerText = `${lastName}: ${firstName}`.trim() || 'គ្មានឈ្មោះ';
       document.getElementById('modalProfileNameText').innerText = `${lastName}: ${firstName}`.trim() || 'គ្មានឈ្មោះ';
@@ -1016,7 +1088,7 @@
       document.getElementById('modalLastName').value = lastName;
       document.getElementById('modalFirstName').value = firstName;
       document.getElementById('modalStudentId').value = s.id || '';
-      document.getElementById('modalGrade').value = s.grade || document.getElementById('modalGrade').options[0].value;
+      document.getElementById('modalGrade').value = s.grade || document.getElementById('modalGrade').options[0]?.value || '';
       document.getElementById('modalGender').value = s.sex || 'ស្រី';
       document.getElementById('modalDob').value = s.dob || '';
       document.getElementById('modalPhone').value = s.phone || '';
@@ -1067,6 +1139,8 @@
       s.isDraft = false;
       if (modalPhotoBase64) s.photoUrl = modalPhotoBase64;
 
+      // Update LocalStorage Cache ភ្លាមៗ
+      localStorage.setItem(CACHE_KEY_STUDENTS, JSON.stringify(studentsList));
       applyFilterAndRender();
       closeEditModal();
 
@@ -1085,11 +1159,9 @@
 
       const actionToCall = s.rowNum ? 'updateStudentData' : 'submitStudentData';
       await apiRequest(actionToCall, { formData: payload });
-      alert("បានរក្សាទុកព័ត៌មានសិស្សជោគជ័យ!");
-      await loadStudentData();
+      syncWithBackendParallel(false);
     }
 
-    // 💾 នាំចូល / រក្សាទុកទិន្នន័យទាំងអស់ទៅ Sheet
     async function saveAllRows() {
       const btn = document.getElementById('saveAllBtn');
       btn.innerHTML = `<span class="spinner"></span> កំពុងរក្សាទុក...`;
@@ -1129,11 +1201,14 @@
       btn.innerHTML = `<span>📥</span> <span>នាំចូល</span>`;
       btn.disabled = false;
       alert(`បានរក្សាទុកទិន្នន័យចំនួន ${count} នាក់ទៅកាន់ Sheet ជោគជ័យ!`);
-      await loadStudentData();
+      hideBottomNavBar();
+      syncWithBackendParallel(false);
     }
 
-    function handleSearch() { applyFilterAndRender(); }
-    function sortStudentsAlphabetical() { studentsList.sort((a,b) => (a.name || '').localeCompare(b.name || '', 'km')); applyFilterAndRender(); }
+    function sortStudentsAlphabetical() {
+      studentsList.sort((a,b) => (a.name || '').localeCompare(b.name || '', 'km'));
+      applyFilterAndRender();
+    }
 
     function toggleColumnMenu(e) {
       e.stopPropagation();
@@ -1186,6 +1261,7 @@
       if (confirm(`តើអ្នកពិតជាចង់លុបសិស្ស «${s.name || s.id}» ចេញពីប្រព័ន្ធមែនទេ?`)) {
         if (s.rowNum) await apiRequest('deleteStudentData', { rowNum: s.rowNum });
         studentsList.splice(activeRowIndex, 1);
+        localStorage.setItem(CACHE_KEY_STUDENTS, JSON.stringify(studentsList));
         applyFilterAndRender();
         alert("បានលុបទិន្នន័យរួចរាល់!");
       }
