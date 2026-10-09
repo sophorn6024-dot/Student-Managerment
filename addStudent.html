@@ -124,11 +124,12 @@
       border-bottom: 1px solid var(--border-soft); vertical-align: middle; white-space: nowrap;
     }
 
-    /* 📌 STICKY LEFT COLUMNS */
-    .sticky-col-1 { position: sticky; left: 0px; z-index: 20; background: var(--bg-sticky); width: 50px; min-width: 50px; }
-    .sticky-col-2 { position: sticky; left: 50px; z-index: 20; background: var(--bg-sticky); width: 65px; min-width: 65px; }
-    .sticky-col-3 {
-      position: sticky; left: 115px; z-index: 20; background: var(--bg-sticky); width: 75px; min-width: 75px;
+    /* 📌 STICKY LEFT COLUMNS (ល.រ ➔ អត្តលេខ ➔ គោត្តនាម ➔ នាម) */
+    .sticky-col-1 { position: sticky; left: 0px; z-index: 20; background: var(--bg-sticky); width: 48px; min-width: 48px; }
+    .sticky-col-2 { position: sticky; left: 48px; z-index: 20; background: var(--bg-sticky); width: 75px; min-width: 75px; }
+    .sticky-col-3 { position: sticky; left: 123px; z-index: 20; background: var(--bg-sticky); width: 70px; min-width: 70px; }
+    .sticky-col-4 {
+      position: sticky; left: 193px; z-index: 20; background: var(--bg-sticky); width: 75px; min-width: 75px;
       border-right: 2px solid #94a3b8 !important;
       box-shadow: 4px 0 10px -2px rgba(0, 0, 0, 0.18);
     }
@@ -140,7 +141,9 @@
       box-shadow: -4px 0 10px -2px rgba(0, 0, 0, 0.15);
     }
 
-    thead .sticky-col-1, thead .sticky-col-2, thead .sticky-col-3 { z-index: 60; background: var(--bg-header-sticky); }
+    thead .sticky-col-1, thead .sticky-col-2, thead .sticky-col-3, thead .sticky-col-4 {
+      z-index: 60; background: var(--bg-header-sticky);
+    }
     thead th.sticky-action { z-index: 60; background: #f1f5f9; color: #334155; }
 
     .th-vertical {
@@ -169,7 +172,6 @@
     .table-input:focus { border-color: #0284c7; box-shadow: 0 0 0 2px rgba(2,132,199,0.15); }
     .input-left { text-align: left; }
 
-    /* 🌟 PINK BADGE BUTTON */
     .id-badge-btn {
       background: #ec4899; color: white; width: 22px; height: 22px;
       border-radius: 50%; font-size: 11px; display: inline-flex;
@@ -404,12 +406,12 @@
     <table id="studentsTable">
       <thead>
         <tr>
-          <!-- 📌 STICKY COLUMNS ON LEFT -->
+          <!-- 📌 STICKY COLUMNS: ល.រ ➔ អត្តលេខ ➔ គោត្តនាម ➔ នាម -->
           <th rowspan="2" class="sticky-col-1"><div class="th-vertical">ល.រ</div></th>
-          <th rowspan="2" class="sticky-col-2"><div class="th-vertical">គោត្តនាម</div></th>
-          <th rowspan="2" class="sticky-col-3"><div class="th-vertical">នាម</div></th>
+          <th rowspan="2" class="sticky-col-2 col-id"><div class="th-vertical">អត្តលេខ</div></th>
+          <th rowspan="2" class="sticky-col-3"><div class="th-vertical">គោត្តនាម</div></th>
+          <th rowspan="2" class="sticky-col-4"><div class="th-vertical">នាម</div></th>
 
-          <th rowspan="2" class="col-id" style="width: 75px;"><div class="th-vertical">អត្តលេខ</div></th>
           <th rowspan="2" class="col-gender" style="width: 60px;"><div class="th-vertical">ភេទ</div></th>
 
           <!-- Category 1: ទីកន្លែងកំណើតសិស្ស -->
@@ -462,11 +464,10 @@
   </div>
 
   <!-- ========================================================================= -->
-  <!-- 🖼️ EDIT MODAL BOX (ដូចរូបភាពទី ២) -->
+  <!-- 🖼️ EDIT MODAL BOX -->
   <!-- ========================================================================= -->
   <div class="edit-modal-overlay" id="editModalOverlay">
     <div class="edit-modal-box">
-      <!-- Banner -->
       <div class="modal-banner">
         <div class="modal-banner-left">
           <div class="edit-circle-icon">✏️</div>
@@ -478,9 +479,7 @@
         <button class="modal-close-btn" onclick="closeEditModal()">✕</button>
       </div>
 
-      <!-- Modal Body -->
       <div class="modal-scroll-body">
-        <!-- Profile Photo / Avatar Card -->
         <div class="profile-card">
           <div class="profile-card-top"></div>
           <div class="avatar-wrapper">
@@ -494,7 +493,6 @@
           <div class="profile-sub-hint">JPG / PNG / WEBP · ≤ 3MB</div>
         </div>
 
-        <!-- Section Form -->
         <div class="form-section-card">
           <div class="section-title-row">
             <div class="section-title-icon">🎓</div>
@@ -565,7 +563,6 @@
         </div>
       </div>
 
-      <!-- Modal Footer -->
       <div class="modal-footer">
         <button class="modal-btn modal-btn-cancel" onclick="closeEditModal()">បោះបង់</button>
         <button class="modal-btn modal-btn-save" onclick="saveModalChanges()">💾 រក្សាទុកការកែប្រែ</button>
@@ -574,7 +571,6 @@
   </div>
 
   <script>
-    // 🔗 GOOGLE APPS SCRIPT BACKEND URL របស់លោកអ្នកត្រូវបានបញ្ចូលដោយជោគជ័យ
     const BACKEND_URL = "https://script.google.com/macros/s/AKfycbxe6vrQshGAPglgmmZykljXazDNh1ZwWSRdFDAip1WWWRky24lmBo-qicLK3_i10AvT/exec";
 
     let studentsList = [];
@@ -591,7 +587,6 @@
              'ADMIN_OR_TEACHER_TOKEN';
     }
 
-    // 📡 មុខងារហៅ API (ដោះស្រាយបញ្ហា CORS & Auto Redirects)
     async function apiRequest(action, payload = {}) {
       try {
         const response = await fetch(BACKEND_URL, {
@@ -609,7 +604,6 @@
       }
     }
 
-    // 🚀 ចាប់ផ្ដើមទាញទិន្នន័យពេលបើកទំព័រ
     window.addEventListener('DOMContentLoaded', async () => {
       await loadClassList();
       await loadStudentData();
@@ -634,7 +628,6 @@
       const tbody = document.getElementById('tableBody');
       tbody.innerHTML = `<tr><td colspan="17" class="status-row"><span class="spinner"></span> កំពុងទាញយកទិន្នន័យពី Google Sheet...</td></tr>`;
 
-      // ទាញយក Roster និង rowNum Map មកប្រើជាមួយគ្នា
       const [rosterRes, dropRes] = await Promise.all([
         apiRequest('getStudentRosterByClass', { className: cls }),
         apiRequest('getStudentsDropdownList')
@@ -666,7 +659,7 @@
       return age > 0 ? age : '';
     }
 
-    // 🎨 RENDER TABLE
+    // 🎨 RENDER TABLE (អត្តលេខ នៅពីមុខ គោត្តនាម)
     function renderTable(list = studentsList) {
       const tbody = document.getElementById('tableBody');
       tbody.innerHTML = '';
@@ -696,15 +689,16 @@
         const tr = document.createElement('tr');
         tr.dataset.index = idx;
         tr.innerHTML = `
-          <!-- 📌 ជួរឈរបង្កកនៅខាងឆ្វេង (ចុចលើ BADGE ឬ លេខ ដើម្បីបើកផ្ទាំងកែ) -->
+          <!-- 📌 ជួរឈរបង្កកនៅខាងឆ្វេង៖ ល.រ ➔ អត្តលេខ ➔ គោត្តនាម ➔ នាម -->
           <td class="sticky-col-1">
             <span style="font-weight:700; margin-right:3px;">${idx + 1}</span>
             <button class="id-badge-btn" onclick="openEditModal(${idx})" title="ចុចដើម្បីកែប្រែ">${initialBadge}</button>
           </td>
-          <td class="sticky-col-2"><input type="text" class="table-input input-left" value="${lastName}" data-field="lastName" style="font-weight:700;"></td>
-          <td class="sticky-col-3"><input type="text" class="table-input input-left" value="${firstName}" data-field="firstName" style="font-weight:700;"></td>
+          <!-- 🌟 អត្តលេខ នៅពីមុខ គោត្តនាម -->
+          <td class="sticky-col-2 col-id"><input type="text" class="table-input" value="${s.id || ''}" data-field="id"></td>
+          <td class="sticky-col-3"><input type="text" class="table-input input-left" value="${lastName}" data-field="lastName" style="font-weight:700;"></td>
+          <td class="sticky-col-4"><input type="text" class="table-input input-left" value="${firstName}" data-field="firstName" style="font-weight:700;"></td>
 
-          <td class="col-id"><input type="text" class="table-input" value="${s.id || ''}" data-field="id"></td>
           <td class="col-gender">
             <select class="gender-pill ${isF ? 'gender-f' : 'gender-m'}" data-field="sex" onchange="this.className='gender-pill '+(this.value==='ស្រី'?'gender-f':'gender-m')">
               <option value="ស្រី" ${isF ? 'selected' : ''}>ស្រី</option>
@@ -764,9 +758,6 @@
       renderTable();
     }
 
-    // =========================================================================
-    // 🌟 បើក / បិទ ផ្ទាំងកែទិន្នន័យ (EDIT MODAL)
-    // =========================================================================
     function openEditModal(idx) {
       activeRowIndex = idx;
       const s = studentsList[idx];
@@ -865,7 +856,6 @@
         photoFile: modalPhotoBase64 ? { base64: modalPhotoBase64 } : null
       };
 
-      // ប្រសិនជាសិស្សមាន rowNum ស្រាប់គឺ update បើថ្មីគឺ submit
       const actionToCall = s.rowNum ? 'updateStudentData' : 'submitStudentData';
       const res = await apiRequest(actionToCall, { formData: payload });
       
