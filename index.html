@@ -2,7 +2,7 @@
 <html lang="km" data-theme="dark">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>ប្រព័ន្ធគ្រប់គ្រងសិស្ស - KrouDigital</title>
 
   <!-- 🔤 Google Fonts Khmer -->
@@ -36,7 +36,7 @@
 
       --sidebar-w: 260px;
       --sidebar-w-collapsed: 78px;
-      --bottom-nav-h: 64px;
+      --bottom-nav-h: 60px;
     }
 
     /* 🌙 Dark Theme */
@@ -55,38 +55,43 @@
       box-sizing: border-box;
       margin: 0;
       padding: 0;
-      font-family: 'Khmer OS Battambang', 'Battambang', sans-serif;
+      font-family: 'Khmer OS Battambang', 'Battambang', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
       -webkit-tap-highlight-color: transparent;
       letter-spacing: 0.1px;
     }
 
     html, body {
-      width: 100vw;
-      height: 100vh;
+      width: 100%;
+      height: 100%;
+      height: 100dvh;
       background: var(--bg);
       color: var(--text);
       overflow: hidden;
-      position: fixed;
       font-size: 13.5px;
-      transition: background 0.25s ease, color 0.25s ease;
+      line-height: 1.5;
+      -webkit-text-size-adjust: 100%;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
     }
 
     .f-moul { font-family: 'Khmer OS Muol Light', 'Moul', cursive !important; font-weight: normal; }
 
     .app-layout {
       display: flex;
-      width: 100vw;
-      height: 100vh;
+      width: 100%;
+      height: 100%;
+      height: 100dvh;
       overflow: hidden;
       position: relative;
     }
 
     /* =========================================================
-       🧭 SIDEBAR រចនាតាមរូបភាពគំរូ (EXACT MATCH)
+       🧭 SIDEBAR រចនាតាមរូបភាពគំរូ (STABLE & CROSS-PLATFORM)
     ========================================================= */
     .sidebar {
       width: var(--sidebar-w);
-      height: 100vh;
+      height: 100%;
+      height: 100dvh;
       background: var(--sidebar-navy);
       color: #fff;
       display: flex;
@@ -100,13 +105,14 @@
 
     .sidebar.collapsed { width: var(--sidebar-w-collapsed); }
 
-    /* 🌟 ១. PROFILE HEADER (រង្វង់បៃតង + ឈ្មោះ + តួនាទី + ប៊ូតុង <) */
+    /* 🌟 ១. PROFILE HEADER */
     .sidebar-user-header {
-      padding: 18px 14px 12px;
+      padding: 16px 14px 12px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 10px;
+      flex-shrink: 0;
     }
 
     .user-profile-summary {
@@ -116,7 +122,6 @@
       min-width: 0;
     }
 
-    /* រង្វង់ពណ៌បៃតងមានអក្សរកាត់ ឬរូបថត */
     .user-green-avatar {
       width: 44px;
       height: 44px;
@@ -132,6 +137,7 @@
       box-shadow: 0 4px 10px rgba(5, 150, 105, 0.35);
       overflow: hidden;
       cursor: pointer;
+      user-select: none;
     }
     .user-green-avatar img { width: 100%; height: 100%; object-fit: cover; }
 
@@ -140,7 +146,7 @@
       white-space: nowrap;
     }
     .user-display-name {
-      font-size: 15px;
+      font-size: 14.5px;
       font-weight: 700;
       color: #ffffff;
       line-height: 1.3;
@@ -153,7 +159,6 @@
       margin-top: 2px;
     }
 
-    /* ប៊ូតុង Collapse < នៅជ្រុងស្ដាំ */
     .collapse-arrow-btn {
       width: 28px;
       height: 28px;
@@ -165,7 +170,7 @@
       align-items: center;
       justify-content: center;
       cursor: pointer;
-      font-size: 13px;
+      font-size: 14px;
       flex-shrink: 0;
       transition: all 0.2s ease;
     }
@@ -174,18 +179,19 @@
     .sidebar.collapsed .user-profile-meta { display: none; }
     .sidebar.collapsed .collapse-arrow-btn { margin: 0 auto; transform: rotate(180deg); }
 
-    /* 🌟 ២. CLASS & YEAR PILL (ថ្នាក់ទី... · 2026-2027 ⌵) */
+    /* 🌟 ២. CLASS & YEAR PILL */
     .class-year-pill-box {
-      margin: 4px 12px 14px;
+      margin: 4px 12px 12px;
       background: var(--sidebar-card-navy);
       border: 1px solid rgba(255, 255, 255, 0.1);
       border-radius: 14px;
-      padding: 10px 14px;
+      padding: 9px 12px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 8px;
       cursor: pointer;
+      flex-shrink: 0;
       transition: background 0.15s;
     }
     .class-year-pill-box:hover { background: #133457; }
@@ -194,13 +200,14 @@
       display: flex;
       align-items: center;
       gap: 10px;
-      font-size: 13.5px;
+      font-size: 13px;
       font-weight: 700;
       color: #f8fafc;
       white-space: nowrap;
       overflow: hidden;
+      text-overflow: ellipsis;
     }
-    .class-pill-left .school-ico { font-size: 16px; color: #38bdf8; }
+    .class-pill-left .school-ico { font-size: 15px; color: #38bdf8; }
     .class-pill-chevron { font-size: 11px; color: #94a3b8; }
 
     .sidebar.collapsed .class-year-pill-box { display: none; }
@@ -208,27 +215,30 @@
     .sidebar-divider {
       height: 1px;
       background: var(--sidebar-border);
-      margin: 0 12px 10px;
+      margin: 0 12px 8px;
+      flex-shrink: 0;
     }
 
-    /* 🌟 ៣. NAV LINKS LIST (ម៉ូត Active Pill ពណ៌ខៀវដូចរូប) */
+    /* 🌟 ៣. NAV LINKS LIST */
     .nav-scrollable {
       flex: 1;
+      min-height: 0; /* 🌟 សំខាន់បំផុត៖ ការពារមិនឱ្យធ្លាយ Flexbox */
       overflow-y: auto;
-      padding: 4px 10px 16px;
+      overflow-x: hidden;
+      padding: 4px 10px 14px;
       -webkit-overflow-scrolling: touch;
     }
     .nav-scrollable::-webkit-scrollbar { width: 4px; }
-    .nav-scrollable::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.1); border-radius: 4px; }
+    .nav-scrollable::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.12); border-radius: 4px; }
 
     .nav-link-btn {
-      height: 46px;
+      height: 44px;
       display: flex;
       align-items: center;
       gap: 14px;
-      padding: 0 16px;
+      padding: 0 14px;
       margin-bottom: 5px;
-      border-radius: 14px;
+      border-radius: 12px;
       color: rgba(255, 255, 255, 0.85);
       font-size: 13.5px;
       font-weight: 600;
@@ -236,12 +246,12 @@
       white-space: nowrap;
       text-decoration: none;
       transition: all 0.18s ease;
-      position: relative;
       border: 1px solid transparent;
+      user-select: none;
     }
 
     .nav-link-btn:hover {
-      background: rgba(255, 255, 255, 0.07);
+      background: rgba(255, 255, 255, 0.08);
       color: #ffffff;
     }
 
@@ -266,51 +276,53 @@
 
     .sidebar.collapsed .nav-text { display: none; }
 
-    /* ============ 🌟 ៤. SIDEBAR FOOTER (DARK/LIGHT & ចាកចេញនៅក្រោមគេ) ============ */
+    /* ============ 🌟 ៤. SIDEBAR FOOTER ============ */
     .sidebar-footer {
-      padding: 10px 10px 14px;
+      padding: 10px 10px max(12px, env(safe-area-inset-bottom));
       border-top: 1px solid var(--sidebar-border);
       display: flex;
       flex-direction: column;
       gap: 6px;
+      flex-shrink: 0;
     }
 
     .sidebar-theme-btn {
       width: 100%;
-      height: 40px;
-      border-radius: 12px;
+      height: 38px;
+      border-radius: 11px;
       border: 1px solid rgba(255, 255, 255, 0.12);
       background: rgba(255, 255, 255, 0.06);
       color: #fff;
       display: flex;
       align-items: center;
       gap: 12px;
-      padding: 0 14px;
+      padding: 0 12px;
       cursor: pointer;
-      font-size: 13px;
+      font-size: 12.5px;
       font-weight: 600;
       transition: all 0.2s ease;
+      user-select: none;
     }
     .sidebar-theme-btn:hover { background: rgba(255, 255, 255, 0.14); }
     .sidebar.collapsed .sidebar-theme-btn { padding: 0; justify-content: center; }
 
-    /* 🌟 ប៊ូតុងចាកចេញ (Logout) នៅក្រោមគេបង្អស់ */
     .sidebar-logout-btn {
       width: 100%;
-      height: 42px;
-      border-radius: 12px;
+      height: 40px;
+      border-radius: 11px;
       border: 1px solid rgba(239, 68, 68, 0.35);
       background: rgba(239, 68, 68, 0.12);
       color: #fca5a5;
       display: flex;
       align-items: center;
       gap: 12px;
-      padding: 0 14px;
+      padding: 0 12px;
       cursor: pointer;
       font-size: 13px;
       font-weight: 700;
       transition: all 0.2s ease;
       margin-top: 2px;
+      user-select: none;
     }
     .sidebar-logout-btn:hover {
       background: #ef4444;
@@ -338,21 +350,26 @@
     .admin-clear-btn:hover { background: rgba(220, 38, 38, 0.35); color: #fff; }
 
     /* =========================================================
-       🌟 MAIN WRAPPER & FULL-HEIGHT CONTENT (គ្មាន TOPBAR)
+       🌟 MAIN WRAPPER (ពេញអេក្រង់ ១០០% គ្មាន TOPBAR មិនទាក់)
     ========================================================= */
     .main-wrapper {
       flex: 1;
-      height: 100vh;
+      height: 100%;
+      height: 100dvh;
       display: flex;
       flex-direction: column;
       min-width: 0;
+      min-height: 0;
       background: var(--bg);
       position: relative;
     }
 
     .content-area {
       flex: 1;
-      height: 100vh;
+      width: 100%;
+      height: 100%;
+      min-height: 0;
+      min-width: 0;
       position: relative;
       overflow: hidden;
     }
@@ -360,7 +377,10 @@
     .view-panel {
       position: absolute;
       inset: 0;
+      width: 100%;
+      height: 100%;
       overflow-y: auto;
+      overflow-x: hidden;
       opacity: 0;
       pointer-events: none;
       transform: translateY(10px);
@@ -369,15 +389,17 @@
     }
     .view-panel.active { opacity: 1; pointer-events: auto; transform: translateY(0); }
 
-    /* DASHBOARD */
-    #dashboardView { padding: 22px 28px 45px; }
-    .dash-container { max-width: 1350px; margin: 0 auto; display: flex; flex-direction: column; gap: 18px; }
+    /* DASHBOARD VIEW */
+    #dashboardView { padding: 22px 24px 50px; }
+    .dash-container { max-width: 1400px; margin: 0 auto; display: flex; flex-direction: column; gap: 16px; }
 
     .welcome-hero {
-      border-radius: 18px; padding: 22px 26px; color: #fff;
+      border-radius: 18px; padding: 20px 24px; color: #fff;
       background: linear-gradient(135deg, #0284c7 0%, #0369a1 60%, #061a2e 100%);
       display: flex; justify-content: space-between; align-items: center;
     }
+    .welcome-hero h1 { font-size: 18px; line-height: 1.4; margin-bottom: 4px; }
+    .welcome-hero p { font-size: 12px; opacity: 0.9; }
 
     .stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
     .stat-card {
@@ -392,10 +414,24 @@
     .stat-digit { font-size: 22px; font-weight: 800; }
     .stat-title { font-size: 11.5px; color: var(--text-muted); font-weight: 600; }
 
-    /* IFRAME FULL-SCREEN */
+    /* IFRAME CONTAINER (FULL HEIGHT 100% CROSS-PLATFORM) */
     #iframeView { padding: 0; background: var(--surface); overflow: hidden !important; }
-    .iframe-container { width: 100%; height: 100%; position: relative; }
-    #pageFrame { width: 100%; height: 100%; border: none; background: var(--surface); }
+    .iframe-container {
+      width: 100%;
+      height: 100%;
+      min-height: 100%;
+      position: absolute;
+      inset: 0;
+      overflow: hidden;
+      -webkit-overflow-scrolling: touch;
+    }
+    #pageFrame {
+      width: 100%;
+      height: 100%;
+      border: none;
+      display: block;
+      background: var(--surface);
+    }
 
     .loading-glass-overlay {
       position: absolute; inset: 0; background: var(--bg); display: flex;
@@ -409,15 +445,26 @@
     }
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    /* MOBILE NAV */
+    /* 📱 MOBILE BOTTOM NAVIGATION */
     .mobile-bottom-nav {
-      display: none; position: fixed; left: 0; right: 0; bottom: 0; height: var(--bottom-nav-h);
-      background: var(--surface); backdrop-filter: blur(16px); border-top: 1px solid var(--border);
-      z-index: 40; padding: 0 8px; align-items: center; justify-content: space-around;
+      display: none;
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      height: calc(var(--bottom-nav-h) + env(safe-area-inset-bottom, 0px));
+      padding-bottom: env(safe-area-inset-bottom, 0px);
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      z-index: 40;
+      align-items: center;
+      justify-content: space-around;
+      box-shadow: 0 -4px 18px rgba(0, 0, 0, 0.08);
     }
     .m-nav-item {
       display: flex; flex-direction: column; align-items: center; justify-content: center;
       flex: 1; height: 100%; cursor: pointer; color: var(--text-muted); font-size: 10.5px; font-weight: 600;
+      user-select: none;
     }
     .m-nav-item.active { color: var(--primary); font-weight: 700; }
 
@@ -452,6 +499,7 @@
     .btn-modal.primary { background: var(--primary); color: #fff; }
     .btn-modal.cancel { background: var(--border-subtle); color: var(--text); }
 
+    /* 📱 RESPONSIVE RULES (ALL PLATFORMS) */
     @media (max-width: 768px) {
       .sidebar {
         position: fixed; left: 0; top: 0; bottom: 0; width: 275px !important;
@@ -459,9 +507,9 @@
       }
       .sidebar.open { transform: translateX(0); }
       .mobile-bottom-nav { display: flex; }
-      #dashboardView { padding: 14px 14px calc(var(--bottom-nav-h) + 16px); }
-      #iframeView { padding-bottom: var(--bottom-nav-h); }
-      .stat-grid { grid-template-columns: 1fr 1fr; }
+      #dashboardView { padding: 16px 14px calc(var(--bottom-nav-h) + env(safe-area-inset-bottom, 0px) + 16px); }
+      #iframeView { padding-bottom: calc(var(--bottom-nav-h) + env(safe-area-inset-bottom, 0px)); }
+      .stat-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
     }
   </style>
 </head>
@@ -470,7 +518,7 @@
 
 <div class="app-layout">
 
-  <div id="mobileBackdrop" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:80;" onclick="closeSidebarMobile()"></div>
+  <div id="mobileBackdrop" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:80; backdrop-filter:blur(3px);" onclick="closeSidebarMobile()"></div>
 
   <!-- =========================================================
        🧭 SIDEBAR រចនាតាមរូបភាពគំរូ + មុខងារចាស់ៗទាំងអស់
@@ -480,7 +528,6 @@
     <!-- 🌟 ១. PROFILE HEADER ខាងលើបង្អស់ -->
     <div class="sidebar-user-header">
       <div class="user-profile-summary">
-        <!-- រង្វង់ពណ៌បៃតងមានអក្សរកាត់ ឬរូបថតគ្រូពិត -->
         <div class="user-green-avatar" id="sidebarAvatar" onclick="openProfileModal()" title="ព័ត៌មានផ្ទាល់ខ្លួន">
           <span id="sidebarInitialChar">ស</span>
         </div>
@@ -490,8 +537,7 @@
         </div>
       </div>
 
-      <!-- ប៊ូតុង Collapse < នៅជ្រុងស្ដាំ -->
-      <button class="collapse-arrow-btn" id="collapseArrowBtn" onclick="toggleSidebarCollapse()" title="បង្រួមរបាចំហៀង">
+      <button class="collapse-arrow-btn" id="collapseArrowBtn" onclick="toggleSidebarCollapse()" title="បង្រួម/ពង្រីករបាចំហៀង">
         <span id="collapseArrowChar">‹</span>
       </button>
     </div>
@@ -509,61 +555,51 @@
 
     <!-- 🌟 ៣. បញ្ជីមុខងារចាស់ៗទាំងអស់ រៀបចំតាមម៉ូតរូបភាពគំរូ -->
     <nav class="nav-scrollable">
-      <!-- 1. ទំព័រដើម (ផ្ទាំងរបស់គ្រូ) -->
       <div class="nav-link-btn active" data-page="dashboard" onclick="navigate('dashboard', this)">
         <span class="nav-icon-box">⊞</span>
         <span class="nav-text">ទំព័រដើម</span>
       </div>
 
-      <!-- 2. បញ្ចូលសិស្សថ្មី -->
       <div class="nav-link-btn" data-page="addStudent" onclick="navigate('addStudent', this)">
         <span class="nav-icon-box">✍️</span>
         <span class="nav-text">បញ្ចូលសិស្សថ្មី</span>
       </div>
 
-      <!-- 3. កាតសិស្ស (ID Card) -->
       <div class="nav-link-btn" data-page="card" onclick="navigate('card', this)">
         <span class="nav-icon-box">🪪</span>
         <span class="nav-text">កាតសិស្ស (ID Card)</span>
       </div>
 
-      <!-- 4. បែងចែកជាក្រុម -->
       <div class="nav-link-btn" data-page="group" onclick="navigate('group', this)">
         <span class="nav-icon-box">👥</span>
         <span class="nav-text">បែងចែកជាក្រុម</span>
       </div>
 
-      <!-- 5. បង្វិលកង់ជ្រើសរើស -->
       <div class="nav-link-btn" data-page="wheel" onclick="navigate('wheel', this)">
         <span class="nav-icon-box">🎡</span>
         <span class="nav-text">បង្វិលកង់ជ្រើសរើស</span>
       </div>
 
-      <!-- 6. វត្តមានសិស្ស -->
       <div class="nav-link-btn" data-page="attendance" onclick="navigate('attendance', this)">
         <span class="nav-icon-box">📅</span>
         <span class="nav-text">វត្តមានសិស្ស</span>
       </div>
 
-      <!-- 7. ស្រង់ពិន្ទុ -->
       <div class="nav-link-btn" data-page="score" onclick="navigate('score', this)">
-        <span class="nav-icon-box">📋</span>
+        <span class="nav-icon-box">📊</span>
         <span class="nav-text">ស្រង់ពិន្ទុ</span>
       </div>
 
-      <!-- 8. សារសន្ទនា -->
       <div class="nav-link-btn" data-page="chat" onclick="navigate('chat', this)">
         <span class="nav-icon-box">💬</span>
         <span class="nav-text">សារសន្ទនា</span>
       </div>
 
-      <!-- 9. របាយការណ៍ (ម៉ូត Active Pill ដូចរូបភាពគំរូ) -->
       <div class="nav-link-btn" data-page="reportsHub" onclick="navigate('reportsHub', this)">
         <span class="nav-icon-box">📄</span>
         <span class="nav-text">របាយការណ៍</span>
       </div>
 
-      <!-- 10. គ្រប់គ្រងគ្រូ (សម្រាប់តែ Admin) -->
       <div class="nav-link-btn" id="teacherAdminNav" data-page="teacher" onclick="navigate('teacher', this)" style="display:none;">
         <span class="nav-icon-box">👨‍🏫</span>
         <span class="nav-text">គ្រប់គ្រងគ្រូ</span>
@@ -594,7 +630,7 @@
   <main class="main-wrapper">
     <div class="content-area">
 
-      <!-- 1. DASHBOARD -->
+      <!-- 1. DASHBOARD VIEW -->
       <div class="view-panel active" id="dashboardView">
         <div class="dash-container">
           <div class="welcome-hero">
@@ -602,7 +638,7 @@
               <h1 class="f-moul" id="heroGreeting">សូមស្វាគមន៍មកកាន់ប្រព័ន្ធគ្រប់គ្រងសិស្ស 👋</h1>
               <p>សាលាបឋមសិក្សាកំពង់ល្ពៅ · ប្រព័ន្ធគ្រប់គ្រងទិន្នន័យឌីជីថល</p>
             </div>
-            <div style="font-size:45px;">🏫</div>
+            <div style="font-size:42px;">🏫</div>
           </div>
 
           <div class="stat-grid">
@@ -626,7 +662,7 @@
         </div>
       </div>
 
-      <!-- 2. IFRAME VIEW -->
+      <!-- 2. IFRAME VIEW (ផ្ទៃពេញអេក្រង់ ១០០% មិនរត់ខុស) -->
       <div class="view-panel" id="iframeView">
         <div class="iframe-container">
           <div class="loading-glass-overlay" id="loadingOverlay">
@@ -639,19 +675,19 @@
 
     </div>
 
-    <!-- MOBILE BOTTOM NAVIGATION -->
+    <!-- 📱 MOBILE BOTTOM NAVIGATION -->
     <nav class="mobile-bottom-nav">
       <div class="m-nav-item active" id="mNavDash" onclick="navigate('dashboard', null)">
-        <span>⊞</span><span>ទំព័រដើម</span>
+        <span style="font-size:18px;">⊞</span><span>ទំព័រដើម</span>
       </div>
       <div class="m-nav-item" id="mNavAtt" onclick="navigate('attendance', null)">
-        <span>📅</span><span>វត្តមាន</span>
+        <span style="font-size:18px;">📅</span><span>វត្តមាន</span>
       </div>
       <div class="m-nav-item" id="mNavScores" onclick="navigate('score', null)">
-        <span>📋</span><span>ស្រង់ពិន្ទុ</span>
+        <span style="font-size:18px;">📊</span><span>ស្រង់ពិន្ទុ</span>
       </div>
       <div class="m-nav-item" onclick="openSidebarMobile()">
-        <span>☰</span><span>ម៉ឺនុយ</span>
+        <span style="font-size:18px;">☰</span><span>ម៉ឺនុយ</span>
       </div>
     </nav>
   </main>
@@ -664,7 +700,7 @@
       <button class="modal-close-btn" onclick="closeProfileModal()">✕</button>
       <div style="font-size:14.5px; font-weight:bold;">👤 ព័ត៌មានផ្ទាល់ខ្លួន</div>
       <img id="profilePhotoPreview" class="modal-avatar-preview" src="" style="display:none;">
-      <div id="profileAvatarPlaceholder" class="modal-avatar-preview" style="display:flex; align-items:center; justify-content:center; font-size:28px; background:linear-gradient(135deg,#3b82f6,#8b5cf6);">👤</div>
+      <div id="profileAvatarPlaceholder" class="modal-avatar-preview" style="display:flex; align-items:center; justify-content:center; font-size:28px; background:linear-gradient(135deg,#0284c7,#061a2e);">👤</div>
     </div>
 
     <div class="modal-body">
@@ -721,20 +757,7 @@
   let USER_ROLE = localStorage.getItem('krou_user_role') || "teacher";
   let ASSIGNED_CLASS = localStorage.getItem('krou_assigned_class') || "";
 
-  const PAGE_TITLES = {
-    dashboard: "🏠 ទំព័រដើម",
-    addStudent: "✍️ បញ្ចូលសិស្សថ្មី",
-    card: "🪪 កាតសិស្ស (ID Card)",
-    group: "👥 បែងចែកជាក្រុម",
-    wheel: "🎡 បង្វិលកង់ជ្រើសរើស",
-    attendance: "📅 វត្តមានសិស្ស",
-    score: "📊 ស្រង់ពិន្ទុ",
-    chat: "💬 សារសន្ទនា",
-    reportsHub: "📁 របាយការណ៍",
-    teacher: "👨‍🏫 គ្រប់គ្រងគ្រូ"
-  };
-
-  /* 🌟 បង្ហាញព័ត៌មាន Profile លើ Sidebar ចេញពីគណនី Login ពិតប្រាកដ */
+  /* 🌟 បង្ហាញព័ត៌មាន Profile លើ Sidebar */
   function renderSidebarProfile() {
     const nameEl = document.getElementById('sidebarTeacherName');
     const roleEl = document.getElementById('sidebarTeacherRole');
@@ -901,7 +924,7 @@
     } catch(err) { alert('កំហុស៖ ' + err.message); }
   }
 
-  /* 🚀 ផ្ទៀងផ្ទាត់ Session និង Update Profile គ្រូជាក់ស្តែង */
+  /* 🚀 ផ្ទៀងផ្ទាត់ Session ជាក់ស្តែង */
   async function verifySessionBeforeBoot() {
     if (!SESSION_TOKEN) {
       window.location.replace('login.html');
