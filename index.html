@@ -289,6 +289,7 @@
       font-size: 12.5px;
       font-weight: 600;
       transition: all 0.2s ease;
+      user-select: none;
     }
     .sidebar-theme-btn:hover { background: rgba(255, 255, 255, 0.14); }
     .sidebar.collapsed .sidebar-theme-btn { padding: 0; justify-content: center; }
@@ -309,6 +310,7 @@
       font-weight: 700;
       transition: all 0.2s ease;
       margin-top: 2px;
+      user-select: none;
     }
     .sidebar-logout-btn:hover {
       background: #ef4444; color: #ffffff;
@@ -373,7 +375,7 @@
     }
     .view-panel.active { opacity: 1; pointer-events: auto; transform: translateY(0); }
 
-    /* DASHBOARD */
+    /* DASHBOARD VIEW */
     #dashboardView { padding: 24px 28px 60px; }
     .dash-inner-container {
       max-width: 1350px;
@@ -383,7 +385,6 @@
       gap: 22px;
     }
 
-    /* Hero Banner Card */
     .hero-banner-card {
       background: #08162b;
       border: 1px solid #132a42;
@@ -550,6 +551,7 @@
       padding-bottom: env(safe-area-inset-bottom, 0px);
       background: #061a2e; border-top: 1px solid rgba(255, 255, 255, 0.08);
       z-index: 40; align-items: center; justify-content: space-around;
+      box-shadow: 0 -4px 18px rgba(0, 0, 0, 0.25);
     }
     .m-nav-item {
       display: flex; flex-direction: column; align-items: center; justify-content: center;
@@ -558,7 +560,7 @@
     .m-nav-item.active { color: #38bdf8; font-weight: 700; }
 
     /* =========================================================
-       🪪 STUDENT PROFILE VIEWER MODAL (មើលប្រវត្តិរូបតាមឈ្មោះម្នាក់ៗ)
+       🪪 STUDENT PROFILE VIEWER MODAL
     ========================================================= */
     .profile-viewer-backdrop {
       display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.7);
@@ -571,7 +573,6 @@
     }
     @keyframes pvPop { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
 
-    /* Top Selector Bar */
     .pv-top-bar {
       padding: 14px 18px; background: #0c213d; border-bottom: 1px solid #1a385c;
       display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap;
@@ -598,12 +599,10 @@
     }
     .pv-close-btn:hover { background: #ef4444; color: #fff; }
 
-    /* Profile Content Body */
     .pv-content-scroll {
       padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 18px;
     }
 
-    /* Bio Card Header */
     .pv-bio-header-card {
       background: linear-gradient(135deg, #0f2b4c 0%, #061a2e 100%);
       border: 1px solid #1a385c; border-radius: 20px; padding: 18px 20px;
@@ -627,7 +626,6 @@
     .pv-tag-grade { background: #1f1d47; border-color: #6366f1; color: #a5b4fc; }
     .pv-tag-gender { background: #2f132e; border-color: #db2777; color: #f472b6; }
 
-    /* Grid Sections */
     .pv-info-grid {
       display: grid; grid-template-columns: 1fr 1fr; gap: 14px;
     }
@@ -670,15 +668,17 @@
       .pv-field-label { color: #555 !important; }
     }
 
-    /* Modal Backdrop */
+    /* =========================================================
+       👤 MODAL: PROFILE គ្រូ / ADMIN (កែប្រែព័ត៌មានផ្ទាល់ខ្លួន)
+    ========================================================= */
     .modal-backdrop {
-      display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.6);
-      backdrop-filter: blur(6px); z-index: 100; align-items: center; justify-content: center; padding: 16px;
+      display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.65);
+      backdrop-filter: blur(6px); z-index: 10020; align-items: center; justify-content: center; padding: 16px;
     }
     .modal-backdrop.show { display: flex; }
     .modal-dialog {
       width: 440px; max-width: 100%; max-height: 90vh; overflow-y: auto;
-      background: var(--surface); border: 1px solid var(--border); border-radius: 22px;
+      background: #08162b; border: 1.5px solid #1a385c; border-radius: 22px; box-shadow: 0 25px 60px rgba(0,0,0,0.5);
     }
     .modal-head-banner {
       padding: 20px; background: linear-gradient(135deg, #0284c7, #061a2e); color: #fff;
@@ -688,18 +688,19 @@
       position: absolute; right: 14px; top: 14px; background: rgba(255,255,255,0.18);
       border: none; color: #fff; width: 30px; height: 30px; border-radius: 50%; cursor: pointer;
     }
-    .modal-avatar-preview { width: 80px; height: 80px; border-radius: 50%; border: 3px solid #fff; object-fit: cover; }
+    .modal-avatar-preview { width: 80px; height: 80px; border-radius: 50%; border: 3px solid #38bdf8; object-fit: cover; }
     .modal-body { padding: 18px; }
     .form-group-field { margin-bottom: 12px; }
-    .form-group-field label { display: block; font-size: 11.5px; font-weight: 700; margin-bottom: 5px; }
+    .form-group-field label { display: block; font-size: 11.5px; font-weight: 700; margin-bottom: 5px; color: #94a3b8; }
     .form-group-field input, .form-group-field select {
-      width: 100%; padding: 10px 14px; border-radius: 11px; border: 1px solid var(--border);
-      background: var(--surface-elevated); color: var(--text); outline: none;
+      width: 100%; padding: 10px 14px; border-radius: 11px; border: 1px solid #1a385c;
+      background: #0c213d; color: #ffffff; outline: none; font-size: 13px;
     }
+    .form-group-field input:focus, .form-group-field select:focus { border-color: #38bdf8; }
     .modal-foot-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 16px; }
     .btn-modal { padding: 9px 18px; border-radius: 11px; font-size: 12.5px; font-weight: 700; cursor: pointer; border: none; }
-    .btn-modal.primary { background: var(--primary); color: #fff; }
-    .btn-modal.cancel { background: var(--border-subtle); color: var(--text); }
+    .btn-modal.primary { background: #0284c7; color: #fff; }
+    .btn-modal.cancel { background: #1a385c; color: #cbd5e1; }
 
     /* RESPONSIVE */
     @media (max-width: 1024px) {
@@ -738,13 +739,13 @@
   ========================================================= -->
   <aside class="sidebar" id="sidebar">
     
-    <!-- Profile Header -->
+    <!-- Profile Header (ចុចលើវាដើម្បីបើកផ្ទាំងកែប្រែព័ត៌មានគ្រូ) -->
     <div class="sidebar-user-header">
       <div class="user-profile-summary">
-        <div class="user-green-avatar" id="sidebarAvatar" onclick="openProfileModal()" title="ព័ត៌មានផ្ទាល់ខ្លួន">
+        <div class="user-green-avatar" id="sidebarAvatar" onclick="openProfileModal()" title="ចុចដើម្បីកែប្រែព័ត៌មានផ្ទាល់ខ្លួន">
           <span id="sidebarInitialChar">ស</span>
         </div>
-        <div class="user-profile-meta">
+        <div class="user-profile-meta" onclick="openProfileModal()" style="cursor:pointer;" title="ចុចដើម្បីកែប្រែព័ត៌មានផ្ទាល់ខ្លួន">
           <div class="user-display-name" id="sidebarTeacherName">...</div>
           <div class="user-display-role" id="sidebarTeacherRole">គ្រូបង្រៀន</div>
         </div>
@@ -930,8 +931,6 @@
             <div class="shortcut-pill-btn sc-amber" onclick="navigate('addStudent', null)">
               <span>👥</span><span>សិស្ស</span><span class="sc-arrow">›</span>
             </div>
-
-            <!-- 🌟 ប៊ូតុងប្រវត្តិរូបសិស្ស (ចុចដើម្បីបើកផ្ទាំងមើលតាមឈ្មោះម្នាក់ៗ) -->
             <div class="shortcut-pill-btn sc-cyan" onclick="openStudentProfileViewer()">
               <span>🕒</span><span>ប្រវត្តិរូបសិស្ស</span><span class="sc-arrow">›</span>
             </div>
@@ -1049,25 +1048,21 @@
 </div>
 
 <!-- =========================================================
-     🪪 MODAL: មើលប្រវត្តិរូបសិស្សតាមឈ្មោះម្នាក់ៗ (STUDENT PROFILE VIEWER)
+     🪪 MODAL: មើលប្រវត្តិរូបសិស្សតាមឈ្មោះម្នាក់ៗ
 ========================================================= -->
 <div class="profile-viewer-backdrop" id="studentProfileModal" onclick="if(event.target===this) closeStudentProfileViewer()">
   <div class="profile-viewer-box">
     
-    <!-- Top Bar: Select Student Name & Class -->
     <div class="pv-top-bar">
       <div class="pv-selector-group">
-        <!-- Dropdown ថ្នាក់ (សម្រាប់ Admin អាចប្តូរថ្នាក់បាន) -->
         <select class="pv-dropdown-select" id="pvClassSelect" style="max-width:130px;" onchange="onPvClassChange()">
           <option value="">គ្រប់ថ្នាក់</option>
         </select>
 
-        <!-- Dropdown ជ្រើសរើសឈ្មោះសិស្សម្នាក់ៗ -->
         <select class="pv-dropdown-select" id="pvStudentSelect" onchange="onPvStudentSelect(this.value)">
           <option value="">កំពុងទាញបញ្ជីឈ្មោះ...</option>
         </select>
 
-        <!-- ប៊ូតុងរំលង សិស្សមុន/បន្ទាប់ -->
         <button class="pv-nav-arrow-btn" onclick="prevStudentProfile()" title="សិស្សមុន">‹</button>
         <button class="pv-nav-arrow-btn" onclick="nextStudentProfile()" title="សិស្សបន្ទាប់">›</button>
       </div>
@@ -1075,10 +1070,7 @@
       <button class="pv-close-btn" onclick="closeStudentProfileViewer()" title="បិទ">✕</button>
     </div>
 
-    <!-- Content: Student Biographical Card -->
     <div class="pv-content-scroll" id="pvContentScroll">
-      
-      <!-- Bio Header Card -->
       <div class="pv-bio-header-card">
         <div class="pv-avatar-frame" id="pvAvatarBox">
           <span id="pvAvatarInitial">ស</span>
@@ -1093,85 +1085,48 @@
         </div>
       </div>
 
-      <!-- Detailed Info Grid -->
       <div class="pv-info-grid">
-        <!-- ព័ត៌មានផ្ទាល់ខ្លួន -->
         <div class="pv-section-block">
-          <div class="pv-block-title">
-            <span>👤</span><span>ព័ត៌មានផ្ទាល់ខ្លួនសិស្ស</span>
-          </div>
-          <div class="pv-field-row">
-            <span class="pv-field-label">ថ្ងៃខែឆ្នាំកំណើត៖</span>
-            <span class="pv-field-value" id="pvDob">-</span>
-          </div>
-          <div class="pv-field-row">
-            <span class="pv-field-label">អាយុសិស្ស៖</span>
-            <span class="pv-field-value" id="pvAge">-</span>
-          </div>
-          <div class="pv-field-row">
-            <span class="pv-field-label">លេខទូរស័ព្ទ៖</span>
-            <span class="pv-field-value" id="pvPhone">-</span>
-          </div>
-          <div class="pv-field-row">
-            <span class="pv-field-label">ទីកន្លែងកំណើត៖</span>
-            <span class="pv-field-value" id="pvPob">-</span>
-          </div>
-          <div class="pv-field-row">
-            <span class="pv-field-label">អាសយដ្ឋានបច្ចុប្បន្ន៖</span>
-            <span class="pv-field-value" id="pvAddress">-</span>
-          </div>
+          <div class="pv-block-title"><span>👤</span><span>ព័ត៌មានផ្ទាល់ខ្លួនសិស្ស</span></div>
+          <div class="pv-field-row"><span class="pv-field-label">ថ្ងៃខែឆ្នាំកំណើត៖</span><span class="pv-field-value" id="pvDob">-</span></div>
+          <div class="pv-field-row"><span class="pv-field-label">អាយុសិស្ស៖</span><span class="pv-field-value" id="pvAge">-</span></div>
+          <div class="pv-field-row"><span class="pv-field-label">លេខទូរស័ព្ទ៖</span><span class="pv-field-value" id="pvPhone">-</span></div>
+          <div class="pv-field-row"><span class="pv-field-label">ទីកន្លែងកំណើត៖</span><span class="pv-field-value" id="pvPob">-</span></div>
+          <div class="pv-field-row"><span class="pv-field-label">អាសយដ្ឋានបច្ចុប្បន្ន៖</span><span class="pv-field-value" id="pvAddress">-</span></div>
         </div>
 
-        <!-- ព័ត៌មានអាណាព្យាបាល -->
         <div class="pv-section-block">
-          <div class="pv-block-title">
-            <span>👨‍👩‍👦</span><span>ព័ត៌មានឪពុកម្តាយ / អាណាព្យាបាល</span>
-          </div>
-          <div class="pv-field-row">
-            <span class="pv-field-label">ឈ្មោះឪពុក៖</span>
-            <span class="pv-field-value" id="pvFather">-</span>
-          </div>
-          <div class="pv-field-row">
-            <span class="pv-field-label">មុខរបរឪពុក៖</span>
-            <span class="pv-field-value" id="pvFatherJob">-</span>
-          </div>
-          <div class="pv-field-row">
-            <span class="pv-field-label">ឈ្មោះម្តាយ៖</span>
-            <span class="pv-field-value" id="pvMother">-</span>
-          </div>
-          <div class="pv-field-row">
-            <span class="pv-field-label">មុខរបរម្តាយ៖</span>
-            <span class="pv-field-value" id="pvMotherJob">-</span>
-          </div>
+          <div class="pv-block-title"><span>👨‍👩‍👦</span><span>ព័ត៌មានឪពុកម្តាយ / អាណាព្យាបាល</span></div>
+          <div class="pv-field-row"><span class="pv-field-label">ឈ្មោះឪពុក៖</span><span class="pv-field-value" id="pvFather">-</span></div>
+          <div class="pv-field-row"><span class="pv-field-label">មុខរបរឪពុក៖</span><span class="pv-field-value" id="pvFatherJob">-</span></div>
+          <div class="pv-field-row"><span class="pv-field-label">ឈ្មោះម្តាយ៖</span><span class="pv-field-value" id="pvMother">-</span></div>
+          <div class="pv-field-row"><span class="pv-field-label">មុខរបរម្តាយ៖</span><span class="pv-field-value" id="pvMotherJob">-</span></div>
         </div>
       </div>
-
     </div>
 
-    <!-- Bottom Actions -->
     <div class="pv-footer-actions">
-      <button class="btn-pv-print" onclick="window.print()">
-        <span>🖨️</span><span>បោះពុម្ពប្រវត្តិរូប</span>
-      </button>
+      <button class="btn-pv-print" onclick="window.print()"><span>🖨️</span><span>បោះពុម្ពប្រវត្តិរូប</span></button>
       <button class="btn-modal cancel" onclick="closeStudentProfileViewer()">បិទ</button>
     </div>
-
   </div>
 </div>
 
-<!-- MODAL: PROFILE ADMIN/TEACHER -->
+<!-- =========================================================
+     👤 MODAL: កែប្រែព័ត៌មានគ្រូផ្ទាល់ខ្លួន (PROFILE MODAL)
+========================================================= -->
 <div class="modal-backdrop" id="profileModalBackdrop" onclick="if(event.target===this) closeProfileModal()">
   <div class="modal-dialog">
     <div class="modal-head-banner">
       <button class="modal-close-btn" onclick="closeProfileModal()">✕</button>
-      <div style="font-size:14.5px; font-weight:bold;">👤 ព័ត៌មានផ្ទាល់ខ្លួន</div>
+      <div style="font-size:14.5px; font-weight:bold;">👤 កែប្រែព័ត៌មានផ្ទាល់ខ្លួន</div>
       <img id="profilePhotoPreview" class="modal-avatar-preview" src="" style="display:none;">
       <div id="profileAvatarPlaceholder" class="modal-avatar-preview" style="display:flex; align-items:center; justify-content:center; font-size:28px; background:linear-gradient(135deg,#0284c7,#061a2e);">👤</div>
     </div>
     <div class="modal-body">
       <form id="profileForm" onsubmit="return saveMyProfile(event)">
         <div style="text-align:center; margin-bottom:14px;">
-          <label style="font-size:11px; font-weight:700; padding:6px 14px; border-radius:20px; background:var(--primary-soft); color:var(--primary); cursor:pointer;">
+          <label style="font-size:11px; font-weight:700; padding:6px 14px; border-radius:20px; background:#0e2945; color:#38bdf8; cursor:pointer; border:1px solid #1a385c;">
             📷 ប្តូររូបថត <input type="file" accept="image/*" style="display:none;" onchange="onProfilePhotoPicked(event)">
           </label>
         </div>
@@ -1192,11 +1147,10 @@
   </div>
 </div>
 
-<!-- 🔗 ភ្ជាប់ API -->
-<script src="api.js"></script>
-
 <script>
-  let SESSION_TOKEN = typeof getStoredToken === 'function' ? getStoredToken() : localStorage.getItem('krou_session_token');
+  const BACKEND_URL = "https://script.google.com/macros/s/AKfycbxe6vrQshGAPglgmmZykljXazDNh1ZwWSRdFDAip1WWWRky24lmBo-qicLK3_i10AvT/exec";
+
+  let SESSION_TOKEN = localStorage.getItem('krou_session_token') || localStorage.getItem('school_persistent_token') || "";
   let TEACHER_NAME = localStorage.getItem('krou_teacher_name') || "";
   let TEACHER_PHOTO_URL = localStorage.getItem('krou_teacher_photo') || "";
   let USER_ROLE = localStorage.getItem('krou_user_role') || "teacher";
@@ -1205,6 +1159,7 @@
 
   let cachedStudentsRoster = [];
   let currentPvIndex = 0;
+  let profilePickedPhotoBase64 = null;
 
   const PAGE_TITLES = {
     dashboard: "⊞ ផ្ទាំងរបស់គ្រូ",
@@ -1214,12 +1169,30 @@
     wheel: "🎡 បង្វិលកង់ជ្រើសរើស",
     attendance: "📅 វត្តមានសិស្ស",
     score: "📊 ស្រង់ពិន្ទុ",
-    rank: "🏆 តារាងចំណាត់ថ្នាក់",
     chat: "💬 សារសន្ទនា",
     reportsHub: "📄 របាយការណ៍",
     teacher: "👨‍🏫 គ្រប់គ្រងគ្រូ"
   };
 
+  /* 📡 មុខងារហៅ API ទៅកាន់ Google Apps Script */
+  async function apiRequest(action, payload = {}) {
+    try {
+      const response = await fetch(BACKEND_URL, {
+        method: 'POST',
+        mode: 'cors',
+        redirect: 'follow',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify({ action: action, token: SESSION_TOKEN, ...payload })
+      });
+      const text = await response.text();
+      return JSON.parse(text);
+    } catch (err) {
+      console.error("API Error:", err);
+      return null;
+    }
+  }
+
+  /* 🌟 បង្ហាញព័ត៌មាន Profile លើ Sidebar */
   function renderSidebarProfile() {
     const nameEl = document.getElementById('sidebarTeacherName');
     const roleEl = document.getElementById('sidebarTeacherRole');
@@ -1252,7 +1225,110 @@
     if (adminClearBtn) adminClearBtn.style.display = IS_ADMIN ? 'flex' : 'none';
   }
 
-  /* 🌓 THEME CONTROL & SYNC */
+  /* =========================================================
+     👤 មុខងារទាញ និងកែប្រែព័ត៌មានគ្រូ (PROFILE MODAL AUTO-FETCH)
+  ========================================================= */
+  async function openProfileModal() {
+    const modal = document.getElementById('profileModalBackdrop');
+    if (!modal) return;
+    modal.classList.add('show');
+
+    // ១. បំពេញទិន្នន័យបឋមពី Memory ជាមុន
+    document.getElementById('pfName').value = TEACHER_NAME || '';
+    if (TEACHER_PHOTO_URL) {
+      document.getElementById('profilePhotoPreview').src = TEACHER_PHOTO_URL;
+      document.getElementById('profilePhotoPreview').style.display = 'block';
+      document.getElementById('profileAvatarPlaceholder').style.display = 'none';
+    }
+
+    // ២. 🌟 ទាញយកទិន្នន័យលម្អិតថ្មីចុងក្រោយពី Google Sheet (getMyProfile)
+    try {
+      const p = await apiRequest('getMyProfile', { token: SESSION_TOKEN });
+      if (p) {
+        const tData = p.teacher || p;
+        if (tData.name) document.getElementById('pfName').value = tData.name;
+        if (tData.sex) document.getElementById('pfSex').value = (tData.sex.includes('ស្រី')) ? 'ស្រី' : 'ប្រុស';
+        if (tData.phone) document.getElementById('pfPhone').value = tData.phone;
+        if (tData.dobIso || tData.dob) document.getElementById('pfDob').value = tData.dobIso || tData.dob;
+        if (tData.address) document.getElementById('pfAddress').value = tData.address;
+
+        const photo = tData.photoUrl || TEACHER_PHOTO_URL;
+        if (photo) {
+          document.getElementById('profilePhotoPreview').src = photo;
+          document.getElementById('profilePhotoPreview').style.display = 'block';
+          document.getElementById('profileAvatarPlaceholder').style.display = 'none';
+        }
+      }
+    } catch(err) {
+      console.warn("Get profile error:", err);
+    }
+  }
+
+  function closeProfileModal() {
+    const modal = document.getElementById('profileModalBackdrop');
+    if (modal) modal.classList.remove('show');
+    profilePickedPhotoBase64 = null;
+  }
+
+  function onProfilePhotoPicked(ev) {
+    const file = ev.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      profilePickedPhotoBase64 = e.target.result;
+      document.getElementById('profilePhotoPreview').src = profilePickedPhotoBase64;
+      document.getElementById('profilePhotoPreview').style.display = 'block';
+      document.getElementById('profileAvatarPlaceholder').style.display = 'none';
+    };
+    reader.readAsDataURL(file);
+  }
+
+  /* 💾 រក្សាទុកព័ត៌មានគ្រូទៅ GOOGLE SHEET */
+  async function saveMyProfile(ev) {
+    ev.preventDefault();
+    const btn = document.getElementById('profileSaveBtn');
+    btn.innerText = '⏳ កំពុងរក្សា...';
+    btn.disabled = true;
+
+    const data = {
+      name: document.getElementById('pfName').value.trim(),
+      sex: document.getElementById('pfSex').value,
+      phone: document.getElementById('pfPhone').value.trim(),
+      dob: document.getElementById('pfDob').value,
+      address: document.getElementById('pfAddress').value.trim(),
+      password: document.getElementById('pfPassword').value
+    };
+    if (profilePickedPhotoBase64) {
+      data.photoFile = { base64: profilePickedPhotoBase64 };
+    }
+
+    try {
+      const res = await apiRequest('updateMyProfile', { token: SESSION_TOKEN, profileData: data });
+      btn.innerText = '💾 រក្សាទុក';
+      btn.disabled = false;
+      closeProfileModal();
+      alert('✅ បានកែប្រែ និងរក្សាទុកព័ត៌មានផ្ទាល់ខ្លួនជោគជ័យ!');
+
+      if (res && (res.teacher || res.success)) {
+        const updated = res.teacher || data;
+        TEACHER_NAME = updated.name || TEACHER_NAME;
+        if (updated.photoUrl) TEACHER_PHOTO_URL = updated.photoUrl;
+
+        localStorage.setItem('krou_teacher_name', TEACHER_NAME);
+        if (TEACHER_PHOTO_URL) localStorage.setItem('krou_teacher_photo', TEACHER_PHOTO_URL);
+
+        renderSidebarProfile();
+        refreshStats();
+      }
+    } catch(err) {
+      btn.innerText = '💾 រក្សាទុក';
+      btn.disabled = false;
+      alert('❌ ការរក្សាទុកបរាជ័យ៖ ' + err.message);
+    }
+    return false;
+  }
+
+  /* 🌓 THEME CONTROL */
   function syncThemeToIframe(theme) {
     const frame = document.getElementById('pageFrame');
     if (!frame) return;
@@ -1289,7 +1365,7 @@
   let currentPage = 'dashboard';
 
   function mapPageToFile(page) {
-    var map = {
+    const map = {
       'dashboard': 'dashboard',
       'reportsHub': 'reportsHub',
       'addStudent': 'addStudent',
@@ -1315,13 +1391,12 @@
     currentPage = page;
     localStorage.setItem('krou_active_page', page);
     
-    var cleanFile = mapPageToFile(page);
+    const cleanFile = mapPageToFile(page);
 
     document.querySelectorAll('.nav-link-btn').forEach(n => n.classList.remove('active'));
     
-    var isReportChild = ['roster', 'rank', 'honor', 'certificate', 'report', 'remesterrecord'].includes(cleanFile);
-    
-    var target = el || document.querySelector(`[data-page="${page}"]`) || document.querySelector(`[data-page="${cleanFile}"]`);
+    const isReportChild = ['roster', 'rank', 'honor', 'certificate', 'report', 'remesterrecord'].includes(cleanFile);
+    let target = el || document.querySelector(`[data-page="${page}"]`) || document.querySelector(`[data-page="${cleanFile}"]`);
     if (!target && isReportChild) {
       target = document.querySelector('[data-page="reportsHub"]');
     }
@@ -1329,9 +1404,9 @@
 
     closeSidebarMobile();
 
-    var iframeView = document.getElementById('iframeView');
-    var dashboardView = document.getElementById('dashboardView');
-    var reportsHubView = document.getElementById('reportsHubView');
+    const iframeView = document.getElementById('iframeView');
+    const dashboardView = document.getElementById('dashboardView');
+    const reportsHubView = document.getElementById('reportsHubView');
 
     if (cleanFile === 'dashboard') {
       iframeView.classList.remove('active');
@@ -1352,11 +1427,11 @@
     if (reportsHubView) reportsHubView.classList.remove('active');
     iframeView.classList.add('active');
 
-    var frame = document.getElementById('pageFrame');
-    var overlay = document.getElementById('loadingOverlay');
+    const frame = document.getElementById('pageFrame');
+    const overlay = document.getElementById('loadingOverlay');
     overlay.classList.add('show');
 
-    var currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+    const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
     frame.src = `${cleanFile}.html?token=${encodeURIComponent(SESSION_TOKEN || '')}&theme=${encodeURIComponent(currentTheme)}&v=${Date.now()}`;
   }
 
@@ -1383,13 +1458,12 @@
   }
 
   /* =========================================================
-     🪪 STUDENT PROFILE VIEWER LOGIC (មើលតាមឈ្មោះម្នាក់ៗ)
+     🪪 STUDENT PROFILE VIEWER (មើលប្រវត្តិរូបសិស្សតាមឈ្មោះម្នាក់ៗ)
   ========================================================= */
   async function openStudentProfileViewer() {
     const modal = document.getElementById('studentProfileModal');
     modal.style.display = 'flex';
 
-    // ១. បើកដំបូង ទាញយក Roster ប្រសិនជាមិនទាន់មាន
     if (!cachedStudentsRoster || cachedStudentsRoster.length === 0) {
       await loadStudentsForProfileViewer();
     } else {
@@ -1407,7 +1481,7 @@
 
     try {
       const targetCls = IS_ADMIN ? (document.getElementById('pvClassSelect').value || '') : (ASSIGNED_CLASS || '');
-      const res = await callBackendApi('getStudentRosterByClass', { className: targetCls });
+      const res = await apiRequest('getStudentRosterByClass', { className: targetCls });
       
       if (Array.isArray(res) && res.length > 0) {
         cachedStudentsRoster = res;
@@ -1416,7 +1490,6 @@
       }
       populateStudentDropdown();
     } catch (err) {
-      console.warn("Load roster error:", err);
       studentSelect.innerHTML = '<option value="">មិនមានទិន្នន័យ</option>';
     }
   }
@@ -1475,21 +1548,15 @@
     return age > 0 ? `${age} ឆ្នាំ` : '';
   }
 
-  /* 🌟 បង្ហាញព័ត៌មានលម្អិតនៃសិស្សដែលបានជ្រើសរើស */
   function renderSelectedStudentProfile(idx) {
     const s = cachedStudentsRoster[idx];
-    if (!s) {
-      renderEmptyStudentProfile();
-      return;
-    }
+    if (!s) { renderEmptyStudentProfile(); return; }
 
-    // Header Bio
     document.getElementById('pvStudentName').innerText = s.name || 'គ្មានឈ្មោះ';
     document.getElementById('pvTagId').innerText = `អត្តលេខ: ${s.id || '-'}`;
     document.getElementById('pvTagGrade').innerText = `ថ្នាក់ទី: ${s.grade || '-'}`;
     document.getElementById('pvTagGender').innerText = `ភេទ: ${s.sex || '-'}`;
 
-    // Avatar
     const avatarBox = document.getElementById('pvAvatarBox');
     const photo = s.photoUrl || s.imageUrl;
     if (photo && String(photo).trim() !== "") {
@@ -1499,14 +1566,11 @@
       avatarBox.innerHTML = `<span>${initial}</span>`;
     }
 
-    // Personal Details
     document.getElementById('pvDob').innerText = s.dob || '-';
     document.getElementById('pvAge').innerText = calculateAge(s.dob) || '-';
     document.getElementById('pvPhone').innerText = s.phone || '-';
     document.getElementById('pvPob').innerText = s.pob || '-';
     document.getElementById('pvAddress').innerText = s.address || '-';
-
-    // Parents Details
     document.getElementById('pvFather').innerText = s.father || '-';
     document.getElementById('pvFatherJob').innerText = s.fatherJob || '-';
     document.getElementById('pvMother').innerText = s.mother || '-';
@@ -1533,8 +1597,7 @@
   /* 📊 REFRESH STATS & DASHBOARD */
   async function refreshStats() {
     try {
-      if (typeof callBackendApi !== 'function') return;
-      const stats = await callBackendApi('getDashboardStats');
+      const stats = await apiRequest('getDashboardStats');
       if (!stats) return;
 
       const totalStudents = stats.totalStudents || 0;
@@ -1544,7 +1607,6 @@
       let studentCountForView = totalStudents;
       let targetClassName = ASSIGNED_CLASS || "៤ក";
 
-      // Populate Class Selector in Profile Viewer
       const pvClassSelect = document.getElementById('pvClassSelect');
       if (pvClassSelect && classBreakdown.length > 0) {
         pvClassSelect.innerHTML = IS_ADMIN ? '<option value="">គ្រប់ថ្នាក់</option>' : '';
@@ -1601,61 +1663,6 @@
     }
   }
 
-  function openProfileModal() { document.getElementById('profileModalBackdrop').classList.add('show'); }
-  function closeProfileModal() { document.getElementById('profileModalBackdrop').classList.remove('show'); }
-
-  function onProfilePhotoPicked(ev) {
-    const file = ev.target.files[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = function(e) {
-      document.getElementById('profilePhotoPreview').src = e.target.result;
-      document.getElementById('profilePhotoPreview').style.display = 'block';
-      document.getElementById('profileAvatarPlaceholder').style.display = 'none';
-      TEACHER_PHOTO_URL = e.target.result;
-    };
-    reader.readAsDataURL(file);
-  }
-
-  async function saveMyProfile(ev) {
-    ev.preventDefault();
-    const btn = document.getElementById('profileSaveBtn');
-    btn.innerText = '⏳ កំពុងរក្សា...';
-    btn.disabled = true;
-
-    const data = {
-      name: document.getElementById('pfName').value.trim(),
-      sex: document.getElementById('pfSex').value,
-      phone: document.getElementById('pfPhone').value.trim(),
-      dob: document.getElementById('pfDob').value,
-      address: document.getElementById('pfAddress').value.trim(),
-      password: document.getElementById('pfPassword').value
-    };
-    if (TEACHER_PHOTO_URL && TEACHER_PHOTO_URL.startsWith('data:image')) {
-      data.photoFile = { base64: TEACHER_PHOTO_URL };
-    }
-
-    try {
-      const res = await callBackendApi('updateMyProfile', { token: SESSION_TOKEN, profileData: data });
-      btn.innerText = '💾 រក្សាទុក';
-      btn.disabled = false;
-      closeProfileModal();
-      alert('✅ រក្សាទុកព័ត៌មានជោគជ័យ');
-      if (res && res.teacher) {
-        TEACHER_NAME = res.teacher.name || TEACHER_NAME;
-        localStorage.setItem('krou_teacher_name', TEACHER_NAME);
-        if (res.teacher.photoUrl) localStorage.setItem('krou_teacher_photo', res.teacher.photoUrl);
-        renderSidebarProfile();
-        refreshStats();
-      }
-    } catch(err) {
-      btn.innerText = '💾 រក្សាទុក';
-      btn.disabled = false;
-      alert('❌ កំហុស៖ ' + err.message);
-    }
-    return false;
-  }
-
   function doLogout() {
     if (!confirm('តើអ្នកពិតជាចង់ចាកចេញពីប្រព័ន្ធមែនទេ?')) return;
     localStorage.clear();
@@ -1667,13 +1674,13 @@
     if (!confirm('⚠️ ព្រមាន៖ តើអ្នកពិតជាចង់សម្អាតទិន្នន័យទាំងអស់មែនទេ?')) return;
     if (prompt('ដើម្បីបញ្ជាក់ សូមវាយ៖ DELETE') !== 'DELETE') return;
     try {
-      await callBackendApi('clearAllSystemData', { token: SESSION_TOKEN });
+      await apiRequest('clearAllSystemData', { token: SESSION_TOKEN });
       alert('✅ សម្អាតទិន្នន័យបានជោគជ័យ');
       location.reload();
     } catch(err) { alert('កំហុស៖ ' + err.message); }
   }
 
-  /* 🚀 VERIFY SESSION */
+  /* 🚀 VERIFY SESSION & BOOT */
   async function verifySessionBeforeBoot() {
     if (!SESSION_TOKEN) {
       window.location.replace('login.html');
@@ -1684,7 +1691,7 @@
     refreshStats();
 
     try {
-      const session = await callBackendApi('getCurrentSession', { token: SESSION_TOKEN });
+      const session = await apiRequest('getCurrentSession', { token: SESSION_TOKEN });
       if (!session || !session.loggedIn) {
         localStorage.clear();
         window.location.replace('login.html');
