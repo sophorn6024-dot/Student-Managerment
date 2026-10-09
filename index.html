@@ -12,42 +12,63 @@
 
   <style>
     /* =========================================================
-       🎨 THEME VARIABLES & SYSTEM CONFIG
+       🎨 DYNAMIC THEME SYSTEM (ស្រស់ស្អាត មិនបែកពណ៌)
     ========================================================= */
     :root {
       --primary: #0284c7;
       --primary-hover: #0369a1;
       --primary-soft: #e0f2fe;
-      
+
+      /* 🌟 Light Theme Variables */
+      --bg: #f1f5f9;
+      --surface: #ffffff;
+      --surface-card: #ffffff;
+      --surface-elevated: #f8fafc;
+      --border: #e2e8f0;
+      --border-subtle: #cbd5e1;
+      --text: #0f172a;
+      --text-muted: #64748b;
+      --card-shadow: 0 4px 18px rgba(15, 23, 42, 0.05);
+
+      /* Hero & Cards in Light Mode */
+      --hero-bg: linear-gradient(135deg, #0284c7 0%, #0369a1 60%, #0c4a6e 100%);
+      --hero-text: #ffffff;
+      --hero-stat-bg: rgba(255, 255, 255, 0.18);
+      --hero-stat-border: rgba(255, 255, 255, 0.28);
+      --today-card-bg: #fffbeb;
+      --today-card-border: #fde68a;
+      --today-card-text: #92400e;
+
+      /* Sidebar (Dark Navy ដូចរូបគំរូ) */
       --sidebar-navy: #061a2e;
       --sidebar-card-navy: #0e2945;
       --sidebar-border: rgba(255, 255, 255, 0.08);
-      
-      /* Light Theme */
-      --bg: #f8fafc;
-      --surface: #ffffff;
-      --surface-elevated: #ffffff;
-      --border: #e2e8f0;
-      --border-subtle: #f1f5f9;
-      --text: #0f172a;
-      --text-muted: #64748b;
-      --card-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.05);
 
       --sidebar-w: 260px;
       --sidebar-w-collapsed: 78px;
       --bottom-nav-h: 60px;
     }
 
-    /* 🌙 Dark Theme (Default) */
+    /* 🌙 Dark Theme Variables */
     [data-theme="dark"] {
-      --bg: #030a13;
-      --surface: #0a1726;
-      --surface-elevated: #0f2238;
-      --border: #132a42;
-      --border-subtle: #0f2238;
+      --bg: #090e17;
+      --surface: #0f172a;
+      --surface-card: #111e33;
+      --surface-elevated: #162642;
+      --border: #1a2f4d;
+      --border-subtle: #233f66;
       --text: #f8fafc;
       --text-muted: #94a3b8;
-      --card-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.45);
+      --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+
+      /* Hero & Cards in Dark Mode */
+      --hero-bg: linear-gradient(135deg, #09203a 0%, #0f2d4e 60%, #051322 100%);
+      --hero-text: #f8fafc;
+      --hero-stat-bg: #0d223a;
+      --hero-stat-border: #1e3a5f;
+      --today-card-bg: #221406;
+      --today-card-border: #78350f;
+      --today-card-text: #fbbf24;
     }
 
     * {
@@ -70,6 +91,7 @@
       line-height: 1.5;
       -webkit-text-size-adjust: 100%;
       -webkit-font-smoothing: antialiased;
+      transition: background 0.25s ease, color 0.25s ease;
     }
 
     .f-moul { font-family: 'Khmer OS Muol Light', 'Moul', cursive !important; font-weight: normal; }
@@ -84,7 +106,7 @@
     }
 
     /* =========================================================
-       🧭 SIDEBAR
+       🧭 SIDEBAR (រចនាតាមរូបភាពគំរូ)
     ========================================================= */
     .sidebar {
       width: var(--sidebar-w);
@@ -103,6 +125,7 @@
 
     .sidebar.collapsed { width: var(--sidebar-w-collapsed); }
 
+    /* Profile Header */
     .sidebar-user-header {
       padding: 16px 14px 12px;
       display: flex;
@@ -134,6 +157,7 @@
       box-shadow: 0 4px 10px rgba(5, 150, 105, 0.35);
       overflow: hidden;
       cursor: pointer;
+      user-select: none;
     }
     .user-green-avatar img { width: 100%; height: 100%; object-fit: cover; }
 
@@ -175,6 +199,7 @@
     .sidebar.collapsed .user-profile-meta { display: none; }
     .sidebar.collapsed .collapse-arrow-btn { margin: 0 auto; transform: rotate(180deg); }
 
+    /* Class & Year Pill */
     .class-year-pill-box {
       margin: 4px 12px 12px;
       background: var(--sidebar-card-navy);
@@ -214,6 +239,7 @@
       flex-shrink: 0;
     }
 
+    /* Nav Links */
     .nav-scrollable {
       flex: 1;
       min-height: 0;
@@ -265,6 +291,7 @@
 
     .sidebar.collapsed .nav-text { display: none; }
 
+    /* Sidebar Footer */
     .sidebar-footer {
       padding: 10px 10px max(12px, env(safe-area-inset-bottom));
       border-top: 1px solid var(--sidebar-border);
@@ -336,7 +363,7 @@
     .admin-clear-btn:hover { background: rgba(220, 38, 38, 0.35); color: #fff; }
 
     /* =========================================================
-       🌟 MAIN WRAPPER & VIEW PANELS
+       🌟 MAIN WRAPPER (ពេញអេក្រង់ ១០០% គ្មាន TOPBAR)
     ========================================================= */
     .main-wrapper {
       flex: 1;
@@ -375,7 +402,9 @@
     }
     .view-panel.active { opacity: 1; pointer-events: auto; transform: translateY(0); }
 
-    /* DASHBOARD VIEW */
+    /* =========================================================
+       🌟 DASHBOARD VIEW (ប្តូរពណ៌យ៉ាងស្រស់ស្អាតទាំង ២ ម៉ូត)
+    ========================================================= */
     #dashboardView { padding: 24px 28px 60px; }
     .dash-inner-container {
       max-width: 1350px;
@@ -385,102 +414,137 @@
       gap: 22px;
     }
 
+    /* 🌟 Hero Card */
     .hero-banner-card {
-      background: #08162b;
-      border: 1px solid #132a42;
+      background: var(--hero-bg);
+      border: 1px solid var(--border);
       border-radius: 24px;
-      padding: 20px 24px;
+      padding: 22px 26px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 20px;
-      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
+      box-shadow: var(--card-shadow);
+      color: var(--hero-text);
+      transition: all 0.25s ease;
     }
+
     .hero-banner-left { display: flex; align-items: center; gap: 18px; min-width: 0; }
     .hero-building-icon {
       width: 58px; height: 58px; border-radius: 18px;
-      background: linear-gradient(135deg, #0284c7 0%, #2563eb 100%);
+      background: linear-gradient(135deg, #38bdf8 0%, #2563eb 100%);
       color: #ffffff; display: flex; align-items: center; justify-content: center;
       font-size: 26px; flex-shrink: 0; box-shadow: 0 8px 20px rgba(2, 132, 199, 0.35);
     }
     .hero-info-texts { display: flex; flex-direction: column; gap: 2px; }
-    .hero-top-tag { font-size: 13px; color: #94a3b8; font-weight: 600; }
+    .hero-top-tag { font-size: 13px; opacity: 0.85; font-weight: 600; }
     .hero-main-title { font-size: 24px; font-weight: 700; color: #38bdf8; line-height: 1.3; }
-    .hero-sub-meta { font-size: 13px; color: #cbd5e1; font-weight: 500; }
+    .hero-sub-meta { font-size: 13px; opacity: 0.9; font-weight: 500; }
 
     .hero-banner-right { display: flex; align-items: center; gap: 14px; flex-shrink: 0; }
+    
     .hero-stat-card {
-      background: #0d223a; border: 1px solid #1e3a5f; border-radius: 18px;
-      padding: 14px 20px; min-width: 140px; display: flex; flex-direction: column; gap: 2px;
+      background: var(--hero-stat-bg);
+      border: 1px solid var(--hero-stat-border);
+      border-radius: 18px;
+      padding: 14px 20px;
+      min-width: 140px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
     }
     .h-stat-top { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; color: #38bdf8; }
-    .h-stat-digit { font-size: 32px; font-weight: 800; color: #ffffff; line-height: 1.2; }
-    .h-stat-sub { font-size: 11.5px; color: #94a3b8; }
+    .h-stat-digit { font-size: 32px; font-weight: 800; line-height: 1.2; }
+    .h-stat-sub { font-size: 11.5px; opacity: 0.8; }
 
     .hero-today-card {
-      background: #241607; border: 1px solid #78350f; border-radius: 18px;
-      padding: 14px 20px; min-width: 140px; display: flex; flex-direction: column; gap: 2px;
-      cursor: pointer; transition: transform 0.15s;
+      background: var(--today-card-bg);
+      border: 1px solid var(--today-card-border);
+      border-radius: 18px;
+      padding: 14px 20px;
+      min-width: 140px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      cursor: pointer;
+      transition: transform 0.15s;
     }
     .hero-today-card:hover { transform: translateY(-2px); }
-    .h-today-top { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; color: #fbbf24; }
-    .h-today-status { font-size: 26px; font-weight: 800; color: #ffffff; line-height: 1.2; }
-    .h-today-sub { font-size: 11.5px; color: #d97706; }
+    .h-today-top { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; color: #d97706; }
+    [data-theme="dark"] .h-today-top { color: #fbbf24; }
+    .h-today-status { font-size: 26px; font-weight: 800; line-height: 1.2; color: var(--today-card-text); }
+    .h-today-sub { font-size: 11.5px; opacity: 0.85; color: var(--today-card-text); }
 
+    /* Sections Headline */
     .section-headline-group { display: flex; flex-direction: column; gap: 2px; }
-    .section-cyan-title { font-size: 17px; font-weight: 700; color: #38bdf8; display: flex; align-items: center; gap: 8px; }
-    .section-slate-sub { font-size: 12.5px; color: #94a3b8; }
+    .section-cyan-title { font-size: 17px; font-weight: 700; color: #0284c7; display: flex; align-items: center; gap: 8px; }
+    [data-theme="dark"] .section-cyan-title { color: #38bdf8; }
+    .section-slate-sub { font-size: 12.5px; color: var(--text-muted); }
 
+    /* 🌟 Tasks Cards */
     .today-tasks-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
     .task-action-card {
-      background: #08162b; border: 1.5px solid #132a42; border-radius: 20px;
-      padding: 16px 20px; display: flex; align-items: center; justify-content: space-between;
-      gap: 14px; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+      background: var(--surface-card);
+      border: 1.5px solid var(--border);
+      border-radius: 20px;
+      padding: 18px 22px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: var(--card-shadow);
     }
     .task-action-card:hover {
-      border-color: #0284c7; transform: translateY(-2px); box-shadow: 0 10px 25px rgba(2, 132, 199, 0.15);
+      border-color: #0284c7; transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(2, 132, 199, 0.15);
     }
     .task-left-box { display: flex; align-items: center; gap: 14px; }
     .task-icon-orange {
       width: 50px; height: 50px; border-radius: 16px; background: #f59e0b; color: #ffffff;
       display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0;
+      box-shadow: 0 4px 14px rgba(245, 158, 11, 0.3);
     }
     .task-icon-purple {
       width: 50px; height: 50px; border-radius: 16px; background: #6366f1; color: #ffffff;
       display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0;
+      box-shadow: 0 4px 14px rgba(99, 102, 241, 0.3);
     }
     .task-text-box { display: flex; flex-direction: column; gap: 2px; }
-    .task-title-text { font-size: 14.5px; font-weight: 700; color: #ffffff; }
-    .task-desc-amber { font-size: 12px; font-weight: 600; color: #fbbf24; }
-    .task-desc-slate { font-size: 12px; color: #cbd5e1; }
-    .task-chevron-arrow { font-size: 16px; color: #64748b; font-weight: bold; }
-    .score-percent-badge { background: #1e293b; color: #94a3b8; font-size: 12px; font-weight: 700; padding: 4px 10px; border-radius: 20px; }
+    .task-title-text { font-size: 14.5px; font-weight: 700; color: var(--text); }
+    .task-desc-amber { font-size: 12px; font-weight: 600; color: #d97706; }
+    [data-theme="dark"] .task-desc-amber { color: #fbbf24; }
+    .task-desc-slate { font-size: 12px; color: var(--text-muted); }
+    .task-chevron-arrow { font-size: 16px; color: var(--text-muted); font-weight: bold; }
+    .score-percent-badge { background: var(--surface-elevated); color: var(--text-muted); font-size: 12px; font-weight: 700; padding: 4px 10px; border-radius: 20px; border: 1px solid var(--border); }
 
+    /* 🌟 Shortcuts */
     .shortcuts-pill-grid { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
     .shortcut-pill-btn {
-      height: 48px; padding: 0 20px; border-radius: 16px; background: #08162b;
-      border: 1.5px solid #132a42; display: flex; align-items: center; gap: 12px;
-      cursor: pointer; color: #cbd5e1; font-size: 13.5px; font-weight: 700; transition: all 0.18s ease;
+      height: 48px; padding: 0 20px; border-radius: 16px;
+      background: var(--surface-card);
+      border: 1.5px solid var(--border);
+      box-shadow: var(--card-shadow);
+      display: flex; align-items: center; gap: 12px;
+      cursor: pointer; color: var(--text); font-size: 13.5px; font-weight: 700; transition: all 0.18s ease;
     }
-    .shortcut-pill-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0,0,0,0.3); }
-    .sc-blue:hover { border-color: #38bdf8; color: #38bdf8; }
-    .sc-green:hover { border-color: #34d399; color: #34d399; }
-    .sc-purple:hover { border-color: #a78bfa; color: #a78bfa; }
-    .sc-amber:hover { border-color: #fbbf24; color: #fbbf24; }
-    .sc-cyan:hover { border-color: #2dd4bf; color: #2dd4bf; }
-    .sc-arrow { font-size: 13px; margin-left: 2px; opacity: 0.7; }
+    .shortcut-pill-btn:hover { transform: translateY(-2px); border-color: #0284c7; color: #0284c7; }
+    .sc-arrow { font-size: 13px; margin-left: 2px; opacity: 0.6; }
 
+    /* Admin Panel */
     .admin-classes-panel {
-      background: #08162b; border: 1px solid #132a42; border-radius: 20px;
+      background: var(--surface-card); border: 1px solid var(--border); border-radius: 20px;
       padding: 20px; display: none; flex-direction: column; gap: 14px;
+      box-shadow: var(--card-shadow);
     }
     .admin-classes-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
     .admin-class-card {
-      background: #0e243d; border: 1px solid #1b3d64; border-radius: 14px;
+      background: var(--surface-elevated); border: 1px solid var(--border); border-radius: 14px;
       padding: 12px 14px; display: flex; align-items: center; justify-content: space-between;
       cursor: pointer; transition: all 0.15s;
     }
-    .admin-class-card:hover { border-color: #0284c7; background: #14355a; }
+    .admin-class-card:hover { border-color: #0284c7; }
 
     /* =========================================================
        🌟 REPORTS HUB VIEW
@@ -490,34 +554,36 @@
       display: flex; align-items: center; justify-content: space-between; margin-bottom: 22px;
     }
     .reports-hub-title {
-      font-size: 19px; color: #38bdf8; display: flex; align-items: center; gap: 10px; font-weight: 700;
+      font-size: 19px; color: #0284c7; display: flex; align-items: center; gap: 10px; font-weight: 700;
     }
+    [data-theme="dark"] .reports-hub-title { color: #38bdf8; }
     .btn-back-home {
-      background: #08162b; border: 1px solid #132a42; color: #ffffff;
+      background: var(--surface-card); border: 1px solid var(--border); color: var(--text);
       padding: 8px 16px; border-radius: 12px; font-size: 13px; font-weight: 700;
-      cursor: pointer; display: flex; align-items: center; gap: 6px;
+      cursor: pointer; display: flex; align-items: center; gap: 6px; transition: all 0.18s;
     }
-    .btn-back-home:hover { border-color: #0284c7; color: #38bdf8; background: #0d223a; }
+    .btn-back-home:hover { border-color: #0284c7; color: #0284c7; }
 
     .reports-grid-clean {
       display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
     }
     .report-card-item {
-      background: #08162b; border: 1px solid #132a42; border-radius: 20px;
+      background: var(--surface-card); border: 1px solid var(--border); border-radius: 20px;
       padding: 18px 20px; display: flex; align-items: center; justify-content: space-between;
-      cursor: pointer; box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25); transition: all 0.2s;
+      cursor: pointer; box-shadow: var(--card-shadow); transition: all 0.2s;
     }
     .report-card-item:hover {
-      transform: translateY(-3px); border-color: #0284c7; background: #0d223a;
+      transform: translateY(-3px); border-color: #0284c7; box-shadow: 0 10px 25px rgba(2, 132, 199, 0.15);
     }
     .rci-left { display: flex; align-items: center; gap: 14px; }
     .rci-icon {
-      width: 48px; height: 48px; border-radius: 15px; background: rgba(2, 132, 199, 0.15);
-      color: #38bdf8; display: flex; align-items: center; justify-content: center; font-size: 22px;
+      width: 48px; height: 48px; border-radius: 15px; background: rgba(2, 132, 199, 0.12);
+      color: #0284c7; display: flex; align-items: center; justify-content: center; font-size: 22px;
+      flex-shrink: 0;
     }
-    .rci-name { font-size: 14px; font-weight: 700; color: #ffffff; }
+    .rci-name { font-size: 14px; font-weight: 700; color: var(--text); }
     .rci-arrow {
-      width: 32px; height: 32px; border-radius: 10px; background: #0e2945; color: #94a3b8;
+      width: 32px; height: 32px; border-radius: 10px; background: var(--surface-elevated); color: var(--text-muted);
       display: flex; align-items: center; justify-content: center; font-size: 13px;
     }
     .report-card-item:hover .rci-arrow { background: #0284c7; color: #ffffff; }
@@ -544,58 +610,57 @@
     }
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    /* 📱 MOBILE BOTTOM NAV */
+    /* Mobile Bottom Nav */
     .mobile-bottom-nav {
       display: none; position: fixed; left: 0; right: 0; bottom: 0;
       height: calc(var(--bottom-nav-h) + env(safe-area-inset-bottom, 0px));
       padding-bottom: env(safe-area-inset-bottom, 0px);
-      background: #061a2e; border-top: 1px solid rgba(255, 255, 255, 0.08);
+      background: var(--surface); border-top: 1px solid var(--border);
       z-index: 40; align-items: center; justify-content: space-around;
-      box-shadow: 0 -4px 18px rgba(0, 0, 0, 0.25);
+      box-shadow: 0 -4px 18px rgba(0, 0, 0, 0.1);
     }
     .m-nav-item {
       display: flex; flex-direction: column; align-items: center; justify-content: center;
       flex: 1; height: 100%; cursor: pointer; color: var(--text-muted); font-size: 10.5px; font-weight: 600;
     }
-    .m-nav-item.active { color: #38bdf8; font-weight: 700; }
+    .m-nav-item.active { color: #0284c7; font-weight: 700; }
 
-    /* =========================================================
-       🪪 STUDENT PROFILE VIEWER MODAL
-    ========================================================= */
+    /* Profile Viewer Modal */
     .profile-viewer-backdrop {
-      display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.7);
+      display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.65);
       backdrop-filter: blur(6px); z-index: 10005; align-items: center; justify-content: center; padding: 14px;
     }
     .profile-viewer-box {
-      width: 100%; max-width: 680px; max-height: 94vh; background: #08162b;
-      border: 1.5px solid #1a385c; border-radius: 24px; box-shadow: 0 25px 60px rgba(0,0,0,0.5);
+      width: 100%; max-width: 680px; max-height: 94vh; background: var(--surface);
+      border: 1.5px solid var(--border); border-radius: 24px; box-shadow: 0 25px 60px rgba(0,0,0,0.3);
       display: flex; flex-direction: column; overflow: hidden; animation: pvPop 0.2s ease-out;
+      color: var(--text);
     }
     @keyframes pvPop { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
 
     .pv-top-bar {
-      padding: 14px 18px; background: #0c213d; border-bottom: 1px solid #1a385c;
+      padding: 14px 18px; background: var(--surface-elevated); border-bottom: 1px solid var(--border);
       display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap;
     }
     .pv-selector-group { display: flex; align-items: center; gap: 8px; flex: 1; min-width: 250px; }
     
     .pv-dropdown-select {
-      flex: 1; height: 38px; border-radius: 12px; background: #08162b; border: 1.5px solid #234d7d;
-      color: #ffffff; font-size: 13px; font-weight: 700; padding: 0 12px; outline: none; cursor: pointer;
+      flex: 1; height: 38px; border-radius: 12px; background: var(--surface); border: 1.5px solid var(--border);
+      color: var(--text); font-size: 13px; font-weight: 700; padding: 0 12px; outline: none; cursor: pointer;
     }
-    .pv-dropdown-select:focus { border-color: #38bdf8; }
+    .pv-dropdown-select:focus { border-color: #0284c7; }
 
     .pv-nav-arrow-btn {
-      width: 38px; height: 38px; border-radius: 12px; background: #08162b; border: 1.5px solid #234d7d;
-      color: #38bdf8; font-size: 16px; font-weight: 700; display: flex; align-items: center; justify-content: center;
+      width: 38px; height: 38px; border-radius: 12px; background: var(--surface); border: 1.5px solid var(--border);
+      color: #0284c7; font-size: 16px; font-weight: 700; display: flex; align-items: center; justify-content: center;
       cursor: pointer; transition: all 0.15s; flex-shrink: 0;
     }
     .pv-nav-arrow-btn:hover { background: #0284c7; color: #fff; border-color: #0284c7; }
 
     .pv-close-btn {
-      width: 32px; height: 32px; border-radius: 50%; background: rgba(255, 255, 255, 0.1);
-      border: none; color: #cbd5e1; font-size: 15px; cursor: pointer; display: flex;
-      align-items: center; justify-content: center; flex-shrink: 0;
+      width: 32px; height: 32px; border-radius: 50%; background: var(--surface-elevated);
+      border: 1px solid var(--border); color: var(--text-muted); font-size: 15px; cursor: pointer;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
     }
     .pv-close-btn:hover { background: #ef4444; color: #fff; }
 
@@ -604,9 +669,8 @@
     }
 
     .pv-bio-header-card {
-      background: linear-gradient(135deg, #0f2b4c 0%, #061a2e 100%);
-      border: 1px solid #1a385c; border-radius: 20px; padding: 18px 20px;
-      display: flex; align-items: center; gap: 18px; position: relative; overflow: hidden;
+      background: var(--surface-elevated); border: 1px solid var(--border); border-radius: 20px; padding: 18px 20px;
+      display: flex; align-items: center; gap: 18px;
     }
     .pv-avatar-frame {
       width: 90px; height: 90px; border-radius: 22px; background: #0284c7;
@@ -615,62 +679,34 @@
       font-weight: 700; color: #fff; overflow: hidden; flex-shrink: 0;
     }
     .pv-avatar-frame img { width: 100%; height: 100%; object-fit: cover; }
-
-    .pv-bio-meta-texts { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
-    .pv-student-name { font-size: 22px; font-weight: 700; color: #38bdf8; line-height: 1.2; }
+    .pv-student-name { font-size: 22px; font-weight: 700; color: #0284c7; line-height: 1.2; }
     .pv-badges-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 4px; }
-    .pv-pill-tag {
-      font-size: 11.5px; font-weight: 700; padding: 2px 10px; border-radius: 20px; border: 1px solid;
-    }
-    .pv-tag-id { background: #032747; border-color: #0284c7; color: #38bdf8; }
-    .pv-tag-grade { background: #1f1d47; border-color: #6366f1; color: #a5b4fc; }
-    .pv-tag-gender { background: #2f132e; border-color: #db2777; color: #f472b6; }
+    .pv-pill-tag { font-size: 11.5px; font-weight: 700; padding: 2px 10px; border-radius: 20px; border: 1px solid var(--border); }
 
-    .pv-info-grid {
-      display: grid; grid-template-columns: 1fr 1fr; gap: 14px;
-    }
+    .pv-info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
     .pv-section-block {
-      background: #0b1e36; border: 1px solid #153457; border-radius: 18px; padding: 16px;
+      background: var(--surface-elevated); border: 1px solid var(--border); border-radius: 18px; padding: 16px;
       display: flex; flex-direction: column; gap: 10px;
     }
     .pv-block-title {
-      font-size: 13.5px; font-weight: 700; color: #38bdf8; display: flex; align-items: center; gap: 8px;
-      border-bottom: 1px solid #1a385c; padding-bottom: 8px; margin-bottom: 4px;
+      font-size: 13.5px; font-weight: 700; color: #0284c7; display: flex; align-items: center; gap: 8px;
+      border-bottom: 1px solid var(--border); padding-bottom: 8px; margin-bottom: 4px;
     }
-    .pv-field-row {
-      display: flex; justify-content: space-between; gap: 10px; font-size: 12.5px; line-height: 1.4;
-    }
-    .pv-field-label { color: #94a3b8; font-weight: 600; flex-shrink: 0; }
-    .pv-field-value { color: #f8fafc; font-weight: 700; text-align: right; word-break: break-word; }
+    .pv-field-row { display: flex; justify-content: space-between; gap: 10px; font-size: 12.5px; line-height: 1.4; }
+    .pv-field-label { color: var(--text-muted); font-weight: 600; flex-shrink: 0; }
+    .pv-field-value { color: var(--text); font-weight: 700; text-align: right; }
 
     .pv-footer-actions {
-      padding: 12px 18px; background: #0c213d; border-top: 1px solid #1a385c;
+      padding: 12px 18px; background: var(--surface-elevated); border-top: 1px solid var(--border);
       display: flex; align-items: center; justify-content: space-between; gap: 10px;
     }
     .btn-pv-print {
       height: 38px; padding: 0 16px; border-radius: 12px; background: #0284c7;
       color: #ffffff; border: none; font-size: 13px; font-weight: 700; cursor: pointer;
-      display: flex; align-items: center; gap: 6px; transition: background 0.15s;
-    }
-    .btn-pv-print:hover { background: #0369a1; }
-
-    /* Print Template */
-    @media print {
-      body * { visibility: hidden; }
-      .profile-viewer-box, .profile-viewer-box * { visibility: visible; }
-      .profile-viewer-box {
-        position: absolute; left: 0; top: 0; width: 100%; max-width: 100%; border: none;
-        background: white !important; color: black !important;
-      }
-      .pv-top-bar, .pv-footer-actions { display: none !important; }
-      .pv-student-name, .pv-block-title { color: #0284c7 !important; }
-      .pv-field-value { color: black !important; }
-      .pv-field-label { color: #555 !important; }
+      display: flex; align-items: center; gap: 6px;
     }
 
-    /* =========================================================
-       👤 MODAL: PROFILE គ្រូ / ADMIN (កែប្រែព័ត៌មានផ្ទាល់ខ្លួន)
-    ========================================================= */
+    /* Modal: Profile */
     .modal-backdrop {
       display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.65);
       backdrop-filter: blur(6px); z-index: 10020; align-items: center; justify-content: center; padding: 16px;
@@ -678,10 +714,11 @@
     .modal-backdrop.show { display: flex; }
     .modal-dialog {
       width: 440px; max-width: 100%; max-height: 90vh; overflow-y: auto;
-      background: #08162b; border: 1.5px solid #1a385c; border-radius: 22px; box-shadow: 0 25px 60px rgba(0,0,0,0.5);
+      background: var(--surface); border: 1.5px solid var(--border); border-radius: 22px;
+      box-shadow: 0 25px 60px rgba(0,0,0,0.3); color: var(--text);
     }
     .modal-head-banner {
-      padding: 20px; background: linear-gradient(135deg, #0284c7, #061a2e); color: #fff;
+      padding: 20px; background: linear-gradient(135deg, #0284c7, #0369a1); color: #fff;
       position: relative; display: flex; flex-direction: column; align-items: center;
     }
     .modal-close-btn {
@@ -691,18 +728,18 @@
     .modal-avatar-preview { width: 80px; height: 80px; border-radius: 50%; border: 3px solid #38bdf8; object-fit: cover; }
     .modal-body { padding: 18px; }
     .form-group-field { margin-bottom: 12px; }
-    .form-group-field label { display: block; font-size: 11.5px; font-weight: 700; margin-bottom: 5px; color: #94a3b8; }
+    .form-group-field label { display: block; font-size: 11.5px; font-weight: 700; margin-bottom: 5px; color: var(--text-muted); }
     .form-group-field input, .form-group-field select {
-      width: 100%; padding: 10px 14px; border-radius: 11px; border: 1px solid #1a385c;
-      background: #0c213d; color: #ffffff; outline: none; font-size: 13px;
+      width: 100%; padding: 10px 14px; border-radius: 11px; border: 1px solid var(--border);
+      background: var(--surface-elevated); color: var(--text); outline: none; font-size: 13px;
     }
-    .form-group-field input:focus, .form-group-field select:focus { border-color: #38bdf8; }
+    .form-group-field input:focus, .form-group-field select:focus { border-color: #0284c7; }
     .modal-foot-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 16px; }
     .btn-modal { padding: 9px 18px; border-radius: 11px; font-size: 12.5px; font-weight: 700; cursor: pointer; border: none; }
     .btn-modal.primary { background: #0284c7; color: #fff; }
-    .btn-modal.cancel { background: #1a385c; color: #cbd5e1; }
+    .btn-modal.cancel { background: var(--surface-elevated); color: var(--text); border: 1px solid var(--border); }
 
-    /* RESPONSIVE */
+    /* Responsive */
     @media (max-width: 1024px) {
       .reports-grid-clean { grid-template-columns: repeat(2, 1fr); }
     }
@@ -739,7 +776,7 @@
   ========================================================= -->
   <aside class="sidebar" id="sidebar">
     
-    <!-- Profile Header (ចុចលើវាដើម្បីបើកផ្ទាំងកែប្រែព័ត៌មានគ្រូ) -->
+    <!-- Profile Header -->
     <div class="sidebar-user-header">
       <div class="user-profile-summary">
         <div class="user-green-avatar" id="sidebarAvatar" onclick="openProfileModal()" title="ចុចដើម្បីកែប្រែព័ត៌មានផ្ទាល់ខ្លួន">
@@ -826,6 +863,7 @@
         <span>🗑️</span><span>សម្អាតទិន្នន័យ</span>
       </button>
 
+      <!-- 🌟 ប៊ូតុង Dark / Light Mode -->
       <button class="sidebar-theme-btn" onclick="toggleTheme()" id="sidebarThemeBtn" title="ប្ដូរ Dark/Light Mode">
         <span id="themeIcon">🌙</span>
         <span class="nav-text" id="themeText">ពន្លឺ / ងងឹត</span>
@@ -862,8 +900,7 @@
             <div class="hero-banner-right">
               <div class="hero-stat-card">
                 <div class="h-stat-top">
-                  <span>👥</span>
-                  <span>សិស្ស</span>
+                  <span>👥</span><span>សិស្ស</span>
                 </div>
                 <div class="h-stat-digit" id="dashStudentCountDigit">0</div>
                 <div class="h-stat-sub" id="dashStudentSubLabel">ក្នុងថ្នាក់របស់អ្នក</div>
@@ -871,8 +908,7 @@
 
               <div class="hero-today-card" onclick="navigate('attendance', null)">
                 <div class="h-today-top">
-                  <span>🕒</span>
-                  <span>ថ្ងៃនេះ:</span>
+                  <span>🕒</span><span>ថ្ងៃនេះ:</span>
                 </div>
                 <div class="h-today-status" id="dashTodayStatus">រង់ចាំ</div>
                 <div class="h-today-sub">ត្រូវកត់វត្តមាន</div>
@@ -919,19 +955,19 @@
           </div>
 
           <div class="shortcuts-pill-grid">
-            <div class="shortcut-pill-btn sc-blue" onclick="navigate('score', null)">
+            <div class="shortcut-pill-btn" onclick="navigate('score', null)">
               <span>📋</span><span>ពិន្ទុខែ</span><span class="sc-arrow">›</span>
             </div>
-            <div class="shortcut-pill-btn sc-green" onclick="navigate('attendance', null)">
+            <div class="shortcut-pill-btn" onclick="navigate('attendance', null)">
               <span>📅</span><span>វត្តមាន</span><span class="sc-arrow">›</span>
             </div>
-            <div class="shortcut-pill-btn sc-purple" onclick="navigate('rank', null)">
+            <div class="shortcut-pill-btn" onclick="navigate('rank', null)">
               <span>📊</span><span>លទ្ធផល</span><span class="sc-arrow">›</span>
             </div>
-            <div class="shortcut-pill-btn sc-amber" onclick="navigate('addStudent', null)">
+            <div class="shortcut-pill-btn" onclick="navigate('addStudent', null)">
               <span>👥</span><span>សិស្ស</span><span class="sc-arrow">›</span>
             </div>
-            <div class="shortcut-pill-btn sc-cyan" onclick="openStudentProfileViewer()">
+            <div class="shortcut-pill-btn" onclick="openStudentProfileViewer()">
               <span>🕒</span><span>ប្រវត្តិរូបសិស្ស</span><span class="sc-arrow">›</span>
             </div>
           </div>
@@ -1029,7 +1065,7 @@
 
     </div>
 
-    <!-- 📱 MOBILE BOTTOM NAV -->
+    <!-- Mobile Bottom Navigation -->
     <nav class="mobile-bottom-nav">
       <div class="m-nav-item active" id="mNavDash" onclick="navigate('dashboard', null)">
         <span style="font-size:18px;">⊞</span><span>ទំព័រដើម</span>
@@ -1052,7 +1088,6 @@
 ========================================================= -->
 <div class="profile-viewer-backdrop" id="studentProfileModal" onclick="if(event.target===this) closeStudentProfileViewer()">
   <div class="profile-viewer-box">
-    
     <div class="pv-top-bar">
       <div class="pv-selector-group">
         <select class="pv-dropdown-select" id="pvClassSelect" style="max-width:130px;" onchange="onPvClassChange()">
@@ -1078,9 +1113,9 @@
         <div class="pv-bio-meta-texts">
           <div class="pv-student-name" id="pvStudentName">ឈ្មោះសិស្ស</div>
           <div class="pv-badges-row">
-            <span class="pv-pill-tag pv-tag-id" id="pvTagId">អត្តលេខ: -</span>
-            <span class="pv-pill-tag pv-tag-grade" id="pvTagGrade">ថ្នាក់ទី: -</span>
-            <span class="pv-pill-tag pv-tag-gender" id="pvTagGender">ភេទ: -</span>
+            <span class="pv-pill-tag" id="pvTagId">អត្តលេខ: -</span>
+            <span class="pv-pill-tag" id="pvTagGrade">ថ្នាក់ទី: -</span>
+            <span class="pv-pill-tag" id="pvTagGender">ភេទ: -</span>
           </div>
         </div>
       </div>
@@ -1113,7 +1148,7 @@
 </div>
 
 <!-- =========================================================
-     👤 MODAL: កែប្រែព័ត៌មានគ្រូផ្ទាល់ខ្លួន (PROFILE MODAL)
+     👤 MODAL: PROFILE គ្រូ / ADMIN
 ========================================================= -->
 <div class="modal-backdrop" id="profileModalBackdrop" onclick="if(event.target===this) closeProfileModal()">
   <div class="modal-dialog">
@@ -1121,12 +1156,12 @@
       <button class="modal-close-btn" onclick="closeProfileModal()">✕</button>
       <div style="font-size:14.5px; font-weight:bold;">👤 កែប្រែព័ត៌មានផ្ទាល់ខ្លួន</div>
       <img id="profilePhotoPreview" class="modal-avatar-preview" src="" style="display:none;">
-      <div id="profileAvatarPlaceholder" class="modal-avatar-preview" style="display:flex; align-items:center; justify-content:center; font-size:28px; background:linear-gradient(135deg,#0284c7,#061a2e);">👤</div>
+      <div id="profileAvatarPlaceholder" class="modal-avatar-preview" style="display:flex; align-items:center; justify-content:center; font-size:28px; background:linear-gradient(135deg,#0284c7,#0369a1);">👤</div>
     </div>
     <div class="modal-body">
       <form id="profileForm" onsubmit="return saveMyProfile(event)">
         <div style="text-align:center; margin-bottom:14px;">
-          <label style="font-size:11px; font-weight:700; padding:6px 14px; border-radius:20px; background:#0e2945; color:#38bdf8; cursor:pointer; border:1px solid #1a385c;">
+          <label style="font-size:11px; font-weight:700; padding:6px 14px; border-radius:20px; background:var(--primary-soft); color:var(--primary); cursor:pointer; border:1px solid var(--border);">
             📷 ប្តូររូបថត <input type="file" accept="image/*" style="display:none;" onchange="onProfilePhotoPicked(event)">
           </label>
         </div>
@@ -1192,7 +1227,6 @@
     }
   }
 
-  /* 🌟 បង្ហាញព័ត៌មាន Profile លើ Sidebar */
   function renderSidebarProfile() {
     const nameEl = document.getElementById('sidebarTeacherName');
     const roleEl = document.getElementById('sidebarTeacherRole');
@@ -1226,120 +1260,75 @@
   }
 
   /* =========================================================
-     👤 មុខងារទាញ និងកែប្រែព័ត៌មានគ្រូ (PROFILE MODAL AUTO-FETCH)
+     🔄 មុខងារ SYNC & INJECT THEME ទៅកាន់គ្រប់ FORM (IFRAMES)
   ========================================================= */
-  async function openProfileModal() {
-    const modal = document.getElementById('profileModalBackdrop');
-    if (!modal) return;
-    modal.classList.add('show');
-
-    // ១. បំពេញទិន្នន័យបឋមពី Memory ជាមុន
-    document.getElementById('pfName').value = TEACHER_NAME || '';
-    if (TEACHER_PHOTO_URL) {
-      document.getElementById('profilePhotoPreview').src = TEACHER_PHOTO_URL;
-      document.getElementById('profilePhotoPreview').style.display = 'block';
-      document.getElementById('profileAvatarPlaceholder').style.display = 'none';
-    }
-
-    // ២. 🌟 ទាញយកទិន្នន័យលម្អិតថ្មីចុងក្រោយពី Google Sheet (getMyProfile)
-    try {
-      const p = await apiRequest('getMyProfile', { token: SESSION_TOKEN });
-      if (p) {
-        const tData = p.teacher || p;
-        if (tData.name) document.getElementById('pfName').value = tData.name;
-        if (tData.sex) document.getElementById('pfSex').value = (tData.sex.includes('ស្រី')) ? 'ស្រី' : 'ប្រុស';
-        if (tData.phone) document.getElementById('pfPhone').value = tData.phone;
-        if (tData.dobIso || tData.dob) document.getElementById('pfDob').value = tData.dobIso || tData.dob;
-        if (tData.address) document.getElementById('pfAddress').value = tData.address;
-
-        const photo = tData.photoUrl || TEACHER_PHOTO_URL;
-        if (photo) {
-          document.getElementById('profilePhotoPreview').src = photo;
-          document.getElementById('profilePhotoPreview').style.display = 'block';
-          document.getElementById('profileAvatarPlaceholder').style.display = 'none';
-        }
-      }
-    } catch(err) {
-      console.warn("Get profile error:", err);
-    }
-  }
-
-  function closeProfileModal() {
-    const modal = document.getElementById('profileModalBackdrop');
-    if (modal) modal.classList.remove('show');
-    profilePickedPhotoBase64 = null;
-  }
-
-  function onProfilePhotoPicked(ev) {
-    const file = ev.target.files[0];
-    if (!file) return;
-    const reader = new FileReader();
-    reader.onload = function(e) {
-      profilePickedPhotoBase64 = e.target.result;
-      document.getElementById('profilePhotoPreview').src = profilePickedPhotoBase64;
-      document.getElementById('profilePhotoPreview').style.display = 'block';
-      document.getElementById('profileAvatarPlaceholder').style.display = 'none';
-    };
-    reader.readAsDataURL(file);
-  }
-
-  /* 💾 រក្សាទុកព័ត៌មានគ្រូទៅ GOOGLE SHEET */
-  async function saveMyProfile(ev) {
-    ev.preventDefault();
-    const btn = document.getElementById('profileSaveBtn');
-    btn.innerText = '⏳ កំពុងរក្សា...';
-    btn.disabled = true;
-
-    const data = {
-      name: document.getElementById('pfName').value.trim(),
-      sex: document.getElementById('pfSex').value,
-      phone: document.getElementById('pfPhone').value.trim(),
-      dob: document.getElementById('pfDob').value,
-      address: document.getElementById('pfAddress').value.trim(),
-      password: document.getElementById('pfPassword').value
-    };
-    if (profilePickedPhotoBase64) {
-      data.photoFile = { base64: profilePickedPhotoBase64 };
-    }
-
-    try {
-      const res = await apiRequest('updateMyProfile', { token: SESSION_TOKEN, profileData: data });
-      btn.innerText = '💾 រក្សាទុក';
-      btn.disabled = false;
-      closeProfileModal();
-      alert('✅ បានកែប្រែ និងរក្សាទុកព័ត៌មានផ្ទាល់ខ្លួនជោគជ័យ!');
-
-      if (res && (res.teacher || res.success)) {
-        const updated = res.teacher || data;
-        TEACHER_NAME = updated.name || TEACHER_NAME;
-        if (updated.photoUrl) TEACHER_PHOTO_URL = updated.photoUrl;
-
-        localStorage.setItem('krou_teacher_name', TEACHER_NAME);
-        if (TEACHER_PHOTO_URL) localStorage.setItem('krou_teacher_photo', TEACHER_PHOTO_URL);
-
-        renderSidebarProfile();
-        refreshStats();
-      }
-    } catch(err) {
-      btn.innerText = '💾 រក្សាទុក';
-      btn.disabled = false;
-      alert('❌ ការរក្សាទុកបរាជ័យ៖ ' + err.message);
-    }
-    return false;
-  }
-
-  /* 🌓 THEME CONTROL */
   function syncThemeToIframe(theme) {
+    theme = theme || document.documentElement.getAttribute('data-theme') || 'dark';
     const frame = document.getElementById('pageFrame');
     if (!frame) return;
+
+    // ១. ផ្ញើតាម postMessage
     try {
       if (frame.contentWindow) {
         frame.contentWindow.postMessage({ type: 'THEME_CHANGE', theme: theme }, '*');
-      }
-      if (frame.contentDocument && frame.contentDocument.documentElement) {
-        frame.contentDocument.documentElement.setAttribute('data-theme', theme);
+        if (typeof frame.contentWindow.applyTheme === 'function') {
+          frame.contentWindow.applyTheme(theme);
+        }
       }
     } catch(e) {}
+
+    // ២. 🌟 កែប្រែ DOM របស់ Iframe ដោយផ្ទាល់ និងចាក់បញ្ចូល Style កុំឱ្យ Form នៅស
+    try {
+      if (frame.contentDocument) {
+        const docEl = frame.contentDocument.documentElement;
+        if (docEl) docEl.setAttribute('data-theme', theme);
+        if (frame.contentDocument.body) frame.contentDocument.body.setAttribute('data-theme', theme);
+
+        // បញ្ចូល Dynamic Theme Overrides ដើម្បីឱ្យ Form ទាំងអស់ប្រែពណ៌ភ្លាមៗ
+        injectIframeThemeStyles(frame.contentDocument, theme);
+      }
+    } catch(e) {}
+  }
+
+  function injectIframeThemeStyles(iframeDoc, theme) {
+    if (!iframeDoc || !iframeDoc.head) return;
+    let styleTag = iframeDoc.getElementById('krou-dynamic-sync-style');
+    if (!styleTag) {
+      styleTag = iframeDoc.createElement('style');
+      styleTag.id = 'krou-dynamic-sync-style';
+      iframeDoc.head.appendChild(styleTag);
+    }
+
+    if (theme === 'dark') {
+      styleTag.innerHTML = `
+        html, body { background: #090e17 !important; color: #f8fafc !important; }
+        .control-card, .table-container, .form-card, .profile-card, .form-section-card, .modal-box, .edit-modal-box {
+          background: #0f172a !important; color: #f8fafc !important; border-color: #1e293b !important;
+        }
+        table { background: #0f172a !important; }
+        thead th.th-plain { background: #132238 !important; color: #f8fafc !important; border-color: #1e293b !important; }
+        tbody td { background: #0f172a !important; color: #f8fafc !important; border-color: #1a2f4d !important; }
+        tbody tr:hover td { background: #162642 !important; }
+        .sticky-col-1, .sticky-col-2, .sticky-col-3, .sticky-col-4, .sticky-action { background: #0f172a !important; }
+        thead .sticky-col-1, thead .sticky-col-2, thead .sticky-col-3, thead .sticky-col-4, thead th.sticky-action { background: #132238 !important; }
+        input.table-input, select, textarea, .modal-input {
+          background: #162642 !important; color: #f8fafc !important; border-color: #233f66 !important;
+        }
+        .btn-circle { background: #162642 !important; border-color: #233f66 !important; color: #94a3b8 !important; }
+      `;
+    } else {
+      styleTag.innerHTML = `
+        html, body { background: #f1f5f9 !important; color: #0f172a !important; }
+        .control-card, .table-container, .form-card, .profile-card, .form-section-card, .modal-box, .edit-modal-box {
+          background: #ffffff !important; color: #0f172a !important; border-color: #e2e8f0 !important;
+        }
+        tbody td { background: #ffffff !important; color: #0f172a !important; border-color: #e2e8f0 !important; }
+        .sticky-col-1, .sticky-col-2, .sticky-col-3, .sticky-col-4, .sticky-action { background: #ffffff !important; }
+        input.table-input, select, textarea, .modal-input {
+          background: #ffffff !important; color: #0f172a !important; border-color: #cbd5e1 !important;
+        }
+      `;
+    }
   }
 
   function applyTheme(theme) {
@@ -1457,8 +1446,106 @@
     document.getElementById('mobileBackdrop').style.display = 'none';
   }
 
+  /* 👤 PROFILE MODAL AUTO-FETCH */
+  async function openProfileModal() {
+    const modal = document.getElementById('profileModalBackdrop');
+    if (!modal) return;
+    modal.classList.add('show');
+
+    document.getElementById('pfName').value = TEACHER_NAME || '';
+    if (TEACHER_PHOTO_URL) {
+      document.getElementById('profilePhotoPreview').src = TEACHER_PHOTO_URL;
+      document.getElementById('profilePhotoPreview').style.display = 'block';
+      document.getElementById('profileAvatarPlaceholder').style.display = 'none';
+    }
+
+    try {
+      const p = await apiRequest('getMyProfile', { token: SESSION_TOKEN });
+      if (p) {
+        const tData = p.teacher || p;
+        if (tData.name) document.getElementById('pfName').value = tData.name;
+        if (tData.sex) document.getElementById('pfSex').value = (tData.sex && tData.sex.includes('ស្រី')) ? 'ស្រី' : 'ប្រុស';
+        if (tData.phone) document.getElementById('pfPhone').value = tData.phone;
+        if (tData.dobIso || tData.dob) document.getElementById('pfDob').value = tData.dobIso || tData.dob;
+        if (tData.address) document.getElementById('pfAddress').value = tData.address;
+
+        const photo = tData.photoUrl || TEACHER_PHOTO_URL;
+        if (photo) {
+          document.getElementById('profilePhotoPreview').src = photo;
+          document.getElementById('profilePhotoPreview').style.display = 'block';
+          document.getElementById('profileAvatarPlaceholder').style.display = 'none';
+        }
+      }
+    } catch(err) {
+      console.warn("Get profile error:", err);
+    }
+  }
+
+  function closeProfileModal() {
+    const modal = document.getElementById('profileModalBackdrop');
+    if (modal) modal.classList.remove('show');
+    profilePickedPhotoBase64 = null;
+  }
+
+  function onProfilePhotoPicked(ev) {
+    const file = ev.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      profilePickedPhotoBase64 = e.target.result;
+      document.getElementById('profilePhotoPreview').src = profilePickedPhotoBase64;
+      document.getElementById('profilePhotoPreview').style.display = 'block';
+      document.getElementById('profileAvatarPlaceholder').style.display = 'none';
+    };
+    reader.readAsDataURL(file);
+  }
+
+  async function saveMyProfile(ev) {
+    ev.preventDefault();
+    const btn = document.getElementById('profileSaveBtn');
+    btn.innerText = '⏳ កំពុងរក្សា...';
+    btn.disabled = true;
+
+    const data = {
+      name: document.getElementById('pfName').value.trim(),
+      sex: document.getElementById('pfSex').value,
+      phone: document.getElementById('pfPhone').value.trim(),
+      dob: document.getElementById('pfDob').value,
+      address: document.getElementById('pfAddress').value.trim(),
+      password: document.getElementById('pfPassword').value
+    };
+    if (profilePickedPhotoBase64) {
+      data.photoFile = { base64: profilePickedPhotoBase64 };
+    }
+
+    try {
+      const res = await apiRequest('updateMyProfile', { token: SESSION_TOKEN, profileData: data });
+      btn.innerText = '💾 រក្សាទុក';
+      btn.disabled = false;
+      closeProfileModal();
+      alert('✅ បានកែប្រែ និងរក្សាទុកព័ត៌មានផ្ទាល់ខ្លួនជោគជ័យ!');
+
+      if (res && (res.teacher || res.success)) {
+        const updated = res.teacher || data;
+        TEACHER_NAME = updated.name || TEACHER_NAME;
+        if (updated.photoUrl) TEACHER_PHOTO_URL = updated.photoUrl;
+
+        localStorage.setItem('krou_teacher_name', TEACHER_NAME);
+        if (TEACHER_PHOTO_URL) localStorage.setItem('krou_teacher_photo', TEACHER_PHOTO_URL);
+
+        renderSidebarProfile();
+        refreshStats();
+      }
+    } catch(err) {
+      btn.innerText = '💾 រក្សាទុក';
+      btn.disabled = false;
+      alert('❌ ការរក្សាទុកបរាជ័យ៖ ' + err.message);
+    }
+    return false;
+  }
+
   /* =========================================================
-     🪪 STUDENT PROFILE VIEWER (មើលប្រវត្តិរូបសិស្សតាមឈ្មោះម្នាក់ៗ)
+     🪪 STUDENT PROFILE VIEWER
   ========================================================= */
   async function openStudentProfileViewer() {
     const modal = document.getElementById('studentProfileModal');
@@ -1513,14 +1600,8 @@
     renderSelectedStudentProfile(0);
   }
 
-  async function onPvClassChange() {
-    await loadStudentsForProfileViewer();
-  }
-
-  function onPvStudentSelect(idx) {
-    currentPvIndex = parseInt(idx) || 0;
-    renderSelectedStudentProfile(currentPvIndex);
-  }
+  async function onPvClassChange() { await loadStudentsForProfileViewer(); }
+  function onPvStudentSelect(idx) { currentPvIndex = parseInt(idx) || 0; renderSelectedStudentProfile(currentPvIndex); }
 
   function prevStudentProfile() {
     if (!cachedStudentsRoster.length) return;
@@ -1632,10 +1713,10 @@
             adminGrid.innerHTML += `
               <div class="admin-class-card" onclick="ASSIGNED_CLASS='${c.className}'; navigate('attendance', null)">
                 <div>
-                  <div style="font-weight:700; color:#fff;">ថ្នាក់ទី ${c.className}</div>
-                  <div style="font-size:11.5px; color:#94a3b8;">ស្រី: ${c.female} នាក់</div>
+                  <div style="font-weight:700;">ថ្នាក់ទី ${c.className}</div>
+                  <div style="font-size:11.5px; opacity:0.8;">ស្រី: ${c.female} នាក់</div>
                 </div>
-                <div style="font-size:18px; font-weight:800; color:#38bdf8;">${c.count}</div>
+                <div style="font-size:18px; font-weight:800; color:#0284c7;">${c.count}</div>
               </div>
             `;
           });
