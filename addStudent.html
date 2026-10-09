@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
   <title>ព័ត៌មានសិស្ស</title>
 
-  <!-- 🔤 Google Fonts Battambang -->
+  <!-- 🔤 Google Fonts Battambang (Khmer OS Battambang) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Battambang:wght@400;700&display=swap" rel="stylesheet">
@@ -110,7 +110,7 @@
     }
     .col-option:hover { background: #f1f5f9; }
 
-    /* 📊 TABLE CONTAINER & STICKY SCROLL */
+    /* 📊 TABLE CONTAINER & STICKY SCROLL BEHAVIOR */
     .table-container {
       background: white; border-radius: 14px; border: 1px solid var(--border-soft);
       overflow: auto; max-height: calc(100vh - 200px);
@@ -125,10 +125,10 @@
     }
 
     /* 📌 STICKY LEFT COLUMNS */
-    .sticky-col-1 { position: sticky; left: 0px; z-index: 20; background: var(--bg-sticky); width: 48px; min-width: 48px; }
-    .sticky-col-2 { position: sticky; left: 48px; z-index: 20; background: var(--bg-sticky); width: 65px; min-width: 65px; }
+    .sticky-col-1 { position: sticky; left: 0px; z-index: 20; background: var(--bg-sticky); width: 50px; min-width: 50px; }
+    .sticky-col-2 { position: sticky; left: 50px; z-index: 20; background: var(--bg-sticky); width: 65px; min-width: 65px; }
     .sticky-col-3 {
-      position: sticky; left: 113px; z-index: 20; background: var(--bg-sticky); width: 75px; min-width: 75px;
+      position: sticky; left: 115px; z-index: 20; background: var(--bg-sticky); width: 75px; min-width: 75px;
       border-right: 2px solid #94a3b8 !important;
       box-shadow: 4px 0 10px -2px rgba(0, 0, 0, 0.18);
     }
@@ -169,7 +169,7 @@
     .table-input:focus { border-color: #0284c7; box-shadow: 0 0 0 2px rgba(2,132,199,0.15); }
     .input-left { text-align: left; }
 
-    /* 🌟 PINK BADGE WITH POINTER CURSOR */
+    /* 🌟 PINK BADGE BUTTON */
     .id-badge-btn {
       background: #ec4899; color: white; width: 22px; height: 22px;
       border-radius: 50%; font-size: 11px; display: inline-flex;
@@ -217,7 +217,7 @@
     @keyframes spin { to { transform: rotate(360deg); } }
 
     /* ========================================================================= */
-    /* 🖼️ EDIT MODAL (ដូចរូបភាពទី ២ បេះបិទ) */
+    /* 🖼️ EDIT MODAL */
     /* ========================================================================= */
     .edit-modal-overlay {
       display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
@@ -232,7 +232,6 @@
     }
     @keyframes modalPop { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
 
-    /* Modal Header Purple Gradient */
     .modal-banner {
       background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
       color: white; padding: 16px 20px; display: flex; align-items: center; justify-content: space-between;
@@ -256,7 +255,6 @@
       padding: 16px; overflow-y: auto; display: flex; flex-direction: column; gap: 14px;
     }
 
-    /* Avatar Upload Card */
     .profile-card {
       background: white; border-radius: 16px; border: 1.5px solid var(--border-subtle);
       overflow: hidden; text-align: center; padding-bottom: 14px;
@@ -283,7 +281,6 @@
     .profile-name-text { font-size: 15px; font-weight: 700; color: #1e293b; margin-bottom: 2px; }
     .profile-sub-hint { font-size: 11.5px; color: #94a3b8; }
 
-    /* Section Card */
     .form-section-card {
       background: white; border-radius: 16px; border: 1.5px solid var(--border-subtle);
       padding: 16px;
@@ -297,7 +294,6 @@
     }
     .section-title-text { font-size: 14px; font-weight: 700; color: #0284c7; }
 
-    /* Form Fields Grid */
     .form-row-2 {
       display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;
     }
@@ -311,7 +307,6 @@
     }
     .modal-input:focus { border-color: #0284c7; box-shadow: 0 0 0 3px rgba(2,132,199,0.15); }
 
-    /* Modal Action Buttons Footer */
     .modal-footer {
       padding: 12px 16px; background: white; border-top: 1px solid var(--border-subtle);
       display: flex; gap: 10px; justify-content: flex-end;
@@ -459,7 +454,7 @@
 
   <!-- 💬 POPUP ACTION MENU -->
   <div class="action-popup" id="actionMenu">
-    <div class="action-item" onclick="viewProfile()"><span>🪪</span> ប្រវត្តិរូប</div>
+    <div class="action-item" onclick="openEditModalFromMenu()"><span>🪪</span> ប្រវត្តិរូប</div>
     <div class="action-item" onclick="openEditModalFromMenu()"><span>✏️</span> កែប្រែព័ត៌មាន</div>
     <div class="action-item" onclick="alert('សៀវភៅសិក្ខាគារិក')"><span>📖</span> សៀវភៅសិក្ខាគារិក</div>
     <div class="action-item" onclick="alert('ប័ណ្ណព័ត៌មានសិស្ស')"><span>🎓</span> ប័ណ្ណព័ត៌មានសិស្ស</div>
@@ -467,7 +462,7 @@
   </div>
 
   <!-- ========================================================================= -->
-  <!-- 🖼️ EDIT MODAL BOX (ផ្ទាំងកែទិន្នន័យដូចរូបភាពទី ២) -->
+  <!-- 🖼️ EDIT MODAL BOX (ដូចរូបភាពទី ២) -->
   <!-- ========================================================================= -->
   <div class="edit-modal-overlay" id="editModalOverlay">
     <div class="edit-modal-box">
@@ -579,14 +574,11 @@
   </div>
 
   <script>
-    let BACKEND_URL = localStorage.getItem('gas_backend_url') || "";
-
-    if (!BACKEND_URL) {
-      BACKEND_URL = prompt("សូមបញ្ចូល Google Apps Script Web App URL របស់អ្នក ៖", "");
-      if (BACKEND_URL) localStorage.setItem('gas_backend_url', BACKEND_URL.trim());
-    }
+    // 🔗 GOOGLE APPS SCRIPT BACKEND URL របស់លោកអ្នកត្រូវបានបញ្ចូលដោយជោគជ័យ
+    const BACKEND_URL = "https://script.google.com/macros/s/AKfycbxe6vrQshGAPglgmmZykljXazDNh1ZwWSRdFDAip1WWWRky24lmBo-qicLK3_i10AvT/exec";
 
     let studentsList = [];
+    let rowNumMap = {};
     let activeRowIndex = null;
     let isTableLocked = false;
     let modalPhotoBase64 = null;
@@ -599,8 +591,8 @@
              'ADMIN_OR_TEACHER_TOKEN';
     }
 
+    // 📡 មុខងារហៅ API (ដោះស្រាយបញ្ហា CORS & Auto Redirects)
     async function apiRequest(action, payload = {}) {
-      if (!BACKEND_URL) return null;
       try {
         const response = await fetch(BACKEND_URL, {
           method: 'POST',
@@ -609,13 +601,15 @@
           headers: { 'Content-Type': 'text/plain;charset=utf-8' },
           body: JSON.stringify({ action: action, token: getAuthToken(), ...payload })
         });
-        return await response.json();
+        const text = await response.text();
+        return JSON.parse(text);
       } catch (err) {
         console.error("API Error:", err);
         return null;
       }
     }
 
+    // 🚀 ចាប់ផ្ដើមទាញទិន្នន័យពេលបើកទំព័រ
     window.addEventListener('DOMContentLoaded', async () => {
       await loadClassList();
       await loadStudentData();
@@ -630,7 +624,7 @@
         modalSelect.innerHTML = '';
         res.classes.forEach(cls => {
           select.innerHTML += `<option value="${cls}">ថ្នាក់ទី ${cls}</option>`;
-          modalSelect.innerHTML += `<option value="${cls}">ថ្នាក់ទី ${cls}</option>`;
+          modalSelect.innerHTML += `<option value="ថ្នាក់ទី${cls}">ថ្នាក់ទី ${cls}</option>`;
         });
       }
     }
@@ -640,9 +634,22 @@
       const tbody = document.getElementById('tableBody');
       tbody.innerHTML = `<tr><td colspan="17" class="status-row"><span class="spinner"></span> កំពុងទាញយកទិន្នន័យពី Google Sheet...</td></tr>`;
 
-      const res = await apiRequest('getStudentRosterByClass', { className: cls });
-      if (res && Array.isArray(res)) {
-        studentsList = res;
+      // ទាញយក Roster និង rowNum Map មកប្រើជាមួយគ្នា
+      const [rosterRes, dropRes] = await Promise.all([
+        apiRequest('getStudentRosterByClass', { className: cls }),
+        apiRequest('getStudentsDropdownList')
+      ]);
+
+      if (Array.isArray(dropRes)) {
+        rowNumMap = {};
+        dropRes.forEach(item => { if (item.id) rowNumMap[item.id] = item.rowNum; });
+      }
+
+      if (Array.isArray(rosterRes)) {
+        studentsList = rosterRes.map(s => ({
+          ...s,
+          rowNum: rowNumMap[s.id] || null
+        }));
       } else {
         studentsList = [];
       }
@@ -758,7 +765,7 @@
     }
 
     // =========================================================================
-    // 🌟 បើក / បិទ ផ្ទាំងកែទិន្នន័យ (EDIT MODAL LOGIC)
+    // 🌟 បើក / បិទ ផ្ទាំងកែទិន្នន័យ (EDIT MODAL)
     // =========================================================================
     function openEditModal(idx) {
       activeRowIndex = idx;
@@ -770,7 +777,6 @@
       let firstName = parts.slice(1).join(' ') || '';
       let initial = firstName ? firstName.charAt(0) : (lastName ? lastName.charAt(0) : 'ក');
 
-      // Populate Header & Avatar
       document.getElementById('modalHeaderSub').innerText = `${lastName}: ${firstName}`.trim() || 'គ្មានឈ្មោះ';
       document.getElementById('modalProfileNameText').innerText = `${lastName}: ${firstName}`.trim() || 'គ្មានឈ្មោះ';
       
@@ -781,7 +787,6 @@
         avatarBox.innerHTML = `<span id="modalAvatarInitial">${initial}</span>`;
       }
 
-      // Populate Inputs
       document.getElementById('modalLastName').value = lastName;
       document.getElementById('modalFirstName').value = firstName;
       document.getElementById('modalStudentId').value = s.id || '';
@@ -801,9 +806,7 @@
     }
 
     function openEditModalFromMenu() {
-      if (activeRowIndex !== null) {
-        openEditModal(activeRowIndex);
-      }
+      if (activeRowIndex !== null) openEditModal(activeRowIndex);
     }
 
     function previewModalPhoto(input) {
@@ -835,7 +838,6 @@
         return;
       }
 
-      // Update in Local List
       const s = studentsList[activeRowIndex];
       s.id = studentId;
       s.name = fullName;
@@ -850,8 +852,8 @@
       renderTable();
       closeEditModal();
 
-      // Send to Backend
       const payload = {
+        rowNum: s.rowNum,
         studentId: s.id,
         name: s.name,
         gender: s.sex,
@@ -863,8 +865,16 @@
         photoFile: modalPhotoBase64 ? { base64: modalPhotoBase64 } : null
       };
 
-      await apiRequest('submitStudentData', { formData: payload });
-      alert("បានកែប្រែ និងរក្សាទុកព័ត៌មានសិស្សជោគជ័យ!");
+      // ប្រសិនជាសិស្សមាន rowNum ស្រាប់គឺ update បើថ្មីគឺ submit
+      const actionToCall = s.rowNum ? 'updateStudentData' : 'submitStudentData';
+      const res = await apiRequest(actionToCall, { formData: payload });
+      
+      if (res && res.success) {
+        alert("បានរក្សាទុកព័ត៌មានសិស្សជោគជ័យ!");
+      } else {
+        alert((res && res.message) || (res && res.error) || "បានរក្សាទុក!");
+      }
+      await loadStudentData();
     }
 
     // 💾 នាំចូល / រក្សាទុកទិន្នន័យទាំងអស់ទៅ Sheet
@@ -887,6 +897,7 @@
           const fullAddr = [student.addr_village, student.addr_commune, student.addr_district, student.addr_province].filter(Boolean).join(', ');
 
           const payload = {
+            rowNum: rowNumMap[student.id],
             studentId: student.id,
             name: fullName,
             gender: student.sex,
@@ -897,7 +908,8 @@
             address: fullAddr
           };
 
-          await apiRequest('submitStudentData', { formData: payload });
+          const action = rowNumMap[student.id] ? 'updateStudentData' : 'submitStudentData';
+          await apiRequest(action, { formData: payload });
           count++;
         }
       }
@@ -963,11 +975,6 @@
       if (e.target === modalOverlay) closeEditModal();
     });
 
-    function viewProfile() {
-      if (activeRowIndex === null) return;
-      openEditModal(activeRowIndex);
-    }
-
     function viewHistory(idx) {
       const s = studentsList[idx];
       alert(`🕒 ប្រវត្តិការកែប្រែ៖ ${s.name || s.id}`);
@@ -977,8 +984,12 @@
       if (activeRowIndex === null) return;
       const s = studentsList[activeRowIndex];
       if (confirm(`តើអ្នកពិតជាចង់លុបសិស្ស «${s.name || s.id}» ចេញពីប្រព័ន្ធមែនទេ?`)) {
+        if (s.rowNum) {
+          await apiRequest('deleteStudentData', { rowNum: s.rowNum });
+        }
         studentsList.splice(activeRowIndex, 1);
         renderTable();
+        alert("បានលុបទិន្នន័យរួចរាល់!");
       }
     }
 
