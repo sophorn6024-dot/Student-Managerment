@@ -75,6 +75,7 @@
       overflow: hidden;
       position: fixed;
       font-size: 13.5px;
+      transition: background 0.25s ease, color 0.25s ease;
     }
 
     .f-moul { 
@@ -575,7 +576,6 @@
       white-space: nowrap;
     }
 
-    /* 🌟 Quick Grid រៀបចំស្អាត 7 មុខងារ (មានទាំង Chat) */
     .quick-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -1042,7 +1042,7 @@
         <span class="nav-icon">📊</span><span class="nav-text">ស្រង់ពិន្ទុ</span>
       </div>
 
-      <!-- 🌟 មុខងារថ្មី៖ សារសន្ទនា (Chat) ក្នុង Sidebar -->
+      <!-- 🌟 មុខងារសារសន្ទនា (Chat) -->
       <div class="nav-link-btn" data-page="chat" onclick="navigate('chat', this)">
         <span class="nav-icon">💬</span><span class="nav-text">សារសន្ទនា</span>
       </div>
@@ -1057,7 +1057,7 @@
       </div>
     </nav>
 
-    <!-- 🌟 ប៊ូតុងលាក់/បង្រួមនៅខាងក្រោម -->
+    <!-- 🌟 ប៊ូតុងខាងក្រោម -->
     <div class="sidebar-footer">
       <button class="admin-clear-btn" id="adminClearBtn" onclick="confirmClearAllData()">
         <span>🗑️</span><span>សម្អាតទិន្នន័យទាំងអស់</span>
@@ -1081,6 +1081,7 @@
       </div>
 
       <div class="topbar-right">
+        <!-- 🌟 ប៊ូតុងប្តូរ Dark/Light Mode -->
         <button class="theme-toggle-btn" onclick="toggleTheme()" id="themeBtn" title="ប្ដូរ Dark/Light Mode">
           <span id="themeIcon">🌙</span>
         </button>
@@ -1162,7 +1163,6 @@
               <div class="dash-panel-header">
                 <div class="dash-panel-title">⚡ ចូលប្រើលឿន</div>
               </div>
-              <!-- 🌟 Quick Grid (មានមុខងារ Chat ថ្មី) -->
               <div class="quick-grid">
                 <div class="quick-item-card" onclick="navigateFromDash('addStudent')"><span class="qi">✍️</span><span class="qt">បញ្ចូលសិស្ស</span></div>
                 <div class="quick-item-card" onclick="navigateFromDash('attendance')"><span class="qi">📅</span><span class="qt">វត្តមាន</span></div>
@@ -1278,7 +1278,6 @@
         <span class="m-icon">📊</span>
         <span class="m-txt">ស្រង់ពិន្ទុ</span>
       </div>
-      <!-- 🌟 Bottom Nav ផ្លូវកាត់ទៅ Chat -->
       <div class="m-nav-item" id="mNavChat" onclick="navigate('chat', null)">
         <span class="m-icon">💬</span>
         <span class="m-txt">សារសន្ទនា</span>
@@ -1363,7 +1362,6 @@
   window.TEACHER_NAME = TEACHER_NAME;
   window.USER_ROLE = USER_ROLE;
 
-  // 🌟 បន្ថែមចំណងជើងទំព័រ Chat
   const PAGE_TITLES = {
     dashboard: "🏠 ទំព័រដើម",
     reportsHub: "📁 របាយការណ៍",
@@ -1375,7 +1373,7 @@
     wheel: "🎡 បង្វិលកង់ជ្រើសរើស",
     attendance: "📅 ស្រង់វត្តមានសិស្ស",
     score: "📊 ស្រង់ពិន្ទុសិស្ស",
-    chat: "💬 សារសន្ទនា", // 👈 មុខងារសារសន្ទនា
+    chat: "💬 សារសន្ទនា",
     rank: "🏆 តារាងចំណាត់ថ្នាក់",
     honor: "🌟 តារាងកិត្តិយស",
     certificate: "🎖️ បណ្ណសរសើរ",
@@ -1425,25 +1423,68 @@
     if (popupEl) popupEl.classList.remove('show');
   }
 
+  /* =========================================================
+     🌓 មុខងារគ្រប់គ្រង THEME & SYNC ទៅកាន់គ្រប់ទំព័រ IFRAME
+  ========================================================= */
   function getAutoThemeByTime() {
     var hour = new Date().getHours();
     return (hour >= 18 || hour < 6) ? 'dark' : 'light';
   }
 
+  // 🌟 Sync Theme ទៅកាន់ទំព័រក្នុង Iframe ភ្លាមៗ (Real-Time)
+  function syncThemeToIframe(theme) {
+    theme = theme || document.documentElement.getAttribute('data-theme') || 'light';
+    var frame = document.getElementById('pageFrame');
+    if (!frame) return;
+
+    // ១. ផ្ញើតាម postMessage (គាំទ្រទាំង Cross-Origin & PostMessage)
+    try {
+      if (frame.contentWindow) {
+        frame.contentWindow.postMessage({ type: 'THEME_CHANGE', theme: theme }, '*');
+        if (typeof frame.contentWindow.applyTheme === 'function') {
+          frame.contentWindow.applyTheme(theme);
+        }
+      }
+    } catch(e) {}
+
+    // ២. កែសម្រួល DOM នៃទំព័រកូនដោយផ្ទាល់ (Same-Origin)
+    try {
+      if (frame.contentDocument && frame.contentDocument.documentElement) {
+        frame.contentDocument.documentElement.setAttribute('data-theme', theme);
+        var subIcon = frame.contentDocument.getElementById('themeIcon');
+        if (subIcon) subIcon.textContent = theme === 'dark' ? '☀️' : '🌙';
+      }
+    } catch(e) {}
+  }
+
   function applyTheme(theme) {
     document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('krou_theme_manual', theme);
+    localStorage.setItem('theme', theme); // Key បម្រុងទុកសម្រាប់ទំព័រកូន
+    
     var icon = document.getElementById('themeIcon');
     if (icon) icon.textContent = theme === 'dark' ? '☀️' : '🌙';
+    
+    // 🌟 បញ្ជូន Theme ទៅកាន់ Iframe ដែលកំពុងបើក
+    syncThemeToIframe(theme);
   }
 
   function toggleTheme() {
     var current = document.documentElement.getAttribute('data-theme') || 'light';
     var next = current === 'dark' ? 'light' : 'dark';
-    localStorage.setItem('krou_theme_manual', next);
     applyTheme(next);
   }
 
-  applyTheme(localStorage.getItem('krou_theme_manual') || getAutoThemeByTime());
+  // ចាប់ផ្ដើម Theme ដំបូង
+  applyTheme(localStorage.getItem('krou_theme_manual') || localStorage.getItem('theme') || getAutoThemeByTime());
+
+  // 🌟 ស្តាប់ Request ពីទំព័រកូនប្រសិនបើទំព័រកូនទើបតែបើក ហើយចង់ដឹង Theme
+  window.addEventListener('message', function(e) {
+    if (e.data && (e.data.type === 'GET_THEME' || e.data.type === 'REQUEST_THEME')) {
+      var currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+      syncThemeToIframe(currentTheme);
+    }
+  });
 
   function renderAvatar(photoUrl) {
     var av = document.getElementById('userAvatar');
@@ -1468,7 +1509,6 @@
 
   var currentPage = localStorage.getItem('krou_active_page') || 'dashboard';
 
-  // 🌟 Map ឈ្មោះទំព័រទៅកាន់ឈ្មោះ File .html
   function mapPageToFile(page) {
     var map = {
       'dashboard': 'dashboard',
@@ -1480,7 +1520,7 @@
       'wheel': 'wheel',
       'attendance': 'attendance',
       'score': 'score',
-      'chat': 'chat', // 👈 ភ្ជាប់ chat.html
+      'chat': 'chat',
       'roster': 'roster',
       'rank': 'rank',
       'honor': 'honor',
@@ -1523,9 +1563,6 @@
     } else if (cleanFile === 'chat') {
       var mb = document.getElementById('mNavChat');
       if (mb) mb.classList.add('active');
-    } else if (cleanFile === 'reportsHub' || isReportChild) {
-      var mb = document.getElementById('mNavReports');
-      if (mb) mb.classList.add('active');
     }
 
     document.getElementById('pageTitle').innerText = PAGE_TITLES[cleanFile] || PAGE_TITLES[page] || cleanFile;
@@ -1558,14 +1595,18 @@
     var overlay = document.getElementById('loadingOverlay');
     overlay.classList.add('show');
 
-    // 🌟 បញ្ជូន Token តាម Query String ទៅកាន់ Iframe (រួមទាំង chat.html)
-    frame.src = cleanFile + '.html?token=' + encodeURIComponent(SESSION_TOKEN || '') + '&v=' + Date.now();
+    // 🌟 បញ្ជូន Theme បច្ចុប្បន្នទៅក្នុង URL Query String ផងដែរ
+    var currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+    frame.src = cleanFile + '.html?token=' + encodeURIComponent(SESSION_TOKEN || '') + '&theme=' + encodeURIComponent(currentTheme) + '&v=' + Date.now();
   }
 
   function navigateFromDash(page) { navigate(page, null); }
 
+  // 🌟 ពេល Iframe ផ្ទុកចប់ ➔ Sync Theme ទៅក្នុង Iframe នោះភ្លាម
   document.getElementById('pageFrame').addEventListener('load', function() {
     document.getElementById('loadingOverlay').classList.remove('show');
+    var currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+    syncThemeToIframe(currentTheme);
   });
 
   function toggleSidebarCollapse() {
