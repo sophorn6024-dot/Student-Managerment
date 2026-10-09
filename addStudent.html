@@ -32,7 +32,7 @@
       background-color: #edf6fc;
       color: #0f172a;
       font-size: 13px;
-      padding: 10px 12px 60px;
+      padding: 10px 12px 90px; /* Space for bottom bar */
       min-height: 100vh;
       -webkit-font-smoothing: antialiased;
     }
@@ -73,12 +73,42 @@
     .top-controls {
       display: grid; grid-template-columns: 210px 1fr auto auto; gap: 10px; align-items: center; margin-bottom: 10px;
     }
-    .custom-select, .search-box {
+
+    /* 🌟 CUSTOM STATUS DROPDOWN */
+    .status-dropdown-wrapper { position: relative; width: 100%; }
+    .status-dropdown-btn {
+      background: #f8fafc; border: 1.5px solid var(--border-soft); border-radius: 22px;
+      height: 38px; padding: 0 16px; font-size: 13px; font-weight: 700; color: #334155;
+      display: flex; align-items: center; justify-content: space-between; cursor: pointer;
+      user-select: none; transition: border-color 0.15s;
+    }
+    .status-dropdown-btn:hover { border-color: #0284c7; }
+    
+    .status-dropdown-menu {
+      display: none; position: absolute; top: 46px; left: 0; width: 220px;
+      background: #ffffff; border: 1.5px solid #e2e8f0; border-radius: 18px;
+      box-shadow: 0 14px 32px rgba(15, 23, 42, 0.15); padding: 8px; z-index: 1000;
+      animation: fadeIn 0.15s ease-out;
+    }
+    .status-dropdown-menu.show { display: block; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: translateY(0); } }
+
+    .status-item {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 10px 14px; border-radius: 12px; font-size: 13px; font-weight: 700;
+      color: #334155; cursor: pointer; transition: all 0.15s;
+    }
+    .status-item:hover { background: #f1f5f9; }
+    .status-item.active { background: #e0f2fe; color: #0284c7; }
+    .status-item .check-mark { display: none; font-size: 15px; font-weight: bold; color: #0284c7; }
+    .status-item.active .check-mark { display: inline-block; }
+
+    .search-box {
       background: #f8fafc; border: 1.5px solid var(--border-soft); border-radius: 22px;
       height: 38px; padding: 0 14px; font-size: 13px; display: flex; align-items: center;
     }
-    .custom-select { outline: none; cursor: pointer; color: #334155; font-weight: 700; width: 100%; }
     .search-box input { border: none; background: transparent; outline: none; width: 100%; margin-left: 6px; font-size: 13px; }
+
     .chip-btn {
       background: #f8fafc; border: 1.5px solid var(--border-soft); border-radius: 22px;
       height: 38px; padding: 0 16px; display: flex; align-items: center; gap: 6px;
@@ -95,7 +125,12 @@
     .btn-sort { background: #ede9fe; color: #7c3aed; }
     .btn-columns { background: #e0f2fe; color: #0284c7; border: 1px solid #bae6fd; position: relative; }
     .btn-import { background: #008080; color: white; }
-    .btn-warning { background: #f8fafc; color: #475569; border: 1.5px solid var(--border-soft); }
+    
+    .btn-warning {
+      background: #fffbeb; color: #b45309; border: 1.5px solid #fde68a; transition: all 0.15s;
+    }
+    .btn-warning:hover { background: #fef3c7; }
+    .btn-warning.active { background: #f59e0b; color: white; border-color: #d97706; }
 
     /* 📋 DROPDOWN MENU */
     .column-dropdown {
@@ -113,7 +148,7 @@
     /* 📊 TABLE CONTAINER & STICKY SCROLL BEHAVIOR */
     .table-container {
       background: white; border-radius: 14px; border: 1px solid var(--border-soft);
-      overflow: auto; max-height: calc(100vh - 200px);
+      overflow: auto; max-height: calc(100vh - 250px);
       -webkit-overflow-scrolling: touch; position: relative;
     }
     table { width: 100%; border-collapse: separate; border-spacing: 0; min-width: 1750px; text-align: center; }
@@ -124,12 +159,12 @@
       border-bottom: 1px solid var(--border-soft); vertical-align: middle; white-space: nowrap;
     }
 
-    /* 📌 STICKY LEFT COLUMNS (ល.រ ➔ អត្តលេខ ➔ គោត្តនាម ➔ នាម) */
-    .sticky-col-1 { position: sticky; left: 0px; z-index: 20; background: var(--bg-sticky); width: 48px; min-width: 48px; }
-    .sticky-col-2 { position: sticky; left: 48px; z-index: 20; background: var(--bg-sticky); width: 75px; min-width: 75px; }
-    .sticky-col-3 { position: sticky; left: 123px; z-index: 20; background: var(--bg-sticky); width: 70px; min-width: 70px; }
+    /* 📌 STICKY LEFT COLUMNS */
+    .sticky-col-1 { position: sticky; left: 0px; z-index: 20; background: var(--bg-sticky); width: 50px; min-width: 50px; }
+    .sticky-col-2 { position: sticky; left: 50px; z-index: 20; background: var(--bg-sticky); width: 75px; min-width: 75px; }
+    .sticky-col-3 { position: sticky; left: 125px; z-index: 20; background: var(--bg-sticky); width: 70px; min-width: 70px; }
     .sticky-col-4 {
-      position: sticky; left: 193px; z-index: 20; background: var(--bg-sticky); width: 75px; min-width: 75px;
+      position: sticky; left: 195px; z-index: 20; background: var(--bg-sticky); width: 75px; min-width: 75px;
       border-right: 2px solid #94a3b8 !important;
       box-shadow: 4px 0 10px -2px rgba(0, 0, 0, 0.18);
     }
@@ -172,6 +207,11 @@
     .table-input:focus { border-color: #0284c7; box-shadow: 0 0 0 2px rgba(2,132,199,0.15); }
     .input-left { text-align: left; }
 
+    .table-input.cell-missing {
+      border: 1.5px dashed #ef4444 !important;
+      background-color: #fff1f2 !important;
+    }
+
     .id-badge-btn {
       background: #ec4899; color: white; width: 22px; height: 22px;
       border-radius: 50%; font-size: 11px; display: inline-flex;
@@ -181,12 +221,30 @@
     }
     .id-badge-btn:hover { transform: scale(1.15); background-color: #db2777; }
 
+    /* ✕ CANCEL DRAFT ROW BUTTON (ដូចរូបភាពជួរទី ២) */
+    .btn-cancel-draft {
+      background: none; border: none; color: #64748b; font-size: 13px; font-weight: 700;
+      cursor: pointer; padding: 2px 4px; border-radius: 4px; transition: color 0.15s;
+    }
+    .btn-cancel-draft:hover { color: #ef4444; background: #fee2e2; }
+
+    /* 🌟 GENDER PILL STYLES */
     .gender-pill {
       border-radius: 12px; font-size: 11px; font-weight: 700; padding: 2px 8px;
       border: 1px solid; outline: none; background: transparent; cursor: pointer;
     }
     .gender-f { color: #db2777; border-color: #fbcfe8; background: #fdf2f8; }
     .gender-m { color: #0284c7; border-color: #bae6fd; background: #f0f9ff; }
+    
+    /* 🌟 GENDER DASH (–) FOR NEW ROW */
+    .gender-dash {
+      color: #ea580c; border-color: #fed7aa; background: #fff7ed; font-weight: 700; padding: 2px 8px;
+    }
+
+    /* 🌟 NEW BADGE IN ACTION CELL (ដូចរូបភាពពាក្យ «ថ្មី») */
+    .badge-new-action {
+      color: #475569; font-weight: 700; font-size: 13px; display: inline-block;
+    }
 
     .action-icons { display: flex; align-items: center; justify-content: center; gap: 5px; }
     .btn-circle {
@@ -219,106 +277,81 @@
     @keyframes spin { to { transform: rotate(360deg); } }
 
     /* ========================================================================= */
-    /* 🖼️ EDIT MODAL */
+    /* 📱 BOTTOM NAVIGATION BAR (ដូចរូបភាពខាងក្រោម) */
     /* ========================================================================= */
-    .edit-modal-overlay {
+    .bottom-nav-bar {
+      position: fixed; bottom: 8px; left: 12px; right: 12px;
+      background: #ffffff; border: 1.5px solid var(--border-subtle);
+      border-radius: 14px; box-shadow: 0 8px 24px rgba(15, 23, 42, 0.12);
+      padding: 6px 12px; display: flex; align-items: center; justify-content: space-between;
+      gap: 8px; z-index: 990;
+    }
+    .bottom-nav-btn {
+      height: 38px; padding: 0 16px; border-radius: 8px; font-size: 13px; font-weight: 700;
+      cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px;
+      border: none; transition: opacity 0.15s, transform 0.15s;
+    }
+    .bottom-nav-btn:active { transform: scale(0.97); }
+    .bottom-nav-primary {
+      background: #0284c7; color: white; flex: 1;
+    }
+    .bottom-nav-icon-btn {
+      width: 38px; height: 38px; background: #f8fafc; border: 1.5px solid var(--border-soft);
+      border-radius: 8px; display: flex; align-items: center; justify-content: center;
+      cursor: pointer; font-size: 15px; color: #334155; font-weight: 700;
+    }
+    .bottom-nav-icon-btn:hover { background: #e2e8f0; }
+
+    /* ⚠️ MISSING MODAL & EDIT MODAL */
+    .missing-modal-overlay, .edit-modal-overlay {
       display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
       background: rgba(15, 23, 42, 0.55); backdrop-filter: blur(3px);
-      z-index: 10000; align-items: center; justify-content: center; padding: 12px;
+      z-index: 10001; align-items: center; justify-content: center; padding: 12px;
     }
-
-    .edit-modal-box {
-      background: #f8fafc; width: 100%; max-width: 580px; border-radius: 20px;
+    .missing-modal-box, .edit-modal-box {
+      background: #f8fafc; width: 100%; max-width: 600px; border-radius: 20px;
       box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); overflow: hidden;
-      max-height: 94vh; display: flex; flex-direction: column; animation: modalPop 0.2s ease-out;
+      max-height: 90vh; display: flex; flex-direction: column; animation: modalPop 0.2s ease-out;
     }
     @keyframes modalPop { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+
+    .missing-modal-banner {
+      background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+      color: white; padding: 16px 20px; display: flex; align-items: center; justify-content: space-between;
+    }
+    .missing-list-container { padding: 16px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
+    .missing-card {
+      background: white; border: 1.5px solid #fed7aa; border-radius: 14px;
+      padding: 12px 14px; display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    }
+    .missing-tag-pill { background: #fee2e2; color: #b91c1c; border: 1px solid #fca5a5; font-size: 11px; font-weight: 700; padding: 2px 7px; border-radius: 6px; }
 
     .modal-banner {
       background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
       color: white; padding: 16px 20px; display: flex; align-items: center; justify-content: space-between;
     }
-    .modal-banner-left { display: flex; align-items: center; gap: 12px; }
-    .edit-circle-icon {
-      background: rgba(255, 255, 255, 0.2); width: 38px; height: 38px; border-radius: 50%;
-      display: flex; align-items: center; justify-content: center; font-size: 18px;
-    }
-    .modal-banner-title { font-size: 16px; font-weight: 700; line-height: 1.3; }
-    .modal-banner-sub { font-size: 12.5px; opacity: 0.9; }
-
-    .modal-close-btn {
-      background: rgba(255, 255, 255, 0.2); border: none; width: 32px; height: 32px;
-      border-radius: 50%; color: white; cursor: pointer; font-size: 15px;
-      display: flex; align-items: center; justify-content: center; transition: background 0.15s;
-    }
-    .modal-close-btn:hover { background: rgba(255, 255, 255, 0.35); }
-
-    .modal-scroll-body {
-      padding: 16px; overflow-y: auto; display: flex; flex-direction: column; gap: 14px;
-    }
-
-    .profile-card {
-      background: white; border-radius: 16px; border: 1.5px solid var(--border-subtle);
-      overflow: hidden; text-align: center; padding-bottom: 14px;
-    }
-    .profile-card-top {
-      height: 60px; background: linear-gradient(135deg, #3b82f6, #6366f1);
-    }
-    .avatar-wrapper {
-      position: relative; width: 90px; height: 90px; margin: -45px auto 8px;
-    }
+    .modal-scroll-body { padding: 16px; overflow-y: auto; display: flex; flex-direction: column; gap: 14px; }
+    .profile-card { background: white; border-radius: 16px; border: 1.5px solid var(--border-subtle); overflow: hidden; text-align: center; padding-bottom: 14px; }
+    .profile-card-top { height: 60px; background: linear-gradient(135deg, #3b82f6, #6366f1); }
+    .avatar-wrapper { position: relative; width: 90px; height: 90px; margin: -45px auto 8px; }
     .avatar-circle {
       width: 100%; height: 100%; border-radius: 50%; border: 4px solid white;
       background: #c2410c; color: white; display: flex; align-items: center;
       justify-content: center; font-size: 36px; font-weight: 700;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.15); overflow: hidden;
     }
-    .avatar-circle img { width: 100%; height: 100%; object-fit: cover; }
-    .camera-badge {
-      position: absolute; bottom: 2px; right: 2px; width: 28px; height: 28px;
-      background: #0d9488; border: 2.5px solid white; border-radius: 50%;
-      color: white; display: flex; align-items: center; justify-content: center;
-      font-size: 13px; cursor: pointer; box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-    }
-    .profile-name-text { font-size: 15px; font-weight: 700; color: #1e293b; margin-bottom: 2px; }
-    .profile-sub-hint { font-size: 11.5px; color: #94a3b8; }
-
-    .form-section-card {
-      background: white; border-radius: 16px; border: 1.5px solid var(--border-subtle);
-      padding: 16px;
-    }
-    .section-title-row {
-      display: flex; align-items: center; gap: 8px; margin-bottom: 14px;
-    }
-    .section-title-icon {
-      background: #e0f2fe; color: #0284c7; width: 32px; height: 32px; border-radius: 8px;
-      display: flex; align-items: center; justify-content: center; font-size: 16px;
-    }
-    .section-title-text { font-size: 14px; font-weight: 700; color: #0284c7; }
-
-    .form-row-2 {
-      display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px;
-    }
-    .form-group label {
-      display: block; font-size: 12px; font-weight: 700; color: #475569; margin-bottom: 5px;
-    }
-    .form-group label span.req { color: #ef4444; }
+    .form-section-card { background: white; border-radius: 16px; border: 1.5px solid var(--border-subtle); padding: 16px; }
+    .form-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
     .modal-input {
       width: 100%; height: 40px; border: 1.5px solid var(--border-soft); border-radius: 8px;
-      background: #ffffff; padding: 0 12px; font-size: 13px; outline: none; transition: all 0.15s;
+      background: #ffffff; padding: 0 12px; font-size: 13px; outline: none;
     }
-    .modal-input:focus { border-color: #0284c7; box-shadow: 0 0 0 3px rgba(2,132,199,0.15); }
-
     .modal-footer {
       padding: 12px 16px; background: white; border-top: 1px solid var(--border-subtle);
-      display: flex; gap: 10px; justify-content: flex-end;
+      display: flex; justify-content: flex-end; gap: 10px;
     }
-    .modal-btn {
-      height: 40px; padding: 0 18px; border-radius: 8px; border: none; font-size: 13px;
-      font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 6px;
-    }
+    .modal-btn { height: 40px; padding: 0 18px; border-radius: 8px; border: none; font-size: 13px; font-weight: 700; cursor: pointer; }
     .modal-btn-cancel { background: #f1f5f9; color: #475569; }
-    .modal-btn-save { background: #4f46e5; color: white; box-shadow: 0 4px 12px rgba(79,70,229,0.25); }
+    .modal-btn-save { background: #4f46e5; color: white; }
 
     @media (max-width: 600px) {
       .form-row-2 { grid-template-columns: 1fr; }
@@ -349,13 +382,36 @@
   <!-- 🎛️ CONTROL CARD -->
   <div class="control-card">
     <div class="top-controls">
-      <select class="custom-select" id="classFilter" onchange="loadStudentData()">
-        <option value="">កំពុងសិក្សា (ទាំងអស់)</option>
-      </select>
+      <!-- 🌟 CUSTOM STATUS DROPDOWN -->
+      <div class="status-dropdown-wrapper" id="statusDropdownWrapper">
+        <div class="status-dropdown-btn" onclick="toggleStatusDropdown(event)">
+          <span id="currentStatusText">កំពុងសិក្សា</span>
+          <span id="statusChevronIcon" style="font-size: 11px;">⌵</span>
+        </div>
+
+        <div class="status-dropdown-menu" id="statusDropdownMenu">
+          <div class="status-item active" onclick="selectStatusFilter('កំពុងសិក្សា', this)">
+            <span>កំពុងសិក្សា</span>
+            <span class="check-mark">✓</span>
+          </div>
+          <div class="status-item" onclick="selectStatusFilter('បានបញ្ចប់', this)">
+            <span>បានបញ្ចប់</span>
+            <span class="check-mark">✓</span>
+          </div>
+          <div class="status-item" onclick="selectStatusFilter('ឈប់រៀន', this)">
+            <span>ឈប់រៀន</span>
+            <span class="check-mark">✓</span>
+          </div>
+          <div class="status-item" onclick="selectStatusFilter('ស្ថានភាពទាំងអស់', this)">
+            <span>ស្ថានភាពទាំងអស់</span>
+            <span class="check-mark">✓</span>
+          </div>
+        </div>
+      </div>
 
       <div class="search-box">
         <span>🔍</span>
-        <input type="text" id="searchInput" placeholder="ស្វែងរកតាមឈ្មោះ ឬអត្តលេខ..." oninput="handleSearch()">
+        <input type="text" id="searchInput" placeholder="ស្វែងរក..." oninput="handleSearch()">
       </div>
 
       <div class="chip-btn" id="syncStatus" onclick="loadStudentData()">
@@ -368,7 +424,8 @@
     </div>
 
     <div class="bottom-toolbar">
-      <button class="btn-action btn-add" onclick="addNewRow()">
+      <!-- ➕ ប៊ូតុងបន្ថែមបានម្តងមួយ -->
+      <button class="btn-action btn-add" id="btnAddRow" onclick="addNewRow()">
         <span>➕</span> <span>បន្ថែមជួរ</span>
         <span class="count-box" id="newRowCount">1</span>
       </button>
@@ -395,8 +452,8 @@
         <span>📥</span> <span>នាំចូល</span>
       </button>
 
-      <button class="btn-action btn-warning" onclick="filterMissingInfo()">
-        <span>⚠️</span> <span>ខ្វះព័ត៌មាន</span>
+      <button class="btn-action btn-warning" id="missingInfoBtn" onclick="handleMissingInfoClick()">
+        <span>⚠️</span> <span id="missingBtnText">ខ្វះព័ត៌មាន</span>
       </button>
     </div>
   </div>
@@ -454,6 +511,15 @@
     </table>
   </div>
 
+  <!-- 📱 BOTTOM NAVIGATION BAR (ដូចរូបភាព) -->
+  <div class="bottom-nav-bar">
+    <button class="bottom-nav-icon-btn" onclick="navigateTable('up')" title="ឡើងលើ">↑</button>
+    <button class="bottom-nav-icon-btn" onclick="navigateTable('left')" title="ទៅឆ្វេង">←</button>
+    <button class="bottom-nav-btn bottom-nav-primary" onclick="navigateTable('down')">↵ ចុះក្រោម</button>
+    <button class="bottom-nav-btn bottom-nav-primary" onclick="navigateTable('right')">→| ទៅមុខ</button>
+    <button class="bottom-nav-icon-btn" style="color:#16a34a; font-size:17px;" onclick="saveAllRows()" title="រក្សាទុក">✓</button>
+  </div>
+
   <!-- 💬 POPUP ACTION MENU -->
   <div class="action-popup" id="actionMenu">
     <div class="action-item" onclick="openEditModalFromMenu()"><span>🪪</span> ប្រវត្តិរូប</div>
@@ -463,20 +529,38 @@
     <div class="action-item delete" onclick="deleteCurrentRow()"><span>🗑️</span> លុបទិន្នន័យ</div>
   </div>
 
-  <!-- ========================================================================= -->
+  <!-- ⚠️ MISSING INFO MODAL -->
+  <div class="missing-modal-overlay" id="missingModalOverlay">
+    <div class="missing-modal-box">
+      <div class="missing-modal-banner">
+        <div style="display:flex; align-items:center; gap:10px;">
+          <span style="font-size:22px;">⚠️</span>
+          <div>
+            <div style="font-size:16px; font-weight:700;">បញ្ជីសិស្សខ្វះព័ត៌មាន</div>
+            <div style="font-size:12px; opacity:0.9;" id="missingModalSub">រកឃើញសិស្សខ្វះទិន្នន័យ</div>
+          </div>
+        </div>
+        <button class="btn-cancel-draft" style="color:white; font-size:18px;" onclick="closeMissingModal()">✕</button>
+      </div>
+
+      <div class="missing-list-container" id="missingListContainer"></div>
+
+      <div style="padding:12px 16px; background:white; display:flex; justify-content:flex-end; gap:8px;">
+        <button class="modal-btn modal-btn-cancel" onclick="closeMissingModal()">បិទ</button>
+        <button class="modal-btn" style="background:#0284c7; color:white;" onclick="filterMissingInTableAndClose()">🔍 ច្រោះមើលក្នុងតារាង</button>
+      </div>
+    </div>
+  </div>
+
   <!-- 🖼️ EDIT MODAL BOX -->
-  <!-- ========================================================================= -->
   <div class="edit-modal-overlay" id="editModalOverlay">
     <div class="edit-modal-box">
       <div class="modal-banner">
-        <div class="modal-banner-left">
-          <div class="edit-circle-icon">✏️</div>
-          <div>
-            <div class="modal-banner-title">កែប្រែព័ត៌មានសិស្ស</div>
-            <div class="modal-banner-sub" id="modalHeaderSub">កែ: លីណា</div>
-          </div>
+        <div>
+          <div class="modal-banner-title">កែប្រែព័ត៌មានសិស្ស</div>
+          <div class="modal-banner-sub" id="modalHeaderSub">ឈ្មោះសិស្ស</div>
         </div>
-        <button class="modal-close-btn" onclick="closeEditModal()">✕</button>
+        <button class="btn-cancel-draft" style="color:white; font-size:18px;" onclick="closeEditModal()">✕</button>
       </div>
 
       <div class="modal-scroll-body">
@@ -486,80 +570,30 @@
             <div class="avatar-circle" id="modalAvatarBox">
               <span id="modalAvatarInitial">ក</span>
             </div>
-            <div class="camera-badge" onclick="document.getElementById('modalPhotoInput').click()" title="ប្តូររូបថត">📷</div>
             <input type="file" id="modalPhotoInput" accept="image/*" style="display:none;" onchange="previewModalPhoto(this)">
           </div>
-          <div class="profile-name-text" id="modalProfileNameText">កែ: លីណា</div>
-          <div class="profile-sub-hint">JPG / PNG / WEBP · ≤ 3MB</div>
+          <div class="profile-name-text" id="modalProfileNameText">ឈ្មោះសិស្ស</div>
         </div>
 
         <div class="form-section-card">
-          <div class="section-title-row">
-            <div class="section-title-icon">🎓</div>
-            <div class="section-title-text">ព័ត៌មានសិស្ស</div>
-          </div>
-
           <div class="form-row-2">
-            <div class="form-group">
-              <label>គោត្តនាម <span class="req">*</span></label>
-              <input type="text" class="modal-input" id="modalLastName" placeholder="គោត្តនាម">
-            </div>
-            <div class="form-group">
-              <label>នាម <span class="req">*</span></label>
-              <input type="text" class="modal-input" id="modalFirstName" placeholder="នាម">
-            </div>
+            <div class="form-group"><label>គោត្តនាម *</label><input type="text" class="modal-input" id="modalLastName"></div>
+            <div class="form-group"><label>នាម *</label><input type="text" class="modal-input" id="modalFirstName"></div>
           </div>
-
           <div class="form-row-2">
-            <div class="form-group">
-              <label>លេខសិស្ស</label>
-              <input type="text" class="modal-input" id="modalStudentId" placeholder="ឧ. 577">
-            </div>
-            <div class="form-group">
-              <label>ថ្នាក់ <span class="req">*</span></label>
-              <select class="modal-input" id="modalGrade">
-                <option value="ថ្នាក់ទី៤ក">ថ្នាក់ទី៤ក</option>
-                <option value="ថ្នាក់ទី៤ខ">ថ្នាក់ទី៤ខ</option>
-                <option value="ថ្នាក់ទី៥ក">ថ្នាក់ទី៥ក</option>
-                <option value="ថ្នាក់ទី៦ក">ថ្នាក់ទី៦ក</option>
-              </select>
-            </div>
+            <div class="form-group"><label>លេខសិស្ស</label><input type="text" class="modal-input" id="modalStudentId"></div>
+            <div class="form-group"><label>ថ្នាក់ *</label><select class="modal-input" id="modalGrade"></select></div>
           </div>
-
           <div class="form-row-2">
-            <div class="form-group">
-              <label>ភេទ</label>
-              <select class="modal-input" id="modalGender">
-                <option value="ស្រី">ស្រី</option>
-                <option value="ប្រុស">ប្រុស</option>
-              </select>
-            </div>
-            <div class="form-group">
-              <label>ថ្ងៃខែឆ្នាំកំណើត</label>
-              <input type="date" class="modal-input" id="modalDob">
-            </div>
+            <div class="form-group"><label>ភេទ</label><select class="modal-input" id="modalGender"><option value="ស្រី">ស្រី</option><option value="ប្រុស">ប្រុស</option></select></div>
+            <div class="form-group"><label>ថ្ងៃខែឆ្នាំកំណើត</label><input type="date" class="modal-input" id="modalDob"></div>
           </div>
-
           <div class="form-row-2">
-            <div class="form-group">
-              <label>ទូរស័ព្ទ</label>
-              <input type="tel" class="modal-input" id="modalPhone" placeholder="លេខទូរស័ព្ទ">
-            </div>
-            <div class="form-group">
-              <label>សញ្ជាតិ</label>
-              <input type="text" class="modal-input" id="modalNationality" value="ខ្មែរ">
-            </div>
+            <div class="form-group"><label>ទូរស័ព្ទ</label><input type="tel" class="modal-input" id="modalPhone"></div>
+            <div class="form-group"><label>សញ្ជាតិ</label><input type="text" class="modal-input" id="modalNationality" value="ខ្មែរ"></div>
           </div>
-
-          <div class="form-group" style="margin-bottom:12px;">
-            <label>ទីកន្លែងកំណើត</label>
-            <input type="text" class="modal-input" id="modalPob" placeholder="ភូមិ ឃុំ ស្រុក ខេត្ត...">
-          </div>
-
-          <div class="form-group">
-            <label>អាសយដ្ឋានបច្ចុប្បន្ន</label>
-            <input type="text" class="modal-input" id="modalAddress" placeholder="ភូមិ ឃុំ ស្រុក ខេត្ត...">
-          </div>
+          <div class="form-group" style="margin-bottom:12px;"><label>ទីកន្លែងកំណើត</label><input type="text" class="modal-input" id="modalPob"></div>
+          <div class="form-group"><label>អាសយដ្ឋានបច្ចុប្បន្ន</label><input type="text" class="modal-input" id="modalAddress"></div>
         </div>
       </div>
 
@@ -578,6 +612,8 @@
     let activeRowIndex = null;
     let isTableLocked = false;
     let modalPhotoBase64 = null;
+    let currentStatusFilter = 'កំពុងសិក្សា';
+    let isMissingFilterActive = false;
 
     function getAuthToken() {
       const urlParams = new URLSearchParams(window.location.search);
@@ -612,24 +648,20 @@
     async function loadClassList() {
       const res = await apiRequest('getClassList');
       if (res && res.classes) {
-        const select = document.getElementById('classFilter');
         const modalSelect = document.getElementById('modalGrade');
-        select.innerHTML = '<option value="">កំពុងសិក្សា (ទាំងអស់)</option>';
         modalSelect.innerHTML = '';
         res.classes.forEach(cls => {
-          select.innerHTML += `<option value="${cls}">ថ្នាក់ទី ${cls}</option>`;
           modalSelect.innerHTML += `<option value="ថ្នាក់ទី${cls}">ថ្នាក់ទី ${cls}</option>`;
         });
       }
     }
 
     async function loadStudentData() {
-      const cls = document.getElementById('classFilter').value;
       const tbody = document.getElementById('tableBody');
       tbody.innerHTML = `<tr><td colspan="17" class="status-row"><span class="spinner"></span> កំពុងទាញយកទិន្នន័យពី Google Sheet...</td></tr>`;
 
       const [rosterRes, dropRes] = await Promise.all([
-        apiRequest('getStudentRosterByClass', { className: cls }),
+        apiRequest('getStudentRosterByClass', { className: '' }),
         apiRequest('getStudentsDropdownList')
       ]);
 
@@ -641,12 +673,156 @@
       if (Array.isArray(rosterRes)) {
         studentsList = rosterRes.map(s => ({
           ...s,
-          rowNum: rowNumMap[s.id] || null
+          rowNum: rowNumMap[s.id] || null,
+          isDraft: false
         }));
       } else {
         studentsList = [];
       }
-      renderTable();
+      applyFilterAndRender();
+    }
+
+    /* ➕ បន្ថែមជួរថ្មី (អនុញ្ញាតតែម្តងមួយជួរដេកប៉ុណ្ណោះ) */
+    function addNewRow() {
+      const hasDraft = studentsList.some(s => s.isDraft);
+      if (hasDraft) {
+        alert("⚠️ អ្នកអាចបន្ថែមបានតែម្ដងមួយជួរដេកប៉ុណ្ណោះ! សូមរក្សាទុកជួរថ្មីនេះសិន ឬចុច ✕ ដើម្បីបោះបង់។");
+        return;
+      }
+
+      studentsList.push({
+        isDraft: true,
+        id: '',
+        name: '',
+        sex: '', // shows '-'
+        dob: '',
+        grade: 'ថ្នាក់ទី៤ក',
+        phone: '',
+        pob: '',
+        address: '',
+        nationality: 'ខ្មែរ'
+      });
+
+      applyFilterAndRender();
+
+      // រំកិលទៅជួរដេកថ្មីនោះដោយស្វ័យប្រវត្តិ
+      setTimeout(() => {
+        const tableContainer = document.getElementById('tableContainer');
+        tableContainer.scrollTop = tableContainer.scrollHeight;
+      }, 100);
+    }
+
+    /* ✕ លុបជួរដេកដែលទើបបន្ថែម (Cancel Draft Row) */
+    function cancelDraftRow(idx) {
+      studentsList.splice(idx, 1);
+      applyFilterAndRender();
+    }
+
+    function toggleStatusDropdown(e) {
+      e.stopPropagation();
+      const menu = document.getElementById('statusDropdownMenu');
+      const icon = document.getElementById('statusChevronIcon');
+      menu.classList.toggle('show');
+      icon.innerText = menu.classList.contains('show') ? '⌃' : '⌵';
+    }
+
+    function selectStatusFilter(status, el) {
+      currentStatusFilter = status;
+      document.getElementById('currentStatusText').innerText = status;
+      document.querySelectorAll('.status-item').forEach(item => item.classList.remove('active'));
+      el.classList.add('active');
+      document.getElementById('statusDropdownMenu').classList.remove('show');
+      document.getElementById('statusChevronIcon').innerText = '⌵';
+      applyFilterAndRender();
+    }
+
+    function getMissingFields(s) {
+      const missing = [];
+      if (!s.id || s.id.trim() === '') missing.push('អត្តលេខ');
+      if (!s.name || s.name.trim() === '') missing.push('ឈ្មោះ');
+      if (!s.dob || s.dob.trim() === '') missing.push('ថ្ងៃខែឆ្នាំកំណើត');
+      if (!s.phone || s.phone.trim() === '') missing.push('លេខទូរស័ព្ទ');
+      if (!s.pob || s.pob.trim() === '') missing.push('ទីកន្លែងកំណើត');
+      if (!s.address || s.address.trim() === '') missing.push('អាសយដ្ឋាន');
+      return missing;
+    }
+
+    function handleMissingInfoClick() {
+      const missingStudents = studentsList.map((s, idx) => ({
+        student: s, index: idx, missing: getMissingFields(s)
+      })).filter(item => item.missing.length > 0 && !item.student.isDraft);
+
+      const modal = document.getElementById('missingModalOverlay');
+      const container = document.getElementById('missingListContainer');
+      document.getElementById('missingModalSub').innerText = `រកឃើញសិស្សខ្វះទិន្នន័យចំនួន ${missingStudents.length} នាក់`;
+      container.innerHTML = '';
+
+      if (missingStudents.length === 0) {
+        container.innerHTML = `<div style="text-align:center; padding:30px; color:#15803d; font-weight:700;">🎉 ព័ត៌មានសិស្សទាំងអស់ត្រូវបានបំពេញពេញលេញ ១០០%!</div>`;
+      } else {
+        missingStudents.forEach(item => {
+          const s = item.student;
+          let fullName = (s.name || '').trim();
+          let parts = fullName.split(' ');
+          let initial = parts.length > 1 ? parts[1].charAt(0) : (fullName.charAt(0) || 'ក');
+
+          const card = document.createElement('div');
+          card.className = 'missing-card';
+          card.innerHTML = `
+            <div>
+              <div style="font-weight:700; color:#1e293b;">${fullName || 'គ្មានឈ្មោះ'} <span style="font-size:11.5px; color:#ea580c;">(${s.id ? 'អត្តលេខ: ' + s.id : 'គ្មានអត្តលេខ'})</span></div>
+              <div style="font-size:11.5px; color:#64748b;">${s.grade || 'មិនទាន់មានថ្នាក់'}</div>
+              <div style="display:flex; gap:4px; margin-top:4px;">
+                ${item.missing.map(f => `<span class="missing-tag-pill">❌ ខ្វះ${f}</span>`).join('')}
+              </div>
+            </div>
+            <button class="bottom-nav-btn" style="background:#0284c7; color:white; height:32px; padding:0 10px;" onclick="openEditFromMissing(${item.index})">✏️ បំពេញ</button>
+          `;
+          container.appendChild(card);
+        });
+      }
+      modal.style.display = 'flex';
+    }
+
+    function closeMissingModal() { document.getElementById('missingModalOverlay').style.display = 'none'; }
+    function openEditFromMissing(idx) { closeMissingModal(); openEditModal(idx); }
+
+    function filterMissingInTableAndClose() {
+      closeMissingModal();
+      isMissingFilterActive = !isMissingFilterActive;
+      const btn = document.getElementById('missingInfoBtn');
+      const btnText = document.getElementById('missingBtnText');
+      if (isMissingFilterActive) {
+        btn.classList.add('active'); btnText.innerText = 'បង្ហាញទាំងអស់';
+      } else {
+        btn.classList.remove('active'); btnText.innerText = 'ខ្វះព័ត៌មាន';
+      }
+      applyFilterAndRender();
+    }
+
+    function applyFilterAndRender() {
+      const q = document.getElementById('searchInput').value.toLowerCase().trim();
+
+      const filtered = studentsList.filter(s => {
+        const matchSearch = !q || 
+          (s.name && s.name.toLowerCase().includes(q)) || 
+          (s.id && s.id.toLowerCase().includes(q));
+
+        if (!matchSearch) return false;
+
+        const isDropout = Boolean(s.dropoutSemester && s.dropoutSemester.trim() !== '');
+        if (currentStatusFilter === 'កំពុងសិក្សា' && isDropout) return false;
+        if (currentStatusFilter === 'ឈប់រៀន' && !isDropout) return false;
+
+        if (isMissingFilterActive && !s.isDraft) {
+          const missing = getMissingFields(s);
+          if (missing.length === 0) return false;
+        }
+
+        return true;
+      });
+
+      renderTable(filtered);
     }
 
     function calculateAge(dobStr) {
@@ -659,13 +835,13 @@
       return age > 0 ? age : '';
     }
 
-    // 🎨 RENDER TABLE (អត្តលេខ នៅពីមុខ គោត្តនាម)
-    function renderTable(list = studentsList) {
+    // 🎨 RENDER TABLE (ជាមួយជួរថ្មីដូចរូបភាព Row 2)
+    function renderTable(list) {
       const tbody = document.getElementById('tableBody');
       tbody.innerHTML = '';
 
       if (list.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="17" class="status-row">គ្មានទិន្នន័យសិស្សក្នុង Sheet ឡើយ! ចុច «➕ បន្ថែមជួរ» ដើម្បីបញ្ចូលថ្មី។</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="17" class="status-row">គ្មានទិន្នន័យសិស្សត្រូវបង្ហាញឡើយ! ចុច «➕ បន្ថែមជួរ» ដើម្បីបញ្ចូលថ្មី។</td></tr>`;
         updateCounters(0, 0);
         return;
       }
@@ -686,51 +862,94 @@
         let pobParts = (s.pob || '').split(',');
         let addrParts = (s.address || '').split(',');
 
-        const tr = document.createElement('tr');
-        tr.dataset.index = idx;
-        tr.innerHTML = `
-          <!-- 📌 ជួរឈរបង្កកនៅខាងឆ្វេង៖ ល.រ ➔ អត្តលេខ ➔ គោត្តនាម ➔ នាម -->
-          <td class="sticky-col-1">
+        const hasMissingDob = !s.isDraft && (!s.dob || s.dob.trim() === '');
+        const hasMissingPhone = !s.isDraft && (!s.phone || s.phone.trim() === '');
+        const hasMissingPob = !s.isDraft && (!s.pob || s.pob.trim() === '');
+        const hasMissingAddr = !s.isDraft && (!s.address || s.address.trim() === '');
+        const hasMissingId = !s.isDraft && (!s.id || s.id.trim() === '');
+
+        // 🌟 ពិនិត្យថាជាជួរថ្មី (Row 2 ដូចរូបភាព) ឬជាជួរទិន្នន័យធម្មតា
+        let col1Content = '';
+        let genderContent = '';
+        let actionContent = '';
+
+        if (s.isDraft) {
+          // ជួរថ្មី៖ លេខរៀង + ប៊ូតុង ✕
+          col1Content = `
+            <span style="font-weight:700; margin-right:3px;">${idx + 1}</span>
+            <button class="btn-cancel-draft" onclick="cancelDraftRow(${idx})" title="បោះបង់ជួរថ្មីនេះ">✕</button>
+          `;
+          // ភេទមានសញ្ញា – (Gender Dash)
+          genderContent = `
+            <select class="gender-pill gender-dash" data-field="sex">
+              <option value="">–</option>
+              <option value="ស្រី">ស្រី</option>
+              <option value="ប្រុស">ប្រុស</option>
+            </select>
+          `;
+          // សកម្មភាពបង្ហាញពាក្យ «ថ្មី»
+          actionContent = `<span class="badge-new-action">ថ្មី</span>`;
+        } else {
+          // ជួរធម្មតា៖ លេខរៀង + Badge ផ្កាឈូក
+          col1Content = `
             <span style="font-weight:700; margin-right:3px;">${idx + 1}</span>
             <button class="id-badge-btn" onclick="openEditModal(${idx})" title="ចុចដើម្បីកែប្រែ">${initialBadge}</button>
-          </td>
-          <!-- 🌟 អត្តលេខ នៅពីមុខ គោត្តនាម -->
-          <td class="sticky-col-2 col-id"><input type="text" class="table-input" value="${s.id || ''}" data-field="id"></td>
-          <td class="sticky-col-3"><input type="text" class="table-input input-left" value="${lastName}" data-field="lastName" style="font-weight:700;"></td>
-          <td class="sticky-col-4"><input type="text" class="table-input input-left" value="${firstName}" data-field="firstName" style="font-weight:700;"></td>
-
-          <td class="col-gender">
+          `;
+          genderContent = `
             <select class="gender-pill ${isF ? 'gender-f' : 'gender-m'}" data-field="sex" onchange="this.className='gender-pill '+(this.value==='ស្រី'?'gender-f':'gender-m')">
               <option value="ស្រី" ${isF ? 'selected' : ''}>ស្រី</option>
               <option value="ប្រុស" ${!isF ? 'selected' : ''}>ប្រុស</option>
             </select>
+          `;
+          actionContent = `
+            <div class="action-icons">
+              <button class="btn-circle" title="ប្រវត្តិ" onclick="viewHistory(${idx})">🕒</button>
+              <button class="btn-menu" onclick="openActionMenu(event, ${idx})">⋮</button>
+            </div>
+          `;
+        }
+
+        const tr = document.createElement('tr');
+        tr.dataset.index = idx;
+        tr.innerHTML = `
+          <!-- 📌 ជួរឈរបង្កកនៅខាងឆ្វេង -->
+          <td class="sticky-col-1">${col1Content}</td>
+          <td class="sticky-col-2 col-id">
+            <input type="text" class="table-input ${hasMissingId ? 'cell-missing' : ''}" value="${s.id || ''}" data-field="id">
+          </td>
+          <td class="sticky-col-3">
+            <input type="text" class="table-input input-left" value="${lastName}" data-field="lastName" style="font-weight:700;">
+          </td>
+          <td class="sticky-col-4">
+            <input type="text" class="table-input input-left" value="${firstName}" data-field="firstName" style="font-weight:700;">
           </td>
 
+          <td class="col-gender">${genderContent}</td>
+
           <!-- ទីកន្លែងកំណើតសិស្ស -->
-          <td class="col-pob"><input type="text" class="table-input" value="${pobParts[3] ? pobParts[3].trim() : (pobParts[0]||'').trim()}" data-field="pob_province"></td>
+          <td class="col-pob"><input type="text" class="table-input ${hasMissingPob ? 'cell-missing' : ''}" value="${pobParts[3] ? pobParts[3].trim() : (pobParts[0]||'').trim()}" data-field="pob_province"></td>
           <td class="col-pob"><input type="text" class="table-input" value="${pobParts[2] ? pobParts[2].trim() : ''}" data-field="pob_district"></td>
           <td class="col-pob"><input type="text" class="table-input" value="${pobParts[1] ? pobParts[1].trim() : ''}" data-field="pob_commune"></td>
           <td class="col-pob"><input type="text" class="table-input" value="${pobParts[0] ? pobParts[0].trim() : ''}" data-field="pob_village"></td>
 
           <!-- អាសយដ្ឋានបច្ចុប្បន្នសិស្ស -->
-          <td class="col-address"><input type="text" class="table-input" value="${addrParts[3] ? addrParts[3].trim() : (addrParts[0]||'').trim()}" data-field="addr_province"></td>
+          <td class="col-address"><input type="text" class="table-input ${hasMissingAddr ? 'cell-missing' : ''}" value="${addrParts[3] ? addrParts[3].trim() : (addrParts[0]||'').trim()}" data-field="addr_province"></td>
           <td class="col-address"><input type="text" class="table-input" value="${addrParts[2] ? addrParts[2].trim() : ''}" data-field="addr_district"></td>
           <td class="col-address"><input type="text" class="table-input" value="${addrParts[1] ? addrParts[1].trim() : ''}" data-field="addr_commune"></td>
           <td class="col-address"><input type="text" class="table-input" value="${addrParts[0] ? addrParts[0].trim() : ''}" data-field="addr_village"></td>
 
           <!-- ព័ត៌មានសិស្ស -->
-          <td class="col-info"><input type="date" class="table-input" value="${s.dob || ''}" data-field="dob" onchange="updateRowAge(this)"></td>
-          <td class="col-info"><span class="age-text" style="font-weight:700;">${age}</span></td>
-          <td class="col-info"><input type="text" class="table-input" value="${s.grade || ''}" data-field="grade"></td>
-          <td class="col-info"><input type="tel" class="table-input" value="${s.phone || ''}" data-field="phone"></td>
-
-          <!-- 📌 ជួរឈរបង្កកនៅខាងស្ដាំ (សកម្មភាព) -->
-          <td class="sticky-action">
-            <div class="action-icons">
-              <button class="btn-circle" title="ប្រវត្តិ" onclick="viewHistory(${idx})">🕒</button>
-              <button class="btn-menu" onclick="openActionMenu(event, ${idx})">⋮</button>
-            </div>
+          <td class="col-info">
+            <input type="date" class="table-input ${hasMissingDob ? 'cell-missing' : ''}" value="${s.dob || ''}" data-field="dob" onchange="updateRowAge(this)">
           </td>
+          <td class="col-info"><span class="age-text" style="font-weight:700;">${age}</span></td>
+          <td class="col-info"><input type="text" class="table-input" value="${s.grade || 'ថ្នាក់ទី៤ក'}" data-field="grade"></td>
+          <td class="col-info">
+            <input type="tel" class="table-input ${hasMissingPhone ? 'cell-missing' : ''}" value="${s.phone || ''}" data-field="phone">
+          </td>
+
+          <!-- 📌 ជួរឈរបង្កកនៅខាងស្ដាំ -->
+          <td class="sticky-action">${actionContent}</td>
         `;
         tbody.appendChild(tr);
       });
@@ -750,12 +969,28 @@
       ageBox.innerText = calculateAge(input.value);
     }
 
-    function addNewRow() {
-      const currentClass = document.getElementById('classFilter').value || '';
-      studentsList.unshift({
-        id: '', name: '', sex: 'ស្រី', dob: '', grade: currentClass, phone: '', pob: '', address: ''
-      });
-      renderTable();
+    /* 📱 មុខងាររុករករវាងក្រឡាតាមប៊ូតុងខាងក្រោម */
+    function navigateTable(direction) {
+      const activeEl = document.activeElement;
+      const allInputs = Array.from(document.querySelectorAll('#tableBody input.table-input, #tableBody select'));
+      let currentIndex = allInputs.indexOf(activeEl);
+
+      if (currentIndex === -1) {
+        if (allInputs.length > 0) allInputs[0].focus();
+        return;
+      }
+
+      if (direction === 'right' && currentIndex < allInputs.length - 1) {
+        allInputs[currentIndex + 1].focus();
+      } else if (direction === 'left' && currentIndex > 0) {
+        allInputs[currentIndex - 1].focus();
+      } else if (direction === 'down') {
+        const nextRowInput = allInputs[currentIndex + 12]; // Jump row
+        if (nextRowInput) nextRowInput.focus();
+      } else if (direction === 'up') {
+        const prevRowInput = allInputs[currentIndex - 12];
+        if (prevRowInput) prevRowInput.focus();
+      }
     }
 
     function openEditModal(idx) {
@@ -796,18 +1031,12 @@
       modalPhotoBase64 = null;
     }
 
-    function openEditModalFromMenu() {
-      if (activeRowIndex !== null) openEditModal(activeRowIndex);
-    }
+    function openEditModalFromMenu() { if (activeRowIndex !== null) openEditModal(activeRowIndex); }
 
     function previewModalPhoto(input) {
       const file = input.files[0];
       if (!file) return;
-      if (file.size > 3 * 1024 * 1024) {
-        alert("ទំហំរូបថតត្រូវតែតូចជាង ឬស្មើ 3MB!");
-        input.value = '';
-        return;
-      }
+      if (file.size > 3 * 1024 * 1024) { alert("ទំហំរូបថតត្រូវតែតូចជាង ឬស្មើ 3MB!"); return; }
       const reader = new FileReader();
       reader.onload = function(e) {
         modalPhotoBase64 = e.target.result;
@@ -824,10 +1053,7 @@
       const fullName = `${lastName} ${firstName}`.trim();
       const studentId = document.getElementById('modalStudentId').value.trim();
 
-      if (!fullName) {
-        alert("សូមបញ្ចូលឈ្មោះសិស្ស!");
-        return;
-      }
+      if (!fullName) { alert("សូមបញ្ចូលឈ្មោះសិស្ស!"); return; }
 
       const s = studentsList[activeRowIndex];
       s.id = studentId;
@@ -838,9 +1064,10 @@
       s.phone = document.getElementById('modalPhone').value.trim();
       s.pob = document.getElementById('modalPob').value.trim();
       s.address = document.getElementById('modalAddress').value.trim();
+      s.isDraft = false;
       if (modalPhotoBase64) s.photoUrl = modalPhotoBase64;
 
-      renderTable();
+      applyFilterAndRender();
       closeEditModal();
 
       const payload = {
@@ -857,13 +1084,8 @@
       };
 
       const actionToCall = s.rowNum ? 'updateStudentData' : 'submitStudentData';
-      const res = await apiRequest(actionToCall, { formData: payload });
-      
-      if (res && res.success) {
-        alert("បានរក្សាទុកព័ត៌មានសិស្សជោគជ័យ!");
-      } else {
-        alert((res && res.message) || (res && res.error) || "បានរក្សាទុក!");
-      }
+      await apiRequest(actionToCall, { formData: payload });
+      alert("បានរក្សាទុកព័ត៌មានសិស្សជោគជ័យ!");
       await loadStudentData();
     }
 
@@ -890,9 +1112,9 @@
             rowNum: rowNumMap[student.id],
             studentId: student.id,
             name: fullName,
-            gender: student.sex,
+            gender: student.sex || 'ស្រី',
             dob: student.dob,
-            grade: student.grade,
+            grade: student.grade || 'ថ្នាក់ទី៤ក',
             phone: student.phone,
             pob: fullPob,
             address: fullAddr
@@ -910,19 +1132,8 @@
       await loadStudentData();
     }
 
-    function handleSearch() {
-      const q = document.getElementById('searchInput').value.toLowerCase().trim();
-      const filtered = studentsList.filter(s => 
-        (s.name && s.name.toLowerCase().includes(q)) || 
-        (s.id && s.id.toLowerCase().includes(q))
-      );
-      renderTable(filtered);
-    }
-
-    function sortStudentsAlphabetical() {
-      studentsList.sort((a,b) => (a.name || '').localeCompare(b.name || '', 'km'));
-      renderTable();
-    }
+    function handleSearch() { applyFilterAndRender(); }
+    function sortStudentsAlphabetical() { studentsList.sort((a,b) => (a.name || '').localeCompare(b.name || '', 'km')); applyFilterAndRender(); }
 
     function toggleColumnMenu(e) {
       e.stopPropagation();
@@ -931,9 +1142,7 @@
     }
 
     function toggleColumn(colClass, isVisible) {
-      document.querySelectorAll(`.${colClass}`).forEach(el => {
-        el.style.display = isVisible ? '' : 'none';
-      });
+      document.querySelectorAll(`.${colClass}`).forEach(el => { el.style.display = isVisible ? '' : 'none'; });
     }
 
     function toggleLockTable() {
@@ -948,12 +1157,9 @@
       activeRowIndex = idx;
       const menu = document.getElementById('actionMenu');
       menu.style.display = 'block';
-
       const rect = e.target.getBoundingClientRect();
-      const menuWidth = 190;
-      let left = rect.left - menuWidth + 24;
+      let left = rect.left - 190 + 24;
       if (left < 10) left = 10;
-      
       menu.style.left = `${left}px`;
       menu.style.top = `${rect.bottom + 6}px`;
     }
@@ -961,31 +1167,28 @@
     document.addEventListener('click', (e) => {
       document.getElementById('actionMenu').style.display = 'none';
       document.getElementById('columnDropdown').style.display = 'none';
+      const statusMenu = document.getElementById('statusDropdownMenu');
+      if (statusMenu && statusMenu.classList.contains('show')) {
+        statusMenu.classList.remove('show');
+        document.getElementById('statusChevronIcon').innerText = '⌵';
+      }
       const modalOverlay = document.getElementById('editModalOverlay');
       if (e.target === modalOverlay) closeEditModal();
+      const missingOverlay = document.getElementById('missingModalOverlay');
+      if (e.target === missingOverlay) closeMissingModal();
     });
 
-    function viewHistory(idx) {
-      const s = studentsList[idx];
-      alert(`🕒 ប្រវត្តិការកែប្រែ៖ ${s.name || s.id}`);
-    }
+    function viewHistory(idx) { alert(`🕒 ប្រវត្តិការកែប្រែ៖ ${studentsList[idx].name || studentsList[idx].id}`); }
 
     async function deleteCurrentRow() {
       if (activeRowIndex === null) return;
       const s = studentsList[activeRowIndex];
       if (confirm(`តើអ្នកពិតជាចង់លុបសិស្ស «${s.name || s.id}» ចេញពីប្រព័ន្ធមែនទេ?`)) {
-        if (s.rowNum) {
-          await apiRequest('deleteStudentData', { rowNum: s.rowNum });
-        }
+        if (s.rowNum) await apiRequest('deleteStudentData', { rowNum: s.rowNum });
         studentsList.splice(activeRowIndex, 1);
-        renderTable();
+        applyFilterAndRender();
         alert("បានលុបទិន្នន័យរួចរាល់!");
       }
-    }
-
-    function filterMissingInfo() {
-      const missing = studentsList.filter(s => !s.dob || !s.phone || !s.pob);
-      renderTable(missing);
     }
   </script>
 </body>
