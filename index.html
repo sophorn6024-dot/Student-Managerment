@@ -373,12 +373,8 @@
     }
     .view-panel.active { opacity: 1; pointer-events: auto; transform: translateY(0); }
 
-    /* =========================================================
-       🌟 1. DASHBOARD VIEW
-    ========================================================= */
-    #dashboardView {
-      padding: 24px 28px 60px;
-    }
+    /* DASHBOARD */
+    #dashboardView { padding: 24px 28px 60px; }
     .dash-inner-container {
       max-width: 1350px;
       margin: 0 auto;
@@ -387,6 +383,7 @@
       gap: 22px;
     }
 
+    /* Hero Banner Card */
     .hero-banner-card {
       background: #08162b;
       border: 1px solid #132a42;
@@ -485,100 +482,47 @@
     .admin-class-card:hover { border-color: #0284c7; background: #14355a; }
 
     /* =========================================================
-       🌟 2. REPORTS HUB VIEW (មជ្ឈមណ្ឌលរបាយការណ៍ដែលបាត់ពីមុន)
+       🌟 REPORTS HUB VIEW
     ========================================================= */
-    #reportsHubView {
-      padding: 24px 28px 60px;
-    }
+    #reportsHubView { padding: 24px 28px 60px; }
     .reports-hub-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 22px;
+      display: flex; align-items: center; justify-content: space-between; margin-bottom: 22px;
     }
     .reports-hub-title {
-      font-size: 19px;
-      color: #38bdf8;
-      display: flex;
-      align-items: center;
-      gap: 10px;
-      font-weight: 700;
+      font-size: 19px; color: #38bdf8; display: flex; align-items: center; gap: 10px; font-weight: 700;
     }
     .btn-back-home {
-      background: #08162b;
-      border: 1px solid #132a42;
-      color: #ffffff;
-      padding: 8px 16px;
-      border-radius: 12px;
-      font-size: 13px;
-      font-weight: 700;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      transition: all 0.18s;
+      background: #08162b; border: 1px solid #132a42; color: #ffffff;
+      padding: 8px 16px; border-radius: 12px; font-size: 13px; font-weight: 700;
+      cursor: pointer; display: flex; align-items: center; gap: 6px;
     }
     .btn-back-home:hover { border-color: #0284c7; color: #38bdf8; background: #0d223a; }
 
     .reports-grid-clean {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 16px;
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
     }
-
     .report-card-item {
-      background: #08162b;
-      border: 1px solid #132a42;
-      border-radius: 20px;
-      padding: 18px 20px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      cursor: pointer;
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
-      transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+      background: #08162b; border: 1px solid #132a42; border-radius: 20px;
+      padding: 18px 20px; display: flex; align-items: center; justify-content: space-between;
+      cursor: pointer; box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25); transition: all 0.2s;
     }
     .report-card-item:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 10px 25px rgba(2, 132, 199, 0.25);
-      border-color: #0284c7;
-      background: #0d223a;
+      transform: translateY(-3px); border-color: #0284c7; background: #0d223a;
     }
-
     .rci-left { display: flex; align-items: center; gap: 14px; }
     .rci-icon {
-      width: 48px;
-      height: 48px;
-      border-radius: 15px;
-      background: rgba(2, 132, 199, 0.15);
-      color: #38bdf8;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 22px;
-      flex-shrink: 0;
+      width: 48px; height: 48px; border-radius: 15px; background: rgba(2, 132, 199, 0.15);
+      color: #38bdf8; display: flex; align-items: center; justify-content: center; font-size: 22px;
     }
     .rci-name { font-size: 14px; font-weight: 700; color: #ffffff; }
     .rci-arrow {
-      width: 32px;
-      height: 32px;
-      border-radius: 10px;
-      background: #0e2945;
-      color: #94a3b8;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 13px;
-      transition: all 0.2s;
+      width: 32px; height: 32px; border-radius: 10px; background: #0e2945; color: #94a3b8;
+      display: flex; align-items: center; justify-content: center; font-size: 13px;
     }
-    .report-card-item:hover .rci-arrow {
-      background: #0284c7;
-      color: #ffffff;
-      transform: translateX(2px);
-    }
+    .report-card-item:hover .rci-arrow { background: #0284c7; color: #ffffff; }
 
     /* =========================================================
-       🌟 3. IFRAME VIEW (ផ្ទៃពេញអេក្រង់ ១០០%)
+       🌟 IFRAME VIEW
     ========================================================= */
     #iframeView { padding: 0; background: var(--surface); overflow: hidden !important; }
     .iframe-container {
@@ -606,7 +550,6 @@
       padding-bottom: env(safe-area-inset-bottom, 0px);
       background: #061a2e; border-top: 1px solid rgba(255, 255, 255, 0.08);
       z-index: 40; align-items: center; justify-content: space-around;
-      box-shadow: 0 -4px 18px rgba(0, 0, 0, 0.25);
     }
     .m-nav-item {
       display: flex; flex-direction: column; align-items: center; justify-content: center;
@@ -614,7 +557,120 @@
     }
     .m-nav-item.active { color: #38bdf8; font-weight: 700; }
 
-    /* Profile Modal */
+    /* =========================================================
+       🪪 STUDENT PROFILE VIEWER MODAL (មើលប្រវត្តិរូបតាមឈ្មោះម្នាក់ៗ)
+    ========================================================= */
+    .profile-viewer-backdrop {
+      display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.7);
+      backdrop-filter: blur(6px); z-index: 10005; align-items: center; justify-content: center; padding: 14px;
+    }
+    .profile-viewer-box {
+      width: 100%; max-width: 680px; max-height: 94vh; background: #08162b;
+      border: 1.5px solid #1a385c; border-radius: 24px; box-shadow: 0 25px 60px rgba(0,0,0,0.5);
+      display: flex; flex-direction: column; overflow: hidden; animation: pvPop 0.2s ease-out;
+    }
+    @keyframes pvPop { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+
+    /* Top Selector Bar */
+    .pv-top-bar {
+      padding: 14px 18px; background: #0c213d; border-bottom: 1px solid #1a385c;
+      display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap;
+    }
+    .pv-selector-group { display: flex; align-items: center; gap: 8px; flex: 1; min-width: 250px; }
+    
+    .pv-dropdown-select {
+      flex: 1; height: 38px; border-radius: 12px; background: #08162b; border: 1.5px solid #234d7d;
+      color: #ffffff; font-size: 13px; font-weight: 700; padding: 0 12px; outline: none; cursor: pointer;
+    }
+    .pv-dropdown-select:focus { border-color: #38bdf8; }
+
+    .pv-nav-arrow-btn {
+      width: 38px; height: 38px; border-radius: 12px; background: #08162b; border: 1.5px solid #234d7d;
+      color: #38bdf8; font-size: 16px; font-weight: 700; display: flex; align-items: center; justify-content: center;
+      cursor: pointer; transition: all 0.15s; flex-shrink: 0;
+    }
+    .pv-nav-arrow-btn:hover { background: #0284c7; color: #fff; border-color: #0284c7; }
+
+    .pv-close-btn {
+      width: 32px; height: 32px; border-radius: 50%; background: rgba(255, 255, 255, 0.1);
+      border: none; color: #cbd5e1; font-size: 15px; cursor: pointer; display: flex;
+      align-items: center; justify-content: center; flex-shrink: 0;
+    }
+    .pv-close-btn:hover { background: #ef4444; color: #fff; }
+
+    /* Profile Content Body */
+    .pv-content-scroll {
+      padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 18px;
+    }
+
+    /* Bio Card Header */
+    .pv-bio-header-card {
+      background: linear-gradient(135deg, #0f2b4c 0%, #061a2e 100%);
+      border: 1px solid #1a385c; border-radius: 20px; padding: 18px 20px;
+      display: flex; align-items: center; gap: 18px; position: relative; overflow: hidden;
+    }
+    .pv-avatar-frame {
+      width: 90px; height: 90px; border-radius: 22px; background: #0284c7;
+      border: 3px solid #38bdf8; box-shadow: 0 8px 20px rgba(2, 132, 199, 0.35);
+      display: flex; align-items: center; justify-content: center; font-size: 38px;
+      font-weight: 700; color: #fff; overflow: hidden; flex-shrink: 0;
+    }
+    .pv-avatar-frame img { width: 100%; height: 100%; object-fit: cover; }
+
+    .pv-bio-meta-texts { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+    .pv-student-name { font-size: 22px; font-weight: 700; color: #38bdf8; line-height: 1.2; }
+    .pv-badges-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 4px; }
+    .pv-pill-tag {
+      font-size: 11.5px; font-weight: 700; padding: 2px 10px; border-radius: 20px; border: 1px solid;
+    }
+    .pv-tag-id { background: #032747; border-color: #0284c7; color: #38bdf8; }
+    .pv-tag-grade { background: #1f1d47; border-color: #6366f1; color: #a5b4fc; }
+    .pv-tag-gender { background: #2f132e; border-color: #db2777; color: #f472b6; }
+
+    /* Grid Sections */
+    .pv-info-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 14px;
+    }
+    .pv-section-block {
+      background: #0b1e36; border: 1px solid #153457; border-radius: 18px; padding: 16px;
+      display: flex; flex-direction: column; gap: 10px;
+    }
+    .pv-block-title {
+      font-size: 13.5px; font-weight: 700; color: #38bdf8; display: flex; align-items: center; gap: 8px;
+      border-bottom: 1px solid #1a385c; padding-bottom: 8px; margin-bottom: 4px;
+    }
+    .pv-field-row {
+      display: flex; justify-content: space-between; gap: 10px; font-size: 12.5px; line-height: 1.4;
+    }
+    .pv-field-label { color: #94a3b8; font-weight: 600; flex-shrink: 0; }
+    .pv-field-value { color: #f8fafc; font-weight: 700; text-align: right; word-break: break-word; }
+
+    .pv-footer-actions {
+      padding: 12px 18px; background: #0c213d; border-top: 1px solid #1a385c;
+      display: flex; align-items: center; justify-content: space-between; gap: 10px;
+    }
+    .btn-pv-print {
+      height: 38px; padding: 0 16px; border-radius: 12px; background: #0284c7;
+      color: #ffffff; border: none; font-size: 13px; font-weight: 700; cursor: pointer;
+      display: flex; align-items: center; gap: 6px; transition: background 0.15s;
+    }
+    .btn-pv-print:hover { background: #0369a1; }
+
+    /* Print Template */
+    @media print {
+      body * { visibility: hidden; }
+      .profile-viewer-box, .profile-viewer-box * { visibility: visible; }
+      .profile-viewer-box {
+        position: absolute; left: 0; top: 0; width: 100%; max-width: 100%; border: none;
+        background: white !important; color: black !important;
+      }
+      .pv-top-bar, .pv-footer-actions { display: none !important; }
+      .pv-student-name, .pv-block-title { color: #0284c7 !important; }
+      .pv-field-value { color: black !important; }
+      .pv-field-label { color: #555 !important; }
+    }
+
+    /* Modal Backdrop */
     .modal-backdrop {
       display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.6);
       backdrop-filter: blur(6px); z-index: 100; align-items: center; justify-content: center; padding: 16px;
@@ -654,6 +710,7 @@
       .hero-banner-right { width: 100%; justify-content: flex-start; }
       .today-tasks-grid { grid-template-columns: 1fr; }
       .admin-classes-grid { grid-template-columns: repeat(2, 1fr); }
+      .pv-info-grid { grid-template-columns: 1fr; }
     }
     @media (max-width: 768px) {
       .sidebar {
@@ -674,7 +731,7 @@
 
 <div class="app-layout">
 
-  <div id="mobileBackdrop" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:80; backdrop-filter:blur(3px);" onclick="closeSidebarMobile()"></div>
+  <div id="mobileBackdrop" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:80;" onclick="closeSidebarMobile()"></div>
 
   <!-- =========================================================
        🧭 SIDEBAR
@@ -718,7 +775,7 @@
 
       <div class="nav-link-btn" data-page="addStudent" onclick="navigate('addStudent', this)">
         <span class="nav-icon-box">✍️</span>
-        <span class="nav-text">ព័ត៌មានសិស្ស</span>
+        <span class="nav-text">បញ្ចូលសិស្សថ្មី</span>
       </div>
 
       <div class="nav-link-btn" data-page="card" onclick="navigate('card', this)">
@@ -751,7 +808,6 @@
         <span class="nav-text">សារសន្ទនា</span>
       </div>
 
-      <!-- 🌟 ប៊ូតុងរបាយការណ៍ -->
       <div class="nav-link-btn" data-page="reportsHub" onclick="navigate('reportsHub', this)">
         <span class="nav-icon-box">📄</span>
         <span class="nav-text">របាយការណ៍</span>
@@ -874,7 +930,9 @@
             <div class="shortcut-pill-btn sc-amber" onclick="navigate('addStudent', null)">
               <span>👥</span><span>សិស្ស</span><span class="sc-arrow">›</span>
             </div>
-            <div class="shortcut-pill-btn sc-cyan" onclick="navigate('card', null)">
+
+            <!-- 🌟 ប៊ូតុងប្រវត្តិរូបសិស្ស (ចុចដើម្បីបើកផ្ទាំងមើលតាមឈ្មោះម្នាក់ៗ) -->
+            <div class="shortcut-pill-btn sc-cyan" onclick="openStudentProfileViewer()">
               <span>🕒</span><span>ប្រវត្តិរូបសិស្ស</span><span class="sc-arrow">›</span>
             </div>
           </div>
@@ -892,7 +950,7 @@
       </div>
 
       <!-- =========================================================
-           🌟 2. REPORTS HUB VIEW (មជ្ឈមណ្ឌលរបាយការណ៍ដែលបាត់ពីមុន)
+           🌟 2. REPORTS HUB VIEW
       ========================================================= -->
       <div class="view-panel" id="reportsHubView">
         <div class="dash-inner-container">
@@ -905,7 +963,6 @@
           </div>
 
           <div class="reports-grid-clean">
-            <!-- 1. បញ្ជីរាយនាមសិស្ស -->
             <div class="report-card-item" onclick="navigate('roster', null)">
               <div class="rci-left">
                 <div class="rci-icon">🗒️</div>
@@ -914,7 +971,6 @@
               <div class="rci-arrow">➔</div>
             </div>
 
-            <!-- 2. តារាងចំណាត់ថ្នាក់ -->
             <div class="report-card-item" onclick="navigate('rank', null)">
               <div class="rci-left">
                 <div class="rci-icon">🏆</div>
@@ -923,7 +979,6 @@
               <div class="rci-arrow">➔</div>
             </div>
 
-            <!-- 3. តារាងកិត្តិយស -->
             <div class="report-card-item" onclick="navigate('honor', null)">
               <div class="rci-left">
                 <div class="rci-icon">🌟</div>
@@ -932,7 +987,6 @@
               <div class="rci-arrow">➔</div>
             </div>
 
-            <!-- 4. ប័ណ្ណសរសើរ -->
             <div class="report-card-item" onclick="navigate('certificate', null)">
               <div class="rci-left">
                 <div class="rci-icon">🎖️</div>
@@ -941,7 +995,6 @@
               <div class="rci-arrow">➔</div>
             </div>
 
-            <!-- 5. សៀវភៅតាមដាន -->
             <div class="report-card-item" onclick="navigate('report', null)">
               <div class="rci-left">
                 <div class="rci-icon">📋</div>
@@ -950,7 +1003,6 @@
               <div class="rci-arrow">➔</div>
             </div>
 
-            <!-- 6. សៀវភៅសិក្ខាគារិក -->
             <div class="report-card-item" onclick="navigate('remesterrecord', null)">
               <div class="rci-left">
                 <div class="rci-icon">📘</div>
@@ -996,7 +1048,118 @@
   </main>
 </div>
 
-<!-- MODAL: PROFILE -->
+<!-- =========================================================
+     🪪 MODAL: មើលប្រវត្តិរូបសិស្សតាមឈ្មោះម្នាក់ៗ (STUDENT PROFILE VIEWER)
+========================================================= -->
+<div class="profile-viewer-backdrop" id="studentProfileModal" onclick="if(event.target===this) closeStudentProfileViewer()">
+  <div class="profile-viewer-box">
+    
+    <!-- Top Bar: Select Student Name & Class -->
+    <div class="pv-top-bar">
+      <div class="pv-selector-group">
+        <!-- Dropdown ថ្នាក់ (សម្រាប់ Admin អាចប្តូរថ្នាក់បាន) -->
+        <select class="pv-dropdown-select" id="pvClassSelect" style="max-width:130px;" onchange="onPvClassChange()">
+          <option value="">គ្រប់ថ្នាក់</option>
+        </select>
+
+        <!-- Dropdown ជ្រើសរើសឈ្មោះសិស្សម្នាក់ៗ -->
+        <select class="pv-dropdown-select" id="pvStudentSelect" onchange="onPvStudentSelect(this.value)">
+          <option value="">កំពុងទាញបញ្ជីឈ្មោះ...</option>
+        </select>
+
+        <!-- ប៊ូតុងរំលង សិស្សមុន/បន្ទាប់ -->
+        <button class="pv-nav-arrow-btn" onclick="prevStudentProfile()" title="សិស្សមុន">‹</button>
+        <button class="pv-nav-arrow-btn" onclick="nextStudentProfile()" title="សិស្សបន្ទាប់">›</button>
+      </div>
+
+      <button class="pv-close-btn" onclick="closeStudentProfileViewer()" title="បិទ">✕</button>
+    </div>
+
+    <!-- Content: Student Biographical Card -->
+    <div class="pv-content-scroll" id="pvContentScroll">
+      
+      <!-- Bio Header Card -->
+      <div class="pv-bio-header-card">
+        <div class="pv-avatar-frame" id="pvAvatarBox">
+          <span id="pvAvatarInitial">ស</span>
+        </div>
+        <div class="pv-bio-meta-texts">
+          <div class="pv-student-name" id="pvStudentName">ឈ្មោះសិស្ស</div>
+          <div class="pv-badges-row">
+            <span class="pv-pill-tag pv-tag-id" id="pvTagId">អត្តលេខ: -</span>
+            <span class="pv-pill-tag pv-tag-grade" id="pvTagGrade">ថ្នាក់ទី: -</span>
+            <span class="pv-pill-tag pv-tag-gender" id="pvTagGender">ភេទ: -</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Detailed Info Grid -->
+      <div class="pv-info-grid">
+        <!-- ព័ត៌មានផ្ទាល់ខ្លួន -->
+        <div class="pv-section-block">
+          <div class="pv-block-title">
+            <span>👤</span><span>ព័ត៌មានផ្ទាល់ខ្លួនសិស្ស</span>
+          </div>
+          <div class="pv-field-row">
+            <span class="pv-field-label">ថ្ងៃខែឆ្នាំកំណើត៖</span>
+            <span class="pv-field-value" id="pvDob">-</span>
+          </div>
+          <div class="pv-field-row">
+            <span class="pv-field-label">អាយុសិស្ស៖</span>
+            <span class="pv-field-value" id="pvAge">-</span>
+          </div>
+          <div class="pv-field-row">
+            <span class="pv-field-label">លេខទូរស័ព្ទ៖</span>
+            <span class="pv-field-value" id="pvPhone">-</span>
+          </div>
+          <div class="pv-field-row">
+            <span class="pv-field-label">ទីកន្លែងកំណើត៖</span>
+            <span class="pv-field-value" id="pvPob">-</span>
+          </div>
+          <div class="pv-field-row">
+            <span class="pv-field-label">អាសយដ្ឋានបច្ចុប្បន្ន៖</span>
+            <span class="pv-field-value" id="pvAddress">-</span>
+          </div>
+        </div>
+
+        <!-- ព័ត៌មានអាណាព្យាបាល -->
+        <div class="pv-section-block">
+          <div class="pv-block-title">
+            <span>👨‍👩‍👦</span><span>ព័ត៌មានឪពុកម្តាយ / អាណាព្យាបាល</span>
+          </div>
+          <div class="pv-field-row">
+            <span class="pv-field-label">ឈ្មោះឪពុក៖</span>
+            <span class="pv-field-value" id="pvFather">-</span>
+          </div>
+          <div class="pv-field-row">
+            <span class="pv-field-label">មុខរបរឪពុក៖</span>
+            <span class="pv-field-value" id="pvFatherJob">-</span>
+          </div>
+          <div class="pv-field-row">
+            <span class="pv-field-label">ឈ្មោះម្តាយ៖</span>
+            <span class="pv-field-value" id="pvMother">-</span>
+          </div>
+          <div class="pv-field-row">
+            <span class="pv-field-label">មុខរបរម្តាយ៖</span>
+            <span class="pv-field-value" id="pvMotherJob">-</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Bottom Actions -->
+    <div class="pv-footer-actions">
+      <button class="btn-pv-print" onclick="window.print()">
+        <span>🖨️</span><span>បោះពុម្ពប្រវត្តិរូប</span>
+      </button>
+      <button class="btn-modal cancel" onclick="closeStudentProfileViewer()">បិទ</button>
+    </div>
+
+  </div>
+</div>
+
+<!-- MODAL: PROFILE ADMIN/TEACHER -->
 <div class="modal-backdrop" id="profileModalBackdrop" onclick="if(event.target===this) closeProfileModal()">
   <div class="modal-dialog">
     <div class="modal-head-banner">
@@ -1040,7 +1203,23 @@
   let ASSIGNED_CLASS = localStorage.getItem('krou_assigned_class') || "";
   let IS_ADMIN = String(USER_ROLE).toLowerCase().trim() === 'admin';
 
-  /* 🌟 បង្ហាញព័ត៌មាន Profile លើ Sidebar */
+  let cachedStudentsRoster = [];
+  let currentPvIndex = 0;
+
+  const PAGE_TITLES = {
+    dashboard: "⊞ ផ្ទាំងរបស់គ្រូ",
+    addStudent: "✍️ បញ្ចូលសិស្សថ្មី",
+    card: "🪪 កាតសិស្ស (ID Card)",
+    group: "👥 បែងចែកជាក្រុម",
+    wheel: "🎡 បង្វិលកង់ជ្រើសរើស",
+    attendance: "📅 វត្តមានសិស្ស",
+    score: "📊 ស្រង់ពិន្ទុ",
+    rank: "🏆 តារាងចំណាត់ថ្នាក់",
+    chat: "💬 សារសន្ទនា",
+    reportsHub: "📄 របាយការណ៍",
+    teacher: "👨‍🏫 គ្រប់គ្រងគ្រូ"
+  };
+
   function renderSidebarProfile() {
     const nameEl = document.getElementById('sidebarTeacherName');
     const roleEl = document.getElementById('sidebarTeacherRole');
@@ -1106,7 +1285,7 @@
 
   applyTheme(localStorage.getItem('krou_theme_manual') || 'dark');
 
-  /* 🧭 NAVIGATION (គ្រប់គ្រងទំព័រ និងរបាយការណ៍) */
+  /* 🧭 NAVIGATION */
   let currentPage = 'dashboard';
 
   function mapPageToFile(page) {
@@ -1140,7 +1319,6 @@
 
     document.querySelectorAll('.nav-link-btn').forEach(n => n.classList.remove('active'));
     
-    // បើសិនចុចលើឯកសារកូនរបស់របាយការណ៍ ➔ Active ប៊ូតុងរបាយការណ៍លើ Sidebar
     var isReportChild = ['roster', 'rank', 'honor', 'certificate', 'report', 'remesterrecord'].includes(cleanFile);
     
     var target = el || document.querySelector(`[data-page="${page}"]`) || document.querySelector(`[data-page="${cleanFile}"]`);
@@ -1155,7 +1333,6 @@
     var dashboardView = document.getElementById('dashboardView');
     var reportsHubView = document.getElementById('reportsHubView');
 
-    // ១. បើកទំព័រ Dashboard
     if (cleanFile === 'dashboard') {
       iframeView.classList.remove('active');
       if (reportsHubView) reportsHubView.classList.remove('active');
@@ -1164,7 +1341,6 @@
       return;
     }
 
-    // ២. 🌟 បើកទំព័រមជ្ឈមណ្ឌលរបាយការណ៍ (REPORTS HUB)
     if (cleanFile === 'reportsHub') {
       dashboardView.classList.remove('active');
       iframeView.classList.remove('active');
@@ -1172,7 +1348,6 @@
       return;
     }
 
-    // ៣. បើកទំព័រ Iframe ផ្សេងៗ (រួមទាំងរបាយការណ៍នីមួយៗ)
     dashboardView.classList.remove('active');
     if (reportsHubView) reportsHubView.classList.remove('active');
     iframeView.classList.add('active');
@@ -1207,7 +1382,155 @@
     document.getElementById('mobileBackdrop').style.display = 'none';
   }
 
-  /* 📊 REFRESH STATS & ADMIN PERMISSIONS */
+  /* =========================================================
+     🪪 STUDENT PROFILE VIEWER LOGIC (មើលតាមឈ្មោះម្នាក់ៗ)
+  ========================================================= */
+  async function openStudentProfileViewer() {
+    const modal = document.getElementById('studentProfileModal');
+    modal.style.display = 'flex';
+
+    // ១. បើកដំបូង ទាញយក Roster ប្រសិនជាមិនទាន់មាន
+    if (!cachedStudentsRoster || cachedStudentsRoster.length === 0) {
+      await loadStudentsForProfileViewer();
+    } else {
+      populateStudentDropdown();
+    }
+  }
+
+  function closeStudentProfileViewer() {
+    document.getElementById('studentProfileModal').style.display = 'none';
+  }
+
+  async function loadStudentsForProfileViewer() {
+    const studentSelect = document.getElementById('pvStudentSelect');
+    studentSelect.innerHTML = '<option value="">កំពុងទាញទិន្នន័យ...</option>';
+
+    try {
+      const targetCls = IS_ADMIN ? (document.getElementById('pvClassSelect').value || '') : (ASSIGNED_CLASS || '');
+      const res = await callBackendApi('getStudentRosterByClass', { className: targetCls });
+      
+      if (Array.isArray(res) && res.length > 0) {
+        cachedStudentsRoster = res;
+      } else {
+        cachedStudentsRoster = [];
+      }
+      populateStudentDropdown();
+    } catch (err) {
+      console.warn("Load roster error:", err);
+      studentSelect.innerHTML = '<option value="">មិនមានទិន្នន័យ</option>';
+    }
+  }
+
+  function populateStudentDropdown() {
+    const select = document.getElementById('pvStudentSelect');
+    select.innerHTML = '';
+
+    if (!cachedStudentsRoster || cachedStudentsRoster.length === 0) {
+      select.innerHTML = '<option value="">គ្មានទិន្នន័យសិស្សឡើយ</option>';
+      renderEmptyStudentProfile();
+      return;
+    }
+
+    cachedStudentsRoster.forEach((s, idx) => {
+      select.innerHTML += `<option value="${idx}">${idx + 1}. ${s.name || 'គ្មានឈ្មោះ'} (${s.grade || 'គ្មានថ្នាក់'})</option>`;
+    });
+
+    currentPvIndex = 0;
+    select.value = "0";
+    renderSelectedStudentProfile(0);
+  }
+
+  async function onPvClassChange() {
+    await loadStudentsForProfileViewer();
+  }
+
+  function onPvStudentSelect(idx) {
+    currentPvIndex = parseInt(idx) || 0;
+    renderSelectedStudentProfile(currentPvIndex);
+  }
+
+  function prevStudentProfile() {
+    if (!cachedStudentsRoster.length) return;
+    currentPvIndex--;
+    if (currentPvIndex < 0) currentPvIndex = cachedStudentsRoster.length - 1;
+    document.getElementById('pvStudentSelect').value = String(currentPvIndex);
+    renderSelectedStudentProfile(currentPvIndex);
+  }
+
+  function nextStudentProfile() {
+    if (!cachedStudentsRoster.length) return;
+    currentPvIndex++;
+    if (currentPvIndex >= cachedStudentsRoster.length) currentPvIndex = 0;
+    document.getElementById('pvStudentSelect').value = String(currentPvIndex);
+    renderSelectedStudentProfile(currentPvIndex);
+  }
+
+  function calculateAge(dobStr) {
+    if (!dobStr) return '';
+    const b = new Date(dobStr);
+    if (isNaN(b.getTime())) return '';
+    const now = new Date();
+    let age = now.getFullYear() - b.getFullYear();
+    if (now.getMonth() < b.getMonth() || (now.getMonth() === b.getMonth() && now.getDate() < b.getDate())) age--;
+    return age > 0 ? `${age} ឆ្នាំ` : '';
+  }
+
+  /* 🌟 បង្ហាញព័ត៌មានលម្អិតនៃសិស្សដែលបានជ្រើសរើស */
+  function renderSelectedStudentProfile(idx) {
+    const s = cachedStudentsRoster[idx];
+    if (!s) {
+      renderEmptyStudentProfile();
+      return;
+    }
+
+    // Header Bio
+    document.getElementById('pvStudentName').innerText = s.name || 'គ្មានឈ្មោះ';
+    document.getElementById('pvTagId').innerText = `អត្តលេខ: ${s.id || '-'}`;
+    document.getElementById('pvTagGrade').innerText = `ថ្នាក់ទី: ${s.grade || '-'}`;
+    document.getElementById('pvTagGender').innerText = `ភេទ: ${s.sex || '-'}`;
+
+    // Avatar
+    const avatarBox = document.getElementById('pvAvatarBox');
+    const photo = s.photoUrl || s.imageUrl;
+    if (photo && String(photo).trim() !== "") {
+      avatarBox.innerHTML = `<img src="${photo}" alt="photo" onerror="this.outerHTML='<span>${(s.name || 'ស').charAt(0)}</span>'">`;
+    } else {
+      const initial = s.name ? s.name.trim().charAt(0) : 'ស';
+      avatarBox.innerHTML = `<span>${initial}</span>`;
+    }
+
+    // Personal Details
+    document.getElementById('pvDob').innerText = s.dob || '-';
+    document.getElementById('pvAge').innerText = calculateAge(s.dob) || '-';
+    document.getElementById('pvPhone').innerText = s.phone || '-';
+    document.getElementById('pvPob').innerText = s.pob || '-';
+    document.getElementById('pvAddress').innerText = s.address || '-';
+
+    // Parents Details
+    document.getElementById('pvFather').innerText = s.father || '-';
+    document.getElementById('pvFatherJob').innerText = s.fatherJob || '-';
+    document.getElementById('pvMother').innerText = s.mother || '-';
+    document.getElementById('pvMotherJob').innerText = s.motherJob || '-';
+  }
+
+  function renderEmptyStudentProfile() {
+    document.getElementById('pvStudentName').innerText = 'គ្មានទិន្នន័យ';
+    document.getElementById('pvTagId').innerText = 'អត្តលេខ: -';
+    document.getElementById('pvTagGrade').innerText = 'ថ្នាក់ទី: -';
+    document.getElementById('pvTagGender').innerText = 'ភេទ: -';
+    document.getElementById('pvAvatarBox').innerHTML = '<span>-</span>';
+    document.getElementById('pvDob').innerText = '-';
+    document.getElementById('pvAge').innerText = '-';
+    document.getElementById('pvPhone').innerText = '-';
+    document.getElementById('pvPob').innerText = '-';
+    document.getElementById('pvAddress').innerText = '-';
+    document.getElementById('pvFather').innerText = '-';
+    document.getElementById('pvFatherJob').innerText = '-';
+    document.getElementById('pvMother').innerText = '-';
+    document.getElementById('pvMotherJob').innerText = '-';
+  }
+
+  /* 📊 REFRESH STATS & DASHBOARD */
   async function refreshStats() {
     try {
       if (typeof callBackendApi !== 'function') return;
@@ -1220,6 +1543,16 @@
 
       let studentCountForView = totalStudents;
       let targetClassName = ASSIGNED_CLASS || "៤ក";
+
+      // Populate Class Selector in Profile Viewer
+      const pvClassSelect = document.getElementById('pvClassSelect');
+      if (pvClassSelect && classBreakdown.length > 0) {
+        pvClassSelect.innerHTML = IS_ADMIN ? '<option value="">គ្រប់ថ្នាក់</option>' : '';
+        classBreakdown.forEach(c => {
+          pvClassSelect.innerHTML += `<option value="${c.className}">ថ្នាក់ទី ${c.className}</option>`;
+        });
+        if (!IS_ADMIN && ASSIGNED_CLASS) pvClassSelect.value = ASSIGNED_CLASS;
+      }
 
       if (IS_ADMIN) {
         document.getElementById('dashRoleTopTag').innerText = "ផ្ទាំងអ្នកគ្រប់គ្រងប្រព័ន្ធ";
@@ -1340,7 +1673,7 @@
     } catch(err) { alert('កំហុស៖ ' + err.message); }
   }
 
-  /* 🚀 VERIFY SESSION ពេលចាប់ផ្ដើម */
+  /* 🚀 VERIFY SESSION */
   async function verifySessionBeforeBoot() {
     if (!SESSION_TOKEN) {
       window.location.replace('login.html');
