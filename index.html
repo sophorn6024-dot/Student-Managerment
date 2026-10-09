@@ -316,6 +316,23 @@
     }
     .sidebar.collapsed .sidebar-logout-btn { padding: 0; justify-content: center; }
 
+    .admin-clear-btn {
+      width: 100%;
+      height: 36px;
+      border-radius: 10px;
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      background: rgba(220, 38, 38, 0.15);
+      color: #fca5a5;
+      font-size: 11.5px;
+      font-weight: 600;
+      display: none;
+      align-items: center;
+      gap: 10px;
+      padding: 0 12px;
+      cursor: pointer;
+    }
+    .admin-clear-btn:hover { background: rgba(220, 38, 38, 0.35); color: #fff; }
+
     /* =========================================================
        🌟 MAIN WRAPPER & VIEW PANELS
     ========================================================= */
@@ -357,7 +374,7 @@
     .view-panel.active { opacity: 1; pointer-events: auto; transform: translateY(0); }
 
     /* =========================================================
-       🌟 🖼️ DASHBOARD VIEW រចនាតាមរូបភាពថ្មី (EXACT MATCH)
+       🌟 1. DASHBOARD VIEW
     ========================================================= */
     #dashboardView {
       padding: 24px 28px 60px;
@@ -370,7 +387,6 @@
       gap: 22px;
     }
 
-    /* 🌟 ១. HERO GREETING & STATS CARD (រូបភាពទី ២) */
     .hero-banner-card {
       background: #08162b;
       border: 1px solid #132a42;
@@ -382,318 +398,192 @@
       gap: 20px;
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
     }
-
-    .hero-banner-left {
-      display: flex;
-      align-items: center;
-      gap: 18px;
-      min-width: 0;
-    }
-
+    .hero-banner-left { display: flex; align-items: center; gap: 18px; min-width: 0; }
     .hero-building-icon {
-      width: 58px;
-      height: 58px;
-      border-radius: 18px;
+      width: 58px; height: 58px; border-radius: 18px;
       background: linear-gradient(135deg, #0284c7 0%, #2563eb 100%);
-      color: #ffffff;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 26px;
-      flex-shrink: 0;
-      box-shadow: 0 8px 20px rgba(2, 132, 199, 0.35);
+      color: #ffffff; display: flex; align-items: center; justify-content: center;
+      font-size: 26px; flex-shrink: 0; box-shadow: 0 8px 20px rgba(2, 132, 199, 0.35);
     }
+    .hero-info-texts { display: flex; flex-direction: column; gap: 2px; }
+    .hero-top-tag { font-size: 13px; color: #94a3b8; font-weight: 600; }
+    .hero-main-title { font-size: 24px; font-weight: 700; color: #38bdf8; line-height: 1.3; }
+    .hero-sub-meta { font-size: 13px; color: #cbd5e1; font-weight: 500; }
 
-    .hero-info-texts {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-    }
-    .hero-top-tag {
-      font-size: 13px;
-      color: #94a3b8;
-      font-weight: 600;
-    }
-    .hero-main-title {
-      font-size: 24px;
-      font-weight: 700;
-      color: #38bdf8;
-      line-height: 1.3;
-      letter-spacing: 0.2px;
-    }
-    .hero-sub-meta {
-      font-size: 13px;
-      color: #cbd5e1;
-      font-weight: 500;
-    }
-
-    .hero-banner-right {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      flex-shrink: 0;
-    }
-
-    /* Stat Card សិស្ស (Navy Card) */
+    .hero-banner-right { display: flex; align-items: center; gap: 14px; flex-shrink: 0; }
     .hero-stat-card {
-      background: #0d223a;
-      border: 1px solid #1e3a5f;
-      border-radius: 18px;
-      padding: 14px 20px;
-      min-width: 140px;
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
+      background: #0d223a; border: 1px solid #1e3a5f; border-radius: 18px;
+      padding: 14px 20px; min-width: 140px; display: flex; flex-direction: column; gap: 2px;
     }
-    .h-stat-top {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 13px;
-      font-weight: 700;
-      color: #38bdf8;
-    }
-    .h-stat-digit {
-      font-size: 32px;
-      font-weight: 800;
-      color: #ffffff;
-      line-height: 1.2;
-    }
-    .h-stat-sub {
-      font-size: 11.5px;
-      color: #94a3b8;
-    }
+    .h-stat-top { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; color: #38bdf8; }
+    .h-stat-digit { font-size: 32px; font-weight: 800; color: #ffffff; line-height: 1.2; }
+    .h-stat-sub { font-size: 11.5px; color: #94a3b8; }
 
-    /* Stat Card ថ្ងៃនេះ (Amber Card ដូចរូប) */
     .hero-today-card {
-      background: #241607;
-      border: 1px solid #78350f;
-      border-radius: 18px;
-      padding: 14px 20px;
-      min-width: 140px;
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-      cursor: pointer;
-      transition: transform 0.15s;
+      background: #241607; border: 1px solid #78350f; border-radius: 18px;
+      padding: 14px 20px; min-width: 140px; display: flex; flex-direction: column; gap: 2px;
+      cursor: pointer; transition: transform 0.15s;
     }
     .hero-today-card:hover { transform: translateY(-2px); }
-    .h-today-top {
+    .h-today-top { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; color: #fbbf24; }
+    .h-today-status { font-size: 26px; font-weight: 800; color: #ffffff; line-height: 1.2; }
+    .h-today-sub { font-size: 11.5px; color: #d97706; }
+
+    .section-headline-group { display: flex; flex-direction: column; gap: 2px; }
+    .section-cyan-title { font-size: 17px; font-weight: 700; color: #38bdf8; display: flex; align-items: center; gap: 8px; }
+    .section-slate-sub { font-size: 12.5px; color: #94a3b8; }
+
+    .today-tasks-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .task-action-card {
+      background: #08162b; border: 1.5px solid #132a42; border-radius: 20px;
+      padding: 16px 20px; display: flex; align-items: center; justify-content: space-between;
+      gap: 14px; cursor: pointer; transition: all 0.2s ease; box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+    }
+    .task-action-card:hover {
+      border-color: #0284c7; transform: translateY(-2px); box-shadow: 0 10px 25px rgba(2, 132, 199, 0.15);
+    }
+    .task-left-box { display: flex; align-items: center; gap: 14px; }
+    .task-icon-orange {
+      width: 50px; height: 50px; border-radius: 16px; background: #f59e0b; color: #ffffff;
+      display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0;
+    }
+    .task-icon-purple {
+      width: 50px; height: 50px; border-radius: 16px; background: #6366f1; color: #ffffff;
+      display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0;
+    }
+    .task-text-box { display: flex; flex-direction: column; gap: 2px; }
+    .task-title-text { font-size: 14.5px; font-weight: 700; color: #ffffff; }
+    .task-desc-amber { font-size: 12px; font-weight: 600; color: #fbbf24; }
+    .task-desc-slate { font-size: 12px; color: #cbd5e1; }
+    .task-chevron-arrow { font-size: 16px; color: #64748b; font-weight: bold; }
+    .score-percent-badge { background: #1e293b; color: #94a3b8; font-size: 12px; font-weight: 700; padding: 4px 10px; border-radius: 20px; }
+
+    .shortcuts-pill-grid { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+    .shortcut-pill-btn {
+      height: 48px; padding: 0 20px; border-radius: 16px; background: #08162b;
+      border: 1.5px solid #132a42; display: flex; align-items: center; gap: 12px;
+      cursor: pointer; color: #cbd5e1; font-size: 13.5px; font-weight: 700; transition: all 0.18s ease;
+    }
+    .shortcut-pill-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0,0,0,0.3); }
+    .sc-blue:hover { border-color: #38bdf8; color: #38bdf8; }
+    .sc-green:hover { border-color: #34d399; color: #34d399; }
+    .sc-purple:hover { border-color: #a78bfa; color: #a78bfa; }
+    .sc-amber:hover { border-color: #fbbf24; color: #fbbf24; }
+    .sc-cyan:hover { border-color: #2dd4bf; color: #2dd4bf; }
+    .sc-arrow { font-size: 13px; margin-left: 2px; opacity: 0.7; }
+
+    .admin-classes-panel {
+      background: #08162b; border: 1px solid #132a42; border-radius: 20px;
+      padding: 20px; display: none; flex-direction: column; gap: 14px;
+    }
+    .admin-classes-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+    .admin-class-card {
+      background: #0e243d; border: 1px solid #1b3d64; border-radius: 14px;
+      padding: 12px 14px; display: flex; align-items: center; justify-content: space-between;
+      cursor: pointer; transition: all 0.15s;
+    }
+    .admin-class-card:hover { border-color: #0284c7; background: #14355a; }
+
+    /* =========================================================
+       🌟 2. REPORTS HUB VIEW (មជ្ឈមណ្ឌលរបាយការណ៍ដែលបាត់ពីមុន)
+    ========================================================= */
+    #reportsHubView {
+      padding: 24px 28px 60px;
+    }
+    .reports-hub-header {
       display: flex;
       align-items: center;
-      gap: 8px;
-      font-size: 13px;
-      font-weight: 700;
-      color: #fbbf24;
+      justify-content: space-between;
+      margin-bottom: 22px;
     }
-    .h-today-status {
-      font-size: 26px;
-      font-weight: 800;
-      color: #ffffff;
-      line-height: 1.2;
-    }
-    .h-today-sub {
-      font-size: 11.5px;
-      color: #d97706;
-    }
-
-    /* 🌟 ២. កិច្ចការថ្ងៃនេះ SECTION (រូបភាពទី ១) */
-    .section-headline-group {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-    }
-    .section-cyan-title {
-      font-size: 17px;
-      font-weight: 700;
+    .reports-hub-title {
+      font-size: 19px;
       color: #38bdf8;
       display: flex;
       align-items: center;
-      gap: 8px;
+      gap: 10px;
+      font-weight: 700;
     }
-    .section-slate-sub {
-      font-size: 12.5px;
-      color: #94a3b8;
+    .btn-back-home {
+      background: #08162b;
+      border: 1px solid #132a42;
+      color: #ffffff;
+      padding: 8px 16px;
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.18s;
     }
+    .btn-back-home:hover { border-color: #0284c7; color: #38bdf8; background: #0d223a; }
 
-    .today-tasks-grid {
+    .reports-grid-clean {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: repeat(3, 1fr);
       gap: 16px;
     }
 
-    .task-action-card {
-      background: #08162b;
-      border: 1.5px solid #132a42;
-      border-radius: 20px;
-      padding: 16px 20px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 14px;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
-    }
-    .task-action-card:hover {
-      border-color: #0284c7;
-      transform: translateY(-2px);
-      box-shadow: 0 10px 25px rgba(2, 132, 199, 0.15);
-    }
-
-    .task-left-box {
-      display: flex;
-      align-items: center;
-      gap: 14px;
-    }
-
-    /* Icon ពណ៌ទឹកក្រូច */
-    .task-icon-orange {
-      width: 50px;
-      height: 50px;
-      border-radius: 16px;
-      background: #f59e0b;
-      color: #ffffff;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 22px;
-      flex-shrink: 0;
-      box-shadow: 0 4px 14px rgba(245, 158, 11, 0.35);
-    }
-
-    /* Icon ពណ៌ស្វាយ Indigo */
-    .task-icon-purple {
-      width: 50px;
-      height: 50px;
-      border-radius: 16px;
-      background: #6366f1;
-      color: #ffffff;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 22px;
-      flex-shrink: 0;
-      box-shadow: 0 4px 14px rgba(99, 102, 241, 0.35);
-    }
-
-    .task-text-box {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-    }
-    .task-title-text {
-      font-size: 14.5px;
-      font-weight: 700;
-      color: #ffffff;
-    }
-    .task-desc-amber {
-      font-size: 12px;
-      font-weight: 600;
-      color: #fbbf24;
-    }
-    .task-desc-slate {
-      font-size: 12px;
-      color: #cbd5e1;
-    }
-
-    .task-chevron-arrow {
-      font-size: 16px;
-      color: #64748b;
-      font-weight: bold;
-    }
-
-    .score-percent-badge {
-      background: #1e293b;
-      color: #94a3b8;
-      font-size: 12px;
-      font-weight: 700;
-      padding: 4px 10px;
-      border-radius: 20px;
-    }
-
-    /* 🌟 ៣. ផ្លូវកាត់ SHORTCUT PILLS SECTION (រូបភាពទី ៣) */
-    .shortcuts-pill-grid {
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      flex-wrap: wrap;
-    }
-
-    .shortcut-pill-btn {
-      height: 48px;
-      padding: 0 20px;
-      border-radius: 16px;
-      background: #08162b;
-      border: 1.5px solid #132a42;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      cursor: pointer;
-      color: #cbd5e1;
-      font-size: 13.5px;
-      font-weight: 700;
-      transition: all 0.18s ease;
-      user-select: none;
-    }
-    .shortcut-pill-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 6px 16px rgba(0,0,0,0.3);
-    }
-
-    .sc-blue   { border-color: #1e3a5f; }
-    .sc-blue:hover { border-color: #38bdf8; color: #38bdf8; }
-    .sc-green  { border-color: #064e3b; }
-    .sc-green:hover { border-color: #34d399; color: #34d399; }
-    .sc-purple { border-color: #3730a3; }
-    .sc-purple:hover { border-color: #a78bfa; color: #a78bfa; }
-    .sc-amber  { border-color: #78350f; }
-    .sc-amber:hover { border-color: #fbbf24; color: #fbbf24; }
-    .sc-cyan   { border-color: #134e4a; }
-    .sc-cyan:hover { border-color: #2dd4bf; color: #2dd4bf; }
-
-    .sc-arrow { font-size: 13px; margin-left: 2px; opacity: 0.7; }
-
-    /* 🌟 ៤. ADMIN CLASS BREAKDOWN SECTION (សម្រាប់ ADMIN មើលសិស្ស & ថ្នាក់ទាំងអស់) */
-    .admin-classes-panel {
+    .report-card-item {
       background: #08162b;
       border: 1px solid #132a42;
       border-radius: 20px;
-      padding: 20px;
-      display: none; /* បើកស្វ័យប្រវត្តិតាម JavaScript ប្រសិនបើជា Admin */
-      flex-direction: column;
-      gap: 14px;
-    }
-    .admin-classes-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 12px;
-    }
-    .admin-class-card {
-      background: #0e243d;
-      border: 1px solid #1b3d64;
-      border-radius: 14px;
-      padding: 12px 14px;
+      padding: 18px 20px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       cursor: pointer;
-      transition: all 0.15s;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+      transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
     }
-    .admin-class-card:hover {
+    .report-card-item:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 25px rgba(2, 132, 199, 0.25);
       border-color: #0284c7;
-      background: #14355a;
+      background: #0d223a;
     }
 
-    /* IFRAME FULL-SCREEN */
+    .rci-left { display: flex; align-items: center; gap: 14px; }
+    .rci-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 15px;
+      background: rgba(2, 132, 199, 0.15);
+      color: #38bdf8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      flex-shrink: 0;
+    }
+    .rci-name { font-size: 14px; font-weight: 700; color: #ffffff; }
+    .rci-arrow {
+      width: 32px;
+      height: 32px;
+      border-radius: 10px;
+      background: #0e2945;
+      color: #94a3b8;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      transition: all 0.2s;
+    }
+    .report-card-item:hover .rci-arrow {
+      background: #0284c7;
+      color: #ffffff;
+      transform: translateX(2px);
+    }
+
+    /* =========================================================
+       🌟 3. IFRAME VIEW (ផ្ទៃពេញអេក្រង់ ១០០%)
+    ========================================================= */
     #iframeView { padding: 0; background: var(--surface); overflow: hidden !important; }
     .iframe-container {
-      width: 100%;
-      height: 100%;
-      position: absolute;
-      inset: 0;
-      overflow: hidden;
-      -webkit-overflow-scrolling: touch;
+      width: 100%; height: 100%; position: absolute; inset: 0;
+      overflow: hidden; -webkit-overflow-scrolling: touch;
     }
     #pageFrame { width: 100%; height: 100%; border: none; display: block; background: var(--surface); }
 
@@ -709,27 +599,20 @@
     }
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    /* 📱 MOBILE NAV */
+    /* 📱 MOBILE BOTTOM NAV */
     .mobile-bottom-nav {
-      display: none;
-      position: fixed;
-      left: 0;
-      right: 0;
-      bottom: 0;
+      display: none; position: fixed; left: 0; right: 0; bottom: 0;
       height: calc(var(--bottom-nav-h) + env(safe-area-inset-bottom, 0px));
       padding-bottom: env(safe-area-inset-bottom, 0px);
-      background: var(--surface);
-      border-top: 1px solid var(--border);
-      z-index: 40;
-      align-items: center;
-      justify-content: space-around;
-      box-shadow: 0 -4px 18px rgba(0, 0, 0, 0.08);
+      background: #061a2e; border-top: 1px solid rgba(255, 255, 255, 0.08);
+      z-index: 40; align-items: center; justify-content: space-around;
+      box-shadow: 0 -4px 18px rgba(0, 0, 0, 0.25);
     }
     .m-nav-item {
       display: flex; flex-direction: column; align-items: center; justify-content: center;
       flex: 1; height: 100%; cursor: pointer; color: var(--text-muted); font-size: 10.5px; font-weight: 600;
     }
-    .m-nav-item.active { color: var(--primary); font-weight: 700; }
+    .m-nav-item.active { color: #38bdf8; font-weight: 700; }
 
     /* Profile Modal */
     .modal-backdrop {
@@ -762,14 +645,16 @@
     .btn-modal.primary { background: var(--primary); color: #fff; }
     .btn-modal.cancel { background: var(--border-subtle); color: var(--text); }
 
-    /* 📱 RESPONSIVE RULES */
+    /* RESPONSIVE */
+    @media (max-width: 1024px) {
+      .reports-grid-clean { grid-template-columns: repeat(2, 1fr); }
+    }
     @media (max-width: 900px) {
       .hero-banner-card { flex-direction: column; align-items: flex-start; }
       .hero-banner-right { width: 100%; justify-content: flex-start; }
       .today-tasks-grid { grid-template-columns: 1fr; }
       .admin-classes-grid { grid-template-columns: repeat(2, 1fr); }
     }
-
     @media (max-width: 768px) {
       .sidebar {
         position: fixed; left: 0; top: 0; bottom: 0; width: 275px !important;
@@ -777,9 +662,10 @@
       }
       .sidebar.open { transform: translateX(0); }
       .mobile-bottom-nav { display: flex; }
-      #dashboardView { padding: 16px 14px calc(var(--bottom-nav-h) + env(safe-area-inset-bottom, 0px) + 20px); }
+      #dashboardView, #reportsHubView { padding: 16px 14px calc(var(--bottom-nav-h) + env(safe-area-inset-bottom, 0px) + 20px); }
       #iframeView { padding-bottom: calc(var(--bottom-nav-h) + env(safe-area-inset-bottom, 0px)); }
       .hero-stat-card, .hero-today-card { flex: 1; min-width: 0; }
+      .reports-grid-clean { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -795,7 +681,7 @@
   ========================================================= -->
   <aside class="sidebar" id="sidebar">
     
-    <!-- ១. Profile Header -->
+    <!-- Profile Header -->
     <div class="sidebar-user-header">
       <div class="user-profile-summary">
         <div class="user-green-avatar" id="sidebarAvatar" onclick="openProfileModal()" title="ព័ត៌មានផ្ទាល់ខ្លួន">
@@ -812,7 +698,7 @@
       </button>
     </div>
 
-    <!-- ២. Class & Year Pill -->
+    <!-- Class & Year Pill -->
     <div class="class-year-pill-box">
       <div class="class-pill-left">
         <span class="school-ico">🏫</span>
@@ -823,7 +709,7 @@
 
     <div class="sidebar-divider"></div>
 
-    <!-- ៣. Navigation Links -->
+    <!-- Navigation Links -->
     <nav class="nav-scrollable">
       <div class="nav-link-btn active" data-page="dashboard" onclick="navigate('dashboard', this)">
         <span class="nav-icon-box">⊞</span>
@@ -832,7 +718,7 @@
 
       <div class="nav-link-btn" data-page="addStudent" onclick="navigate('addStudent', this)">
         <span class="nav-icon-box">✍️</span>
-        <span class="nav-text">បញ្ចូលសិស្សថ្មី</span>
+        <span class="nav-text">ព័ត៌មានសិស្ស</span>
       </div>
 
       <div class="nav-link-btn" data-page="card" onclick="navigate('card', this)">
@@ -865,6 +751,7 @@
         <span class="nav-text">សារសន្ទនា</span>
       </div>
 
+      <!-- 🌟 ប៊ូតុងរបាយការណ៍ -->
       <div class="nav-link-btn" data-page="reportsHub" onclick="navigate('reportsHub', this)">
         <span class="nav-icon-box">📄</span>
         <span class="nav-text">របាយការណ៍</span>
@@ -876,7 +763,7 @@
       </div>
     </nav>
 
-    <!-- ៤. Sidebar Footer -->
+    <!-- Sidebar Footer -->
     <div class="sidebar-footer">
       <button class="admin-clear-btn" id="adminClearBtn" onclick="confirmClearAllData()">
         <span>🗑️</span><span>សម្អាតទិន្នន័យ</span>
@@ -899,12 +786,12 @@
     <div class="content-area">
 
       <!-- =========================================================
-           🌟 1. DASHBOARD VIEW រចនាតាមរូបភាពថ្មី ១០០%
+           🌟 1. DASHBOARD VIEW
       ========================================================= -->
       <div class="view-panel active" id="dashboardView">
         <div class="dash-inner-container">
 
-          <!-- 🌟 ១. HERO BANNER CARD (រូបភាពទី ២) -->
+          <!-- Hero Banner Card -->
           <div class="hero-banner-card">
             <div class="hero-banner-left">
               <div class="hero-building-icon">🏫</div>
@@ -916,7 +803,6 @@
             </div>
 
             <div class="hero-banner-right">
-              <!-- Stat Card សិស្ស -->
               <div class="hero-stat-card">
                 <div class="h-stat-top">
                   <span>👥</span>
@@ -926,7 +812,6 @@
                 <div class="h-stat-sub" id="dashStudentSubLabel">ក្នុងថ្នាក់របស់អ្នក</div>
               </div>
 
-              <!-- Stat Card ថ្ងៃនេះ -->
               <div class="hero-today-card" onclick="navigate('attendance', null)">
                 <div class="h-today-top">
                   <span>🕒</span>
@@ -938,14 +823,13 @@
             </div>
           </div>
 
-          <!-- 🌟 ២. កិច្ចការថ្ងៃនេះ SECTION (រូបភាពទី ១) -->
+          <!-- កិច្ចការថ្ងៃនេះ -->
           <div class="section-headline-group">
             <div class="section-cyan-title">កិច្ចការថ្ងៃនេះ:</div>
             <div class="section-slate-sub">រឿងសំខាន់ៗដែលត្រូវពិនិត្យថ្ងៃនេះ</div>
           </div>
 
           <div class="today-tasks-grid">
-            <!-- Task 1: វត្តមានថ្ងៃនេះ -->
             <div class="task-action-card" onclick="navigate('attendance', null)">
               <div class="task-left-box">
                 <div class="task-icon-orange">📅</div>
@@ -957,7 +841,6 @@
               <div class="task-chevron-arrow">›</div>
             </div>
 
-            <!-- Task 2: ពិន្ទុខែនេះ -->
             <div class="task-action-card" onclick="navigate('score', null)">
               <div class="task-left-box">
                 <div class="task-icon-purple">📋</div>
@@ -973,49 +856,30 @@
             </div>
           </div>
 
-          <!-- 🌟 ៣. ផ្លូវកាត់ SHORTCUTS SECTION (រូបភាពទី ៣) -->
+          <!-- ផ្លូវកាត់ -->
           <div class="section-headline-group" style="margin-top:6px;">
             <div class="section-cyan-title">ផ្លូវកាត់</div>
           </div>
 
           <div class="shortcuts-pill-grid">
-            <!-- ពិន្ទុខែ -->
             <div class="shortcut-pill-btn sc-blue" onclick="navigate('score', null)">
-              <span>📋</span>
-              <span>ពិន្ទុខែ</span>
-              <span class="sc-arrow">›</span>
+              <span>📋</span><span>ពិន្ទុខែ</span><span class="sc-arrow">›</span>
             </div>
-
-            <!-- វត្តមាន -->
             <div class="shortcut-pill-btn sc-green" onclick="navigate('attendance', null)">
-              <span>📅</span>
-              <span>វត្តមាន</span>
-              <span class="sc-arrow">›</span>
+              <span>📅</span><span>វត្តមាន</span><span class="sc-arrow">›</span>
             </div>
-
-            <!-- លទ្ធផល -->
             <div class="shortcut-pill-btn sc-purple" onclick="navigate('rank', null)">
-              <span>📊</span>
-              <span>លទ្ធផល</span>
-              <span class="sc-arrow">›</span>
+              <span>📊</span><span>លទ្ធផល</span><span class="sc-arrow">›</span>
             </div>
-
-            <!-- សិស្ស -->
             <div class="shortcut-pill-btn sc-amber" onclick="navigate('addStudent', null)">
-              <span>👥</span>
-              <span>សិស្ស</span>
-              <span class="sc-arrow">›</span>
+              <span>👥</span><span>សិស្ស</span><span class="sc-arrow">›</span>
             </div>
-
-            <!-- ប្រវត្តិរូបសិស្ស -->
             <div class="shortcut-pill-btn sc-cyan" onclick="navigate('card', null)">
-              <span>🕒</span>
-              <span>ប្រវត្តិរូបសិស្ស</span>
-              <span class="sc-arrow">›</span>
+              <span>🕒</span><span>ប្រវត្តិរូបសិស្ស</span><span class="sc-arrow">›</span>
             </div>
           </div>
 
-          <!-- 🌟 ៤. ADMIN CLASS BREAKDOWN SECTION (បង្ហាញតែពេល ADMIN LOGIN ប៉ុណ្ណោះ) -->
+          <!-- Admin Classes Overview -->
           <div class="admin-classes-panel" id="adminClassesPanel">
             <div class="section-headline-group">
               <div class="section-cyan-title" style="font-size:15px;">🏫 ស្ថិតិសិស្សតាមថ្នាក់ទាំងអស់ (Admin Overview)</div>
@@ -1027,7 +891,81 @@
         </div>
       </div>
 
-      <!-- 2. IFRAME VIEW -->
+      <!-- =========================================================
+           🌟 2. REPORTS HUB VIEW (មជ្ឈមណ្ឌលរបាយការណ៍ដែលបាត់ពីមុន)
+      ========================================================= -->
+      <div class="view-panel" id="reportsHubView">
+        <div class="dash-inner-container">
+          
+          <div class="reports-hub-header">
+            <div class="reports-hub-title f-moul">📁 របាយការណ៍ និងឯកសារសិស្ស</div>
+            <button class="btn-back-home" onclick="navigate('dashboard', null)">
+              <span>🏠</span><span>ទំព័រដើម</span>
+            </button>
+          </div>
+
+          <div class="reports-grid-clean">
+            <!-- 1. បញ្ជីរាយនាមសិស្ស -->
+            <div class="report-card-item" onclick="navigate('roster', null)">
+              <div class="rci-left">
+                <div class="rci-icon">🗒️</div>
+                <div class="rci-name">បញ្ជីរាយនាមសិស្ស</div>
+              </div>
+              <div class="rci-arrow">➔</div>
+            </div>
+
+            <!-- 2. តារាងចំណាត់ថ្នាក់ -->
+            <div class="report-card-item" onclick="navigate('rank', null)">
+              <div class="rci-left">
+                <div class="rci-icon">🏆</div>
+                <div class="rci-name">តារាងចំណាត់ថ្នាក់</div>
+              </div>
+              <div class="rci-arrow">➔</div>
+            </div>
+
+            <!-- 3. តារាងកិត្តិយស -->
+            <div class="report-card-item" onclick="navigate('honor', null)">
+              <div class="rci-left">
+                <div class="rci-icon">🌟</div>
+                <div class="rci-name">តារាងកិត្តិយស</div>
+              </div>
+              <div class="rci-arrow">➔</div>
+            </div>
+
+            <!-- 4. ប័ណ្ណសរសើរ -->
+            <div class="report-card-item" onclick="navigate('certificate', null)">
+              <div class="rci-left">
+                <div class="rci-icon">🎖️</div>
+                <div class="rci-name">ប័ណ្ណសរសើរ</div>
+              </div>
+              <div class="rci-arrow">➔</div>
+            </div>
+
+            <!-- 5. សៀវភៅតាមដាន -->
+            <div class="report-card-item" onclick="navigate('report', null)">
+              <div class="rci-left">
+                <div class="rci-icon">📋</div>
+                <div class="rci-name">សៀវភៅតាមដាន</div>
+              </div>
+              <div class="rci-arrow">➔</div>
+            </div>
+
+            <!-- 6. សៀវភៅសិក្ខាគារិក -->
+            <div class="report-card-item" onclick="navigate('remesterrecord', null)">
+              <div class="rci-left">
+                <div class="rci-icon">📘</div>
+                <div class="rci-name">សៀវភៅសិក្ខាគារិក</div>
+              </div>
+              <div class="rci-arrow">➔</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- =========================================================
+           🌟 3. IFRAME VIEW
+      ========================================================= -->
       <div class="view-panel" id="iframeView">
         <div class="iframe-container">
           <div class="loading-glass-overlay" id="loadingOverlay">
@@ -1102,20 +1040,6 @@
   let ASSIGNED_CLASS = localStorage.getItem('krou_assigned_class') || "";
   let IS_ADMIN = String(USER_ROLE).toLowerCase().trim() === 'admin';
 
-  const PAGE_TITLES = {
-    dashboard: "⊞ ផ្ទាំងរបស់គ្រូ",
-    addStudent: "✍️ បញ្ចូលសិស្សថ្មី",
-    card: "🪪 កាតសិស្ស (ID Card)",
-    group: "👥 បែងចែកជាក្រុម",
-    wheel: "🎡 បង្វិលកង់ជ្រើសរើស",
-    attendance: "📅 វត្តមានសិស្ស",
-    score: "📊 ស្រង់ពិន្ទុ",
-    rank: "🏆 តារាងចំណាត់ថ្នាក់",
-    chat: "💬 សារសន្ទនា",
-    reportsHub: "📄 របាយការណ៍",
-    teacher: "👨‍🏫 គ្រប់គ្រងគ្រូ"
-  };
-
   /* 🌟 បង្ហាញព័ត៌មាន Profile លើ Sidebar */
   function renderSidebarProfile() {
     const nameEl = document.getElementById('sidebarTeacherName');
@@ -1143,7 +1067,6 @@
       avatarEl.innerHTML = `<span>${char}</span>`;
     }
 
-    // បង្ហាញមុខងារ Admin
     const teacherNav = document.getElementById('teacherAdminNav');
     const adminClearBtn = document.getElementById('adminClearBtn');
     if (teacherNav) teacherNav.style.display = IS_ADMIN ? 'flex' : 'none';
@@ -1183,54 +1106,83 @@
 
   applyTheme(localStorage.getItem('krou_theme_manual') || 'dark');
 
-  /* 🧭 NAVIGATION */
+  /* 🧭 NAVIGATION (គ្រប់គ្រងទំព័រ និងរបាយការណ៍) */
   let currentPage = 'dashboard';
 
   function mapPageToFile(page) {
-    const map = {
+    var map = {
       'dashboard': 'dashboard',
+      'reportsHub': 'reportsHub',
       'addStudent': 'addStudent',
       'card': 'card',
       'group': 'group',
       'wheel': 'wheel',
       'attendance': 'attendance',
       'score': 'score',
-      'rank': 'rank',
       'chat': 'chat',
-      'reportsHub': 'reportsHub',
+      'roster': 'roster',
+      'rank': 'rank',
+      'honor': 'honor',
+      'certificate': 'certificate',
+      'report': 'report',
+      'remesterrecord': 'remesterrecord',
       'teacher': 'teacher'
     };
     return map[page] || page;
   }
 
   function navigate(page, el) {
+    if (!page) return;
     currentPage = page;
+    localStorage.setItem('krou_active_page', page);
+    
+    var cleanFile = mapPageToFile(page);
+
     document.querySelectorAll('.nav-link-btn').forEach(n => n.classList.remove('active'));
     
-    const target = el || document.querySelector(`[data-page="${page}"]`);
+    // បើសិនចុចលើឯកសារកូនរបស់របាយការណ៍ ➔ Active ប៊ូតុងរបាយការណ៍លើ Sidebar
+    var isReportChild = ['roster', 'rank', 'honor', 'certificate', 'report', 'remesterrecord'].includes(cleanFile);
+    
+    var target = el || document.querySelector(`[data-page="${page}"]`) || document.querySelector(`[data-page="${cleanFile}"]`);
+    if (!target && isReportChild) {
+      target = document.querySelector('[data-page="reportsHub"]');
+    }
     if (target) target.classList.add('active');
 
     closeSidebarMobile();
 
-    const iframeView = document.getElementById('iframeView');
-    const dashboardView = document.getElementById('dashboardView');
+    var iframeView = document.getElementById('iframeView');
+    var dashboardView = document.getElementById('dashboardView');
+    var reportsHubView = document.getElementById('reportsHubView');
 
-    if (page === 'dashboard') {
+    // ១. បើកទំព័រ Dashboard
+    if (cleanFile === 'dashboard') {
       iframeView.classList.remove('active');
+      if (reportsHubView) reportsHubView.classList.remove('active');
       dashboardView.classList.add('active');
       refreshStats();
       return;
     }
 
+    // ២. 🌟 បើកទំព័រមជ្ឈមណ្ឌលរបាយការណ៍ (REPORTS HUB)
+    if (cleanFile === 'reportsHub') {
+      dashboardView.classList.remove('active');
+      iframeView.classList.remove('active');
+      if (reportsHubView) reportsHubView.classList.add('active');
+      return;
+    }
+
+    // ៣. បើកទំព័រ Iframe ផ្សេងៗ (រួមទាំងរបាយការណ៍នីមួយៗ)
     dashboardView.classList.remove('active');
+    if (reportsHubView) reportsHubView.classList.remove('active');
     iframeView.classList.add('active');
 
-    const frame = document.getElementById('pageFrame');
-    const overlay = document.getElementById('loadingOverlay');
+    var frame = document.getElementById('pageFrame');
+    var overlay = document.getElementById('loadingOverlay');
     overlay.classList.add('show');
 
-    const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
-    frame.src = `${mapPageToFile(page)}.html?token=${encodeURIComponent(SESSION_TOKEN || '')}&theme=${encodeURIComponent(currentTheme)}&v=${Date.now()}`;
+    var currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+    frame.src = `${cleanFile}.html?token=${encodeURIComponent(SESSION_TOKEN || '')}&theme=${encodeURIComponent(currentTheme)}&v=${Date.now()}`;
   }
 
   document.getElementById('pageFrame').addEventListener('load', function() {
@@ -1255,9 +1207,7 @@
     document.getElementById('mobileBackdrop').style.display = 'none';
   }
 
-  /* =========================================================
-     📊 មុខងារ REFRESH STATS & កំណត់សិទ្ធិ ADMIN VS គ្រូ
-  ========================================================= */
+  /* 📊 REFRESH STATS & ADMIN PERMISSIONS */
   async function refreshStats() {
     try {
       if (typeof callBackendApi !== 'function') return;
@@ -1265,11 +1215,9 @@
       if (!stats) return;
 
       const totalStudents = stats.totalStudents || 0;
-      const activeCount = stats.activeCount || 0;
       const totalClasses = stats.totalClasses || 0;
       const classBreakdown = stats.classBreakdown || [];
 
-      // 🌟 ១. ពិនិត្យថាជា Admin ឬ គ្រូតាមថ្នាក់
       let studentCountForView = totalStudents;
       let targetClassName = ASSIGNED_CLASS || "៤ក";
 
@@ -1280,7 +1228,6 @@
         document.getElementById('dashStudentSubLabel').innerText = "សិស្សសរុបទាំងអស់";
         studentCountForView = totalStudents;
 
-        // បើកផ្ទាំង Admin Overview
         const adminPanel = document.getElementById('adminClassesPanel');
         const adminGrid = document.getElementById('adminClassesGridArea');
         if (adminPanel && adminGrid) {
@@ -1299,7 +1246,6 @@
           });
         }
       } else {
-        // គណនីគ្រូធម្មតា ➔ ចាប់យកចំនួនសិស្សតែក្នុងថ្នាក់របស់គាត់ប៉ុណ្ណោះ
         document.getElementById('dashRoleTopTag').innerText = "ផ្ទាំងគ្រូបង្រៀន";
         document.getElementById('dashHeroGreeting').innerText = `សួស្ដី ${TEACHER_NAME || 'លោកគ្រូ/អ្នកគ្រូ'}`;
 
@@ -1314,10 +1260,7 @@
         if (adminPanel) adminPanel.style.display = 'none';
       }
 
-      // ២. បង្ហាញចំនួនសិស្សលើ Stat Card
       document.getElementById('dashStudentCountDigit').innerText = studentCountForView;
-
-      // ៣. បង្ហាញព័ត៌មានកិច្ចការ
       document.getElementById('taskScoreDesc').innerText = `0/${studentCountForView} នាក់បានបញ្ចូល`;
 
     } catch(e) {
@@ -1397,7 +1340,7 @@
     } catch(err) { alert('កំហុស៖ ' + err.message); }
   }
 
-  /* 🚀 ផ្ទៀងផ្ទាត់ SESSION និងកំណត់សិទ្ធិពេលបើកទំព័រ */
+  /* 🚀 VERIFY SESSION ពេលចាប់ផ្ដើម */
   async function verifySessionBeforeBoot() {
     if (!SESSION_TOKEN) {
       window.location.replace('login.html');
