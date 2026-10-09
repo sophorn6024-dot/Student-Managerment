@@ -1018,9 +1018,7 @@
         <span class="nav-icon">✍️</span><span class="nav-text">បញ្ចូលសិស្សថ្មី</span>
       </div>
 
-      <div class="nav-link-btn" data-page="edit" onclick="navigate('edit', this)">
-        <span class="nav-icon">✏️</span><span class="nav-text">កែប្រែ/លុបទិន្នន័យ</span>
-      </div>
+      <!-- 🌟 ប៊ូតុង «កែប្រែ/លុបទិន្នន័យ» ត្រូវបានលុបចេញដោយជោគជ័យ -->
 
       <div class="nav-link-btn" data-page="card" onclick="navigate('card', this)">
         <span class="nav-icon">🪪</span><span class="nav-text">កាតសិស្ស (ID Card)</span>
@@ -1367,7 +1365,6 @@
     reportsHub: "📁 របាយការណ៍",
     roster: "🗒️ បញ្ជីរាយនាមសិស្ស",
     addStudent: "✍️ បញ្ចូលសិស្សថ្មី",
-    edit: "✏️ កែប្រែ/លុបទិន្នន័យ",
     card: "🪪 កាតសិស្ស (ID Card)",
     group: "👥 បែងចែកជាក្រុម",
     wheel: "🎡 បង្វិលកង់ជ្រើសរើស",
@@ -1431,13 +1428,11 @@
     return (hour >= 18 || hour < 6) ? 'dark' : 'light';
   }
 
-  // 🌟 Sync Theme ទៅកាន់ទំព័រក្នុង Iframe ភ្លាមៗ (Real-Time)
   function syncThemeToIframe(theme) {
     theme = theme || document.documentElement.getAttribute('data-theme') || 'light';
     var frame = document.getElementById('pageFrame');
     if (!frame) return;
 
-    // ១. ផ្ញើតាម postMessage (គាំទ្រទាំង Cross-Origin & PostMessage)
     try {
       if (frame.contentWindow) {
         frame.contentWindow.postMessage({ type: 'THEME_CHANGE', theme: theme }, '*');
@@ -1447,7 +1442,6 @@
       }
     } catch(e) {}
 
-    // ២. កែសម្រួល DOM នៃទំព័រកូនដោយផ្ទាល់ (Same-Origin)
     try {
       if (frame.contentDocument && frame.contentDocument.documentElement) {
         frame.contentDocument.documentElement.setAttribute('data-theme', theme);
@@ -1460,12 +1454,11 @@
   function applyTheme(theme) {
     document.documentElement.setAttribute('data-theme', theme);
     localStorage.setItem('krou_theme_manual', theme);
-    localStorage.setItem('theme', theme); // Key បម្រុងទុកសម្រាប់ទំព័រកូន
+    localStorage.setItem('theme', theme);
     
     var icon = document.getElementById('themeIcon');
     if (icon) icon.textContent = theme === 'dark' ? '☀️' : '🌙';
     
-    // 🌟 បញ្ជូន Theme ទៅកាន់ Iframe ដែលកំពុងបើក
     syncThemeToIframe(theme);
   }
 
@@ -1475,10 +1468,8 @@
     applyTheme(next);
   }
 
-  // ចាប់ផ្ដើម Theme ដំបូង
   applyTheme(localStorage.getItem('krou_theme_manual') || localStorage.getItem('theme') || getAutoThemeByTime());
 
-  // 🌟 ស្តាប់ Request ពីទំព័រកូនប្រសិនបើទំព័រកូនទើបតែបើក ហើយចង់ដឹង Theme
   window.addEventListener('message', function(e) {
     if (e.data && (e.data.type === 'GET_THEME' || e.data.type === 'REQUEST_THEME')) {
       var currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
@@ -1508,13 +1499,14 @@
   }
 
   var currentPage = localStorage.getItem('krou_active_page') || 'dashboard';
+  // បើសិនជាទំព័រចាស់ត្រូវបានកំណត់ជា edit ➔ ប្តូរមក dashboard វិញស្វ័យប្រវត្តិ
+  if (currentPage === 'edit') currentPage = 'dashboard';
 
   function mapPageToFile(page) {
     var map = {
       'dashboard': 'dashboard',
       'reportsHub': 'reportsHub',
       'addStudent': 'addStudent',
-      'edit': 'edit',
       'card': 'card',
       'group': 'group',
       'wheel': 'wheel',
@@ -1595,14 +1587,12 @@
     var overlay = document.getElementById('loadingOverlay');
     overlay.classList.add('show');
 
-    // 🌟 បញ្ជូន Theme បច្ចុប្បន្នទៅក្នុង URL Query String ផងដែរ
     var currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
     frame.src = cleanFile + '.html?token=' + encodeURIComponent(SESSION_TOKEN || '') + '&theme=' + encodeURIComponent(currentTheme) + '&v=' + Date.now();
   }
 
   function navigateFromDash(page) { navigate(page, null); }
 
-  // 🌟 ពេល Iframe ផ្ទុកចប់ ➔ Sync Theme ទៅក្នុង Iframe នោះភ្លាម
   document.getElementById('pageFrame').addEventListener('load', function() {
     document.getElementById('loadingOverlay').classList.remove('show');
     var currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
