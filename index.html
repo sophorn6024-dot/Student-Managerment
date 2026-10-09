@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="km" data-theme="light">
+<html lang="km" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
@@ -15,10 +15,14 @@
        🎨 THEME VARIABLES & SYSTEM CONFIG
     ========================================================= */
     :root {
-      --primary: #2563eb;
-      --primary-hover: #1d4ed8;
-      --primary-soft: #eff6ff;
-      --navy: #0f172a;
+      --primary: #0284c7;
+      --primary-hover: #0369a1;
+      --primary-soft: #e0f2fe;
+      
+      /* 🌟 ពណ៌ Dark Navy Blue ដូចរូបភាពគំរូ */
+      --sidebar-navy: #061a2e;
+      --sidebar-card-navy: #0e2945;
+      --sidebar-border: rgba(255, 255, 255, 0.08);
       
       /* Light Theme */
       --bg: #f8fafc;
@@ -28,12 +32,8 @@
       --border-subtle: #f1f5f9;
       --text: #0f172a;
       --text-muted: #64748b;
-      --text-soft: #94a3b8;
-      
-      --sidebar-bg: linear-gradient(180deg, #090d16 0%, #0f172a 50%, #1e293b 100%);
       --card-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.05);
-      --card-shadow-hover: 0 12px 30px -4px rgba(37, 99, 235, 0.12);
-      
+
       --sidebar-w: 260px;
       --sidebar-w-collapsed: 78px;
       --bottom-nav-h: 64px;
@@ -41,19 +41,14 @@
 
     /* 🌙 Dark Theme */
     [data-theme="dark"] {
-      --bg: #090d16;
-      --surface: #111827;
-      --surface-elevated: #1e293b;
-      --border: #1f2937;
-      --border-subtle: #1e293b;
+      --bg: #030a13;
+      --surface: #0a1726;
+      --surface-elevated: #0f2238;
+      --border: #132a42;
+      --border-subtle: #0f2238;
       --text: #f8fafc;
       --text-muted: #94a3b8;
-      --text-soft: #64748b;
-      
-      --sidebar-bg: linear-gradient(180deg, #030712 0%, #0b1120 50%, #0f172a 100%);
       --card-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.45);
-      --card-shadow-hover: 0 12px 30px -4px rgba(0, 0, 0, 0.65);
-      --primary-soft: rgba(37, 99, 235, 0.15);
     }
 
     * {
@@ -76,11 +71,7 @@
       transition: background 0.25s ease, color 0.25s ease;
     }
 
-    .f-moul { 
-      font-family: 'Khmer OS Muol Light', 'Moul', cursive !important; 
-      font-weight: normal; 
-      letter-spacing: 0.5px; 
-    }
+    .f-moul { font-family: 'Khmer OS Muol Light', 'Moul', cursive !important; font-weight: normal; }
 
     .app-layout {
       display: flex;
@@ -91,211 +82,230 @@
     }
 
     /* =========================================================
-       🧭 SIDEBAR
+       🧭 SIDEBAR រចនាតាមរូបភាពគំរូ (EXACT MATCH)
     ========================================================= */
     .sidebar {
       width: var(--sidebar-w);
       height: 100vh;
-      background: var(--sidebar-bg);
+      background: var(--sidebar-navy);
       color: #fff;
       display: flex;
       flex-direction: column;
       flex-shrink: 0;
       z-index: 60;
-      box-shadow: 6px 0 25px rgba(0,0,0,0.18);
-      transition: width 0.28s cubic-bezier(0.4, 0, 0.2, 1), transform 0.28s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 6px 0 25px rgba(0,0,0,0.25);
+      border-right: 1px solid var(--sidebar-border);
+      transition: width 0.25s cubic-bezier(0.4, 0, 0.2, 1), transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     .sidebar.collapsed { width: var(--sidebar-w-collapsed); }
 
-    .brand-box {
-      min-height: 72px;
+    /* 🌟 ១. PROFILE HEADER (រង្វង់បៃតង + ឈ្មោះ + តួនាទី + ប៊ូតុង <) */
+    .sidebar-user-header {
+      padding: 18px 14px 12px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 14px 16px;
-      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-      white-space: nowrap;
-      overflow: hidden;
+      gap: 10px;
     }
 
-    .brand-info { display: flex; align-items: center; gap: 12px; overflow: hidden; }
-
-    /* 🌟 AVATAR USER លើ SIDEBAR */
-    .avatar-btn {
-      width: 42px;
-      height: 42px;
-      border-radius: 12px;
-      background: linear-gradient(135deg, #3b82f6, #8b5cf6);
-      color: #fff;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 700;
-      font-size: 15px;
-      cursor: pointer;
-      overflow: hidden;
-      border: 2px solid rgba(255, 255, 255, 0.2);
-      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
-      flex-shrink: 0;
-      transition: transform 0.15s;
-    }
-    .avatar-btn:hover { transform: scale(1.05); }
-    .avatar-btn img { width: 100%; height: 100%; object-fit: cover; }
-
-    .brand-meta { overflow: hidden; }
-    .sidebar.collapsed .brand-meta { opacity: 0; width: 0; display: none; }
-    .brand-title { font-size: 13.5px; font-weight: bold; color: #fff; line-height: 1.3; }
-    .brand-sub { font-size: 10.5px; color: rgba(255, 255, 255, 0.65); margin-top: 2px; }
-
-    .sidebar-close-mobile-btn {
-      display: none;
-      background: rgba(255, 255, 255, 0.12);
-      border: none;
-      color: #fff;
-      width: 32px;
-      height: 32px;
-      border-radius: 10px;
-      font-size: 16px;
-      cursor: pointer;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .nav-scrollable {
-      flex: 1;
-      overflow-y: auto;
-      overflow-x: hidden;
-      padding: 14px 10px;
-      -webkit-overflow-scrolling: touch;
-    }
-    .nav-scrollable::-webkit-scrollbar { width: 4px; }
-    .nav-scrollable::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.15); border-radius: 4px; }
-
-    .nav-link-btn {
-      height: 42px;
+    .user-profile-summary {
       display: flex;
       align-items: center;
       gap: 12px;
-      padding: 0 12px;
-      margin-bottom: 5px;
-      border-radius: 12px;
-      color: rgba(255, 255, 255, 0.76);
+      min-width: 0;
+    }
+
+    /* រង្វង់ពណ៌បៃតងមានអក្សរកាត់ ឬរូបថត */
+    .user-green-avatar {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: #059669;
+      color: #ffffff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      font-weight: 700;
+      flex-shrink: 0;
+      box-shadow: 0 4px 10px rgba(5, 150, 105, 0.35);
+      overflow: hidden;
+      cursor: pointer;
+    }
+    .user-green-avatar img { width: 100%; height: 100%; object-fit: cover; }
+
+    .user-profile-meta {
+      overflow: hidden;
+      white-space: nowrap;
+    }
+    .user-display-name {
+      font-size: 15px;
+      font-weight: 700;
+      color: #ffffff;
+      line-height: 1.3;
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+    .user-display-role {
+      font-size: 12px;
+      color: #94a3b8;
+      margin-top: 2px;
+    }
+
+    /* ប៊ូតុង Collapse < នៅជ្រុងស្ដាំ */
+    .collapse-arrow-btn {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #cbd5e1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
       font-size: 13px;
-      font-weight: 500;
+      flex-shrink: 0;
+      transition: all 0.2s ease;
+    }
+    .collapse-arrow-btn:hover { background: rgba(255, 255, 255, 0.2); color: #fff; }
+
+    .sidebar.collapsed .user-profile-meta { display: none; }
+    .sidebar.collapsed .collapse-arrow-btn { margin: 0 auto; transform: rotate(180deg); }
+
+    /* 🌟 ២. CLASS & YEAR PILL (ថ្នាក់ទី... · 2026-2027 ⌵) */
+    .class-year-pill-box {
+      margin: 4px 12px 14px;
+      background: var(--sidebar-card-navy);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 14px;
+      padding: 10px 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .class-year-pill-box:hover { background: #133457; }
+
+    .class-pill-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 13.5px;
+      font-weight: 700;
+      color: #f8fafc;
+      white-space: nowrap;
+      overflow: hidden;
+    }
+    .class-pill-left .school-ico { font-size: 16px; color: #38bdf8; }
+    .class-pill-chevron { font-size: 11px; color: #94a3b8; }
+
+    .sidebar.collapsed .class-year-pill-box { display: none; }
+
+    .sidebar-divider {
+      height: 1px;
+      background: var(--sidebar-border);
+      margin: 0 12px 10px;
+    }
+
+    /* 🌟 ៣. NAV LINKS LIST (ម៉ូត Active Pill ពណ៌ខៀវដូចរូប) */
+    .nav-scrollable {
+      flex: 1;
+      overflow-y: auto;
+      padding: 4px 10px 16px;
+      -webkit-overflow-scrolling: touch;
+    }
+    .nav-scrollable::-webkit-scrollbar { width: 4px; }
+    .nav-scrollable::-webkit-scrollbar-thumb { background: rgba(255, 255, 255, 0.1); border-radius: 4px; }
+
+    .nav-link-btn {
+      height: 46px;
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 0 16px;
+      margin-bottom: 5px;
+      border-radius: 14px;
+      color: rgba(255, 255, 255, 0.85);
+      font-size: 13.5px;
+      font-weight: 600;
       cursor: pointer;
       white-space: nowrap;
       text-decoration: none;
       transition: all 0.18s ease;
       position: relative;
+      border: 1px solid transparent;
     }
 
-    .nav-link-btn:active { transform: scale(0.97); }
     .nav-link-btn:hover {
-      background: rgba(255, 255, 255, 0.08);
+      background: rgba(255, 255, 255, 0.07);
       color: #ffffff;
-      transform: translateX(2px);
     }
 
+    /* 🌟 ACTIVE PILL ដូចរូបភាពគំរូ */
     .nav-link-btn.active {
-      background: linear-gradient(90deg, rgba(37, 99, 235, 0.45), rgba(124, 58, 237, 0.3));
+      background: #0284c7;
       color: #ffffff;
       font-weight: 700;
-      border: 1px solid rgba(255, 255, 255, 0.14);
+      box-shadow: 0 4px 15px rgba(2, 132, 199, 0.35);
+      border: 1px solid rgba(255, 255, 255, 0.15);
     }
 
-    .nav-link-btn.active::before {
-      content: "";
-      position: absolute;
-      left: 0;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 4px;
-      height: 22px;
-      background: #60a5fa;
-      border-radius: 0 4px 4px 0;
+    .nav-icon-box {
+      font-size: 18px;
+      width: 24px;
+      text-align: center;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
     }
 
-    .nav-icon { font-size: 16px; width: 22px; text-align: center; flex-shrink: 0; }
-    .sidebar.collapsed .nav-text { opacity: 0; width: 0; display: none; }
+    .sidebar.collapsed .nav-text { display: none; }
 
-    /* ============ SIDEBAR FOOTER ============ */
+    /* ============ 🌟 ៤. SIDEBAR FOOTER (DARK/LIGHT & ចាកចេញនៅក្រោមគេ) ============ */
     .sidebar-footer {
       padding: 10px 10px 14px;
-      border-top: 1px solid rgba(255, 255, 255, 0.08);
+      border-top: 1px solid var(--sidebar-border);
       display: flex;
       flex-direction: column;
       gap: 6px;
     }
 
-    .collapse-toggle-btn {
-      width: 100%;
-      height: 38px;
-      border-radius: 11px;
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      background: rgba(255, 255, 255, 0.06);
-      color: #fff;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      padding: 0 12px;
-      cursor: pointer;
-      font-size: 12.5px;
-      font-weight: 600;
-      transition: all 0.2s ease;
-    }
-    .collapse-toggle-btn:hover {
-      background: rgba(255, 255, 255, 0.14);
-      border-color: rgba(255, 255, 255, 0.25);
-    }
-    .collapse-icon {
-      font-size: 13px;
-      width: 22px;
-      text-align: center;
-      flex-shrink: 0;
-      transition: transform 0.2s ease;
-    }
-    .sidebar.collapsed .collapse-toggle-btn {
-      padding: 0;
-      justify-content: center;
-    }
-
     .sidebar-theme-btn {
       width: 100%;
-      height: 38px;
-      border-radius: 11px;
+      height: 40px;
+      border-radius: 12px;
       border: 1px solid rgba(255, 255, 255, 0.12);
       background: rgba(255, 255, 255, 0.06);
       color: #fff;
       display: flex;
       align-items: center;
       gap: 12px;
-      padding: 0 12px;
+      padding: 0 14px;
       cursor: pointer;
-      font-size: 12.5px;
+      font-size: 13px;
       font-weight: 600;
       transition: all 0.2s ease;
     }
-    .sidebar-theme-btn:hover {
-      background: rgba(255, 255, 255, 0.14);
-      border-color: rgba(255, 255, 255, 0.25);
-    }
-    .sidebar.collapsed .sidebar-theme-btn {
-      padding: 0;
-      justify-content: center;
-    }
+    .sidebar-theme-btn:hover { background: rgba(255, 255, 255, 0.14); }
+    .sidebar.collapsed .sidebar-theme-btn { padding: 0; justify-content: center; }
 
+    /* 🌟 ប៊ូតុងចាកចេញ (Logout) នៅក្រោមគេបង្អស់ */
     .sidebar-logout-btn {
       width: 100%;
-      height: 40px;
-      border-radius: 11px;
+      height: 42px;
+      border-radius: 12px;
       border: 1px solid rgba(239, 68, 68, 0.35);
       background: rgba(239, 68, 68, 0.12);
       color: #fca5a5;
       display: flex;
       align-items: center;
       gap: 12px;
-      padding: 0 12px;
+      padding: 0 14px;
       cursor: pointer;
       font-size: 13px;
       font-weight: 700;
@@ -308,10 +318,7 @@
       border-color: #ef4444;
       box-shadow: 0 4px 14px rgba(239, 68, 68, 0.35);
     }
-    .sidebar.collapsed .sidebar-logout-btn {
-      padding: 0;
-      justify-content: center;
-    }
+    .sidebar.collapsed .sidebar-logout-btn { padding: 0; justify-content: center; }
 
     .admin-clear-btn {
       width: 100%;
@@ -327,10 +334,8 @@
       gap: 10px;
       padding: 0 12px;
       cursor: pointer;
-      transition: all 0.2s;
     }
     .admin-clear-btn:hover { background: rgba(220, 38, 38, 0.35); color: #fff; }
-    .sidebar.collapsed .admin-clear-btn { padding: 0; justify-content: center; }
 
     /* =========================================================
        🌟 MAIN WRAPPER & FULL-HEIGHT CONTENT (គ្មាន TOPBAR)
@@ -359,833 +364,269 @@
       opacity: 0;
       pointer-events: none;
       transform: translateY(10px);
-      transition: opacity 0.25s cubic-bezier(0.2, 0.8, 0.2, 1), transform 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+      transition: opacity 0.2s ease, transform 0.2s ease;
       -webkit-overflow-scrolling: touch;
     }
+    .view-panel.active { opacity: 1; pointer-events: auto; transform: translateY(0); }
 
-    .view-panel.active {
-      opacity: 1;
-      pointer-events: auto;
-      transform: translateY(0);
-    }
-
-    /* ============ 1. DASHBOARD VIEW ============ */
+    /* DASHBOARD */
     #dashboardView { padding: 22px 28px 45px; }
-    .dash-container {
-      max-width: 1400px;
-      margin: 0 auto;
-      display: flex;
-      flex-direction: column;
-      gap: 18px;
-    }
+    .dash-container { max-width: 1350px; margin: 0 auto; display: flex; flex-direction: column; gap: 18px; }
 
     .welcome-hero {
-      position: relative;
-      border-radius: 20px;
-      padding: 22px 26px;
-      color: #fff;
-      background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 60%, #7c3aed 100%);
-      box-shadow: 0 10px 25px -4px rgba(37, 99, 235, 0.28);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-    .welcome-hero h1 { font-size: 19px; line-height: 1.4; font-weight: normal; margin-bottom: 4px; }
-    .welcome-hero p { font-size: 12px; opacity: 0.9; font-weight: 400; }
-    .hero-decor { font-size: 70px; opacity: 0.16; pointer-events: none; }
-
-    .stat-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 16px;
+      border-radius: 18px; padding: 22px 26px; color: #fff;
+      background: linear-gradient(135deg, #0284c7 0%, #0369a1 60%, #061a2e 100%);
+      display: flex; justify-content: space-between; align-items: center;
     }
 
+    .stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
     .stat-card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 18px;
-      padding: 16px 18px;
-      display: flex;
-      align-items: center;
-      gap: 14px;
-      box-shadow: var(--card-shadow);
-      transition: all 0.2s ease;
+      background: var(--surface); border: 1px solid var(--border); border-radius: 16px;
+      padding: 16px; display: flex; align-items: center; gap: 12px;
     }
-    .stat-card:hover {
-      transform: translateY(-3px);
-      box-shadow: var(--card-shadow-hover);
-      border-color: rgba(37, 99, 235, 0.3);
-    }
+    .stat-icon-wrap { width: 44px; height: 44px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; }
+    .stat-icon-wrap.blue { background: #e0f2fe; color: #0284c7; }
+    .stat-icon-wrap.green { background: #dcfce7; color: #16a34a; }
+    .stat-icon-wrap.pink { background: #fce7f3; color: #db2777; }
+    .stat-icon-wrap.amber { background: #fef3c7; color: #d97706; }
+    .stat-digit { font-size: 22px; font-weight: 800; }
+    .stat-title { font-size: 11.5px; color: var(--text-muted); font-weight: 600; }
 
-    .stat-icon-wrap {
-      width: 46px;
-      height: 46px;
-      border-radius: 14px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 20px;
-      flex-shrink: 0;
-    }
-    .stat-icon-wrap.blue   { background: #eff6ff; color: #2563eb; }
-    .stat-icon-wrap.green  { background: #f0fdf4; color: #16a34a; }
-    .stat-icon-wrap.pink   { background: #fdf2f8; color: #db2777; }
-    .stat-icon-wrap.amber  { background: #fffbeb; color: #d97706; }
-
-    [data-theme="dark"] .stat-icon-wrap.blue  { background: rgba(37, 99, 235, 0.2); }
-    [data-theme="dark"] .stat-icon-wrap.green { background: rgba(22, 163, 74, 0.2); }
-    [data-theme="dark"] .stat-icon-wrap.pink  { background: rgba(219, 39, 119, 0.2); }
-    [data-theme="dark"] .stat-icon-wrap.amber { background: rgba(217, 119, 6, 0.2); }
-
-    .stat-digit { font-size: 22px; font-weight: 800; color: var(--text); line-height: 1.2; }
-    .stat-title { font-size: 11px; font-weight: 600; color: var(--text-muted); margin-top: 2px; }
-
-    .dash-split-grid {
-      display: grid;
-      grid-template-columns: 1.4fr 1fr;
-      gap: 18px;
-    }
-
-    .dash-panel {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      padding: 20px;
-      box-shadow: var(--card-shadow);
-      display: flex;
-      flex-direction: column;
-    }
-    .dash-panel-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 16px;
-    }
-    .dash-panel-title { font-size: 14px; font-weight: 700; color: var(--text); display: flex; align-items: center; gap: 8px; }
-
-    .bar-chart-container {
-      width: 100%;
-      overflow-x: auto;
-      padding-bottom: 6px;
-      -webkit-overflow-scrolling: touch;
-    }
-    .bar-chart-stage {
-      min-width: 440px;
-      height: 220px;
-      display: flex;
-      align-items: stretch;
-      position: relative;
-      padding: 10px 10px 26px 38px;
-    }
-    .chart-grid-lines {
-      position: absolute;
-      left: 38px;
-      right: 10px;
-      top: 10px;
-      bottom: 26px;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      pointer-events: none;
-    }
-    .grid-line-item { width: 100%; height: 1px; background: var(--border-subtle); position: relative; }
-    .grid-line-val { position: absolute; left: -34px; top: -7px; font-size: 10px; font-weight: bold; color: var(--text-soft); }
-    .chart-bars-wrap {
-      flex: 1;
-      display: flex;
-      align-items: flex-end;
-      justify-content: space-around;
-      gap: 10px;
-      border-bottom: 1.5px solid var(--border);
-      height: 100%;
-    }
-    .bar-col {
-      flex: 1;
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: flex-end;
-      position: relative;
-    }
-    .bar-val-txt { font-size: 10.5px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
-    .bar-fill {
-      width: 24px;
-      max-width: 70%;
-      background: linear-gradient(180deg, #3b82f6 0%, #6366f1 100%);
-      border-radius: 6px 6px 2px 2px;
-      box-shadow: 0 4px 10px rgba(59, 130, 246, 0.25);
-      transition: height 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
-    }
-    .bar-label-txt {
-      position: absolute;
-      bottom: -22px;
-      font-size: 10px;
-      font-weight: 600;
-      color: var(--text-muted);
-      white-space: nowrap;
-    }
-
-    .quick-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 10px;
-    }
-    .quick-item-card {
-      min-height: 84px;
-      background: var(--surface-elevated);
-      border: 1px solid var(--border);
-      border-radius: 15px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 6px;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      text-decoration: none;
-      padding: 6px;
-    }
-    .quick-item-card:active { transform: scale(0.96); }
-    .quick-item-card:hover {
-      transform: translateY(-2px);
-      border-color: var(--primary);
-      box-shadow: 0 8px 16px rgba(37, 99, 235, 0.12);
-      background: var(--primary-soft);
-    }
-    .quick-item-card .qi { font-size: 22px; }
-    .quick-item-card .qt { font-size: 11px; font-weight: 700; color: var(--text); }
-
-    .class-progress-list { display: flex; flex-direction: column; gap: 12px; }
-    .class-prog-row { display: flex; align-items: center; gap: 10px; font-size: 12px; }
-    .class-prog-title { width: 80px; font-weight: 700; color: var(--text); flex-shrink: 0; }
-    .class-prog-track { flex: 1; height: 8px; background: var(--border-subtle); border-radius: 20px; overflow: hidden; }
-    .class-prog-fill { height: 100%; border-radius: 20px; background: linear-gradient(90deg, #3b82f6, #8b5cf6); transition: width 0.9s ease; }
-    .class-prog-count { width: 38px; text-align: right; font-weight: 700; color: var(--text-muted); }
-
-    /* ============ 2. REPORTS HUB VIEW ============ */
-    #reportsHubView { padding: 22px 28px 45px; }
-    .reports-hub-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin-bottom: 18px;
-    }
-    .reports-hub-title {
-      font-size: 17px;
-      color: var(--text);
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .btn-back-home {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      color: var(--text);
-      padding: 7px 14px;
-      border-radius: 12px;
-      font-size: 12px;
-      font-weight: 600;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      transition: all 0.2s;
-    }
-    .btn-back-home:hover {
-      border-color: var(--primary);
-      color: var(--primary);
-      background: var(--primary-soft);
-    }
-
-    .reports-grid-clean {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 14px;
-    }
-
-    .report-card-item {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 18px;
-      padding: 16px 18px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      cursor: pointer;
-      box-shadow: var(--card-shadow);
-      transition: all 0.22s cubic-bezier(0.2, 0.8, 0.2, 1);
-    }
-    .report-card-item:hover {
-      transform: translateY(-3px);
-      box-shadow: var(--card-shadow-hover);
-      border-color: var(--primary);
-      background: var(--surface-elevated);
-    }
-
-    .rci-left { display: flex; align-items: center; gap: 14px; }
-    .rci-icon {
-      width: 44px;
-      height: 44px;
-      border-radius: 13px;
-      background: var(--primary-soft);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 22px;
-      flex-shrink: 0;
-    }
-    .rci-name { font-size: 13.5px; font-weight: 700; color: var(--text); }
-    .rci-arrow {
-      width: 30px;
-      height: 30px;
-      border-radius: 10px;
-      background: var(--border-subtle);
-      color: var(--text-muted);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 12px;
-      transition: all 0.2s;
-    }
-    .report-card-item:hover .rci-arrow {
-      background: var(--primary);
-      color: #fff;
-      transform: translateX(2px);
-    }
-
-    /* ============ 3. IFRAME VIEW (ពេញអេក្រង់ ១០០%) ============ */
-    #iframeView {
-      padding: 0;
-      background: var(--surface);
-      overflow: hidden !important;
-    }
-    .iframe-container {
-      width: 100%;
-      height: 100%;
-      position: relative;
-      overflow: hidden;
-    }
-    #pageFrame {
-      width: 100%;
-      height: 100%;
-      border: none;
-      background: var(--surface);
-      overflow-y: auto;
-      -webkit-overflow-scrolling: touch;
-    }
+    /* IFRAME FULL-SCREEN */
+    #iframeView { padding: 0; background: var(--surface); overflow: hidden !important; }
+    .iframe-container { width: 100%; height: 100%; position: relative; }
+    #pageFrame { width: 100%; height: 100%; border: none; background: var(--surface); }
 
     .loading-glass-overlay {
-      position: absolute;
-      inset: 0;
-      background: var(--bg);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 12px;
-      z-index: 10;
-      opacity: 0;
-      visibility: hidden;
-      pointer-events: none;
-      transition: all 0.2s;
+      position: absolute; inset: 0; background: var(--bg); display: flex;
+      flex-direction: column; align-items: center; justify-content: center; gap: 10px;
+      z-index: 10; opacity: 0; visibility: hidden; pointer-events: none; transition: all 0.2s;
     }
     .loading-glass-overlay.show { opacity: 1; visibility: visible; pointer-events: auto; }
     .spinner-ring {
-      width: 32px;
-      height: 32px;
-      border: 3px solid var(--border);
-      border-top-color: var(--primary);
-      border-radius: 50%;
-      animation: spin 0.7s linear infinite;
+      width: 32px; height: 32px; border: 3px solid var(--border);
+      border-top-color: var(--primary); border-radius: 50%; animation: spin 0.7s linear infinite;
     }
     @keyframes spin { to { transform: rotate(360deg); } }
 
-    /* POPUP & BOTTOM NAV */
-    .welcome-popup {
-      position: fixed;
-      top: 20px;
-      right: 20px;
-      z-index: 9999;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      background: rgba(255, 255, 255, 0.96);
-      backdrop-filter: blur(16px);
-      border: 1.5px solid rgba(37, 99, 235, 0.25);
-      border-radius: 18px;
-      padding: 12px 16px;
-      box-shadow: 0 16px 40px rgba(15, 23, 42, 0.16);
-      transform: translateY(-80px) scale(0.92);
-      opacity: 0;
-      pointer-events: none;
-      transition: all 0.4s ease;
-      max-width: 90vw;
-    }
-    [data-theme="dark"] .welcome-popup {
-      background: rgba(17, 24, 39, 0.96);
-      border-color: rgba(96, 165, 250, 0.3);
-      box-shadow: 0 16px 45px rgba(0, 0, 0, 0.55);
-    }
-    .welcome-popup.show { transform: translateY(0) scale(1); opacity: 1; pointer-events: auto; }
-    .welcome-popup-icon {
-      width: 38px;
-      height: 38px;
-      border-radius: 12px;
-      background: linear-gradient(135deg, #2563eb, #8b5cf6);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 19px;
-      color: #fff;
-    }
-    .welcome-popup-content { display: flex; flex-direction: column; gap: 2px; }
-    .welcome-popup-title { font-size: 12.5px; font-weight: 700; color: var(--text); }
-    .welcome-popup-msg { font-size: 11px; color: var(--text-muted); }
-    .welcome-popup-close { background: none; border: none; color: var(--text-muted); cursor: pointer; font-size: 14px; margin-left: 6px; }
-
+    /* MOBILE NAV */
     .mobile-bottom-nav {
-      display: none;
-      position: fixed;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      height: var(--bottom-nav-h);
-      background: var(--surface);
-      backdrop-filter: blur(16px);
-      border-top: 1px solid var(--border);
-      z-index: 40;
-      padding: 0 8px;
-      box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.05);
-      align-items: center;
-      justify-content: space-around;
+      display: none; position: fixed; left: 0; right: 0; bottom: 0; height: var(--bottom-nav-h);
+      background: var(--surface); backdrop-filter: blur(16px); border-top: 1px solid var(--border);
+      z-index: 40; padding: 0 8px; align-items: center; justify-content: space-around;
     }
     .m-nav-item {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 3px;
-      flex: 1;
-      height: 100%;
-      cursor: pointer;
-      color: var(--text-muted);
-      border-radius: 10px;
-      transition: all 0.15s ease;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      flex: 1; height: 100%; cursor: pointer; color: var(--text-muted); font-size: 10.5px; font-weight: 600;
     }
-    .m-nav-item:active { transform: scale(0.92); }
     .m-nav-item.active { color: var(--primary); font-weight: 700; }
-    .m-nav-item .m-icon { font-size: 19px; line-height: 1; }
-    .m-nav-item .m-txt { font-size: 10px; line-height: 1; font-weight: 600; }
 
     /* Profile Modal */
     .modal-backdrop {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.6);
-      backdrop-filter: blur(6px);
-      z-index: 100;
-      align-items: center;
-      justify-content: center;
-      padding: 16px;
+      display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(6px); z-index: 100; align-items: center; justify-content: center; padding: 16px;
     }
     .modal-backdrop.show { display: flex; }
     .modal-dialog {
-      width: 440px;
-      max-width: 100%;
-      max-height: 90vh;
-      overflow-y: auto;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 22px;
-      box-shadow: 0 25px 60px rgba(0,0,0,0.3);
+      width: 440px; max-width: 100%; max-height: 90vh; overflow-y: auto;
+      background: var(--surface); border: 1px solid var(--border); border-radius: 22px;
     }
     .modal-head-banner {
-      padding: 20px;
-      background: linear-gradient(135deg, #1e3a8a, #7c3aed);
-      color: #fff;
-      position: relative;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
+      padding: 20px; background: linear-gradient(135deg, #0284c7, #061a2e); color: #fff;
+      position: relative; display: flex; flex-direction: column; align-items: center;
     }
     .modal-close-btn {
-      position: absolute;
-      right: 14px;
-      top: 14px;
-      background: rgba(255,255,255,0.18);
-      border: none;
-      color: #fff;
-      width: 30px;
-      height: 30px;
-      border-radius: 50%;
-      cursor: pointer;
-      font-size: 14px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      position: absolute; right: 14px; top: 14px; background: rgba(255,255,255,0.18);
+      border: none; color: #fff; width: 30px; height: 30px; border-radius: 50%; cursor: pointer;
     }
-    .modal-avatar-preview {
-      width: 80px;
-      height: 80px;
-      border-radius: 50%;
-      border: 3px solid #fff;
-      box-shadow: 0 6px 16px rgba(0,0,0,0.2);
-      object-fit: cover;
-      margin-top: 8px;
-    }
+    .modal-avatar-preview { width: 80px; height: 80px; border-radius: 50%; border: 3px solid #fff; object-fit: cover; }
     .modal-body { padding: 18px; }
     .form-group-field { margin-bottom: 12px; }
-    .form-group-field label { display: block; font-size: 11.5px; font-weight: 700; margin-bottom: 5px; color: var(--text); }
+    .form-group-field label { display: block; font-size: 11.5px; font-weight: 700; margin-bottom: 5px; }
     .form-group-field input, .form-group-field select {
-      width: 100%;
-      padding: 10px 14px;
-      border-radius: 11px;
-      border: 1px solid var(--border);
-      background: var(--surface-elevated);
-      color: var(--text);
-      font-size: 13px;
-      outline: none;
+      width: 100%; padding: 10px 14px; border-radius: 11px; border: 1px solid var(--border);
+      background: var(--surface-elevated); color: var(--text); outline: none;
     }
     .modal-foot-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 16px; }
     .btn-modal { padding: 9px 18px; border-radius: 11px; font-size: 12.5px; font-weight: 700; cursor: pointer; border: none; }
     .btn-modal.primary { background: var(--primary); color: #fff; }
     .btn-modal.cancel { background: var(--border-subtle); color: var(--text); }
 
-    .toast-box {
-      position: fixed;
-      right: 20px;
-      bottom: 74px;
-      padding: 10px 16px;
-      border-radius: 12px;
-      background: #0f172a;
-      color: #fff;
-      font-size: 12px;
-      font-weight: 600;
-      z-index: 200;
-      opacity: 0;
-      transform: translateY(12px);
-      transition: all 0.25s;
-      pointer-events: none;
-    }
-    .toast-box.show { opacity: 1; transform: translateY(0); }
-
-    /* RESPONSIVE */
-    @media (max-width: 1024px) {
-      .stat-grid { grid-template-columns: repeat(2, 1fr); }
-      .dash-split-grid { grid-template-columns: 1fr; }
-      .reports-grid-clean { grid-template-columns: repeat(2, 1fr); }
-    }
-
     @media (max-width: 768px) {
       .sidebar {
-        position: fixed;
-        left: 0;
-        top: 0;
-        bottom: 0;
-        width: 275px !important;
-        transform: translateX(-100%);
-        z-index: 90;
+        position: fixed; left: 0; top: 0; bottom: 0; width: 275px !important;
+        transform: translateX(-100%); z-index: 90;
       }
       .sidebar.open { transform: translateX(0); }
-      .sidebar.collapsed { width: 275px !important; }
-      .sidebar.collapsed .brand-meta,
-      .sidebar.collapsed .nav-text {
-        display: inline !important;
-        opacity: 1 !important;
-        width: auto !important;
-      }
-      .sidebar-close-mobile-btn { display: flex; }
-      .collapse-toggle-btn { display: none; }
-
       .mobile-bottom-nav { display: flex; }
-      
-      #dashboardView, #reportsHubView { padding: 14px 14px calc(var(--bottom-nav-h) + 16px); }
+      #dashboardView { padding: 14px 14px calc(var(--bottom-nav-h) + 16px); }
       #iframeView { padding-bottom: var(--bottom-nav-h); }
-
-      .welcome-hero { padding: 16px; border-radius: 16px; }
-      .hero-decor { display: none; }
-      .welcome-hero h1 { font-size: 16px; }
-
-      .stat-grid { grid-template-columns: 1fr 1fr; gap: 10px; }
-      .stat-card { padding: 12px 14px; gap: 10px; border-radius: 14px; }
-      .stat-icon-wrap { width: 40px; height: 40px; font-size: 18px; border-radius: 12px; }
-      .stat-digit { font-size: 19px; }
-
-      .dash-panel { padding: 16px; border-radius: 16px; }
-      .quick-grid { grid-template-columns: repeat(3, 1fr); gap: 8px; }
-      .quick-item-card { min-height: 74px; border-radius: 12px; }
-
-      .reports-grid-clean { grid-template-columns: 1fr; gap: 10px; }
-      .report-card-item { padding: 14px 16px; border-radius: 15px; }
-
-      .modal-backdrop { align-items: flex-end; padding: 0; }
-      .modal-dialog { width: 100%; max-height: 88vh; border-radius: 22px 22px 0 0; margin: 0; }
+      .stat-grid { grid-template-columns: 1fr 1fr; }
     }
   </style>
 </head>
 
 <body>
 
-<!-- POPUP ស្វាគមន៍ -->
-<div id="welcomeGreetingPopup" class="welcome-popup">
-  <div class="welcome-popup-icon" id="welcomePopupIcon">🌅</div>
-  <div class="welcome-popup-content">
-    <div class="welcome-popup-title" id="welcomePopupTitle">អរុណសួស្ដី!</div>
-    <div class="welcome-popup-msg" id="welcomePopupMsg">រីករាយដែលបានជួបលោកគ្រូ/អ្នកគ្រូ។</div>
-  </div>
-  <button class="welcome-popup-close" onclick="closeGreetingPopup()" title="បិទ">✕</button>
-</div>
-
 <div class="app-layout">
 
-  <div id="mobileBackdrop" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.55); z-index:80; backdrop-filter:blur(3px);" onclick="closeSidebarMobile()"></div>
+  <div id="mobileBackdrop" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:80;" onclick="closeSidebarMobile()"></div>
 
-  <!-- ============ 🧭 SIDEBAR ============ -->
+  <!-- =========================================================
+       🧭 SIDEBAR រចនាតាមរូបភាពគំរូ + មុខងារចាស់ៗទាំងអស់
+  ========================================================= -->
   <aside class="sidebar" id="sidebar">
-    <div class="brand-box">
-      <div class="brand-info">
-        <!-- 🌟 AVATAR USER លើ SIDEBAR (ចុចដើម្បីបើក Profile Modal) -->
-        <div class="avatar-btn" id="userAvatar" onclick="openProfileModal()" title="ព័ត៌មានផ្ទាល់ខ្លួន">
-          👤
+    
+    <!-- 🌟 ១. PROFILE HEADER ខាងលើបង្អស់ -->
+    <div class="sidebar-user-header">
+      <div class="user-profile-summary">
+        <!-- រង្វង់ពណ៌បៃតងមានអក្សរកាត់ ឬរូបថតគ្រូពិត -->
+        <div class="user-green-avatar" id="sidebarAvatar" onclick="openProfileModal()" title="ព័ត៌មានផ្ទាល់ខ្លួន">
+          <span id="sidebarInitialChar">ស</span>
         </div>
-        <div class="brand-meta">
-          <div class="brand-title" id="userNameLabel">...</div>
-          <div class="brand-sub">សាលាបឋមសិក្សាកំពង់ល្ពៅ</div>
+        <div class="user-profile-meta">
+          <div class="user-display-name" id="sidebarTeacherName">...</div>
+          <div class="user-display-role" id="sidebarTeacherRole">គ្រូបង្រៀន</div>
         </div>
       </div>
-      <button class="sidebar-close-mobile-btn" onclick="closeSidebarMobile()">✕</button>
+
+      <!-- ប៊ូតុង Collapse < នៅជ្រុងស្ដាំ -->
+      <button class="collapse-arrow-btn" id="collapseArrowBtn" onclick="toggleSidebarCollapse()" title="បង្រួមរបាចំហៀង">
+        <span id="collapseArrowChar">‹</span>
+      </button>
     </div>
 
+    <!-- 🌟 ២. CLASS & YEAR PILL (ថ្នាក់ទី... · 2026-2027 ⌵) -->
+    <div class="class-year-pill-box">
+      <div class="class-pill-left">
+        <span class="school-ico">🏫</span>
+        <span id="sidebarClassYearText">ថ្នាក់ទី... · 2026-2027</span>
+      </div>
+      <span class="class-pill-chevron">⌵</span>
+    </div>
+
+    <div class="sidebar-divider"></div>
+
+    <!-- 🌟 ៣. បញ្ជីមុខងារចាស់ៗទាំងអស់ រៀបចំតាមម៉ូតរូបភាពគំរូ -->
     <nav class="nav-scrollable">
+      <!-- 1. ទំព័រដើម (ផ្ទាំងរបស់គ្រូ) -->
       <div class="nav-link-btn active" data-page="dashboard" onclick="navigate('dashboard', this)">
-        <span class="nav-icon">🏠</span><span class="nav-text">ទំព័រដើម</span>
+        <span class="nav-icon-box">⊞</span>
+        <span class="nav-text">ទំព័រដើម</span>
       </div>
 
+      <!-- 2. បញ្ចូលសិស្សថ្មី -->
       <div class="nav-link-btn" data-page="addStudent" onclick="navigate('addStudent', this)">
-        <span class="nav-icon">✍️</span><span class="nav-text">បញ្ចូលសិស្សថ្មី</span>
+        <span class="nav-icon-box">✍️</span>
+        <span class="nav-text">បញ្ចូលសិស្សថ្មី</span>
       </div>
 
-      <div class="nav-link-btn" data-page="edit" onclick="navigate('edit', this)">
-        <span class="nav-icon">✏️</span><span class="nav-text">កែប្រែ/លុបទិន្នន័យ</span>
-      </div>
-
+      <!-- 3. កាតសិស្ស (ID Card) -->
       <div class="nav-link-btn" data-page="card" onclick="navigate('card', this)">
-        <span class="nav-icon">🪪</span><span class="nav-text">កាតសិស្ស (ID Card)</span>
+        <span class="nav-icon-box">🪪</span>
+        <span class="nav-text">កាតសិស្ស (ID Card)</span>
       </div>
 
+      <!-- 4. បែងចែកជាក្រុម -->
       <div class="nav-link-btn" data-page="group" onclick="navigate('group', this)">
-        <span class="nav-icon">👥</span><span class="nav-text">បែងចែកជាក្រុម</span>
+        <span class="nav-icon-box">👥</span>
+        <span class="nav-text">បែងចែកជាក្រុម</span>
       </div>
 
+      <!-- 5. បង្វិលកង់ជ្រើសរើស -->
       <div class="nav-link-btn" data-page="wheel" onclick="navigate('wheel', this)">
-        <span class="nav-icon">🎡</span><span class="nav-text">បង្វិលកង់ជ្រើសរើស</span>
+        <span class="nav-icon-box">🎡</span>
+        <span class="nav-text">បង្វិលកង់ជ្រើសរើស</span>
       </div>
 
+      <!-- 6. វត្តមានសិស្ស -->
       <div class="nav-link-btn" data-page="attendance" onclick="navigate('attendance', this)">
-        <span class="nav-icon">📅</span><span class="nav-text">វត្តមានសិស្ស</span>
+        <span class="nav-icon-box">📅</span>
+        <span class="nav-text">វត្តមានសិស្ស</span>
       </div>
 
+      <!-- 7. ស្រង់ពិន្ទុ -->
       <div class="nav-link-btn" data-page="score" onclick="navigate('score', this)">
-        <span class="nav-icon">📊</span><span class="nav-text">ស្រង់ពិន្ទុ</span>
+        <span class="nav-icon-box">📋</span>
+        <span class="nav-text">ស្រង់ពិន្ទុ</span>
       </div>
 
+      <!-- 8. សារសន្ទនា -->
       <div class="nav-link-btn" data-page="chat" onclick="navigate('chat', this)">
-        <span class="nav-icon">💬</span><span class="nav-text">សារសន្ទនា</span>
+        <span class="nav-icon-box">💬</span>
+        <span class="nav-text">សារសន្ទនា</span>
       </div>
 
+      <!-- 9. របាយការណ៍ (ម៉ូត Active Pill ដូចរូបភាពគំរូ) -->
       <div class="nav-link-btn" data-page="reportsHub" onclick="navigate('reportsHub', this)">
-        <span class="nav-icon">📁</span><span class="nav-text">របាយការណ៍</span>
+        <span class="nav-icon-box">📄</span>
+        <span class="nav-text">របាយការណ៍</span>
       </div>
 
+      <!-- 10. គ្រប់គ្រងគ្រូ (សម្រាប់តែ Admin) -->
       <div class="nav-link-btn" id="teacherAdminNav" data-page="teacher" onclick="navigate('teacher', this)" style="display:none;">
-        <span class="nav-icon">👨‍🏫</span><span class="nav-text">គ្រប់គ្រងគ្រូ</span>
+        <span class="nav-icon-box">👨‍🏫</span>
+        <span class="nav-text">គ្រប់គ្រងគ្រូ</span>
       </div>
     </nav>
 
-    <!-- ============ 🌟 SIDEBAR FOOTER (ប៊ូតុង Theme & ចាកចេញនៅក្រោមបង្អស់) ============ -->
+    <!-- ============ 🌟 ៤. SIDEBAR FOOTER (DARK/LIGHT & ចាកចេញ) ============ -->
     <div class="sidebar-footer">
       <button class="admin-clear-btn" id="adminClearBtn" onclick="confirmClearAllData()">
-        <span>🗑️</span><span class="nav-text">សម្អាតទិន្នន័យទាំងអស់</span>
+        <span>🗑️</span><span>សម្អាតទិន្នន័យ</span>
       </button>
 
-      <button class="collapse-toggle-btn" id="collapseToggleBtn" onclick="toggleSidebarCollapse()" title="បង្រួមរបាចំហៀង">
-        <span id="collapseIcon" class="collapse-icon">◀</span>
-        <span id="collapseText" class="nav-text">បង្រួមម៉ឺនុយ</span>
-      </button>
-
-      <!-- 🌟 ១. ប៊ូតុង Dark / Light Mode -->
+      <!-- ប៊ូតុង Dark / Light Mode -->
       <button class="sidebar-theme-btn" onclick="toggleTheme()" id="sidebarThemeBtn" title="ប្ដូរ Dark/Light Mode">
-        <span id="themeIcon" class="collapse-icon">🌙</span>
+        <span id="themeIcon">🌙</span>
         <span class="nav-text" id="themeText">ពន្លឺ / ងងឹត</span>
       </button>
 
-      <!-- 🌟 ២. ប៊ូតុងចាកចេញ (Logout) នៅក្រោមគេបង្អស់ -->
+      <!-- ប៊ូតុងចាកចេញ (Logout) នៅក្រោមគេបង្អស់ -->
       <button class="sidebar-logout-btn" onclick="doLogout()" title="ចាកចេញពីប្រព័ន្ធ">
-        <span class="collapse-icon">🚪</span>
+        <span>🚪</span>
         <span class="nav-text">ចាកចេញ</span>
       </button>
     </div>
   </aside>
 
-  <!-- ============ 🖥️ MAIN AREA (ពេញអេក្រង់ ១០០% គ្មាន TOPBAR ឡើយ) ============ -->
+  <!-- ============ 🖥️ MAIN AREA (ពេញអេក្រង់ ១០០% គ្មាន TOPBAR) ============ -->
   <main class="main-wrapper">
-    
-    <!-- Content Area -->
     <div class="content-area">
 
-      <!-- 1️⃣ DASHBOARD VIEW -->
+      <!-- 1. DASHBOARD -->
       <div class="view-panel active" id="dashboardView">
         <div class="dash-container">
-          
           <div class="welcome-hero">
             <div>
               <h1 class="f-moul" id="heroGreeting">សូមស្វាគមន៍មកកាន់ប្រព័ន្ធគ្រប់គ្រងសិស្ស 👋</h1>
-              <p id="heroSubGreeting">សាលាបឋមសិក្សាកំពង់ល្ពៅ · ប្រព័ន្ធគ្រប់គ្រងទិន្នន័យឌីជីថល</p>
+              <p>សាលាបឋមសិក្សាកំពង់ល្ពៅ · ប្រព័ន្ធគ្រប់គ្រងទិន្នន័យឌីជីថល</p>
             </div>
-            <div class="hero-decor">🏫</div>
+            <div style="font-size:45px;">🏫</div>
           </div>
 
-          <!-- Stat Cards -->
           <div class="stat-grid">
             <div class="stat-card">
               <div class="stat-icon-wrap blue">👨‍🎓</div>
-              <div>
-                <div class="stat-digit" id="statTotal">0</div>
-                <div class="stat-title">សិស្សសរុប</div>
-              </div>
+              <div><div class="stat-digit" id="statTotal">0</div><div class="stat-title">សិស្សសរុប</div></div>
             </div>
             <div class="stat-card">
               <div class="stat-icon-wrap green">✅</div>
-              <div>
-                <div class="stat-digit" id="statActive">0</div>
-                <div class="stat-title">សិស្សសកម្ម</div>
-              </div>
+              <div><div class="stat-digit" id="statActive">0</div><div class="stat-title">សិស្សសកម្ម</div></div>
             </div>
             <div class="stat-card">
               <div class="stat-icon-wrap pink">👧</div>
-              <div>
-                <div class="stat-digit" id="statFemale">0</div>
-                <div class="stat-title">សិស្សស្រី</div>
-              </div>
+              <div><div class="stat-digit" id="statFemale">0</div><div class="stat-title">សិស្សស្រី</div></div>
             </div>
             <div class="stat-card">
               <div class="stat-icon-wrap amber">🏫</div>
-              <div>
-                <div class="stat-digit" id="statClasses">0</div>
-                <div class="stat-title">ថ្នាក់រៀន</div>
-              </div>
+              <div><div class="stat-digit" id="statClasses">0</div><div class="stat-title">ថ្នាក់រៀន</div></div>
             </div>
           </div>
-
-          <!-- Split Grid -->
-          <div class="dash-split-grid">
-            <div class="dash-panel">
-              <div class="dash-panel-header">
-                <div class="dash-panel-title">📊 ចំនួនសិស្សតាមថ្នាក់</div>
-              </div>
-              <div class="bar-chart-container">
-                <div class="bar-chart-stage" id="barChart">
-                  <div class="chart-grid-lines" id="chartGrid"></div>
-                  <div class="chart-bars-wrap" id="barsArea"></div>
-                </div>
-              </div>
-            </div>
-
-            <div class="dash-panel">
-              <div class="dash-panel-header">
-                <div class="dash-panel-title">⚡ ចូលប្រើលឿន</div>
-              </div>
-              <div class="quick-grid">
-                <div class="quick-item-card" onclick="navigateFromDash('addStudent')"><span class="qi">✍️</span><span class="qt">បញ្ចូលសិស្ស</span></div>
-                <div class="quick-item-card" onclick="navigateFromDash('attendance')"><span class="qi">📅</span><span class="qt">វត្តមាន</span></div>
-                <div class="quick-item-card" onclick="navigateFromDash('score')"><span class="qi">📊</span><span class="qt">ស្រង់ពិន្ទុ</span></div>
-                <div class="quick-item-card" onclick="navigateFromDash('card')"><span class="qi">🪪</span><span class="qt">កាតសិស្ស</span></div>
-                <div class="quick-item-card" onclick="navigateFromDash('chat')"><span class="qi">💬</span><span class="qt">សារសន្ទនា</span></div>
-                <div class="quick-item-card" onclick="navigateFromDash('reportsHub')"><span class="qi">📁</span><span class="qt">របាយការណ៍</span></div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Class Progress Breakdown -->
-          <div class="dash-panel">
-            <div class="dash-panel-header">
-              <div class="dash-panel-title">📈 ស្ថិតិសិស្សតាមថ្នាក់</div>
-            </div>
-            <div class="class-progress-list" id="classBreakdownArea">
-              <div style="text-align:center; padding:20px; color:var(--text-muted); font-size:12px;">កំពុងទាញយកទិន្នន័យ...</div>
-            </div>
-          </div>
-
         </div>
       </div>
 
-      <!-- 2️⃣ REPORTS HUB VIEW -->
-      <div class="view-panel" id="reportsHubView">
-        <div class="dash-container">
-          
-          <div class="reports-hub-header">
-            <div class="reports-hub-title f-moul">📁 របាយការណ៍ និងឯកសារសិស្ស</div>
-            <button class="btn-back-home" onclick="navigate('dashboard', null)">
-              <span>🏠</span><span>ទំព័រដើម</span>
-            </button>
-          </div>
-
-          <div class="reports-grid-clean">
-            <div class="report-card-item" onclick="navigate('roster', null)">
-              <div class="rci-left">
-                <div class="rci-icon">🗒️</div>
-                <div class="rci-name">បញ្ជីរាយនាមសិស្ស</div>
-              </div>
-              <div class="rci-arrow">➔</div>
-            </div>
-
-            <div class="report-card-item" onclick="navigate('rank', null)">
-              <div class="rci-left">
-                <div class="rci-icon">🏆</div>
-                <div class="rci-name">តារាងចំណាត់ថ្នាក់</div>
-              </div>
-              <div class="rci-arrow">➔</div>
-            </div>
-
-            <div class="report-card-item" onclick="navigate('honor', null)">
-              <div class="rci-left">
-                <div class="rci-icon">🌟</div>
-                <div class="rci-name">តារាងកិត្តិយស</div>
-              </div>
-              <div class="rci-arrow">➔</div>
-            </div>
-
-            <div class="report-card-item" onclick="navigate('certificate', null)">
-              <div class="rci-left">
-                <div class="rci-icon">🎖️</div>
-                <div class="rci-name">ប័ណ្ណសរសើរ</div>
-              </div>
-              <div class="rci-arrow">➔</div>
-            </div>
-
-            <div class="report-card-item" onclick="navigate('report', null)">
-              <div class="rci-left">
-                <div class="rci-icon">📋</div>
-                <div class="rci-name">សៀវភៅតាមដាន</div>
-              </div>
-              <div class="rci-arrow">➔</div>
-            </div>
-
-            <div class="report-card-item" onclick="navigate('remesterrecord', null)">
-              <div class="rci-left">
-                <div class="rci-icon">📘</div>
-                <div class="rci-name">សៀវភៅសិក្ខាគារិក</div>
-              </div>
-              <div class="rci-arrow">➔</div>
-            </div>
-          </div>
-
-        </div>
-      </div>
-
-      <!-- 3️⃣ IFRAME VIEW (ផ្ទៃពេញអេក្រង់ ១០០%) -->
+      <!-- 2. IFRAME VIEW -->
       <div class="view-panel" id="iframeView">
         <div class="iframe-container">
           <div class="loading-glass-overlay" id="loadingOverlay">
@@ -1201,27 +642,18 @@
     <!-- MOBILE BOTTOM NAVIGATION -->
     <nav class="mobile-bottom-nav">
       <div class="m-nav-item active" id="mNavDash" onclick="navigate('dashboard', null)">
-        <span class="m-icon">🏠</span>
-        <span class="m-txt">ទំព័រដើម</span>
+        <span>⊞</span><span>ទំព័រដើម</span>
       </div>
       <div class="m-nav-item" id="mNavAtt" onclick="navigate('attendance', null)">
-        <span class="m-icon">📅</span>
-        <span class="m-txt">វត្តមាន</span>
+        <span>📅</span><span>វត្តមាន</span>
       </div>
       <div class="m-nav-item" id="mNavScores" onclick="navigate('score', null)">
-        <span class="m-icon">📊</span>
-        <span class="m-txt">ស្រង់ពិន្ទុ</span>
-      </div>
-      <div class="m-nav-item" id="mNavChat" onclick="navigate('chat', null)">
-        <span class="m-icon">💬</span>
-        <span class="m-txt">សារសន្ទនា</span>
+        <span>📋</span><span>ស្រង់ពិន្ទុ</span>
       </div>
       <div class="m-nav-item" onclick="openSidebarMobile()">
-        <span class="m-icon">☰</span>
-        <span class="m-txt">ម៉ឺនុយ</span>
+        <span>☰</span><span>ម៉ឺនុយ</span>
       </div>
     </nav>
-
   </main>
 </div>
 
@@ -1279,8 +711,6 @@
   </div>
 </div>
 
-<div class="toast-box" id="profileToast"></div>
-
 <!-- 🔗 ភ្ជាប់ API -->
 <script src="api.js"></script>
 
@@ -1289,94 +719,61 @@
   let TEACHER_NAME = localStorage.getItem('krou_teacher_name') || "";
   let TEACHER_PHOTO_URL = localStorage.getItem('krou_teacher_photo') || "";
   let USER_ROLE = localStorage.getItem('krou_user_role') || "teacher";
-  let IS_ADMIN = String(USER_ROLE).trim().toLowerCase() === 'admin';
-  let TEACHER_SEX = localStorage.getItem('krou_teacher_sex') || '';
-
-  window.SESSION_TOKEN = SESSION_TOKEN;
-  window.TEACHER_NAME = TEACHER_NAME;
-  window.USER_ROLE = USER_ROLE;
+  let ASSIGNED_CLASS = localStorage.getItem('krou_assigned_class') || "";
 
   const PAGE_TITLES = {
     dashboard: "🏠 ទំព័រដើម",
-    reportsHub: "📁 របាយការណ៍",
-    roster: "🗒️ បញ្ជីរាយនាមសិស្ស",
     addStudent: "✍️ បញ្ចូលសិស្សថ្មី",
-    edit: "✏️ កែប្រែ/លុបទិន្នន័យ",
     card: "🪪 កាតសិស្ស (ID Card)",
     group: "👥 បែងចែកជាក្រុម",
     wheel: "🎡 បង្វិលកង់ជ្រើសរើស",
-    attendance: "📅 ស្រង់វត្តមានសិស្ស",
-    score: "📊 ស្រង់ពិន្ទុសិស្ស",
+    attendance: "📅 វត្តមានសិស្ស",
+    score: "📊 ស្រង់ពិន្ទុ",
     chat: "💬 សារសន្ទនា",
-    rank: "🏆 តារាងចំណាត់ថ្នាក់",
-    honor: "🌟 តារាងកិត្តិយស",
-    certificate: "🎖️ បណ្ណសរសើរ",
-    report: "📋 សៀវភៅតាមដាន",
-    remesterrecord: "📘 សៀវភៅសិក្ខាគារិក",
-    teacher: "👨‍🏫 គ្រប់គ្រងគ្រូបង្រៀន"
+    reportsHub: "📁 របាយការណ៍",
+    teacher: "👨‍🏫 គ្រប់គ្រងគ្រូ"
   };
 
-  function getTeacherFormalTitle(sex, rawName) {
-    var s = (sex || '').toString().trim().toLowerCase();
-    var n = (rawName || '').toString().trim();
-    if (n.indexOf('លោកគ្រូ') === 0 || n.indexOf('អ្នកគ្រូ') === 0) return n;
-    var isFemale = (s === 'ស្រី' || s === 'f' || s === 'female' || s === 'ស្រី្ត');
-    return n ? ((isFemale ? 'អ្នកគ្រូ ' : 'លោកគ្រូ ') + n) : (isFemale ? 'អ្នកគ្រូ' : 'លោកគ្រូ');
-  }
+  /* 🌟 បង្ហាញព័ត៌មាន Profile លើ Sidebar ចេញពីគណនី Login ពិតប្រាកដ */
+  function renderSidebarProfile() {
+    const nameEl = document.getElementById('sidebarTeacherName');
+    const roleEl = document.getElementById('sidebarTeacherRole');
+    const avatarEl = document.getElementById('sidebarAvatar');
+    const classYearEl = document.getElementById('sidebarClassYearText');
+    const heroGreeting = document.getElementById('heroGreeting');
 
-  function getTimeGreeting() {
-    var hour = new Date().getHours();
-    if (hour >= 5 && hour < 12) return { greeting: "អរុណសួស្ដី", icon: "🌅" };
-    if (hour >= 12 && hour < 17) return { greeting: "ទិវាសួស្ដី", icon: "☀️" };
-    if (hour >= 17 && hour < 21) return { greeting: "សាយណ្ហសួស្ដី", icon: "🌇" };
-    return { greeting: "រាត្រីសួស្ដី", icon: "🌙" };
-  }
+    if (nameEl) nameEl.innerText = TEACHER_NAME || "លោកគ្រូ/អ្នកគ្រូ";
+    if (heroGreeting) heroGreeting.innerText = `សូមស្វាគមន៍ ${TEACHER_NAME || 'លោកគ្រូ/អ្នកគ្រូ'} 👋`;
+    if (roleEl) roleEl.innerText = (String(USER_ROLE).toLowerCase() === 'admin') ? "អ្នកគ្រប់គ្រងប្រព័ន្ធ" : "គ្រូបង្រៀន";
 
-  function initGreetings() {
-    var timeData = getTimeGreeting();
-    var formalName = getTeacherFormalTitle(TEACHER_SEX, TEACHER_NAME);
-
-    var heroEl = document.getElementById('heroGreeting');
-    if (heroEl) heroEl.innerHTML = timeData.icon + ' ' + timeData.greeting + ' ' + formalName + ' 👋';
-
-    var popIcon = document.getElementById('welcomePopupIcon');
-    var popTitle = document.getElementById('welcomePopupTitle');
-    var popupEl = document.getElementById('welcomeGreetingPopup');
-
-    if (popIcon) popIcon.innerText = timeData.icon;
-    if (popTitle) popTitle.innerText = timeData.greeting + ' ' + formalName + '!';
-
-    if (popupEl) {
-      setTimeout(() => popupEl.classList.add('show'), 350);
-      setTimeout(() => closeGreetingPopup(), 4000);
+    const currentYear = new Date().getFullYear();
+    const academicYear = `${currentYear}-${currentYear + 1}`;
+    if (classYearEl) {
+      classYearEl.innerText = ASSIGNED_CLASS ? `ថ្នាក់ទី${ASSIGNED_CLASS} · ${academicYear}` : `ទូទៅ · ${academicYear}`;
     }
+
+    if (TEACHER_PHOTO_URL && String(TEACHER_PHOTO_URL).trim() !== "") {
+      avatarEl.innerHTML = `<img src="${TEACHER_PHOTO_URL}" alt="photo" onerror="this.outerHTML='<span>${TEACHER_NAME ? TEACHER_NAME.charAt(0) : '👤'}</span>'">`;
+    } else {
+      const char = TEACHER_NAME ? TEACHER_NAME.trim().charAt(0) : "ស";
+      avatarEl.innerHTML = `<span>${char}</span>`;
+    }
+
+    const isAdmin = String(USER_ROLE).toLowerCase() === 'admin';
+    const teacherNav = document.getElementById('teacherAdminNav');
+    const adminClearBtn = document.getElementById('adminClearBtn');
+    if (teacherNav) teacherNav.style.display = isAdmin ? 'flex' : 'none';
+    if (adminClearBtn) adminClearBtn.style.display = isAdmin ? 'flex' : 'none';
   }
 
-  function closeGreetingPopup() {
-    var popupEl = document.getElementById('welcomeGreetingPopup');
-    if (popupEl) popupEl.classList.remove('show');
-  }
-
-  function getAutoThemeByTime() {
-    var hour = new Date().getHours();
-    return (hour >= 18 || hour < 6) ? 'dark' : 'light';
-  }
-
+  /* 🌓 THEME CONTROL & SYNC */
   function syncThemeToIframe(theme) {
-    theme = theme || document.documentElement.getAttribute('data-theme') || 'light';
-    var frame = document.getElementById('pageFrame');
+    const frame = document.getElementById('pageFrame');
     if (!frame) return;
-
     try {
       if (frame.contentWindow) {
         frame.contentWindow.postMessage({ type: 'THEME_CHANGE', theme: theme }, '*');
-        if (typeof frame.contentWindow.applyTheme === 'function') {
-          frame.contentWindow.applyTheme(theme);
-        }
       }
-    } catch(e) {}
-
-    try {
       if (frame.contentDocument && frame.contentDocument.documentElement) {
         frame.contentDocument.documentElement.setAttribute('data-theme', theme);
       }
@@ -1387,167 +784,81 @@
     document.documentElement.setAttribute('data-theme', theme);
     localStorage.setItem('krou_theme_manual', theme);
     localStorage.setItem('theme', theme);
-    
-    var icon = document.getElementById('themeIcon');
-    var text = document.getElementById('themeText');
+    const icon = document.getElementById('themeIcon');
+    const text = document.getElementById('themeText');
     if (icon) icon.textContent = theme === 'dark' ? '☀️' : '🌙';
-    if (text) text.textContent = theme === 'dark' ? 'ម៉ូតពន្លឺ (Light)' : 'ម៉ូតងងឹត (Dark)';
-    
+    if (text) text.textContent = theme === 'dark' ? 'ពន្លឺ (Light)' : 'ងងឹត (Dark)';
     syncThemeToIframe(theme);
   }
 
   function toggleTheme() {
-    var current = document.documentElement.getAttribute('data-theme') || 'light';
-    var next = current === 'dark' ? 'light' : 'dark';
+    const current = document.documentElement.getAttribute('data-theme') || 'dark';
+    const next = current === 'dark' ? 'light' : 'dark';
     applyTheme(next);
   }
 
-  applyTheme(localStorage.getItem('krou_theme_manual') || localStorage.getItem('theme') || getAutoThemeByTime());
+  applyTheme(localStorage.getItem('krou_theme_manual') || 'dark');
 
-  function renderAvatar(photoUrl) {
-    var av = document.getElementById('userAvatar');
-    if (!av) return;
-    if (photoUrl && String(photoUrl).trim() !== "") {
-      av.innerHTML = '<img src="' + photoUrl + '" onerror="this.style.display=\'none\';this.parentNode.innerText=\'' + (TEACHER_NAME ? TEACHER_NAME.charAt(0) : '👤') + '\'">';
-    } else {
-      av.innerText = TEACHER_NAME ? TEACHER_NAME.charAt(0) : '👤';
-    }
-  }
-
-  function initAdminTools() {
-    var clearBtn = document.getElementById('adminClearBtn');
-    var teacherNav = document.getElementById('teacherAdminNav');
-    if (IS_ADMIN) {
-      if (clearBtn) clearBtn.style.display = 'flex';
-      if (teacherNav) teacherNav.style.display = 'flex';
-    } else {
-      if (clearBtn) clearBtn.style.display = 'none';
-      if (teacherNav) teacherNav.style.display = 'none';
-    }
-  }
-
-  var currentPage = localStorage.getItem('krou_active_page') || 'dashboard';
+  /* 🧭 NAVIGATION */
+  let currentPage = 'dashboard';
 
   function mapPageToFile(page) {
-    var map = {
+    const map = {
       'dashboard': 'dashboard',
-      'reportsHub': 'reportsHub',
       'addStudent': 'addStudent',
-      'edit': 'edit',
       'card': 'card',
       'group': 'group',
       'wheel': 'wheel',
       'attendance': 'attendance',
       'score': 'score',
       'chat': 'chat',
-      'roster': 'roster',
-      'rank': 'rank',
-      'honor': 'honor',
-      'certificate': 'certificate',
-      'report': 'report',
-      'remesterrecord': 'remesterrecord',
+      'reportsHub': 'reportsHub',
       'teacher': 'teacher'
     };
     return map[page] || page;
   }
 
   function navigate(page, el) {
-    if (!page) return;
     currentPage = page;
-    localStorage.setItem('krou_active_page', page);
-    
-    var cleanFile = mapPageToFile(page);
-
     document.querySelectorAll('.nav-link-btn').forEach(n => n.classList.remove('active'));
     
-    var isReportChild = ['roster', 'rank', 'honor', 'certificate', 'report', 'remesterrecord'].includes(cleanFile);
-    
-    var target = el || document.querySelector('[data-page="' + page + '"]') || document.querySelector('[data-page="' + cleanFile + '"]');
-    if (!target && isReportChild) {
-      target = document.querySelector('[data-page="reportsHub"]');
-    }
+    const target = el || document.querySelector(`[data-page="${page}"]`);
     if (target) target.classList.add('active');
-
-    // Mobile nav
-    document.querySelectorAll('.m-nav-item').forEach(m => m.classList.remove('active'));
-    if (cleanFile === 'dashboard') {
-      var mb = document.getElementById('mNavDash');
-      if (mb) mb.classList.add('active');
-    } else if (cleanFile === 'attendance') {
-      var mb = document.getElementById('mNavAtt');
-      if (mb) mb.classList.add('active');
-    } else if (cleanFile === 'score') {
-      var mb = document.getElementById('mNavScores');
-      if (mb) mb.classList.add('active');
-    } else if (cleanFile === 'chat') {
-      var mb = document.getElementById('mNavChat');
-      if (mb) mb.classList.add('active');
-    }
-
-    var pt = document.getElementById('pageTitle');
-    if (pt) pt.innerText = PAGE_TITLES[cleanFile] || PAGE_TITLES[page] || cleanFile;
 
     closeSidebarMobile();
 
-    var iframeView = document.getElementById('iframeView');
-    var dashboardView = document.getElementById('dashboardView');
-    var reportsHubView = document.getElementById('reportsHubView');
+    const iframeView = document.getElementById('iframeView');
+    const dashboardView = document.getElementById('dashboardView');
 
-    if (cleanFile === 'dashboard') {
+    if (page === 'dashboard') {
       iframeView.classList.remove('active');
-      reportsHubView.classList.remove('active');
       dashboardView.classList.add('active');
       refreshStats();
       return;
     }
 
-    if (cleanFile === 'reportsHub') {
-      dashboardView.classList.remove('active');
-      iframeView.classList.remove('active');
-      reportsHubView.classList.add('active');
-      return;
-    }
-
     dashboardView.classList.remove('active');
-    reportsHubView.classList.remove('active');
     iframeView.classList.add('active');
 
-    var frame = document.getElementById('pageFrame');
-    var overlay = document.getElementById('loadingOverlay');
+    const frame = document.getElementById('pageFrame');
+    const overlay = document.getElementById('loadingOverlay');
     overlay.classList.add('show');
 
-    var currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
-    frame.src = cleanFile + '.html?token=' + encodeURIComponent(SESSION_TOKEN || '') + '&theme=' + encodeURIComponent(currentTheme) + '&v=' + Date.now();
+    const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+    frame.src = `${mapPageToFile(page)}.html?token=${encodeURIComponent(SESSION_TOKEN || '')}&theme=${encodeURIComponent(currentTheme)}&v=${Date.now()}`;
   }
-
-  function navigateFromDash(page) { navigate(page, null); }
 
   document.getElementById('pageFrame').addEventListener('load', function() {
     document.getElementById('loadingOverlay').classList.remove('show');
-    var currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
+    const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
     syncThemeToIframe(currentTheme);
   });
 
   function toggleSidebarCollapse() {
-    var sidebar = document.getElementById('sidebar');
-    var isCollapsed = sidebar.classList.toggle('collapsed');
-    localStorage.setItem('krou_sidebar_collapsed', isCollapsed ? '1' : '0');
-    updateCollapseUI(isCollapsed);
-  }
-
-  function updateCollapseUI(isCollapsed) {
-    var icon = document.getElementById('collapseIcon');
-    var btn = document.getElementById('collapseToggleBtn');
-    if (icon) icon.innerText = isCollapsed ? '▶' : '◀';
-    if (btn) btn.setAttribute('title', isCollapsed ? 'ពង្រីករបាចំហៀង' : 'បង្រួមរបាចំហៀង');
-  }
-
-  function handleMenuToggle() {
-    if (window.innerWidth <= 768) {
-      openSidebarMobile();
-    } else {
-      toggleSidebarCollapse();
-    }
+    const sidebar = document.getElementById('sidebar');
+    const isCollapsed = sidebar.classList.toggle('collapsed');
+    const arrow = document.getElementById('collapseArrowChar');
+    if (arrow) arrow.innerText = isCollapsed ? '›' : '‹';
   }
 
   function openSidebarMobile() {
@@ -1559,267 +870,74 @@
     document.getElementById('mobileBackdrop').style.display = 'none';
   }
 
-  var khDigits = ['០','១','២','៣','៤','៥','៦','៧','៨','៩'];
-  var khDays = ["អាទិត្យ","ចន្ទ","អង្គារ","ពុធ","ព្រហស្បតិ៍","សុក្រ","សៅរ៍"];
-  var khMonths = ["មករា","កុម្ភៈ","មីនា","មេសា","ឧសភា","មិថុនា","កក្កដា","សីហា","កញ្ញា","តុលា","វិច្ឆិកា","ធ្នូ"];
-
-  function toKhNum(n) { return String(n).replace(/\d/g, d => khDigits[d]); }
-
-  function animateCount(id, target) {
-    var el = document.getElementById(id), start = 0, duration = 600, startTime = null;
-    if (!el) return;
-    function step(ts) {
-      if (!startTime) startTime = ts;
-      var progress = Math.min((ts - startTime) / duration, 1);
-      el.innerText = toKhNum(Math.round(progress * target));
-      if (progress < 1) requestAnimationFrame(step);
-    }
-    requestAnimationFrame(step);
-  }
-
-  function renderBarChart(classData) {
-    var barsArea = document.getElementById('barsArea'), grid = document.getElementById('chartGrid');
-    if (!barsArea || !grid) return;
-    barsArea.innerHTML = ''; grid.innerHTML = '';
-    if (!classData || !classData.length) {
-      barsArea.innerHTML = '<div style="color:var(--text-muted); font-size:11.5px; margin:auto;">មិនទាន់មានទិន្នន័យ</div>';
-      return;
-    }
-    var max = Math.max.apply(null, classData.map(c => Number(c.count || 0))) || 1;
-
-    for (var i = 5; i >= 0; i--) {
-      var val = Math.ceil((max * i) / 5);
-      grid.innerHTML += `<div class="grid-line-item"><span class="grid-line-val">${toKhNum(val)}</span></div>`;
-    }
-
-    classData.forEach((c) => {
-      var count = Number(c.count || 0), pct = (count / max) * 100;
-      barsArea.innerHTML += `
-        <div class="bar-col">
-          <span class="bar-val-txt">${toKhNum(count)}</span>
-          <div class="bar-fill" style="height:0%;" data-h="${pct}%"></div>
-          <span class="bar-label-txt">ថ្នាក់ទី ${c.className}</span>
-        </div>
-      `;
-    });
-
-    setTimeout(() => {
-      document.querySelectorAll('.bar-fill').forEach(el => el.style.height = el.getAttribute('data-h'));
-    }, 60);
-  }
-
   async function refreshStats() {
     try {
       if (typeof callBackendApi !== 'function') return;
-      var stats = await callBackendApi('getDashboardStats');
+      const stats = await callBackendApi('getDashboardStats');
       if (!stats) return;
-      animateCount('statTotal', stats.totalStudents || 0);
-      animateCount('statActive', stats.activeCount || 0);
-      animateCount('statFemale', stats.femaleCount || 0);
-      animateCount('statClasses', stats.totalClasses || 0);
-
-      var data = stats.classBreakdown || [];
-      renderBarChart(data);
-
-      var area = document.getElementById('classBreakdownArea');
-      if (area) {
-        if (!data.length) {
-          area.innerHTML = '<div style="text-align:center; color:var(--text-muted); padding:10px; font-size:12px;">មិនទាន់មានទិន្នន័យ</div>';
-          return;
-        }
-        var max = Math.max.apply(null, data.map(c => Number(c.count || 0))) || 1;
-        var h = '';
-        data.forEach(c => {
-          var count = Number(c.count || 0), pct = Math.round((count / max) * 100);
-          h += `
-            <div class="class-prog-row">
-              <div class="class-prog-title">ថ្នាក់ទី ${c.className}</div>
-              <div class="class-prog-track"><div class="class-prog-fill" style="width:${pct}%;"></div></div>
-              <div class="class-prog-count">${toKhNum(count)}</div>
-            </div>
-          `;
-        });
-        area.innerHTML = h;
-      }
-    } catch(e) {
-      console.error("កំហុសទាញយកស្ថិតិ:", e);
-    }
+      document.getElementById('statTotal').innerText = stats.totalStudents || 0;
+      document.getElementById('statActive').innerText = stats.activeCount || 0;
+      document.getElementById('statFemale').innerText = stats.femaleCount || 0;
+      document.getElementById('statClasses').innerText = stats.totalClasses || 0;
+    } catch(e) {}
   }
 
-  var profilePickedPhotoBase64 = null;
-
-  async function openProfileModal() {
-    document.getElementById('profileForm').reset();
-    document.getElementById('profileModalBackdrop').classList.add('show');
-    try {
-      if (typeof callBackendApi !== 'function') return;
-      var p = await callBackendApi('getMyProfile', { token: SESSION_TOKEN });
-      if (!p) return;
-      document.getElementById('pfName').value = p.name || '';
-      document.getElementById('pfSex').value = p.sex || 'ប្រុស';
-      document.getElementById('pfPhone').value = p.phone || '';
-      document.getElementById('pfDob').value = p.dobIso || '';
-      document.getElementById('pfAddress').value = p.address || '';
-      if (p.photoUrl) {
-        document.getElementById('profilePhotoPreview').src = p.photoUrl;
-        document.getElementById('profilePhotoPreview').style.display = 'block';
-        document.getElementById('profileAvatarPlaceholder').style.display = 'none';
-      }
-    } catch(err) {
-      console.error(err);
-    }
-  }
-
+  function openProfileModal() { document.getElementById('profileModalBackdrop').classList.add('show'); }
   function closeProfileModal() { document.getElementById('profileModalBackdrop').classList.remove('show'); }
 
-  function onProfilePhotoPicked(ev) {
-    var file = ev.target.files[0];
-    if (!file) return;
-    var reader = new FileReader();
-    reader.onload = function(e) {
-      profilePickedPhotoBase64 = e.target.result;
-      document.getElementById('profilePhotoPreview').src = profilePickedPhotoBase64;
-      document.getElementById('profilePhotoPreview').style.display = 'block';
-      document.getElementById('profileAvatarPlaceholder').style.display = 'none';
-    };
-    reader.readAsDataURL(file);
-  }
-
-  async function saveMyProfile(ev) {
-    ev.preventDefault();
-    var btn = document.getElementById('profileSaveBtn');
-    btn.innerText = '⏳ កំពុងរក្សា...';
-    btn.disabled = true;
-
-    var data = {
-      name: document.getElementById('pfName').value.trim(),
-      sex: document.getElementById('pfSex').value,
-      phone: document.getElementById('pfPhone').value.trim(),
-      dob: document.getElementById('pfDob').value,
-      address: document.getElementById('pfAddress').value.trim(),
-      password: document.getElementById('pfPassword').value
-    };
-    if (profilePickedPhotoBase64) data.photoFile = { base64: profilePickedPhotoBase64 };
-
-    try {
-      var res = await callBackendApi('updateMyProfile', { token: SESSION_TOKEN, profileData: data });
-      btn.innerText = '💾 រក្សាទុក';
-      btn.disabled = false;
-      closeProfileModal();
-      showToast('✅ រក្សាទុកព័ត៌មានជោគជ័យ');
-      if (res && res.teacher) {
-        TEACHER_NAME = res.teacher.name || TEACHER_NAME;
-        TEACHER_SEX = res.teacher.sex || TEACHER_SEX;
-        localStorage.setItem('krou_teacher_name', TEACHER_NAME);
-        localStorage.setItem('krou_teacher_sex', TEACHER_SEX);
-        if (res.teacher.photoUrl) localStorage.setItem('krou_teacher_photo', res.teacher.photoUrl);
-        var un = document.getElementById('userNameLabel');
-        if (un) un.innerText = TEACHER_NAME;
-        renderAvatar(res.teacher.photoUrl || '');
-        initGreetings();
-      }
-    } catch(err) {
-      btn.innerText = '💾 រក្សាទុក';
-      btn.disabled = false;
-      alert('❌ កំហុស៖ ' + err.message);
-    }
-    return false;
-  }
-
-  function showToast(msg) {
-    var t = document.getElementById('profileToast');
-    if (!t) return;
-    t.innerText = msg;
-    t.classList.add('show');
-    setTimeout(() => t.classList.remove('show'), 2600);
-  }
-
-  async function doLogout() {
+  function doLogout() {
     if (!confirm('តើអ្នកពិតជាចង់ចាកចេញពីប្រព័ន្ធមែនទេ?')) return;
-    try { 
-      if (typeof callBackendApi === 'function') {
-        await callBackendApi('logoutSession', { token: SESSION_TOKEN }); 
-      }
-    } catch(e) {}
-    localStorage.removeItem('krou_session_token');
-    localStorage.removeItem('krou_teacher_name');
-    localStorage.removeItem('krou_user_role');
-    localStorage.removeItem('krou_teacher_photo');
-    if (typeof removeStoredToken === 'function') removeStoredToken();
+    localStorage.clear();
     window.location.replace('login.html');
   }
 
   async function confirmClearAllData() {
-    if (!IS_ADMIN) return;
     if (!confirm('⚠️ ព្រមាន៖ តើអ្នកពិតជាចង់សម្អាតទិន្នន័យទាំងអស់មែនទេ?')) return;
     if (prompt('ដើម្បីបញ្ជាក់ សូមវាយ៖ DELETE') !== 'DELETE') return;
     try {
       await callBackendApi('clearAllSystemData', { token: SESSION_TOKEN });
       alert('✅ សម្អាតទិន្នន័យបានជោគជ័យ');
       location.reload();
-    } catch(err) {
-      alert('កំហុស៖ ' + err.message);
-    }
+    } catch(err) { alert('កំហុស៖ ' + err.message); }
   }
 
-  function bootAuthenticatedApp() {
-    initGreetings();
-
-    if (localStorage.getItem('krou_sidebar_collapsed') === '1' && window.innerWidth > 768) {
-      document.getElementById('sidebar').classList.add('collapsed');
-      updateCollapseUI(true);
-    }
-
-    navigate(currentPage, null);
-  }
-
+  /* 🚀 ផ្ទៀងផ្ទាត់ Session និង Update Profile គ្រូជាក់ស្តែង */
   async function verifySessionBeforeBoot() {
     if (!SESSION_TOKEN) {
       window.location.replace('login.html');
       return;
     }
 
-    if (TEACHER_NAME) {
-      var un = document.getElementById('userNameLabel');
-      if (un) un.innerText = TEACHER_NAME;
-      renderAvatar(TEACHER_PHOTO_URL);
-      initAdminTools();
-    }
-
-    bootAuthenticatedApp();
+    renderSidebarProfile();
 
     try {
-      var session = await callBackendApi('getCurrentSession', { token: SESSION_TOKEN });
+      const session = await callBackendApi('getCurrentSession', { token: SESSION_TOKEN });
       if (!session || !session.loggedIn) {
-        localStorage.removeItem('krou_session_token');
+        localStorage.clear();
         window.location.replace('login.html');
         return;
       }
+
       TEACHER_NAME = session.name || TEACHER_NAME;
       USER_ROLE = session.role || USER_ROLE;
-      IS_ADMIN = String(USER_ROLE).trim().toLowerCase() === 'admin';
-      if (session.sex) TEACHER_SEX = session.sex;
+      ASSIGNED_CLASS = session.assignedClass || ASSIGNED_CLASS;
+      TEACHER_PHOTO_URL = session.photoUrl || TEACHER_PHOTO_URL;
 
       localStorage.setItem('krou_teacher_name', TEACHER_NAME);
       localStorage.setItem('krou_user_role', USER_ROLE);
-      localStorage.setItem('krou_teacher_sex', TEACHER_SEX);
-      if (session.photoUrl) localStorage.setItem('krou_teacher_photo', session.photoUrl);
+      localStorage.setItem('krou_assigned_class', ASSIGNED_CLASS);
+      if (TEACHER_PHOTO_URL) localStorage.setItem('krou_teacher_photo', TEACHER_PHOTO_URL);
 
-      window.TEACHER_NAME = TEACHER_NAME;
-      window.USER_ROLE = USER_ROLE;
-
-      var un2 = document.getElementById('userNameLabel');
-      if (un2) un2.innerText = TEACHER_NAME;
-      renderAvatar(session.photoUrl || '');
-      initAdminTools();
+      renderSidebarProfile();
     } catch(err) {
-      console.warn('Silent session check failed:', err);
+      console.warn("Session offline:", err);
     }
   }
 
-  window.onload = function() {
+  window.addEventListener('DOMContentLoaded', () => {
     verifySessionBeforeBoot();
-  };
+    refreshStats();
+  });
 </script>
 </body>
 </html>
