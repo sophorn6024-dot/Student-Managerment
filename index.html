@@ -30,7 +30,6 @@
       --text-muted: #64748b;
       --text-soft: #94a3b8;
       
-      --topbar-bg: rgba(255, 255, 255, 0.85);
       --sidebar-bg: linear-gradient(180deg, #090d16 0%, #0f172a 50%, #1e293b 100%);
       --card-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.05);
       --card-shadow-hover: 0 12px 30px -4px rgba(37, 99, 235, 0.12);
@@ -51,7 +50,6 @@
       --text-muted: #94a3b8;
       --text-soft: #64748b;
       
-      --topbar-bg: rgba(17, 24, 39, 0.88);
       --sidebar-bg: linear-gradient(180deg, #030712 0%, #0b1120 50%, #0f172a 100%);
       --card-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.45);
       --card-shadow-hover: 0 12px 30px -4px rgba(0, 0, 0, 0.65);
@@ -111,11 +109,11 @@
     .sidebar.collapsed { width: var(--sidebar-w-collapsed); }
 
     .brand-box {
-      min-height: 70px;
+      min-height: 72px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 14px 18px;
+      padding: 14px 16px;
       border-bottom: 1px solid rgba(255, 255, 255, 0.08);
       white-space: nowrap;
       overflow: hidden;
@@ -123,22 +121,31 @@
 
     .brand-info { display: flex; align-items: center; gap: 12px; overflow: hidden; }
 
-    .brand-logo {
-      width: 40px;
-      height: 40px;
+    /* 🌟 AVATAR USER លើ SIDEBAR */
+    .avatar-btn {
+      width: 42px;
+      height: 42px;
       border-radius: 12px;
       background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+      color: #fff;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 20px;
-      box-shadow: 0 6px 18px rgba(37, 99, 235, 0.35);
+      font-weight: 700;
+      font-size: 15px;
+      cursor: pointer;
+      overflow: hidden;
+      border: 2px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
       flex-shrink: 0;
+      transition: transform 0.15s;
     }
+    .avatar-btn:hover { transform: scale(1.05); }
+    .avatar-btn img { width: 100%; height: 100%; object-fit: cover; }
 
     .brand-meta { overflow: hidden; }
     .sidebar.collapsed .brand-meta { opacity: 0; width: 0; display: none; }
-    .brand-title { font-size: 13.5px; font-weight: bold; color: #fff; }
+    .brand-title { font-size: 13.5px; font-weight: bold; color: #fff; line-height: 1.3; }
     .brand-sub { font-size: 10.5px; color: rgba(255, 255, 255, 0.65); margin-top: 2px; }
 
     .sidebar-close-mobile-btn {
@@ -214,61 +221,120 @@
 
     /* ============ SIDEBAR FOOTER ============ */
     .sidebar-footer {
-      padding: 12px 10px;
+      padding: 10px 10px 14px;
       border-top: 1px solid rgba(255, 255, 255, 0.08);
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 6px;
     }
 
     .collapse-toggle-btn {
       width: 100%;
-      height: 40px;
-      border-radius: 12px;
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      background: rgba(255, 255, 255, 0.08);
+      height: 38px;
+      border-radius: 11px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: rgba(255, 255, 255, 0.06);
       color: #fff;
       display: flex;
       align-items: center;
-      justify-content: center;
-      gap: 10px;
+      gap: 12px;
+      padding: 0 12px;
       cursor: pointer;
-      font-size: 13px;
+      font-size: 12.5px;
       font-weight: 600;
       transition: all 0.2s ease;
     }
     .collapse-toggle-btn:hover {
-      background: rgba(255, 255, 255, 0.16);
-      border-color: rgba(255, 255, 255, 0.28);
+      background: rgba(255, 255, 255, 0.14);
+      border-color: rgba(255, 255, 255, 0.25);
     }
     .collapse-icon {
       font-size: 13px;
-      display: inline-block;
+      width: 22px;
+      text-align: center;
+      flex-shrink: 0;
       transition: transform 0.2s ease;
     }
-    .sidebar.collapsed .collapse-toggle-btn span:last-child {
-      display: none;
+    .sidebar.collapsed .collapse-toggle-btn {
+      padding: 0;
+      justify-content: center;
+    }
+
+    .sidebar-theme-btn {
+      width: 100%;
+      height: 38px;
+      border-radius: 11px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: rgba(255, 255, 255, 0.06);
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 0 12px;
+      cursor: pointer;
+      font-size: 12.5px;
+      font-weight: 600;
+      transition: all 0.2s ease;
+    }
+    .sidebar-theme-btn:hover {
+      background: rgba(255, 255, 255, 0.14);
+      border-color: rgba(255, 255, 255, 0.25);
+    }
+    .sidebar.collapsed .sidebar-theme-btn {
+      padding: 0;
+      justify-content: center;
+    }
+
+    .sidebar-logout-btn {
+      width: 100%;
+      height: 40px;
+      border-radius: 11px;
+      border: 1px solid rgba(239, 68, 68, 0.35);
+      background: rgba(239, 68, 68, 0.12);
+      color: #fca5a5;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 0 12px;
+      cursor: pointer;
+      font-size: 13px;
+      font-weight: 700;
+      transition: all 0.2s ease;
+      margin-top: 2px;
+    }
+    .sidebar-logout-btn:hover {
+      background: #ef4444;
+      color: #ffffff;
+      border-color: #ef4444;
+      box-shadow: 0 4px 14px rgba(239, 68, 68, 0.35);
+    }
+    .sidebar.collapsed .sidebar-logout-btn {
+      padding: 0;
+      justify-content: center;
     }
 
     .admin-clear-btn {
       width: 100%;
-      height: 38px;
+      height: 36px;
       border-radius: 10px;
-      border: 1px solid rgba(239, 68, 68, 0.4);
-      background: linear-gradient(135deg, rgba(185, 28, 28, 0.35), rgba(220, 38, 38, 0.2));
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      background: rgba(220, 38, 38, 0.15);
       color: #fca5a5;
-      font-size: 12px;
+      font-size: 11.5px;
       font-weight: 600;
       display: none;
       align-items: center;
-      justify-content: center;
-      gap: 6px;
+      gap: 10px;
+      padding: 0 12px;
       cursor: pointer;
       transition: all 0.2s;
     }
-    .admin-clear-btn:hover { background: rgba(220, 38, 38, 0.4); color: #fff; }
+    .admin-clear-btn:hover { background: rgba(220, 38, 38, 0.35); color: #fff; }
+    .sidebar.collapsed .admin-clear-btn { padding: 0; justify-content: center; }
 
-    /* ============ MAIN TOPBAR ============ */
+    /* =========================================================
+       🌟 MAIN WRAPPER & FULL-HEIGHT CONTENT (គ្មាន TOPBAR)
+    ========================================================= */
     .main-wrapper {
       flex: 1;
       height: 100vh;
@@ -279,125 +345,9 @@
       position: relative;
     }
 
-    .topbar {
-      height: 64px;
-      background: var(--topbar-bg);
-      backdrop-filter: blur(14px);
-      -webkit-backdrop-filter: blur(14px);
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 24px;
-      z-index: 30;
-      flex-shrink: 0;
-    }
-
-    .topbar-left { display: flex; align-items: center; gap: 12px; min-width: 0; }
-    
-    .hamburger-btn {
-      display: flex;
-      background: var(--surface);
-      border: 1px solid var(--border);
-      width: 38px;
-      height: 38px;
-      border-radius: 11px;
-      font-size: 18px;
-      color: var(--text);
-      cursor: pointer;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 2px 6px rgba(0,0,0,0.03);
-      transition: all 0.2s;
-    }
-    .hamburger-btn:hover {
-      border-color: var(--primary);
-      color: var(--primary);
-    }
-
-    .page-title {
-      font-size: 15.5px;
-      font-weight: 700;
-      color: var(--text);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-
-    .topbar-right { display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
-
-    .theme-toggle-btn {
-      width: 38px;
-      height: 38px;
-      border-radius: 11px;
-      border: 1px solid var(--border);
-      background: var(--surface);
-      color: var(--text);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 16px;
-      cursor: pointer;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-      transition: all 0.2s ease;
-    }
-    .theme-toggle-btn:hover { transform: translateY(-2px); border-color: var(--primary); }
-
-    .date-badge {
-      background: var(--primary-soft);
-      color: var(--primary);
-      font-size: 11.5px;
-      font-weight: 600;
-      padding: 6px 14px;
-      border-radius: 30px;
-      white-space: nowrap;
-      border: 1px solid rgba(37, 99, 235, 0.15);
-    }
-
-    .user-profile-widget {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding-left: 8px;
-      border-left: 1px solid var(--border);
-    }
-    .user-name-txt { font-size: 12.5px; font-weight: 700; color: var(--text); }
-
-    .avatar-btn {
-      width: 38px;
-      height: 38px;
-      border-radius: 12px;
-      background: linear-gradient(135deg, #3b82f6, #8b5cf6);
-      color: #fff;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 700;
-      font-size: 14px;
-      cursor: pointer;
-      overflow: hidden;
-      border: 2px solid var(--surface);
-      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.2);
-    }
-    .avatar-btn img { width: 100%; height: 100%; object-fit: cover; }
-
-    .btn-logout {
-      padding: 6px 12px;
-      border-radius: 10px;
-      border: 1px solid rgba(239, 68, 68, 0.3);
-      background: rgba(239, 68, 68, 0.08);
-      color: #ef4444;
-      font-size: 11.5px;
-      font-weight: 700;
-      cursor: pointer;
-      transition: all 0.15s;
-    }
-    .btn-logout:hover { background: #ef4444; color: #fff; }
-
-    /* ============ VIEW PANELS ============ */
     .content-area {
       flex: 1;
-      min-height: 0;
+      height: 100vh;
       position: relative;
       overflow: hidden;
     }
@@ -704,7 +654,7 @@
       transform: translateX(2px);
     }
 
-    /* ============ 3. IFRAME VIEW ============ */
+    /* ============ 3. IFRAME VIEW (ពេញអេក្រង់ ១០០%) ============ */
     #iframeView {
       padding: 0;
       background: var(--surface);
@@ -801,7 +751,7 @@
       right: 0;
       bottom: 0;
       height: var(--bottom-nav-h);
-      background: var(--topbar-bg);
+      background: var(--surface);
       backdrop-filter: blur(16px);
       border-top: 1px solid var(--border);
       z-index: 40;
@@ -949,10 +899,6 @@
       .sidebar-close-mobile-btn { display: flex; }
       .collapse-toggle-btn { display: none; }
 
-      .topbar { height: 56px; padding: 0 14px; }
-      .user-name-txt, .date-badge { display: none; }
-      .page-title { font-size: 14px; }
-
       .mobile-bottom-nav { display: flex; }
       
       #dashboardView, #reportsHubView { padding: 14px 14px calc(var(--bottom-nav-h) + 16px); }
@@ -1000,10 +946,13 @@
   <aside class="sidebar" id="sidebar">
     <div class="brand-box">
       <div class="brand-info">
-        <div class="brand-logo">🏫</div>
+        <!-- 🌟 AVATAR USER លើ SIDEBAR (ចុចដើម្បីបើក Profile Modal) -->
+        <div class="avatar-btn" id="userAvatar" onclick="openProfileModal()" title="ព័ត៌មានផ្ទាល់ខ្លួន">
+          👤
+        </div>
         <div class="brand-meta">
-          <div class="brand-title f-moul">សាលាបឋមសិក្សា</div>
-          <div class="brand-sub">កំពង់ល្ពៅ · គ្រប់គ្រងសិស្ស</div>
+          <div class="brand-title" id="userNameLabel">...</div>
+          <div class="brand-sub">សាលាបឋមសិក្សាកំពង់ល្ពៅ</div>
         </div>
       </div>
       <button class="sidebar-close-mobile-btn" onclick="closeSidebarMobile()">✕</button>
@@ -1018,7 +967,9 @@
         <span class="nav-icon">✍️</span><span class="nav-text">បញ្ចូលសិស្សថ្មី</span>
       </div>
 
-      <!-- 🌟 ប៊ូតុង «កែប្រែ/លុបទិន្នន័យ» ត្រូវបានលុបចេញដោយជោគជ័យ -->
+      <div class="nav-link-btn" data-page="edit" onclick="navigate('edit', this)">
+        <span class="nav-icon">✏️</span><span class="nav-text">កែប្រែ/លុបទិន្នន័យ</span>
+      </div>
 
       <div class="nav-link-btn" data-page="card" onclick="navigate('card', this)">
         <span class="nav-icon">🪪</span><span class="nav-text">កាតសិស្ស (ID Card)</span>
@@ -1040,12 +991,10 @@
         <span class="nav-icon">📊</span><span class="nav-text">ស្រង់ពិន្ទុ</span>
       </div>
 
-      <!-- 🌟 មុខងារសារសន្ទនា (Chat) -->
       <div class="nav-link-btn" data-page="chat" onclick="navigate('chat', this)">
         <span class="nav-icon">💬</span><span class="nav-text">សារសន្ទនា</span>
       </div>
 
-      <!-- 🌟 ប៊ូតុងរបាយការណ៍ -->
       <div class="nav-link-btn" data-page="reportsHub" onclick="navigate('reportsHub', this)">
         <span class="nav-icon">📁</span><span class="nav-text">របាយការណ៍</span>
       </div>
@@ -1055,47 +1004,34 @@
       </div>
     </nav>
 
-    <!-- 🌟 ប៊ូតុងខាងក្រោម -->
+    <!-- ============ 🌟 SIDEBAR FOOTER (ប៊ូតុង Theme & ចាកចេញនៅក្រោមបង្អស់) ============ -->
     <div class="sidebar-footer">
       <button class="admin-clear-btn" id="adminClearBtn" onclick="confirmClearAllData()">
-        <span>🗑️</span><span>សម្អាតទិន្នន័យទាំងអស់</span>
+        <span>🗑️</span><span class="nav-text">សម្អាតទិន្នន័យទាំងអស់</span>
       </button>
 
       <button class="collapse-toggle-btn" id="collapseToggleBtn" onclick="toggleSidebarCollapse()" title="បង្រួមរបាចំហៀង">
         <span id="collapseIcon" class="collapse-icon">◀</span>
         <span id="collapseText" class="nav-text">បង្រួមម៉ឺនុយ</span>
       </button>
+
+      <!-- 🌟 ១. ប៊ូតុង Dark / Light Mode -->
+      <button class="sidebar-theme-btn" onclick="toggleTheme()" id="sidebarThemeBtn" title="ប្ដូរ Dark/Light Mode">
+        <span id="themeIcon" class="collapse-icon">🌙</span>
+        <span class="nav-text" id="themeText">ពន្លឺ / ងងឹត</span>
+      </button>
+
+      <!-- 🌟 ២. ប៊ូតុងចាកចេញ (Logout) នៅក្រោមគេបង្អស់ -->
+      <button class="sidebar-logout-btn" onclick="doLogout()" title="ចាកចេញពីប្រព័ន្ធ">
+        <span class="collapse-icon">🚪</span>
+        <span class="nav-text">ចាកចេញ</span>
+      </button>
     </div>
   </aside>
 
-  <!-- ============ 🖥️ MAIN AREA ============ -->
+  <!-- ============ 🖥️ MAIN AREA (ពេញអេក្រង់ ១០០% គ្មាន TOPBAR ឡើយ) ============ -->
   <main class="main-wrapper">
     
-    <!-- Topbar -->
-    <header class="topbar">
-      <div class="topbar-left">
-        <button class="hamburger-btn" onclick="handleMenuToggle()" title="លាក់/បង្ហាញម៉ឺនុយ">☰</button>
-        <div class="page-title" id="pageTitle">🏠 ទំព័រដើម</div>
-      </div>
-
-      <div class="topbar-right">
-        <!-- 🌟 ប៊ូតុងប្តូរ Dark/Light Mode -->
-        <button class="theme-toggle-btn" onclick="toggleTheme()" id="themeBtn" title="ប្ដូរ Dark/Light Mode">
-          <span id="themeIcon">🌙</span>
-        </button>
-
-        <div class="date-badge" id="todayPill">-</div>
-
-        <div class="user-profile-widget">
-          <span class="user-name-txt" id="userNameLabel">...</span>
-          <div class="avatar-btn" id="userAvatar" onclick="openProfileModal()" title="ព័ត៌មានផ្ទាល់ខ្លួន">
-            👤
-          </div>
-          <button class="btn-logout" onclick="doLogout()">ចាកចេញ</button>
-        </div>
-      </div>
-    </header>
-
     <!-- Content Area -->
     <div class="content-area">
 
@@ -1249,7 +1185,7 @@
         </div>
       </div>
 
-      <!-- 3️⃣ IFRAME VIEW -->
+      <!-- 3️⃣ IFRAME VIEW (ផ្ទៃពេញអេក្រង់ ១០០%) -->
       <div class="view-panel" id="iframeView">
         <div class="iframe-container">
           <div class="loading-glass-overlay" id="loadingOverlay">
@@ -1365,6 +1301,7 @@
     reportsHub: "📁 របាយការណ៍",
     roster: "🗒️ បញ្ជីរាយនាមសិស្ស",
     addStudent: "✍️ បញ្ចូលសិស្សថ្មី",
+    edit: "✏️ កែប្រែ/លុបទិន្នន័យ",
     card: "🪪 កាតសិស្ស (ID Card)",
     group: "👥 បែងចែកជាក្រុម",
     wheel: "🎡 បង្វិលកង់ជ្រើសរើស",
@@ -1420,9 +1357,6 @@
     if (popupEl) popupEl.classList.remove('show');
   }
 
-  /* =========================================================
-     🌓 មុខងារគ្រប់គ្រង THEME & SYNC ទៅកាន់គ្រប់ទំព័រ IFRAME
-  ========================================================= */
   function getAutoThemeByTime() {
     var hour = new Date().getHours();
     return (hour >= 18 || hour < 6) ? 'dark' : 'light';
@@ -1445,8 +1379,6 @@
     try {
       if (frame.contentDocument && frame.contentDocument.documentElement) {
         frame.contentDocument.documentElement.setAttribute('data-theme', theme);
-        var subIcon = frame.contentDocument.getElementById('themeIcon');
-        if (subIcon) subIcon.textContent = theme === 'dark' ? '☀️' : '🌙';
       }
     } catch(e) {}
   }
@@ -1457,7 +1389,9 @@
     localStorage.setItem('theme', theme);
     
     var icon = document.getElementById('themeIcon');
+    var text = document.getElementById('themeText');
     if (icon) icon.textContent = theme === 'dark' ? '☀️' : '🌙';
+    if (text) text.textContent = theme === 'dark' ? 'ម៉ូតពន្លឺ (Light)' : 'ម៉ូតងងឹត (Dark)';
     
     syncThemeToIframe(theme);
   }
@@ -1470,15 +1404,9 @@
 
   applyTheme(localStorage.getItem('krou_theme_manual') || localStorage.getItem('theme') || getAutoThemeByTime());
 
-  window.addEventListener('message', function(e) {
-    if (e.data && (e.data.type === 'GET_THEME' || e.data.type === 'REQUEST_THEME')) {
-      var currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
-      syncThemeToIframe(currentTheme);
-    }
-  });
-
   function renderAvatar(photoUrl) {
     var av = document.getElementById('userAvatar');
+    if (!av) return;
     if (photoUrl && String(photoUrl).trim() !== "") {
       av.innerHTML = '<img src="' + photoUrl + '" onerror="this.style.display=\'none\';this.parentNode.innerText=\'' + (TEACHER_NAME ? TEACHER_NAME.charAt(0) : '👤') + '\'">';
     } else {
@@ -1499,14 +1427,13 @@
   }
 
   var currentPage = localStorage.getItem('krou_active_page') || 'dashboard';
-  // បើសិនជាទំព័រចាស់ត្រូវបានកំណត់ជា edit ➔ ប្តូរមក dashboard វិញស្វ័យប្រវត្តិ
-  if (currentPage === 'edit') currentPage = 'dashboard';
 
   function mapPageToFile(page) {
     var map = {
       'dashboard': 'dashboard',
       'reportsHub': 'reportsHub',
       'addStudent': 'addStudent',
+      'edit': 'edit',
       'card': 'card',
       'group': 'group',
       'wheel': 'wheel',
@@ -1557,7 +1484,9 @@
       if (mb) mb.classList.add('active');
     }
 
-    document.getElementById('pageTitle').innerText = PAGE_TITLES[cleanFile] || PAGE_TITLES[page] || cleanFile;
+    var pt = document.getElementById('pageTitle');
+    if (pt) pt.innerText = PAGE_TITLES[cleanFile] || PAGE_TITLES[page] || cleanFile;
+
     closeSidebarMobile();
 
     var iframeView = document.getElementById('iframeView');
@@ -1635,11 +1564,6 @@
   var khMonths = ["មករា","កុម្ភៈ","មីនា","មេសា","ឧសភា","មិថុនា","កក្កដា","សីហា","កញ្ញា","តុលា","វិច្ឆិកា","ធ្នូ"];
 
   function toKhNum(n) { return String(n).replace(/\d/g, d => khDigits[d]); }
-
-  function setTodayPill() {
-    var d = new Date();
-    document.getElementById('todayPill').innerText = 'ថ្ងៃ' + khDays[d.getDay()] + ' ទី' + toKhNum(d.getDate()) + ' ' + khMonths[d.getMonth()] + ' ' + toKhNum(d.getFullYear());
-  }
 
   function animateCount(id, target) {
     var el = document.getElementById(id), start = 0, duration = 600, startTime = null;
@@ -1789,7 +1713,8 @@
         localStorage.setItem('krou_teacher_name', TEACHER_NAME);
         localStorage.setItem('krou_teacher_sex', TEACHER_SEX);
         if (res.teacher.photoUrl) localStorage.setItem('krou_teacher_photo', res.teacher.photoUrl);
-        document.getElementById('userNameLabel').innerText = TEACHER_NAME;
+        var un = document.getElementById('userNameLabel');
+        if (un) un.innerText = TEACHER_NAME;
         renderAvatar(res.teacher.photoUrl || '');
         initGreetings();
       }
@@ -1838,7 +1763,6 @@
   }
 
   function bootAuthenticatedApp() {
-    setTodayPill();
     initGreetings();
 
     if (localStorage.getItem('krou_sidebar_collapsed') === '1' && window.innerWidth > 768) {
@@ -1856,7 +1780,8 @@
     }
 
     if (TEACHER_NAME) {
-      document.getElementById('userNameLabel').innerText = TEACHER_NAME;
+      var un = document.getElementById('userNameLabel');
+      if (un) un.innerText = TEACHER_NAME;
       renderAvatar(TEACHER_PHOTO_URL);
       initAdminTools();
     }
@@ -1883,7 +1808,8 @@
       window.TEACHER_NAME = TEACHER_NAME;
       window.USER_ROLE = USER_ROLE;
 
-      document.getElementById('userNameLabel').innerText = TEACHER_NAME;
+      var un2 = document.getElementById('userNameLabel');
+      if (un2) un2.innerText = TEACHER_NAME;
       renderAvatar(session.photoUrl || '');
       initAdminTools();
     } catch(err) {
