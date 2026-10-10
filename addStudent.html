@@ -591,6 +591,39 @@
     .btn-cancel-draft{background:none;border:none;cursor:pointer;color:#ef4444;font-size:13px;font-weight:700}
     .btn-save-row-now{background:#16a34a;color:#fff;border:none;border-radius:7px;height:28px;padding:0 10px;font-size:12px;font-weight:700;cursor:pointer}
 
+
+    /* ===== EDIT MODAL (ស្ទីលថ្មី) ===== */
+    .em-box { max-width: 640px; border-radius: 26px; border: none; }
+    .em-banner { display:flex; align-items:center; gap:14px; padding:18px 20px; color:#fff; background:linear-gradient(120deg,#2563eb 0%,#6d4ae6 55%,#8b45ee 100%); }
+    .em-banner-icon { width:52px; height:52px; border-radius:16px; background:rgba(255,255,255,.2); border:1px solid rgba(255,255,255,.28); display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+    .em-banner-text { flex:1; min-width:0; }
+    .em-banner-title { font-size:18px; font-weight:800; line-height:1.3; }
+    .em-banner-sub { font-size:14px; opacity:.88; margin-top:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .em-close { width:44px; height:44px; border-radius:50%; border:none; background:rgba(255,255,255,.2); color:#fff; display:flex; align-items:center; justify-content:center; cursor:pointer; flex-shrink:0; }
+    .em-close:active { transform:scale(.94); }
+    .em-body { padding:16px; gap:16px; background:var(--bg); }
+    .em-profile { background:var(--surface); border:1px solid var(--border-subtle); border-radius:22px; overflow:hidden; text-align:center; padding-bottom:18px; box-shadow:var(--card-shadow); }
+    .em-profile-top { height:92px; background:linear-gradient(120deg,#3b82f6 0%,#7c6cf0 60%,#9a5cf5 100%); }
+    .em-avatar-wrap { width:104px; height:104px; margin:-52px auto 10px; }
+    .em-avatar-wrap .avatar-circle { border:5px solid var(--surface); font-size:42px; cursor:pointer; }
+    .em-camera { position:absolute; right:-4px; bottom:2px; width:42px; height:42px; border-radius:50%; background:#059669; color:#fff; border:4px solid var(--surface); display:flex; align-items:center; justify-content:center; cursor:pointer; box-shadow:0 3px 8px rgba(0,0,0,.2); }
+    .em-name { font-size:18px; font-weight:800; color:var(--text); }
+    .em-hint { font-size:13px; color:var(--text-muted); margin-top:6px; }
+    .em-section { background:var(--surface); border:1px solid var(--border-subtle); border-radius:22px; overflow:hidden; box-shadow:var(--card-shadow); }
+    .em-section-head { display:flex; align-items:center; gap:12px; padding:14px 18px; background:rgba(2,132,199,.07); border-bottom:1px solid var(--border-subtle); }
+    .em-section-icon { width:36px; height:36px; border-radius:11px; background:rgba(2,132,199,.14); color:var(--primary); display:flex; align-items:center; justify-content:center; }
+    .em-section-title { font-size:15px; font-weight:800; color:var(--primary); }
+    .em-section-body { padding:16px 18px 18px; }
+    .em-box .modal-input { height:48px; border-radius:14px; border:1.5px solid var(--border-subtle); background:var(--surface); font-size:15px; padding:0 14px; display:flex; align-items:center; box-shadow:0 1px 2px rgba(0,0,0,.04); transition:border-color .15s, box-shadow .15s; }
+    .em-box .modal-input:focus { border-color:#3b82f6; box-shadow:0 0 0 4px rgba(59,130,246,.2); }
+    .em-box .form-group label { font-size:13.5px; font-weight:600; color:var(--text-muted); margin-bottom:7px; }
+    .em-req { color:#e11d48; }
+    .em-date { gap:10px; cursor:pointer; color:var(--text-muted); }
+    .em-date-icon { color:var(--text-muted); display:flex; }
+    .em-age { float:right; font-size:11px; font-weight:700; color:var(--primary); background:rgba(2,132,199,.12); padding:1px 8px; border-radius:12px; }
+    .em-footer { padding:14px 16px; gap:12px; }
+    .em-footer .modal-btn { height:46px; border-radius:12px; font-size:14px; }
+
     @media (max-width: 768px) {
       .top-controls { grid-template-columns: 1fr 1fr; }
       .search-box { grid-column: 1 / -1; }
@@ -890,63 +923,67 @@
 
   <!-- 🖼️ EDIT MODAL BOX (POPUP កែប្រែព័ត៌មាន) -->
   <div class="edit-modal-overlay" id="editModalOverlay">
-    <div class="edit-modal-box">
-      <div class="modal-banner">
-        <div>
-          <div style="font-size:15px; font-weight:700;">កែប្រែព័ត៌មានសិស្ស</div>
-          <div style="font-size:12px; opacity:0.85;" id="modalHeaderSub">ឈ្មោះសិស្ស</div>
+    <div class="edit-modal-box em-box">
+      <div class="em-banner">
+        <div class="em-banner-icon"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg></div>
+        <div class="em-banner-text">
+          <div class="em-banner-title">កែប្រែព័ត៌មានសិស្ស</div>
+          <div class="em-banner-sub" id="modalHeaderSub">ឈ្មោះសិស្ស</div>
         </div>
-        <button class="btn-cancel-draft" style="color:white; font-size:18px;" onclick="closeEditModal()">✕</button>
+        <button type="button" class="em-close" onclick="closeEditModal()" aria-label="បិទ"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
       </div>
 
-      <div class="modal-scroll-body">
-        <div class="profile-card">
-          <div class="profile-card-top"></div>
-          <div class="avatar-wrapper">
-            <div class="avatar-circle" id="modalAvatarBox" style="cursor:pointer;" onclick="document.getElementById('modalPhotoInput').click()" title="ប្តូររូបថត">
-              <span id="modalAvatarInitial">ក</span>
-            </div>
-            <div class="camera-badge" onclick="document.getElementById('modalPhotoInput').click()" title="ប្តូររូបថត">📷</div>
-            <input type="file" id="modalPhotoInput" accept="image/*" style="display:none;" onchange="previewModalPhoto(this)">
+      <div class="modal-scroll-body em-body">
+        <div class="em-profile">
+          <div class="em-profile-top"></div>
+          <div class="avatar-wrapper em-avatar-wrap">
+            <div class="avatar-circle" id="modalAvatarBox" onclick="document.getElementById('modalPhotoInput').click()" title="ប្តូររូបថត"><span id="modalAvatarInitial">ក</span></div>
+            <button type="button" class="em-camera" onclick="document.getElementById('modalPhotoInput').click()" title="ប្តូររូបថត" aria-label="ប្តូររូបថត"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2Z"/><circle cx="12" cy="13" r="4"/></svg></button>
+            <input type="file" id="modalPhotoInput" accept="image/jpeg,image/png,image/webp" style="display:none;" onchange="previewModalPhoto(this)">
           </div>
-          <div class="profile-name-text" id="modalProfileNameText">ឈ្មោះសិស្ស</div>
-          <button type="button" class="modal-btn modal-btn-cancel" style="height:32px;margin-top:6px;" onclick="document.getElementById('modalPhotoInput').click()">📷 ប្តូររូបថត</button>
+          <div class="em-name" id="modalProfileNameText">ឈ្មោះសិស្ស</div>
+          <div class="em-hint">JPG / PNG / WEBP · ≤ 3MB</div>
         </div>
 
-        <div class="form-section-card">
-          <div class="form-row-2">
-            <div class="form-group"><label>គោត្តនាម *</label><input type="text" class="modal-input" id="modalLastName"></div>
-            <div class="form-group"><label>នាម *</label><input type="text" class="modal-input" id="modalFirstName"></div>
-          </div>
-          <div class="form-row-2">
-            <div class="form-group"><label>លេខសិស្ស</label><input type="text" class="modal-input" id="modalStudentId"></div>
-            <div class="form-group"><label>ថ្នាក់ *</label><select class="modal-input" id="modalGrade"></select></div>
-          </div>
-          <div class="form-row-2">
-            <div class="form-group"><label>ភេទ</label><select class="modal-input" id="modalGender"><option value="ស្រី">ស្រី</option><option value="ប្រុស">ប្រុស</option></select></div>
-            <div class="form-group">
-              <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:5px;">
-                <label style="margin:0;">ថ្ងៃខែឆ្នាំកំណើត</label>
-                <span id="modalAgeDisplay" style="font-size:11px; font-weight:700; color:var(--primary); background:rgba(2,132,199,0.12); padding:1px 8px; border-radius:12px;">អាយុ: -</span>
-              </div>
-              <div class="date-picker-trigger" id="modalDobTrigger" onclick="openKhmerCalendarForModal(event)">
-                <span id="modalDobText">ជ្រើសរើសថ្ងៃខែ...</span>
-                <span class="cal-icon">📅</span>
+        <div class="em-section">
+          <div class="em-section-head"><div class="em-section-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10 12 5 2 10l10 5 10-5Z"/><path d="M6 12v5c3 2 9 2 12 0v-5"/></svg></div><div class="em-section-title">ព័ត៌មានសិស្ស</div></div>
+          <div class="em-section-body">
+            <div class="form-row-2">
+              <div class="form-group"><label>គោត្តនាម <b class="em-req">*</b></label><input type="text" class="modal-input" id="modalLastName"></div>
+              <div class="form-group"><label>នាម <b class="em-req">*</b></label><input type="text" class="modal-input" id="modalFirstName"></div>
+            </div>
+            <div class="form-row-2">
+              <div class="form-group"><label>លេខសិស្ស</label><input type="text" class="modal-input" id="modalStudentId"></div>
+              <div class="form-group"><label>ថ្នាក់ <b class="em-req">*</b></label><select class="modal-input" id="modalGrade"></select></div>
+            </div>
+            <div class="form-row-2">
+              <div class="form-group"><label>ភេទ</label><select class="modal-input" id="modalGender"><option value="ស្រី">ស្រី</option><option value="ប្រុស">ប្រុស</option></select></div>
+              <div class="form-group">
+                <label>ថ្ងៃខែឆ្នាំកំណើត <span id="modalAgeDisplay" class="em-age">អាយុ: -</span></label>
+                <div class="modal-input em-date" id="modalDobTrigger" onclick="openKhmerCalendarForModal(event)">
+                  <span class="em-date-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></span><span id="modalDobText">ជ្រើសថ្ងៃ</span>
+                </div>
               </div>
             </div>
           </div>
-          <div class="form-row-2">
-            <div class="form-group"><label>ទូរស័ព្ទ</label><input type="tel" class="modal-input" id="modalPhone"></div>
-            <div class="form-group"><label>សញ្ជាតិ</label><input type="text" class="modal-input" id="modalNationality" value="ខ្មែរ"></div>
+        </div>
+
+        <div class="em-section">
+          <div class="em-section-head"><div class="em-section-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 10c0 7-9 13-9 13S3 17 3 10a9 9 0 0 1 18 0Z"/><circle cx="12" cy="10" r="3"/></svg></div><div class="em-section-title">ទំនាក់ទំនង និងអាសយដ្ឋាន</div></div>
+          <div class="em-section-body">
+            <div class="form-row-2">
+              <div class="form-group"><label>ទូរស័ព្ទ</label><input type="tel" class="modal-input" id="modalPhone"></div>
+              <div class="form-group"><label>សញ្ជាតិ</label><input type="text" class="modal-input" id="modalNationality" value="ខ្មែរ"></div>
+            </div>
+            <div class="form-group" style="margin-bottom:12px;"><label>ទីកន្លែងកំណើត</label><input type="text" class="modal-input" id="modalPob"></div>
+            <div class="form-group"><label>អាសយដ្ឋានបច្ចុប្បន្ន</label><input type="text" class="modal-input" id="modalAddress"></div>
           </div>
-          <div class="form-group" style="margin-bottom:12px;"><label>ទីកន្លែងកំណើត</label><input type="text" class="modal-input" id="modalPob"></div>
-          <div class="form-group"><label>អាសយដ្ឋានបច្ចុប្បន្ន</label><input type="text" class="modal-input" id="modalAddress"></div>
         </div>
       </div>
 
-      <div class="modal-footer">
-        <button class="modal-btn modal-btn-cancel" onclick="closeEditModal()">បោះបង់</button>
-        <button class="modal-btn modal-btn-save" onclick="saveModalChanges()">💾 រក្សាទុកការកែប្រែ</button>
+      <div class="modal-footer em-footer">
+        <button type="button" class="modal-btn modal-btn-cancel" onclick="closeEditModal()">បោះបង់</button>
+        <button type="button" class="modal-btn modal-btn-save" onclick="saveModalChanges()">💾 រក្សាទុកការកែប្រែ</button>
       </div>
     </div>
   </div>
