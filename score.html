@@ -1,10 +1,10 @@
 <!DOCTYPE html>
-<html lang="km">
+<html lang="km" data-theme="dark">
 <head>
   <base target="_top">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>ប្រព័ន្ធស្រង់ពិន្ទុ</title>
+  <title>ប្រព័ន្ធស្រង់ពិន្ទុ - KrouDigital</title>
   
   <!-- 🔤 Google Fonts Khmer -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -19,17 +19,24 @@
   <script src="api.js"></script>
 
   <style>
+    /* =========================================================
+       🎨 THEME VARIABLES & DESIGN SYSTEM
+    ========================================================= */
     :root {
-      --primary: #2563eb;
-      --primary-dark: #1e40af;
+      --primary: #0284c7;
+      --primary-dark: #0369a1;
       --navy: #132d56;
       --bg: #f8fafc;
       --surface: #ffffff;
+      --surface-card: #ffffff;
+      --surface-elevated: #f1f5f9;
       --border: #cbd5e1;
+      --border-subtle: #e2e8f0;
       --text: #0f172a;
       --text-muted: #64748b;
+      --card-shadow: 0 4px 18px rgba(15, 23, 42, 0.05);
       
-      /* Subject Group Colors */
+      /* Subject Group Colors (Light) */
       --khmer-bg: #dbeafe; --khmer-txt: #1e40af; --khmer-col: #eff6ff; --khmer-brd: #93c5fd;
       --math-bg: #ede9fe; --math-txt: #5b21b6; --math-col: #f5f3ff; --math-brd: #c4b5fd;
       --sci-bg: #dcfce7; --sci-txt: #15803d; --sci-col: #dcfce7; --sci-brd: #86efac;
@@ -37,6 +44,27 @@
       --art-bg: #ffe4e6; --art-txt: #be123c; --art-col: #fff1f2; --art-brd: #fecdd3;
       --for-bg: #cffafe; --for-txt: #0e7490; --for-col: #cffafe; --for-brd: #a5f3fc;
       --res-bg: #e0e7ff; --res-txt: #3730a3;
+    }
+
+    [data-theme="dark"] {
+      --bg: #090e17;
+      --surface: #0f172a;
+      --surface-card: #111e33;
+      --surface-elevated: #162642;
+      --border: #1a2f4d;
+      --border-subtle: #233f66;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --card-shadow: 0 8px 25px rgba(0, 0, 0, 0.45);
+
+      /* Subject Group Colors (Dark Mode Adjustments) */
+      --khmer-bg: #1e3a8a; --khmer-txt: #bfdbfe; --khmer-col: #172554; --khmer-brd: #1d4ed8;
+      --math-bg: #4c1d95; --math-txt: #ddd6fe; --math-col: #2e1065; --math-brd: #6d28d9;
+      --sci-bg: #14532d; --sci-txt: #bbf7d0; --sci-col: #052e16; --sci-brd: #16a34a;
+      --soc-bg: #78350f; --soc-txt: #fde68a; --soc-col: #451a03; --soc-brd: #d97706;
+      --art-bg: #881337; --art-txt: #fecdd3; --art-col: #4c0519; --art-brd: #e11d48;
+      --for-bg: #164e63; --for-txt: #a5f3fc; --for-col: #083344; --for-brd: #0891b2;
+      --res-bg: #312e81; --res-txt: #c7d2fe;
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -51,6 +79,7 @@
       font-size: 13px;
       line-height: 1.4;
       -webkit-tap-highlight-color: transparent;
+      transition: background-color 0.25s ease, color 0.25s ease;
     }
 
     .f-moul { font-family: 'Khmer OS Muol Light', 'Moul', cursive; font-weight: normal; }
@@ -63,10 +92,22 @@
       padding: 30px 20px;
       height: 100%;
       overflow-y: auto;
+      animation: fadeIn 0.25s ease;
     }
-    .landing-header { margin-bottom: 20px; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+    .landing-header { margin-bottom: 20px; display: flex; justify-content: space-between; align-items: flex-end; }
     .landing-header h1 { font-size: 22px; color: var(--primary); margin-bottom: 4px; }
     .landing-header p { font-size: 13px; color: var(--text-muted); }
+    .assigned-class-badge {
+      background: var(--surface-elevated);
+      border: 1px solid var(--border);
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--primary);
+    }
 
     .cards-wrapper {
       display: grid;
@@ -74,12 +115,12 @@
       gap: 16px;
     }
     .score-card {
-      background: #ffffff;
+      background: var(--surface-card);
       border-radius: 18px;
       padding: 20px;
       cursor: pointer;
-      border: 1px solid #e2e8f0;
-      box-shadow: 0 4px 18px rgba(15, 23, 42, 0.05);
+      border: 1px solid var(--border);
+      box-shadow: var(--card-shadow);
       transition: all 0.22s cubic-bezier(0.2, 0.8, 0.2, 1);
       position: relative;
       overflow: hidden;
@@ -90,7 +131,8 @@
     }
     .score-card:hover {
       transform: translateY(-3px);
-      box-shadow: 0 10px 25px rgba(37, 99, 235, 0.12);
+      box-shadow: 0 10px 25px rgba(2, 132, 199, 0.15);
+      border-color: var(--primary);
     }
     .score-card.monthly { border-left: 5px solid #0284c7; }
     .score-card.semester { border-left: 5px solid #7c3aed; }
@@ -106,8 +148,8 @@
       font-size: 20px;
       flex-shrink: 0;
     }
-    .card-icon.m { background: #e0f2fe; color: #0284c7; }
-    .card-icon.s { background: #ede9fe; color: #7c3aed; }
+    .card-icon.m { background: rgba(2, 132, 199, 0.15); color: #0284c7; }
+    .card-icon.s { background: rgba(124, 58, 237, 0.15); color: #7c3aed; }
     
     .card-info h2 { font-size: 15px; margin-bottom: 3px; }
     .card-info p { font-size: 11.5px; color: var(--text-muted); }
@@ -118,19 +160,21 @@
       align-items: center;
       margin-top: 14px;
       padding-top: 10px;
-      border-top: 1px dashed #e2e8f0;
+      border-top: 1px dashed var(--border);
     }
     .card-badge {
-      font-size: 10.5px;
+      font-size: 11px;
       font-weight: bold;
-      padding: 3px 8px;
+      padding: 3px 10px;
       border-radius: 20px;
-      background: #f1f5f9;
-      color: #334155;
+      background: var(--surface-elevated);
+      color: var(--text);
+      border: 1px solid var(--border);
     }
-    .card-arrow { font-size: 15px; color: #94a3b8; }
+    .card-arrow { font-size: 15px; color: var(--text-muted); transition: transform 0.2s; }
+    .score-card:hover .card-arrow { transform: translateX(3px); color: var(--primary); }
 
-    /* ================= 🌟 MAIN FORM CONTAINER (FLEX ENGINE) ================= */
+    /* ================= MAIN FORM CONTAINER ================= */
     #mainForm {
       display: none;
       width: 100%;
@@ -145,19 +189,19 @@
       flex: 1;
       display: flex;
       flex-direction: column;
-      min-height: 0; /* 🌟 ចំណុចគន្លឹះដើម្បីឱ្យរមូរដល់សិស្សចុងក្រោយ */
-      background: #ffffff;
+      min-height: 0;
+      background: var(--surface);
       border-radius: 14px;
-      border: 1px solid #cbd5e1;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.05);
+      border: 1px solid var(--border);
+      box-shadow: var(--card-shadow);
       overflow: hidden;
     }
 
     .top-toolbar {
       flex-shrink: 0;
-      background: #ffffff;
+      background: var(--surface);
       padding: 8px 12px;
-      border-bottom: 1.5px solid #e2e8f0;
+      border-bottom: 1.5px solid var(--border);
       display: flex;
       flex-wrap: wrap;
       align-items: center;
@@ -173,26 +217,34 @@
     }
 
     .pill-select {
-      border: 1.5px solid #cbd5e1;
+      border: 1.5px solid var(--border);
       border-radius: 20px;
-      padding: 5px 10px;
-      font-size: 11.5px;
+      padding: 5px 12px;
+      font-size: 12px;
       font-weight: bold;
-      background: #f8fafc;
+      background: var(--surface-elevated);
       color: var(--text);
       font-family: inherit;
       cursor: pointer;
       outline: none;
+      transition: all 0.15s;
+    }
+    .pill-select:disabled {
+      opacity: 0.8;
+      cursor: not-allowed;
+      background: var(--surface);
+      border-color: var(--primary);
+      color: var(--primary);
     }
 
     .search-input-wrap {
       display: flex;
       align-items: center;
       gap: 6px;
-      border: 1.5px solid #cbd5e1;
+      border: 1.5px solid var(--border);
       border-radius: 20px;
       padding: 4px 10px;
-      background: #f8fafc;
+      background: var(--surface-elevated);
       min-width: 140px;
     }
     .search-input-wrap input {
@@ -201,6 +253,7 @@
       outline: none;
       font-size: 11.5px;
       font-family: inherit;
+      color: var(--text);
       width: 100%;
     }
 
@@ -208,59 +261,55 @@
       display: inline-flex;
       align-items: center;
       gap: 4px;
-      padding: 5px 11px;
+      padding: 5px 12px;
       border-radius: 20px;
-      border: 1.5px solid #cbd5e1;
-      background: #ffffff;
+      border: 1.5px solid var(--border);
+      background: var(--surface);
+      color: var(--text);
       font-size: 11.5px;
       font-weight: bold;
       cursor: pointer;
       font-family: inherit;
       transition: all 0.15s;
     }
-    .action-btn:hover { background: #f1f5f9; }
+    .action-btn:hover { background: var(--surface-elevated); border-color: var(--primary); }
     .action-btn.btn-save { background: #16a34a; border-color: #15803d; color: #fff; }
+    .action-btn.btn-save:hover { background: #15803d; }
     .action-btn.btn-report { background: #0284c7; border-color: #0369a1; color: #fff; }
-    .action-btn.btn-back { background: #f1f5f9; color: #334155; }
+    .action-btn.btn-report:hover { background: #0369a1; }
+    .action-btn.btn-back { background: var(--surface-elevated); color: var(--text); }
 
     .autosave-pill {
       font-size: 11px;
       font-weight: bold;
-      padding: 4px 8px;
+      padding: 4px 10px;
       border-radius: 20px;
-      background: #f1f5f9;
-      color: #64748b;
+      background: var(--surface-elevated);
+      color: var(--text-muted);
       display: inline-flex;
       align-items: center;
       gap: 4px;
+      border: 1px solid var(--border);
     }
-    .autosave-pill.saving { background: #fef3c7; color: #b45309; }
-    .autosave-pill.saved { background: #dcfce7; color: #15803d; }
-    .autosave-pill.error { background: #fee2e2; color: #b91c1c; }
+    .autosave-pill.saving { background: rgba(245, 158, 11, 0.15); color: #f59e0b; border-color: rgba(245, 158, 11, 0.3); }
+    .autosave-pill.saved { background: rgba(22, 163, 74, 0.15); color: #16a34a; border-color: rgba(22, 163, 74, 0.3); }
+    .autosave-pill.error { background: rgba(239, 68, 68, 0.15); color: #ef4444; border-color: rgba(239, 68, 68, 0.3); }
 
-    /* ================= 🌟 TABLE SCROLL ENGINE (100% RESPONSIVE) ================= */
+    /* ================= TABLE SCROLL ENGINE ================= */
     .table-scroll-wrap {
       flex: 1;
       min-height: 0;
       width: 100%;
       overflow: auto !important;
       position: relative;
-      background: #ffffff;
+      background: var(--surface);
       -webkit-overflow-scrolling: touch;
       touch-action: pan-x pan-y !important;
     }
 
-    .table-scroll-wrap::-webkit-scrollbar {
-      width: 8px;
-      height: 8px;
-    }
-    .table-scroll-wrap::-webkit-scrollbar-thumb {
-      background: #cbd5e1;
-      border-radius: 4px;
-    }
-    .table-scroll-wrap::-webkit-scrollbar-thumb:hover {
-      background: #94a3b8;
-    }
+    .table-scroll-wrap::-webkit-scrollbar { width: 8px; height: 8px; }
+    .table-scroll-wrap::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+    .table-scroll-wrap::-webkit-scrollbar-thumb:hover { background: var(--text-muted); }
 
     .modern-score-table {
       width: max-content;
@@ -268,12 +317,12 @@
       border-collapse: collapse;
       font-size: 12.5px;
       text-align: center;
-      border: 1px solid #cbd5e1;
+      border: 1px solid var(--border);
       touch-action: pan-x pan-y !important;
     }
 
     .modern-score-table th, .modern-score-table td {
-      border: 1px solid #cbd5e1;
+      border: 1px solid var(--border);
       padding: 3px 2px;
       height: 38px;
       vertical-align: middle;
@@ -281,19 +330,20 @@
       touch-action: pan-x pan-y !important;
     }
 
-    /* 🌟 Sticky Columns អាចអូស Touch បានដោយសេរី */
+    /* Sticky Columns */
     .stk {
       position: sticky !important;
-      background: #ffffff;
+      background: var(--surface) !important;
+      color: var(--text);
       z-index: 20;
       touch-action: pan-x pan-y !important;
     }
     .stk-1 { left: 0; min-width: 42px; max-width: 42px; }
     .stk-2 { left: 42px; min-width: 80px; max-width: 80px; text-align: left; padding-left: 6px; }
     .stk-3 { left: 122px; min-width: 90px; max-width: 90px; text-align: left; padding-left: 6px; font-weight: bold; }
-    .stk-4 { left: 212px; min-width: 50px; max-width: 50px; box-shadow: 3px 0 6px -2px rgba(0,0,0,0.12); }
+    .stk-4 { left: 212px; min-width: 50px; max-width: 50px; box-shadow: 3px 0 6px -2px rgba(0,0,0,0.15); }
 
-    .modern-score-table thead th.stk { z-index: 40; background: #f8fafc; }
+    .modern-score-table thead th.stk { z-index: 40; background: var(--surface-elevated) !important; }
 
     .th-group-kh { background: var(--khmer-bg); color: var(--khmer-txt); }
     .th-group-ma { background: var(--math-bg); color: var(--math-txt); }
@@ -329,42 +379,38 @@
     .th-sub-so { background: var(--soc-col); color: var(--soc-txt); }
     .th-sub-ar { background: var(--art-col); color: var(--art-txt); }
     .th-sub-fo { background: var(--for-col); color: var(--for-txt); }
-    .th-sub-res { background: #f8fafc; color: var(--res-txt); }
+    .th-sub-res { background: var(--surface-elevated); color: var(--res-txt); }
 
     .coef-row {
-      background: #f8fafc;
+      background: var(--surface-elevated);
       font-size: 11px;
       font-weight: bold;
-      color: #64748b;
+      color: var(--text-muted);
       height: 32px;
     }
-    .coef-tag {
-      display: inline-block;
-      padding: 1px 5px;
-      border-radius: 4px;
-      font-weight: bold;
-    }
-    .coef-zero { color: #94a3b8; }
-    .coef-active { color: #2563eb; font-weight: bold; }
+    .coef-tag { display: inline-block; padding: 1px 5px; border-radius: 4px; font-weight: bold; }
+    .coef-zero { color: var(--text-muted); opacity: 0.6; }
+    .coef-active { color: #0284c7; font-weight: bold; }
 
     .score-box {
       width: 44px;
       height: 30px;
       text-align: center;
       border-radius: 8px;
-      border: 1.5px solid #cbd5e1;
+      border: 1.5px solid var(--border);
       font-size: 13.5px;
       font-weight: bold;
       font-family: inherit;
       outline: none;
       transition: all 0.15s ease;
-      background: #ffffff;
+      background: var(--surface);
+      color: var(--text);
       touch-action: manipulation;
     }
     .score-box:focus {
-      border-color: #2563eb !important;
-      box-shadow: 0 0 0 3px rgba(37,99,235,0.15);
-      background: #eff6ff !important;
+      border-color: #0284c7 !important;
+      box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.2);
+      background: var(--surface-elevated) !important;
     }
     
     .box-kh { border-color: var(--khmer-brd); }
@@ -375,17 +421,18 @@
     .box-fo { border-color: var(--for-brd); }
 
     .score-box.filled {
-      background: #fef9c3;
+      background: rgba(245, 158, 11, 0.12);
       border-color: #f59e0b;
-      color: #92400e;
+      color: #d97706;
     }
+    [data-theme="dark"] .score-box.filled { color: #fbbf24; }
 
-    .col-res-tot   { min-width: 75px !important; font-size: 13px; color: #475569; }
-    .col-res-avg   { min-width: 75px !important; font-size: 13.5px; font-weight: bold; color: #0f172a; }
+    .col-res-tot   { min-width: 75px !important; font-size: 13px; color: var(--text-muted); }
+    .col-res-avg   { min-width: 75px !important; font-size: 13.5px; font-weight: bold; color: var(--text); }
     .col-res-rank  { min-width: 75px !important; font-size: 13.5px; font-weight: bold; color: #dc2626; }
     .col-res-grade { min-width: 85px !important; }
     .col-res-note  { min-width: 75px !important; font-size: 12.5px; }
-    .col-res-abs   { min-width: 65px !important; font-size: 12.5px; color: #b91c1c; font-weight: bold; }
+    .col-res-abs   { min-width: 65px !important; font-size: 12.5px; color: #dc2626; font-weight: bold; }
     
     .badge-grade {
       display: inline-block;
@@ -395,55 +442,57 @@
       font-size: 11.5px;
       white-space: nowrap;
     }
-    .grade-a { background: #dcfce7; color: #15803d; }
-    .grade-b { background: #ecfdf5; color: #047857; }
-    .grade-c { background: #eff6ff; color: #1d4ed8; }
-    .grade-d { background: #fef3c7; color: #b45309; }
-    .grade-e { background: #fed7aa; color: #c2410c; }
-    .grade-f { background: #fee2e2; color: #b91c1c; }
+    .grade-a { background: rgba(22, 163, 74, 0.15); color: #16a34a; }
+    .grade-b { background: rgba(16, 185, 129, 0.15); color: #10b981; }
+    .grade-c { background: rgba(2, 132, 199, 0.15); color: #0284c7; }
+    .grade-d { background: rgba(217, 119, 6, 0.15); color: #d97706; }
+    .grade-e { background: rgba(234, 88, 12, 0.15); color: #ea580c; }
+    .grade-f { background: rgba(220, 38, 38, 0.15); color: #dc2626; }
 
     .status-pass { color: #16a34a; font-weight: bold; }
     .status-fail { color: #dc2626; font-weight: bold; }
 
-    .dr:hover { background-color: #f1f5f9; }
-    .dr:hover .stk { background-color: #f1f5f9; }
-    .focused-row { background-color: #e0f2fe !important; }
-    .focused-row .stk { background-color: #e0f2fe !important; }
+    .dr:hover { background-color: var(--surface-elevated); }
+    .dr:hover .stk { background-color: var(--surface-elevated) !important; }
+    .focused-row { background-color: rgba(2, 132, 199, 0.08) !important; }
+    .focused-row .stk { background-color: rgba(2, 132, 199, 0.08) !important; }
 
-    /* 🌟 បាតតារាង Buffer 80px ធានាថាមិនបាំងសិស្សចុងក្រោយឡើយ */
     .table-footer-buffer {
       height: 80px !important;
-      background: #f8fafc;
-      color: #64748b;
+      background: var(--surface-elevated);
+      color: var(--text-muted);
       font-weight: 700;
       font-size: 12px;
-      border: 1px solid #cbd5e1;
+      border: 1px solid var(--border);
       text-align: center;
       vertical-align: middle;
     }
 
-    /* ================= 🖨️ REPORT VIEWER ================= */
+    /* ================= REPORT VIEWER ================= */
     #scoreReportModal {
       display: none;
       position: fixed;
       inset: 0;
-      background: #090d16;
+      background: rgba(9, 14, 23, 0.85);
+      backdrop-filter: blur(6px);
       z-index: 3000;
       overflow-y: auto;
-      padding: 10px 10px 40px;
+      padding: 14px 14px 40px;
     }
     .viewer-top-bar {
       position: sticky;
       top: 0;
-      background: #111827;
-      color: #fff;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text);
       padding: 10px 16px;
-      border-radius: 12px;
+      border-radius: 14px;
       display: flex;
       align-items: center;
       justify-content: space-between;
       margin-bottom: 16px;
       z-index: 100;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.25);
     }
     .report-paper-container {
       background: #ffffff;
@@ -452,8 +501,8 @@
       min-height: 210mm;
       margin: 0 auto;
       padding: 10mm 12mm;
-      border-radius: 4px;
-      box-shadow: 0 10px 35px rgba(0,0,0,0.7);
+      border-radius: 6px;
+      box-shadow: 0 10px 35px rgba(0,0,0,0.6);
       color: #0f172a;
       font-size: 11px;
     }
@@ -499,7 +548,7 @@
 
     .clean-lunar-input {
       font-family: inherit;
-      font-size: 12.5px;
+      font-size: 12px;
       font-weight: bold;
       color: #1e3a8a;
       border: none !important;
@@ -555,8 +604,13 @@
   <!-- ══════════════ 1. LANDING PAGE ══════════════ -->
   <div id="landingPage">
     <div class="landing-header">
-      <h1 class="f-moul">ស្រង់ពិន្ទុ</h1>
-      <p>បញ្ចូលពិន្ទុសិស្ស តាមប្រភេទនីមួយៗ</p>
+      <div>
+        <h1 class="f-moul">ស្រង់ពិន្ទុ</h1>
+        <p>បញ្ចូលពិន្ទុសិស្សប្រចាំខែ និងឆមាស</p>
+      </div>
+      <div class="assigned-class-badge" id="landingClassBadge">
+        ថ្នាក់ទី...
+      </div>
     </div>
 
     <div class="cards-wrapper">
@@ -564,12 +618,12 @@
         <div class="card-top">
           <div class="card-icon m">📋</div>
           <div class="card-info">
-            <h2 class="f-moul" style="color: #0369a1;">ស្រង់ពិន្ទុខែ</h2>
-            <p>ពិន្ទុប្រចាំខែ តាមមុខវិជ្ជា</p>
+            <h2 class="f-moul" style="color: #0284c7;">ស្រង់ពិន្ទុខែ</h2>
+            <p>ពិន្ទុប្រចាំខែតាមមុខវិជ្ជា</p>
           </div>
         </div>
         <div class="card-bottom">
-          <span class="card-badge">សីហា · រួចរាល់</span>
+          <span class="card-badge" id="monthlyBadgeText">ខែបច្ចុប្បន្ន</span>
           <span class="card-arrow">➔</span>
         </div>
       </div>
@@ -578,12 +632,12 @@
         <div class="card-top">
           <div class="card-icon s">📝</div>
           <div class="card-info">
-            <h2 class="f-moul" style="color: #6d28d9;">ស្រង់ពិន្ទុឆមាស</h2>
+            <h2 class="f-moul" style="color: #7c3aed;">ស្រង់ពិន្ទុឆមាស</h2>
             <p>ពិន្ទុប្រឡងឆមាសទី១ និងទី២</p>
           </div>
         </div>
         <div class="card-bottom">
-          <span class="card-badge">ឆមាសទី១ · រួចរាល់</span>
+          <span class="card-badge">ឆមាសទី ១ / ២</span>
           <span class="card-arrow">➔</span>
         </div>
       </div>
@@ -599,7 +653,8 @@
         <div class="tb-left">
           <button class="action-btn btn-back" onclick="goBackLanding()">⬅ ត្រឡប់</button>
           
-          <select id="classSelect" onchange="loadStudents()" class="pill-select">
+          <!-- 🌟 បញ្ជីរើសថ្នាក់ (ចាក់សោសម្រាប់គ្រូ និងបើកចំហសម្រាប់ Admin) -->
+          <select id="classSelect" onchange="loadStudents()" class="pill-select" title="ជ្រើសរើសថ្នាក់">
             <option value="">កំពុងទាញយកថ្នាក់...</option>
           </select>
 
@@ -611,7 +666,7 @@
             <option value="ឧសភា">ឧសភា</option>
             <option value="មិថុនា">មិថុនា</option>
             <option value="កក្កដា">កក្កដា</option>
-            <option value="សីហា" selected>សីហា</option>
+            <option value="សីហា">សីហា</option>
             <option value="កញ្ញា">កញ្ញា</option>
             <option value="តុលា">តុលា</option>
             <option value="វិច្ឆិកា">វិច្ឆិកា</option>
@@ -640,7 +695,7 @@
 
       <!-- Table Scroll Area -->
       <div id="tableArea" class="table-scroll-wrap">
-        <div style="text-align:center; padding: 50px; color:#64748b;">កំពុងដំណើរការទិន្នន័យ...</div>
+        <div style="text-align:center; padding: 50px; color:var(--text-muted);">កំពុងដំណើរការទិន្នន័យ...</div>
       </div>
 
     </div>
@@ -653,7 +708,7 @@
       <div style="display:flex; gap:8px;">
         <button class="action-btn" style="background:#0284c7; color:#fff; border-color:#0369a1;" onclick="downloadScorePDF()">📄 ទាញយក PDF</button>
         <button class="action-btn" style="background:#16a34a; color:#fff; border-color:#15803d;" onclick="exportToExcel()">📥 Excel</button>
-        <button class="action-btn" style="background:#9333ea; color:#fff; border-color:#7e22ce;" onclick="window.print()">🖨️ បោះពុម្ព</button>
+        <button class="action-btn" style="background:#7c3aed; color:#fff; border-color:#6d28d9;" onclick="window.print()">🖨️ បោះពុម្ព</button>
       </div>
     </div>
     <div class="report-paper-container" id="printableScorePaper"></div>
@@ -661,20 +716,41 @@
 
   <script>
     /* =========================================================
-       🔑 កំណត់ SESSION & AUTH
+       🔑 កំណត់ SESSION, AUTH & ROLE (គ្រូ vs ADMIN)
     ========================================================= */
-    var TOKEN = (window.parent && window.parent.SESSION_TOKEN) || localStorage.getItem('krou_session_token') || "";
+    const urlParams = new URLSearchParams(window.location.search);
+    var TOKEN = urlParams.get('token') || (window.parent && window.parent.SESSION_TOKEN) || localStorage.getItem('krou_session_token') || localStorage.getItem('school_persistent_token') || "";
     var USER_ROLE = (window.parent && window.parent.USER_ROLE) || localStorage.getItem('krou_user_role') || "teacher";
-    var USER_CLASS = localStorage.getItem('krou_user_class') || "";
+    
+    // 🌟 ទាញយកថ្នាក់ចាត់តាំងឱ្យត្រូវជាមួយ Parent Shell
+    var USER_CLASS = (window.parent && window.parent.ASSIGNED_CLASS) || localStorage.getItem('krou_assigned_class') || localStorage.getItem('krou_user_class') || "";
     var TEACHER_NAME = (window.parent && window.parent.TEACHER_NAME) || localStorage.getItem('krou_teacher_name') || "";
+    var IS_ADMIN = String(USER_ROLE).toLowerCase().trim() === 'admin';
 
+    var KHMER_MONTHS = ['មករា','កុម្ភៈ','មីនា','មេសា','ឧសភា','មិថុនា','កក្កដា','សីហា','កញ្ញា','តុលា','វិច្ឆិកា','ធ្នូ'];
     var KHMER_DIGITS = ['០','១','២','៣','៤','៥','៦','៧','៨','៩'];
     function toKhmerNum(n) { return String(n).replace(/\d/g, d => KHMER_DIGITS[d]); }
 
+    /* 🎨 THEME SYNC */
+    function applyTheme(th) {
+      document.documentElement.setAttribute('data-theme', th);
+    }
+    applyTheme(urlParams.get('theme') || localStorage.getItem('krou_theme_manual') || 'dark');
+
+    window.addEventListener('message', function(ev) {
+      if (ev.data && ev.data.type === 'THEME_CHANGE') {
+        applyTheme(ev.data.theme);
+      }
+    });
+
+    /* 🔗 ROBUST API CALL ENGINE */
     async function apiCall(action, params = {}) {
       params.token = params.token || TOKEN;
       if (typeof callBackendApi === 'function') {
         return await callBackendApi(action, params);
+      }
+      if (window.parent && typeof window.parent.apiRequest === 'function') {
+        return await window.parent.apiRequest(action, params);
       }
       if (typeof google !== 'undefined' && google.script && google.script.run) {
         return new Promise((resolve, reject) => {
@@ -684,6 +760,13 @@
         });
       }
       throw new Error("ពុំទាន់ភ្ជាប់ API ឡើយ។");
+    }
+
+    /* 📡 បាញ់ដំណឹងទៅកាន់ផ្ទាំងមេ Dashboard ឱ្យ Refresh Real-time */
+    function notifyParentDataChanged() {
+      if (window.parent && window.parent !== window) {
+        window.parent.postMessage({ type: 'DATA_UPDATED', action: 'SCORE_SAVED' }, '*');
+      }
     }
 
     var MONTHLY_GROUPS = [
@@ -797,11 +880,30 @@
     }
 
     window.onload = function() {
+      // 🌟 កំណត់ខែបច្ចុប្បន្នស្វ័យប្រវត្តិ
+      var curMonth = KHMER_MONTHS[new Date().getMonth()];
+      var mSel = document.getElementById('monthSelect');
+      if (mSel) mSel.value = curMonth;
+
+      var bTxt = document.getElementById('monthlyBadgeText');
+      if (bTxt) bTxt.textContent = curMonth + ' · ស្រង់ពិន្ទុ';
+
+      // បង្ហាញ Badge ថ្នាក់នៅទំព័រ Landing
+      var lBadge = document.getElementById('landingClassBadge');
+      if (lBadge) {
+        if (IS_ADMIN) {
+          lBadge.textContent = 'គ្រប់គ្រងគ្រប់ថ្នាក់ (Admin)';
+        } else {
+          var cName = USER_CLASS ? USER_CLASS.replace(/^ថ្នាក់ទី\s*/, '') : 'ទូទៅ';
+          lBadge.textContent = 'ថ្នាក់ទី ' + cName;
+        }
+      }
+
       setupArrowKeys();
       attachNativeTouchScroller(document.getElementById('tableArea'));
     };
 
-    /* 🌟 NATIVE TOUCH SCROLLER (ដោះស្រាយបញ្ហា Sticky Column និង Input Blocking លើ Tablet 100%) */
+    /* 🌟 NATIVE TOUCH SCROLLER */
     function attachNativeTouchScroller(container) {
       if (!container || container._hasTouchListener) return;
       container._hasTouchListener = true;
@@ -822,12 +924,10 @@
         var deltaY = startY - e.touches[0].clientY;
         var deltaX = startX - e.touches[0].clientX;
 
-        // បើម្រាមដៃកម្រើកលើសពី 5px បញ្ជាក់ថាជាការ Scroll មិនមែន Tap ទេ
         if (Math.abs(deltaY) > 5 || Math.abs(deltaX) > 5) {
           container.scrollTop = sTop + deltaY;
           container.scrollLeft = sLeft + deltaX;
 
-          // ដោះ Keyboard ចេញកុំឱ្យរំខានពេលកំពុងអូសតារាង
           if (document.activeElement && document.activeElement.tagName === 'INPUT') {
             document.activeElement.blur();
           }
@@ -856,12 +956,7 @@
       }
 
       initCoefState();
-      var cs = document.getElementById('classSelect');
-      if (!cs.options.length || cs.options[0].value === '') {
-        loadClassList();
-      } else {
-        loadStudents();
-      }
+      loadClassList();
     }
 
     function goBackLanding() {
@@ -878,16 +973,37 @@
       isLocked = !isLocked;
       var btn = document.getElementById('btnLock');
       btn.textContent = isLocked ? '🔒 ចាក់សោ' : '🔓 ដោះសោ';
-      btn.style.background = isLocked ? '#fee2e2' : '#ffffff';
-      btn.style.color = isLocked ? '#b91c1c' : '#1e293b';
+      btn.style.background = isLocked ? 'rgba(239, 68, 68, 0.15)' : 'var(--surface)';
+      btn.style.color = isLocked ? '#ef4444' : 'var(--text)';
       document.querySelectorAll('.score-box').forEach(el => {
         el.disabled = isLocked;
       });
     }
 
+    /* =========================================================
+       🏫 LOAD CLASS LIST (ចាក់សោតាមថ្នាក់ លើកលែងតែ ADMIN)
+    ========================================================= */
     async function loadClassList() {
       var sel = document.getElementById('classSelect');
       sel.innerHTML = '<option value="">កំពុងទាញយកថ្នាក់...</option>';
+
+      var cleanUserClass = (USER_CLASS || '').replace(/^ថ្នាក់ទី\s*/, '').trim();
+
+      // 🌟 ១. ប្រសិនបើជាគ្រូបង្រៀនធម្មតា (មិនមែន Admin) ត្រូវបង្ហាញតែថ្នាក់គាត់ ហើយចាក់សោ (Disabled)
+      if (!IS_ADMIN && cleanUserClass !== '') {
+        sel.innerHTML = '';
+        var opt = document.createElement('option');
+        opt.value = cleanUserClass;
+        opt.textContent = 'ថ្នាក់ទី ' + cleanUserClass;
+        sel.appendChild(opt);
+        sel.value = cleanUserClass;
+        sel.disabled = true; // 🔒 ចាក់សោមិនឱ្យគ្រូរើសថ្នាក់ផ្សេងបានឡើយ!
+        loadStudents();
+        return;
+      }
+
+      // 🌟 ២. ប្រសិនបើជា Admin ត្រូវបើកចំហ (Enabled) និងទាញយកគ្រប់ថ្នាក់ទាំងអស់
+      sel.disabled = false;
       var classes = [];
 
       try {
@@ -903,23 +1019,30 @@
           else if (fallbackRes && Array.isArray(fallbackRes.classes)) classes = fallbackRes.classes;
         }
       } catch (err) {
-        console.warn("Class list fetch warning:", err);
+        console.warn("Class list fetch notice:", err);
       }
 
       if (!classes.length) {
-        classes = (USER_CLASS && USER_CLASS.trim() !== '') ? [USER_CLASS] : ['១', '២', '៣', '៤', '៥', '៦'];
+        classes = cleanUserClass ? [cleanUserClass] : ['១', '២', '៣', '៤ក', '៤ខ', '៥', '៦'];
       }
 
       sel.innerHTML = '';
       classes.forEach(function(c) {
-        var val = c.toString().trim();
+        var val = (typeof c === 'object' && c !== null) ? (c.className || c.name || '') : c.toString().trim();
+        val = val.replace(/^ថ្នាក់ទី\s*/, '').trim();
+        if (!val) return;
         var o = document.createElement('option');
         o.value = val;
-        o.textContent = val.startsWith('ថ្នាក់') ? val : 'ថ្នាក់ទី ' + val;
+        o.textContent = 'ថ្នាក់ទី ' + val;
         sel.appendChild(o);
       });
 
-      if (USER_CLASS) sel.value = USER_CLASS;
+      if (cleanUserClass && Array.from(sel.options).some(o => o.value === cleanUserClass)) {
+        sel.value = cleanUserClass;
+      } else if (sel.options.length > 0) {
+        sel.selectedIndex = 0;
+      }
+
       loadStudents();
     }
 
@@ -953,7 +1076,7 @@
       if (!cls) return;
 
       setAutoSaveStatus('✓ រួចរាល់', 'saved');
-      document.getElementById('tableArea').innerHTML = '<div style="text-align:center; padding: 50px; color:#64748b;">⚡ កំពុងទាញយកទិន្នន័យ...</div>';
+      document.getElementById('tableArea').innerHTML = '<div style="text-align:center; padding: 50px; color:var(--text-muted);">⚡ កំពុងទាញយកទិន្នន័យ...</div>';
 
       try {
         var data = await apiCall('getStudentsForScoreEntrySecured', { token: TOKEN, className: cls, period: period });
@@ -1168,7 +1291,7 @@
         });
       });
 
-      h += '<td class="col-res-tot" style="color:#2563eb; font-weight:bold;" id="totalCoefCount">0</td>'
+      h += '<td class="col-res-tot" style="color:#0284c7; font-weight:bold;" id="totalCoefCount">0</td>'
         +  '<td colspan="' + (RES_COLS.length - 1) + '"></td>'
         +  '</tr>';
 
@@ -1191,16 +1314,16 @@
           var absVal = (studentAbsenceData[s.id] !== undefined && studentAbsenceData[s.id] > 0) ? studentAbsenceData[s.id] : '—';
 
           h += '<tr class="dr" data-id="' + s.id + '">'
-            +  '<td class="stk stk-1" style="color:#64748b;">' + (idx + 1) + '</td>'
+            +  '<td class="stk stk-1" style="color:var(--text-muted);">' + (idx + 1) + '</td>'
             +  '<td class="stk stk-2">' + lastName + '</td>'
             +  '<td class="stk stk-3">' + firstName + '</td>'
-            +  '<td class="stk stk-4" style="font-weight:bold; color:' + (isF ? '#db2777' : '#1e293b') + ';">' + (isF ? 'ស្រី' : 'ប្រុស') + '</td>';
+            +  '<td class="stk stk-4" style="font-weight:bold; color:' + (isF ? '#ec4899' : 'var(--text)') + ';">' + (isF ? 'ស្រី' : 'ប្រុស') + '</td>';
 
           grps.forEach(g => {
             g.cols.forEach(c => {
               var val = sc[c.key] !== undefined ? sc[c.key] : '';
               var isFilled = val !== '' && val !== '.';
-              h += '<td style="background:' + (g.grp === 'kh' ? '#fcfdff' : g.grp === 'ma' ? '#fdfcff' : '#ffffff') + ';">'
+              h += '<td>'
                 +  '<input type="text" inputmode="decimal" autocomplete="off" value="' + val + '"'
                 +  ' data-sid="' + s.id + '" data-key="' + c.key + '"'
                 +  ' class="score-box box-' + g.grp + (isFilled ? ' filled' : '') + '"'
@@ -1223,7 +1346,6 @@
 
       h += '</tbody>';
 
-      // 🌟 ជួរ Buffer 80px ធានាថាសិស្សចុងក្រោយគេនឹងរុញផុតពីរបារ Scrollbar យ៉ាងស្រស់ស្អាត
       if (list.length > 0) {
         h += `<tfoot>
           <tr>
@@ -1237,8 +1359,6 @@
       h += '</table>';
       area.innerHTML = h;
       updateAutoCoef();
-      
-      // 🌟 ភ្ជាប់ Touch Gesture Scroller ទៅលើតារាងភ្លាមៗ
       attachNativeTouchScroller(area);
     }
 
@@ -1341,6 +1461,7 @@
         await apiCall('saveMonthlyScoresSecured', { token: TOKEN, payload: buildPayload(), ...buildPayload() });
         isAutoSaving = false;
         setAutoSaveStatus('✓ បានរក្សាទុក', 'saved');
+        notifyParentDataChanged(); // 🌟 បាញ់ដំណឹងទៅផ្ទាំងមេ
       } catch(err) {
         isAutoSaving = false;
         setAutoSaveStatus('⚠ រក្សាមិនបាន', 'error');
@@ -1363,6 +1484,7 @@
         btn.textContent = '💾 រក្សាទុក';
         btn.disabled = false;
         setAutoSaveStatus('✓ បានរក្សាទុក', 'saved');
+        notifyParentDataChanged(); // 🌟 បាញ់ដំណឹងទៅផ្ទាំងមេ
         var msg = (res && res.message) ? res.message : (typeof res === 'string' ? res : 'រក្សាទុកទិន្នន័យពិន្ទុបានជោគជ័យ');
         alert('✓ ' + msg);
       } catch(err) {
@@ -1373,7 +1495,7 @@
       }
     }
 
-    /* ================= 🖨️ REPORT GENERATION & PRINT ================= */
+    /* ================= REPORT GENERATION & PRINT ================= */
     function openScoreReportModal() {
       var cls = document.getElementById('classSelect').value;
       if (!cls || !displayedStudents.length) {
@@ -1412,7 +1534,6 @@
       var cls = document.getElementById('classSelect').value;
       var period = getSelectedPeriod();
       var grps = groups();
-      var keys = allKeys();
       var ranks = computeRanks();
 
       var currentYear = new Date().getFullYear();
