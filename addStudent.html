@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Battambang:wght@400;600;700;900&display=swap" rel="stylesheet">
 
-  <!-- 📊 SheetJS Library -->
+  <!-- 📊 SheetJS Library (សម្រាប់ Import & Export Excel) -->
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 
   <style>
@@ -258,7 +258,7 @@
     .table-input:focus { border-color: #0284c7; box-shadow: 0 0 0 2px rgba(2,132,199,0.2); }
     .input-left { text-align: left; }
 
-    /* 📸 STUDENT PHOTO THUMBNAIL លើតារាង (ចុចដើម្បី Popup ផ្ទាំងកែប្រែ) */
+    /* 📸 STUDENT PHOTO THUMBNAIL (ចុចលើរូបដើម្បី Popup កែប្រែព័ត៌មាន) */
     .table-photo-box {
       width: 36px; height: 36px; border-radius: 50%; border: 1.5px solid var(--border);
       margin: 0 auto; display: flex; align-items: center; justify-content: center;
@@ -325,82 +325,143 @@
     @keyframes spin { to { transform: rotate(360deg); } }
 
     /* =========================================================
-       🖼️ EDIT MODAL BOX (កែលម្អកន្លែងកែរូបថតឱ្យច្បាស់លាស់)
+       📥 ផ្ទាំង IMPORT ROSTER MODAL
     ========================================================= */
-    .edit-modal-overlay {
+    .import-modal-overlay {
       display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(15, 23, 42, 0.65); backdrop-filter: blur(5px);
-      z-index: 10001; align-items: center; justify-content: center; padding: 14px;
+      background: rgba(15, 23, 42, 0.65); backdrop-filter: blur(6px);
+      z-index: 10002; align-items: center; justify-content: center; padding: 14px;
     }
-    .edit-modal-box {
+    .import-modal-card {
       background: var(--surface); color: var(--text); width: 100%; max-width: 580px;
-      border-radius: 22px; box-shadow: 0 25px 60px rgba(0, 0, 0, 0.35);
-      border: 1.5px solid var(--border); overflow: hidden; max-height: 92vh;
-      display: flex; flex-direction: column; animation: modalZoom 0.18s ease-out;
+      border-radius: 24px; box-shadow: 0 25px 60px rgba(0, 0, 0, 0.35);
+      border: 1px solid var(--border); overflow: hidden; display: flex; flex-direction: column;
+      animation: modalZoom 0.18s ease-out;
     }
     @keyframes modalZoom { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
 
-    .modal-banner {
-      background: #0284c7; color: white; padding: 16px 20px;
-      display: flex; align-items: center; justify-content: space-between;
+    .import-modal-header {
+      padding: 20px 24px 14px; display: flex; align-items: center; justify-content: space-between;
     }
-    .modal-scroll-body {
-      padding: 16px 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 14px;
+    .import-title { font-size: 18px; font-weight: 900; color: var(--text); }
+    .import-close-btn {
+      width: 32px; height: 32px; border-radius: 50%; border: 1px solid var(--border);
+      background: var(--surface-elevated); cursor: pointer; display: flex; align-items: center;
+      justify-content: center; font-size: 14px; color: var(--text-muted); transition: all 0.15s;
+    }
+    .import-close-btn:hover { color: #ef4444; border-color: #ef4444; }
+
+    .import-class-row {
+      padding: 0 24px 14px; display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700;
+      color: var(--text-muted);
+    }
+    .import-class-tag {
+      background: var(--surface-elevated); border: 1px solid var(--border); border-radius: 8px;
+      padding: 3px 10px; font-weight: 800; color: var(--text); font-size: 12.5px;
     }
 
-    /* 📸 PHOTO EDIT SECTION ថ្មី (ច្បាស់លាស់ មិនអាចបាត់បានទេ) */
-    .modal-photo-editor-card {
-      background: var(--surface-elevated); border: 1.5px solid var(--border); border-radius: 16px;
-      padding: 14px 16px; display: flex; align-items: center; gap: 16px;
+    .import-tabs-bar {
+      margin: 0 24px 16px; background: var(--surface-elevated); padding: 5px; border-radius: 14px;
+      display: grid; grid-template-columns: 1fr 1fr; gap: 6px; border: 1px solid var(--border);
     }
-    .modal-avatar-wrapper {
-      position: relative; width: 76px; height: 76px; flex-shrink: 0;
+    .import-tab-btn {
+      height: 38px; border-radius: 10px; border: none; font-size: 13px; font-weight: 700;
+      color: var(--text-muted); background: transparent; cursor: pointer; display: flex;
+      align-items: center; justify-content: center; gap: 7px; transition: all 0.15s;
     }
-    .modal-avatar-circle {
-      width: 100%; height: 100%; border-radius: 50%; border: 3px solid var(--surface);
-      background: #c2410c; color: white; display: flex; align-items: center;
-      justify-content: center; font-size: 32px; font-weight: 800;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.18); overflow: hidden; cursor: pointer;
-    }
-    .modal-avatar-circle img { width: 100%; height: 100%; object-fit: cover; }
-    .modal-camera-badge {
-      position: absolute; bottom: 0; right: 0; width: 26px; height: 26px;
-      background: #0284c7; border: 2px solid var(--surface); border-radius: 50%;
-      color: white; display: flex; align-items: center; justify-content: center;
-      font-size: 12px; cursor: pointer; box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+    .import-tab-btn.active {
+      background: var(--surface); color: var(--text); box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      font-weight: 800;
     }
 
-    .modal-photo-controls { flex: 1; }
-    .modal-photo-title { font-size: 14.5px; font-weight: 800; color: var(--text); margin-bottom: 3px; }
-    .modal-photo-desc { font-size: 11.5px; color: var(--text-muted); margin-bottom: 8px; line-height: 1.4; }
-    .modal-photo-btn-group { display: flex; gap: 8px; flex-wrap: wrap; }
-    .btn-photo-action {
-      height: 32px; padding: 0 12px; border-radius: 8px; font-size: 12px; font-weight: 700;
-      cursor: pointer; display: inline-flex; align-items: center; gap: 5px; border: none;
-      transition: all 0.15s;
+    .import-body-content {
+      padding: 0 24px 20px; overflow-y: auto; max-height: calc(85vh - 200px);
     }
-    .btn-photo-change { background: #0284c7; color: white; }
-    .btn-photo-change:hover { background: #0369a1; }
-    .btn-photo-remove { background: rgba(239, 68, 68, 0.12); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.25); }
-    .btn-photo-remove:hover { background: rgba(239, 68, 68, 0.2); }
 
-    .form-section-card {
-      background: var(--surface-elevated); border-radius: 16px; border: 1.5px solid var(--border); padding: 16px;
+    .paste-guide-card {
+      background: var(--surface-elevated); border: 1.5px solid var(--border); border-radius: 18px;
+      padding: 16px; margin-bottom: 12px;
     }
-    .form-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
-    .form-group label { display: block; font-size: 11.5px; font-weight: 700; margin-bottom: 5px; color: var(--text-muted); }
-    .modal-input {
-      width: 100%; height: 40px; border: 1.5px solid var(--border); border-radius: 8px;
-      background: var(--surface); color: var(--text); padding: 0 12px; font-size: 13px; outline: none;
+    .guide-header { display: flex; gap: 12px; align-items: flex-start; margin-bottom: 14px; }
+    .guide-icon-box {
+      width: 36px; height: 36px; border-radius: 50%; background: #2563eb; color: white;
+      display: flex; align-items: center; justify-content: center; font-size: 16px; flex-shrink: 0;
     }
-    .modal-input:focus { border-color: #0284c7; }
-    .modal-footer {
-      padding: 12px 20px; background: var(--surface); border-top: 1px solid var(--border);
-      display: flex; justify-content: flex-end; gap: 10px;
+    .guide-title { font-size: 14px; font-weight: 800; color: var(--text); margin-bottom: 3px; }
+    .guide-sub { font-size: 11.5px; color: var(--text-muted); line-height: 1.5; }
+
+    .numbered-chips-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 14px;
     }
-    .modal-btn { height: 40px; padding: 0 18px; border-radius: 8px; border: none; font-size: 13px; font-weight: 700; cursor: pointer; }
-    .modal-btn-cancel { background: var(--surface-elevated); color: var(--text); border: 1px solid var(--border); }
-    .modal-btn-save { background: #0284c7; color: white; }
+    .num-chip {
+      background: var(--surface); border: 1px solid var(--border); border-radius: 8px;
+      padding: 7px 8px; font-size: 11px; font-weight: 700; display: flex; align-items: center; gap: 6px;
+      color: var(--text);
+    }
+    .num-chip.primary { background: rgba(37, 99, 235, 0.08); border-color: rgba(37, 99, 235, 0.25); color: #2563eb; }
+    .num-chip .chip-n { font-weight: 900; opacity: 0.8; }
+
+    .import-textarea {
+      width: 100%; height: 160px; border: 1.5px solid var(--border); border-radius: 14px;
+      background: var(--surface); color: var(--text); padding: 12px 14px; font-size: 13.5px;
+      line-height: 1.7; outline: none; resize: vertical; font-family: inherit;
+    }
+    .import-textarea:focus { border-color: #2563eb; }
+
+    .excel-step-card {
+      background: var(--surface-elevated); border: 1.5px solid var(--border); border-radius: 18px;
+      padding: 16px; margin-bottom: 14px; display: flex; gap: 14px;
+    }
+    .step-number-circle {
+      width: 32px; height: 32px; border-radius: 50%; background: #2563eb; color: white;
+      font-weight: 900; font-size: 14px; display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .step-info { flex: 1; }
+    .step-title { font-size: 14px; font-weight: 800; margin-bottom: 4px; color: var(--text); }
+    .step-sub { font-size: 11.5px; color: var(--text-muted); margin-bottom: 12px; line-height: 1.5; }
+    .btn-download-tmpl {
+      background: #2563eb; color: white; border: none; border-radius: 8px; height: 36px;
+      padding: 0 16px; font-size: 12.5px; font-weight: 700; cursor: pointer; display: inline-flex;
+      align-items: center; gap: 6px; transition: background 0.15s;
+    }
+    .btn-download-tmpl:hover { background: #1d4ed8; }
+
+    .dropzone-box {
+      border: 2px dashed #93c5fd; background: rgba(239, 246, 255, 0.4); border-radius: 14px;
+      padding: 24px 16px; text-align: center; cursor: pointer; transition: all 0.15s;
+    }
+    [data-theme="dark"] .dropzone-box { background: rgba(30, 58, 138, 0.15); border-color: #3b82f6; }
+    .dropzone-box:hover { background: rgba(239, 246, 255, 0.8); border-color: #2563eb; }
+    .dropzone-cloud { font-size: 32px; color: #2563eb; margin-bottom: 6px; }
+    .dropzone-title { font-size: 13.5px; font-weight: 800; color: var(--text); margin-bottom: 2px; }
+    .dropzone-types { font-size: 12px; color: var(--text-muted); }
+
+    .plp-note-box {
+      margin-top: 10px; display: flex; gap: 8px; font-size: 11.5px; color: #0d9488;
+      line-height: 1.5; font-weight: 600;
+    }
+
+    .import-modal-footer {
+      padding: 14px 24px 20px; display: flex; align-items: center; justify-content: space-between;
+      border-top: 1px solid var(--border);
+    }
+    .btn-modal-cancel {
+      background: transparent; border: none; font-size: 13.5px; font-weight: 700;
+      color: var(--text-muted); cursor: pointer; padding: 8px 16px;
+    }
+    .btn-modal-cancel:hover { color: var(--text); }
+
+    .btn-modal-submit {
+      background: #3b82f6; color: white; border: none; border-radius: 10px; height: 42px;
+      padding: 0 22px; font-size: 13.5px; font-weight: 800; cursor: pointer;
+      display: inline-flex; align-items: center; gap: 6px; transition: all 0.15s;
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+    }
+    .btn-modal-submit:disabled {
+      background: #93c5fd; cursor: not-allowed; box-shadow: none; opacity: 0.8;
+    }
+    .btn-modal-submit:not(:disabled):hover { background: #2563eb; }
 
     /* =========================================================
        📅 KHMER CALENDAR POPUP MODAL
@@ -473,10 +534,62 @@
     }
     .toast-notification.show { transform: translateY(0); opacity: 1; }
 
+    /* ⚠️ MODALS */
+    .missing-modal-overlay, .edit-modal-overlay {
+      display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.65); backdrop-filter: blur(4px);
+      z-index: 10001; align-items: center; justify-content: center; padding: 12px;
+    }
+    .missing-modal-box, .edit-modal-box {
+      background: var(--surface); color: var(--text); width: 100%; max-width: 600px; border-radius: 20px;
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.35); overflow: hidden;
+      max-height: 90vh; display: flex; flex-direction: column; animation: modalPop 0.2s ease-out;
+      border: 1.5px solid var(--border);
+    }
+    @keyframes modalPop { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+
+    .modal-banner {
+      background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
+      color: white; padding: 16px 20px; display: flex; align-items: center; justify-content: space-between;
+    }
+    .modal-scroll-body { padding: 16px; overflow-y: auto; display: flex; flex-direction: column; gap: 14px; }
+    .profile-card { background: var(--surface-elevated); border-radius: 16px; border: 1.5px solid var(--border); overflow: hidden; text-align: center; padding-bottom: 14px; }
+    .profile-card-top { height: 60px; background: linear-gradient(135deg, #0284c7, #2563eb); }
+    .avatar-wrapper { position: relative; width: 90px; height: 90px; margin: -45px auto 8px; }
+    .avatar-circle {
+      width: 100%; height: 100%; border-radius: 50%; border: 4px solid var(--surface);
+      background: #c2410c; color: white; display: flex; align-items: center;
+      justify-content: center; font-size: 36px; font-weight: 700;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15); overflow: hidden;
+    }
+    .avatar-circle img { width: 100%; height: 100%; object-fit: cover; }
+    .camera-badge {
+      position: absolute; bottom: 2px; right: 2px; width: 28px; height: 28px;
+      background: #0284c7; border: 2.5px solid var(--surface); border-radius: 50%;
+      color: white; display: flex; align-items: center; justify-content: center;
+      font-size: 13px; cursor: pointer; box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    }
+    .profile-name-text { font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 2px; }
+
+    .form-section-card { background: var(--surface-elevated); border-radius: 16px; border: 1.5px solid var(--border); padding: 16px; }
+    .form-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+    .form-group label { display: block; font-size: 11.5px; font-weight: 700; margin-bottom: 5px; color: var(--text-muted); }
+    .modal-input {
+      width: 100%; height: 40px; border: 1.5px solid var(--border); border-radius: 8px;
+      background: var(--surface); color: var(--text); padding: 0 12px; font-size: 13px; outline: none;
+    }
+    .modal-footer {
+      padding: 12px 16px; background: var(--surface); border-top: 1px solid var(--border);
+      display: flex; justify-content: flex-end; gap: 10px;
+    }
+    .modal-btn { height: 40px; padding: 0 18px; border-radius: 8px; border: none; font-size: 13px; font-weight: 700; cursor: pointer; }
+    .modal-btn-cancel { background: var(--surface-elevated); color: var(--text); border: 1px solid var(--border); }
+    .modal-btn-save { background: #0284c7; color: white; }
+
     @media (max-width: 768px) {
       .top-controls { grid-template-columns: 1fr 1fr; }
       .search-box { grid-column: 1 / -1; }
-      .form-row-2 { grid-template-columns: 1fr; }
+      .numbered-chips-grid { grid-template-columns: 1fr 1fr; }
     }
   </style>
 </head>
@@ -484,6 +597,10 @@
 
   <!-- 🌟 TOAST NOTIFICATION -->
   <div id="toastNotification" class="toast-notification"></div>
+
+  <!-- 🌟 HIDDEN FILE INPUTS -->
+  <input type="file" id="rowPhotoFileInput" accept="image/*" style="display:none;" onchange="onRowPhotoFileSelected(this)">
+  <input type="file" id="excelRosterFileInput" accept=".xlsx, .xls" style="display:none;" onchange="onExcelFileSelected(this)">
 
   <!-- 🌟 HEADER NAVIGATION -->
   <div class="top-nav">
@@ -555,6 +672,10 @@
         <span class="count-box" id="newRowCount">1</span>
       </button>
 
+      <button class="btn-action btn-import-roster" onclick="openImportModal()">
+        <span>📥</span> <span>បញ្ចូលបញ្ជីសិស្ស</span>
+      </button>
+
       <button class="btn-action btn-sort" onclick="sortStudentsAlphabetical()">
         <span>⇅</span> <span>តម្រៀប (ក-អ)</span>
       </button>
@@ -624,43 +745,156 @@
     </table>
   </div>
 
-  <!-- 🖼️ EDIT MODAL BOX (មានកន្លែងកែរូបថតច្បាស់លាស់ ១០០%) -->
+  <!-- 📥 ផ្ទាំង IMPORT ROSTER MODAL -->
+  <div class="import-modal-overlay" id="importModalOverlay">
+    <div class="import-modal-card">
+      <div class="import-modal-header">
+        <div class="import-title">បញ្ចូលបញ្ជីសិស្ស</div>
+        <button class="import-close-btn" onclick="closeImportModal()">✕</button>
+      </div>
+
+      <div class="import-class-row">
+        <span>ថ្នាក់</span>
+        <span class="import-class-tag" id="importClassTag">ថ្នាក់ទី៤ក</span>
+      </div>
+
+      <div class="import-tabs-bar">
+        <button class="import-tab-btn" id="tabBtnExcel" onclick="switchImportTab('excel')">
+          <span>📄</span> <span>ឯកសារ Excel</span>
+        </button>
+        <button class="import-tab-btn active" id="tabBtnPaste" onclick="switchImportTab('paste')">
+          <span>📋</span> <span>បិទភ្ជាប់បញ្ជីឈ្មោះ</span>
+        </button>
+      </div>
+
+      <div class="import-body-content">
+        <!-- 📋 TAB 2: បិទភ្ជាប់បញ្ជីឈ្មោះ -->
+        <div id="tabContentPaste">
+          <div class="paste-guide-card">
+            <div class="guide-header">
+              <div class="guide-icon-box">📋</div>
+              <div>
+                <div class="guide-title">វាយ ឬបិទភ្ជាប់ មួយនាក់ក្នុងមួយបន្ទាត់</div>
+                <div class="guide-sub">ដកឃ្លា = ក្រឡា ។ ចម្លងជួរពី Excel ក៏បាន ។ ត្រូវការតែ គោត្តនាម នាម ភេទ • សល់បំពេញក្នុងតារាងក្រោយក៏បាន ។</div>
+              </div>
+            </div>
+
+            <div class="numbered-chips-grid">
+              <div class="num-chip primary"><span class="chip-n">1</span> គោត្តនាម *</div>
+              <div class="num-chip primary"><span class="chip-n">2</span> នាម *</div>
+              <div class="num-chip primary"><span class="chip-n">3</span> ភេទ *</div>
+              <div class="num-chip"><span class="chip-n">4</span> លេខសិស្ស</div>
+              <div class="num-chip"><span class="chip-n">5</span> ទូរស័ព្ទ</div>
+              <div class="num-chip"><span class="chip-n">6</span> ឈ្មោះឪពុក</div>
+              <div class="num-chip"><span class="chip-n">7</span> ទូរស័ព្ទឪពុក</div>
+              <div class="num-chip"><span class="chip-n">8</span> ឈ្មោះម្តាយ</div>
+              <div class="num-chip"><span class="chip-n">9</span> ទូរស័ព្ទម្តាយ</div>
+            </div>
+
+            <textarea class="import-textarea" id="pasteInputText" placeholder="សុខ ចន្ថា ប្រុស&#10;ចាន់ ដារ៉ា ស្រី 012345678&#10;រស់ សុភាព" oninput="onPasteTextInput()"></textarea>
+          </div>
+        </div>
+
+        <!-- 📄 TAB 1: ឯកសារ EXCEL -->
+        <div id="tabContentExcel" style="display:none;">
+          <div class="excel-step-card">
+            <div class="step-number-circle">1</div>
+            <div class="step-info">
+              <div class="step-title">ទាញយកគំរូ រួចបំពេញឈ្មោះសិស្ស</div>
+              <div class="step-sub">បើមាន file បញ្ជីសិស្សពី PLP រួចហើយ មិនបាច់ទាញយកគំរូទេ ។</div>
+              <button class="btn-download-tmpl" onclick="downloadExcelTemplate()">
+                <span>📥</span> <span>ទាញយកគំរូ Excel</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="excel-step-card" style="flex-direction:column; gap:8px;">
+            <div style="display:flex; gap:14px;">
+              <div class="step-number-circle">2</div>
+              <div class="step-info">
+                <div class="step-title">Upload គំរូដែលបំពេញរួច (.xlsx)</div>
+              </div>
+            </div>
+
+            <div class="dropzone-box" onclick="document.getElementById('excelRosterFileInput').click()">
+              <div class="dropzone-cloud">☁️</div>
+              <div class="dropzone-title">ចុចទីនេះ ដើម្បីជ្រើស file</div>
+              <div class="dropzone-types">.xlsx ឬ .xls</div>
+            </div>
+
+            <div class="plp-note-box">
+              <span>📄</span>
+              <span>មាន file ពី PLP (បញ្ជីសិស្សនាំចេញ ឬគំរូនាំចូលសិស្សរបស់ PLP)? ដាក់ file នោះចូលបានតែម្តង មិនបាច់ចម្លងចូលគំរូទេ ។</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="import-modal-footer">
+        <button class="btn-modal-cancel" onclick="closeImportModal()">បោះបង់</button>
+        <button class="btn-modal-submit" id="btnSubmitImport" disabled onclick="submitImportStudents()">
+          នាំចូល 0 នាក់
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 📅 KHMER CALENDAR POPUP MODAL -->
+  <div class="khmer-cal-popup" id="khmerCalPopup">
+    <div class="cal-header-controls">
+      <select class="cal-select" id="calMonthSelect" onchange="onCalMonthYearChange()"></select>
+      <select class="cal-select" id="calYearSelect" onchange="onCalMonthYearChange()"></select>
+    </div>
+    <div class="cal-subtitle" id="calSubtitle">តុលា 2026</div>
+    <div class="cal-grid-weekdays">
+      <span>អា</span><span>ច</span><span>អ</span><span>ព</span><span>ព្រ</span><span>សុ</span><span>ស</span>
+    </div>
+    <div class="cal-grid-days" id="calGridDays"></div>
+    <div class="cal-footer-box">
+      <button type="button" class="cal-btn-today" onclick="selectCalToday()">ថ្ងៃនេះ</button>
+    </div>
+  </div>
+
+  <!-- 📱 ARROW KEY BOTTOM BAR -->
+  <div class="bottom-nav-bar" id="bottomNavBar">
+    <button class="bottom-nav-icon-btn" onmousedown="event.preventDefault()" onclick="navigateTable('up')" title="ឡើងលើ">↑</button>
+    <button class="bottom-nav-icon-btn" onmousedown="event.preventDefault()" onclick="navigateTable('left')" title="ទៅឆ្វេង">←</button>
+    <button class="bottom-nav-btn bottom-nav-primary" onmousedown="event.preventDefault()" onclick="navigateTable('down')">↵ ចុះក្រោម</button>
+    <button class="bottom-nav-btn bottom-nav-primary" onmousedown="event.preventDefault()" onclick="navigateTable('right')">→| ទៅមុខ</button>
+    <button class="bottom-nav-icon-btn" onmousedown="event.preventDefault()" style="color:#16a34a; font-size:17px;" onclick="saveAllRows()" title="រក្សាទុក">✓</button>
+  </div>
+
+  <!-- 💬 POPUP ACTION MENU -->
+  <div class="action-popup" id="actionMenu">
+    <div class="action-item" onclick="openEditModalFromMenu()"><span>🪪</span> ប្រវត្តិរូប</div>
+    <div class="action-item" onclick="openEditModalFromMenu()"><span>✏️</span> កែប្រែព័ត៌មាន</div>
+    <div class="action-item delete" onclick="deleteCurrentRow()"><span>🗑️</span> លុបទិន្នន័យ</div>
+  </div>
+
+  <!-- 🖼️ EDIT MODAL BOX (POPUP កែប្រែព័ត៌មាន) -->
   <div class="edit-modal-overlay" id="editModalOverlay">
     <div class="edit-modal-box">
       <div class="modal-banner">
         <div>
-          <div style="font-size:16px; font-weight:800;">កែប្រែព័ត៌មានសិស្ស</div>
-          <div style="font-size:12.5px; opacity:0.9;" id="modalHeaderSub">ឈ្មោះសិស្ស</div>
+          <div style="font-size:15px; font-weight:700;">កែប្រែព័ត៌មានសិស្ស</div>
+          <div style="font-size:12px; opacity:0.85;" id="modalHeaderSub">ឈ្មោះសិស្ស</div>
         </div>
         <button class="btn-cancel-draft" style="color:white; font-size:18px;" onclick="closeEditModal()">✕</button>
       </div>
 
       <div class="modal-scroll-body">
-        <!-- 📸 កន្លែងបង្ហាញ និងកែរូបថតសិស្ស (PHOTO EDITOR CARD) -->
-        <div class="modal-photo-editor-card">
-          <div class="modal-avatar-wrapper">
-            <div class="modal-avatar-circle" id="modalAvatarBox" onclick="document.getElementById('modalPhotoInput').click()" title="ចុចលើរូបដើម្បីប្តូររូបថត">
+        <div class="profile-card">
+          <div class="profile-card-top"></div>
+          <div class="avatar-wrapper">
+            <div class="avatar-circle" id="modalAvatarBox">
               <span id="modalAvatarInitial">ក</span>
             </div>
-            <div class="modal-camera-badge" onclick="document.getElementById('modalPhotoInput').click()" title="ប្តូររូបថត">📷</div>
-          </div>
-          <div class="modal-photo-controls">
-            <div class="modal-photo-title" id="modalProfileNameText">ឈ្មោះសិស្ស</div>
-            <div class="modal-photo-desc">រូបថតត្រូវបានផ្ទុកក្នុងជួរ O នៃ Google Sheet</div>
-            <div class="modal-photo-btn-group">
-              <button type="button" class="btn-photo-action btn-photo-change" onclick="document.getElementById('modalPhotoInput').click()">
-                📷 ជ្រើសរូបថតថ្មី
-              </button>
-              <button type="button" class="btn-photo-action btn-photo-remove" id="btnDeletePhoto" onclick="removeModalPhoto()">
-                🗑️ លុបរូប
-              </button>
-            </div>
-            <!-- Input file លាក់ -->
+            <div class="camera-badge" onclick="document.getElementById('modalPhotoInput').click()" title="ប្តូររូបថត">📷</div>
             <input type="file" id="modalPhotoInput" accept="image/*" style="display:none;" onchange="previewModalPhoto(this)">
           </div>
+          <div class="profile-name-text" id="modalProfileNameText">ឈ្មោះសិស្ស</div>
         </div>
 
-        <!-- 📝 ព័ត៌មានលម្អិតសិស្ស -->
         <div class="form-section-card">
           <div class="form-row-2">
             <div class="form-group"><label>គោត្តនាម *</label><input type="text" class="modal-input" id="modalLastName"></div>
@@ -699,38 +933,6 @@
     </div>
   </div>
 
-  <!-- 📅 KHMER CALENDAR POPUP MODAL -->
-  <div class="khmer-cal-popup" id="khmerCalPopup">
-    <div class="cal-header-controls">
-      <select class="cal-select" id="calMonthSelect" onchange="onCalMonthYearChange()"></select>
-      <select class="cal-select" id="calYearSelect" onchange="onCalMonthYearChange()"></select>
-    </div>
-    <div class="cal-subtitle" id="calSubtitle">តុលា 2026</div>
-    <div class="cal-grid-weekdays">
-      <span>អា</span><span>ច</span><span>អ</span><span>ព</span><span>ព្រ</span><span>សុ</span><span>ស</span>
-    </div>
-    <div class="cal-grid-days" id="calGridDays"></div>
-    <div class="cal-footer-box">
-      <button type="button" class="cal-btn-today" onclick="selectCalToday()">ថ្ងៃនេះ</button>
-    </div>
-  </div>
-
-  <!-- 📱 ARROW KEY BOTTOM BAR -->
-  <div class="bottom-nav-bar" id="bottomNavBar">
-    <button class="bottom-nav-icon-btn" onmousedown="event.preventDefault()" onclick="navigateTable('up')" title="ឡើងលើ">↑</button>
-    <button class="bottom-nav-icon-btn" onmousedown="event.preventDefault()" onclick="navigateTable('left')" title="ទៅឆ្វេង">←</button>
-    <button class="bottom-nav-btn bottom-nav-primary" onmousedown="event.preventDefault()" onclick="navigateTable('down')">↵ ចុះក្រោម</button>
-    <button class="bottom-nav-btn bottom-nav-primary" onmousedown="event.preventDefault()" onclick="navigateTable('right')">→| ទៅមុខ</button>
-    <button class="bottom-nav-icon-btn" onmousedown="event.preventDefault()" style="color:#16a34a; font-size:17px;" onclick="saveAllRows()" title="រក្សាទុក">✓</button>
-  </div>
-
-  <!-- 💬 POPUP ACTION MENU -->
-  <div class="action-popup" id="actionMenu">
-    <div class="action-item" onclick="openEditModalFromMenu()"><span>🪪</span> ប្រវត្តិរូប</div>
-    <div class="action-item" onclick="openEditModalFromMenu()"><span>✏️</span> កែប្រែព័ត៌មាន</div>
-    <div class="action-item delete" onclick="deleteCurrentRow()"><span>🗑️</span> លុបទិន្នន័យ</div>
-  </div>
-
   <script>
     const BACKEND_URL = "https://script.google.com/macros/s/AKfycbxe6vrQshGAPglgmmZykljXazDNh1ZwWSRdFDAip1WWWRky24lmBo-qicLK3_i10AvT/exec";
 
@@ -744,14 +946,21 @@
     let studentsList = [];
     let rowNumMap = {};
     let activeRowIndex = null;
+    let uploadTargetIndex = null;
     let isTableLocked = false;
-    let modalPhotoBase64 = null; // null: មិនប្តូរ, 'DELETE': លុប, 'data:image...': រូបថ្មី
+    let modalPhotoBase64 = null;
     let currentStatusFilter = 'កំពុងសិក្សា';
     let isMissingFilterActive = false;
     let searchDebounceTimer = null;
     let autoSaveTimers = {};
 
-    function applyTheme(th) { document.documentElement.setAttribute('data-theme', th); }
+    let pendingImportStudents = [];
+    let activeImportTab = 'paste';
+
+    /* 🎨 THEME SYNC */
+    function applyTheme(th) {
+      document.documentElement.setAttribute('data-theme', th);
+    }
     applyTheme(urlParams.get('theme') || localStorage.getItem('krou_theme_manual') || 'dark');
 
     window.addEventListener('message', function(ev) {
@@ -791,10 +1000,12 @@
       let raw = '';
 
       if (typeof s === 'object' && s !== null) {
+        // ចាប់យកតាមឈ្មោះ Field ឬ អក្សរជួរ O
         raw = s['រូបថត'] || s['រូបភាព'] || s.photo || s.photoUrl || s.imageUrl || s.image || 
               s['O'] || s['o'] || s.colO || s.columnO || s.ColumnO || 
               s.picture || s.avatar || s.Photo || s.Image || '';
 
+        // បើសិនជាទិន្នន័យបញ្ជូនមកជា Array (ជួរ O គឺ index ទី ១៤)
         if (!raw && Array.isArray(s)) raw = s[14] || '';
         if (!raw && s.row && Array.isArray(s.row)) raw = s.row[14] || '';
         if (!raw && s.data && Array.isArray(s.data)) raw = s.data[14] || '';
@@ -805,6 +1016,7 @@
       if (!raw) return '';
       raw = String(raw).trim();
 
+      // បើសិនជាមានរូបមន្ត =IMAGE("url") ក្នុង Google Sheet ត្រូវស្រង់យកតែ URL
       const formulaMatch = raw.match(/=IMAGE\s*\(\s*["']?([^"'\)]+)["']?\s*\)/i);
       if (formulaMatch && formulaMatch[1]) {
         raw = formulaMatch[1].trim();
@@ -953,7 +1165,9 @@
 
         if (Array.isArray(rosterRes)) {
           studentsList = rosterRes.map(s => {
+            // 📸 ទាញយករូបថតសិស្សពីជួរ O នៃ Sheet ព័ត៌មានសិស្ស
             const photo = extractStudentPhoto(s);
+
             return {
               ...s,
               dob: formatToInputDate(s.dob),
@@ -973,6 +1187,204 @@
     }
 
     function refreshDataForce() { syncWithBackendParallel(true); }
+
+    /* =========================================================
+       📥 មុខងារ IMPORT ROSTER LOGIC
+    ========================================================= */
+    function openImportModal() {
+      const modal = document.getElementById('importModalOverlay');
+      const classTag = document.getElementById('importClassTag');
+      classTag.innerText = currentSelectedClass ? `ថ្នាក់ទី${currentSelectedClass}` : 'ថ្នាក់ទី៤ក';
+      document.getElementById('pasteInputText').value = '';
+      pendingImportStudents = [];
+      updateSubmitImportBtn(0);
+      switchImportTab('paste');
+      modal.style.display = 'flex';
+    }
+
+    function closeImportModal() {
+      document.getElementById('importModalOverlay').style.display = 'none';
+    }
+
+    function switchImportTab(tab) {
+      activeImportTab = tab;
+      const btnExcel = document.getElementById('tabBtnExcel');
+      const btnPaste = document.getElementById('tabBtnPaste');
+      const contentExcel = document.getElementById('tabContentExcel');
+      const contentPaste = document.getElementById('tabContentPaste');
+
+      if (tab === 'excel') {
+        btnExcel.classList.add('active');
+        btnPaste.classList.remove('active');
+        contentExcel.style.display = 'block';
+        contentPaste.style.display = 'none';
+        updateSubmitImportBtn(pendingImportStudents.length);
+      } else {
+        btnPaste.classList.add('active');
+        btnExcel.classList.remove('active');
+        contentPaste.style.display = 'block';
+        contentExcel.style.display = 'none';
+        onPasteTextInput();
+      }
+    }
+
+    function updateSubmitImportBtn(count) {
+      const btn = document.getElementById('btnSubmitImport');
+      btn.innerText = `នាំចូល ${count} នាក់`;
+      btn.disabled = count <= 0;
+    }
+
+    function onPasteTextInput() {
+      const text = document.getElementById('pasteInputText').value;
+      const lines = text.split('\n').map(l => l.trim()).filter(Boolean);
+
+      const parsed = [];
+      for (let line of lines) {
+        const parts = line.split(/[\t\s]+/).filter(Boolean);
+        if (parts.length < 2) continue;
+
+        let lastName = parts[0] || '';
+        let firstName = parts[1] || '';
+        let gender = 'ស្រី';
+        let studentId = '';
+        let phone = '';
+
+        if (parts.length >= 3) {
+          const g = parts[2];
+          if (g.includes('ប្រុស') || g.toLowerCase() === 'm' || g.toLowerCase() === 'male') gender = 'ប្រុស';
+          else gender = 'ស្រី';
+        }
+
+        if (parts.length >= 4) {
+          if (/^\d{8,11}$/.test(parts[3])) phone = parts[3];
+          else studentId = parts[3];
+        }
+        if (parts.length >= 5 && !phone && /^\d{8,11}$/.test(parts[4])) {
+          phone = parts[4];
+        }
+
+        parsed.push({
+          name: `${lastName} ${firstName}`.trim(),
+          sex: gender,
+          id: studentId,
+          phone: phone,
+          grade: currentSelectedClass ? `ថ្នាក់ទី${currentSelectedClass}` : 'ថ្នាក់ទី៤ក',
+          dob: '', pob: '', address: '', photoUrl: '', isDraft: false
+        });
+      }
+
+      pendingImportStudents = parsed;
+      updateSubmitImportBtn(parsed.length);
+    }
+
+    function downloadExcelTemplate() {
+      const headers = [
+        ["ល.រ", "គោត្តនាម", "នាម", "ភេទ", "អត្តលេខ", "ថ្ងៃខែឆ្នាំកំណើត", "ទូរស័ព្ទ", "ទីកន្លែងកំណើត", "អាសយដ្ឋានបច្ចុប្បន្ន"]
+      ];
+      const sample = [
+        [1, "សុខ", "ចន្ថា", "ប្រុស", "001", "2014-05-10", "012345678", "ភ្នំពេញ", "ភ្នំពេញ"],
+        [2, "ចាន់", "ដារ៉ា", "ស្រី", "002", "2014-08-15", "098765432", "កណ្តាល", "កណ្តាល"]
+      ];
+
+      const ws = XLSX.utils.aoa_to_sheet([...headers, ...sample]);
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, "បញ្ជីសិស្ស");
+      XLSX.writeFile(wb, `គំរូបញ្ជីសិស្ស_ថ្នាក់ទី${currentSelectedClass || '៤ក'}.xlsx`);
+    }
+
+    function onExcelFileSelected(input) {
+      const file = input.files[0];
+      if (!file) return;
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const data = new Uint8Array(e.target.result);
+        const workbook = XLSX.read(data, { type: 'array' });
+        const firstSheetName = workbook.SheetNames[0];
+        const worksheet = workbook.Sheets[firstSheetName];
+        const jsonRows = XLSX.utils.sheet_to_json(worksheet, { defval: "" });
+
+        const parsed = [];
+        for (let row of jsonRows) {
+          const lastName = row['គោត្តនាម'] || row['Last Name'] || row['Lastname'] || '';
+          const firstName = row['នាម'] || row['First Name'] || row['Firstname'] || '';
+          let fullName = row['ឈ្មោះ'] || row['ឈ្មោះសិស្ស'] || row['Name'] || '';
+
+          if (!fullName && (lastName || firstName)) {
+            fullName = `${lastName} ${firstName}`.trim();
+          }
+          if (!fullName) continue;
+
+          let gender = row['ភេទ'] || row['Sex'] || row['Gender'] || 'ស្រី';
+          if (gender.includes('ប្រុស') || String(gender).toLowerCase() === 'm') gender = 'ប្រុស';
+          else gender = 'ស្រី';
+
+          const studentId = String(row['អត្តលេខ'] || row['លេខសិស្ស'] || row['ID'] || row['Student ID'] || '');
+          const dob = formatToInputDate(row['ថ្ងៃខែឆ្នាំកំណើត'] || row['DOB'] || row['ថ្ងៃកំណើត'] || '');
+          const phone = String(row['ទូរស័ព្ទ'] || row['Phone'] || '');
+          const pob = String(row['ទីកន្លែងកំណើត'] || row['POB'] || '');
+          const addr = String(row['អាសយដ្ឋានបច្ចុប្បន្ន'] || row['Address'] || '');
+
+          parsed.push({
+            name: fullName,
+            sex: gender,
+            id: studentId,
+            dob: dob,
+            phone: phone,
+            pob: pob,
+            address: addr,
+            grade: currentSelectedClass ? `ថ្នាក់ទី${currentSelectedClass}` : 'ថ្នាក់ទី៤ក',
+            photoUrl: '', isDraft: false
+          });
+        }
+
+        pendingImportStudents = parsed;
+        updateSubmitImportBtn(parsed.length);
+        showToast(`📊 បានអានទិន្នន័យសិស្ស ${parsed.length} នាក់ពី Excel!`);
+      };
+      reader.readAsArrayBuffer(file);
+      input.value = '';
+    }
+
+    async function submitImportStudents() {
+      if (pendingImportStudents.length === 0) return;
+
+      const submitBtn = document.getElementById('btnSubmitImport');
+      submitBtn.disabled = true;
+      submitBtn.innerHTML = `<span class="spinner-dark" style="width:14px;height:14px;border-top-color:#fff;"></span> កំពុងនាំចូល...`;
+
+      for (let s of pendingImportStudents) {
+        studentsList.push(s);
+      }
+
+      applyFilterAndRender();
+      closeImportModal();
+      showToast(`🎉 បាននាំចូលសិស្សចំនួន ${pendingImportStudents.length} នាក់ដោយជោគជ័យ!`);
+
+      const tasks = pendingImportStudents.map(s => {
+        const payload = {
+          studentId: s.id,
+          name: s.name,
+          gender: s.sex,
+          dob: s.dob,
+          grade: s.grade,
+          phone: s.phone,
+          pob: s.pob,
+          address: s.address,
+          photoFile: null
+        };
+        return () => apiRequest('submitStudentData', { formData: payload });
+      });
+
+      const CHUNK_SIZE = 5;
+      for (let i = 0; i < tasks.length; i += CHUNK_SIZE) {
+        const chunk = tasks.slice(i, i + CHUNK_SIZE).map(fn => fn());
+        await Promise.all(chunk);
+      }
+
+      notifyParentDataChanged();
+      syncWithBackendParallel(false);
+    }
 
     /* =========================================================
        🚀 AUTO-SAVE & TABLE SYNC
@@ -1027,8 +1439,11 @@
         if (/^\d{4}-\d{2}-\d{2}$/.test(dateVal)) return dateVal;
         const dmy = dateVal.split(/[\/\-.]/);
         if (dmy.length === 3) {
-          if (dmy[2].length === 4) return `${dmy[2]}-${dmy[1].padStart(2, '0')}-${dmy[0].padStart(2, '0')}`;
-          else if (dmy[0].length === 4) return `${dmy[0]}-${dmy[1].padStart(2, '0')}-${dmy[2].padStart(2, '0')}`;
+          if (dmy[2].length === 4) {
+            return `${dmy[2]}-${dmy[1].padStart(2, '0')}-${dmy[0].padStart(2, '0')}`;
+          } else if (dmy[0].length === 4) {
+            return `${dmy[0]}-${dmy[1].padStart(2, '0')}-${dmy[2].padStart(2, '0')}`;
+          }
         }
       }
       const d = new Date(dateVal);
@@ -1225,6 +1640,32 @@
         const age = calculateAge(selectedDate);
         document.getElementById('modalAgeDisplay').innerText = age ? `អាយុ: ${age} ឆ្នាំ` : 'អាយុ: -';
       });
+    }
+
+    function triggerRowPhotoUpload(realIdx) {
+      uploadTargetIndex = realIdx;
+      document.getElementById('rowPhotoFileInput').click();
+    }
+
+    function onRowPhotoFileSelected(input) {
+      const file = input.files[0];
+      if (!file || uploadTargetIndex === null) return;
+      if (file.size > 3 * 1024 * 1024) { alert("ទំហំរូបថតត្រូវតែតូចជាង 3MB!"); return; }
+
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        const base64Data = e.target.result;
+        const s = studentsList[uploadTargetIndex];
+        if (s) {
+          s.photoUrl = base64Data;
+          s.imageUrl = base64Data;
+          applyFilterAndRender();
+          triggerAutoSave(uploadTargetIndex);
+          showToast(`បានបញ្ចូលរូបថតសិស្ស «${s.name || ''}»`);
+        }
+      };
+      reader.readAsDataURL(file);
+      input.value = '';
     }
 
     /* =========================================================
@@ -1431,11 +1872,49 @@
         student: s, realIndex: idx, missing: getMissingFields(s)
       })).filter(item => item.missing.length > 0 && !item.student.isDraft);
 
-      if (missingStudents.length === 0) {
-        showToast("🎉 ព័ត៌មានសិស្សទាំងអស់ត្រូវបានបំពេញពេញលេញ ១០០%!");
-        return;
-      }
+      const modal = document.getElementById('missingModalOverlay');
+      const container = document.getElementById('missingListContainer');
+      document.getElementById('missingModalSub').innerText = `រកឃើញសិស្សខ្វះទិន្នន័យចំនួន ${missingStudents.length} នាក់`;
+      container.innerHTML = '';
 
+      if (missingStudents.length === 0) {
+        container.innerHTML = `<div style="text-align:center; padding:30px; color:#16a34a; font-weight:700;">🎉 ព័ត៌មានសិស្សទាំងអស់ត្រូវបានបំពេញពេញលេញ ១០០%!</div>`;
+      } else {
+        missingStudents.forEach(item => {
+          const s = item.student;
+          let fullName = (s.name || '').trim();
+          let parts = fullName.split(' ');
+          let initial = parts.length > 1 ? parts[1].charAt(0) : (fullName.charAt(0) || 'ក');
+
+          let avatarDisplay = (s.photoUrl || s.imageUrl) 
+            ? `<img src="${s.photoUrl || s.imageUrl}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" alt="avatar" onerror="this.outerHTML='${initial}'">` 
+            : initial;
+
+          const card = document.createElement('div');
+          card.className = 'missing-card';
+          card.innerHTML = `
+            <div style="display:flex;align-items:center;gap:10px;">
+              <div class="avatar-circle" style="width:38px;height:38px;font-size:14px;box-shadow:none;border:1.5px solid var(--border);">${avatarDisplay}</div>
+              <div>
+                <div style="font-weight:700;">${fullName || 'គ្មានឈ្មោះ'} <span style="font-size:11.5px; color:#ea580c;">(${s.id ? 'អត្តលេខ: ' + s.id : 'គ្មានអត្តលេខ'})</span></div>
+                <div style="font-size:11.5px; color:var(--text-muted);">${s.grade || 'មិនទាន់មានថ្នាក់'}</div>
+                <div style="display:flex; gap:4px; margin-top:4px; flex-wrap:wrap;">
+                  ${item.missing.map(f => `<span class="missing-tag-pill">❌ ខ្វះ${f}</span>`).join('')}
+                </div>
+              </div>
+            </div>
+            <button class="bottom-nav-btn" style="background:#0284c7; color:white; height:32px; padding:0 10px;" onclick="closeMissingModal(); openEditModal(${item.realIndex})">✏️ បំពេញ</button>
+          `;
+          container.appendChild(card);
+        });
+      }
+      modal.style.display = 'flex';
+    }
+
+    function closeMissingModal() { document.getElementById('missingModalOverlay').style.display = 'none'; }
+
+    function filterMissingInTableAndClose() {
+      closeMissingModal();
       isMissingFilterActive = !isMissingFilterActive;
       const btn = document.getElementById('missingInfoBtn');
       const btnText = document.getElementById('missingBtnText');
@@ -1484,7 +1963,7 @@
       const tbody = document.getElementById('tableBody');
 
       if (list.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="18" class="status-row">គ្មានទិន្នន័យសិស្សត្រូវបង្ហាញឡើយ! ចុច «➕ បន្ថែមជួរ» ដើម្បីបញ្ចូលថ្មី។</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="18" class="status-row">គ្មានទិន្នន័យសិស្សត្រូវបង្ហាញឡើយ! ចុច «➕ បន្ថែមជួរ» ឬ «📥 បញ្ចូលបញ្ជីសិស្ស» ដើម្បីបញ្ចូលថ្មី។</td></tr>`;
         updateCounters(0, 0);
         return;
       }
@@ -1517,7 +1996,7 @@
         const hasMissingAddr = !s.isDraft && (!s.address || s.address.trim() === '');
         const hasMissingId = !s.isDraft && (!s.id || s.id.trim() === '');
 
-        // 📸 រូបថតសិស្ស (ពីជួរ O នៃ Sheet)
+        // 📸 រូបថតសិស្ស (ពីជួរ O នៃ Sheet ព័ត៌មានសិស្ស)
         const photoUrl = s.photoUrl || s.imageUrl;
         const photoImgHtml = photoUrl
           ? `<img src="${photoUrl}" alt="photo" onerror="this.onerror=null; this.parentElement.innerHTML='${initialBadge}';">`
@@ -1644,12 +2123,9 @@
       }
     }
 
-    /* =========================================================
-       🌟 EDIT MODAL (POPUP កែប្រែព័ត៌មាន & រូបថត)
-    ========================================================= */
+    /* 🌟 EDIT MODAL (POPUP ពេលចុចលើរូបថត ឬ MENU) */
     function openEditModal(realIdx) {
       activeRowIndex = realIdx;
-      modalPhotoBase64 = null; // Reset photo draft state
       const s = studentsList[realIdx];
       if (!s) return;
 
@@ -1662,17 +2138,12 @@
       document.getElementById('modalHeaderSub').innerText = `${lastName} ${firstName}`.trim() || 'គ្មានឈ្មោះ';
       document.getElementById('modalProfileNameText').innerText = `${lastName} ${firstName}`.trim() || 'គ្មានឈ្មោះ';
       
-      // 📸 បង្ហាញរូបថតសិស្សក្នុង Modal
       const avatarBox = document.getElementById('modalAvatarBox');
-      const delBtn = document.getElementById('btnDeletePhoto');
       const photoUrl = s.photoUrl || s.imageUrl;
-
       if (photoUrl) {
         avatarBox.innerHTML = `<img src="${photoUrl}" alt="avatar" onerror="this.onerror=null; this.parentElement.innerHTML='<span id=\\'modalAvatarInitial\\'>${initial}</span>';">`;
-        if (delBtn) delBtn.style.display = 'inline-flex';
       } else {
         avatarBox.innerHTML = `<span id="modalAvatarInitial">${initial}</span>`;
-        if (delBtn) delBtn.style.display = 'none';
       }
 
       document.getElementById('modalLastName').value = lastName;
@@ -1702,36 +2173,18 @@
 
     function openEditModalFromMenu() { if (activeRowIndex !== null) openEditModal(activeRowIndex); }
 
-    /* 📸 PREVIEW PHOTO ពេលរើស FILE ថ្មី */
     function previewModalPhoto(input) {
       const file = input.files[0];
       if (!file) return;
       if (file.size > 3 * 1024 * 1024) { alert("ទំហំរូបថតត្រូវតែតូចជាង ឬស្មើ 3MB!"); return; }
-
       const reader = new FileReader();
       reader.onload = function(e) {
         modalPhotoBase64 = e.target.result;
         document.getElementById('modalAvatarBox').innerHTML = `<img src="${modalPhotoBase64}" alt="avatar">`;
-        const delBtn = document.getElementById('btnDeletePhoto');
-        if (delBtn) delBtn.style.display = 'inline-flex';
       };
       reader.readAsDataURL(file);
-      input.value = '';
     }
 
-    /* 🗑️ REMOVE PHOTO ក្នុង MODAL */
-    function removeModalPhoto() {
-      modalPhotoBase64 = 'DELETE';
-      const s = studentsList[activeRowIndex];
-      const fullName = (s && s.name ? s.name : '').trim();
-      const initial = fullName ? fullName.charAt(0) : 'ក';
-
-      document.getElementById('modalAvatarBox').innerHTML = `<span id="modalAvatarInitial">${initial}</span>`;
-      const delBtn = document.getElementById('btnDeletePhoto');
-      if (delBtn) delBtn.style.display = 'none';
-    }
-
-    /* 💾 SAVE CHANGES ក្នុង MODAL (រួមទាំងរូបថតថ្មី) */
     async function saveModalChanges() {
       if (activeRowIndex === null) return;
 
@@ -1752,19 +2205,9 @@
       s.pob = document.getElementById('modalPob').value.trim();
       s.address = document.getElementById('modalAddress').value.trim();
       s.isDraft = false;
-
-      // 📸 កែប្រែ Link រូបភាពក្នុង State
-      let photoPayloadFile = null;
-      let finalPhotoUrl = s.photoUrl || '';
-
-      if (modalPhotoBase64 === 'DELETE') {
-        s.photoUrl = '';
-        s.imageUrl = '';
-        finalPhotoUrl = '';
-      } else if (modalPhotoBase64 && modalPhotoBase64.startsWith('data:image')) {
+      if (modalPhotoBase64) {
         s.photoUrl = modalPhotoBase64;
         s.imageUrl = modalPhotoBase64;
-        photoPayloadFile = { base64: modalPhotoBase64 };
       }
 
       applyFilterAndRender();
@@ -1780,8 +2223,8 @@
         phone: s.phone,
         pob: s.pob,
         address: s.address,
-        photoUrl: finalPhotoUrl,
-        photoFile: photoPayloadFile
+        photoUrl: s.photoUrl || '',
+        photoFile: modalPhotoBase64 ? { base64: modalPhotoBase64 } : null
       };
 
       const actionToCall = s.rowNum ? 'updateStudentData' : 'submitStudentData';
@@ -1908,6 +2351,10 @@
       }
       const modalOverlay = document.getElementById('editModalOverlay');
       if (e.target === modalOverlay) closeEditModal();
+      const missingOverlay = document.getElementById('missingModalOverlay');
+      if (e.target === missingOverlay) closeMissingModal();
+      const importOverlay = document.getElementById('importModalOverlay');
+      if (e.target === importOverlay) closeImportModal();
     });
 
     function viewHistory(realIdx) { alert(`🕒 ប្រវត្តិការកែប្រែ៖ ${studentsList[realIdx].name || studentsList[realIdx].id}`); }
