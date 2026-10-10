@@ -1,23 +1,45 @@
 <!DOCTYPE html>
-<html lang="km">
+<html lang="km" data-theme="dark">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>ព័ត៌មានសិស្ស</title>
+  <title>ព័ត៌មានសិស្ស - KrouDigital</title>
 
-  <!-- 🔤 Google Fonts Battambang (Khmer OS Battambang) -->
+  <!-- 🔤 Google Fonts Battambang -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Battambang:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Battambang:wght@400;600;700;900&display=swap" rel="stylesheet">
 
   <style>
+    /* =========================================================
+       🎨 THEME VARIABLES & SYSTEM
+    ========================================================= */
     :root {
-      --primary-cyan: #0284c7;
+      --primary: #0284c7;
       --primary-dark: #0369a1;
-      --border-soft: #cbd5e1;
+      --bg: #edf6fc;
+      --surface: #ffffff;
+      --surface-elevated: #f8fafc;
+      --border: #cbd5e1;
       --border-subtle: #e2e8f0;
+      --text: #0f172a;
+      --text-muted: #64748b;
+      --card-shadow: 0 4px 16px rgba(15, 23, 42, 0.04);
       --bg-sticky: #ffffff;
       --bg-header-sticky: #f8fafc;
+    }
+
+    [data-theme="dark"] {
+      --bg: #090e17;
+      --surface: #0f172a;
+      --surface-elevated: #162642;
+      --border: #1a2f4d;
+      --border-subtle: #233f66;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --card-shadow: 0 8px 25px rgba(0, 0, 0, 0.45);
+      --bg-sticky: #0f172a;
+      --bg-header-sticky: #162642;
     }
 
     * {
@@ -29,12 +51,13 @@
     }
 
     body {
-      background-color: #edf6fc;
-      color: #0f172a;
+      background-color: var(--bg);
+      color: var(--text);
       font-size: 13px;
       padding: 10px 12px 60px;
       min-height: 100vh;
       -webkit-font-smoothing: antialiased;
+      transition: background-color 0.25s ease, color 0.25s ease;
     }
 
     /* 🌟 TOP NAVIGATION */
@@ -44,49 +67,51 @@
     }
     .nav-left { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
     .back-btn {
-      background: white; border: 1.5px solid var(--border-subtle); width: 32px; height: 32px;
+      background: var(--surface); border: 1.5px solid var(--border-subtle); width: 32px; height: 32px;
       border-radius: 50%; display: flex; align-items: center; justify-content: center;
-      cursor: pointer; font-size: 13px; color: #475569;
+      cursor: pointer; font-size: 13px; color: var(--text);
     }
     .page-title {
-      font-size: 16px; font-weight: 700; color: var(--primary-cyan); display: flex; align-items: center; gap: 6px;
+      font-size: 16px; font-weight: 700; color: var(--primary); display: flex; align-items: center; gap: 6px;
     }
     .badge-pill {
       font-size: 12px; font-weight: 700; padding: 3px 12px; border-radius: 20px;
     }
-    .badge-total { background: #ede9fe; color: #6366f1; }
-    .badge-female { background: #fce7f3; color: #db2777; }
-    .badge-male { background: #e0f2fe; color: #0284c7; }
-
-    .nav-right { display: flex; align-items: center; gap: 6px; }
-    .icon-btn {
-      background: white; border: 1.5px solid var(--border-subtle); width: 32px; height: 32px;
-      border-radius: 50%; display: flex; align-items: center; justify-content: center;
-      cursor: pointer; color: #475569; font-size: 13px;
-    }
+    .badge-total { background: rgba(99, 102, 241, 0.15); color: #818cf8; }
+    .badge-female { background: rgba(236, 72, 153, 0.15); color: #f472b6; }
+    .badge-male { background: rgba(2, 132, 199, 0.15); color: #38bdf8; }
 
     /* 🎛️ CONTROLS & TOOLBAR */
     .control-card {
-      background: #ffffff; border-radius: 18px; border: 1.5px solid var(--border-subtle);
-      box-shadow: 0 4px 16px rgba(15,23,42,0.03); padding: 12px 14px; margin-bottom: 12px;
+      background: var(--surface); border-radius: 18px; border: 1.5px solid var(--border);
+      box-shadow: var(--card-shadow); padding: 12px 14px; margin-bottom: 12px;
     }
     .top-controls {
-      display: grid; grid-template-columns: 210px 1fr auto auto; gap: 10px; align-items: center; margin-bottom: 10px;
+      display: grid; grid-template-columns: 160px 180px 1fr auto auto; gap: 10px; align-items: center; margin-bottom: 10px;
+    }
+
+    .pill-select-class {
+      background: var(--surface-elevated); border: 1.5px solid var(--border); border-radius: 22px;
+      height: 38px; padding: 0 14px; font-size: 12.5px; font-weight: 700; color: var(--text);
+      outline: none; cursor: pointer; transition: all 0.2s;
+    }
+    .pill-select-class:disabled {
+      opacity: 0.85; cursor: not-allowed; border-color: var(--primary); color: var(--primary);
     }
 
     .status-dropdown-wrapper { position: relative; width: 100%; }
     .status-dropdown-btn {
-      background: #f8fafc; border: 1.5px solid var(--border-soft); border-radius: 22px;
-      height: 38px; padding: 0 16px; font-size: 13px; font-weight: 700; color: #334155;
+      background: var(--surface-elevated); border: 1.5px solid var(--border); border-radius: 22px;
+      height: 38px; padding: 0 16px; font-size: 12.5px; font-weight: 700; color: var(--text);
       display: flex; align-items: center; justify-content: space-between; cursor: pointer;
       user-select: none; transition: border-color 0.15s;
     }
-    .status-dropdown-btn:hover { border-color: #0284c7; }
+    .status-dropdown-btn:hover { border-color: var(--primary); }
     
     .status-dropdown-menu {
-      display: none; position: absolute; top: 46px; left: 0; width: 220px;
-      background: #ffffff; border: 1.5px solid #e2e8f0; border-radius: 18px;
-      box-shadow: 0 14px 32px rgba(15, 23, 42, 0.15); padding: 8px; z-index: 1000;
+      display: none; position: absolute; top: 46px; left: 0; width: 200px;
+      background: var(--surface); border: 1.5px solid var(--border); border-radius: 18px;
+      box-shadow: 0 14px 32px rgba(0, 0, 0, 0.25); padding: 8px; z-index: 1000;
       animation: fadeIn 0.15s ease-out;
     }
     .status-dropdown-menu.show { display: block; }
@@ -94,26 +119,27 @@
 
     .status-item {
       display: flex; align-items: center; justify-content: space-between;
-      padding: 10px 14px; border-radius: 12px; font-size: 13px; font-weight: 700;
-      color: #334155; cursor: pointer; transition: all 0.15s;
+      padding: 9px 12px; border-radius: 12px; font-size: 12.5px; font-weight: 700;
+      color: var(--text); cursor: pointer; transition: all 0.15s;
     }
-    .status-item:hover { background: #f1f5f9; }
-    .status-item.active { background: #e0f2fe; color: #0284c7; }
-    .status-item .check-mark { display: none; font-size: 15px; font-weight: bold; color: #0284c7; }
+    .status-item:hover { background: var(--surface-elevated); }
+    .status-item.active { background: rgba(2, 132, 199, 0.15); color: var(--primary); }
+    .status-item .check-mark { display: none; font-size: 14px; font-weight: bold; color: var(--primary); }
     .status-item.active .check-mark { display: inline-block; }
 
     .search-box {
-      background: #f8fafc; border: 1.5px solid var(--border-soft); border-radius: 22px;
+      background: var(--surface-elevated); border: 1.5px solid var(--border); border-radius: 22px;
       height: 38px; padding: 0 14px; font-size: 13px; display: flex; align-items: center;
     }
-    .search-box input { border: none; background: transparent; outline: none; width: 100%; margin-left: 6px; font-size: 13px; }
+    .search-box input { border: none; background: transparent; outline: none; width: 100%; margin-left: 6px; font-size: 13px; color: var(--text); }
 
     .chip-btn {
-      background: #f8fafc; border: 1.5px solid var(--border-soft); border-radius: 22px;
+      background: var(--surface-elevated); border: 1.5px solid var(--border); border-radius: 22px;
       height: 38px; padding: 0 16px; display: flex; align-items: center; gap: 6px;
-      cursor: pointer; font-size: 12.5px; font-weight: 700; color: #334155; white-space: nowrap;
-      transition: all 0.15s;
+      cursor: pointer; font-size: 12.5px; font-weight: 700; color: var(--text); white-space: nowrap;
+      transition: all 0.15s; user-select: none;
     }
+    .chip-btn:hover { border-color: var(--primary); }
 
     .bottom-toolbar { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; position: relative; }
     .btn-action {
@@ -121,34 +147,35 @@
       font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 6px;
       transition: all 0.15s;
     }
+    .btn-action:active { transform: scale(0.97); }
     .btn-add { background: #0284c7; color: white; }
     .btn-add .count-box { background: #0369a1; padding: 2px 8px; border-radius: 4px; margin-left: 4px; font-size: 11.5px; }
-    .btn-sort { background: #ede9fe; color: #7c3aed; }
-    .btn-columns { background: #e0f2fe; color: #0284c7; border: 1px solid #bae6fd; position: relative; }
-    .btn-import { background: #008080; color: white; }
+    .btn-sort { background: rgba(124, 58, 237, 0.15); color: #a78bfa; }
+    .btn-columns { background: rgba(2, 132, 199, 0.15); color: #38bdf8; border: 1px solid var(--border); }
+    .btn-import { background: #0d9488; color: white; }
     
     .btn-warning {
-      background: #fffbeb; color: #b45309; border: 1.5px solid #fde68a; transition: all 0.15s;
+      background: rgba(245, 158, 11, 0.15); color: #f59e0b; border: 1.5px solid rgba(245, 158, 11, 0.3);
     }
-    .btn-warning:hover { background: #fef3c7; }
-    .btn-warning.active { background: #f59e0b; color: white; border-color: #d97706; }
+    .btn-warning:hover { background: rgba(245, 158, 11, 0.25); }
+    .btn-warning.active { background: #f59e0b; color: white; }
 
     /* 📋 DROPDOWN MENU */
     .column-dropdown {
       display: none; position: absolute; top: 44px; left: 210px; z-index: 1000;
-      background: white; border-radius: 14px; box-shadow: 0 12px 36px rgba(15,23,42,0.18);
-      border: 1px solid var(--border-subtle); width: 220px; padding: 10px;
+      background: var(--surface); border-radius: 14px; box-shadow: 0 12px 36px rgba(0,0,0,0.3);
+      border: 1px solid var(--border); width: 220px; padding: 10px;
     }
-    .dropdown-title { font-size: 12px; font-weight: 700; color: #64748b; padding: 4px 8px 6px; }
+    .dropdown-title { font-size: 12px; font-weight: 700; color: var(--text-muted); padding: 4px 8px 6px; }
     .col-option {
       display: flex; align-items: center; gap: 8px; padding: 7px 10px; border-radius: 8px;
-      cursor: pointer; font-size: 12.5px; color: #334155; font-weight: 700;
+      cursor: pointer; font-size: 12.5px; color: var(--text); font-weight: 700;
     }
-    .col-option:hover { background: #f1f5f9; }
+    .col-option:hover { background: var(--surface-elevated); }
 
     /* 📊 TABLE CONTAINER & STICKY SCROLL BEHAVIOR */
     .table-container {
-      background: white; border-radius: 14px; border: 1px solid var(--border-soft);
+      background: var(--surface); border-radius: 14px; border: 1px solid var(--border);
       overflow: auto; max-height: calc(100vh - 210px);
       -webkit-overflow-scrolling: touch; position: relative;
     }
@@ -156,8 +183,8 @@
 
     thead { position: sticky; top: 0; z-index: 50; }
     thead th {
-      font-size: 12px; font-weight: 700; padding: 6px 4px; border-right: 1px solid var(--border-soft);
-      border-bottom: 1px solid var(--border-soft); vertical-align: middle; white-space: nowrap;
+      font-size: 12px; font-weight: 700; padding: 6px 4px; border-right: 1px solid var(--border);
+      border-bottom: 1px solid var(--border); vertical-align: middle; white-space: nowrap;
     }
 
     /* 📌 STICKY LEFT COLUMNS */
@@ -166,71 +193,68 @@
     .sticky-col-3 { position: sticky; left: 129px; z-index: 20; background: var(--bg-sticky); width: 70px; min-width: 70px; }
     .sticky-col-4 {
       position: sticky; left: 199px; z-index: 20; background: var(--bg-sticky); width: 75px; min-width: 75px;
-      border-right: 2px solid #94a3b8 !important;
-      box-shadow: 4px 0 10px -2px rgba(0, 0, 0, 0.18);
+      border-right: 2px solid var(--border) !important;
+      box-shadow: 4px 0 10px -2px rgba(0, 0, 0, 0.2);
     }
 
     /* 📌 STICKY RIGHT COLUMN - សកម្មភាព */
     .sticky-action {
       position: sticky; right: 0px; z-index: 20; background: var(--bg-sticky); width: 95px; min-width: 95px;
-      border-left: 2px solid #cbd5e1 !important;
-      box-shadow: -4px 0 10px -2px rgba(0, 0, 0, 0.15);
+      border-left: 2px solid var(--border) !important;
+      box-shadow: -4px 0 10px -2px rgba(0, 0, 0, 0.2);
     }
 
     thead .sticky-col-1, thead .sticky-col-2, thead .sticky-col-3, thead .sticky-col-4 {
       z-index: 60; background: var(--bg-header-sticky);
     }
-    thead th.sticky-action { z-index: 60; background: #f1f5f9; color: #334155; }
+    thead th.sticky-action { z-index: 60; background: var(--surface-elevated); color: var(--text); }
 
     .th-vertical {
       writing-mode: vertical-rl; transform: rotate(180deg); text-orientation: mixed; white-space: nowrap;
       height: 70px; line-height: 1; padding: 6px 2px; letter-spacing: 0.5px;
     }
 
-    .th-pob-main { background: #bae6fd; color: #0284c7; font-size: 13.5px; }
-    .th-addr-main { background: #bfdbfe; color: #1d4ed8; font-size: 13.5px; }
-    .th-sub-pob { background: #e0f2fe; color: #0369a1; }
-    .th-sub-addr { background: #dbeafe; color: #1e40af; }
-    .th-academic { background: #fae8ff; color: #86198f; }
+    .th-pob-main { background: rgba(2, 132, 199, 0.18); color: #38bdf8; font-size: 13.5px; }
+    .th-addr-main { background: rgba(37, 99, 235, 0.18); color: #60a5fa; font-size: 13.5px; }
+    .th-sub-pob { background: rgba(2, 132, 199, 0.1); color: #0284c7; }
+    .th-sub-addr { background: rgba(37, 99, 235, 0.1); color: #2563eb; }
+    .th-academic { background: rgba(168, 85, 247, 0.15); color: #c084fc; }
 
     tbody tr { height: 46px; }
-    tbody tr:hover td { background-color: #f0f7ff; }
-    tbody tr:hover td.sticky-action { background-color: #f0f7ff; }
+    tbody tr:hover td { background-color: rgba(2, 132, 199, 0.08); }
+    tbody tr:hover td.sticky-action { background-color: rgba(2, 132, 199, 0.08); }
     tbody td {
-      padding: 3px 5px; border-right: 1px solid #e2e8f0; border-bottom: 1px solid #e2e8f0;
-      vertical-align: middle; font-size: 12.5px; background: white;
+      padding: 3px 5px; border-right: 1px solid var(--border); border-bottom: 1px solid var(--border);
+      vertical-align: middle; font-size: 12.5px; background: var(--surface); color: var(--text);
     }
 
     .table-input {
-      width: 100%; height: 32px; border: 1px solid var(--border-soft); border-radius: 6px;
-      background: white; padding: 0 6px; font-size: 12.5px; outline: none; text-align: center;
+      width: 100%; height: 32px; border: 1px solid var(--border); border-radius: 6px;
+      background: var(--surface-elevated); color: var(--text); padding: 0 6px; font-size: 12.5px; outline: none; text-align: center;
     }
-    .table-input:focus { border-color: #0284c7; box-shadow: 0 0 0 2px rgba(2,132,199,0.15); }
+    .table-input:focus { border-color: #0284c7; box-shadow: 0 0 0 2px rgba(2,132,199,0.2); }
     .input-left { text-align: left; }
 
     .table-input.cell-missing {
       border: 1.5px dashed #ef4444 !important;
-      background-color: #fff1f2 !important;
+      background-color: rgba(239, 68, 68, 0.12) !important;
     }
 
-    /* 🌟 AVATAR BADGE ក្នុងតារាង (បង្ហាញរូបថតពិត ឬអក្សរកាត់) */
     .id-badge-btn {
       background: #ec4899; color: white; width: 24px; height: 24px;
       border-radius: 50%; font-size: 11px; display: inline-flex;
       align-items: center; justify-content: center; font-weight: 700;
       cursor: pointer; border: 1.5px solid white; box-shadow: 0 2px 5px rgba(236,72,153,0.35);
-      transition: transform 0.15s, background-color 0.15s; overflow: hidden; padding: 0;
+      transition: transform 0.15s; overflow: hidden; padding: 0;
     }
-    .id-badge-btn img {
-      width: 100%; height: 100%; object-fit: cover;
-    }
+    .id-badge-btn img { width: 100%; height: 100%; object-fit: cover; }
     .id-badge-btn:hover { transform: scale(1.2); }
 
     .btn-cancel-draft {
-      background: none; border: none; color: #64748b; font-size: 13px; font-weight: 700;
+      background: none; border: none; color: var(--text-muted); font-size: 13px; font-weight: 700;
       cursor: pointer; padding: 2px 4px; border-radius: 4px; transition: color 0.15s;
     }
-    .btn-cancel-draft:hover { color: #ef4444; background: #fee2e2; }
+    .btn-cancel-draft:hover { color: #ef4444; background: rgba(239, 68, 68, 0.15); }
 
     .btn-save-row-now {
       background: #16a34a; color: white; border: none; border-radius: 6px;
@@ -244,15 +268,15 @@
       border-radius: 12px; font-size: 11px; font-weight: 700; padding: 2px 8px;
       border: 1px solid; outline: none; background: transparent; cursor: pointer;
     }
-    .gender-f { color: #db2777; border-color: #fbcfe8; background: #fdf2f8; }
-    .gender-m { color: #0284c7; border-color: #bae6fd; background: #f0f9ff; }
-    .gender-dash { color: #ea580c; border-color: #fed7aa; background: #fff7ed; font-weight: 700; padding: 2px 8px; }
+    .gender-f { color: #ec4899; border-color: rgba(236, 72, 153, 0.4); background: rgba(236, 72, 153, 0.12); }
+    .gender-m { color: #0284c7; border-color: rgba(2, 132, 199, 0.4); background: rgba(2, 132, 199, 0.12); }
+    .gender-dash { color: #f59e0b; border-color: rgba(245, 158, 11, 0.4); background: rgba(245, 158, 11, 0.12); font-weight: 700; }
 
     .action-icons { display: flex; align-items: center; justify-content: center; gap: 5px; }
     .btn-circle {
-      width: 26px; height: 26px; border-radius: 50%; border: 1.5px solid var(--border-soft);
-      background: white; cursor: pointer; display: flex; align-items: center; justify-content: center;
-      font-size: 12px; color: #475569;
+      width: 26px; height: 26px; border-radius: 50%; border: 1.5px solid var(--border);
+      background: var(--surface-elevated); cursor: pointer; display: flex; align-items: center; justify-content: center;
+      font-size: 12px; color: var(--text);
     }
     .btn-menu {
       background: #6366f1; color: white; border: none; border-radius: 7px;
@@ -262,20 +286,16 @@
 
     /* 💬 POPUP ACTION MENU */
     .action-popup {
-      display: none; position: fixed; z-index: 9999; background: white; border-radius: 12px;
-      box-shadow: 0 10px 30px rgba(15,23,42,0.18); border: 1px solid var(--border-subtle); width: 190px;
+      display: none; position: fixed; z-index: 9999; background: var(--surface); border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3); border: 1px solid var(--border); width: 190px;
     }
     .action-item {
-      padding: 9px 14px; display: flex; align-items: center; gap: 9px; font-size: 12.5px; cursor: pointer; color: #334155; font-weight: 700;
+      padding: 9px 14px; display: flex; align-items: center; gap: 9px; font-size: 12.5px; cursor: pointer; color: var(--text); font-weight: 700;
     }
-    .action-item:hover { background: #f1f5f9; color: var(--primary-cyan); }
-    .action-item.delete { color: #ef4444; border-top: 1px solid #f1f5f9; }
+    .action-item:hover { background: var(--surface-elevated); color: var(--primary); }
+    .action-item.delete { color: #ef4444; border-top: 1px solid var(--border); }
 
-    .status-row { text-align: center; padding: 36px 14px; color: #64748b; font-size: 13.5px; font-weight: 700; }
-    .spinner {
-      width: 14px; height: 14px; border: 2px solid rgba(255,255,255,0.4);
-      border-top-color: white; border-radius: 50%; animation: spin 0.6s linear infinite; display: inline-block;
-    }
+    .status-row { text-align: center; padding: 36px 14px; color: var(--text-muted); font-size: 13.5px; font-weight: 700; }
     .spinner-dark {
       width: 16px; height: 16px; border: 2px solid rgba(2,132,199,0.2);
       border-top-color: #0284c7; border-radius: 50%; animation: spin 0.6s linear infinite; display: inline-block;
@@ -285,8 +305,8 @@
     /* 📱 ARROW KEY BOTTOM BAR */
     .bottom-nav-bar {
       position: fixed; bottom: 12px; left: 12px; right: 12px;
-      background: #ffffff; border: 1.5px solid var(--border-subtle);
-      border-radius: 16px; box-shadow: 0 12px 36px rgba(15, 23, 42, 0.2);
+      background: var(--surface); border: 1.5px solid var(--border);
+      border-radius: 16px; box-shadow: 0 12px 36px rgba(0, 0, 0, 0.3);
       padding: 6px 12px; display: flex; align-items: center; justify-content: space-between;
       gap: 8px; z-index: 995; transform: translateY(130%); opacity: 0; pointer-events: none;
       transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.2s ease;
@@ -298,17 +318,15 @@
       cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 6px;
       border: none; user-select: none;
     }
-    .bottom-nav-btn:active { transform: scale(0.97); }
     .bottom-nav-primary { background: #0284c7; color: white; flex: 1; }
     .bottom-nav-icon-btn {
-      width: 38px; height: 38px; background: #f8fafc; border: 1.5px solid var(--border-soft);
+      width: 38px; height: 38px; background: var(--surface-elevated); border: 1.5px solid var(--border);
       border-radius: 8px; display: flex; align-items: center; justify-content: center;
-      cursor: pointer; font-size: 15px; color: #334155; font-weight: 700; user-select: none;
+      cursor: pointer; font-size: 15px; color: var(--text); font-weight: 700; user-select: none;
     }
-    .bottom-nav-icon-btn:hover { background: #e2e8f0; }
 
     .toast-notification {
-      position: fixed; top: 18px; right: 18px; background: #15803d; color: white;
+      position: fixed; top: 18px; right: 18px; background: #16a34a; color: white;
       padding: 10px 18px; border-radius: 12px; font-size: 13px; font-weight: 700;
       box-shadow: 0 10px 25px rgba(0,0,0,0.2); z-index: 99999;
       transform: translateY(-50px); opacity: 0; pointer-events: none; transition: all 0.25s ease;
@@ -318,13 +336,14 @@
     /* ⚠️ MODALS */
     .missing-modal-overlay, .edit-modal-overlay {
       display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(15, 23, 42, 0.55); backdrop-filter: blur(3px);
+      background: rgba(0, 0, 0, 0.65); backdrop-filter: blur(4px);
       z-index: 10001; align-items: center; justify-content: center; padding: 12px;
     }
     .missing-modal-box, .edit-modal-box {
-      background: #f8fafc; width: 100%; max-width: 600px; border-radius: 20px;
-      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); overflow: hidden;
+      background: var(--surface); color: var(--text); width: 100%; max-width: 600px; border-radius: 20px;
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.35); overflow: hidden;
       max-height: 90vh; display: flex; flex-direction: column; animation: modalPop 0.2s ease-out;
+      border: 1.5px solid var(--border);
     }
     @keyframes modalPop { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
 
@@ -334,21 +353,21 @@
     }
     .missing-list-container { padding: 16px; overflow-y: auto; display: flex; flex-direction: column; gap: 10px; }
     .missing-card {
-      background: white; border: 1.5px solid #fed7aa; border-radius: 14px;
+      background: var(--surface-elevated); border: 1.5px solid var(--border); border-radius: 14px;
       padding: 12px 14px; display: flex; align-items: center; justify-content: space-between; gap: 12px;
     }
-    .missing-tag-pill { background: #fee2e2; color: #b91c1c; border: 1px solid #fca5a5; font-size: 11px; font-weight: 700; padding: 2px 7px; border-radius: 6px; }
+    .missing-tag-pill { background: rgba(239, 68, 68, 0.15); color: #ef4444; border: 1px solid rgba(239, 68, 68, 0.3); font-size: 11px; font-weight: 700; padding: 2px 7px; border-radius: 6px; }
 
     .modal-banner {
-      background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+      background: linear-gradient(135deg, #0284c7 0%, #0369a1 100%);
       color: white; padding: 16px 20px; display: flex; align-items: center; justify-content: space-between;
     }
     .modal-scroll-body { padding: 16px; overflow-y: auto; display: flex; flex-direction: column; gap: 14px; }
-    .profile-card { background: white; border-radius: 16px; border: 1.5px solid var(--border-subtle); overflow: hidden; text-align: center; padding-bottom: 14px; }
-    .profile-card-top { height: 60px; background: linear-gradient(135deg, #3b82f6, #6366f1); }
+    .profile-card { background: var(--surface-elevated); border-radius: 16px; border: 1.5px solid var(--border); overflow: hidden; text-align: center; padding-bottom: 14px; }
+    .profile-card-top { height: 60px; background: linear-gradient(135deg, #0284c7, #2563eb); }
     .avatar-wrapper { position: relative; width: 90px; height: 90px; margin: -45px auto 8px; }
     .avatar-circle {
-      width: 100%; height: 100%; border-radius: 50%; border: 4px solid white;
+      width: 100%; height: 100%; border-radius: 50%; border: 4px solid var(--surface);
       background: #c2410c; color: white; display: flex; align-items: center;
       justify-content: center; font-size: 36px; font-weight: 700;
       box-shadow: 0 4px 10px rgba(0,0,0,0.15); overflow: hidden;
@@ -356,27 +375,32 @@
     .avatar-circle img { width: 100%; height: 100%; object-fit: cover; }
     .camera-badge {
       position: absolute; bottom: 2px; right: 2px; width: 28px; height: 28px;
-      background: #0d9488; border: 2.5px solid white; border-radius: 50%;
+      background: #0284c7; border: 2.5px solid var(--surface); border-radius: 50%;
       color: white; display: flex; align-items: center; justify-content: center;
       font-size: 13px; cursor: pointer; box-shadow: 0 2px 6px rgba(0,0,0,0.2);
     }
-    .profile-name-text { font-size: 15px; font-weight: 700; color: #1e293b; margin-bottom: 2px; }
-    .profile-sub-hint { font-size: 11.5px; color: #94a3b8; }
+    .profile-name-text { font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 2px; }
 
-    .form-section-card { background: white; border-radius: 16px; border: 1.5px solid var(--border-subtle); padding: 16px; }
+    .form-section-card { background: var(--surface-elevated); border-radius: 16px; border: 1.5px solid var(--border); padding: 16px; }
     .form-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+    .form-group label { display: block; font-size: 11.5px; font-weight: 700; margin-bottom: 5px; color: var(--text-muted); }
     .modal-input {
-      width: 100%; height: 40px; border: 1.5px solid var(--border-soft); border-radius: 8px;
-      background: #ffffff; padding: 0 12px; font-size: 13px; outline: none;
+      width: 100%; height: 40px; border: 1.5px solid var(--border); border-radius: 8px;
+      background: var(--surface); color: var(--text); padding: 0 12px; font-size: 13px; outline: none;
     }
+    .modal-input:focus { border-color: #0284c7; }
     .modal-footer {
-      padding: 12px 16px; background: white; border-top: 1px solid var(--border-subtle);
+      padding: 12px 16px; background: var(--surface); border-top: 1px solid var(--border);
       display: flex; justify-content: flex-end; gap: 10px;
     }
     .modal-btn { height: 40px; padding: 0 18px; border-radius: 8px; border: none; font-size: 13px; font-weight: 700; cursor: pointer; }
-    .modal-btn-cancel { background: #f1f5f9; color: #475569; }
-    .modal-btn-save { background: #4f46e5; color: white; }
+    .modal-btn-cancel { background: var(--surface-elevated); color: var(--text); border: 1px solid var(--border); }
+    .modal-btn-save { background: #0284c7; color: white; }
 
+    @media (max-width: 768px) {
+      .top-controls { grid-template-columns: 1fr 1fr; }
+      .search-box { grid-column: 1 / -1; }
+    }
     @media (max-width: 600px) {
       .form-row-2 { grid-template-columns: 1fr; }
     }
@@ -395,20 +419,25 @@
         <span>🎓</span>
         <span>ព័ត៌មានសិស្ស</span>
       </div>
-      <div class="badge-pill badge-total" id="badgeTotal">សរុប 0/100</div>
+      <div class="badge-pill badge-total" id="badgeTotal">សរុប 0</div>
       <div class="badge-pill badge-female" id="badgeFemale">ស្រី 0</div>
       <div class="badge-pill badge-male" id="badgeMale">ប្រុស 0</div>
     </div>
     <div class="nav-right">
-      <button class="icon-btn">❔</button>
-      <button class="icon-btn">☀️</button>
-      <button class="icon-btn">🔔</button>
+      <div class="badge-pill" id="roleBadge" style="background:var(--surface); border:1px solid var(--border); color:var(--primary); font-weight:700;">
+        ...
+      </div>
     </div>
   </div>
 
   <!-- 🎛️ CONTROL CARD -->
   <div class="control-card">
     <div class="top-controls">
+      <!-- 🌟 បញ្ជីរើសថ្នាក់ (ចាក់សោសម្រាប់គ្រូ និងបើកចំហសម្រាប់ Admin) -->
+      <select class="pill-select-class" id="classFilterSelect" onchange="onClassFilterChange()">
+        <option value="">កំពុងទាញយកថ្នាក់...</option>
+      </select>
+
       <div class="status-dropdown-wrapper" id="statusDropdownWrapper">
         <div class="status-dropdown-btn" onclick="toggleStatusDropdown(event)">
           <span id="currentStatusText">កំពុងសិក្សា</span>
@@ -437,7 +466,7 @@
 
       <div class="search-box">
         <span>🔍</span>
-        <input type="text" id="searchInput" placeholder="ស្វែងរក..." oninput="handleSearch()">
+        <input type="text" id="searchInput" placeholder="ស្វែងរកតាមឈ្មោះ ឬអត្តលេខ..." oninput="handleSearch()">
       </div>
 
       <div class="chip-btn" id="syncStatus" onclick="refreshDataForce()" title="ចុចដើម្បី Update ឡើងវិញ">
@@ -456,7 +485,7 @@
       </button>
 
       <button class="btn-action btn-sort" onclick="sortStudentsAlphabetical()">
-        <span>⇅</span> <span>តម្រៀប</span>
+        <span>⇅</span> <span>តម្រៀប (ក-អ)</span>
       </button>
 
       <button class="btn-action btn-columns" onclick="toggleColumnMenu(event)">
@@ -473,7 +502,7 @@
       </div>
 
       <button class="btn-action btn-import" id="saveAllBtn" onclick="saveAllRows()">
-        <span>📥</span> <span>នាំចូល</span>
+        <span>📥</span> <span>នាំចូល Sheet</span>
       </button>
 
       <button class="btn-action btn-warning" id="missingInfoBtn" onclick="handleMissingInfoClick()">
@@ -541,8 +570,6 @@
   <div class="action-popup" id="actionMenu">
     <div class="action-item" onclick="openEditModalFromMenu()"><span>🪪</span> ប្រវត្តិរូប</div>
     <div class="action-item" onclick="openEditModalFromMenu()"><span>✏️</span> កែប្រែព័ត៌មាន</div>
-    <div class="action-item" onclick="alert('សៀវភៅសិក្ខាគារិក')"><span>📖</span> សៀវភៅសិក្ខាគារិក</div>
-    <div class="action-item" onclick="alert('ប័ណ្ណព័ត៌មានសិស្ស')"><span>🎓</span> ប័ណ្ណព័ត៌មានសិស្ស</div>
     <div class="action-item delete" onclick="deleteCurrentRow()"><span>🗑️</span> លុបទិន្នន័យ</div>
   </div>
 
@@ -562,7 +589,7 @@
 
       <div class="missing-list-container" id="missingListContainer"></div>
 
-      <div style="padding:12px 16px; background:white; display:flex; justify-content:flex-end; gap:8px;">
+      <div style="padding:12px 16px; background:var(--surface); display:flex; justify-content:flex-end; gap:8px;">
         <button class="modal-btn modal-btn-cancel" onclick="closeMissingModal()">បិទ</button>
         <button class="modal-btn" style="background:#0284c7; color:white;" onclick="filterMissingInTableAndClose()">🔍 ច្រោះមើលក្នុងតារាង</button>
       </div>
@@ -574,8 +601,8 @@
     <div class="edit-modal-box">
       <div class="modal-banner">
         <div>
-          <div class="modal-banner-title">កែប្រែព័ត៌មានសិស្ស</div>
-          <div class="modal-banner-sub" id="modalHeaderSub">ឈ្មោះសិស្ស</div>
+          <div style="font-size:15px; font-weight:700;">កែប្រែព័ត៌មានសិស្ស</div>
+          <div style="font-size:12px; opacity:0.85;" id="modalHeaderSub">ឈ្មោះសិស្ស</div>
         </div>
         <button class="btn-cancel-draft" style="color:white; font-size:18px;" onclick="closeEditModal()">✕</button>
       </div>
@@ -584,7 +611,6 @@
         <div class="profile-card">
           <div class="profile-card-top"></div>
           <div class="avatar-wrapper">
-            <!-- 🌟 បង្ហាញរូបថតធំ ឬអក្សរកាត់ -->
             <div class="avatar-circle" id="modalAvatarBox">
               <span id="modalAvatarInitial">ក</span>
             </div>
@@ -626,10 +652,13 @@
   <script>
     const BACKEND_URL = "https://script.google.com/macros/s/AKfycbxe6vrQshGAPglgmmZykljXazDNh1ZwWSRdFDAip1WWWRky24lmBo-qicLK3_i10AvT/exec";
 
-    const CACHE_KEY_STUDENTS = 'cache_students_data_fast_v2';
-    const CACHE_KEY_CLASSES  = 'cache_classes_list_fast_v2';
-    const CACHE_KEY_ROWNUMS  = 'cache_rownum_map_fast_v2';
+    const urlParams = new URLSearchParams(window.location.search);
+    const TOKEN = urlParams.get('token') || (window.parent && window.parent.SESSION_TOKEN) || localStorage.getItem('krou_session_token') || localStorage.getItem('school_persistent_token') || "";
+    const USER_ROLE = (window.parent && window.parent.USER_ROLE) || localStorage.getItem('krou_user_role') || "teacher";
+    const USER_CLASS = (window.parent && window.parent.ASSIGNED_CLASS) || localStorage.getItem('krou_assigned_class') || localStorage.getItem('krou_user_class') || "";
+    const IS_ADMIN = String(USER_ROLE).toLowerCase().trim() === 'admin';
 
+    let currentSelectedClass = USER_CLASS ? USER_CLASS.replace(/^ថ្នាក់ទី\s*/, '').trim() : '';
     let studentsList = [];
     let rowNumMap = {};
     let activeRowIndex = null;
@@ -639,12 +668,22 @@
     let isMissingFilterActive = false;
     let searchDebounceTimer = null;
 
-    function getAuthToken() {
-      const urlParams = new URLSearchParams(window.location.search);
-      return urlParams.get('token') || 
-             (window.parent && window.parent.SESSION_TOKEN) || 
-             localStorage.getItem('school_persistent_token') || 
-             'ADMIN_OR_TEACHER_TOKEN';
+    /* 🎨 THEME SYNC */
+    function applyTheme(th) {
+      document.documentElement.setAttribute('data-theme', th);
+    }
+    applyTheme(urlParams.get('theme') || localStorage.getItem('krou_theme_manual') || 'dark');
+
+    window.addEventListener('message', function(ev) {
+      if (ev.data && ev.data.type === 'THEME_CHANGE') {
+        applyTheme(ev.data.theme);
+      }
+    });
+
+    function notifyParentDataChanged() {
+      if (window.parent && window.parent !== window) {
+        window.parent.postMessage({ type: 'DATA_UPDATED', action: 'STUDENT_ROSTER_CHANGED' }, '*');
+      }
     }
 
     async function apiRequest(action, payload = {}) {
@@ -654,7 +693,7 @@
           mode: 'cors',
           redirect: 'follow',
           headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-          body: JSON.stringify({ action: action, token: getAuthToken(), ...payload })
+          body: JSON.stringify({ action: action, token: TOKEN, ...payload })
         });
         const text = await response.text();
         return JSON.parse(text);
@@ -672,36 +711,71 @@
     }
 
     window.addEventListener('DOMContentLoaded', () => {
-      const hasCached = restoreDataFromInstantCache();
-      syncWithBackendParallel(!hasCached);
+      renderRoleBadge();
+      initClassFilterDropdown();
       initArrowKeyVisibilityEvents();
     });
 
-    function restoreDataFromInstantCache() {
-      try {
-        const cachedStudents = localStorage.getItem(CACHE_KEY_STUDENTS);
-        const cachedClasses  = localStorage.getItem(CACHE_KEY_CLASSES);
-        const cachedRowNums  = localStorage.getItem(CACHE_KEY_ROWNUMS);
-
-        if (cachedClasses) populateClassSelect(JSON.parse(cachedClasses));
-        if (cachedRowNums) rowNumMap = JSON.parse(cachedRowNums);
-        if (cachedStudents) {
-          studentsList = JSON.parse(cachedStudents);
-          applyFilterAndRender();
-          setSyncStatusBadge("⚡ បង្ហាញភ្លាមៗ", "#0284c7");
-          return true;
-        }
-      } catch (e) {}
-      return false;
+    function renderRoleBadge() {
+      const b = document.getElementById('roleBadge');
+      if (b) {
+        b.innerText = IS_ADMIN ? 'អ្នកគ្រប់គ្រង (Admin)' : (USER_CLASS ? `ថ្នាក់ទី ${USER_CLASS.replace(/^ថ្នាក់ទី\s*/, '')}` : 'គ្រូបង្រៀន');
+      }
     }
 
-    function populateClassSelect(classes) {
+    /* 🏫 INITIALIZE CLASS DROPDOWN (ចាក់សោតាមថ្នាក់ លើកលែងតែ Admin) */
+    async function initClassFilterDropdown() {
+      const sel = document.getElementById('classFilterSelect');
+      sel.innerHTML = '<option value="">កំពុងទាញយកថ្នាក់...</option>';
+
+      if (!IS_ADMIN && currentSelectedClass !== '') {
+        sel.innerHTML = `<option value="${currentSelectedClass}">ថ្នាក់ទី ${currentSelectedClass}</option>`;
+        sel.value = currentSelectedClass;
+        sel.disabled = true; // 🔒 គ្រូធម្មតាមិនអាចប្តូរថ្នាក់បានឡើយ
+        syncWithBackendParallel(true);
+        return;
+      }
+
+      // 🌟 បើជា Admin អនុញ្ញាតឱ្យរើសគ្រប់ថ្នាក់ទាំងអស់
+      sel.disabled = false;
+      try {
+        const classesRes = await apiRequest('getClassList');
+        let classes = [];
+        if (classesRes && Array.isArray(classesRes.classes)) classes = classesRes.classes;
+        else if (Array.isArray(classesRes)) classes = classesRes;
+
+        if (!classes.length) classes = ['១', '២', '៣', '៤ក', '៤ខ', '៥', '៦'];
+
+        sel.innerHTML = '<option value="">គ្រប់ថ្នាក់ទាំងអស់</option>';
+        classes.forEach(c => {
+          let val = (typeof c === 'object' && c !== null) ? (c.className || c.name || '') : c.toString().trim();
+          val = val.replace(/^ថ្នាក់ទី\s*/, '').trim();
+          if (val) sel.innerHTML += `<option value="${val}">ថ្នាក់ទី ${val}</option>`;
+        });
+
+        if (currentSelectedClass) sel.value = currentSelectedClass;
+      } catch(e) {
+        sel.innerHTML = '<option value="">គ្រប់ថ្នាក់</option>';
+      }
+
+      syncWithBackendParallel(true);
+    }
+
+    function onClassFilterChange() {
+      currentSelectedClass = document.getElementById('classFilterSelect').value;
+      syncWithBackendParallel(true);
+    }
+
+    function populateModalClassSelect(classes) {
       const modalSelect = document.getElementById('modalGrade');
       if (!modalSelect) return;
       modalSelect.innerHTML = '';
       classes.forEach(cls => {
-        modalSelect.innerHTML += `<option value="ថ្នាក់ទី${cls}">ថ្នាក់ទី ${cls}</option>`;
+        let val = typeof cls === 'object' ? (cls.className || cls.name) : cls;
+        val = String(val).replace(/^ថ្នាក់ទី\s*/, '').trim();
+        modalSelect.innerHTML += `<option value="ថ្នាក់ទី${val}">ថ្នាក់ទី ${val}</option>`;
       });
+      if (currentSelectedClass) modalSelect.value = `ថ្នាក់ទី${currentSelectedClass}`;
     }
 
     function setSyncStatusBadge(text, color = "#0284c7") {
@@ -722,19 +796,17 @@
       try {
         const [classesRes, rosterRes, dropRes] = await Promise.all([
           apiRequest('getClassList'),
-          apiRequest('getStudentRosterByClass', { className: '' }),
+          apiRequest('getStudentRosterByClass', { className: currentSelectedClass }),
           apiRequest('getStudentsDropdownList')
         ]);
 
         if (classesRes && classesRes.classes) {
-          localStorage.setItem(CACHE_KEY_CLASSES, JSON.stringify(classesRes.classes));
-          populateClassSelect(classesRes.classes);
+          populateModalClassSelect(classesRes.classes);
         }
 
         if (Array.isArray(dropRes)) {
           rowNumMap = {};
           dropRes.forEach(item => { if (item.id) rowNumMap[item.id] = item.rowNum; });
-          localStorage.setItem(CACHE_KEY_ROWNUMS, JSON.stringify(rowNumMap));
         }
 
         if (Array.isArray(rosterRes)) {
@@ -745,7 +817,6 @@
             rowNum: rowNumMap[s.id] || null,
             isDraft: false
           }));
-          localStorage.setItem(CACHE_KEY_STUDENTS, JSON.stringify(studentsList));
           applyFilterAndRender();
           setSyncStatusBadge("⚡ ទាន់សម័យ", "#16a34a");
         }
@@ -771,13 +842,15 @@
         }
       }
 
+      const defaultGrade = currentSelectedClass ? `ថ្នាក់ទី${currentSelectedClass}` : 'ថ្នាក់ទី៤ក';
+
       studentsList.push({
         isDraft: true,
         id: '',
         name: '',
         sex: 'ស្រី',
         dob: '',
-        grade: 'ថ្នាក់ទី៤ក',
+        grade: defaultGrade,
         phone: '',
         pob: '',
         address: '',
@@ -819,7 +892,7 @@
         s.name = `${lName} ${fName}`.trim() || s.name || '';
         s.sex = data.sex || s.sex || 'ស្រី';
         s.dob = data.dob || s.dob || '';
-        s.grade = data.grade || s.grade || 'ថ្នាក់ទី៤ក';
+        s.grade = data.grade || s.grade || (currentSelectedClass ? `ថ្នាក់ទី${currentSelectedClass}` : 'ថ្នាក់ទី៤ក');
         s.phone = data.phone || s.phone || '';
 
         const fullPob = [data.pob_village, data.pob_commune, data.pob_district, data.pob_province].filter(Boolean).join(', ');
@@ -848,7 +921,7 @@
 
       const actionCell = tr ? tr.querySelector('.sticky-action') : null;
       if (actionCell) {
-        actionCell.innerHTML = `<span class="btn-save-row-now"><span class="spinner"></span> រក្សាទុក...</span>`;
+        actionCell.innerHTML = `<span class="btn-save-row-now"><span class="spinner-dark" style="width:12px;height:12px;border-top-color:#fff;"></span> រក្សា...</span>`;
       }
 
       const payload = {
@@ -856,7 +929,7 @@
         name: s.name,
         gender: s.sex || 'ស្រី',
         dob: s.dob || '',
-        grade: s.grade || 'ថ្នាក់ទី៤ក',
+        grade: s.grade,
         phone: s.phone || '',
         pob: s.pob || '',
         address: s.address || '',
@@ -864,12 +937,11 @@
       };
 
       try {
-        const res = await apiRequest('submitStudentData', { formData: payload });
+        await apiRequest('submitStudentData', { formData: payload });
         s.isDraft = false;
-        localStorage.setItem(CACHE_KEY_STUDENTS, JSON.stringify(studentsList));
         applyFilterAndRender();
-
-        showToast(`🎉 បានរក្សាទុកសិស្ស «${s.name}» ទៅ Google Sheet ជោគជ័យ!`);
+        showToast(`🎉 បានរក្សាទុកសិស្ស «${s.name}» ជោគជ័យ!`);
+        notifyParentDataChanged(); // 🌟 Auto-refresh Dashboard
         syncWithBackendParallel(false);
         return true;
       } catch (err) {
@@ -984,7 +1056,7 @@
       container.innerHTML = '';
 
       if (missingStudents.length === 0) {
-        container.innerHTML = `<div style="text-align:center; padding:30px; color:#15803d; font-weight:700;">🎉 ព័ត៌មានសិស្សទាំងអស់ត្រូវបានបំពេញពេញលេញ ១០០%!</div>`;
+        container.innerHTML = `<div style="text-align:center; padding:30px; color:#16a34a; font-weight:700;">🎉 ព័ត៌មានសិស្សទាំងអស់ត្រូវបានបំពេញពេញលេញ ១០០%!</div>`;
       } else {
         missingStudents.forEach(item => {
           const s = item.student;
@@ -992,7 +1064,6 @@
           let parts = fullName.split(' ');
           let initial = parts.length > 1 ? parts[1].charAt(0) : (fullName.charAt(0) || 'ក');
 
-          // បង្ហាញរូបថតក្នុងបញ្ជីខ្វះព័ត៌មាន (បើមាន)
           let avatarDisplay = (s.photoUrl || s.imageUrl) 
             ? `<img src="${s.photoUrl || s.imageUrl}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" alt="avatar">` 
             : initial;
@@ -1001,11 +1072,11 @@
           card.className = 'missing-card';
           card.innerHTML = `
             <div style="display:flex;align-items:center;gap:10px;">
-              <div class="avatar-circle" style="width:38px;height:38px;font-size:14px;box-shadow:none;border:1.5px solid #fed7aa;">${avatarDisplay}</div>
+              <div class="avatar-circle" style="width:38px;height:38px;font-size:14px;box-shadow:none;border:1.5px solid var(--border);">${avatarDisplay}</div>
               <div>
-                <div style="font-weight:700; color:#1e293b;">${fullName || 'គ្មានឈ្មោះ'} <span style="font-size:11.5px; color:#ea580c;">(${s.id ? 'អត្តលេខ: ' + s.id : 'គ្មានអត្តលេខ'})</span></div>
-                <div style="font-size:11.5px; color:#64748b;">${s.grade || 'មិនទាន់មានថ្នាក់'}</div>
-                <div style="display:flex; gap:4px; margin-top:4px;">
+                <div style="font-weight:700;">${fullName || 'គ្មានឈ្មោះ'} <span style="font-size:11.5px; color:#ea580c;">(${s.id ? 'អត្តលេខ: ' + s.id : 'គ្មានអត្តលេខ'})</span></div>
+                <div style="font-size:11.5px; color:var(--text-muted);">${s.grade || 'មិនទាន់មានថ្នាក់'}</div>
+                <div style="display:flex; gap:4px; margin-top:4px; flex-wrap:wrap;">
                   ${item.missing.map(f => `<span class="missing-tag-pill">❌ ខ្វះ${f}</span>`).join('')}
                 </div>
               </div>
@@ -1066,9 +1137,19 @@
       renderTable(filtered);
     }
 
+    /* 🌟 គណនាអាយុឆ្លាតវៃ ស្គាល់គ្រប់ទម្រង់ (DD/MM/YYYY, DD-MM-YYYY, YYYY-MM-DD) */
     function calculateAge(dobStr) {
       if (!dobStr) return '';
-      const b = new Date(dobStr);
+      let b = new Date(dobStr);
+
+      if (isNaN(b.getTime()) && typeof dobStr === 'string') {
+        const parts = dobStr.trim().split(/[\/\-.]/);
+        if (parts.length === 3) {
+          if (parts[2].length === 4) b = new Date(`${parts[2]}-${parts[1]}-${parts[0]}`);
+          else if (parts[0].length === 4) b = new Date(`${parts[0]}-${parts[1]}-${parts[2]}`);
+        }
+      }
+
       if (isNaN(b.getTime())) return '';
       const now = new Date();
       let age = now.getFullYear() - b.getFullYear();
@@ -1076,7 +1157,7 @@
       return age > 0 ? age : '';
     }
 
-    /* 🎨 RENDER TABLE (ជាមួយការបង្ហាញរូបថតពិត ឬអក្សរកាត់) */
+    /* 🎨 RENDER TABLE */
     function renderTable(list) {
       const tbody = document.getElementById('tableBody');
 
@@ -1101,8 +1182,8 @@
         const initialBadge = firstName ? firstName.charAt(0) : (lastName ? lastName.charAt(0) : 'ក');
         const age = calculateAge(s.dob);
 
-        const pobParts = (s.pob || '').split(',');
-        const addrParts = (s.address || '').split(',');
+        const pobArr = (s.pob || '').split(',').map(p => p.trim());
+        const addrArr = (s.address || '').split(',').map(p => p.trim());
 
         const hasMissingDob = !s.isDraft && (!s.dob || s.dob.trim() === '');
         const hasMissingPhone = !s.isDraft && (!s.phone || s.phone.trim() === '');
@@ -1127,7 +1208,6 @@
             <button class="btn-save-row-now" onclick="saveDraftRow(${idx})" title="ចុចរក្សាទុកជួរនេះ (Enter)">💾 រក្សាទុក</button>
           `;
         } else {
-          // 🌟 ពិនិត្យបើសិស្សមានរូបថត ➔ បង្ហាញរូបថតតូច ជំនួសអក្សរកាត់
           const photoImg = (s.photoUrl || s.imageUrl)
             ? `<img src="${s.photoUrl || s.imageUrl}" alt="photo" onerror="this.outerHTML='${initialBadge}'">`
             : initialBadge;
@@ -1163,19 +1243,19 @@
               <input type="text" class="table-input input-left ${!firstName && !s.isDraft ? 'cell-missing' : ''}" value="${firstName}" data-field="firstName" style="font-weight:700;" oninput="syncRowInput(this, ${idx})" placeholder="${s.isDraft ? 'នាម' : ''}">
             </td>
             <td class="col-gender">${genderContent}</td>
-            <td class="col-pob"><input type="text" class="table-input ${hasMissingPob ? 'cell-missing' : ''}" value="${pobParts[3] ? pobParts[3].trim() : (pobParts[0]||'').trim()}" data-field="pob_province" oninput="syncRowInput(this, ${idx})"></td>
-            <td class="col-pob"><input type="text" class="table-input" value="${pobParts[2] ? pobParts[2].trim() : ''}" data-field="pob_district" oninput="syncRowInput(this, ${idx})"></td>
-            <td class="col-pob"><input type="text" class="table-input" value="${pobParts[1] ? pobParts[1].trim() : ''}" data-field="pob_commune" oninput="syncRowInput(this, ${idx})"></td>
-            <td class="col-pob"><input type="text" class="table-input" value="${pobParts[0] ? pobParts[0].trim() : ''}" data-field="pob_village" oninput="syncRowInput(this, ${idx})"></td>
-            <td class="col-address"><input type="text" class="table-input ${hasMissingAddr ? 'cell-missing' : ''}" value="${addrParts[3] ? addrParts[3].trim() : (addrParts[0]||'').trim()}" data-field="addr_province" oninput="syncRowInput(this, ${idx})"></td>
-            <td class="col-address"><input type="text" class="table-input" value="${addrParts[2] ? addrParts[2].trim() : ''}" data-field="addr_district" oninput="syncRowInput(this, ${idx})"></td>
-            <td class="col-address"><input type="text" class="table-input" value="${addrParts[1] ? addrParts[1].trim() : ''}" data-field="addr_commune" oninput="syncRowInput(this, ${idx})"></td>
-            <td class="col-address"><input type="text" class="table-input" value="${addrParts[0] ? addrParts[0].trim() : ''}" data-field="addr_village" oninput="syncRowInput(this, ${idx})"></td>
+            <td class="col-pob"><input type="text" class="table-input ${hasMissingPob ? 'cell-missing' : ''}" value="${pobArr[3] || pobArr[0] || ''}" data-field="pob_province" oninput="syncRowInput(this, ${idx})"></td>
+            <td class="col-pob"><input type="text" class="table-input" value="${pobArr[2] || ''}" data-field="pob_district" oninput="syncRowInput(this, ${idx})"></td>
+            <td class="col-pob"><input type="text" class="table-input" value="${pobArr[1] || ''}" data-field="pob_commune" oninput="syncRowInput(this, ${idx})"></td>
+            <td class="col-pob"><input type="text" class="table-input" value="${pobArr[0] || ''}" data-field="pob_village" oninput="syncRowInput(this, ${idx})"></td>
+            <td class="col-address"><input type="text" class="table-input ${hasMissingAddr ? 'cell-missing' : ''}" value="${addrArr[3] || addrArr[0] || ''}" data-field="addr_province" oninput="syncRowInput(this, ${idx})"></td>
+            <td class="col-address"><input type="text" class="table-input" value="${addrArr[2] || ''}" data-field="addr_district" oninput="syncRowInput(this, ${idx})"></td>
+            <td class="col-address"><input type="text" class="table-input" value="${addrArr[1] || ''}" data-field="addr_commune" oninput="syncRowInput(this, ${idx})"></td>
+            <td class="col-address"><input type="text" class="table-input" value="${addrArr[0] || ''}" data-field="addr_village" oninput="syncRowInput(this, ${idx})"></td>
             <td class="col-info">
               <input type="date" class="table-input ${hasMissingDob ? 'cell-missing' : ''}" value="${s.dob || ''}" data-field="dob" onchange="updateRowAge(this); syncRowInput(this, ${idx})">
             </td>
             <td class="col-info"><span class="age-text" style="font-weight:700;">${age}</span></td>
-            <td class="col-info"><input type="text" class="table-input" value="${s.grade || 'ថ្នាក់ទី៤ក'}" data-field="grade" oninput="syncRowInput(this, ${idx})"></td>
+            <td class="col-info"><input type="text" class="table-input" value="${s.grade || ''}" data-field="grade" oninput="syncRowInput(this, ${idx})"></td>
             <td class="col-info">
               <input type="tel" class="table-input ${hasMissingPhone ? 'cell-missing' : ''}" value="${s.phone || ''}" data-field="phone" oninput="syncRowInput(this, ${idx})">
             </td>
@@ -1189,7 +1269,7 @@
     }
 
     function updateCounters(total, female) {
-      document.getElementById('badgeTotal').innerText = `សរុប ${total}/100`;
+      document.getElementById('badgeTotal').innerText = `សរុប ${total}`;
       document.getElementById('badgeFemale').innerText = `ស្រី ${female}`;
       document.getElementById('badgeMale').innerText = `ប្រុស ${total - female}`;
     }
@@ -1200,30 +1280,44 @@
       ageBox.innerText = calculateAge(input.value);
     }
 
+    /* 🌟 ARROW NAVIGATION FIX (រុញ Cursor ចុះក្រោម ឬឡើងលើ ត្រូវតាម Column ឥតខុស) */
     function navigateTable(direction) {
       const activeEl = document.activeElement;
-      const allInputs = Array.from(document.querySelectorAll('#tableBody input.table-input, #tableBody select'));
-      let currentIndex = allInputs.indexOf(activeEl);
+      if (!activeEl) return;
 
-      if (currentIndex === -1) {
-        if (allInputs.length > 0) allInputs[0].focus();
-        return;
-      }
+      const currentTr = activeEl.closest('#tableBody tr');
+      if (!currentTr) return;
 
-      if (direction === 'right' && currentIndex < allInputs.length - 1) {
-        allInputs[currentIndex + 1].focus();
-      } else if (direction === 'left' && currentIndex > 0) {
-        allInputs[currentIndex - 1].focus();
-      } else if (direction === 'down') {
-        const nextRowInput = allInputs[currentIndex + 12];
-        if (nextRowInput) nextRowInput.focus();
+      const currentField = activeEl.dataset.field;
+
+      if (direction === 'down') {
+        const nextTr = currentTr.nextElementSibling;
+        if (nextTr) {
+          const target = nextTr.querySelector(`[data-field="${currentField}"]`) || nextTr.querySelector('input.table-input');
+          if (target) { target.focus(); target.select?.(); }
+        }
       } else if (direction === 'up') {
-        const prevRowInput = allInputs[currentIndex - 12];
-        if (prevRowInput) prevRowInput.focus();
+        const prevTr = currentTr.previousElementSibling;
+        if (prevTr) {
+          const target = prevTr.querySelector(`[data-field="${currentField}"]`) || prevTr.querySelector('input.table-input');
+          if (target) { target.focus(); target.select?.(); }
+        }
+      } else if (direction === 'right') {
+        const rowInputs = Array.from(currentTr.querySelectorAll('input.table-input, select'));
+        const idx = rowInputs.indexOf(activeEl);
+        if (idx !== -1 && idx < rowInputs.length - 1) {
+          rowInputs[idx + 1].focus(); rowInputs[idx + 1].select?.();
+        }
+      } else if (direction === 'left') {
+        const rowInputs = Array.from(currentTr.querySelectorAll('input.table-input, select'));
+        const idx = rowInputs.indexOf(activeEl);
+        if (idx > 0) {
+          rowInputs[idx - 1].focus(); rowInputs[idx - 1].select?.();
+        }
       }
     }
 
-    /* 🌟 បង្ហាញរូបថតក្នុង EDIT MODAL */
+    /* 🌟 EDIT MODAL */
     function openEditModal(idx) {
       activeRowIndex = idx;
       const s = studentsList[idx];
@@ -1234,8 +1328,8 @@
       const firstName = parts.slice(1).join(' ') || '';
       const initial = firstName ? firstName.charAt(0) : (lastName ? lastName.charAt(0) : 'ក');
 
-      document.getElementById('modalHeaderSub').innerText = `${lastName}: ${firstName}`.trim() || 'គ្មានឈ្មោះ';
-      document.getElementById('modalProfileNameText').innerText = `${lastName}: ${firstName}`.trim() || 'គ្មានឈ្មោះ';
+      document.getElementById('modalHeaderSub').innerText = `${lastName} ${firstName}`.trim() || 'គ្មានឈ្មោះ';
+      document.getElementById('modalProfileNameText').innerText = `${lastName} ${firstName}`.trim() || 'គ្មានឈ្មោះ';
       
       const avatarBox = document.getElementById('modalAvatarBox');
       if (s.photoUrl || s.imageUrl) {
@@ -1301,7 +1395,6 @@
         s.imageUrl = modalPhotoBase64;
       }
 
-      localStorage.setItem(CACHE_KEY_STUDENTS, JSON.stringify(studentsList));
       applyFilterAndRender();
       closeEditModal();
 
@@ -1321,12 +1414,13 @@
       const actionToCall = s.rowNum ? 'updateStudentData' : 'submitStudentData';
       await apiRequest(actionToCall, { formData: payload });
       showToast(`🎉 បានកែប្រែព័ត៌មានសិស្ស «${s.name}» ជោគជ័យ!`);
+      notifyParentDataChanged(); // 🌟 Auto-refresh Dashboard
       syncWithBackendParallel(false);
     }
 
     async function saveAllRows() {
       const btn = document.getElementById('saveAllBtn');
-      btn.innerHTML = `<span class="spinner"></span> កំពុងរក្សាទុក...`;
+      btn.innerHTML = `<span class="spinner-dark" style="width:12px;height:12px;border-top-color:#fff;"></span> កំពុងរក្សាទុក...`;
       btn.disabled = true;
 
       const rows = document.querySelectorAll('#tableBody tr');
@@ -1348,7 +1442,7 @@
             name: fullName,
             gender: student.sex || 'ស្រី',
             dob: student.dob,
-            grade: student.grade || 'ថ្នាក់ទី៤ក',
+            grade: student.grade || (currentSelectedClass ? `ថ្នាក់ទី${currentSelectedClass}` : 'ថ្នាក់ទី៤ក'),
             phone: student.phone,
             pob: fullPob,
             address: fullAddr
@@ -1360,10 +1454,11 @@
         }
       }
 
-      btn.innerHTML = `<span>📥</span> <span>នាំចូល</span>`;
+      btn.innerHTML = `<span>📥</span> <span>នាំចូល Sheet</span>`;
       btn.disabled = false;
       showToast(`🎉 បានរក្សាទុកទិន្នន័យចំនួន ${count} នាក់ទៅ Sheet ជោគជ័យ!`);
       hideBottomNavBar();
+      notifyParentDataChanged(); // 🌟 Auto-refresh Dashboard
       syncWithBackendParallel(false);
     }
 
@@ -1423,9 +1518,9 @@
       if (confirm(`តើអ្នកពិតជាចង់លុបសិស្ស «${s.name || s.id}» ចេញពីប្រព័ន្ធមែនទេ?`)) {
         if (s.rowNum) await apiRequest('deleteStudentData', { rowNum: s.rowNum });
         studentsList.splice(activeRowIndex, 1);
-        localStorage.setItem(CACHE_KEY_STUDENTS, JSON.stringify(studentsList));
         applyFilterAndRender();
         showToast("បានលុបទិន្នន័យរួចរាល់!");
+        notifyParentDataChanged(); // 🌟 Auto-refresh Dashboard
       }
     }
   </script>
