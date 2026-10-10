@@ -903,13 +903,14 @@
         <div class="profile-card">
           <div class="profile-card-top"></div>
           <div class="avatar-wrapper">
-            <div class="avatar-circle" id="modalAvatarBox">
+            <div class="avatar-circle" id="modalAvatarBox" style="cursor:pointer;" onclick="document.getElementById('modalPhotoInput').click()" title="ប្តូររូបថត">
               <span id="modalAvatarInitial">ក</span>
             </div>
             <div class="camera-badge" onclick="document.getElementById('modalPhotoInput').click()" title="ប្តូររូបថត">📷</div>
             <input type="file" id="modalPhotoInput" accept="image/*" style="display:none;" onchange="previewModalPhoto(this)">
           </div>
           <div class="profile-name-text" id="modalProfileNameText">ឈ្មោះសិស្ស</div>
+          <button type="button" class="modal-btn modal-btn-cancel" style="height:32px;margin-top:6px;" onclick="document.getElementById('modalPhotoInput').click()">📷 ប្តូររូបថត</button>
         </div>
 
         <div class="form-section-card">
