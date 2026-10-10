@@ -208,9 +208,7 @@
       position: sticky; left: 0px; z-index: 28; background: var(--bg-sticky); width: 48px; min-width: 48px;
     }
     
-    /* 📸 រូបថតសិស្ស (ជួរ O នៃ Sheet ព័ត៌មានសិស្ស) */
     .col-photo { width: 55px; min-width: 55px; max-width: 55px; }
-
     .col-id { width: 80px; min-width: 80px; max-width: 80px; z-index: 10; }
     .sticky-col-2 {
       position: sticky; left: 48px; z-index: 24; background: var(--bg-sticky); width: 85px; min-width: 85px;
@@ -258,7 +256,7 @@
     .table-input:focus { border-color: #0284c7; box-shadow: 0 0 0 2px rgba(2,132,199,0.2); }
     .input-left { text-align: left; }
 
-    /* 📸 STUDENT PHOTO THUMBNAIL (ចុចលើរូបដើម្បី Popup កែប្រែព័ត៌មាន) */
+    /* 📸 STUDENT PHOTO THUMBNAIL */
     .table-photo-box {
       width: 36px; height: 36px; border-radius: 50%; border: 1.5px solid var(--border);
       margin: 0 auto; display: flex; align-items: center; justify-content: center;
@@ -553,8 +551,6 @@
       color: white; padding: 16px 20px; display: flex; align-items: center; justify-content: space-between;
     }
     .modal-scroll-body { padding: 16px; overflow-y: auto; display: flex; flex-direction: column; gap: 14px; }
-    .profile-card { background: var(--surface-elevated); border-radius: 16px; border: 1.5px solid var(--border); overflow: hidden; text-align: center; padding-bottom: 14px; }
-    .profile-card-top { height: 60px; background: linear-gradient(135deg, #0284c7, #2563eb); }
     .avatar-wrapper { position: relative; width: 90px; height: 90px; margin: -45px auto 8px; }
     .avatar-circle {
       width: 100%; height: 100%; border-radius: 50%; border: 4px solid var(--surface);
@@ -563,36 +559,8 @@
       box-shadow: 0 4px 10px rgba(0,0,0,0.15); overflow: hidden;
     }
     .avatar-circle img { width: 100%; height: 100%; object-fit: cover; }
-    .camera-badge {
-      position: absolute; bottom: 2px; right: 2px; width: 28px; height: 28px;
-      background: #0284c7; border: 2.5px solid var(--surface); border-radius: 50%;
-      color: white; display: flex; align-items: center; justify-content: center;
-      font-size: 13px; cursor: pointer; box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-    }
-    .profile-name-text { font-size: 15px; font-weight: 700; color: var(--text); margin-bottom: 2px; }
 
-    .form-section-card { background: var(--surface-elevated); border-radius: 16px; border: 1.5px solid var(--border); padding: 16px; }
-    .form-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
-    .form-group label { display: block; font-size: 11.5px; font-weight: 700; margin-bottom: 5px; color: var(--text-muted); }
-    .modal-input {
-      width: 100%; height: 40px; border: 1.5px solid var(--border); border-radius: 8px;
-      background: var(--surface); color: var(--text); padding: 0 12px; font-size: 13px; outline: none;
-    }
-    .modal-footer {
-      padding: 12px 16px; background: var(--surface); border-top: 1px solid var(--border);
-      display: flex; justify-content: flex-end; gap: 10px;
-    }
-    .modal-btn { height: 40px; padding: 0 18px; border-radius: 8px; border: none; font-size: 13px; font-weight: 700; cursor: pointer; }
-    .modal-btn-cancel { background: var(--surface-elevated); color: var(--text); border: 1px solid var(--border); }
-    .modal-btn-save { background: #0284c7; color: white; }
-
-    .missing-card{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px;border:1.5px solid var(--border);border-radius:12px;background:var(--surface-elevated)}
-    .missing-tag-pill{font-size:10.5px;font-weight:700;color:#ef4444;background:rgba(239,68,68,.12);border-radius:10px;padding:1px 7px}
-    .btn-cancel-draft{background:none;border:none;cursor:pointer;color:#ef4444;font-size:13px;font-weight:700}
-    .btn-save-row-now{background:#16a34a;color:#fff;border:none;border-radius:7px;height:28px;padding:0 10px;font-size:12px;font-weight:700;cursor:pointer}
-
-
-    /* ===== EDIT MODAL (ស្ទីលថ្មី) ===== */
+    /* EDIT MODAL */
     .em-box { max-width: 640px; border-radius: 26px; border: none; }
     .em-banner { display:flex; align-items:center; gap:14px; padding:18px 20px; color:#fff; background:linear-gradient(120deg,#2563eb 0%,#6d4ae6 55%,#8b45ee 100%); }
     .em-banner-icon { width:52px; height:52px; border-radius:16px; background:rgba(255,255,255,.2); border:1px solid rgba(255,255,255,.28); display:flex; align-items:center; justify-content:center; flex-shrink:0; }
@@ -601,8 +569,7 @@
     .em-banner-sub { font-size:14px; opacity:.88; margin-top:2px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
     .em-close { width:44px; height:44px; border-radius:50%; border:none; background:rgba(255,255,255,.2); color:#fff; display:flex; align-items:center; justify-content:center; cursor:pointer; flex-shrink:0; }
     .em-close:active { transform:scale(.94); }
-    .em-body { padding:16px; gap:16px; background:var(--bg); }
-    .em-body { flex:1 1 auto; min-height:0; overflow-y:auto; -webkit-overflow-scrolling:touch; overscroll-behavior:contain; }
+    .em-body { padding:16px; gap:16px; background:var(--bg); flex:1 1 auto; min-height:0; overflow-y:auto; -webkit-overflow-scrolling:touch; overscroll-behavior:contain; }
     .em-body > * { flex-shrink:0; }
     .em-banner, .em-footer { flex-shrink:0; }
     .em-box { max-height:92vh; max-height:92dvh; }
@@ -627,6 +594,11 @@
     .em-age { float:right; font-size:11px; font-weight:700; color:var(--primary); background:rgba(2,132,199,.12); padding:1px 8px; border-radius:12px; }
     .em-footer { padding:14px 16px; gap:12px; }
     .em-footer .modal-btn { height:46px; border-radius:12px; font-size:14px; }
+
+    .missing-card{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px;border:1.5px solid var(--border);border-radius:12px;background:var(--surface-elevated)}
+    .missing-tag-pill{font-size:10.5px;font-weight:700;color:#ef4444;background:rgba(239,68,68,.12);border-radius:10px;padding:1px 7px}
+    .btn-cancel-draft{background:none;border:none;cursor:pointer;color:#ef4444;font-size:13px;font-weight:700}
+    .btn-save-row-now{background:#16a34a;color:#fff;border:none;border-radius:7px;height:28px;padding:0 10px;font-size:12px;font-weight:700;cursor:pointer}
 
     @media (max-width: 768px) {
       .top-controls { grid-template-columns: 1fr 1fr; }
@@ -695,7 +667,7 @@
         <input type="text" id="searchInput" placeholder="ស្វែងរកតាមឈ្មោះ ឬអត្តលេខ..." oninput="handleSearch()">
       </div>
 
-      <div class="chip-btn" id="syncStatus" onclick="refreshDataForce()" title="ចុចដើម្បី Update ឡើងវិញ">
+      <div class="chip-btn" id="syncStatus" onclick="handleSyncBadgeClick()" title="ចុចដើម្បី Refresh ទិន្នន័យឡើងវិញ">
         <span>⚡</span> <span id="syncStatusText">ស្វ័យរក្សាទុកបើក</span>
       </div>
 
@@ -793,7 +765,7 @@
 
       <div class="import-class-row">
         <span>ថ្នាក់</span>
-        <span class="import-class-tag" id="importClassTag">ថ្នាក់ទី៤ក</span>
+        <span class="import-class-tag" id="importClassTag">ថ្នាក់ទី៤(ក)</span>
       </div>
 
       <div class="import-tabs-bar">
@@ -806,7 +778,6 @@
       </div>
 
       <div class="import-body-content">
-        <!-- 📋 TAB 2: បិទភ្ជាប់បញ្ជីឈ្មោះ -->
         <div id="tabContentPaste">
           <div class="paste-guide-card">
             <div class="guide-header">
@@ -833,7 +804,6 @@
           </div>
         </div>
 
-        <!-- 📄 TAB 1: ឯកសារ EXCEL -->
         <div id="tabContentExcel" style="display:none;">
           <div class="excel-step-card">
             <div class="step-number-circle">1</div>
@@ -946,7 +916,7 @@
             <input type="file" id="modalPhotoInput" accept="image/jpeg,image/png,image/webp" style="display:none;" onchange="previewModalPhoto(this)">
           </div>
           <div class="em-name" id="modalProfileNameText">ឈ្មោះសិស្ស</div>
-          <div class="em-hint">JPG / PNG / WEBP · ≤ 3MB</div>
+          <div class="em-hint">JPG / PNG / WEBP (ប្រព័ន្ធបង្រួមស្វ័យប្រវត្តិកុំឱ្យស្ទះ)</div>
         </div>
 
         <div class="em-section">
@@ -987,7 +957,7 @@
 
       <div class="modal-footer em-footer">
         <button type="button" class="modal-btn modal-btn-cancel" onclick="closeEditModal()">បោះបង់</button>
-        <button type="button" class="modal-btn modal-btn-save" onclick="saveModalChanges()">💾 រក្សាទុកការកែប្រែ</button>
+        <button type="button" class="modal-btn modal-btn-save" id="modalSaveBtn" onclick="saveModalChanges()">💾 រក្សាទុកការកែប្រែ</button>
       </div>
     </div>
   </div>
@@ -1002,9 +972,8 @@
     const USER_CLASS = parentVar('ASSIGNED_CLASS') || localStorage.getItem('krou_assigned_class') || localStorage.getItem('krou_user_class') || "";
     const IS_ADMIN = String(USER_ROLE).toLowerCase().trim() === 'admin';
 
-    let currentSelectedClass = USER_CLASS ? USER_CLASS.replace(/^ថ្នាក់ទី\s*/, '').trim() : '៤ក';
+    let currentSelectedClass = USER_CLASS ? USER_CLASS.replace(/^ថ្នាក់ទី\s*/, '').trim() : '៤(ក)';
     let studentsList = [];
-    let rowNumMap = {};
     let activeRowIndex = null;
     let uploadTargetIndex = null;
     let isTableLocked = false;
@@ -1017,15 +986,9 @@
     let pendingImportStudents = [];
     let activeImportTab = 'paste';
 
-    /* 🎨 THEME SYNC */
-    function applyTheme(th) {
-      document.documentElement.setAttribute('data-theme', th);
-    }
+    function applyTheme(th) { document.documentElement.setAttribute('data-theme', th); }
     applyTheme(urlParams.get('theme') || localStorage.getItem('krou_theme_manual') || 'dark');
-
-    window.addEventListener('message', function(ev) {
-      if (ev.data && ev.data.type === 'THEME_CHANGE') applyTheme(ev.data.theme);
-    });
+    window.addEventListener('message', function(ev) { if (ev.data && ev.data.type === 'THEME_CHANGE') applyTheme(ev.data.theme); });
 
     function notifyParentDataChanged() {
       if (window.parent && window.parent !== window) {
@@ -1033,7 +996,6 @@
       }
     }
 
-    /* 📸 FUNCTION បំប្លែង LINK GOOGLE DRIVE ទៅជា DIRECT THUMBNAIL LINK */
     function normalizePhotoUrl(url) {
       if (!url || typeof url !== 'string') return '';
       url = url.trim();
@@ -1054,34 +1016,18 @@
       return url;
     }
 
-    /* 📸 ស្រង់យករូបថតដោយផ្ទាល់ពីជួរ O (Column O = index 14) នៃ SHEET ព័ត៌មានសិស្ស */
     function extractStudentPhoto(s) {
       if (!s) return '';
       let raw = '';
-
       if (typeof s === 'object' && s !== null) {
-        // ចាប់យកតាមឈ្មោះ Field ឬ អក្សរជួរ O
         raw = s['រូបថត'] || s['រូបភាព'] || s.photo || s.photoUrl || s.imageUrl || s.image || 
-              s['O'] || s['o'] || s.colO || s.columnO || s.ColumnO || 
-              s.picture || s.avatar || s.Photo || s.Image || '';
-
-        // បើសិនជាទិន្នន័យបញ្ជូនមកជា Array (ជួរ O គឺ index ទី ១៤)
+              s['O'] || s['o'] || s.colO || s.columnO || s.picture || s.avatar || '';
         if (!raw && Array.isArray(s)) raw = s[14] || '';
-        if (!raw && s.row && Array.isArray(s.row)) raw = s.row[14] || '';
-        if (!raw && s.data && Array.isArray(s.data)) raw = s.data[14] || '';
-      } else if (typeof s === 'string') {
-        raw = s;
-      }
-
+      } else if (typeof s === 'string') raw = s;
       if (!raw) return '';
       raw = String(raw).trim();
-
-      // បើសិនជាមានរូបមន្ត =IMAGE("url") ក្នុង Google Sheet ត្រូវស្រង់យកតែ URL
       const formulaMatch = raw.match(/=IMAGE\s*\(\s*["']?([^"'\)]+)["']?\s*\)/i);
-      if (formulaMatch && formulaMatch[1]) {
-        raw = formulaMatch[1].trim();
-      }
-
+      if (formulaMatch && formulaMatch[1]) raw = formulaMatch[1].trim();
       return normalizePhotoUrl(raw);
     }
 
@@ -1091,28 +1037,48 @@
     function safeUrl(u) { u = String(u || '').trim(); return /^(https:\/\/|data:image\/)/.test(u) ? u : ''; }
     function escParts(p) { const o = {}; for (const k in p) o[k] = esc(p[k]); return o; }
 
+    /* =========================================================
+       🌐 API REQUEST ENGINE (ដោះស្រាយ Failed to Fetch)
+    ========================================================= */
     async function apiRequest(action, payload = {}) {
       const body = JSON.stringify({ action: action, token: TOKEN, ...payload });
+      
       for (let attempt = 1; attempt <= 2; attempt++) {
         try {
+          const ctrl = new AbortController();
+          const timer = setTimeout(() => ctrl.abort(), 25000); // 25s timeout
+
           const response = await fetch(BACKEND_URL, {
-            method: 'POST', mode: 'cors', redirect: 'follow',
-            headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: body
+            method: 'POST',
+            mode: 'cors',
+            redirect: 'follow',
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+            body: body,
+            signal: ctrl.signal
           });
+          clearTimeout(timer);
+
           const text = await response.text();
           if (/^\s*</.test(text)) {
-            lastApiError = 'Server ត្រឡប់ទំព័រកំហុស (HTML) — សូម Deploy Apps Script ជា New version ហើយអនុញ្ញាតសិទ្ធិ';
+            lastApiError = 'Server ឆ្លើយតបជាទំព័រកំហុស (HTML)';
             return null;
           }
-          const j = JSON.parse(text);
+
+          let j;
+          try { j = JSON.parse(text); }
+          catch (pe) { lastApiError = 'Server ឆ្លើយមកមិនមែន JSON: ' + text.slice(0, 100); return null; }
+
           if (j && j.success === false) { lastApiError = j.error || j.message || 'កំហុស'; return null; }
           lastApiError = '';
           return j;
         } catch (err) {
-          console.error('API Error (try ' + attempt + '):', err);
-          if (attempt === 1) { await new Promise(r => setTimeout(r, 1200)); continue; }
-          lastApiError = (err && err.name === 'TypeError')
-            ? 'ភ្ជាប់ទៅ Server មិនបាន (Failed to fetch) — ពិនិត្យអ៊ីនធឺណិត, ការ Deploy Apps Script, ឬទំហំរូបថត'
+          console.error(`API Error on action "${action}" (try ${attempt}):`, err);
+          if (attempt === 1) {
+            await new Promise(r => setTimeout(r, 1000));
+            continue;
+          }
+          lastApiError = (err && (err.name === 'TypeError' || err.name === 'AbortError'))
+            ? 'ភ្ជាប់ទៅ Server មិនបាន (Failed to fetch) — សូមពិនិត្យអ៊ីនធឺណិត ឬទំហំរូបថត'
             : String(err);
           return null;
         }
@@ -1120,11 +1086,37 @@
       return null;
     }
 
+    /* 📸 FUNCTION បង្រួមរូបថតឱ្យតូចខ្លាំង (≤350px) ដើម្បីកុំឱ្យធ្លាក់ Failed to fetch */
+    function compressImageFile(file, maxSide = 350, quality = 0.65) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onerror = () => reject(new Error('មិនអាចអានឯកសារបានទេ'));
+        reader.onload = function(e) {
+          const img = new Image();
+          img.onerror = () => reject(new Error('មិនអាចអានរូបនេះបានទេ'));
+          img.onload = function() {
+            const k = Math.min(1, maxSide / Math.max(img.width, img.height));
+            const c = document.createElement('canvas');
+            c.width = Math.max(1, Math.round(img.width * k));
+            c.height = Math.max(1, Math.round(img.height * k));
+            const ctx = c.getContext('2d');
+            ctx.fillStyle = '#ffffff';
+            ctx.fillRect(0, 0, c.width, c.height);
+            ctx.drawImage(img, 0, 0, c.width, c.height);
+            // គុណភាព 0.65 ធ្វើឱ្យរូបសល់ក្រោម 30KB
+            resolve(c.toDataURL('image/jpeg', quality));
+          };
+          img.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+
     function showToast(msg) {
       const toast = document.getElementById('toastNotification');
       toast.innerText = msg;
       toast.classList.add('show');
-      setTimeout(() => toast.classList.remove('show'), 3000);
+      setTimeout(() => toast.classList.remove('show'), 3500);
     }
 
     window.addEventListener('DOMContentLoaded', () => {
@@ -1169,7 +1161,7 @@
         if (classesRes && Array.isArray(classesRes.classes)) classes = classesRes.classes;
         else if (Array.isArray(classesRes)) classes = classesRes;
 
-        if (!classes.length) classes = ['១', '២', '៣', '៤ក', '៤ខ', '៥', '៦'];
+        if (!classes.length) classes = ['១', '២', '៣', '៤(ក)', '៤(ខ)', '៥', '៦'];
 
         sel.innerHTML = '<option value="">គ្រប់ថ្នាក់ទាំងអស់</option>';
         classes.forEach(c => {
@@ -1220,6 +1212,11 @@
       }
     }
 
+    function handleSyncBadgeClick() {
+      if (lastApiError) alert("ព័ត៌មានកំហុស៖\n" + lastApiError);
+      refreshDataForce();
+    }
+
     async function syncWithBackendParallel(showLoadingRow = false) {
       const tbody = document.getElementById('tableBody');
       if (showLoadingRow) tbody.innerHTML = `<tr><td colspan="18" class="status-row"><span class="spinner-dark"></span> កំពុងទាញទិន្នន័យពី Google Sheet...</td></tr>`;
@@ -1239,8 +1236,22 @@
       const drafts = studentsList.filter(x => x.isDraft);
       studentsList = rosterRes.map(s => {
         const photo = extractStudentPhoto(s);
-        return { ...s, dob: formatToInputDate(s.dobIso || s.dob), photoUrl: photo, imageUrl: photo,
-                 origId: s.id, _uid: ++uidSeq, isDraft: false };
+        const sid = String(s.id || s.studentId || s.student_id || s['អត្តលេខ'] || s['លេខសិស្ស'] || '').trim();
+        const rawDob = s.dobIso || s.dob || s['ថ្ងៃខែឆ្នាំកំណើត'] || s['ថ្ងៃកំណើត'] || '';
+        const fullName = String(s.name || s.studentName || s['ឈ្មោះ'] || s['ឈ្មោះសិស្ស'] || '').trim();
+        return {
+          ...s,
+          id: sid,
+          studentId: sid,
+          name: fullName,
+          sex: s.sex || s.gender || s['ភេទ'] || 'ស្រី',
+          dob: formatToInputDate(rawDob),
+          photoUrl: photo,
+          imageUrl: photo,
+          origId: sid,
+          _uid: ++uidSeq,
+          isDraft: false
+        };
       }).concat(drafts);
       applyFilterAndRender();
       setSyncStatusBadge("⚡ ស្វ័យរក្សាទុកបើក", "#16a34a");
@@ -1249,186 +1260,7 @@
     function refreshDataForce() { syncWithBackendParallel(true); }
 
     /* =========================================================
-       📥 មុខងារ IMPORT ROSTER LOGIC
-    ========================================================= */
-    function openImportModal() {
-      if (IS_ADMIN && !currentSelectedClass) { showToast('⚠️ សូមជ្រើសថ្នាក់ជាមុន ទើបនាំចូលបាន'); return; }
-      document.getElementById('importClassTag').innerText = `ថ្នាក់ទី${currentSelectedClass || ''}`;
-      document.getElementById('pasteInputText').value = '';
-      pendingImportStudents = [];
-      updateSubmitImportBtn(0);
-      switchImportTab('paste');
-      document.getElementById('importModalOverlay').style.display = 'flex';
-    }
-
-    function closeImportModal() {
-      document.getElementById('importModalOverlay').style.display = 'none';
-    }
-
-    function switchImportTab(tab) {
-      activeImportTab = tab;
-      const btnExcel = document.getElementById('tabBtnExcel');
-      const btnPaste = document.getElementById('tabBtnPaste');
-      const contentExcel = document.getElementById('tabContentExcel');
-      const contentPaste = document.getElementById('tabContentPaste');
-
-      if (tab === 'excel') {
-        btnExcel.classList.add('active');
-        btnPaste.classList.remove('active');
-        contentExcel.style.display = 'block';
-        contentPaste.style.display = 'none';
-        updateSubmitImportBtn(pendingImportStudents.length);
-      } else {
-        btnPaste.classList.add('active');
-        btnExcel.classList.remove('active');
-        contentPaste.style.display = 'block';
-        contentExcel.style.display = 'none';
-        onPasteTextInput();
-      }
-    }
-
-    function updateSubmitImportBtn(count) {
-      const btn = document.getElementById('btnSubmitImport');
-      btn.innerText = `នាំចូល ${count} នាក់`;
-      btn.disabled = count <= 0;
-    }
-
-    function onPasteTextInput() {
-      const text = document.getElementById('pasteInputText').value;
-      const lines = text.split('\n').map(l => l.trim()).filter(Boolean);
-
-      const parsed = [];
-      for (let line of lines) {
-        const parts = line.split(/[\t\s]+/).filter(Boolean);
-        if (parts.length < 2) continue;
-
-        let lastName = parts[0] || '';
-        let firstName = parts[1] || '';
-        let gender = 'ស្រី';
-        let studentId = '';
-        let phone = '';
-
-        if (parts.length >= 3) {
-          const g = parts[2];
-          if (g.includes('ប្រុស') || g.toLowerCase() === 'm' || g.toLowerCase() === 'male') gender = 'ប្រុស';
-          else gender = 'ស្រី';
-        }
-
-        if (parts.length >= 4) {
-          if (/^\d{8,11}$/.test(parts[3])) phone = parts[3];
-          else studentId = parts[3];
-        }
-        if (parts.length >= 5 && !phone && /^\d{8,11}$/.test(parts[4])) {
-          phone = parts[4];
-        }
-
-        parsed.push({
-          name: `${lastName} ${firstName}`.trim(),
-          sex: gender,
-          id: studentId,
-          phone: phone,
-          grade: currentSelectedClass ? `ថ្នាក់ទី${currentSelectedClass}` : 'ថ្នាក់ទី៤ក',
-          dob: '', pob: '', address: '', photoUrl: '', isDraft: false
-        });
-      }
-
-      pendingImportStudents = parsed;
-      updateSubmitImportBtn(parsed.length);
-    }
-
-    function downloadExcelTemplate() {
-      const headers = [
-        ["ល.រ", "គោត្តនាម", "នាម", "ភេទ", "អត្តលេខ", "ថ្ងៃខែឆ្នាំកំណើត", "ទូរស័ព្ទ", "ទីកន្លែងកំណើត", "អាសយដ្ឋានបច្ចុប្បន្ន"]
-      ];
-      const sample = [
-        [1, "សុខ", "ចន្ថា", "ប្រុស", "001", "2014-05-10", "012345678", "ភ្នំពេញ", "ភ្នំពេញ"],
-        [2, "ចាន់", "ដារ៉ា", "ស្រី", "002", "2014-08-15", "098765432", "កណ្តាល", "កណ្តាល"]
-      ];
-
-      const ws = XLSX.utils.aoa_to_sheet([...headers, ...sample]);
-      const wb = XLSX.utils.book_new();
-      XLSX.utils.book_append_sheet(wb, ws, "បញ្ជីសិស្ស");
-      XLSX.writeFile(wb, `គំរូបញ្ជីសិស្ស_ថ្នាក់ទី${currentSelectedClass || '៤ក'}.xlsx`);
-    }
-
-    function onExcelFileSelected(input) {
-      const file = input.files[0];
-      if (!file) return;
-
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        const data = new Uint8Array(e.target.result);
-        const workbook = XLSX.read(data, { type: 'array', cellDates: true });
-        const firstSheetName = workbook.SheetNames[0];
-        const worksheet = workbook.Sheets[firstSheetName];
-        const jsonRows = XLSX.utils.sheet_to_json(worksheet, { defval: "" });
-
-        const parsed = [];
-        for (let row of jsonRows) {
-          const lastName = row['គោត្តនាម'] || row['Last Name'] || row['Lastname'] || '';
-          const firstName = row['នាម'] || row['First Name'] || row['Firstname'] || '';
-          let fullName = row['ឈ្មោះ'] || row['ឈ្មោះសិស្ស'] || row['Name'] || '';
-
-          if (!fullName && (lastName || firstName)) {
-            fullName = `${lastName} ${firstName}`.trim();
-          }
-          if (!fullName) continue;
-
-          let gender = String(row['ភេទ'] || row['Sex'] || row['Gender'] || 'ស្រី');
-          if (gender.includes('ប្រុស') || String(gender).toLowerCase() === 'm') gender = 'ប្រុស';
-          else gender = 'ស្រី';
-
-          const studentId = String(row['អត្តលេខ'] || row['លេខសិស្ស'] || row['ID'] || row['Student ID'] || '');
-          const dob = formatToInputDate(row['ថ្ងៃខែឆ្នាំកំណើត'] || row['DOB'] || row['ថ្ងៃកំណើត'] || '');
-          const phone = String(row['ទូរស័ព្ទ'] || row['Phone'] || '');
-          const pob = String(row['ទីកន្លែងកំណើត'] || row['POB'] || '');
-          const addr = String(row['អាសយដ្ឋានបច្ចុប្បន្ន'] || row['Address'] || '');
-
-          parsed.push({
-            name: fullName,
-            sex: gender,
-            id: studentId,
-            dob: dob,
-            phone: phone,
-            pob: pob,
-            address: addr,
-            grade: currentSelectedClass ? `ថ្នាក់ទី${currentSelectedClass}` : 'ថ្នាក់ទី៤ក',
-            photoUrl: '', isDraft: false
-          });
-        }
-
-        pendingImportStudents = parsed;
-        updateSubmitImportBtn(parsed.length);
-        showToast(`📊 បានអានទិន្នន័យសិស្ស ${parsed.length} នាក់ពី Excel!`);
-      };
-      reader.readAsArrayBuffer(file);
-      input.value = '';
-    }
-
-    async function submitImportStudents() {
-      if (!pendingImportStudents.length) return;
-      const btn = document.getElementById('btnSubmitImport');
-      btn.disabled = true;
-      btn.innerHTML = `<span class="spinner-dark" style="width:14px;height:14px;border-top-color:#fff;"></span> កំពុងនាំចូល...`;
-
-      const list = pendingImportStudents.map(s => ({ studentId: s.id, name: s.name, gender: s.sex, dob: s.dob,
-        grade: s.grade, phone: s.phone, pob: s.pob, address: s.address }));
-      let added = 0, skipped = [], failed = false;
-      for (let i = 0; i < list.length; i += 25) {
-        const res = await apiRequest('bulkSubmitStudents', { students: list.slice(i, i + 25) });
-        if (!res) { alert("❌ នាំចូលបរាជ័យ៖ " + lastApiError); failed = true; break; }
-        added += res.added || 0;
-        skipped = skipped.concat(res.skipped || []);
-      }
-      closeImportModal();
-      if (added) showToast(`🎉 បាននាំចូល ${added} នាក់` + (skipped.length ? ` • រំលង ${skipped.length}` : ''));
-      if (skipped.length) alert("បានរំលងសិស្សទាំងនេះ៖\n" + skipped.map(x => `${x.name || '(គ្មានឈ្មោះ)'} – ${x.reason}`).join('\n'));
-      if (added) notifyParentDataChanged();
-      if (!failed || added) syncWithBackendParallel(true);
-    }
-
-    /* =========================================================
-       🚀 AUTO-SAVE & TABLE SYNC
+       🚀 AUTO-SAVE & SMART SUBMIT ENGINE
     ========================================================= */
     function triggerAutoSave(realIdx) {
       const s = studentsList[realIdx];
@@ -1436,22 +1268,54 @@
       s._uid = s._uid || ++uidSeq;
       setSyncStatusBadge("💾 កំពុងរក្សាទុក...", "#f59e0b");
       clearTimeout(autoSaveTimers[s._uid]);
-      autoSaveTimers[s._uid] = setTimeout(() => executeAutoSaveRow(s), 850);
+      autoSaveTimers[s._uid] = setTimeout(() => executeAutoSaveRow(s), 800);
     }
 
     function buildPayload(s) {
-      return {
-        originalId: s.origId || '', studentId: s.id, name: s.name, gender: s.sex || 'ស្រី', dob: s.dob || '',
-        grade: s.grade, phone: s.phone || '', pob: s.pob || '', address: s.address || '',
-        photoFile: s.photoUrl && s.photoUrl.startsWith('data:image') ? { base64: s.photoUrl } : null
+      const sid = String(s.id || s.studentId || '').trim();
+      const orig = String(s.origId || sid).trim();
+      const payload = {
+        originalId: orig,
+        studentId: sid,
+        name: (s.name || '').trim(),
+        gender: s.sex || s.gender || 'ស្រី',
+        sex: s.sex || s.gender || 'ស្រី',
+        dob: s.dob || '',
+        grade: s.grade || (currentSelectedClass ? `ថ្នាក់ទី${currentSelectedClass}` : ''),
+        className: currentSelectedClass || (s.grade ? s.grade.replace(/^ថ្នាក់ទី\s*/, '').trim() : ''),
+        phone: (s.phone || '').trim(),
+        pob: (s.pob || '').trim(),
+        address: (s.address || '').trim()
       };
+
+      // បញ្ជូន photoFile លុះត្រាតែជារូបថត Base64 ថ្មីដែលទើបជ្រើសរើស
+      if (s.photoUrl && s.photoUrl.startsWith('data:image')) {
+        payload.photoFile = { base64: s.photoUrl };
+      }
+      return payload;
     }
 
     async function executeAutoSaveRow(s) {
       if (!s || !s.id || !s.name) return;
-      const res = await apiRequest(s.origId ? 'updateStudentData' : 'submitStudentData', { formData: buildPayload(s) });
+      const payload = buildPayload(s);
+      let res = null;
+
+      // 🔄 SMART UPDATE / SUBMIT FALLBACK
+      if (s.origId) {
+        res = await apiRequest('updateStudentData', { formData: payload });
+        if (!res && lastApiError && (lastApiError.includes('រកមិនឃើញសិស្ស') || lastApiError.includes('not found'))) {
+          res = await apiRequest('submitStudentData', { formData: payload });
+        }
+      } else {
+        res = await apiRequest('submitStudentData', { formData: payload });
+        if (!res && lastApiError && (lastApiError.includes('មានរួចហើយ') || lastApiError.includes('ស្ទួន'))) {
+          res = await apiRequest('updateStudentData', { formData: payload });
+        }
+      }
+
       if (res) {
         s.origId = s.id;
+        s.isDraft = false;
         if (s.photoUrl && s.photoUrl.startsWith('data:image')) syncWithBackendParallel(false);
         setSyncStatusBadge("⚡ រក្សាទុករួចរាល់", "#16a34a");
         notifyParentDataChanged();
@@ -1471,11 +1335,8 @@
         if (/^\d{4}-\d{2}-\d{2}$/.test(dateVal)) return dateVal;
         const dmy = dateVal.split(/[\/\-.]/);
         if (dmy.length === 3) {
-          if (dmy[2].length === 4) {
-            return `${dmy[2]}-${dmy[1].padStart(2, '0')}-${dmy[0].padStart(2, '0')}`;
-          } else if (dmy[0].length === 4) {
-            return `${dmy[0]}-${dmy[1].padStart(2, '0')}-${dmy[2].padStart(2, '0')}`;
-          }
+          if (dmy[2].length === 4) return `${dmy[2]}-${dmy[1].padStart(2, '0')}-${dmy[0].padStart(2, '0')}`;
+          if (dmy[0].length === 4) return `${dmy[0]}-${dmy[1].padStart(2, '0')}-${dmy[2].padStart(2, '0')}`;
         }
       }
       const d = new Date(dateVal);
@@ -1528,9 +1389,7 @@
     function initKhmerCalendarComponent() {
       const monthSel = document.getElementById('calMonthSelect');
       const yearSel = document.getElementById('calYearSelect');
-
       monthSel.innerHTML = KHMER_MONTHS.map((m, idx) => `<option value="${idx}">${m}</option>`).join('');
-
       let yearsHtml = '';
       for (let y = 2035; y >= 1995; y--) yearsHtml += `<option value="${y}">${y}</option>`;
       yearSel.innerHTML = yearsHtml;
@@ -1679,14 +1538,12 @@
       document.getElementById('rowPhotoFileInput').click();
     }
 
-    function onRowPhotoFileSelected(input) {
+    async function onRowPhotoFileSelected(input) {
       const file = input.files[0];
       if (!file || uploadTargetIndex === null) return;
-      if (file.size > 3 * 1024 * 1024) { alert("ទំហំរូបថតត្រូវតែតូចជាង 3MB!"); return; }
-
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        const base64Data = e.target.result;
+      input.value = '';
+      try {
+        const base64Data = await compressImageFile(file, 350, 0.65);
         const s = studentsList[uploadTargetIndex];
         if (s) {
           s.photoUrl = base64Data;
@@ -1695,16 +1552,14 @@
           triggerAutoSave(uploadTargetIndex);
           showToast(`បានបញ្ចូលរូបថតសិស្ស «${s.name || ''}»`);
         }
-      };
-      reader.readAsDataURL(file);
-      input.value = '';
+      } catch (err) { alert(err.message || 'មិនអាចអានរូបនេះបានទេ'); }
     }
 
     /* =========================================================
        ➕ ADD / SAVE ROW DRAFT
     ========================================================= */
     async function addNewRow() {
-      const defaultGrade = currentSelectedClass ? `ថ្នាក់ទី${currentSelectedClass}` : 'ថ្នាក់ទី៤ក';
+      const defaultGrade = currentSelectedClass ? `ថ្នាក់ទី${currentSelectedClass}` : 'ថ្នាក់ទី៤(ក)';
       studentsList.push({
         isDraft: true,
         id: '',
@@ -1748,7 +1603,7 @@
         const fName = data.firstName || '';
         s.name = `${lName} ${fName}`.trim() || s.name || '';
         s.sex = data.sex || s.sex || 'ស្រី';
-        s.grade = data.grade || s.grade || (currentSelectedClass ? `ថ្នាក់ទី${currentSelectedClass}` : 'ថ្នាក់ទី៤ក');
+        s.grade = data.grade || s.grade || (currentSelectedClass ? `ថ្នាក់ទី${currentSelectedClass}` : 'ថ្នាក់ទី៤(ក)');
         s.phone = data.phone || s.phone || '';
         s.pob = joinAddressParts(data.pob_village, data.pob_commune, data.pob_district, data.pob_province);
         s.address = joinAddressParts(data.addr_village, data.addr_commune, data.addr_district, data.addr_province);
@@ -1758,8 +1613,11 @@
       if (!s.name) { alert("⚠️ សូមបញ្ចូល «គោត្តនាម» ឬ «នាម» របស់សិស្ស!"); return false; }
 
       const payload = buildPayload(s);
-      s.origId = '';
-      const res = await apiRequest('submitStudentData', { formData: payload });
+      let res = await apiRequest('submitStudentData', { formData: payload });
+      if (!res && lastApiError && (lastApiError.includes('មានរួចហើយ') || lastApiError.includes('ស្ទួន'))) {
+        res = await apiRequest('updateStudentData', { formData: payload });
+      }
+
       if (!res) { alert("❌ ការរក្សាទុកបរាជ័យ៖ " + lastApiError); return false; }
       s.isDraft = false; s.origId = s.id;
       applyFilterAndRender();
@@ -2002,7 +1860,6 @@
         const hasMissingAddr = !s.isDraft && (!s.address || s.address.trim() === '');
         const hasMissingId = !s.isDraft && (!s.id || s.id.trim() === '');
 
-        // 📸 រូបថតសិស្ស (ពីជួរ O នៃ Sheet ព័ត៌មានសិស្ស)
         const photoUrl = safeUrl(s.photoUrl || s.imageUrl);
         const photoImgHtml = photoUrl
           ? `<img src="${esc(photoUrl)}" data-ini="${esc(initialBadge)}" onerror="this.onerror=null;this.parentElement.textContent=this.dataset.ini">`
@@ -2044,7 +1901,6 @@
           <tr data-index="${realIdx}">
             <td class="sticky-col-1">${col1Content}</td>
 
-            <!-- 📸 រូបថតសិស្ស (ចុចលើរូបដើម្បី Popup ផ្ទាំងកែប្រែព័ត៌មាន) -->
             <td class="col-photo">
               <div class="table-photo-box" onclick="openEditModal(${realIdx})" title="ចុចលើរូបដើម្បីកែប្រែព័ត៌មានសិស្ស">
                 ${photoImgHtml}
@@ -2130,9 +1986,10 @@
       }
     }
 
-    /* 🌟 EDIT MODAL (POPUP ពេលចុចលើរូបថត ឬ MENU) */
+    /* 🌟 EDIT MODAL */
     function openEditModal(realIdx) {
       activeRowIndex = realIdx;
+      modalPhotoBase64 = null; // សម្អាតរូបថ្មី (ទុកឱ្យប្រើរូបចាស់)
       const s = studentsList[realIdx];
       if (!s) return;
 
@@ -2178,30 +2035,20 @@
 
     function openEditModalFromMenu() { if (activeRowIndex !== null) openEditModal(activeRowIndex); }
 
-    function previewModalPhoto(input) {
+    async function previewModalPhoto(input) {
       const file = input.files[0];
       if (!file) return;
-      if (file.size > 10 * 1024 * 1024) { alert("ទំហំរូបថតត្រូវតែតូចជាង 10MB!"); return; }
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        const img = new Image();
-        img.onload = function() {
-          const MAX = 800, k = Math.min(1, MAX / Math.max(img.width, img.height));
-          const c = document.createElement('canvas');
-          c.width = Math.round(img.width * k); c.height = Math.round(img.height * k);
-          c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
-          modalPhotoBase64 = c.toDataURL('image/jpeg', 0.85);   // បង្រួមរូបមុនផ្ញើ (~100-200KB)
-          const box = document.getElementById('modalAvatarBox');
-          box.textContent = '';
-          const im = document.createElement('img'); im.src = modalPhotoBase64; box.appendChild(im);
-        };
-        img.onerror = () => alert("មិនអាចអានរូបនេះបានទេ");
-        img.src = e.target.result;
-      };
-      reader.readAsDataURL(file);
       input.value = '';
+      try {
+        // បង្រួមរូបឱ្យតូច ≤ 350px កុំឱ្យជាប់ Failed to fetch ពេល Upload
+        modalPhotoBase64 = await compressImageFile(file, 350, 0.65);
+        const box = document.getElementById('modalAvatarBox');
+        box.textContent = '';
+        const im = document.createElement('img'); im.src = modalPhotoBase64; box.appendChild(im);
+      } catch (err) { alert(err.message || 'មិនអាចអានរូបនេះបានទេ'); }
     }
 
+    /* 💾 SAVE MODAL CHANGES (កែសម្រួលដើម្បីកុំឱ្យជាប់ Failed to fetch) */
     async function saveModalChanges() {
       if (activeRowIndex === null) return;
 
@@ -2211,6 +2058,10 @@
       const studentId = document.getElementById('modalStudentId').value.trim();
 
       if (!fullName) { alert("សូមបញ្ចូលឈ្មោះសិស្ស!"); return; }
+
+      const saveBtn = document.getElementById('modalSaveBtn');
+      saveBtn.disabled = true;
+      saveBtn.innerText = '⏳ កំពុងរក្សាទុក...';
 
       const s = studentsList[activeRowIndex];
       s.id = studentId;
@@ -2222,19 +2073,40 @@
       s.pob = document.getElementById('modalPob').value.trim();
       s.address = document.getElementById('modalAddress').value.trim();
       s.isDraft = false;
+
       if (modalPhotoBase64) {
         s.photoUrl = modalPhotoBase64;
         s.imageUrl = modalPhotoBase64;
       }
 
+      const payload = buildPayload(s);
+      let res = null;
+
+      // 🔄 SMART UPDATE OR SUBMIT FALLBACK
+      if (s.origId) {
+        res = await apiRequest('updateStudentData', { formData: payload });
+        if (!res && lastApiError && (lastApiError.includes('រកមិនឃើញសិស្ស') || lastApiError.includes('not found'))) {
+          res = await apiRequest('submitStudentData', { formData: payload });
+        }
+      } else {
+        res = await apiRequest('submitStudentData', { formData: payload });
+        if (!res && lastApiError && (lastApiError.includes('មានរួចហើយ') || lastApiError.includes('ស្ទួន'))) {
+          res = await apiRequest('updateStudentData', { formData: payload });
+        }
+      }
+
+      saveBtn.disabled = false;
+      saveBtn.innerText = '💾 រក្សាទុកការកែប្រែ';
+
+      if (!res) {
+        alert("❌ រក្សាទុកបរាជ័យ៖ " + lastApiError);
+        return; // ទុក Modal បើកដដែល កុំឱ្យបាត់ទិន្នន័យ
+      }
+
+      s.origId = s.id;
+      modalPhotoBase64 = null;
       applyFilterAndRender();
       closeEditModal();
-
-      const payload = buildPayload(s);
-      if (modalPhotoBase64) payload.photoFile = { base64: modalPhotoBase64 };
-      const res = await apiRequest(s.origId ? 'updateStudentData' : 'submitStudentData', { formData: payload });
-      if (!res) { alert("❌ រក្សាទុកបរាជ័យ៖ " + lastApiError); syncWithBackendParallel(true); return; }
-      s.origId = s.id;
       showToast(`🎉 បានកែប្រែព័ត៌មានសិស្ស «${s.name}» ជោគជ័យ!`);
       notifyParentDataChanged();
       syncWithBackendParallel(false);
@@ -2259,9 +2131,17 @@
           jobs.push(s);
         });
         if (!jobs.length) { showToast("គ្មានទិន្នន័យត្រូវរក្សាទុកឡើយ!"); return; }
-        for (let i = 0; i < jobs.length; i += 3) {
-          await Promise.all(jobs.slice(i, i + 3).map(async s => {
-            const res = await apiRequest(s.origId ? 'updateStudentData' : 'submitStudentData', { formData: buildPayload(s) });
+        for (let i = 0; i < jobs.length; i += 2) {
+          await Promise.all(jobs.slice(i, i + 2).map(async s => {
+            const payload = buildPayload(s);
+            let res = null;
+            if (s.origId) {
+              res = await apiRequest('updateStudentData', { formData: payload });
+              if (!res && lastApiError && lastApiError.includes('រកមិនឃើញសិស្ស')) res = await apiRequest('submitStudentData', { formData: payload });
+            } else {
+              res = await apiRequest('submitStudentData', { formData: payload });
+              if (!res && lastApiError && lastApiError.includes('មានរួចហើយ')) res = await apiRequest('updateStudentData', { formData: payload });
+            }
             if (res) { s.origId = s.id; s.isDraft = false; ok++; } else fail++;
           }));
         }
