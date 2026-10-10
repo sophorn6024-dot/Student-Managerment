@@ -173,7 +173,9 @@
     }
     .col-option:hover { background: var(--surface-elevated); }
 
-    /* 📊 TABLE CONTAINER & STICKY SCROLL BEHAVIOR */
+    /* =========================================================
+       📊 TABLE CONTAINER & DYNAMIC STICKY SCROLL ENGINE
+    ========================================================= */
     .table-container {
       background: var(--surface); border-radius: 14px; border: 1px solid var(--border);
       overflow: auto; max-height: calc(100vh - 210px);
@@ -187,14 +189,28 @@
       border-bottom: 1px solid var(--border); vertical-align: middle; white-space: nowrap;
     }
 
-    /* 📌 STICKY LEFT COLUMNS */
-    .sticky-col-1 { position: sticky; left: 0px; z-index: 20; background: var(--bg-sticky); width: 54px; min-width: 54px; }
-    .sticky-col-2 { position: sticky; left: 54px; z-index: 20; background: var(--bg-sticky); width: 75px; min-width: 75px; }
-    .sticky-col-3 { position: sticky; left: 129px; z-index: 20; background: var(--bg-sticky); width: 70px; min-width: 70px; }
-    .sticky-col-4 {
-      position: sticky; left: 199px; z-index: 20; background: var(--bg-sticky); width: 75px; min-width: 75px;
+    /* 📌 STICKY COL 1: ល.រ (Pinned នៅ 0px មាន z-index ខ្ពស់ជាងគេ ដើម្បីបាំងអត្តលេខពេល Scroll) */
+    .sticky-col-1 {
+      position: sticky; left: 0px; z-index: 28; background: var(--bg-sticky); width: 48px; min-width: 48px;
+    }
+
+    /* 🌟 អត្តលេខ: នៅបន្ទាប់ពី ល.រ តែមិន Sticky ទេ (ពេល Scroll វានឹងរមូរលាក់ចូលក្រោយ ល.រ) */
+    .col-id {
+      width: 80px; min-width: 80px; max-width: 80px; z-index: 10;
+    }
+
+    /* 📌 STICKY COL 2: គោត្តនាម (Pinned នៅ 48px ពេល Scroll ហួស អត្តលេខ វានឹងរត់មកជាប់ ល.រ) */
+    .sticky-col-2 {
+      position: sticky; left: 48px; z-index: 24; background: var(--bg-sticky); width: 85px; min-width: 85px;
+      text-align: left; padding-left: 6px;
+    }
+
+    /* 📌 STICKY COL 3: នាម (Pinned នៅ 133px = 48px + 85px មានស្រមោលកាត់ព្រំដែន) */
+    .sticky-col-3 {
+      position: sticky; left: 133px; z-index: 24; background: var(--bg-sticky); width: 85px; min-width: 85px;
+      text-align: left; padding-left: 6px;
       border-right: 2px solid var(--border) !important;
-      box-shadow: 4px 0 10px -2px rgba(0, 0, 0, 0.2);
+      box-shadow: 4px 0 10px -2px rgba(0, 0, 0, 0.22);
     }
 
     /* 📌 STICKY RIGHT COLUMN - សកម្មភាព */
@@ -204,9 +220,8 @@
       box-shadow: -4px 0 10px -2px rgba(0, 0, 0, 0.2);
     }
 
-    thead .sticky-col-1, thead .sticky-col-2, thead .sticky-col-3, thead .sticky-col-4 {
-      z-index: 60; background: var(--bg-header-sticky);
-    }
+    thead .sticky-col-1 { z-index: 70; background: var(--bg-header-sticky); }
+    thead .sticky-col-2, thead .sticky-col-3 { z-index: 65; background: var(--bg-header-sticky); }
     thead th.sticky-action { z-index: 60; background: var(--surface-elevated); color: var(--text); }
 
     .th-vertical {
@@ -214,11 +229,11 @@
       height: 70px; line-height: 1; padding: 6px 2px; letter-spacing: 0.5px;
     }
 
+    .th-academic { background: rgba(168, 85, 247, 0.18); color: #c084fc; font-size: 13.5px; }
     .th-pob-main { background: rgba(2, 132, 199, 0.18); color: #38bdf8; font-size: 13.5px; }
     .th-addr-main { background: rgba(37, 99, 235, 0.18); color: #60a5fa; font-size: 13.5px; }
     .th-sub-pob { background: rgba(2, 132, 199, 0.1); color: #0284c7; }
     .th-sub-addr { background: rgba(37, 99, 235, 0.1); color: #2563eb; }
-    .th-academic { background: rgba(168, 85, 247, 0.15); color: #c084fc; }
 
     tbody tr { height: 46px; }
     tbody tr:hover td { background-color: rgba(2, 132, 199, 0.08); }
@@ -433,7 +448,7 @@
   <!-- 🎛️ CONTROL CARD -->
   <div class="control-card">
     <div class="top-controls">
-      <!-- 🌟 បញ្ជីរើសថ្នាក់ (ចាក់សោសម្រាប់គ្រូ និងបើកចំហសម្រាប់ Admin) -->
+      <!-- 🌟 បញ្ជីរើសថ្នាក់ -->
       <select class="pill-select-class" id="classFilterSelect" onchange="onClassFilterChange()">
         <option value="">កំពុងទាញយកថ្នាក់...</option>
       </select>
@@ -516,35 +531,50 @@
     <table id="studentsTable">
       <thead>
         <tr>
+          <!-- 📌 STICKY: ល.រ (Pinned នៅ 0px) -->
           <th rowspan="2" class="sticky-col-1"><div class="th-vertical">ល.រ</div></th>
-          <th rowspan="2" class="sticky-col-2 col-id"><div class="th-vertical">អត្តលេខ</div></th>
-          <th rowspan="2" class="sticky-col-3"><div class="th-vertical">គោត្តនាម</div></th>
-          <th rowspan="2" class="sticky-col-4"><div class="th-vertical">នាម</div></th>
 
+          <!-- 🌟 អត្តលេខ (នៅបន្ទាប់ពី ល.រ ដដែល តែពេល Scroll វានឹងរមូរលាក់ចូលក្រោយ ល.រ) -->
+          <th rowspan="2" class="col-id"><div class="th-vertical">អត្តលេខ</div></th>
+
+          <!-- 📌 STICKY: គោត្តនាម, នាម -->
+          <th rowspan="2" class="sticky-col-2"><div class="th-vertical">គោត្តនាម</div></th>
+          <th rowspan="2" class="sticky-col-3"><div class="th-vertical">នាម</div></th>
+
+          <!-- 🌟 ភេទ -->
           <th rowspan="2" class="col-gender" style="width: 60px;"><div class="th-vertical">ភេទ</div></th>
 
-          <th colspan="4" class="th-pob-main col-pob">ទីកន្លែងកំណើតសិស្ស</th>
-          <th colspan="4" class="th-addr-main col-address">អាសយដ្ឋានបច្ចុប្បន្នសិស្ស</th>
+          <!-- 🌟 ព័ត៌មានសិស្ស (នៅជាប់ភេទ) -->
           <th colspan="4" class="th-academic col-info">ព័ត៌មានសិស្ស</th>
 
+          <!-- ទីកន្លែងកំណើត -->
+          <th colspan="4" class="th-pob-main col-pob">ទីកន្លែងកំណើតសិស្ស</th>
+
+          <!-- អាសយដ្ឋានបច្ចុប្បន្ន -->
+          <th colspan="4" class="th-addr-main col-address">អាសយដ្ឋានបច្ចុប្បន្នសិស្ស</th>
+
+          <!-- សកម្មភាព -->
           <th rowspan="2" class="sticky-action">សកម្មភាព</th>
         </tr>
 
         <tr>
+          <!-- ព័ត៌មានសិស្ស sub-headers -->
+          <th class="col-info" style="width: 110px;">ថ្ងៃកំណើត</th>
+          <th class="col-info" style="width: 50px;">អាយុ</th>
+          <th class="col-info" style="width: 90px;">ថ្នាក់</th>
+          <th class="col-info" style="width: 105px;">ទូរស័ព្ទ</th>
+
+          <!-- ទីកន្លែងកំណើត sub-headers -->
           <th class="th-sub-pob col-pob" style="width: 105px;">ខេត្ត/ក្រុង</th>
           <th class="th-sub-pob col-pob" style="width: 105px;">ស្រុក/ខណ្ឌ</th>
           <th class="th-sub-pob col-pob" style="width: 105px;">ឃុំ/សង្កាត់</th>
           <th class="th-sub-pob col-pob" style="width: 95px;">ភូមិ</th>
 
+          <!-- អាសយដ្ឋានបច្ចុប្បន្ន sub-headers -->
           <th class="th-sub-addr col-address" style="width: 105px;">ខេត្ត/ក្រុង</th>
           <th class="th-sub-addr col-address" style="width: 105px;">ស្រុក/ខណ្ឌ</th>
           <th class="th-sub-addr col-address" style="width: 105px;">ឃុំ/សង្កាត់</th>
           <th class="th-sub-addr col-address" style="width: 95px;">ភូមិ</th>
-
-          <th class="col-info" style="width: 110px;">ថ្ងៃកំណើត</th>
-          <th class="col-info" style="width: 50px;">អាយុ</th>
-          <th class="col-info" style="width: 90px;">ថ្នាក់</th>
-          <th class="col-info" style="width: 105px;">ទូរស័ព្ទ</th>
         </tr>
       </thead>
       <tbody id="tableBody">
@@ -723,7 +753,7 @@
       }
     }
 
-    /* 🏫 INITIALIZE CLASS DROPDOWN (ចាក់សោតាមថ្នាក់ លើកលែងតែ Admin) */
+    /* 🏫 INITIALIZE CLASS DROPDOWN */
     async function initClassFilterDropdown() {
       const sel = document.getElementById('classFilterSelect');
       sel.innerHTML = '<option value="">កំពុងទាញយកថ្នាក់...</option>';
@@ -731,12 +761,11 @@
       if (!IS_ADMIN && currentSelectedClass !== '') {
         sel.innerHTML = `<option value="${currentSelectedClass}">ថ្នាក់ទី ${currentSelectedClass}</option>`;
         sel.value = currentSelectedClass;
-        sel.disabled = true; // 🔒 គ្រូធម្មតាមិនអាចប្តូរថ្នាក់បានឡើយ
+        sel.disabled = true;
         syncWithBackendParallel(true);
         return;
       }
 
-      // 🌟 បើជា Admin អនុញ្ញាតឱ្យរើសគ្រប់ថ្នាក់ទាំងអស់
       sel.disabled = false;
       try {
         const classesRes = await apiRequest('getClassList');
@@ -941,7 +970,7 @@
         s.isDraft = false;
         applyFilterAndRender();
         showToast(`🎉 បានរក្សាទុកសិស្ស «${s.name}» ជោគជ័យ!`);
-        notifyParentDataChanged(); // 🌟 Auto-refresh Dashboard
+        notifyParentDataChanged();
         syncWithBackendParallel(false);
         return true;
       } catch (err) {
@@ -1137,7 +1166,7 @@
       renderTable(filtered);
     }
 
-    /* 🌟 គណនាអាយុឆ្លាតវៃ ស្គាល់គ្រប់ទម្រង់ (DD/MM/YYYY, DD-MM-YYYY, YYYY-MM-DD) */
+    /* 🌟 គណនាអាយុ */
     function calculateAge(dobStr) {
       if (!dobStr) return '';
       let b = new Date(dobStr);
@@ -1157,7 +1186,9 @@
       return age > 0 ? age : '';
     }
 
-    /* 🎨 RENDER TABLE */
+    /* 🎨 RENDER TABLE:
+       - [ល.រ] ➔ [អត្តលេខ (បន្ទាប់ពីល.រ តែ Scroll លាក់)] ➔ [គោត្តនាម] ➔ [នាម] ➔ [ភេទ] ➔ [ព័ត៌មានសិស្ស (នៅជាប់ភេទ)]
+    */
     function renderTable(list) {
       const tbody = document.getElementById('tableBody');
 
@@ -1232,25 +1263,26 @@
 
         rowsHtml.push(`
           <tr data-index="${idx}">
+            <!-- 📌 STICKY: ល.រ -->
             <td class="sticky-col-1">${col1Content}</td>
-            <td class="sticky-col-2 col-id">
+
+            <!-- 🌟 អត្តលេខ (នៅបន្ទាប់ពី ល.រ ដដែល តែពេល Scroll វានឹងរមូរលាក់ចូលក្រោយ ល.រ) -->
+            <td class="col-id">
               <input type="text" class="table-input ${hasMissingId ? 'cell-missing' : ''}" value="${s.id || ''}" data-field="id" oninput="syncRowInput(this, ${idx})" placeholder="${s.isDraft ? 'អត្តលេខ' : ''}">
             </td>
-            <td class="sticky-col-3">
+
+            <!-- 📌 STICKY: គោត្តនាម, នាម -->
+            <td class="sticky-col-2">
               <input type="text" class="table-input input-left ${!lastName && !s.isDraft ? 'cell-missing' : ''}" value="${lastName}" data-field="lastName" style="font-weight:700;" oninput="syncRowInput(this, ${idx})" placeholder="${s.isDraft ? 'គោត្តនាម' : ''}">
             </td>
-            <td class="sticky-col-4">
+            <td class="sticky-col-3">
               <input type="text" class="table-input input-left ${!firstName && !s.isDraft ? 'cell-missing' : ''}" value="${firstName}" data-field="firstName" style="font-weight:700;" oninput="syncRowInput(this, ${idx})" placeholder="${s.isDraft ? 'នាម' : ''}">
             </td>
+
+            <!-- 🌟 ភេទ -->
             <td class="col-gender">${genderContent}</td>
-            <td class="col-pob"><input type="text" class="table-input ${hasMissingPob ? 'cell-missing' : ''}" value="${pobArr[3] || pobArr[0] || ''}" data-field="pob_province" oninput="syncRowInput(this, ${idx})"></td>
-            <td class="col-pob"><input type="text" class="table-input" value="${pobArr[2] || ''}" data-field="pob_district" oninput="syncRowInput(this, ${idx})"></td>
-            <td class="col-pob"><input type="text" class="table-input" value="${pobArr[1] || ''}" data-field="pob_commune" oninput="syncRowInput(this, ${idx})"></td>
-            <td class="col-pob"><input type="text" class="table-input" value="${pobArr[0] || ''}" data-field="pob_village" oninput="syncRowInput(this, ${idx})"></td>
-            <td class="col-address"><input type="text" class="table-input ${hasMissingAddr ? 'cell-missing' : ''}" value="${addrArr[3] || addrArr[0] || ''}" data-field="addr_province" oninput="syncRowInput(this, ${idx})"></td>
-            <td class="col-address"><input type="text" class="table-input" value="${addrArr[2] || ''}" data-field="addr_district" oninput="syncRowInput(this, ${idx})"></td>
-            <td class="col-address"><input type="text" class="table-input" value="${addrArr[1] || ''}" data-field="addr_commune" oninput="syncRowInput(this, ${idx})"></td>
-            <td class="col-address"><input type="text" class="table-input" value="${addrArr[0] || ''}" data-field="addr_village" oninput="syncRowInput(this, ${idx})"></td>
+
+            <!-- 🌟 ព័ត៌មានសិស្ស (នៅជាប់ភេទ) -->
             <td class="col-info">
               <input type="date" class="table-input ${hasMissingDob ? 'cell-missing' : ''}" value="${s.dob || ''}" data-field="dob" onchange="updateRowAge(this); syncRowInput(this, ${idx})">
             </td>
@@ -1259,6 +1291,20 @@
             <td class="col-info">
               <input type="tel" class="table-input ${hasMissingPhone ? 'cell-missing' : ''}" value="${s.phone || ''}" data-field="phone" oninput="syncRowInput(this, ${idx})">
             </td>
+
+            <!-- ទីកន្លែងកំណើត -->
+            <td class="col-pob"><input type="text" class="table-input ${hasMissingPob ? 'cell-missing' : ''}" value="${pobArr[3] || pobArr[0] || ''}" data-field="pob_province" oninput="syncRowInput(this, ${idx})"></td>
+            <td class="col-pob"><input type="text" class="table-input" value="${pobArr[2] || ''}" data-field="pob_district" oninput="syncRowInput(this, ${idx})"></td>
+            <td class="col-pob"><input type="text" class="table-input" value="${pobArr[1] || ''}" data-field="pob_commune" oninput="syncRowInput(this, ${idx})"></td>
+            <td class="col-pob"><input type="text" class="table-input" value="${pobArr[0] || ''}" data-field="pob_village" oninput="syncRowInput(this, ${idx})"></td>
+
+            <!-- អាសយដ្ឋានបច្ចុប្បន្ន -->
+            <td class="col-address"><input type="text" class="table-input ${hasMissingAddr ? 'cell-missing' : ''}" value="${addrArr[3] || addrArr[0] || ''}" data-field="addr_province" oninput="syncRowInput(this, ${idx})"></td>
+            <td class="col-address"><input type="text" class="table-input" value="${addrArr[2] || ''}" data-field="addr_district" oninput="syncRowInput(this, ${idx})"></td>
+            <td class="col-address"><input type="text" class="table-input" value="${addrArr[1] || ''}" data-field="addr_commune" oninput="syncRowInput(this, ${idx})"></td>
+            <td class="col-address"><input type="text" class="table-input" value="${addrArr[0] || ''}" data-field="addr_village" oninput="syncRowInput(this, ${idx})"></td>
+
+            <!-- សកម្មភាព -->
             <td class="sticky-action">${actionContent}</td>
           </tr>
         `);
@@ -1280,7 +1326,7 @@
       ageBox.innerText = calculateAge(input.value);
     }
 
-    /* 🌟 ARROW NAVIGATION FIX (រុញ Cursor ចុះក្រោម ឬឡើងលើ ត្រូវតាម Column ឥតខុស) */
+    /* 🌟 ARROW NAVIGATION FIX */
     function navigateTable(direction) {
       const activeEl = document.activeElement;
       if (!activeEl) return;
@@ -1414,7 +1460,7 @@
       const actionToCall = s.rowNum ? 'updateStudentData' : 'submitStudentData';
       await apiRequest(actionToCall, { formData: payload });
       showToast(`🎉 បានកែប្រែព័ត៌មានសិស្ស «${s.name}» ជោគជ័យ!`);
-      notifyParentDataChanged(); // 🌟 Auto-refresh Dashboard
+      notifyParentDataChanged();
       syncWithBackendParallel(false);
     }
 
@@ -1458,7 +1504,7 @@
       btn.disabled = false;
       showToast(`🎉 បានរក្សាទុកទិន្នន័យចំនួន ${count} នាក់ទៅ Sheet ជោគជ័យ!`);
       hideBottomNavBar();
-      notifyParentDataChanged(); // 🌟 Auto-refresh Dashboard
+      notifyParentDataChanged();
       syncWithBackendParallel(false);
     }
 
@@ -1520,7 +1566,7 @@
         studentsList.splice(activeRowIndex, 1);
         applyFilterAndRender();
         showToast("បានលុបទិន្នន័យរួចរាល់!");
-        notifyParentDataChanged(); // 🌟 Auto-refresh Dashboard
+        notifyParentDataChanged();
       }
     }
   </script>
