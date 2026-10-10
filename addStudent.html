@@ -598,11 +598,13 @@
     .em-age { float:right; font-size:11px; font-weight:700; color:var(--primary); background:rgba(2,132,199,.12); padding:1px 8px; border-radius:12px; }
     .em-footer { padding:14px 16px; gap:12px; }
     .em-footer .modal-btn { height:46px; border-radius:12px; font-size:14px; }
+    .form-row-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
 
     @media (max-width: 768px) {
       .top-controls { grid-template-columns: 1fr 1fr; }
       .search-box { grid-column: 1 / -1; }
       .numbered-chips-grid { grid-template-columns: 1fr 1fr; }
+      .form-row-2 { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -930,7 +932,7 @@
               <div class="form-group"><label>នាម <b class="em-req">*</b></label><input type="text" class="modal-input" id="modalFirstName"></div>
             </div>
             <div class="form-row-2">
-              <div class="form-group"><label>លេខសិស្ស</label><input type="text" class="modal-input" id="modalStudentId"></div>
+              <div class="form-group"><label>លេខសិស្ស</label><input type="text" class="modal-input" id="modalStudentId" placeholder="ទុកទទេដើម្បីបង្កើតស្វ័យប្រវត្តិ"></div>
               <div class="form-group"><label>ថ្នាក់ <b class="em-req">*</b></label><select class="modal-input" id="modalGrade"></select></div>
             </div>
             <div class="form-row-2">
@@ -976,6 +978,7 @@
     const IS_ADMIN = String(USER_ROLE).toLowerCase().trim() === 'admin';
 
     let currentSelectedClass = USER_CLASS ? USER_CLASS.replace(/^ថ្នាក់ទី\s*/, '').trim() : '៤(ក)';
+    let availableClassesList = ['១', '២', '៣', '៤(ក)', '៤(ខ)', '៥', '៦'];
     let studentsList = [];
     let activeRowIndex = null;
     let uploadTargetIndex = null;
@@ -1041,7 +1044,7 @@
     function escParts(p) { const o = {}; for (const k in p) o[k] = esc(p[k]); return o; }
 
     /* =========================================================
-       🌐 API REQUEST ENGINE
+       🌐 API REQUEST ENGINE (កែសម្រួលដើម្បីស្គាល់ទាំង Text & JSON)
     ========================================================= */
     async function apiRequest(action, payload = {}) {
       const body = JSON.stringify({ action: action, token: TOKEN, ...payload });
@@ -1052,14 +1055,30 @@
             headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: body
           });
           const text = await response.text();
+          
           if (/^\s*</.test(text)) {
-            lastApiError = 'Server ត្រឡប់ទំព័រកំហុស (HTML)';
+            lastApiError = 'Server ត្រឡប់ទំព័រ Login/HTML — សូមពិនិត្យមើល Web App Deployment (ត្រូវដាក់ Anyone)';
             return null;
           }
-          let j;
-          try { j = JSON.parse(text); }
-          catch (pe) { lastApiError = 'Server ឆ្លើយមកមិនមែន JSON: ' + text.slice(0, 120); return null; }
-          if (j && j.success === false) { lastApiError = j.error || j.message || 'កំហុស'; return null; }
+
+          let j = null;
+          try { 
+            j = JSON.parse(text); 
+          } catch (pe) { 
+            // បើ Server ឆ្លើយតបមកជា Text ធម្មតា តែមានពាក្យជោគជ័យ
+            if (/ជោគជ័យ|success|ok|true/i.test(text)) {
+              lastApiError = '';
+              return { success: true, message: text };
+            }
+            lastApiError = text.slice(0, 160); 
+            return null; 
+          }
+
+          if (j && (j.success === false || j.status === 'error')) { 
+            lastApiError = j.error || j.message || 'កំហុសពី Server'; 
+            return null; 
+          }
+
           lastApiError = '';
           return j;
         } catch (err) {
@@ -1067,7 +1086,7 @@
           const isWrite = /^(submit|update|delete|bulk|set|save|clear)/.test(action);
           if (attempt === 1 && !isWrite) { await new Promise(r => setTimeout(r, 1200)); continue; }
           lastApiError = (err && err.name === 'TypeError')
-            ? 'ភ្ជាប់ទៅ Server មិនបាន — ពិនិត្យអ៊ីនធឺណិត ឬទំហំរូបថត'
+            ? 'ភ្ជាប់ទៅ Server មិនបាន — ពិនិត្យអ៊ីនធឺណិត ឬសិទ្ធិ CORS'
             : String(err);
           return null;
         }
@@ -1208,13 +1227,14 @@
             <span>🏫</span> <span>ថ្នាក់ទី ${displayClassName}</span>
           </div>
         `;
+        populateModalClassSelect(availableClassesList);
         syncWithBackendParallel(true);
         return;
       }
 
       container.innerHTML = `
         <select class="pill-select-class" id="classFilterSelect" onchange="onClassFilterChange()">
-          <option value="">កំពុងទាញយកថ្នាក់...</option>
+          <option value="">គ្រប់ថ្នាក់ទាំងអស់</option>
         </select>
       `;
 
@@ -1225,10 +1245,10 @@
         if (classesRes && Array.isArray(classesRes.classes)) classes = classesRes.classes;
         else if (Array.isArray(classesRes)) classes = classesRes;
 
-        if (!classes.length) classes = ['១', '២', '៣', '៤(ក)', '៤(ខ)', '៥', '៦'];
+        if (classes && classes.length) availableClassesList = classes;
 
         sel.innerHTML = '<option value="">គ្រប់ថ្នាក់ទាំងអស់</option>';
-        classes.forEach(c => {
+        availableClassesList.forEach(c => {
           let val = (typeof c === 'object' && c !== null) ? (c.className || c.name || '') : c.toString().trim();
           val = val.replace(/^ថ្នាក់ទី\s*/, '').trim();
           if (val) sel.innerHTML += `<option value="${esc(val)}">ថ្នាក់ទី ${esc(val)}</option>`;
@@ -1239,12 +1259,15 @@
         sel.innerHTML = '<option value="">គ្រប់ថ្នាក់</option>';
       }
 
+      populateModalClassSelect(availableClassesList);
       syncWithBackendParallel(true);
     }
 
     function onClassFilterChange() {
       const sel = document.getElementById('classFilterSelect');
       currentSelectedClass = sel ? sel.value : '';
+      const tag = document.getElementById('importClassTag');
+      if (tag) tag.innerText = currentSelectedClass ? `ថ្នាក់ទី${currentSelectedClass}` : 'គ្រប់ថ្នាក់';
       syncWithBackendParallel(true);
     }
 
@@ -1253,18 +1276,21 @@
       if (!modalSelect) return;
       modalSelect.innerHTML = '';
 
+      const list = (Array.isArray(classes) && classes.length) ? classes : availableClassesList;
+
       if (!IS_ADMIN && currentSelectedClass) {
         modalSelect.innerHTML = `<option value="ថ្នាក់ទី${esc(currentSelectedClass)}">ថ្នាក់ទី ${esc(currentSelectedClass)}</option>`;
-        modalSelect.disabled = true;
+        modalSelect.disabled = false;
         return;
       }
 
       modalSelect.disabled = false;
-      classes.forEach(cls => {
+      list.forEach(cls => {
         let val = typeof cls === 'object' ? (cls.className || cls.name) : cls;
         val = String(val).replace(/^ថ្នាក់ទី\s*/, '').trim();
-        modalSelect.innerHTML += `<option value="ថ្នាក់ទី${esc(val)}">ថ្នាក់ទី ${esc(val)}</option>`;
+        if (val) modalSelect.innerHTML += `<option value="ថ្នាក់ទី${esc(val)}">ថ្នាក់ទី ${esc(val)}</option>`;
       });
+
       if (currentSelectedClass) modalSelect.value = `ថ្នាក់ទី${currentSelectedClass}`;
     }
 
@@ -1290,13 +1316,19 @@
         apiRequest('getClassList'),
         apiRequest('getStudentRosterByClass', { className: currentSelectedClass })
       ]);
-      if (classesRes && classesRes.classes) populateModalClassSelect(classesRes.classes);
+
+      const fetchedClasses = (classesRes && classesRes.classes) ? classesRes.classes : (Array.isArray(classesRes) ? classesRes : []);
+      if (fetchedClasses.length) {
+        availableClassesList = fetchedClasses;
+        populateModalClassSelect(availableClassesList);
+      }
 
       if (!Array.isArray(rosterRes)) {
         setSyncStatusBadge("⚠️ " + (lastApiError || 'ក្រៅបណ្ដាញ'), "#ea580c");
         if (showLoadingRow) tbody.innerHTML = `<tr><td colspan="18" class="status-row">⚠️ ${esc(lastApiError || 'ទាញទិន្នន័យមិនបាន')}</td></tr>`;
         return;
       }
+
       const drafts = studentsList.filter(x => x.isDraft);
       studentsList = rosterRes.map(s => {
         const photo = extractStudentPhoto(s);
@@ -1336,8 +1368,14 @@
     }
 
     function buildPayload(s) {
+      if (!s.id || !String(s.id).trim()) {
+        s.id = 'ST' + Math.floor(100000 + Math.random() * 900000);
+      }
       const sid = String(s.id || s.studentId || '').trim();
       const orig = String(s.origId || sid).trim();
+      const currentGrade = s.grade || (currentSelectedClass ? `ថ្នាក់ទី${currentSelectedClass}` : 'ថ្នាក់ទី៤(ក)');
+      const clsName = currentSelectedClass || (currentGrade ? currentGrade.replace(/^ថ្នាក់ទី\s*/, '').trim() : '');
+
       return {
         originalId: orig,
         studentId: sid,
@@ -1345,8 +1383,8 @@
         gender: s.sex || s.gender || 'ស្រី',
         sex: s.sex || s.gender || 'ស្រី',
         dob: s.dob || '',
-        grade: s.grade || (currentSelectedClass ? `ថ្នាក់ទី${currentSelectedClass}` : ''),
-        className: currentSelectedClass || (s.grade ? s.grade.replace(/^ថ្នាក់ទី\s*/, '').trim() : ''),
+        grade: currentGrade,
+        className: clsName,
         phone: (s.phone || '').trim(),
         pob: (s.pob || '').trim(),
         address: (s.address || '').trim(),
@@ -1355,14 +1393,13 @@
     }
 
     async function executeAutoSaveRow(s) {
-      if (!s || !s.id || !s.name) return;
+      if (!s || !s.name) return;
       const payload = buildPayload(s);
       let res = null;
 
-      // 🔄 SMART SAVE: ព្យាយាម update បើមិនឃើញសិស្ស សាកល្បង submit បន្ថែមថ្មី
       if (s.origId) {
         res = await apiRequest('updateStudentData', { formData: payload });
-        if (!res && lastApiError && (lastApiError.includes('រកមិនឃើញសិស្ស') || lastApiError.includes('not found'))) {
+        if (!res && lastApiError && (lastApiError.includes('រកមិនឃើញ') || lastApiError.includes('not found'))) {
           res = await apiRequest('submitStudentData', { formData: payload });
         }
       } else {
@@ -1621,9 +1658,12 @@
     ========================================================= */
     async function addNewRow() {
       const defaultGrade = currentSelectedClass ? `ថ្នាក់ទី${currentSelectedClass}` : 'ថ្នាក់ទី៤(ក)';
+      const autoId = 'ST' + Math.floor(100000 + Math.random() * 900000);
       studentsList.push({
         isDraft: true,
-        id: '',
+        id: autoId,
+        studentId: autoId,
+        origId: '',
         name: '',
         sex: 'ស្រី',
         dob: '',
@@ -1632,7 +1672,8 @@
         pob: '',
         address: '',
         photoUrl: '',
-        nationality: 'ខ្មែរ'
+        nationality: 'ខ្មែរ',
+        _uid: ++uidSeq
       });
 
       applyFilterAndRender();
@@ -1643,8 +1684,8 @@
         tableContainer.scrollTop = tableContainer.scrollHeight;
         const tr = document.querySelector(`#tableBody tr[data-index="${studentsList.length - 1}"]`);
         if (tr) {
-          const idInp = tr.querySelector('input[data-field="id"]');
-          if (idInp) idInp.focus();
+          const lNameInp = tr.querySelector('input[data-field="lastName"]');
+          if (lNameInp) lNameInp.focus();
         }
       }, 80);
     }
@@ -1659,7 +1700,7 @@
         let data = {};
         inputs.forEach(inp => data[inp.dataset.field] = inp.value.trim());
 
-        s.id = data.id || s.id || '';
+        s.id = data.id || s.id || ('ST' + Math.floor(100000 + Math.random() * 900000));
         const lName = data.lastName || '';
         const fName = data.firstName || '';
         s.name = `${lName} ${fName}`.trim() || s.name || '';
@@ -1670,7 +1711,6 @@
         s.address = joinAddressParts(data.addr_village, data.addr_commune, data.addr_district, data.addr_province);
       }
 
-      if (!s.id) { alert("⚠️ សូមបញ្ចូល «អត្តលេខ» សិស្ស!"); return false; }
       if (!s.name) { alert("⚠️ សូមបញ្ចូល «គោត្តនាម» ឬ «នាម» របស់សិស្ស!"); return false; }
 
       const payload = buildPayload(s);
@@ -1679,8 +1719,13 @@
         res = await apiRequest('updateStudentData', { formData: payload });
       }
 
-      if (!res) { alert("❌ ការរក្សាទុកបរាជ័យ៖ " + lastApiError); return false; }
-      s.isDraft = false; s.origId = s.id;
+      if (!res) { 
+        alert("❌ ការរក្សាទុកបរាជ័យ៖ " + (lastApiError || 'ពិនិត្យ Server')); 
+        return false; 
+      }
+
+      s.isDraft = false; 
+      s.origId = s.id;
       applyFilterAndRender();
       showToast(`🎉 បានរក្សាទុកសិស្ស «${s.name}» ជោគជ័យ!`);
       notifyParentDataChanged();
@@ -1969,13 +2014,13 @@
             </td>
 
             <td class="col-id">
-              <input type="text" class="table-input ${hasMissingId ? 'cell-missing' : ''}" value="${esc(s.id)}" data-field="id" oninput="syncRowInput(this, ${realIdx})" placeholder="${s.isDraft ? 'អត្តលេខ' : ''}">
+              <input type="text" class="table-input ${hasMissingId ? 'cell-missing' : ''}" value="${esc(s.id)}" data-field="id" oninput="syncRowInput(this, ${realIdx})" placeholder="អត្តលេខ">
             </td>
             <td class="sticky-col-2">
-              <input type="text" class="table-input input-left ${!lastName && !s.isDraft ? 'cell-missing' : ''}" value="${esc(lastName)}" data-field="lastName" style="font-weight:700;" oninput="syncRowInput(this, ${realIdx})" placeholder="${s.isDraft ? 'គោត្តនាម' : ''}">
+              <input type="text" class="table-input input-left ${!lastName && !s.isDraft ? 'cell-missing' : ''}" value="${esc(lastName)}" data-field="lastName" style="font-weight:700;" oninput="syncRowInput(this, ${realIdx})" placeholder="គោត្តនាម">
             </td>
             <td class="sticky-col-3">
-              <input type="text" class="table-input input-left ${!firstName && !s.isDraft ? 'cell-missing' : ''}" value="${esc(firstName)}" data-field="firstName" style="font-weight:700;" oninput="syncRowInput(this, ${realIdx})" placeholder="${s.isDraft ? 'នាម' : ''}">
+              <input type="text" class="table-input input-left ${!firstName && !s.isDraft ? 'cell-missing' : ''}" value="${esc(firstName)}" data-field="firstName" style="font-weight:700;" oninput="syncRowInput(this, ${realIdx})" placeholder="នាម">
             </td>
             <td class="col-gender">${genderContent}</td>
             <td class="col-info">
@@ -2054,6 +2099,8 @@
       const s = studentsList[realIdx];
       if (!s) return;
 
+      populateModalClassSelect(availableClassesList);
+
       const fullName = (s.name || '').trim();
       const parts = fullName.split(' ');
       const lastName = parts[0] || '';
@@ -2072,7 +2119,14 @@
       document.getElementById('modalLastName').value = lastName;
       document.getElementById('modalFirstName').value = firstName;
       document.getElementById('modalStudentId').value = s.id || '';
-      document.getElementById('modalGrade').value = s.grade || document.getElementById('modalGrade').options[0]?.value || '';
+      
+      const gradeSel = document.getElementById('modalGrade');
+      if (s.grade) {
+        gradeSel.value = s.grade.startsWith('ថ្នាក់ទី') ? s.grade : `ថ្នាក់ទី${s.grade}`;
+      } else if (currentSelectedClass) {
+        gradeSel.value = `ថ្នាក់ទី${currentSelectedClass}`;
+      }
+
       document.getElementById('modalGender').value = s.sex || 'ស្រី';
 
       const formattedDob = formatToInputDate(s.dob);
@@ -2115,9 +2169,12 @@
       const lastName = document.getElementById('modalLastName').value.trim();
       const firstName = document.getElementById('modalFirstName').value.trim();
       const fullName = `${lastName} ${firstName}`.trim();
-      const studentId = document.getElementById('modalStudentId').value.trim();
+      let studentId = document.getElementById('modalStudentId').value.trim();
 
       if (!fullName) { alert("សូមបញ្ចូលឈ្មោះសិស្ស!"); return; }
+      if (!studentId) {
+        studentId = 'ST' + Math.floor(100000 + Math.random() * 900000);
+      }
 
       const s = studentsList[activeRowIndex];
       s.id = studentId;
@@ -2142,7 +2199,7 @@
       let res = null;
       if (s.origId) {
         res = await apiRequest('updateStudentData', { formData: payload });
-        if (!res && lastApiError && (lastApiError.includes('រកមិនឃើញសិស្ស') || lastApiError.includes('not found'))) {
+        if (!res && lastApiError && (lastApiError.includes('រកមិនឃើញ') || lastApiError.includes('not found'))) {
           res = await apiRequest('submitStudentData', { formData: payload });
         }
       } else {
@@ -2156,7 +2213,7 @@
       saveBtn.innerText = '💾 រក្សាទុកការកែប្រែ';
 
       if (!res) {
-        alert("❌ រក្សាទុកបរាជ័យ៖ " + lastApiError);
+        alert("❌ រក្សាទុកបរាជ័យ៖ " + (lastApiError || 'ពិនិត្យ Server'));
         return;
       }
 
@@ -2180,20 +2237,31 @@
           if (!s) return;
           const f = {}; r.querySelectorAll('[data-field]').forEach(inp => f[inp.dataset.field] = inp.value.trim());
           const name = `${f.lastName || ''} ${f.firstName || ''}`.trim();
-          if (!name || !f.id) return;
-          s.id = f.id; s.name = name; s.sex = f.sex || s.sex; s.grade = f.grade || s.grade; s.phone = f.phone;
+          if (!name) return;
+          s.id = f.id || s.id || ('ST' + Math.floor(100000 + Math.random() * 900000));
+          s.name = name; 
+          s.sex = f.sex || s.sex; 
+          s.grade = f.grade || s.grade; 
+          s.phone = f.phone;
           s.pob = joinAddressParts(f.pob_village, f.pob_commune, f.pob_district, f.pob_province);
           s.address = joinAddressParts(f.addr_village, f.addr_commune, f.addr_district, f.addr_province);
           jobs.push(s);
         });
-        if (!jobs.length) { showToast("គ្មានទិន្នន័យត្រូវរក្សាទុកឡើយ!"); return; }
+
+        if (!jobs.length) { 
+          showToast("គ្មានទិន្នន័យត្រូវរក្សាទុកឡើយ!"); 
+          btn.innerHTML = `<span>📥</span> <span>នាំចូល Sheet</span>`; 
+          btn.disabled = false;
+          return; 
+        }
+
         for (let i = 0; i < jobs.length; i += 2) {
           await Promise.all(jobs.slice(i, i + 2).map(async s => {
             const payload = buildPayload(s);
             let res = null;
             if (s.origId) {
               res = await apiRequest('updateStudentData', { formData: payload });
-              if (!res && lastApiError && lastApiError.includes('រកមិនឃើញសិស្ស')) res = await apiRequest('submitStudentData', { formData: payload });
+              if (!res && lastApiError && lastApiError.includes('រកមិនឃើញ')) res = await apiRequest('submitStudentData', { formData: payload });
             } else {
               res = await apiRequest('submitStudentData', { formData: payload });
               if (!res && lastApiError && lastApiError.includes('មានរួចហើយ')) res = await apiRequest('updateStudentData', { formData: payload });
@@ -2201,12 +2269,18 @@
             if (res) { s.origId = s.id; s.isDraft = false; ok++; } else fail++;
           }));
         }
+
         showToast(fail ? `⚠️ រក្សាទុកបាន ${ok} • បរាជ័យ ${fail} (${lastApiError})` : `🎉 បានរក្សាទុក ${ok} នាក់ជោគជ័យ!`);
         hideBottomNavBar();
         notifyParentDataChanged();
         syncWithBackendParallel(false);
-      } catch (err) { showToast("⚠️ ការរក្សាទុកជួបបញ្ហា"); console.error(err); }
-      finally { btn.innerHTML = `<span>📥</span> <span>នាំចូល Sheet</span>`; btn.disabled = false; }
+      } catch (err) { 
+        showToast("⚠️ ការរក្សាទុកជួបបញ្ហា"); 
+        console.error(err); 
+      } finally { 
+        btn.innerHTML = `<span>📥</span> <span>នាំចូល Sheet</span>`; 
+        btn.disabled = false; 
+      }
     }
 
     function sortStudentsAlphabetical() {
@@ -2248,6 +2322,152 @@
       if (left < 10) left = 10;
       menu.style.left = `${left}px`;
       menu.style.top = `${rect.bottom + 6}px`;
+    }
+
+    /* =========================================================
+       📥 IMPORT MODAL LOGIC (EXCEL & PASTE LIST)
+    ========================================================= */
+    function openImportModal() {
+      pendingImportStudents = [];
+      const tag = document.getElementById('importClassTag');
+      if (tag) tag.innerText = currentSelectedClass ? `ថ្នាក់ទី${currentSelectedClass}` : 'ថ្នាក់ទី៤(ក)';
+      document.getElementById('pasteInputText').value = '';
+      updateImportSubmitBtn();
+      document.getElementById('importModalOverlay').style.display = 'flex';
+    }
+
+    function closeImportModal() {
+      document.getElementById('importModalOverlay').style.display = 'none';
+      pendingImportStudents = [];
+    }
+
+    function switchImportTab(tab) {
+      activeImportTab = tab;
+      document.getElementById('tabBtnExcel').classList.toggle('active', tab === 'excel');
+      document.getElementById('tabBtnPaste').classList.toggle('active', tab === 'paste');
+      document.getElementById('tabContentExcel').style.display = tab === 'excel' ? 'block' : 'none';
+      document.getElementById('tabContentPaste').style.display = tab === 'paste' ? 'block' : 'none';
+    }
+
+    function onPasteTextInput() {
+      const txt = document.getElementById('pasteInputText').value.trim();
+      if (!txt) {
+        pendingImportStudents = [];
+        updateImportSubmitBtn();
+        return;
+      }
+
+      const lines = txt.split('\n');
+      const list = [];
+      const defGrade = currentSelectedClass ? `ថ្នាក់ទី${currentSelectedClass}` : 'ថ្នាក់ទី៤(ក)';
+
+      lines.forEach(line => {
+        line = line.trim();
+        if (!line) return;
+        const tokens = line.split(/[\t, ]+/).filter(Boolean);
+        if (!tokens.length) return;
+
+        const lName = tokens[0] || '';
+        const fName = tokens[1] || '';
+        let gender = tokens[2] || 'ស្រី';
+        if (gender !== 'ប្រុស' && gender !== 'ស្រី') {
+          gender = (gender.includes('ប') || gender.toLowerCase().startsWith('m')) ? 'ប្រុស' : 'ស្រី';
+        }
+        const sid = tokens[3] || ('ST' + Math.floor(100000 + Math.random() * 900000));
+        const phone = tokens[4] || '';
+
+        list.push({
+          id: sid,
+          studentId: sid,
+          name: `${lName} ${fName}`.trim() || lName,
+          sex: gender,
+          grade: defGrade,
+          phone: phone,
+          pob: '',
+          address: '',
+          dob: '',
+          isDraft: true,
+          _uid: ++uidSeq
+        });
+      });
+
+      pendingImportStudents = list;
+      updateImportSubmitBtn();
+    }
+
+    function updateImportSubmitBtn() {
+      const btn = document.getElementById('btnSubmitImport');
+      const count = pendingImportStudents.length;
+      btn.innerText = `នាំចូល ${count} នាក់`;
+      btn.disabled = count === 0;
+    }
+
+    function downloadExcelTemplate() {
+      const headers = ["អត្តលេខ", "គោត្តនាម", "នាម", "ភេទ", "ថ្ងៃខែឆ្នាំកំណើត", "ទូរស័ព្ទ", "ទីកន្លែងកំណើត", "អាសយដ្ឋានបច្ចុប្បន្ន"];
+      const sample = [
+        ["1001", "សុខ", "ចន្ថា", "ប្រុស", "2015-02-14", "012345678", "ភ្នំពេញ", "ភ្នំពេញ"],
+        ["1002", "ចាន់", "ដារ៉ា", "ស្រី", "2015-05-20", "098765432", "កណ្តាល", "កណ្តាល"]
+      ];
+      const ws = XLSX.utils.aoa_to_sheet([headers, ...sample]);
+      const wb = XLSX.utils.book_new();
+      XLSX.utils.book_append_sheet(wb, ws, "បញ្ជីសិស្ស");
+      XLSX.writeFile(wb, "គំរូបញ្ជីសិស្ស_KrouDigital.xlsx");
+    }
+
+    function onExcelFileSelected(input) {
+      const file = input.files[0];
+      if (!file) return;
+      input.value = '';
+      const reader = new FileReader();
+      reader.onload = function(e) {
+        try {
+          const data = new Uint8Array(e.target.result);
+          const workbook = XLSX.read(data, { type: 'array' });
+          const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
+          const json = XLSX.utils.sheet_to_json(firstSheet, { header: 1 });
+          if (!json.length) { alert("File គ្មានទិន្នន័យ!"); return; }
+
+          const defGrade = currentSelectedClass ? `ថ្នាក់ទី${currentSelectedClass}` : 'ថ្នាក់ទី៤(ក)';
+          const list = [];
+          for (let i = 1; i < json.length; i++) {
+            const row = json[i];
+            if (!row || !row.length) continue;
+            const sid = String(row[0] || '').trim() || ('ST' + Math.floor(100000 + Math.random() * 900000));
+            const lName = String(row[1] || '').trim();
+            const fName = String(row[2] || '').trim();
+            const name = `${lName} ${fName}`.trim() || String(row[1] || '').trim();
+            if (!name) continue;
+
+            const sex = String(row[3] || '').includes('ប') ? 'ប្រុស' : 'ស្រី';
+            const dob = formatToInputDate(row[4] || '');
+            const phone = String(row[5] || '').trim();
+            const pob = String(row[6] || '').trim();
+            const addr = String(row[7] || '').trim();
+
+            list.push({
+              id: sid, studentId: sid, name, sex, dob, phone, pob, address: addr,
+              grade: defGrade, isDraft: true, _uid: ++uidSeq
+            });
+          }
+
+          if (!list.length) { alert("មិនអាចស្រង់ទិន្នន័យសិស្សពី File នេះបានទេ!"); return; }
+          pendingImportStudents = list;
+          updateImportSubmitBtn();
+          showToast(`បានអានទិន្នន័យសិស្ស ${list.length} នាក់រួចរាល់! ចុច «នាំចូល»`);
+        } catch(err) {
+          alert("បរាជ័យក្នុងការអាន Excel: " + err.message);
+        }
+      };
+      reader.readAsArrayBuffer(file);
+    }
+
+    function submitImportStudents() {
+      if (!pendingImportStudents.length) return;
+      studentsList = studentsList.concat(pendingImportStudents);
+      applyFilterAndRender();
+      closeImportModal();
+      showToast(`🎉 បាននាំចូល ${pendingImportStudents.length} នាក់ទៅក្នុងតារាង! ចុច «នាំចូល Sheet» ដើម្បីរក្សាទុក`);
+      showBottomNavBar();
     }
 
     document.addEventListener('click', (e) => {
