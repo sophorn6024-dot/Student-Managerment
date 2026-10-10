@@ -740,6 +740,10 @@
       <button class="btn-action btn-warning" id="missingInfoBtn" onclick="handleMissingInfoClick()">
         <span>⚠️</span> <span id="missingBtnText">ខ្វះព័ត៌មាន</span>
       </button>
+
+      <button class="btn-action btn-columns" id="diagBtn" onclick="runDiagnostics()" title="ពិនិត្យការតភ្ជាប់ទៅ Server">
+        <span>🩺</span> <span>ពិនិត្យ Server</span>
+      </button>
     </div>
   </div>
 
@@ -1114,7 +1118,9 @@
           return j;
         } catch (err) {
           console.error('API Error (try ' + attempt + '):', err);
-          if (attempt === 1) { await new Promise(r => setTimeout(r, 1200)); continue; }
+          // ព្យាយាមម្តងទៀតតែ action អាន — action សរសេរមិនត្រូវ retry ទេ ដើម្បីកុំឱ្យកត់ស្ទួន
+          const isWrite = /^(submit|update|delete|bulk|set|save|clear)/.test(action);
+          if (attempt === 1 && !isWrite) { await new Promise(r => setTimeout(r, 1200)); continue; }
           lastApiError = (err && err.name === 'TypeError')
             ? 'ភ្ជាប់ទៅ Server មិនបាន (Failed to fetch) — ពិនិត្យអ៊ីនធឺណិត, ការ Deploy Apps Script, ឬទំហំរូបថត'
             : String(err);
@@ -1122,6 +1128,40 @@
         }
       }
       return null;
+    }
+
+    /* =========================================================
+       🩺 ពិនិត្យការតភ្ជាប់ (មិនសរសេរទិន្នន័យអ្វីទាំងអស់)
+    ========================================================= */
+    async function diagFetch(label, init, urlOverride) {
+      const t0 = Date.now();
+      try {
+        const r = await fetch(urlOverride || BACKEND_URL, init);
+        const txt = await r.text();
+        let note;
+        if (/^\s*</.test(txt)) note = 'HTML (មិនមែន JSON): ' + txt.replace(/<[^>]*>/g, ' ').replace(/\s+/g, ' ').slice(0, 140);
+        else note = txt.slice(0, 140);
+        return `✅ ${label}: HTTP ${r.status} • ${Date.now() - t}ms\n    ${note}`;
+      } catch (e) {
+        return `❌ ${label}: ${e && e.name}: ${e && e.message} • ${Date.now() - t}ms`;
+      }
+    }
+
+    async function runDiagnostics() {
+      const btn = document.getElementById('diagBtn');
+      btn.disabled = true;
+      showToast('🩺 កំពុងពិនិត្យ...');
+      const post = (obj) => ({ method: 'POST', mode: 'cors', redirect: 'follow',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(obj) });
+      const lines = [];
+      lines.push(`Token: ${TOKEN ? 'មាន (' + TOKEN.length + ' តួ)' : '❌ គ្មាន Token'} • Role: ${USER_ROLE} • ថ្នាក់: ${currentSelectedClass || '-'}`);
+      lines.push(await diagFetch('1) GET', { method: 'GET', mode: 'cors', redirect: 'follow' }));
+      lines.push(await diagFetch('2) POST មិនមាន Token', post({ action: 'getClassList', token: '' })));
+      lines.push(await diagFetch('3) POST អាន (getClassList)', post({ action: 'getClassList', token: TOKEN })));
+      lines.push(await diagFetch('4) POST សរសេរ (សាកល្បង មិនកែអ្វី)', post({ action: 'updateStudentData', token: TOKEN,
+        formData: { originalId: '__diag_no_such_id__', studentId: '__diag_no_such_id__' } })));
+      btn.disabled = false;
+      alert('លទ្ធផលពិនិត្យ\n\n' + lines.join('\n\n'));
     }
 
     /* =========================================================
