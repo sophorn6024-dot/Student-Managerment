@@ -27,7 +27,8 @@
       --card-shadow: 0 4px 16px rgba(15, 23, 42, 0.04);
       --bg-sticky: #ffffff;
       --bg-header-sticky: #f8fafc;
-      --cal-icon-filter: invert(36%) sepia(85%) saturate(1982%) hue-rotate(183deg) brightness(96%) contrast(97%);
+      --cal-selected-bg: #f1f5f9;
+      --cal-selected-text: #0f172a;
     }
 
     [data-theme="dark"] {
@@ -41,7 +42,8 @@
       --card-shadow: 0 8px 25px rgba(0, 0, 0, 0.45);
       --bg-sticky: #0f172a;
       --bg-header-sticky: #162642;
-      --cal-icon-filter: invert(65%) sepia(60%) saturate(2200%) hue-rotate(175deg) brightness(105%) contrast(100%);
+      --cal-selected-bg: #1e293b;
+      --cal-selected-text: #f8fafc;
     }
 
     * {
@@ -92,7 +94,7 @@
       display: grid; grid-template-columns: 160px 180px 1fr auto auto; gap: 10px; align-items: center; margin-bottom: 10px;
     }
 
-    /* ប៊ូតុងជ្រើសរើសថ្នាក់ (Admin) */
+    /* ប៊ូតុងរើសថ្នាក់ (Admin) */
     .pill-select-class {
       background: var(--surface-elevated); border: 1.5px solid var(--border); border-radius: 22px;
       height: 38px; padding: 0 14px; font-size: 12.5px; font-weight: 700; color: var(--text);
@@ -100,7 +102,7 @@
     }
     .pill-select-class:focus { border-color: var(--primary); }
 
-    /* Badge ថ្នាក់គ្រូ (Teacher Read-Only) */
+    /* Badge ថ្នាក់គ្រូ (Teacher) */
     .teacher-class-pill {
       background: rgba(2, 132, 199, 0.12); border: 1.5px solid rgba(2, 132, 199, 0.3); border-radius: 22px;
       height: 38px; padding: 0 14px; font-size: 12.5px; font-weight: 700; color: var(--primary);
@@ -189,7 +191,7 @@
       overflow: auto; max-height: calc(100vh - 210px);
       -webkit-overflow-scrolling: touch; position: relative;
     }
-    table { width: 100%; border-collapse: separate; border-spacing: 0; min-width: 1750px; text-align: center; }
+    table { width: 100%; border-collapse: separate; border-spacing: 0; min-width: 1800px; text-align: center; }
 
     thead { position: sticky; top: 0; z-index: 50; }
     thead th {
@@ -200,6 +202,10 @@
     .sticky-col-1 {
       position: sticky; left: 0px; z-index: 28; background: var(--bg-sticky); width: 48px; min-width: 48px;
     }
+    
+    /* 📸 រូបថតសិស្ស */
+    .col-photo { width: 55px; min-width: 55px; max-width: 55px; }
+
     .col-id {
       width: 80px; min-width: 80px; max-width: 80px; z-index: 10;
     }
@@ -234,7 +240,7 @@
     .th-sub-pob { background: rgba(2, 132, 199, 0.1); color: #0284c7; }
     .th-sub-addr { background: rgba(37, 99, 235, 0.1); color: #2563eb; }
 
-    tbody tr { height: 46px; }
+    tbody tr { height: 48px; }
     tbody tr:hover td { background-color: rgba(2, 132, 199, 0.08); }
     tbody tr:hover td.sticky-action { background-color: rgba(2, 132, 199, 0.08); }
     tbody td {
@@ -249,45 +255,30 @@
     .table-input:focus { border-color: #0284c7; box-shadow: 0 0 0 2px rgba(2,132,199,0.2); }
     .input-left { text-align: left; }
 
-    /* =========================================================
-       📅 BEAUTIFUL MODERN CALENDAR INPUT STYLES
-    ========================================================= */
-    input[type="date"].table-input, input[type="date"].modal-input {
-      position: relative;
-      accent-color: var(--primary);
-      cursor: pointer;
-      font-weight: 600;
-      letter-spacing: 0.3px;
+    /* 📸 STUDENT PHOTO THUMBNAIL */
+    .table-photo-box {
+      width: 36px; height: 36px; border-radius: 50%; border: 1.5px solid var(--border);
+      margin: 0 auto; display: flex; align-items: center; justify-content: center;
+      background: #c2410c; color: white; font-weight: 700; font-size: 14px;
+      overflow: hidden; cursor: pointer; transition: transform 0.15s, box-shadow 0.15s;
     }
+    .table-photo-box img { width: 100%; height: 100%; object-fit: cover; }
+    .table-photo-box:hover { transform: scale(1.15); box-shadow: 0 4px 10px rgba(0,0,0,0.25); }
 
-    /* Style the date picker indicator */
-    input[type="date"]::-webkit-calendar-picker-indicator {
-      cursor: pointer;
-      border-radius: 4px;
-      padding: 2px;
-      opacity: 0.85;
-      filter: var(--cal-icon-filter);
-      transition: transform 0.15s ease, opacity 0.15s ease;
+    /* 📅 DATE FIELD TRIGGER BUTTON/INPUT */
+    .date-picker-trigger {
+      width: 100%; height: 32px; border: 1px solid var(--border); border-radius: 6px;
+      background: var(--surface-elevated); color: var(--text); padding: 0 8px; font-size: 12.5px;
+      display: flex; align-items: center; justify-content: space-between; cursor: pointer;
+      user-select: none; transition: border-color 0.15s;
     }
-    input[type="date"]::-webkit-calendar-picker-indicator:hover {
-      opacity: 1;
-      transform: scale(1.18);
-    }
+    .date-picker-trigger:hover { border-color: #0284c7; }
+    .date-picker-trigger .cal-icon { color: #0284c7; font-size: 13px; }
 
-    .table-input.cell-missing {
+    .table-input.cell-missing, .date-picker-trigger.cell-missing {
       border: 1.5px dashed #ef4444 !important;
       background-color: rgba(239, 68, 68, 0.12) !important;
     }
-
-    .id-badge-btn {
-      background: #ec4899; color: white; width: 24px; height: 24px;
-      border-radius: 50%; font-size: 11px; display: inline-flex;
-      align-items: center; justify-content: center; font-weight: 700;
-      cursor: pointer; border: 1.5px solid white; box-shadow: 0 2px 5px rgba(236,72,153,0.35);
-      transition: transform 0.15s; overflow: hidden; padding: 0;
-    }
-    .id-badge-btn img { width: 100%; height: 100%; object-fit: cover; }
-    .id-badge-btn:hover { transform: scale(1.2); }
 
     .btn-cancel-draft {
       background: none; border: none; color: var(--text-muted); font-size: 13px; font-weight: 700;
@@ -340,6 +331,67 @@
       border-top-color: #0284c7; border-radius: 50%; animation: spin 0.6s linear infinite; display: inline-block;
     }
     @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* =========================================================
+       📅 KHMER CALENDAR POPUP MODAL (ដូចក្នុងរូបភាព ១០០%)
+    ========================================================= */
+    .khmer-cal-popup {
+      display: none; position: fixed; z-index: 10005;
+      background: var(--surface); border: 1.5px solid var(--border);
+      border-radius: 20px; box-shadow: 0 20px 45px rgba(0, 0, 0, 0.28);
+      width: 310px; padding: 18px 16px 14px; animation: calPop 0.16s ease-out;
+      user-select: none;
+    }
+    @keyframes calPop { from { opacity: 0; transform: scale(0.96) translateY(-6px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+
+    .cal-header-controls {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px;
+    }
+    .cal-select {
+      background: var(--surface-elevated); border: 1.5px solid var(--border); border-radius: 12px;
+      height: 38px; padding: 0 10px; font-size: 13px; font-weight: 700; color: var(--text);
+      outline: none; cursor: pointer; width: 100%; transition: border-color 0.15s;
+    }
+    .cal-select:focus { border-color: var(--primary); }
+
+    .cal-subtitle {
+      text-align: center; font-size: 14.5px; font-weight: 700; color: var(--text);
+      margin-bottom: 12px;
+    }
+
+    .cal-grid-weekdays {
+      display: grid; grid-template-columns: repeat(7, 1fr); text-align: center;
+      font-size: 12.5px; font-weight: 700; color: var(--text-muted); margin-bottom: 8px;
+    }
+
+    .cal-grid-days {
+      display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px 2px;
+    }
+    .cal-day-cell {
+      height: 36px; display: flex; align-items: center; justify-content: center;
+      font-size: 13.5px; font-weight: 500; border-radius: 8px; cursor: pointer;
+      color: var(--text); transition: background 0.12s, transform 0.1s;
+    }
+    .cal-day-cell:hover { background: rgba(2, 132, 199, 0.12); color: var(--primary); }
+    .cal-day-other {
+      opacity: 0.32; font-weight: 400; color: var(--text-muted);
+    }
+    .cal-day-selected {
+      background: var(--cal-selected-bg) !important;
+      color: var(--cal-selected-text) !important;
+      font-weight: 800 !important;
+      border-radius: 12px !important;
+      border: 1.5px solid var(--border);
+    }
+
+    .cal-footer-box {
+      border-top: 1px solid var(--border-subtle); margin-top: 12px; padding-top: 8px;
+    }
+    .cal-btn-today {
+      background: none; border: none; color: #2563eb; font-size: 13px; font-weight: 700;
+      cursor: pointer; padding: 4px 6px; border-radius: 6px; transition: opacity 0.15s;
+    }
+    .cal-btn-today:hover { opacity: 0.75; text-decoration: underline; }
 
     /* 📱 ARROW KEY BOTTOM BAR */
     .bottom-nav-bar {
@@ -472,10 +524,8 @@
   <!-- 🎛️ CONTROL CARD -->
   <div class="control-card">
     <div class="top-controls">
-      <!-- 🌟 កន្លែងបង្ហាញថ្នាក់ (Admin: Select Dropdown / Teacher: Fixed Badge) -->
-      <div id="classFilterContainer">
-        <!-- នឹងត្រូវ Render ដោយ JavaScript តាម Role -->
-      </div>
+      <!-- 🌟 កន្លែងបង្ហាញថ្នាក់ (Admin: Dropdown / Teacher: Fixed Badge) -->
+      <div id="classFilterContainer"></div>
 
       <div class="status-dropdown-wrapper" id="statusDropdownWrapper">
         <div class="status-dropdown-btn" onclick="toggleStatusDropdown(event)">
@@ -533,6 +583,7 @@
 
       <div class="column-dropdown" id="columnDropdown">
         <div class="dropdown-title">ជ្រើសជួរឈរ</div>
+        <label class="col-option"><input type="checkbox" checked onchange="toggleColumn('col-photo', this.checked)"> រូបថត</label>
         <label class="col-option"><input type="checkbox" checked onchange="toggleColumn('col-id', this.checked)"> អត្តលេខ</label>
         <label class="col-option"><input type="checkbox" checked onchange="toggleColumn('col-gender', this.checked)"> ភេទ</label>
         <label class="col-option"><input type="checkbox" checked onchange="toggleColumn('col-info', this.checked)"> ព័ត៌មានសិស្ស</label>
@@ -557,6 +608,9 @@
         <tr>
           <!-- 📌 STICKY: ល.រ -->
           <th rowspan="2" class="sticky-col-1"><div class="th-vertical">ល.រ</div></th>
+
+          <!-- 📸 រូបថតសិស្ស (បង្ហាញច្បាស់លាស់) -->
+          <th rowspan="2" class="col-photo"><div class="th-vertical">រូបថត</div></th>
 
           <!-- 🌟 អត្តលេខ -->
           <th rowspan="2" class="col-id"><div class="th-vertical">អត្តលេខ</div></th>
@@ -583,7 +637,7 @@
 
         <tr>
           <!-- ព័ត៌មានសិស្ស sub-headers -->
-          <th class="col-info" style="width: 135px;">ថ្ងៃកំណើត</th>
+          <th class="col-info" style="width: 130px;">ថ្ងៃកំណើត</th>
           <th class="col-info" style="width: 50px;">អាយុ</th>
           <th class="col-info" style="width: 90px;">ថ្នាក់</th>
           <th class="col-info" style="width: 105px;">ទូរស័ព្ទ</th>
@@ -603,7 +657,7 @@
       </thead>
       <tbody id="tableBody">
         <tr>
-          <td colspan="17" class="status-row">
+          <td colspan="18" class="status-row">
             <span class="spinner-dark"></span> កំពុងរៀបចំទិន្នន័យ...
           </td>
         </tr>
@@ -618,6 +672,22 @@
     <button class="bottom-nav-btn bottom-nav-primary" onmousedown="event.preventDefault()" onclick="navigateTable('down')">↵ ចុះក្រោម</button>
     <button class="bottom-nav-btn bottom-nav-primary" onmousedown="event.preventDefault()" onclick="navigateTable('right')">→| ទៅមុខ</button>
     <button class="bottom-nav-icon-btn" onmousedown="event.preventDefault()" style="color:#16a34a; font-size:17px;" onclick="saveAllRows()" title="រក្សាទុក">✓</button>
+  </div>
+
+  <!-- 📅 KHMER CALENDAR POPUP MODAL (ដូចក្នុងរូបភាព) -->
+  <div class="khmer-cal-popup" id="khmerCalPopup">
+    <div class="cal-header-controls">
+      <select class="cal-select" id="calMonthSelect" onchange="onCalMonthYearChange()"></select>
+      <select class="cal-select" id="calYearSelect" onchange="onCalMonthYearChange()"></select>
+    </div>
+    <div class="cal-subtitle" id="calSubtitle">តុលា 2026</div>
+    <div class="cal-grid-weekdays">
+      <span>អា</span><span>ច</span><span>អ</span><span>ព</span><span>ព្រ</span><span>សុ</span><span>ស</span>
+    </div>
+    <div class="cal-grid-days" id="calGridDays"></div>
+    <div class="cal-footer-box">
+      <button type="button" class="cal-btn-today" onclick="selectCalToday()">ថ្ងៃនេះ</button>
+    </div>
   </div>
 
   <!-- 💬 POPUP ACTION MENU -->
@@ -690,7 +760,10 @@
                 <label style="margin:0;">ថ្ងៃខែឆ្នាំកំណើត</label>
                 <span id="modalAgeDisplay" style="font-size:11px; font-weight:700; color:var(--primary); background:rgba(2,132,199,0.12); padding:1px 8px; border-radius:12px;">អាយុ: -</span>
               </div>
-              <input type="date" class="modal-input" id="modalDob" oninput="onModalDobChanged(this)" onchange="onModalDobChanged(this)">
+              <div class="date-picker-trigger" id="modalDobTrigger" onclick="openKhmerCalendarForModal(event)">
+                <span id="modalDobText">ជ្រើសរើសថ្ងៃខែ...</span>
+                <span class="cal-icon">📅</span>
+              </div>
             </div>
           </div>
           <div class="form-row-2">
@@ -718,7 +791,6 @@
     const USER_CLASS = (window.parent && window.parent.ASSIGNED_CLASS) || localStorage.getItem('krou_assigned_class') || localStorage.getItem('krou_user_class') || "";
     const IS_ADMIN = String(USER_ROLE).toLowerCase().trim() === 'admin';
 
-    // ប្រសិនបើជាគ្រូ កំណត់ថ្នាក់របស់គាត់ភ្លាមៗ
     let currentSelectedClass = USER_CLASS ? USER_CLASS.replace(/^ថ្នាក់ទី\s*/, '').trim() : '';
     let studentsList = [];
     let rowNumMap = {};
@@ -774,6 +846,7 @@
     window.addEventListener('DOMContentLoaded', () => {
       renderRoleBadge();
       initClassFilterDropdown();
+      initKhmerCalendarComponent();
       initArrowKeyVisibilityEvents();
     });
 
@@ -789,7 +862,6 @@
       const container = document.getElementById('classFilterContainer');
       container.innerHTML = '';
 
-      // 🌟 បើមិនមែនជា ADMIN (ជាគ្រូ): បង្ហាញ Badge ថ្នាក់ថេរ មិនឱ្យប្តូរថ្នាក់ឡើយ
       if (!IS_ADMIN) {
         const displayClassName = currentSelectedClass || 'មិនទាន់កំណត់';
         container.innerHTML = `
@@ -801,7 +873,6 @@
         return;
       }
 
-      // 🌟 បើជា ADMIN: បង្ហាញ Dropdown សម្រាប់ជ្រើសរើសថ្នាក់ទាំងអស់
       container.innerHTML = `
         <select class="pill-select-class" id="classFilterSelect" onchange="onClassFilterChange()">
           <option value="">កំពុងទាញយកថ្នាក់...</option>
@@ -869,7 +940,7 @@
     async function syncWithBackendParallel(showLoadingRow = false) {
       if (showLoadingRow) {
         const tbody = document.getElementById('tableBody');
-        tbody.innerHTML = `<tr><td colspan="17" class="status-row"><span class="spinner-dark"></span> កំពុងទាញទិន្នន័យពី Google Sheet...</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="18" class="status-row"><span class="spinner-dark"></span> កំពុងទាញទិន្នន័យពី Google Sheet...</td></tr>`;
       }
       setSyncStatusBadge("🔄 កំពុងពិនិត្យ...");
 
@@ -947,29 +1018,6 @@
       return age >= 0 ? age : '';
     }
 
-    /* 🌟 AUTO-CALCULATE AGE លើ TABLE ROW */
-    function onTableRowDobChanged(input, realIdx) {
-      const formattedDate = formatToInputDate(input.value);
-      input.value = formattedDate;
-
-      const row = input.closest('tr');
-      const ageBox = row.querySelector('.age-text');
-      const calculatedAge = calculateAge(formattedDate);
-      if (ageBox) ageBox.innerText = calculatedAge;
-
-      // Sync ចូល studentsList ភ្លាមៗ
-      syncRowInput(input, realIdx);
-    }
-
-    /* 🌟 AUTO-CALCULATE AGE លើ EDIT MODAL */
-    function onModalDobChanged(input) {
-      const formattedDate = formatToInputDate(input.value);
-      input.value = formattedDate;
-      const age = calculateAge(formattedDate);
-      const badge = document.getElementById('modalAgeDisplay');
-      if (badge) badge.innerText = age ? `អាយុ: ${age} ឆ្នាំ` : 'អាយុ: -';
-    }
-
     function parseAddressParts(addrStr) {
       if (!addrStr) return { village: '', commune: '', district: '', province: '' };
       const parts = addrStr.split(',').map(p => p.trim()).filter(Boolean);
@@ -991,6 +1039,179 @@
 
     function joinAddressParts(village, commune, district, province) {
       return [village, commune, district, province].map(s => (s || '').trim()).filter(Boolean).join(', ');
+    }
+
+    /* =========================================================
+       📅 KHMER CALENDAR ENGINE & INTERACTIVE LOGIC
+    ========================================================= */
+    const KHMER_MONTHS = ['មករា', 'កុម្ភៈ', 'មីនា', 'មេសា', 'ឧសភា', 'មិថុនា', 'កក្កដា', 'សីហា', 'កញ្ញា', 'តុលា', 'វិច្ឆិកា', 'ធ្នូ'];
+    let calCurrentYear = 2026;
+    let calCurrentMonth = 9; // 0-indexed (9 = តុលា)
+    let calSelectedDate = null; // 'YYYY-MM-DD'
+    let calCallback = null;
+
+    function initKhmerCalendarComponent() {
+      const monthSel = document.getElementById('calMonthSelect');
+      const yearSel = document.getElementById('calYearSelect');
+
+      monthSel.innerHTML = KHMER_MONTHS.map((m, idx) => `<option value="${idx}">${m}</option>`).join('');
+
+      let yearsHtml = '';
+      const startYear = 1995;
+      const endYear = 2035;
+      for (let y = endYear; y >= startYear; y--) {
+        yearsHtml += `<option value="${y}">${y}</option>`;
+      }
+      yearSel.innerHTML = yearsHtml;
+    }
+
+    function renderKhmerCalendarGrid() {
+      const monthSel = document.getElementById('calMonthSelect');
+      const yearSel = document.getElementById('calYearSelect');
+      const subTitle = document.getElementById('calSubtitle');
+      const grid = document.getElementById('calGridDays');
+
+      monthSel.value = calCurrentMonth;
+      yearSel.value = calCurrentYear;
+      subTitle.innerText = `${KHMER_MONTHS[calCurrentMonth]} ${calCurrentYear}`;
+
+      grid.innerHTML = '';
+
+      const firstDay = new Date(calCurrentYear, calCurrentMonth, 1).getDay(); // 0 = អាទិត្យ
+      const daysInMonth = new Date(calCurrentYear, calCurrentMonth + 1, 0).getDate();
+      const prevMonthDays = new Date(calCurrentYear, calCurrentMonth, 0).getDate();
+
+      // ថ្ងៃនៃខែមុន
+      for (let i = firstDay - 1; i >= 0; i--) {
+        const dNum = prevMonthDays - i;
+        const cell = document.createElement('div');
+        cell.className = 'cal-day-cell cal-day-other';
+        cell.innerText = dNum;
+        cell.onclick = () => {
+          calCurrentMonth--;
+          if (calCurrentMonth < 0) { calCurrentMonth = 11; calCurrentYear--; }
+          selectCalDay(dNum);
+        };
+        grid.appendChild(cell);
+      }
+
+      // ថ្ងៃនៃខែបច្ចុប្បន្ន
+      for (let d = 1; d <= daysInMonth; d++) {
+        const cell = document.createElement('div');
+        cell.className = 'cal-day-cell';
+        cell.innerText = d;
+
+        const dateStr = `${calCurrentYear}-${String(calCurrentMonth + 1).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+        if (calSelectedDate === dateStr) {
+          cell.classList.add('cal-day-selected');
+        }
+
+        cell.onclick = () => selectCalDay(d);
+        grid.appendChild(cell);
+      }
+
+      // ថ្ងៃនៃខែបន្ទាប់
+      const totalCells = grid.children.length;
+      const nextDaysCount = (totalCells % 7 === 0) ? 0 : 7 - (totalCells % 7);
+      for (let d = 1; d <= nextDaysCount; d++) {
+        const cell = document.createElement('div');
+        cell.className = 'cal-day-cell cal-day-other';
+        cell.innerText = d;
+        cell.onclick = () => {
+          calCurrentMonth++;
+          if (calCurrentMonth > 11) { calCurrentMonth = 0; calCurrentYear++; }
+          selectCalDay(d);
+        };
+        grid.appendChild(cell);
+      }
+    }
+
+    function onCalMonthYearChange() {
+      calCurrentMonth = Number(document.getElementById('calMonthSelect').value);
+      calCurrentYear = Number(document.getElementById('calYearSelect').value);
+      renderKhmerCalendarGrid();
+    }
+
+    function selectCalDay(day) {
+      const dateStr = `${calCurrentYear}-${String(calCurrentMonth + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+      if (typeof calCallback === 'function') {
+        calCallback(dateStr);
+      }
+      closeKhmerCalendar();
+    }
+
+    function selectCalToday() {
+      const now = new Date();
+      calCurrentYear = now.getFullYear();
+      calCurrentMonth = now.getMonth();
+      selectCalDay(now.getDate());
+    }
+
+    function openKhmerCalendarAtElement(targetEl, initialDate, callback) {
+      calCallback = callback;
+      const validDate = formatToInputDate(initialDate);
+      if (validDate) {
+        calSelectedDate = validDate;
+        const [y, m] = validDate.split('-').map(Number);
+        calCurrentYear = y;
+        calCurrentMonth = m - 1;
+      } else {
+        calSelectedDate = null;
+        calCurrentYear = 2026;
+        calCurrentMonth = 9;
+      }
+
+      renderKhmerCalendarGrid();
+
+      const popup = document.getElementById('khmerCalPopup');
+      popup.style.display = 'block';
+
+      const rect = targetEl.getBoundingClientRect();
+      let top = rect.bottom + 6;
+      let left = rect.left;
+
+      if (left + 310 > window.innerWidth) left = window.innerWidth - 325;
+      if (left < 10) left = 10;
+      if (top + 340 > window.innerHeight) top = rect.top - 340;
+
+      popup.style.top = `${Math.max(10, top)}px`;
+      popup.style.left = `${Math.max(10, left)}px`;
+    }
+
+    function closeKhmerCalendar() {
+      document.getElementById('khmerCalPopup').style.display = 'none';
+      calCallback = null;
+    }
+
+    function openKhmerCalendarForTable(e, realIdx) {
+      e.stopPropagation();
+      const targetEl = e.currentTarget;
+      const s = studentsList[realIdx];
+      openKhmerCalendarAtElement(targetEl, s.dob, (selectedDate) => {
+        s.dob = selectedDate;
+        const tr = document.querySelector(`#tableBody tr[data-index="${realIdx}"]`);
+        if (tr) {
+          const dobText = tr.querySelector('.dob-text');
+          if (dobText) dobText.innerText = selectedDate;
+          const ageBox = tr.querySelector('.age-text');
+          if (ageBox) ageBox.innerText = calculateAge(selectedDate);
+          const trigger = tr.querySelector('.date-picker-trigger');
+          if (trigger) trigger.classList.remove('cell-missing');
+        }
+      });
+    }
+
+    function openKhmerCalendarForModal(e) {
+      e.stopPropagation();
+      const targetEl = e.currentTarget;
+      const curDob = document.getElementById('modalDobText').dataset.rawDate || '';
+      openKhmerCalendarAtElement(targetEl, curDob, (selectedDate) => {
+        const textSpan = document.getElementById('modalDobText');
+        textSpan.innerText = selectedDate;
+        textSpan.dataset.rawDate = selectedDate;
+        const age = calculateAge(selectedDate);
+        document.getElementById('modalAgeDisplay').innerText = age ? `អាយុ: ${age} ឆ្នាំ` : 'អាយុ: -';
+      });
     }
 
     /* =========================================================
@@ -1060,7 +1281,6 @@
         const fName = data.firstName || '';
         s.name = `${lName} ${fName}`.trim() || s.name || '';
         s.sex = data.sex || s.sex || 'ស្រី';
-        s.dob = formatToInputDate(data.dob || s.dob || '');
         s.grade = data.grade || s.grade || (currentSelectedClass ? `ថ្នាក់ទី${currentSelectedClass}` : 'ថ្នាក់ទី៤ក');
         s.phone = data.phone || s.phone || '';
 
@@ -1132,7 +1352,6 @@
         s.name = `${lName} ${fName}`.trim();
       }
       if (field === 'sex') s.sex = val;
-      if (field === 'dob') s.dob = formatToInputDate(val);
       if (field === 'grade') s.grade = val;
       if (field === 'phone') s.phone = val;
 
@@ -1331,7 +1550,7 @@
       const tbody = document.getElementById('tableBody');
 
       if (list.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="17" class="status-row">គ្មានទិន្នន័យសិស្សត្រូវបង្ហាញឡើយ! ចុច «➕ បន្ថែមជួរ» ដើម្បីបញ្ចូលថ្មី។</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="18" class="status-row">គ្មានទិន្នន័យសិស្សត្រូវបង្ហាញឡើយ! ចុច «➕ បន្ថែមជួរ» ដើម្បីបញ្ចូលថ្មី។</td></tr>`;
         updateCounters(0, 0);
         return;
       }
@@ -1364,6 +1583,11 @@
         const hasMissingAddr = !s.isDraft && (!s.address || s.address.trim() === '');
         const hasMissingId = !s.isDraft && (!s.id || s.id.trim() === '');
 
+        // 📸 រូបថតសិស្ស
+        const photoImgHtml = (s.photoUrl || s.imageUrl)
+          ? `<img src="${s.photoUrl || s.imageUrl}" alt="photo">`
+          : initialBadge;
+
         let col1Content, genderContent, actionContent;
 
         if (s.isDraft) {
@@ -1381,14 +1605,7 @@
             <button class="btn-save-row-now" onclick="saveDraftRow(${realIdx})" title="ចុចរក្សាទុកជួរនេះ (Enter)">💾 រក្សាទុក</button>
           `;
         } else {
-          const photoImg = (s.photoUrl || s.imageUrl)
-            ? `<img src="${s.photoUrl || s.imageUrl}" alt="photo" onerror="this.outerHTML='${initialBadge}'">`
-            : initialBadge;
-
-          col1Content = `
-            <span style="font-weight:700; margin-right:3px;">${i + 1}</span>
-            <button class="id-badge-btn" onclick="openEditModal(${realIdx})" title="ចុចដើម្បីកែប្រែ">${photoImg}</button>
-          `;
+          col1Content = `<span style="font-weight:700;">${i + 1}</span>`;
           genderContent = `
             <select class="gender-pill ${isF ? 'gender-f' : 'gender-m'}" data-field="sex" onchange="this.className='gender-pill '+(this.value==='ស្រី'?'gender-f':'gender-m'); syncRowInput(this, ${realIdx})">
               <option value="ស្រី" ${isF ? 'selected' : ''}>ស្រី</option>
@@ -1408,6 +1625,13 @@
             <!-- 📌 STICKY: ល.រ -->
             <td class="sticky-col-1">${col1Content}</td>
 
+            <!-- 📸 រូបថតសិស្ស (បង្ហាញច្បាស់លាស់) -->
+            <td class="col-photo">
+              <div class="table-photo-box" onclick="openEditModal(${realIdx})" title="ចុចដើម្បីមើល/ប្តូររូបថត">
+                ${photoImgHtml}
+              </div>
+            </td>
+
             <!-- 🌟 អត្តលេខ -->
             <td class="col-id">
               <input type="text" class="table-input ${hasMissingId ? 'cell-missing' : ''}" value="${s.id || ''}" data-field="id" oninput="syncRowInput(this, ${realIdx})" placeholder="${s.isDraft ? 'អត្តលេខ' : ''}">
@@ -1426,7 +1650,10 @@
 
             <!-- 🌟 ព័ត៌មានសិស្ស (Calendar គណនាអាយុស្វ័យប្រវត្ត) -->
             <td class="col-info">
-              <input type="date" class="table-input ${hasMissingDob ? 'cell-missing' : ''}" value="${formattedDob}" data-field="dob" oninput="onTableRowDobChanged(this, ${realIdx})" onchange="onTableRowDobChanged(this, ${realIdx})">
+              <div class="date-picker-trigger ${hasMissingDob ? 'cell-missing' : ''}" onclick="openKhmerCalendarForTable(event, ${realIdx})">
+                <span class="dob-text">${formattedDob || 'ជ្រើសរើស...'}</span>
+                <span class="cal-icon">📅</span>
+              </div>
             </td>
             <td class="col-info"><span class="age-text" style="font-weight:700;">${age}</span></td>
             <td class="col-info"><input type="text" class="table-input" value="${s.grade || ''}" data-field="grade" oninput="syncRowInput(this, ${realIdx})"></td>
@@ -1528,8 +1755,9 @@
       document.getElementById('modalGender').value = s.sex || 'ស្រី';
       
       const formattedDob = formatToInputDate(s.dob);
-      const dobInput = document.getElementById('modalDob');
-      dobInput.value = formattedDob;
+      const dobText = document.getElementById('modalDobText');
+      dobText.innerText = formattedDob || 'ជ្រើសរើសថ្ងៃខែ...';
+      dobText.dataset.rawDate = formattedDob;
       const age = calculateAge(formattedDob);
       document.getElementById('modalAgeDisplay').innerText = age ? `អាយុ: ${age} ឆ្នាំ` : 'អាយុ: -';
 
@@ -1574,7 +1802,7 @@
       s.name = fullName;
       s.grade = document.getElementById('modalGrade').value;
       s.sex = document.getElementById('modalGender').value;
-      s.dob = formatToInputDate(document.getElementById('modalDob').value);
+      s.dob = formatToInputDate(document.getElementById('modalDobText').dataset.rawDate);
       s.phone = document.getElementById('modalPhone').value.trim();
       s.pob = document.getElementById('modalPob').value.trim();
       s.address = document.getElementById('modalAddress').value.trim();
@@ -1624,6 +1852,9 @@
           let student = {};
           inputs.forEach(inp => student[inp.dataset.field] = inp.value.trim());
 
+          const realIdx = Number(r.dataset.index);
+          const s = studentsList[realIdx];
+
           const fullName = `${student.lastName || ''} ${student.firstName || ''}`.trim();
           if (fullName && student.id) {
             const fullPob = joinAddressParts(student.pob_village, student.pob_commune, student.pob_district, student.pob_province);
@@ -1634,7 +1865,7 @@
               studentId: student.id,
               name: fullName,
               gender: student.sex || 'ស្រី',
-              dob: formatToInputDate(student.dob),
+              dob: s ? s.dob : '',
               grade: student.grade || (currentSelectedClass ? `ថ្នាក់ទី${currentSelectedClass}` : 'ថ្នាក់ទី៤ក'),
               phone: student.phone,
               pob: fullPob,
@@ -1687,7 +1918,10 @@
 
     function toggleLockTable() {
       isTableLocked = !isTableLocked;
-      document.querySelectorAll('.table-input, select').forEach(inp => inp.disabled = isTableLocked);
+      document.querySelectorAll('.table-input, select, .date-picker-trigger').forEach(inp => {
+        if (inp.tagName === 'DIV') inp.style.pointerEvents = isTableLocked ? 'none' : 'auto';
+        else inp.disabled = isTableLocked;
+      });
       document.getElementById('lockIcon').innerText = isTableLocked ? '🔓' : '🔒';
       document.getElementById('lockText').innerText = isTableLocked ? 'ដោះសោ' : 'ចាក់សោ';
     }
@@ -1707,6 +1941,12 @@
     document.addEventListener('click', (e) => {
       document.getElementById('actionMenu').style.display = 'none';
       document.getElementById('columnDropdown').style.display = 'none';
+      
+      const calPopup = document.getElementById('khmerCalPopup');
+      if (calPopup && !calPopup.contains(e.target)) {
+        closeKhmerCalendar();
+      }
+
       const statusMenu = document.getElementById('statusDropdownMenu');
       if (statusMenu && statusMenu.classList.contains('show')) {
         statusMenu.classList.remove('show');
