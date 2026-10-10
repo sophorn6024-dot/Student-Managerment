@@ -1086,7 +1086,7 @@
           const isWrite = /^(submit|update|delete|bulk|set|save|clear)/.test(action);
           if (attempt === 1 && !isWrite) { await new Promise(r => setTimeout(r, 1200)); continue; }
           lastApiError = (err && err.name === 'TypeError')
-            ? 'ភ្ជាប់ទៅ Server មិនបាន — ពិនិត្យអ៊ីនធឺណិត ឬសិទ្ធិ CORS'
+            ? 'មិនអាចអានការឆ្លើយតបពី Google Apps Script បានទេ។ សូមពិនិត្យ BACKEND_URL (/exec), Deploy សិទ្ធិ Anyone, និង Console/Network។ TypeError មិនអាចបញ្ជាក់ថាជា CORS តែមួយមុខបានទេ។'
             : String(err);
           return null;
         }
@@ -1167,7 +1167,14 @@
         lines.push(await diagFetch(label, init));
         render('⏳ កំពុងសាកល្បង...');
       }
-      render('✔ រួចរាល់ — Server ដំណើរការធម្មតាទាំងអស់!');
+      const failed = lines.filter(line => line.startsWith('❌'));
+      const postLines = lines.filter(line => line.includes('POST'));
+      const postReachable = postLines.some(line => line.startsWith('✅'));
+      if (failed.length === 0 && postReachable) {
+        render('✅ តេស្ត HTTP បានទទួលការឆ្លើយតបពី Server។ សូមពិនិត្យខ្លឹមសារ POST ខាងលើផងដែរ មុនសន្និដ្ឋានថាមុខងាររក្សាទុកដំណើរការត្រឹមត្រូវ។');
+      } else {
+        render('❌ មានតេស្តភ្ជាប់មិនបាន។ សូមពិនិត្យ BACKEND_URL ត្រូវជា URL Web App បញ្ចប់ដោយ /exec, Deploy ថ្មីបំផុត និងសិទ្ធិអ្នកប្រើ។ បើ POST បង្ហាញ TypeError សូមពិនិត្យ DevTools > Console/Network ដើម្បីបំបែក CORS, redirect ឬ URL ខុស។');
+      }
       btn.disabled = false;
     }
 
