@@ -12,7 +12,7 @@
 
   <style>
     /* =========================================================
-       🎨 DYNAMIC THEME SYSTEM
+       🎨 DYNAMIC THEME SYSTEM & DESIGN TOKENS
     ========================================================= */
     :root {
       --primary: #0284c7;
@@ -20,20 +20,21 @@
       --primary-soft: #e0f2fe;
 
       /* Light Theme */
-      --bg: #f1f5f9;
+      --bg: #f8fafc;
       --surface: #ffffff;
       --surface-card: #ffffff;
-      --surface-elevated: #f8fafc;
+      --surface-elevated: #f1f5f9;
       --border: #e2e8f0;
       --border-subtle: #cbd5e1;
       --text: #0f172a;
       --text-muted: #64748b;
-      --card-shadow: 0 4px 18px rgba(15, 23, 42, 0.05);
+      --card-shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.06), 0 2px 6px -1px rgba(15, 23, 42, 0.04);
+      --card-shadow-hover: 0 12px 28px -4px rgba(2, 132, 199, 0.15), 0 4px 10px -2px rgba(15, 23, 42, 0.05);
 
-      --hero-bg: linear-gradient(135deg, #0284c7 0%, #0369a1 60%, #0c4a6e 100%);
+      --hero-bg: linear-gradient(135deg, #0284c7 0%, #0369a1 60%, #075985 100%);
       --hero-text: #ffffff;
-      --hero-stat-bg: rgba(255, 255, 255, 0.18);
-      --hero-stat-border: rgba(255, 255, 255, 0.28);
+      --hero-stat-bg: rgba(255, 255, 255, 0.15);
+      --hero-stat-border: rgba(255, 255, 255, 0.25);
       --today-card-bg: #fffbeb;
       --today-card-border: #fde68a;
       --today-card-text: #92400e;
@@ -44,7 +45,8 @@
 
       --sidebar-w: 260px;
       --sidebar-w-collapsed: 78px;
-      --bottom-nav-h: 60px;
+      --bottom-nav-h: 62px;
+      --anim-speed: 0.25s;
     }
 
     /* 🌙 Dark Theme */
@@ -57,11 +59,12 @@
       --border-subtle: #233f66;
       --text: #f8fafc;
       --text-muted: #94a3b8;
-      --card-shadow: 0 10px 30px rgba(0, 0, 0, 0.45);
+      --card-shadow: 0 8px 25px -4px rgba(0, 0, 0, 0.5);
+      --card-shadow-hover: 0 14px 35px -2px rgba(2, 132, 199, 0.25);
 
       --hero-bg: linear-gradient(135deg, #09203a 0%, #0f2d4e 60%, #051322 100%);
       --hero-text: #f8fafc;
-      --hero-stat-bg: #0d223a;
+      --hero-stat-bg: rgba(13, 34, 58, 0.8);
       --hero-stat-border: #1e3a5f;
       --today-card-bg: #221406;
       --today-card-border: #78350f;
@@ -88,7 +91,7 @@
       line-height: 1.5;
       -webkit-text-size-adjust: 100%;
       -webkit-font-smoothing: antialiased;
-      transition: background 0.25s ease, color 0.25s ease;
+      transition: background var(--anim-speed) ease, color var(--anim-speed) ease;
     }
 
     .f-moul { font-family: 'Khmer OS Muol Light', 'Moul', cursive !important; font-weight: normal; }
@@ -117,7 +120,7 @@
       z-index: 60;
       box-shadow: 6px 0 25px rgba(0,0,0,0.25);
       border-right: 1px solid var(--sidebar-border);
-      transition: width 0.25s cubic-bezier(0.4, 0, 0.2, 1), transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      transition: width var(--anim-speed) cubic-bezier(0.4, 0, 0.2, 1), transform var(--anim-speed) cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     .sidebar.collapsed { width: var(--sidebar-w-collapsed); }
@@ -150,10 +153,12 @@
       font-size: 20px;
       font-weight: 700;
       flex-shrink: 0;
-      box-shadow: 0 4px 10px rgba(5, 150, 105, 0.35);
+      box-shadow: 0 4px 12px rgba(5, 150, 105, 0.35);
       overflow: hidden;
       cursor: pointer;
+      transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
+    .user-green-avatar:hover { transform: scale(1.08); }
     .user-green-avatar img { width: 100%; height: 100%; object-fit: cover; }
 
     .user-profile-meta { overflow: hidden; white-space: nowrap; }
@@ -169,7 +174,7 @@
       align-items: center; justify-content: center; cursor: pointer; font-size: 14px;
       flex-shrink: 0; transition: all 0.2s ease;
     }
-    .collapse-arrow-btn:hover { background: rgba(255, 255, 255, 0.2); color: #fff; }
+    .collapse-arrow-btn:hover { background: rgba(255, 255, 255, 0.25); color: #fff; transform: scale(1.05); }
 
     .sidebar.collapsed .user-profile-meta { display: none; }
     .sidebar.collapsed .collapse-arrow-btn { margin: 0 auto; transform: rotate(180deg); }
@@ -178,9 +183,9 @@
       margin: 4px 12px 12px; background: var(--sidebar-card-navy); border: 1px solid rgba(255, 255, 255, 0.1);
       border-radius: 14px; padding: 9px 12px; display: flex; align-items: center;
       justify-content: space-between; gap: 8px; cursor: pointer; flex-shrink: 0;
-      transition: background 0.15s;
+      transition: all 0.2s;
     }
-    .class-year-pill-box:hover { background: #133457; }
+    .class-year-pill-box:hover { background: #133457; transform: translateY(-1px); }
     .class-pill-left {
       display: flex; align-items: center; gap: 10px; font-size: 13px; font-weight: 700;
       color: #f8fafc; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
@@ -201,13 +206,15 @@
     .nav-link-btn {
       height: 44px; display: flex; align-items: center; gap: 14px; padding: 0 14px; margin-bottom: 5px;
       border-radius: 12px; color: rgba(255, 255, 255, 0.85); font-size: 13.5px; font-weight: 600;
-      cursor: pointer; white-space: nowrap; text-decoration: none; transition: all 0.18s ease;
+      cursor: pointer; white-space: nowrap; text-decoration: none; transition: all 0.2s ease;
       border: 1px solid transparent; user-select: none;
     }
-    .nav-link-btn:hover { background: rgba(255, 255, 255, 0.08); color: #ffffff; }
+    .nav-link-btn:hover { background: rgba(255, 255, 255, 0.08); color: #ffffff; transform: translateX(3px); }
+    .nav-link-btn:active { transform: scale(0.98); }
     .nav-link-btn.active {
       background: #0284c7; color: #ffffff; font-weight: 700;
       box-shadow: 0 4px 15px rgba(2, 132, 199, 0.35); border: 1px solid rgba(255, 255, 255, 0.15);
+      transform: none;
     }
     .nav-icon-box {
       font-size: 18px; width: 24px; text-align: center; flex-shrink: 0; display: flex;
@@ -227,6 +234,7 @@
       transition: all 0.2s ease; user-select: none;
     }
     .sidebar-theme-btn:hover { background: rgba(255, 255, 255, 0.14); }
+    .sidebar-theme-btn:active { transform: scale(0.98); }
     .sidebar.collapsed .sidebar-theme-btn { padding: 0; justify-content: center; }
 
     .sidebar-logout-btn {
@@ -238,12 +246,14 @@
     .sidebar-logout-btn:hover {
       background: #ef4444; color: #ffffff; box-shadow: 0 4px 14px rgba(239, 68, 68, 0.35);
     }
+    .sidebar-logout-btn:active { transform: scale(0.98); }
     .sidebar.collapsed .sidebar-logout-btn { padding: 0; justify-content: center; }
 
     .admin-clear-btn {
       width: 100%; height: 36px; border-radius: 10px; border: 1px solid rgba(239, 68, 68, 0.3);
       background: rgba(220, 38, 38, 0.15); color: #fca5a5; font-size: 11.5px; font-weight: 600;
       display: none; align-items: center; gap: 10px; padding: 0 12px; cursor: pointer;
+      transition: all 0.2s;
     }
     .admin-clear-btn:hover { background: rgba(220, 38, 38, 0.35); color: #fff; }
 
@@ -262,28 +272,34 @@
 
     .view-panel {
       position: absolute; inset: 0; width: 100%; height: 100%; overflow-y: auto;
-      overflow-x: hidden; opacity: 0; pointer-events: none; transform: translateY(8px);
-      transition: opacity 0.2s ease, transform 0.2s ease; -webkit-overflow-scrolling: touch;
+      overflow-x: hidden; opacity: 0; pointer-events: none; transform: translateY(10px) scale(0.995);
+      transition: opacity 0.25s cubic-bezier(0.4, 0, 0.2, 1), transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      -webkit-overflow-scrolling: touch;
     }
-    .view-panel.active { opacity: 1; pointer-events: auto; transform: translateY(0); }
+    .view-panel.active { opacity: 1; pointer-events: auto; transform: translateY(0) scale(1); }
 
     #dashboardView { padding: 24px 28px 60px; }
     .dash-inner-container {
       max-width: 1350px; margin: 0 auto; display: flex; flex-direction: column; gap: 22px;
     }
 
+    /* Hero Banner */
     .hero-banner-card {
       background: var(--hero-bg); border: 1px solid var(--border); border-radius: 24px;
       padding: 22px 26px; display: flex; align-items: center; justify-content: space-between;
-      gap: 20px; box-shadow: var(--card-shadow); color: var(--hero-text); transition: all 0.25s ease;
+      gap: 20px; box-shadow: var(--card-shadow); color: var(--hero-text);
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
     }
+    .hero-banner-card:hover { box-shadow: var(--card-shadow-hover); }
     .hero-banner-left { display: flex; align-items: center; gap: 18px; min-width: 0; }
     .hero-building-icon {
       width: 58px; height: 58px; border-radius: 18px;
       background: linear-gradient(135deg, #38bdf8 0%, #2563eb 100%);
       color: #ffffff; display: flex; align-items: center; justify-content: center;
       font-size: 26px; flex-shrink: 0; box-shadow: 0 8px 20px rgba(2, 132, 199, 0.35);
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
+    .hero-banner-card:hover .hero-building-icon { transform: rotate(5deg) scale(1.05); }
     .hero-info-texts { display: flex; flex-direction: column; gap: 2px; }
     .hero-top-tag { font-size: 13px; opacity: 0.85; font-weight: 600; }
     .hero-main-title { font-size: 24px; font-weight: 700; color: #38bdf8; line-height: 1.3; }
@@ -293,7 +309,7 @@
     .hero-stat-card {
       background: var(--hero-stat-bg); border: 1px solid var(--hero-stat-border);
       border-radius: 18px; padding: 14px 20px; min-width: 140px; display: flex;
-      flex-direction: column; gap: 2px;
+      flex-direction: column; gap: 2px; backdrop-filter: blur(8px);
     }
     .h-stat-top { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; color: #38bdf8; }
     .h-stat-digit { font-size: 32px; font-weight: 800; line-height: 1.2; }
@@ -302,9 +318,10 @@
     .hero-today-card {
       background: var(--today-card-bg); border: 1px solid var(--today-card-border);
       border-radius: 18px; padding: 14px 20px; min-width: 140px; display: flex;
-      flex-direction: column; gap: 2px; cursor: pointer; transition: transform 0.15s;
+      flex-direction: column; gap: 2px; cursor: pointer; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     }
-    .hero-today-card:hover { transform: translateY(-2px); }
+    .hero-today-card:hover { transform: translateY(-3px) scale(1.02); box-shadow: 0 10px 25px rgba(217, 119, 6, 0.2); }
+    .hero-today-card:active { transform: scale(0.98); }
     .h-today-top { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; color: #d97706; }
     [data-theme="dark"] .h-today-top { color: #fbbf24; }
     .h-today-status { font-size: 26px; font-weight: 800; line-height: 1.2; color: var(--today-card-text); }
@@ -316,25 +333,29 @@
     .section-slate-sub { font-size: 12.5px; color: var(--text-muted); }
 
     /* =========================================================
-       🌟 TASK CARDS (វត្តមានថ្ងៃនេះ & ពិន្ទុខែនេះ)
+       🌟 TASK CARDS (វត្តមាន & ពិន្ទុ)
     ========================================================= */
     .today-tasks-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
     .task-action-card {
       background: var(--surface-card); border: 1.5px solid var(--border); border-radius: 20px;
       padding: 16px 22px; display: flex; align-items: center; justify-content: space-between;
-      gap: 14px; cursor: pointer; transition: all 0.2s ease; box-shadow: var(--card-shadow);
+      gap: 14px; cursor: pointer; transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: var(--card-shadow);
+      position: relative; overflow: hidden;
     }
     .task-action-card:hover {
-      border-color: #0284c7; transform: translateY(-2px); box-shadow: 0 10px 25px rgba(2, 132, 199, 0.15);
+      border-color: #0284c7; transform: translateY(-3px); box-shadow: var(--card-shadow-hover);
     }
+    .task-action-card:active { transform: scale(0.985); }
     .task-left-box { display: flex; align-items: center; gap: 14px; }
 
-    /* 🌟 Icon ប្រតិទិនថ្ងៃនេះ (ដូចរូបភាពគំរូ) */
+    /* Icon ប្រតិទិនថ្ងៃនេះ */
     .task-icon-orange {
       width: 52px; height: 52px; border-radius: 16px; background: #f59e0b; color: #ffffff;
       display: flex; align-items: center; justify-content: center; flex-shrink: 0;
-      box-shadow: 0 4px 14px rgba(245, 158, 11, 0.3); padding: 4px;
+      box-shadow: 0 4px 14px rgba(245, 158, 11, 0.35); padding: 4px;
+      transition: transform 0.2s ease;
     }
+    .task-action-card:hover .task-icon-orange { transform: scale(1.06); }
     .task-cal-mini {
       width: 36px; height: 38px; background: white; border-radius: 8px;
       overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 2px 6px rgba(0,0,0,0.2);
@@ -348,30 +369,35 @@
       font-size: 16px; font-weight: 800; color: #0f172a; line-height: 1;
     }
 
-    /* 🌟 Icon ក្រដាសពិន្ទុ */
+    /* Icon ស្រង់ពិន្ទុ */
     .task-icon-purple {
       width: 52px; height: 52px; border-radius: 16px; background: #6366f1; color: #ffffff;
       display: flex; align-items: center; justify-content: center; font-size: 24px; flex-shrink: 0;
-      box-shadow: 0 4px 14px rgba(99, 102, 241, 0.3);
+      box-shadow: 0 4px 14px rgba(99, 102, 241, 0.35); transition: transform 0.2s ease;
     }
+    .task-action-card:hover .task-icon-purple { transform: scale(1.06); }
 
     .task-text-box { display: flex; flex-direction: column; gap: 2px; }
     .task-title-text { font-size: 14.5px; font-weight: 700; color: var(--text); }
-    .task-desc-amber { font-size: 12px; font-weight: 600; color: #d97706; }
+    .task-desc-amber { font-size: 12px; font-weight: 600; color: #d97706; transition: color 0.2s; }
     [data-theme="dark"] .task-desc-amber { color: #fbbf24; }
     
-    /* ពណ៌បៃតងពេលកត់វត្តមាន ឬពិន្ទុរួចរាល់ */
     .task-desc-green { font-size: 12px; font-weight: 700; color: #16a34a !important; }
     [data-theme="dark"] .task-desc-green { color: #34d399 !important; }
 
-    .task-chevron-arrow { font-size: 16px; color: var(--text-muted); font-weight: bold; }
+    .task-desc-slate { font-size: 12px; font-weight: 600; color: var(--text-muted); }
+
+    .task-chevron-arrow { font-size: 18px; color: var(--text-muted); font-weight: bold; transition: transform 0.2s; }
+    .task-action-card:hover .task-chevron-arrow { transform: translateX(3px); color: #0284c7; }
     
     .score-percent-badge {
       background: var(--surface-elevated); color: var(--text-muted); font-size: 12px;
-      font-weight: 700; padding: 4px 10px; border-radius: 20px; border: 1px solid var(--border);
+      font-weight: 700; padding: 4px 12px; border-radius: 20px; border: 1px solid var(--border);
+      transition: all 0.25s ease;
     }
     .score-percent-badge.complete {
       background: rgba(16, 185, 129, 0.15); color: #10b981; border-color: rgba(16, 185, 129, 0.3);
+      box-shadow: 0 0 10px rgba(16, 185, 129, 0.2);
     }
 
     /* Shortcuts */
@@ -380,23 +406,27 @@
       height: 48px; padding: 0 20px; border-radius: 16px; background: var(--surface-card);
       border: 1.5px solid var(--border); box-shadow: var(--card-shadow); display: flex;
       align-items: center; gap: 12px; cursor: pointer; color: var(--text); font-size: 13.5px;
-      font-weight: 700; transition: all 0.18s ease;
+      font-weight: 700; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     }
-    .shortcut-pill-btn:hover { transform: translateY(-2px); border-color: #0284c7; color: #0284c7; }
-    .sc-arrow { font-size: 13px; margin-left: 2px; opacity: 0.6; }
+    .shortcut-pill-btn:hover { transform: translateY(-3px); border-color: #0284c7; color: #0284c7; box-shadow: var(--card-shadow-hover); }
+    .shortcut-pill-btn:active { transform: scale(0.97); }
+    .sc-arrow { font-size: 13px; margin-left: 2px; opacity: 0.6; transition: transform 0.2s; }
+    .shortcut-pill-btn:hover .sc-arrow { transform: translateX(3px); opacity: 1; }
 
     /* Admin Panel */
     .admin-classes-panel {
       background: var(--surface-card); border: 1px solid var(--border); border-radius: 20px;
       padding: 20px; display: none; flex-direction: column; gap: 14px; box-shadow: var(--card-shadow);
+      animation: fadeIn 0.3s ease;
     }
     .admin-classes-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
     .admin-class-card {
       background: var(--surface-elevated); border: 1px solid var(--border); border-radius: 14px;
       padding: 12px 14px; display: flex; align-items: center; justify-content: space-between;
-      cursor: pointer; transition: all 0.15s;
+      cursor: pointer; transition: all 0.2s ease;
     }
-    .admin-class-card:hover { border-color: #0284c7; }
+    .admin-class-card:hover { border-color: #0284c7; transform: translateY(-2px); box-shadow: 0 6px 16px rgba(2, 132, 199, 0.15); }
+    .admin-class-card:active { transform: scale(0.97); }
 
     /* Reports Hub View */
     #reportsHubView { padding: 24px 28px 60px; }
@@ -406,28 +436,31 @@
     .btn-back-home {
       background: var(--surface-card); border: 1px solid var(--border); color: var(--text);
       padding: 8px 16px; border-radius: 12px; font-size: 13px; font-weight: 700;
-      cursor: pointer; display: flex; align-items: center; gap: 6px;
+      cursor: pointer; display: flex; align-items: center; gap: 6px; transition: all 0.2s;
     }
-    .btn-back-home:hover { border-color: #0284c7; color: #0284c7; }
+    .btn-back-home:hover { border-color: #0284c7; color: #0284c7; transform: translateY(-2px); }
 
     .reports-grid-clean { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
     .report-card-item {
       background: var(--surface-card); border: 1px solid var(--border); border-radius: 20px;
       padding: 18px 20px; display: flex; align-items: center; justify-content: space-between;
-      cursor: pointer; box-shadow: var(--card-shadow); transition: all 0.2s;
+      cursor: pointer; box-shadow: var(--card-shadow); transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     }
-    .report-card-item:hover { transform: translateY(-3px); border-color: #0284c7; box-shadow: 0 10px 25px rgba(2, 132, 199, 0.15); }
+    .report-card-item:hover { transform: translateY(-3px); border-color: #0284c7; box-shadow: var(--card-shadow-hover); }
+    .report-card-item:active { transform: scale(0.98); }
     .rci-left { display: flex; align-items: center; gap: 14px; }
     .rci-icon {
       width: 48px; height: 48px; border-radius: 15px; background: rgba(2, 132, 199, 0.12);
       color: #0284c7; display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0;
+      transition: transform 0.2s ease;
     }
+    .report-card-item:hover .rci-icon { transform: scale(1.08); }
     .rci-name { font-size: 14px; font-weight: 700; color: var(--text); }
     .rci-arrow {
       width: 32px; height: 32px; border-radius: 10px; background: var(--surface-elevated); color: var(--text-muted);
-      display: flex; align-items: center; justify-content: center; font-size: 13px;
+      display: flex; align-items: center; justify-content: center; font-size: 13px; transition: all 0.2s ease;
     }
-    .report-card-item:hover .rci-arrow { background: #0284c7; color: #ffffff; }
+    .report-card-item:hover .rci-arrow { background: #0284c7; color: #ffffff; transform: translateX(3px); }
 
     /* Iframe View */
     #iframeView { padding: 0; background: var(--surface); overflow: hidden !important; }
@@ -436,15 +469,16 @@
 
     .loading-glass-overlay {
       position: absolute; inset: 0; background: var(--bg); display: flex;
-      flex-direction: column; align-items: center; justify-content: center; gap: 10px;
-      z-index: 10; opacity: 0; visibility: hidden; pointer-events: none; transition: all 0.2s;
+      flex-direction: column; align-items: center; justify-content: center; gap: 12px;
+      z-index: 10; opacity: 0; visibility: hidden; pointer-events: none; transition: all 0.25s;
     }
     .loading-glass-overlay.show { opacity: 1; visibility: visible; pointer-events: auto; }
     .spinner-ring {
-      width: 32px; height: 32px; border: 3px solid var(--border);
-      border-top-color: var(--primary); border-radius: 50%; animation: spin 0.7s linear infinite;
+      width: 36px; height: 36px; border: 3.5px solid var(--border);
+      border-top-color: var(--primary); border-radius: 50%; animation: spin 0.7s cubic-bezier(0.5, 0.1, 0.5, 0.9) infinite;
     }
     @keyframes spin { to { transform: rotate(360deg); } }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
     /* Mobile Bottom Nav */
     .mobile-bottom-nav {
@@ -457,18 +491,28 @@
     .m-nav-item {
       display: flex; flex-direction: column; align-items: center; justify-content: center;
       flex: 1; height: 100%; cursor: pointer; color: var(--text-muted); font-size: 10.5px; font-weight: 600;
+      transition: all 0.2s;
     }
+    .m-nav-item:active { transform: scale(0.92); }
     .m-nav-item.active { color: #0284c7; font-weight: 700; }
 
-    /* Profile Viewer Modal */
+    /* =========================================================
+       🪪 MODAL: មើលប្រវត្តិរូបសិស្ស
+    ========================================================= */
     .profile-viewer-backdrop {
       display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.65);
       backdrop-filter: blur(6px); z-index: 10005; align-items: center; justify-content: center; padding: 14px;
+      animation: fadeIn 0.2s ease;
     }
     .profile-viewer-box {
       width: 100%; max-width: 680px; max-height: 94vh; background: var(--surface);
       border: 1.5px solid var(--border); border-radius: 24px; box-shadow: 0 25px 60px rgba(0,0,0,0.3);
       display: flex; flex-direction: column; overflow: hidden; color: var(--text);
+      animation: modalPop 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    @keyframes modalPop {
+      from { opacity: 0; transform: scale(0.92) translateY(12px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
     }
     .pv-top-bar {
       padding: 14px 18px; background: var(--surface-elevated); border-bottom: 1px solid var(--border);
@@ -478,17 +522,21 @@
     .pv-dropdown-select {
       flex: 1; height: 38px; border-radius: 12px; background: var(--surface); border: 1.5px solid var(--border);
       color: var(--text); font-size: 13px; font-weight: 700; padding: 0 12px; outline: none; cursor: pointer;
+      transition: border-color 0.2s;
     }
+    .pv-dropdown-select:focus { border-color: #0284c7; }
     .pv-nav-arrow-btn {
       width: 38px; height: 38px; border-radius: 12px; background: var(--surface); border: 1.5px solid var(--border);
       color: #0284c7; font-size: 16px; font-weight: 700; display: flex; align-items: center; justify-content: center;
-      cursor: pointer; flex-shrink: 0;
+      cursor: pointer; flex-shrink: 0; transition: all 0.2s;
     }
+    .pv-nav-arrow-btn:hover { background: #0284c7; color: #fff; }
     .pv-close-btn {
       width: 32px; height: 32px; border-radius: 50%; background: var(--surface-elevated);
       border: 1px solid var(--border); color: var(--text-muted); font-size: 15px; cursor: pointer;
-      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all 0.2s;
     }
+    .pv-close-btn:hover { background: #ef4444; color: #fff; }
     .pv-content-scroll { padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 18px; }
     .pv-bio-header-card {
       background: var(--surface-elevated); border: 1px solid var(--border); border-radius: 20px; padding: 18px 20px;
@@ -497,9 +545,11 @@
     .pv-avatar-frame {
       width: 90px; height: 90px; border-radius: 22px; background: #0284c7; border: 3px solid #38bdf8;
       display: flex; align-items: center; justify-content: center; font-size: 38px; font-weight: 700; color: #fff; overflow: hidden; flex-shrink: 0;
+      box-shadow: 0 6px 18px rgba(2, 132, 199, 0.3);
     }
     .pv-avatar-frame img { width: 100%; height: 100%; object-fit: cover; }
     .pv-student-name { font-size: 22px; font-weight: 700; color: #0284c7; line-height: 1.2; }
+    [data-theme="dark"] .pv-student-name { color: #38bdf8; }
     .pv-badges-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 4px; }
     .pv-pill-tag { font-size: 11.5px; font-weight: 700; padding: 2px 10px; border-radius: 20px; border: 1px solid var(--border); }
 
@@ -512,6 +562,7 @@
       font-size: 13.5px; font-weight: 700; color: #0284c7; display: flex; align-items: center; gap: 8px;
       border-bottom: 1px solid var(--border); padding-bottom: 8px; margin-bottom: 4px;
     }
+    [data-theme="dark"] .pv-block-title { color: #38bdf8; }
     .pv-field-row { display: flex; justify-content: space-between; gap: 10px; font-size: 12.5px; line-height: 1.4; }
     .pv-field-label { color: var(--text-muted); font-weight: 600; flex-shrink: 0; }
     .pv-field-value { color: var(--text); font-weight: 700; text-align: right; }
@@ -522,19 +573,24 @@
     .btn-pv-print {
       height: 38px; padding: 0 16px; border-radius: 12px; background: #0284c7;
       color: #ffffff; border: none; font-size: 13px; font-weight: 700; cursor: pointer;
-      display: flex; align-items: center; gap: 6px;
+      display: flex; align-items: center; gap: 6px; transition: all 0.2s;
     }
+    .btn-pv-print:hover { background: #0369a1; transform: translateY(-1px); }
 
-    /* Modal: Profile */
+    /* =========================================================
+       👤 MODAL: PROFILE គ្រូ / ADMIN
+    ========================================================= */
     .modal-backdrop {
       display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.65);
       backdrop-filter: blur(6px); z-index: 10020; align-items: center; justify-content: center; padding: 16px;
+      animation: fadeIn 0.2s ease;
     }
     .modal-backdrop.show { display: flex; }
     .modal-dialog {
       width: 440px; max-width: 100%; max-height: 90vh; overflow-y: auto;
       background: var(--surface); border: 1.5px solid var(--border); border-radius: 22px;
       box-shadow: 0 25px 60px rgba(0,0,0,0.3); color: var(--text);
+      animation: modalPop 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
     .modal-head-banner {
       padding: 20px; background: linear-gradient(135deg, #0284c7, #0369a1); color: #fff;
@@ -543,19 +599,29 @@
     .modal-close-btn {
       position: absolute; right: 14px; top: 14px; background: rgba(255,255,255,0.18);
       border: none; color: #fff; width: 30px; height: 30px; border-radius: 50%; cursor: pointer;
+      transition: all 0.2s;
     }
-    .modal-avatar-preview { width: 80px; height: 80px; border-radius: 50%; border: 3px solid #38bdf8; object-fit: cover; }
+    .modal-close-btn:hover { background: rgba(255,255,255,0.35); transform: scale(1.08); }
+    .modal-avatar-preview {
+      width: 80px; height: 80px; border-radius: 50%; border: 3px solid #38bdf8; object-fit: cover;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.25);
+    }
     .modal-body { padding: 18px; }
     .form-group-field { margin-bottom: 12px; }
     .form-group-field label { display: block; font-size: 11.5px; font-weight: 700; margin-bottom: 5px; color: var(--text-muted); }
     .form-group-field input, .form-group-field select {
       width: 100%; padding: 10px 14px; border-radius: 11px; border: 1px solid var(--border);
       background: var(--surface-elevated); color: var(--text); outline: none; font-size: 13px;
+      transition: border-color 0.2s;
     }
+    .form-group-field input:focus, .form-group-field select:focus { border-color: #0284c7; }
     .modal-foot-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 16px; }
-    .btn-modal { padding: 9px 18px; border-radius: 11px; font-size: 12.5px; font-weight: 700; cursor: pointer; border: none; }
+    .btn-modal { padding: 9px 18px; border-radius: 11px; font-size: 12.5px; font-weight: 700; cursor: pointer; border: none; transition: all 0.2s; }
+    .btn-modal:active { transform: scale(0.97); }
     .btn-modal.primary { background: #0284c7; color: #fff; }
+    .btn-modal.primary:hover { background: #0369a1; }
     .btn-modal.cancel { background: var(--surface-elevated); color: var(--text); border: 1px solid var(--border); }
+    .btn-modal.cancel:hover { background: var(--border); }
 
     /* Responsive */
     @media (max-width: 1024px) { .reports-grid-clean { grid-template-columns: repeat(2, 1fr); } }
@@ -585,7 +651,7 @@
 
 <div class="app-layout">
 
-  <div id="mobileBackdrop" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:80;" onclick="closeSidebarMobile()"></div>
+  <div id="mobileBackdrop" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); backdrop-filter:blur(3px); z-index:80;" onclick="closeSidebarMobile()"></div>
 
   <!-- =========================================================
        🧭 SIDEBAR
@@ -716,7 +782,6 @@
             <!-- ១. កិច្ចការវត្តមានថ្ងៃនេះ -->
             <div class="task-action-card" onclick="navigate('attendance', null)">
               <div class="task-left-box">
-                <!-- Icon ប្រតិទិនបង្ហាញខែ និងថ្ងៃនេះផ្ទាល់ (ដូចរូបភាពគំរូ) -->
                 <div class="task-icon-orange">
                   <div class="task-cal-mini">
                     <div class="cal-mini-header" id="taskCalMonth">OCT</div>
@@ -830,7 +895,7 @@
         <div class="iframe-container">
           <div class="loading-glass-overlay" id="loadingOverlay">
             <div class="spinner-ring"></div>
-            <div style="font-size:12px; font-weight:600; color:var(--text-muted);">កំពុងផ្ទុក...</div>
+            <div style="font-size:12.5px; font-weight:600; color:var(--text-muted);">កំពុងផ្ទុក...</div>
           </div>
           <iframe id="pageFrame" src="about:blank"></iframe>
         </div>
@@ -922,14 +987,14 @@
   <div class="modal-dialog">
     <div class="modal-head-banner">
       <button class="modal-close-btn" onclick="closeProfileModal()">✕</button>
-      <div style="font-size:14.5px; font-weight:bold;">👤 កែប្រែព័ត៌មានផ្ទាល់ខ្លួន</div>
+      <div style="font-size:14.5px; font-weight:bold; margin-bottom:12px;">👤 កែប្រែព័ត៌មានផ្ទាល់ខ្លួន</div>
       <img id="profilePhotoPreview" class="modal-avatar-preview" src="" style="display:none;">
       <div id="profileAvatarPlaceholder" class="modal-avatar-preview" style="display:flex; align-items:center; justify-content:center; font-size:28px; background:linear-gradient(135deg,#0284c7,#0369a1);">👤</div>
     </div>
     <div class="modal-body">
       <form id="profileForm" onsubmit="return saveMyProfile(event)">
         <div style="text-align:center; margin-bottom:14px;">
-          <label style="font-size:11px; font-weight:700; padding:6px 14px; border-radius:20px; background:var(--primary-soft); color:var(--primary); cursor:pointer; border:1px solid var(--border);">
+          <label style="font-size:11px; font-weight:700; padding:6px 14px; border-radius:20px; background:var(--primary-soft); color:var(--primary); cursor:pointer; border:1px solid var(--border); transition:all 0.2s;">
             📷 ប្តូររូបថត <input type="file" accept="image/*" style="display:none;" onchange="onProfilePhotoPicked(event)">
           </label>
         </div>
@@ -966,25 +1031,6 @@
   let cachedStudentsRoster = [];
   let currentPvIndex = 0;
   let profilePickedPhotoBase64 = null;
-
-  const PAGE_TITLES = {
-    dashboard: "⊞ ផ្ទាំងរបស់គ្រូ",
-    addStudent: "✍️ បញ្ចូលសិស្សថ្មី",
-    card: "🪪 កាតសិស្ស (ID Card)",
-    group: "👥 បែងចែកជាក្រុម",
-    wheel: "🎡 បង្វិលកង់ជ្រើសរើស",
-    attendance: "📅 វត្តមានសិស្ស",
-    score: "📊 ស្រង់ពិន្ទុ",
-    chat: "💬 សារសន្ទនា",
-    reportsHub: "📄 របាយការណ៍",
-    roster: "🗒️ បញ្ជីរាយនាមសិស្ស",
-    rank: "🏆 តារាងចំណាត់ថ្នាក់",
-    honor: "🌟 តារាងកិត្តិយស",
-    certificate: "🎖️ បណ្ណសរសើរ",
-    report: "📋 សៀវភៅតាមដាន",
-    remesterrecord: "📘 សៀវភៅសិក្ខាគារិក",
-    teacher: "👨‍🏫 គ្រប់គ្រងគ្រូ"
-  };
 
   async function apiRequest(action, payload = {}) {
     try {
@@ -1087,7 +1133,7 @@
       `;
     } else {
       styleTag.innerHTML = `
-        html, body { background: #f1f5f9 !important; color: #0f172a !important; }
+        html, body { background: #f8fafc !important; color: #0f172a !important; }
         .control-card, .table-container, .form-card, .profile-card, .form-section-card, .modal-box, .edit-modal-box {
           background: #ffffff !important; color: #0f172a !important; border-color: #e2e8f0 !important;
         }
@@ -1103,7 +1149,6 @@
   function applyTheme(theme) {
     document.documentElement.setAttribute('data-theme', theme);
     localStorage.setItem('krou_theme_manual', theme);
-    localStorage.setItem('theme', theme);
     const icon = document.getElementById('themeIcon');
     const text = document.getElementById('themeText');
     if (icon) icon.textContent = theme === 'dark' ? '☀️' : '🌙';
@@ -1185,7 +1230,7 @@
       iframeView.classList.remove('active');
       if (reportsHubView) reportsHubView.classList.remove('active');
       dashboardView.classList.add('active');
-      refreshStats();
+      refreshStats(); // 🌟 Auto-refresh Dashboard Stats
       return;
     }
 
@@ -1214,6 +1259,13 @@
     syncThemeToIframe(currentTheme);
   });
 
+  /* 🌟 ស្តាប់សារពី Subpages ក្នុង Iframe ពេលកត់វត្តមាន ឬពិន្ទុរួច ដើម្បី Auto-Refresh */
+  window.addEventListener('message', function(event) {
+    if (event.data && (event.data.type === 'DATA_UPDATED' || event.data.action === 'REFRESH_STATS')) {
+      refreshStats();
+    }
+  });
+
   function toggleSidebarCollapse() {
     const sidebar = document.getElementById('sidebar');
     const isCollapsed = sidebar.classList.toggle('collapsed');
@@ -1235,7 +1287,6 @@
   ========================================================= */
   async function checkDashboardTasks(targetCls, currentMonth, todayDay, totalClassStudents) {
     try {
-      // កំណត់កាលបរិច្ឆេទថ្ងៃនេះលើ Icon ប្រតិទិន
       const now = new Date();
       const engMonth = ENG_MONTHS[now.getMonth()];
       const dayNum = now.getDate();
@@ -1244,19 +1295,19 @@
       if (calMonthEl) calMonthEl.innerText = engMonth;
       if (calDayEl) calDayEl.innerText = dayNum;
 
-      // ហៅ API ទាញទិន្នន័យវត្តមាន និងពិន្ទុស្របគ្នា
       const [attRes, scoreRes] = await Promise.all([
         apiRequest('getMonthlyAttendanceForClass', { className: targetCls, month: currentMonth }),
         apiRequest('getSavedScores', { className: targetCls, period: currentMonth })
       ]);
 
-      // ១. 🌟 ពិនិត្យវត្តមានថ្ងៃនេះ
+      // ១. 🌟 ពិនិត្យវត្តមានថ្ងៃនេះ (ដោះស្រាយទាំង Array និង Object)
       let isAttRecordedToday = false;
       if (Array.isArray(attRes) && attRes.length > 0) {
-        // បើមានសិស្សណាម្នាក់ត្រូវបានកត់ត្រាវត្តមានថ្ងៃនេះ (P, C, A, L)
         const recordedTodayList = attRes.filter(s => {
-          const code = s.days && s.days[todayDay];
-          return code && code !== '-' && code.trim() !== '';
+          if (!s || !s.days) return false;
+          // ប្រសិនបើជា Array ត្រូវឆែក index [todayDay - 1] បើ Object ឆែក key [todayDay]
+          const code = Array.isArray(s.days) ? s.days[todayDay - 1] : s.days[todayDay];
+          return code && code !== '-' && String(code).trim() !== '';
         });
         if (recordedTodayList.length > 0) {
           isAttRecordedToday = true;
@@ -1301,7 +1352,6 @@
 
       if (scoreRes && scoreRes.scores) {
         const scoresMap = scoreRes.scores;
-        // រាប់ចំនួនសិស្សដែលបានបញ្ចូលពិន្ទុរួច
         scoredStudentsCount = Object.keys(scoresMap).filter(sid => {
           const sObj = scoresMap[sid];
           if (!sObj) return false;
@@ -1372,8 +1422,9 @@
           adminPanel.style.display = 'flex';
           adminGrid.innerHTML = '';
           classBreakdown.forEach(c => {
+            // 🌟 កែសម្រួល៖ រក្សាទុកក្នុង localStorage ភ្លាមៗពេលចុច
             adminGrid.innerHTML += `
-              <div class="admin-class-card" onclick="ASSIGNED_CLASS='${c.className}'; navigate('attendance', null)">
+              <div class="admin-class-card" onclick="ASSIGNED_CLASS='${c.className}'; localStorage.setItem('krou_assigned_class', '${c.className}'); navigate('attendance', null)">
                 <div>
                   <div style="font-weight:700;">ថ្នាក់ទី ${c.className}</div>
                   <div style="font-size:11.5px; opacity:0.8;">ស្រី: ${c.female} នាក់</div>
@@ -1400,7 +1451,6 @@
 
       document.getElementById('dashStudentCountDigit').innerText = studentCountForView;
 
-      // 🌟 ដំណើរការមុខងារត្រួតពិនិត្យវត្តមាន និងពិន្ទុជាក់ស្តែង
       const now = new Date();
       const currentMonth = KHMER_MONTHS[now.getMonth()];
       const todayDay = now.getDate();
@@ -1582,9 +1632,22 @@
     renderSelectedStudentProfile(currentPvIndex);
   }
 
+  /* 🌟 គណនាអាយុសិស្សឆ្លាតវៃ គាំទ្រគ្រប់ទម្រង់ថ្ងៃខែ (DD/MM/YYYY, DD-MM-YYYY, YYYY-MM-DD) */
   function calculateAge(dobStr) {
     if (!dobStr) return '';
-    const b = new Date(dobStr);
+    let b = new Date(dobStr);
+
+    if (isNaN(b.getTime()) && typeof dobStr === 'string') {
+      const parts = dobStr.trim().split(/[\/\-.]/);
+      if (parts.length === 3) {
+        if (parts[2].length === 4) {
+          b = new Date(`${parts[2]}-${parts[1]}-${parts[0]}`);
+        } else if (parts[0].length === 4) {
+          b = new Date(`${parts[0]}-${parts[1]}-${parts[2]}`);
+        }
+      }
+    }
+
     if (isNaN(b.getTime())) return '';
     const now = new Date();
     let age = now.getFullYear() - b.getFullYear();
@@ -1638,9 +1701,16 @@
     document.getElementById('pvMotherJob').innerText = '-';
   }
 
+  /* 🌟 LOGOUT៖ លុបតែ Session ដោយរក្សាទុក Theme */
   function doLogout() {
     if (!confirm('តើអ្នកពិតជាចង់ចាកចេញពីប្រព័ន្ធមែនទេ?')) return;
-    localStorage.clear();
+    localStorage.removeItem('krou_session_token');
+    localStorage.removeItem('school_persistent_token');
+    localStorage.removeItem('krou_teacher_name');
+    localStorage.removeItem('krou_teacher_photo');
+    localStorage.removeItem('krou_user_role');
+    localStorage.removeItem('krou_assigned_class');
+    localStorage.removeItem('krou_active_page');
     window.location.replace('login.html');
   }
 
@@ -1668,7 +1738,8 @@
     try {
       const session = await apiRequest('getCurrentSession', { token: SESSION_TOKEN });
       if (!session || !session.loggedIn) {
-        localStorage.clear();
+        localStorage.removeItem('krou_session_token');
+        localStorage.removeItem('school_persistent_token');
         window.location.replace('login.html');
         return;
       }
