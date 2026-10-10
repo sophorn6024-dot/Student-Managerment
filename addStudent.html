@@ -265,7 +265,7 @@
     .table-photo-box img { width: 100%; height: 100%; object-fit: cover; }
     .table-photo-box:hover { transform: scale(1.15); box-shadow: 0 4px 10px rgba(0,0,0,0.25); }
 
-    /* 📅 DATE FIELD TRIGGER BUTTON/INPUT */
+    /* 📅 DATE FIELD TRIGGER BUTTON */
     .date-picker-trigger {
       width: 100%; height: 32px; border: 1px solid var(--border); border-radius: 6px;
       background: var(--surface-elevated); color: var(--text); padding: 0 8px; font-size: 12.5px;
@@ -502,6 +502,9 @@
   <!-- 🌟 TOAST NOTIFICATION -->
   <div id="toastNotification" class="toast-notification"></div>
 
+  <!-- 🌟 HIDDEN FILE INPUT FOR ROW PHOTO UPLOAD -->
+  <input type="file" id="rowPhotoFileInput" accept="image/*" style="display:none;" onchange="onRowPhotoFileSelected(this)">
+
   <!-- 🌟 HEADER NAVIGATION -->
   <div class="top-nav">
     <div class="nav-left">
@@ -559,7 +562,7 @@
       </div>
 
       <div class="chip-btn" id="syncStatus" onclick="refreshDataForce()" title="ចុចដើម្បី Update ឡើងវិញ">
-        <span>⚡</span> <span id="syncStatusText">រៀបចំរួចរាល់</span>
+        <span>⚡</span> <span id="syncStatusText">ស្វ័យរក្សាទុកបើក</span>
       </div>
 
       <div class="chip-btn" onclick="toggleLockTable()">
@@ -795,11 +798,13 @@
     let studentsList = [];
     let rowNumMap = {};
     let activeRowIndex = null;
+    let uploadTargetIndex = null;
     let isTableLocked = false;
     let modalPhotoBase64 = null;
     let currentStatusFilter = 'កំពុងសិក្សា';
     let isMissingFilterActive = false;
     let searchDebounceTimer = null;
+    let autoSaveTimers = {};
 
     /* 🎨 THEME SYNC */
     function applyTheme(th) {
@@ -817,6 +822,29 @@
       if (window.parent && window.parent !== window) {
         window.parent.postMessage({ type: 'DATA_UPDATED', action: 'STUDENT_ROSTER_CHANGED' }, '*');
       }
+    }
+
+    /* 📸 FUNCTION បំប្លែង LINK GOOGLE DRIVE ទៅជា LINK រូបភាពពិតប្រាកដ */
+    function normalizePhotoUrl(url) {
+      if (!url || typeof url !== 'string') return '';
+      url = url.trim();
+      if (!url) return '';
+      if (url.startsWith('data:image')) return url;
+
+      // ឆែកមើល Link Google Drive និងបំប្លែងទៅ Thumbnail អាច Embed បាន
+      let fileId = '';
+      const match1 = url.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
+      const match2 = url.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+      const match3 = url.match(/^([a-zA-Z0-9_-]{25,})$/); // Drive ID សុទ្ធ
+
+      if (match1 && match1[1]) fileId = match1[1];
+      else if (match2 && match2[1]) fileId = match2[1];
+      else if (match3 && match3[1]) fileId = match3[1];
+
+      if (fileId) {
+        return `https://drive.google.com/thumbnail?id=${fileId}&sz=w200`;
+      }
+      return url;
     }
 
     async function apiRequest(action, payload = {}) {
@@ -961,16 +989,23 @@
         }
 
         if (Array.isArray(rosterRes)) {
-          studentsList = rosterRes.map(s => ({
-            ...s,
-            dob: formatToInputDate(s.dob),
-            photoUrl: s.photoUrl || s.imageUrl || '',
-            imageUrl: s.imageUrl || s.photoUrl || '',
-            rowNum: rowNumMap[s.id] || null,
-            isDraft: false
-          }));
+          studentsList = rosterRes.map(s => {
+            // ចាប់យកគ្រប់ Field រូបភាពដែលអាចមាន
+            const rawPhoto = s.photoUrl || s.imageUrl || s.photo || s.image || s.picture || s.avatar || s.Photo || s.Image || '';
+            const normalizedPhoto = normalizePhotoUrl(rawPhoto);
+
+            return {
+              ...s,
+              dob: formatToInputDate(s.dob),
+              photoUrl: normalizedPhoto,
+              imageUrl: normalizedPhoto,
+              rowNum: rowNumMap[s.id] || s.rowNum || null,
+              isDraft: false
+            };
+          });
+
           applyFilterAndRender();
-          setSyncStatusBadge("⚡ ទាន់សម័យ", "#16a34a");
+          setSyncStatusBadge("⚡ ស្វ័យរក្សាទុកបើក", "#16a34a");
         }
       } catch (err) {
         setSyncStatusBadge("⚠️ ក្រៅបណ្ដាញ", "#ea580c");
@@ -978,6 +1013,48 @@
     }
 
     function refreshDataForce() { syncWithBackendParallel(true); }
+
+    /* =========================================================
+       🚀 AUTO-SAVE ENGINE (ស្វ័យរក្សាទុកពេលកែទិន្នន័យ)
+    ========================================================= */
+    function triggerAutoSave(realIdx) {
+      const s = studentsList[realIdx];
+      if (!s || s.isDraft) return;
+
+      setSyncStatusBadge("💾 កំពុងរក្សាទុក...", "#f59e0b");
+
+      clearTimeout(autoSaveTimers[realIdx]);
+      autoSaveTimers[realIdx] = setTimeout(async () => {
+        await executeAutoSaveRow(realIdx);
+      }, 850);
+    }
+
+    async function executeAutoSaveRow(realIdx) {
+      const s = studentsList[realIdx];
+      if (!s || !s.id || !s.name) return;
+
+      const payload = {
+        rowNum: s.rowNum || rowNumMap[s.id] || null,
+        studentId: s.id,
+        name: s.name,
+        gender: s.sex || 'ស្រី',
+        dob: s.dob || '',
+        grade: s.grade,
+        phone: s.phone || '',
+        pob: s.pob || '',
+        address: s.address || '',
+        photoFile: s.photoUrl && s.photoUrl.startsWith('data:image') ? { base64: s.photoUrl } : null
+      };
+
+      const action = payload.rowNum ? 'updateStudentData' : 'submitStudentData';
+      const res = await apiRequest(action, { formData: payload });
+      if (res) {
+        setSyncStatusBadge("⚡ រក្សាទុករួចរាល់", "#16a34a");
+        notifyParentDataChanged();
+      } else {
+        setSyncStatusBadge("⚠️ រក្សាទុកមិនបាន", "#ef4444");
+      }
+    }
 
     /* =========================================================
        🛠️ DATE & AGE & ADDRESS PARSER FUNCTIONS
@@ -1047,7 +1124,7 @@
     const KHMER_MONTHS = ['មករា', 'កុម្ភៈ', 'មីនា', 'មេសា', 'ឧសភា', 'មិថុនា', 'កក្កដា', 'សីហា', 'កញ្ញា', 'តុលា', 'វិច្ឆិកា', 'ធ្នូ'];
     let calCurrentYear = 2026;
     let calCurrentMonth = 9; // 0-indexed (9 = តុលា)
-    let calSelectedDate = null; // 'YYYY-MM-DD'
+    let calSelectedDate = null;
     let calCallback = null;
 
     function initKhmerCalendarComponent() {
@@ -1077,11 +1154,10 @@
 
       grid.innerHTML = '';
 
-      const firstDay = new Date(calCurrentYear, calCurrentMonth, 1).getDay(); // 0 = អាទិត្យ
+      const firstDay = new Date(calCurrentYear, calCurrentMonth, 1).getDay();
       const daysInMonth = new Date(calCurrentYear, calCurrentMonth + 1, 0).getDate();
       const prevMonthDays = new Date(calCurrentYear, calCurrentMonth, 0).getDate();
 
-      // ថ្ងៃនៃខែមុន
       for (let i = firstDay - 1; i >= 0; i--) {
         const dNum = prevMonthDays - i;
         const cell = document.createElement('div');
@@ -1095,7 +1171,6 @@
         grid.appendChild(cell);
       }
 
-      // ថ្ងៃនៃខែបច្ចុប្បន្ន
       for (let d = 1; d <= daysInMonth; d++) {
         const cell = document.createElement('div');
         cell.className = 'cal-day-cell';
@@ -1110,7 +1185,6 @@
         grid.appendChild(cell);
       }
 
-      // ថ្ងៃនៃខែបន្ទាប់
       const totalCells = grid.children.length;
       const nextDaysCount = (totalCells % 7 === 0) ? 0 : 7 - (totalCells % 7);
       for (let d = 1; d <= nextDaysCount; d++) {
@@ -1198,6 +1272,7 @@
           const trigger = tr.querySelector('.date-picker-trigger');
           if (trigger) trigger.classList.remove('cell-missing');
         }
+        triggerAutoSave(realIdx);
       });
     }
 
@@ -1212,6 +1287,33 @@
         const age = calculateAge(selectedDate);
         document.getElementById('modalAgeDisplay').innerText = age ? `អាយុ: ${age} ឆ្នាំ` : 'អាយុ: -';
       });
+    }
+
+    /* 📸 QUICK PHOTO UPLOAD លើ TABLE ROW */
+    function triggerRowPhotoUpload(realIdx) {
+      uploadTargetIndex = realIdx;
+      document.getElementById('rowPhotoFileInput').click();
+    }
+
+    function onRowPhotoFileSelected(input) {
+      const file = input.files[0];
+      if (!file || uploadTargetIndex === null) return;
+      if (file.size > 3 * 1024 * 1024) { alert("ទំហំរូបថតត្រូវតែតូចជាង 3MB!"); return; }
+
+      const reader = new FileReader();
+      reader.onload = async function(e) {
+        const base64Data = e.target.result;
+        const s = studentsList[uploadTargetIndex];
+        if (s) {
+          s.photoUrl = base64Data;
+          s.imageUrl = base64Data;
+          applyFilterAndRender();
+          triggerAutoSave(uploadTargetIndex);
+          showToast(`បានបញ្ចូលរូបថតសិស្ស «${s.name || ''}»`);
+        }
+      };
+      reader.readAsDataURL(file);
+      input.value = '';
     }
 
     /* =========================================================
@@ -1374,6 +1476,9 @@
           tr.querySelector('input[data-field="addr_province"]').value
         );
       }
+
+      // 🌟 ហៅ Auto-Save ស្វ័យប្រវត្តិ
+      triggerAutoSave(realIdx);
     }
 
     function cancelDraftRow(realIdx) {
@@ -1471,7 +1576,7 @@
           let initial = parts.length > 1 ? parts[1].charAt(0) : (fullName.charAt(0) || 'ក');
 
           let avatarDisplay = (s.photoUrl || s.imageUrl) 
-            ? `<img src="${s.photoUrl || s.imageUrl}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" alt="avatar">` 
+            ? `<img src="${s.photoUrl || s.imageUrl}" style="width:100%;height:100%;object-fit:cover;border-radius:50%;" alt="avatar" onerror="this.outerHTML='${initial}'">` 
             : initial;
 
           const card = document.createElement('div');
@@ -1583,9 +1688,10 @@
         const hasMissingAddr = !s.isDraft && (!s.address || s.address.trim() === '');
         const hasMissingId = !s.isDraft && (!s.id || s.id.trim() === '');
 
-        // 📸 រូបថតសិស្ស
-        const photoImgHtml = (s.photoUrl || s.imageUrl)
-          ? `<img src="${s.photoUrl || s.imageUrl}" alt="photo">`
+        // 📸 រូបថតសិស្ស (បង្ហាញរូបភាព ឬ អក្សរកាត់បើគ្មាន)
+        const photoUrl = s.photoUrl || s.imageUrl;
+        const photoImgHtml = photoUrl
+          ? `<img src="${photoUrl}" alt="photo" onerror="this.onerror=null; this.parentElement.innerHTML='${initialBadge}';">`
           : initialBadge;
 
         let col1Content, genderContent, actionContent;
@@ -1625,9 +1731,9 @@
             <!-- 📌 STICKY: ល.រ -->
             <td class="sticky-col-1">${col1Content}</td>
 
-            <!-- 📸 រូបថតសិស្ស (បង្ហាញច្បាស់លាស់) -->
+            <!-- 📸 រូបថតសិស្ស (ចុចដើម្បីប្តូរ ឬមើលរូបថត) -->
             <td class="col-photo">
-              <div class="table-photo-box" onclick="openEditModal(${realIdx})" title="ចុចដើម្បីមើល/ប្តូររូបថត">
+              <div class="table-photo-box" onclick="triggerRowPhotoUpload(${realIdx})" title="ចុចដើម្បីប្តូររូបថត">
                 ${photoImgHtml}
               </div>
             </td>
@@ -1742,8 +1848,9 @@
       document.getElementById('modalProfileNameText').innerText = `${lastName} ${firstName}`.trim() || 'គ្មានឈ្មោះ';
       
       const avatarBox = document.getElementById('modalAvatarBox');
-      if (s.photoUrl || s.imageUrl) {
-        avatarBox.innerHTML = `<img src="${s.photoUrl || s.imageUrl}" alt="avatar">`;
+      const photoUrl = s.photoUrl || s.imageUrl;
+      if (photoUrl) {
+        avatarBox.innerHTML = `<img src="${photoUrl}" alt="avatar" onerror="this.onerror=null; this.parentElement.innerHTML='<span id=\\'modalAvatarInitial\\'>${initial}</span>';">`;
       } else {
         avatarBox.innerHTML = `<span id="modalAvatarInitial">${initial}</span>`;
       }
@@ -1861,7 +1968,7 @@
             const fullAddr = joinAddressParts(student.addr_village, student.addr_commune, student.addr_district, student.addr_province);
 
             const payload = {
-              rowNum: rowNumMap[student.id] || null,
+              rowNum: rowNumMap[student.id] || (s ? s.rowNum : null),
               studentId: student.id,
               name: fullName,
               gender: student.sex || 'ស្រី',
@@ -1918,7 +2025,7 @@
 
     function toggleLockTable() {
       isTableLocked = !isTableLocked;
-      document.querySelectorAll('.table-input, select, .date-picker-trigger').forEach(inp => {
+      document.querySelectorAll('.table-input, select, .date-picker-trigger, .table-photo-box').forEach(inp => {
         if (inp.tagName === 'DIV') inp.style.pointerEvents = isTableLocked ? 'none' : 'auto';
         else inp.disabled = isTableLocked;
       });
