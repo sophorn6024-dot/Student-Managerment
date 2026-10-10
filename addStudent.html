@@ -1141,9 +1141,12 @@
       const ros = await raw('២ អានបញ្ជី', 'getStudentRosterByClass', { className: cls });
       await raw('៣ សរសេរ(លុបក្លែង)', 'deleteStudentData', { studentId: '__none__' });
       await raw('៤ សរសេរ(កែក្លែង)', 'updateStudentData', { formData: { originalId: '__none__', studentId: 'x', name: 'x' } });
-      if (Array.isArray(ros) && ros.length && confirm('សាកល្បងរក្សាទុកពិតលើសិស្សទី ១ ("' + ros[0].name + '") ដោយមិនប្តូរទិន្នន័យ?')) {
-        const s = ros[0];
-        await raw('៥ រក្សាទុកពិត', 'updateStudentData', { formData: { originalId: s.id, studentId: s.id, name: s.name, gender: s.sex, grade: s.grade, phone: s.phone, pob: s.pob, address: s.address } });
+      if (Array.isArray(ros) && ros.length && confirm('សាកល្បងផ្លូវសរសេរម្តងមួយជំហាន លើសិស្សទី ១ ("' + ros[0].name + '") ដោយមិនប្តូរទិន្នន័យ?')) {
+        const sid = ros[0].id;
+        for (const st of ['read', 'formats', 'values', 'formula', 'cache']) {
+          await raw('៥.' + st, 'diagWrite', { stage: st, studentId: sid });
+        }
+        await raw('៦ រក្សាទុកពិត', 'updateStudentData', { formData: { originalId: sid, studentId: sid, name: ros[0].name, gender: ros[0].sex, grade: ros[0].grade, phone: ros[0].phone, pob: ros[0].pob, address: ros[0].address } });
       }
       out.push('Token: ' + (TOKEN ? 'មាន' : 'គ្មាន') + ' | ថ្នាក់: ' + cls);
       alert(out.join('\n\n'));
