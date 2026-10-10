@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>ព័ត៌មានសិស្ស</title>
+  <title>ព័ត៌មានសិស្ស - KrouDigital</title>
 
   <!-- 🔤 Google Fonts Battambang -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -118,7 +118,7 @@
       user-select: none; transition: border-color 0.15s;
     }
     .status-dropdown-btn:hover { border-color: var(--primary); }
-    
+
     .status-dropdown-menu {
       display: none; position: absolute; top: 46px; left: 0; width: 200px;
       background: var(--surface); border: 1.5px solid var(--border); border-radius: 18px;
@@ -161,14 +161,14 @@
     .btn-action:active { transform: scale(0.97); }
     .btn-add { background: #0284c7; color: white; }
     .btn-add .count-box { background: #0369a1; padding: 2px 8px; border-radius: 4px; margin-left: 4px; font-size: 11.5px; }
-    
+
     .btn-import-roster { background: #4f46e5; color: white; }
     .btn-import-roster:hover { background: #4338ca; }
 
     .btn-sort { background: rgba(124, 58, 237, 0.15); color: #a78bfa; }
     .btn-columns { background: rgba(2, 132, 199, 0.15); color: #38bdf8; border: 1px solid var(--border); }
     .btn-import { background: #0d9488; color: white; }
-    
+
     .btn-warning {
       background: rgba(245, 158, 11, 0.15); color: #f59e0b; border: 1.5px solid rgba(245, 158, 11, 0.3);
     }
@@ -207,7 +207,7 @@
     .sticky-col-1 {
       position: sticky; left: 0px; z-index: 28; background: var(--bg-sticky); width: 48px; min-width: 48px;
     }
-    
+
     /* 📸 រូបថតសិស្ស (ជួរ O នៃ Sheet ព័ត៌មានសិស្ស) */
     .col-photo { width: 55px; min-width: 55px; max-width: 55px; }
 
@@ -585,6 +585,7 @@
     .modal-btn { height: 40px; padding: 0 18px; border-radius: 8px; border: none; font-size: 13px; font-weight: 700; cursor: pointer; }
     .modal-btn-cancel { background: var(--surface-elevated); color: var(--text); border: 1px solid var(--border); }
     .modal-btn-save { background: #0284c7; color: white; }
+    .modal-btn:disabled { opacity: 0.6; cursor: not-allowed; }
 
     .missing-card{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px;border:1.5px solid var(--border);border-radius:12px;background:var(--surface-elevated)}
     .missing-tag-pill{font-size:10.5px;font-weight:700;color:#ef4444;background:rgba(239,68,68,.12);border-radius:10px;padding:1px 7px}
@@ -946,7 +947,7 @@
             <input type="file" id="modalPhotoInput" accept="image/jpeg,image/png,image/webp" style="display:none;" onchange="previewModalPhoto(this)">
           </div>
           <div class="em-name" id="modalProfileNameText">ឈ្មោះសិស្ស</div>
-          <div class="em-hint">JPG / PNG / WEBP · ≤ 3MB</div>
+          <div class="em-hint">JPG / PNG / WEBP · ≤ 10MB (បង្រួមស្វ័យប្រវត្តិ)</div>
         </div>
 
         <div class="em-section">
@@ -987,12 +988,13 @@
 
       <div class="modal-footer em-footer">
         <button type="button" class="modal-btn modal-btn-cancel" onclick="closeEditModal()">បោះបង់</button>
-        <button type="button" class="modal-btn modal-btn-save" onclick="saveModalChanges()">💾 រក្សាទុកការកែប្រែ</button>
+        <button type="button" class="modal-btn modal-btn-save" id="modalSaveBtn" onclick="saveModalChanges()">💾 រក្សាទុកការកែប្រែ</button>
       </div>
     </div>
   </div>
 
   <script>
+    /* ⚠️ បើ Deploy Apps Script ជា "New deployment" ត្រូវដាក់ URL ថ្មីនៅទីនេះ */
     const BACKEND_URL = "https://script.google.com/macros/s/AKfycbxe6vrQshGAPglgmmZykljXazDNh1ZwWSRdFDAip1WWWRky24lmBo-qicLK3_i10AvT/exec";
 
     const urlParams = new URLSearchParams(window.location.search);
@@ -1060,12 +1062,10 @@
       let raw = '';
 
       if (typeof s === 'object' && s !== null) {
-        // ចាប់យកតាមឈ្មោះ Field ឬ អក្សរជួរ O
-        raw = s['រូបថត'] || s['រូបភាព'] || s.photo || s.photoUrl || s.imageUrl || s.image || 
-              s['O'] || s['o'] || s.colO || s.columnO || s.ColumnO || 
+        raw = s['រូបថត'] || s['រូបភាព'] || s.photo || s.photoUrl || s.imageUrl || s.image ||
+              s['O'] || s['o'] || s.colO || s.columnO || s.ColumnO ||
               s.picture || s.avatar || s.Photo || s.Image || '';
 
-        // បើសិនជាទិន្នន័យបញ្ជូនមកជា Array (ជួរ O គឺ index ទី ១៤)
         if (!raw && Array.isArray(s)) raw = s[14] || '';
         if (!raw && s.row && Array.isArray(s.row)) raw = s.row[14] || '';
         if (!raw && s.data && Array.isArray(s.data)) raw = s.data[14] || '';
@@ -1076,7 +1076,6 @@
       if (!raw) return '';
       raw = String(raw).trim();
 
-      // បើសិនជាមានរូបមន្ត =IMAGE("url") ក្នុង Google Sheet ត្រូវស្រង់យកតែ URL
       const formulaMatch = raw.match(/=IMAGE\s*\(\s*["']?([^"'\)]+)["']?\s*\)/i);
       if (formulaMatch && formulaMatch[1]) {
         raw = formulaMatch[1].trim();
@@ -1091,18 +1090,65 @@
     function safeUrl(u) { u = String(u || '').trim(); return /^(https:\/\/|data:image\/)/.test(u) ? u : ''; }
     function escParts(p) { const o = {}; for (const k in p) o[k] = esc(p[k]); return o; }
 
+    /* =========================================================
+       🌐 API REQUEST (មាន Retry + ចាប់កំហុសច្បាស់លាស់)
+    ========================================================= */
     async function apiRequest(action, payload = {}) {
-      try {
-        const response = await fetch(BACKEND_URL, {
-          method: 'POST', mode: 'cors', redirect: 'follow',
-          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-          body: JSON.stringify({ action: action, token: TOKEN, ...payload })
-        });
-        const j = JSON.parse(await response.text());
-        if (j && j.success === false) { lastApiError = j.error || j.message || 'កំហុស'; return null; }
-        lastApiError = '';
-        return j;
-      } catch (err) { lastApiError = String(err); console.error('API Error:', err); return null; }
+      const body = JSON.stringify({ action: action, token: TOKEN, ...payload });
+      for (let attempt = 1; attempt <= 2; attempt++) {
+        try {
+          const response = await fetch(BACKEND_URL, {
+            method: 'POST', mode: 'cors', redirect: 'follow',
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: body
+          });
+          const text = await response.text();
+          if (/^\s*</.test(text)) {
+            lastApiError = 'Server ត្រឡប់ទំព័រកំហុស (HTML) — សូម Deploy Apps Script ជា New version ហើយអនុញ្ញាតសិទ្ធិ (Execute as: Me / Access: Anyone)';
+            return null;
+          }
+          let j;
+          try { j = JSON.parse(text); }
+          catch (pe) { lastApiError = 'Server ឆ្លើយមកមិនមែន JSON: ' + text.slice(0, 120); return null; }
+          if (j && j.success === false) { lastApiError = j.error || j.message || 'កំហុស'; return null; }
+          lastApiError = '';
+          return j;
+        } catch (err) {
+          console.error('API Error (try ' + attempt + '):', err);
+          if (attempt === 1) { await new Promise(r => setTimeout(r, 1200)); continue; }
+          lastApiError = (err && err.name === 'TypeError')
+            ? 'ភ្ជាប់ទៅ Server មិនបាន (Failed to fetch) — ពិនិត្យអ៊ីនធឺណិត, ការ Deploy Apps Script, ឬទំហំរូបថត'
+            : String(err);
+          return null;
+        }
+      }
+      return null;
+    }
+
+    /* =========================================================
+       🖼️ បង្រួមរូបថតមុនផ្ញើ (កុំឱ្យធំពេល POST ទៅ Apps Script)
+    ========================================================= */
+    function compressImageFile(file, maxSide, quality) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onerror = () => reject(new Error('មិនអាចអានឯកសារបានទេ'));
+        reader.onload = function(e) {
+          const img = new Image();
+          img.onerror = () => reject(new Error('មិនអាចអានរូបនេះបានទេ'));
+          img.onload = function() {
+            const k = Math.min(1, maxSide / Math.max(img.width, img.height));
+            const c = document.createElement('canvas');
+            c.width = Math.max(1, Math.round(img.width * k));
+            c.height = Math.max(1, Math.round(img.height * k));
+            const ctx = c.getContext('2d');
+            ctx.fillStyle = '#ffffff';              // PNG ថ្លា → ផ្ទៃសជំនួស
+            ctx.fillRect(0, 0, c.width, c.height);
+            ctx.drawImage(img, 0, 0, c.width, c.height);
+            resolve(c.toDataURL('image/jpeg', quality));
+          };
+          img.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+      });
     }
 
     function showToast(msg) {
@@ -1160,7 +1206,7 @@
         classes.forEach(c => {
           let val = (typeof c === 'object' && c !== null) ? (c.className || c.name || '') : c.toString().trim();
           val = val.replace(/^ថ្នាក់ទី\s*/, '').trim();
-          if (val) sel.innerHTML += `<option value="${val}">ថ្នាក់ទី ${val}</option>`;
+          if (val) sel.innerHTML += `<option value="${esc(val)}">ថ្នាក់ទី ${esc(val)}</option>`;
         });
 
         if (currentSelectedClass) sel.value = currentSelectedClass;
@@ -1183,7 +1229,7 @@
       modalSelect.innerHTML = '';
 
       if (!IS_ADMIN && currentSelectedClass) {
-        modalSelect.innerHTML = `<option value="ថ្នាក់ទី${currentSelectedClass}">ថ្នាក់ទី ${currentSelectedClass}</option>`;
+        modalSelect.innerHTML = `<option value="ថ្នាក់ទី${esc(currentSelectedClass)}">ថ្នាក់ទី ${esc(currentSelectedClass)}</option>`;
         modalSelect.disabled = true;
         return;
       }
@@ -1192,7 +1238,7 @@
       classes.forEach(cls => {
         let val = typeof cls === 'object' ? (cls.className || cls.name) : cls;
         val = String(val).replace(/^ថ្នាក់ទី\s*/, '').trim();
-        modalSelect.innerHTML += `<option value="ថ្នាក់ទី${val}">ថ្នាក់ទី ${val}</option>`;
+        modalSelect.innerHTML += `<option value="ថ្នាក់ទី${esc(val)}">ថ្នាក់ទី ${esc(val)}</option>`;
       });
       if (currentSelectedClass) modalSelect.value = `ថ្នាក់ទី${currentSelectedClass}`;
     }
@@ -1664,25 +1710,24 @@
       document.getElementById('rowPhotoFileInput').click();
     }
 
-    function onRowPhotoFileSelected(input) {
+    /* ✅ កែ៖ បង្រួមរូបមុនផ្ញើ (ពីមុនផ្ញើរូបដើមរហូតដល់ 3MB) */
+    async function onRowPhotoFileSelected(input) {
       const file = input.files[0];
       if (!file || uploadTargetIndex === null) return;
-      if (file.size > 3 * 1024 * 1024) { alert("ទំហំរូបថតត្រូវតែតូចជាង 3MB!"); return; }
-
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        const base64Data = e.target.result;
-        const s = studentsList[uploadTargetIndex];
+      if (file.size > 10 * 1024 * 1024) { alert("ទំហំរូបថតត្រូវតែតូចជាង 10MB!"); input.value = ''; return; }
+      const idx = uploadTargetIndex;
+      input.value = '';
+      try {
+        const base64Data = await compressImageFile(file, 800, 0.85);
+        const s = studentsList[idx];
         if (s) {
           s.photoUrl = base64Data;
           s.imageUrl = base64Data;
           applyFilterAndRender();
-          triggerAutoSave(uploadTargetIndex);
+          triggerAutoSave(idx);
           showToast(`បានបញ្ចូលរូបថតសិស្ស «${s.name || ''}»`);
         }
-      };
-      reader.readAsDataURL(file);
-      input.value = '';
+      } catch (err) { alert(err.message || 'មិនអាចអានរូបនេះបានទេ'); }
     }
 
     /* =========================================================
@@ -1926,13 +1971,13 @@
       const q = document.getElementById('searchInput').value.toLowerCase().trim();
 
       const filtered = studentsList.filter(s => {
-        const matchSearch = !q || 
-          (s.name && s.name.toLowerCase().includes(q)) || 
-          (s.id && s.id.toLowerCase().includes(q));
+        const matchSearch = !q ||
+          (s.name && s.name.toLowerCase().includes(q)) ||
+          (s.id && String(s.id).toLowerCase().includes(q));
 
         if (!matchSearch) return false;
 
-        const isDropout = Boolean(s.dropoutSemester && s.dropoutSemester.trim() !== '');
+        const isDropout = Boolean(s.dropoutSemester && String(s.dropoutSemester).trim() !== '');
         if (currentStatusFilter === 'កំពុងសិក្សា' && isDropout) return false;
         if (currentStatusFilter === 'ឈប់រៀន' && !isDropout) return false;
 
@@ -1974,7 +2019,7 @@
         const lastName = parts[0] || '';
         const firstName = parts.slice(1).join(' ') || '';
         const initialBadge = firstName ? firstName.charAt(0) : (lastName ? lastName.charAt(0) : 'ក');
-        
+
         const formattedDob = formatToInputDate(s.dob);
         const age = calculateAge(formattedDob);
 
@@ -1982,12 +2027,11 @@
         const addr = escParts(parseAddressParts(s.address));
 
         const hasMissingDob = !s.isDraft && (!formattedDob || formattedDob.trim() === '');
-        const hasMissingPhone = !s.isDraft && (!s.phone || s.phone.trim() === '');
+        const hasMissingPhone = !s.isDraft && (!s.phone || String(s.phone).trim() === '');
         const hasMissingPob = !s.isDraft && (!s.pob || s.pob.trim() === '');
         const hasMissingAddr = !s.isDraft && (!s.address || s.address.trim() === '');
-        const hasMissingId = !s.isDraft && (!s.id || s.id.trim() === '');
+        const hasMissingId = !s.isDraft && (!s.id || String(s.id).trim() === '');
 
-        // 📸 រូបថតសិស្ស (ពីជួរ O នៃ Sheet ព័ត៌មានសិស្ស)
         const photoUrl = safeUrl(s.photoUrl || s.imageUrl);
         const photoImgHtml = photoUrl
           ? `<img src="${esc(photoUrl)}" data-ini="${esc(initialBadge)}" onerror="this.onerror=null;this.parentElement.textContent=this.dataset.ini">`
@@ -2029,7 +2073,6 @@
           <tr data-index="${realIdx}">
             <td class="sticky-col-1">${col1Content}</td>
 
-            <!-- 📸 រូបថតសិស្ស (ចុចលើរូបដើម្បី Popup ផ្ទាំងកែប្រែព័ត៌មាន) -->
             <td class="col-photo">
               <div class="table-photo-box" onclick="openEditModal(${realIdx})" title="ចុចលើរូបដើម្បីកែប្រែព័ត៌មានសិស្ស">
                 ${photoImgHtml}
@@ -2118,6 +2161,7 @@
     /* 🌟 EDIT MODAL (POPUP ពេលចុចលើរូបថត ឬ MENU) */
     function openEditModal(realIdx) {
       activeRowIndex = realIdx;
+      modalPhotoBase64 = null;
       const s = studentsList[realIdx];
       if (!s) return;
 
@@ -2129,7 +2173,7 @@
 
       document.getElementById('modalHeaderSub').innerText = `${lastName} ${firstName}`.trim() || 'គ្មានឈ្មោះ';
       document.getElementById('modalProfileNameText').innerText = `${lastName} ${firstName}`.trim() || 'គ្មានឈ្មោះ';
-      
+
       const avatarBox = document.getElementById('modalAvatarBox');
       avatarBox.textContent = '';
       const pu = safeUrl(s.photoUrl || s.imageUrl);
@@ -2141,7 +2185,7 @@
       document.getElementById('modalStudentId').value = s.id || '';
       document.getElementById('modalGrade').value = s.grade || document.getElementById('modalGrade').options[0]?.value || '';
       document.getElementById('modalGender').value = s.sex || 'ស្រី';
-      
+
       const formattedDob = formatToInputDate(s.dob);
       const dobText = document.getElementById('modalDobText');
       dobText.innerText = formattedDob || 'ជ្រើសរើសថ្ងៃខែ...';
@@ -2163,16 +2207,18 @@
 
     function openEditModalFromMenu() { if (activeRowIndex !== null) openEditModal(activeRowIndex); }
 
-    function previewModalPhoto(input) {
+    /* ✅ បង្រួមរូប ≤800px មុនផ្ញើ */
+    async function previewModalPhoto(input) {
       const file = input.files[0];
       if (!file) return;
-      if (file.size > 3 * 1024 * 1024) { alert("ទំហំរូបថតត្រូវតែតូចជាង ឬស្មើ 3MB!"); return; }
-      const reader = new FileReader();
-      reader.onload = function(e) {
-        modalPhotoBase64 = e.target.result;
-        document.getElementById('modalAvatarBox').innerHTML = `<img src="${modalPhotoBase64}" alt="avatar">`;
-      };
-      reader.readAsDataURL(file);
+      input.value = '';
+      if (file.size > 10 * 1024 * 1024) { alert("ទំហំរូបថតត្រូវតែតូចជាង 10MB!"); return; }
+      try {
+        modalPhotoBase64 = await compressImageFile(file, 800, 0.85);
+        const box = document.getElementById('modalAvatarBox');
+        box.textContent = '';
+        const im = document.createElement('img'); im.src = modalPhotoBase64; box.appendChild(im);
+      } catch (err) { alert(err.message || 'មិនអាចអានរូបនេះបានទេ'); }
     }
 
     async function saveModalChanges() {
@@ -2200,14 +2246,24 @@
         s.imageUrl = modalPhotoBase64;
       }
 
-      applyFilterAndRender();
-      closeEditModal();
+      const saveBtn = document.getElementById('modalSaveBtn');
+      saveBtn.disabled = true;
+      saveBtn.innerText = '⏳ កំពុងរក្សាទុក...';
 
       const payload = buildPayload(s);
-      if (modalPhotoBase64) payload.photoFile = { base64: modalPhotoBase64 };
       const res = await apiRequest(s.origId ? 'updateStudentData' : 'submitStudentData', { formData: payload });
-      if (!res) { alert("❌ រក្សាទុកបរាជ័យ៖ " + lastApiError); syncWithBackendParallel(true); return; }
+
+      saveBtn.disabled = false;
+      saveBtn.innerText = '💾 រក្សាទុកការកែប្រែ';
+
+      if (!res) {
+        alert("❌ រក្សាទុកបរាជ័យ៖ " + lastApiError);
+        return; // ទុក Modal បើក ដើម្បីកុំឱ្យបាត់ទិន្នន័យដែលបានវាយ
+      }
+
       s.origId = s.id;
+      applyFilterAndRender();
+      closeEditModal();
       showToast(`🎉 បានកែប្រែព័ត៌មានសិស្ស «${s.name}» ជោគជ័យ!`);
       notifyParentDataChanged();
       syncWithBackendParallel(false);
@@ -2290,7 +2346,7 @@
     document.addEventListener('click', (e) => {
       document.getElementById('actionMenu').style.display = 'none';
       document.getElementById('columnDropdown').style.display = 'none';
-      
+
       const calPopup = document.getElementById('khmerCalPopup');
       if (calPopup && !calPopup.contains(e.target)) closeKhmerCalendar();
 
