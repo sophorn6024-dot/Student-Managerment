@@ -1126,23 +1126,33 @@
 
     async function testBackend() {
       const out = [];
-      try {
-        const r = await fetch(BACKEND_URL, { method: 'GET', mode: 'cors', redirect: 'follow' });
-        out.push('GET: ' + r.status + ' ' + (await r.text()).slice(0, 90));
-      } catch (e) { out.push('GET បរាជ័យ: ' + e); }
-      try {
-        const r = await fetch(BACKEND_URL, { method: 'POST', mode: 'cors', redirect: 'follow',
-          headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ action: 'getCurrentSession', token: TOKEN }) });
-        out.push('POST: ' + r.status + ' ' + (await r.text()).slice(0, 140));
-      } catch (e) { out.push('POST បរាជ័យ: ' + e); }
-      out.push('Token: ' + (TOKEN ? 'មាន (' + TOKEN.length + ' តួ)' : 'គ្មាន'));
-      out.push('Page: ' + location.origin);
+      async function raw(label, action, payload) {
+        const t0 = performance.now();
+        try {
+          const r = await fetch(BACKEND_URL, { method: 'POST', mode: 'cors', redirect: 'follow',
+            headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ action, token: TOKEN, ...payload }) });
+          const t = await r.text();
+          out.push(`${label}: ${r.status} (${Math.round(performance.now() - t0)}ms) ${t.slice(0, 110)}`);
+          try { return JSON.parse(t); } catch (e) { return null; }
+        } catch (e) { out.push(`${label}: បរាជ័យ (${Math.round(performance.now() - t0)}ms) ${e}`); return null; }
+      }
+      const ses = await raw('១ Session', 'getCurrentSession', {});
+      const cls = (ses && ses.assignedClass) || currentSelectedClass;
+      const ros = await raw('២ អានបញ្ជី', 'getStudentRosterByClass', { className: cls });
+      await raw('៣ សរសេរ(លុបក្លែង)', 'deleteStudentData', { studentId: '__none__' });
+      await raw('៤ សរសេរ(កែក្លែង)', 'updateStudentData', { formData: { originalId: '__none__', studentId: 'x', name: 'x' } });
+      if (Array.isArray(ros) && ros.length && confirm('សាកល្បងរក្សាទុកពិតលើសិស្សទី ១ ("' + ros[0].name + '") ដោយមិនប្តូរទិន្នន័យ?')) {
+        const s = ros[0];
+        await raw('៥ រក្សាទុកពិត', 'updateStudentData', { formData: { originalId: s.id, studentId: s.id, name: s.name, gender: s.sex, grade: s.grade, phone: s.phone, pob: s.pob, address: s.address } });
+      }
+      out.push('Token: ' + (TOKEN ? 'មាន' : 'គ្មាន') + ' | ថ្នាក់: ' + cls);
       alert(out.join('\n\n'));
     }
 
     function showToast(msg) {
       const toast = document.getElementById('toastNotification');
       toast.innerText = msg;
+      toast.style.background = /^(⚠️|❌)/.test(msg) ? '#dc2626' : '#16a34a';
       toast.classList.add('show');
       setTimeout(() => toast.classList.remove('show'), 3000);
     }
