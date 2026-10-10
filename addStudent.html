@@ -736,6 +736,10 @@
         <span>📥</span> <span>នាំចូល Sheet</span>
       </button>
 
+      <button class="btn-action btn-columns" onclick="testBackend()">
+        <span>🩺</span> <span>ពិនិត្យការតភ្ជាប់</span>
+      </button>
+
       <button class="btn-action btn-warning" id="missingInfoBtn" onclick="handleMissingInfoClick()">
         <span>⚠️</span> <span id="missingBtnText">ខ្វះព័ត៌មាន</span>
       </button>
@@ -1118,6 +1122,22 @@
         }
       }
       return null;
+    }
+
+    async function testBackend() {
+      const out = [];
+      try {
+        const r = await fetch(BACKEND_URL, { method: 'GET', mode: 'cors', redirect: 'follow' });
+        out.push('GET: ' + r.status + ' ' + (await r.text()).slice(0, 90));
+      } catch (e) { out.push('GET បរាជ័យ: ' + e); }
+      try {
+        const r = await fetch(BACKEND_URL, { method: 'POST', mode: 'cors', redirect: 'follow',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify({ action: 'getCurrentSession', token: TOKEN }) });
+        out.push('POST: ' + r.status + ' ' + (await r.text()).slice(0, 140));
+      } catch (e) { out.push('POST បរាជ័យ: ' + e); }
+      out.push('Token: ' + (TOKEN ? 'មាន (' + TOKEN.length + ' តួ)' : 'គ្មាន'));
+      out.push('Page: ' + location.origin);
+      alert(out.join('\n\n'));
     }
 
     function showToast(msg) {
