@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <title>ព័ត៌មានសិស្ស</title>
+  <title>ព័ត៌មានសិស្ស - KrouDigital</title>
 
   <!-- 🔤 Google Fonts Battambang -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -14,7 +14,9 @@
   <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 
   <style>
-
+    /* =========================================================
+       🎨 THEME VARIABLES & SYSTEM
+    ========================================================= */
     :root {
       --primary: #0284c7;
       --primary-dark: #0369a1;
@@ -187,6 +189,9 @@
     }
     .col-option:hover { background: var(--surface-elevated); }
 
+    /* =========================================================
+       📊 TABLE CONTAINER & STICKY SCROLL ENGINE
+    ========================================================= */
     .table-container {
       background: var(--surface); border-radius: 14px; border: 1px solid var(--border);
       overflow: auto; max-height: calc(100vh - 210px);
@@ -1232,6 +1237,9 @@
     function safeUrl(u) { u = String(u || '').trim(); return /^(https:\/\/|data:image\/)/.test(u) ? u : ''; }
     function escParts(p) { const o = {}; for (const k in p) o[k] = esc(p[k]); return o; }
 
+    /* =========================================================
+       🌐 API REQUEST ENGINE
+    ========================================================= */
     async function apiRequest(action, payload = {}) {
       const body = JSON.stringify({ action: action, token: TOKEN, ...payload });
       for (let attempt = 1; attempt <= 2; attempt++) {
@@ -1548,7 +1556,9 @@
 
     function refreshDataForce() { syncWithBackendParallel(true); }
 
-
+    /* =========================================================
+       🚀 AUTO-SAVE & SMART SUBMIT ENGINE
+    ========================================================= */
     function triggerAutoSave(realIdx) {
       const s = studentsList[realIdx];
       if (!s || s.isDraft) return;
@@ -1613,6 +1623,9 @@
       }
     }
 
+    /* =========================================================
+       🛠️ ស្គាល់ថ្ងៃខែជាភាសាខ្មែរ និងលុបអាសយដ្ឋានស្ទួន ៤ ដង
+    ========================================================= */
     const KHMER_MONTHS_MAP = {
       'មករា': 1, 'កុម្ភៈ': 2, 'មីនា': 3, 'មេសា': 4,
       'ឧសភា': 5, 'មិថុនា': 6, 'កក្កដា': 7, 'សីហា': 8,
@@ -1704,6 +1717,9 @@
       return unique.join(', ');
     }
 
+    /* =========================================================
+       📅 KHMER CALENDAR ENGINE
+    ========================================================= */
     const KHMER_MONTHS = ['មករា', 'កុម្ភៈ', 'មីនា', 'មេសា', 'ឧសភា', 'មិថុនា', 'កក្កដា', 'សីហា', 'កញ្ញា', 'តុលា', 'វិច្ឆិកា', 'ធ្នូ'];
     let calCurrentYear = 2026;
     let calCurrentMonth = 9;
@@ -1881,6 +1897,9 @@
       } catch (err) { alert(err.message || 'មិនអាចអានរូបនេះបានទេ'); }
     }
 
+    /* =========================================================
+       ➕ ADD / SAVE ROW DRAFT
+    ========================================================= */
     async function addNewRow() {
       const defaultGrade = currentSelectedClass ? `ថ្នាក់ទី${currentSelectedClass}` : 'ថ្នាក់ទី៤(ក)';
       const autoId = 'ST' + Math.floor(100000 + Math.random() * 900000);
@@ -2151,6 +2170,9 @@
       renderTable(filtered);
     }
 
+    /* =========================================================
+       📊 RENDER TABLE
+    ========================================================= */
     function renderTable(list) {
       const tbody = document.getElementById('tableBody');
 
@@ -2316,6 +2338,9 @@
       }
     }
 
+    /* =========================================================
+       🪪 STUDENT BIODATA PROFILE MODAL LOGIC (បង្ហាញដូចរូបថតទី ២)
+    ========================================================= */
     let currentProfileIdx = 0;
 
     function openProfileModal(realIdx) {
@@ -2503,114 +2528,60 @@
     }
 
     async function saveModalChanges() {
-  if (activeRowIndex === null) return;
+      if (activeRowIndex === null) return;
 
-  const saveBtn = document.getElementById('modalSaveBtn');
-  const originalText = '💾 រក្សាទុកការកែប្រែ';
+      const lastName = document.getElementById('modalLastName').value.trim();
+      const firstName = document.getElementById('modalFirstName').value.trim();
+      const fullName = `${lastName} ${firstName}`.trim();
+      let studentId = document.getElementById('modalStudentId').value.trim();
 
-  if (!saveBtn) {
-    alert('មិនអាចរកប៊ូតុងរក្សាទុកបានទេ!');
-    return;
-  }
+      if (!fullName) { alert("សូមបញ្ចូលឈ្មោះសិស្ស!"); return; }
+      if (!studentId) {
+        studentId = 'ST' + Math.floor(100000 + Math.random() * 900000);
+      }
 
-  if (saveBtn.disabled) return;
+      const s = studentsList[activeRowIndex];
+      s.id = studentId;
+      s.name = fullName;
+      s.grade = document.getElementById('modalGrade').value;
+      s.sex = document.getElementById('modalGender').value;
+      s.dob = formatToInputDate(document.getElementById('modalDobText').dataset.rawDate);
+      s.phone = document.getElementById('modalPhone').value.trim();
+      s.pob = document.getElementById('modalPob').value.trim();
+      s.address = document.getElementById('modalAddress').value.trim();
+      s.isDraft = false;
+      if (modalPhotoBase64) {
+        s.photoUrl = modalPhotoBase64;
+        s.imageUrl = modalPhotoBase64;
+      }
 
-  try {
-    const lastName =
-      document.getElementById('modalLastName').value.trim();
+      const saveBtn = document.getElementById('modalSaveBtn');
+      saveBtn.disabled = true;
+      saveBtn.innerText = '⏳ កំពុងរក្សាទុក...';
 
-    const firstName =
-      document.getElementById('modalFirstName').value.trim();
+      const payload = buildPayload(s);
+      let res = null;
+      if (s.origId) {
+        res = await apiRequest('updateStudentData', { formData: payload });
+        if (!res && lastApiError && (lastApiError.includes('រកមិនឃើញ') || lastApiError.includes('not found'))) {
+          res = await apiRequest('submitStudentData', { formData: payload });
+        }
+      } else {
+        res = await apiRequest('submitStudentData', { formData: payload });
+        if (!res && lastApiError && (lastApiError.includes('មានរួចហើយ') || lastApiError.includes('ស្ទួន'))) {
+          res = await apiRequest('updateStudentData', { formData: payload });
+        }
+      }
 
-    const fullName = `${lastName} ${firstName}`.trim();
+      saveBtn.disabled = false;
+      saveBtn.innerText = '💾 រក្សាទុកការកែប្រែ';
 
-    if (!fullName) {
-      alert('សូមបញ្ចូលឈ្មោះសិស្ស!');
-      return;
-    }
+      if (!res) {
+        alert("❌ រក្សាទុកបរាជ័យ៖ " + (lastApiError || 'ពិនិត្យ Server'));
+        return;
+      }
 
-    const s = studentsList[activeRowIndex];
-
-    if (!s) {
-      alert('រកមិនឃើញទិន្នន័យសិស្សដែលត្រូវកែទេ!');
-      return;
-    }
-
-    const studentIdInput =
-      document.getElementById('modalStudentId');
-
-    let studentId = studentIdInput.value.trim();
-
-    if (s.origId && !studentId) {
-      alert('សូមបញ្ចូលអត្តលេខសិស្ស!');
-      return;
-    }
-
-    if (!s.origId && !studentId) {
-      studentId =
-        'ST' + Math.floor(100000 + Math.random() * 900000);
-
-      studentIdInput.value = studentId;
-    }
-
-    s.id = studentId;
-    s.name = fullName;
-
-    s.grade =
-      document.getElementById('modalGrade').value;
-
-    s.sex =
-      document.getElementById('modalGender').value;
-
-    s.dob = formatToInputDate(
-      document.getElementById('modalDobText').dataset.rawDate
-    );
-
-    s.phone =
-      document.getElementById('modalPhone').value.trim();
-
-    s.pob =
-      document.getElementById('modalPob').value.trim();
-
-    s.address =
-      document.getElementById('modalAddress').value.trim();
-
-    saveBtn.disabled = true;
-    saveBtn.innerText = '⏳ កំពុងរក្សាទុក...';
-
-    const payload = buildPayload(s);
-
-    let res = null;
-
-    if (s.origId) {
-      res = await apiRequest('updateStudentData', {
-        formData: payload
-      });
-    } else {
-      res = await apiRequest('submitStudentData', {
-        formData: payload
-      });
-    }
-
-    if (!res) {
-      throw new Error(lastApiError || 'ពិនិត្យការតភ្ជាប់ Server');
-    }
-
-    alert('✅ រក្សាទុកព័ត៌មានសិស្សបានជោគជ័យ!');
-
-  } catch (err) {
-    console.error('saveModalChanges error:', err);
-
-    alert(
-      '❌ រក្សាទុកបរាជ័យ៖ ' +
-      (err.message || 'មានបញ្ហាមិនស្គាល់')
-    );
-
-  } finally {
-    saveBtn.disabled = false;
-    saveBtn.innerText = originalText;
-  }
-}     s.origId = s.id;
+      s.origId = s.id;
       applyFilterAndRender();
       closeEditModal();
       showToast(`🎉 បានកែប្រែព័ត៌មានសិស្ស «${s.name}» ជោគជ័យ!`);
@@ -2676,6 +2647,9 @@
       }
     }
 
+    /* =========================================================
+       🌟 មុខងារ SORT តាមត្រកូល (គោត្តនាម / ពាក្យខាងមុខ) ពី ក-អ
+    ========================================================= */
     function getKhmerSortParts(fullName) {
       const clean = String(fullName || '').trim();
       if (!clean) return { last: '', first: '' };
