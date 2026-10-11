@@ -166,6 +166,7 @@
     .btn-import-roster:hover { background: #4338ca; }
 
     .btn-sort { background: rgba(124, 58, 237, 0.15); color: #a78bfa; }
+    .btn-sort.active { background: #7c3aed; color: white; }
     .btn-columns { background: rgba(2, 132, 199, 0.15); color: #38bdf8; border: 1px solid var(--border); }
     .btn-import { background: #0d9488; color: white; }
 
@@ -276,7 +277,8 @@
     .date-picker-trigger:hover { border-color: #0284c7; }
     .date-picker-trigger .cal-icon { color: #0284c7; font-size: 13px; }
 
-    .table-input.cell-missing, .date-picker-trigger.cell-missing {
+    /* 🌟 កែប្រែ៖ បង្ហាញបន្ទាត់ដាច់ៗពណ៌ក្រហមតែពេលចុចប៊ូតុង ខ្វះព័ត៌មាន ប៉ុណ្ណោះ */
+    .cell-missing {
       border: 1.5px dashed #ef4444 !important;
       background-color: rgba(239, 68, 68, 0.12) !important;
     }
@@ -301,12 +303,14 @@
       display: flex; align-items: center; justify-content: center;
     }
 
+    /* 🌟 កែប្រែ Popup Menu កុំឱ្យធ្លាក់ចុះក្រោមដាច់មើលមិនឃើញ */
     .action-popup {
-      display: none; position: fixed; z-index: 9999; background: var(--surface); border-radius: 12px;
-      box-shadow: 0 10px 30px rgba(0,0,0,0.3); border: 1px solid var(--border); width: 190px;
+      display: none; position: fixed; z-index: 99999; background: var(--surface); border-radius: 14px;
+      box-shadow: 0 16px 36px rgba(0,0,0,0.35); border: 1px solid var(--border); width: 190px;
+      overflow: hidden; animation: fadeIn 0.12s ease-out;
     }
     .action-item {
-      padding: 9px 14px; display: flex; align-items: center; gap: 9px; font-size: 12.5px; cursor: pointer; color: var(--text); font-weight: 700;
+      padding: 10px 14px; display: flex; align-items: center; gap: 9px; font-size: 12.5px; cursor: pointer; color: var(--text); font-weight: 700;
     }
     .action-item:hover { background: var(--surface-elevated); color: var(--primary); }
     .action-item.delete { color: #ef4444; border-top: 1px solid var(--border); }
@@ -687,8 +691,9 @@
         <span>📥</span> <span>បញ្ចូលបញ្ជីសិស្ស</span>
       </button>
 
-      <button class="btn-action btn-sort" onclick="sortStudentsAlphabetical()">
-        <span>⇅</span> <span>តម្រៀប (ក-អ)</span>
+      <!-- 🌟 កែប្រែប៊ូតុង Sort ឱ្យបង្ហាញទិសដៅច្បាស់លាស់ -->
+      <button class="btn-action btn-sort" id="sortBtn" onclick="sortStudentsAlphabetical()">
+        <span>⇅</span> <span id="sortBtnText">តម្រៀបតាមនាម (ក-អ)</span>
       </button>
 
       <button class="btn-action btn-columns" onclick="toggleColumnMenu(event)">
@@ -895,7 +900,6 @@
 
   <!-- 💬 POPUP ACTION MENU -->
   <div class="action-popup" id="actionMenu">
-    <div class="action-item" onclick="openEditModalFromMenu()"><span>🪪</span> ប្រវត្តិរូប</div>
     <div class="action-item" onclick="openEditModalFromMenu()"><span>✏️</span> កែប្រែព័ត៌មាន</div>
     <div class="action-item delete" onclick="deleteCurrentRow()"><span>🗑️</span> លុបទិន្នន័យ</div>
   </div>
@@ -988,6 +992,7 @@
     let isMissingFilterActive = false;
     let searchDebounceTimer = null;
     let autoSaveTimers = {};
+    let sortDirectionAsc = true; // 🌟 សម្រាប់គ្រប់គ្រងទិសដៅ Sort
 
     let pendingImportStudents = [];
     let activeImportTab = 'paste';
@@ -1044,7 +1049,7 @@
     function escParts(p) { const o = {}; for (const k in p) o[k] = esc(p[k]); return o; }
 
     /* =========================================================
-       🌐 API REQUEST ENGINE (កែសម្រួលដើម្បីស្គាល់ទាំង Text & JSON)
+       🌐 API REQUEST ENGINE
     ========================================================= */
     async function apiRequest(action, payload = {}) {
       const body = JSON.stringify({ action: action, token: TOKEN, ...payload });
@@ -1065,7 +1070,6 @@
           try { 
             j = JSON.parse(text); 
           } catch (pe) { 
-            // បើ Server ឆ្លើយតបមកជា Text ធម្មតា តែមានពាក្យជោគជ័យ
             if (/ជោគជ័យ|success|ok|true/i.test(text)) {
               lastApiError = '';
               return { success: true, message: text };
@@ -1086,7 +1090,7 @@
           const isWrite = /^(submit|update|delete|bulk|set|save|clear)/.test(action);
           if (attempt === 1 && !isWrite) { await new Promise(r => setTimeout(r, 1200)); continue; }
           lastApiError = (err && err.name === 'TypeError')
-            ? 'មិនអាចអានការឆ្លើយតបពី Google Apps Script បានទេ។ សូមពិនិត្យ BACKEND_URL (/exec), Deploy សិទ្ធិ Anyone, និង Console/Network។ TypeError មិនអាចបញ្ជាក់ថាជា CORS តែមួយមុខបានទេ។'
+            ? 'មិនអាចអានការឆ្លើយតបពី Google Apps Script បានទេ។ សូមពិនិត្យ BACKEND_URL, Deploy សិទ្ធិ Anyone។'
             : String(err);
           return null;
         }
@@ -1171,9 +1175,9 @@
       const postLines = lines.filter(line => line.includes('POST'));
       const postReachable = postLines.some(line => line.startsWith('✅'));
       if (failed.length === 0 && postReachable) {
-        render('✅ តេស្ត HTTP បានទទួលការឆ្លើយតបពី Server។ សូមពិនិត្យខ្លឹមសារ POST ខាងលើផងដែរ មុនសន្និដ្ឋានថាមុខងាររក្សាទុកដំណើរការត្រឹមត្រូវ។');
+        render('✅ តេស្ត HTTP បានទទួលការឆ្លើយតបពី Server។');
       } else {
-        render('❌ មានតេស្តភ្ជាប់មិនបាន។ សូមពិនិត្យ BACKEND_URL ត្រូវជា URL Web App បញ្ចប់ដោយ /exec, Deploy ថ្មីបំផុត និងសិទ្ធិអ្នកប្រើ។ បើ POST បង្ហាញ TypeError សូមពិនិត្យ DevTools > Console/Network ដើម្បីបំបែក CORS, redirect ឬ URL ខុស។');
+        render('❌ មានតេស្តភ្ជាប់មិនបាន។ សូមពិនិត្យ BACKEND_URL និងសិទ្ធិ Anyone។');
       }
       btn.disabled = false;
     }
@@ -1344,6 +1348,7 @@
         const fullName = String(s.name || s.studentName || s['ឈ្មោះ'] || s['ឈ្មោះសិស្ស'] || '').trim();
         return {
           ...s,
+          rowNum: s.rowNum || null, // 🌟 រក្សាទុក rowNum ពី Server ជានិច្ច
           id: sid,
           studentId: sid,
           name: fullName,
@@ -1374,6 +1379,7 @@
       autoSaveTimers[s._uid] = setTimeout(() => executeAutoSaveRow(s), 800);
     }
 
+    // 🌟 បន្ថែម rowNum ទៅក្នុង Payload ដើម្បីឱ្យ Update ដំណើរការ ១០០%
     function buildPayload(s) {
       if (!s.id || !String(s.id).trim()) {
         s.id = 'ST' + Math.floor(100000 + Math.random() * 900000);
@@ -1384,6 +1390,7 @@
       const clsName = currentSelectedClass || (currentGrade ? currentGrade.replace(/^ថ្នាក់ទី\s*/, '').trim() : '');
 
       return {
+        rowNum: s.rowNum || s.rowIndex || null,
         originalId: orig,
         studentId: sid,
         name: (s.name || '').trim(),
@@ -1967,11 +1974,13 @@
         const pob = escParts(parseAddressParts(s.pob));
         const addr = escParts(parseAddressParts(s.address));
 
-        const hasMissingDob = !s.isDraft && (!formattedDob || formattedDob.trim() === '');
-        const hasMissingPhone = !s.isDraft && (!s.phone || String(s.phone).trim() === '');
-        const hasMissingPob = !s.isDraft && (!s.pob || s.pob.trim() === '');
-        const hasMissingAddr = !s.isDraft && (!s.address || s.address.trim() === '');
-        const hasMissingId = !s.isDraft && (!s.id || String(s.id).trim() === '');
+        // 🌟 កែប្រែ៖ ដាក់ពណ៌ក្រហមដាច់ៗតែពេលចុចប៊ូតុង «ខ្វះព័ត៌មាន» ប៉ុណ្ណោះ
+        const showMissingHighlight = isMissingFilterActive && !s.isDraft;
+        const hasMissingDob = showMissingHighlight && (!formattedDob || formattedDob.trim() === '');
+        const hasMissingPhone = showMissingHighlight && (!s.phone || String(s.phone).trim() === '');
+        const hasMissingPob = showMissingHighlight && (!s.pob || s.pob.trim() === '');
+        const hasMissingAddr = showMissingHighlight && (!s.address || s.address.trim() === '');
+        const hasMissingId = showMissingHighlight && (!s.id || String(s.id).trim() === '');
 
         const photoUrl = safeUrl(s.photoUrl || s.imageUrl);
         const photoImgHtml = photoUrl
@@ -2024,10 +2033,10 @@
               <input type="text" class="table-input ${hasMissingId ? 'cell-missing' : ''}" value="${esc(s.id)}" data-field="id" oninput="syncRowInput(this, ${realIdx})" placeholder="អត្តលេខ">
             </td>
             <td class="sticky-col-2">
-              <input type="text" class="table-input input-left ${!lastName && !s.isDraft ? 'cell-missing' : ''}" value="${esc(lastName)}" data-field="lastName" style="font-weight:700;" oninput="syncRowInput(this, ${realIdx})" placeholder="គោត្តនាម">
+              <input type="text" class="table-input input-left ${showMissingHighlight && !lastName ? 'cell-missing' : ''}" value="${esc(lastName)}" data-field="lastName" style="font-weight:700;" oninput="syncRowInput(this, ${realIdx})" placeholder="គោត្តនាម">
             </td>
             <td class="sticky-col-3">
-              <input type="text" class="table-input input-left ${!firstName && !s.isDraft ? 'cell-missing' : ''}" value="${esc(firstName)}" data-field="firstName" style="font-weight:700;" oninput="syncRowInput(this, ${realIdx})" placeholder="នាម">
+              <input type="text" class="table-input input-left ${showMissingHighlight && !firstName ? 'cell-missing' : ''}" value="${esc(firstName)}" data-field="firstName" style="font-weight:700;" oninput="syncRowInput(this, ${realIdx})" placeholder="នាម">
             </td>
             <td class="col-gender">${genderContent}</td>
             <td class="col-info">
@@ -2290,9 +2299,49 @@
       }
     }
 
+    /* =========================================================
+       🌟 មុខងារ SORT តាមក្បួនខ្នាតខ្មែរ (តម្រៀបតាម «នាម» ពី ក-អ)
+    ========================================================= */
+    function getKhmerSortParts(fullName) {
+      const clean = String(fullName || '').trim();
+      if (!clean) return { first: '', last: '' };
+      const parts = clean.split(/\s+/);
+      if (parts.length === 1) return { first: parts[0], last: '' };
+      const last = parts[0];
+      const first = parts.slice(1).join(' ');
+      return { first, last };
+    }
+
     function sortStudentsAlphabetical() {
-      studentsList.sort((a,b) => (a.name || '').localeCompare(b.name || '', 'km'));
+      sortDirectionAsc = !sortDirectionAsc; // ប្តូរទិសដៅរាល់ពេលចុច
+      
+      studentsList.sort((a, b) => {
+        // រក្សាទុកជួរ Draft នៅចុងក្រោយគេជានិច្ច
+        if (a.isDraft && !b.isDraft) return 1;
+        if (!a.isDraft && b.isDraft) return -1;
+
+        const partA = getKhmerSortParts(a.name);
+        const partB = getKhmerSortParts(b.name);
+
+        // 🌟 ១. ប្រៀបធៀបតាម «នាម» (First Name) ជាចម្បង
+        let cmp = (partA.first || '').localeCompare(partB.first || '', 'km');
+        // 🌟 ២. បើនាមដូចគ្នា ទើបប្រៀបធៀបតាម «គោត្តនាម» (Last Name)
+        if (cmp === 0) {
+          cmp = (partA.last || '').localeCompare(partB.last || '', 'km');
+        }
+
+        return sortDirectionAsc ? cmp : -cmp;
+      });
+
+      const btnText = document.getElementById('sortBtnText');
+      if (btnText) {
+        btnText.innerText = sortDirectionAsc ? 'តម្រៀបតាមនាម (ក-អ)' : 'តម្រៀបតាមនាម (អ-ក)';
+      }
+      const sortBtn = document.getElementById('sortBtn');
+      if (sortBtn) sortBtn.classList.toggle('active', !sortDirectionAsc);
+
       applyFilterAndRender();
+      showToast(sortDirectionAsc ? '✅ បានតម្រៀបតាមនាមសិស្ស (ក ដល់ អ)' : '✅ បានតម្រៀបតាមនាមសិស្ស (អ ដល់ ក)');
     }
 
     function toggleColumnMenu(e) {
@@ -2319,16 +2368,28 @@
       document.getElementById('lockText').innerText = isTableLocked ? 'ដោះសោ' : 'ចាក់សោ';
     }
 
+    /* 🌟 កែប្រែ Popup Action Menu ឱ្យបង្ហាញគ្រប់ទំហំអេក្រង់ និងមិនធ្លាក់បាត */
     function openActionMenu(e, realIdx) {
       e.stopPropagation();
       activeRowIndex = realIdx;
       const menu = document.getElementById('actionMenu');
       menu.style.display = 'block';
-      const rect = e.target.getBoundingClientRect();
-      let left = rect.left - 190 + 24;
+
+      const rect = e.currentTarget.getBoundingClientRect();
+      const menuHeight = 90;
+      const menuWidth = 190;
+
+      // បើជិតបាតអេក្រង់ ឱ្យ Menu លោតឡើងលើវិញ
+      let top = rect.bottom + 6;
+      if (top + menuHeight > window.innerHeight) {
+        top = rect.top - menuHeight - 6;
+      }
+
+      let left = rect.right - menuWidth;
       if (left < 10) left = 10;
+
+      menu.style.top = `${Math.max(10, top)}px`;
       menu.style.left = `${left}px`;
-      menu.style.top = `${rect.bottom + 6}px`;
     }
 
     /* =========================================================
