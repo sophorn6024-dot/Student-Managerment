@@ -194,7 +194,7 @@
       overflow: auto; max-height: calc(100vh - 210px);
       -webkit-overflow-scrolling: touch; position: relative;
     }
-    table { width: 100%; border-collapse: separate; border-spacing: 0; min-width: 1800px; text-align: center; }
+    table { width: 100%; border-collapse: separate; border-spacing: 0; min-width: 2350px; text-align: center; }
 
     thead { position: sticky; top: 0; z-index: 50; }
     thead th {
@@ -237,6 +237,8 @@
     .th-addr-main { background: rgba(37, 99, 235, 0.18); color: #60a5fa; font-size: 13.5px; }
     .th-sub-pob { background: rgba(2, 132, 199, 0.1); color: #0284c7; }
     .th-sub-addr { background: rgba(37, 99, 235, 0.1); color: #2563eb; }
+    .th-parent-main { background: rgba(234, 88, 12, 0.18); color: #fb923c; font-size: 13.5px; }
+    .th-sub-parent { background: rgba(234, 88, 12, 0.1); color: #ea580c; }
 
     tbody tr { height: 48px; }
     tbody tr:hover td { background-color: rgba(2, 132, 199, 0.08); }
@@ -802,6 +804,7 @@
         <label class="col-option"><input type="checkbox" checked onchange="toggleColumn('col-info', this.checked)"> ព័ត៌មានសិស្ស</label>
         <label class="col-option"><input type="checkbox" checked onchange="toggleColumn('col-pob', this.checked)"> ទីកន្លែងកំណើត</label>
         <label class="col-option"><input type="checkbox" checked onchange="toggleColumn('col-address', this.checked)"> អាសយដ្ឋានបច្ចុប្បន្ន</label>
+        <label class="col-option"><input type="checkbox" checked onchange="toggleColumn('col-parent', this.checked)"> ឪពុកម្តាយ</label>
       </div>
 
       <!-- 🌟 ប៊ូតុង «ទាញយក Excel» -->
@@ -833,6 +836,7 @@
           <th colspan="4" class="th-academic col-info">ព័ត៌មានសិស្ស</th>
           <th colspan="4" class="th-pob-main col-pob">ទីកន្លែងកំណើតសិស្ស</th>
           <th colspan="4" class="th-addr-main col-address">អាសយដ្ឋានបច្ចុប្បន្នសិស្ស</th>
+          <th colspan="4" class="th-parent-main col-parent">ព័ត៌មានឪពុកម្តាយ</th>
           <th rowspan="2" class="sticky-action">សកម្មភាព</th>
         </tr>
         <tr>
@@ -848,11 +852,15 @@
           <th class="th-sub-addr col-address" style="width: 105px;">ស្រុក/ខណ្ឌ</th>
           <th class="th-sub-addr col-address" style="width: 105px;">ឃុំ/សង្កាត់</th>
           <th class="th-sub-addr col-address" style="width: 95px;">ភូមិ</th>
+          <th class="th-sub-parent col-parent" style="width: 130px;">ឈ្មោះឪពុក</th>
+          <th class="th-sub-parent col-parent" style="width: 110px;">មុខរបរឪពុក</th>
+          <th class="th-sub-parent col-parent" style="width: 130px;">ឈ្មោះម្តាយ</th>
+          <th class="th-sub-parent col-parent" style="width: 110px;">មុខរបរម្តាយ</th>
         </tr>
       </thead>
       <tbody id="tableBody">
         <tr>
-          <td colspan="18" class="status-row">
+          <td colspan="22" class="status-row">
             <span class="spinner-dark"></span> កំពុងរៀបចំទិន្នន័យ...
           </td>
         </tr>
@@ -914,7 +922,7 @@
             <div class="step-number-circle">1</div>
             <div class="step-info">
               <div class="step-title">ទាញយកគំរូ រួចបំពេញឈ្មោះសិស្ស</div>
-              <div class="step-sub">ត្រូវបំពេញ អត្តលេខ, គោត្តនាម, នាម, ភេទ ។</div>
+              <div class="step-sub">ត្រូវបំពេញ អត្តលេខ, គោត្តនាម, នាម, ភេទ ។ ឈ្មោះ និងមុខរបរឪពុកម្តាយ ជាជម្រើស ។</div>
               <button class="btn-download-tmpl" onclick="downloadExcelTemplate()">
                 <span>📥</span> <span>ទាញយកគំរូ Excel</span>
               </button>
@@ -1110,6 +1118,21 @@
             </div>
             <div class="form-group" style="margin-bottom:12px;"><label>ទីកន្លែងកំណើត</label><input type="text" class="modal-input" id="modalPob"></div>
             <div class="form-group"><label>អាសយដ្ឋានបច្ចុប្បន្ន</label><input type="text" class="modal-input" id="modalAddress"></div>
+          </div>
+        </div>
+
+        <!-- 👪 ព័ត៌មានឪពុកម្តាយ (ថ្មី) -->
+        <div class="em-section">
+          <div class="em-section-head"><div class="em-section-icon">👪</div><div class="em-section-title">ព័ត៌មានឪពុកម្តាយ</div></div>
+          <div class="em-section-body">
+            <div class="form-row-2">
+              <div class="form-group"><label>ឈ្មោះឪពុក</label><input type="text" class="modal-input" id="modalFather"></div>
+              <div class="form-group"><label>មុខរបរឪពុក</label><input type="text" class="modal-input" id="modalFatherJob"></div>
+            </div>
+            <div class="form-row-2" style="margin-bottom:0;">
+              <div class="form-group"><label>ឈ្មោះម្តាយ</label><input type="text" class="modal-input" id="modalMother"></div>
+              <div class="form-group"><label>មុខរបរម្តាយ</label><input type="text" class="modal-input" id="modalMotherJob"></div>
+            </div>
           </div>
         </div>
       </div>
@@ -1457,7 +1480,7 @@
       const requestedClass = String(currentSelectedClass || '').replace(/^ថ្នាក់ទី\s*/, '').trim();
 
       if (showLoadingRow && tbody) {
-        tbody.innerHTML = `<tr><td colspan="18" class="status-row"><span class="spinner-dark"></span> កំពុងទាញទិន្នន័យពី Google Sheet...</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="22" class="status-row"><span class="spinner-dark"></span> កំពុងទាញទិន្នន័យពី Google Sheet...</td></tr>`;
       }
       setSyncStatusBadge("🔄 កំពុងពិនិត្យ...");
 
@@ -1480,7 +1503,7 @@
       if (!Array.isArray(rosterRes)) {
         const em = rosterErr || lastApiError || 'ក្រៅបណ្ដាញ';
         setSyncStatusBadge("⚠️ " + em, "#ea580c");
-        if (showLoadingRow) tbody.innerHTML = `<tr><td colspan="18" class="status-row">⚠️ ${esc(em || 'ទាញទិន្នន័យមិនបាន')}</td></tr>`;
+        if (showLoadingRow) tbody.innerHTML = `<tr><td colspan="22" class="status-row">⚠️ ${esc(em || 'ទាញទិន្នន័យមិនបាន')}</td></tr>`;
         return;
       }
 
@@ -1500,6 +1523,13 @@
           dob: formatToInputDate(rawDob),
           photoUrl: photo,
           imageUrl: photo,
+          // ឪពុកម្តាយ៖ ធានាថាមានតម្លៃជា string ជានិច្ច
+          father: String(s.father || s.fatherName || '').trim(),
+          fatherName: String(s.father || s.fatherName || '').trim(),
+          fatherJob: String(s.fatherJob || '').trim(),
+          mother: String(s.mother || s.motherName || '').trim(),
+          motherName: String(s.mother || s.motherName || '').trim(),
+          motherJob: String(s.motherJob || '').trim(),
           origId: sid,
           _uid: ++uidSeq,
           isDraft: false
@@ -1545,10 +1575,13 @@
         phone: (s.phone || '').trim(),
         pob: (s.pob || '').trim(),
         address: (s.address || '').trim(),
-        father: (s.father || s.fatherName || '').trim(),
-        fatherJob: (s.fatherJob || '').trim(),
-        mother: (s.mother || s.motherName || '').trim(),
-        motherJob: (s.motherJob || '').trim(),
+        // 👪 ប្រើ ?? ដើម្បីឱ្យតម្លៃទទេ (ដែលអ្នកលុប) ត្រូវបានផ្ញើទៅ Server ពិតប្រាកដ
+        father: String(s.father ?? s.fatherName ?? '').trim(),
+        fatherName: String(s.father ?? s.fatherName ?? '').trim(),
+        fatherJob: String(s.fatherJob ?? '').trim(),
+        mother: String(s.mother ?? s.motherName ?? '').trim(),
+        motherName: String(s.mother ?? s.motherName ?? '').trim(),
+        motherJob: String(s.motherJob ?? '').trim(),
         photoFile: s.photoUrl && s.photoUrl.startsWith('data:image') ? { base64: s.photoUrl } : null
       };
     }
@@ -1894,6 +1927,8 @@
         phone: '',
         pob: '',
         address: '',
+        father: '', fatherName: '', fatherJob: '',
+        mother: '', motherName: '', motherJob: '',
         photoUrl: '',
         nationality: 'ខ្មែរ',
         _uid: ++uidSeq
@@ -1930,6 +1965,11 @@
       s.phone = data.phone !== undefined ? data.phone : (s.phone || '');
       s.pob = joinAddressParts(data.pob_village, data.pob_commune, data.pob_district, data.pob_province);
       s.address = joinAddressParts(data.addr_village, data.addr_commune, data.addr_district, data.addr_province);
+      // 👪 ឪពុកម្តាយ
+      s.father = data.father || ''; s.fatherName = s.father;
+      s.fatherJob = data.fatherJob || '';
+      s.mother = data.mother || ''; s.motherName = s.mother;
+      s.motherJob = data.motherJob || '';
     }
 
     async function saveDraftRow(realIdx) {
@@ -2066,6 +2106,10 @@
       if (field === 'grade') s.grade = val;
       if (field === 'phone') s.phone = val;
 
+      // 👪 ឪពុកម្តាយ៖ កំណត់ទាំង father និង fatherName កុំឱ្យតម្លៃចាស់ត្រឡប់មកវិញពេលលុប
+      if (field === 'father' || field === 'mother') { s[field] = val; s[field + 'Name'] = val; }
+      if (field === 'fatherJob' || field === 'motherJob') s[field] = val;
+
       if (field.startsWith('pob_')) {
         const tr = input.closest('tr');
         s.pob = joinAddressParts(
@@ -2169,6 +2213,8 @@
       if (!s.phone) missing.push('លេខទូរស័ព្ទ');
       if (!s.pob) missing.push('ទីកន្លែងកំណើត');
       if (!s.address) missing.push('អាសយដ្ឋាន');
+      if (!(s.father || s.fatherName)) missing.push('ឈ្មោះឪពុក');
+      if (!(s.mother || s.motherName)) missing.push('ឈ្មោះម្តាយ');
       return missing;
     }
 
@@ -2260,7 +2306,7 @@
       const tbody = document.getElementById('tableBody');
 
       if (list.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="18" class="status-row">គ្មានទិន្នន័យសិស្សត្រូវបង្ហាញឡើយ! ចុច «➕ បន្ថែមជួរ» ឬ «📥 បញ្ចូលបញ្ជីសិស្ស» ដើម្បីបញ្ចូលថ្មី។</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="22" class="status-row">គ្មានទិន្នន័យសិស្សត្រូវបង្ហាញឡើយ! ចុច «➕ បន្ថែមជួរ» ឬ «📥 បញ្ចូលបញ្ជីសិស្ស» ដើម្បីបញ្ចូលថ្មី។</td></tr>`;
         updateCounters(0, 0);
         return;
       }
@@ -2298,6 +2344,8 @@
         const hasMissingName = (showMissingHighlight && !lastName) || !!errs.name;
         const hasMissingSex = (showMissingHighlight && !gv) || !!errs.sex;
         const hasMissingGrade = !!errs.grade;
+        const hasMissingFather = showMissingHighlight && !(s.father || s.fatherName);
+        const hasMissingMother = showMissingHighlight && !(s.mother || s.motherName);
 
         const photoUrl = safeUrl(s.photoUrl || s.imageUrl);
         const photoImgHtml = photoUrl
@@ -2375,6 +2423,10 @@
             <td class="col-address"><input type="text" class="table-input" value="${addr.district}" data-field="addr_district" oninput="syncRowInput(this, ${realIdx})" placeholder="ស្រុក"></td>
             <td class="col-address"><input type="text" class="table-input" value="${addr.commune}" data-field="addr_commune" oninput="syncRowInput(this, ${realIdx})" placeholder="ឃុំ"></td>
             <td class="col-address"><input type="text" class="table-input" value="${addr.village}" data-field="addr_village" oninput="syncRowInput(this, ${realIdx})" placeholder="ភូមិ"></td>
+            <td class="col-parent"><input type="text" class="table-input input-left ${hasMissingFather ? 'cell-missing' : ''}" value="${esc(s.father || s.fatherName)}" data-field="father" oninput="syncRowInput(this, ${realIdx})" placeholder="ឈ្មោះឪពុក"></td>
+            <td class="col-parent"><input type="text" class="table-input input-left" value="${esc(s.fatherJob)}" data-field="fatherJob" oninput="syncRowInput(this, ${realIdx})" placeholder="មុខរបរ"></td>
+            <td class="col-parent"><input type="text" class="table-input input-left ${hasMissingMother ? 'cell-missing' : ''}" value="${esc(s.mother || s.motherName)}" data-field="mother" oninput="syncRowInput(this, ${realIdx})" placeholder="ឈ្មោះម្តាយ"></td>
+            <td class="col-parent"><input type="text" class="table-input input-left" value="${esc(s.motherJob)}" data-field="motherJob" oninput="syncRowInput(this, ${realIdx})" placeholder="មុខរបរ"></td>
             <td class="sticky-action">${actionContent}</td>
           </tr>
         `);
@@ -2619,6 +2671,12 @@
       document.getElementById('modalPob').value = cleanDuplicateAddress(s.pob) || '';
       document.getElementById('modalAddress').value = cleanDuplicateAddress(s.address) || '';
 
+      // 👪 ឪពុកម្តាយ
+      document.getElementById('modalFather').value = s.father || s.fatherName || '';
+      document.getElementById('modalFatherJob').value = s.fatherJob || '';
+      document.getElementById('modalMother').value = s.mother || s.motherName || '';
+      document.getElementById('modalMotherJob').value = s.motherJob || '';
+
       document.getElementById('editModalOverlay').style.display = 'flex';
     }
 
@@ -2662,6 +2720,9 @@
 
       const backup = { ...s };
 
+      // បញ្ឈប់ Auto-save ដែលកំពុងរង់ចាំ ដើម្បីកុំឱ្យផ្ញើទិន្នន័យស្ទួន
+      clearTimeout(autoSaveTimers[s._uid]);
+
       s.id = studentId;
       s.studentId = studentId;
       s.name = fullName;
@@ -2671,6 +2732,11 @@
       s.phone = document.getElementById('modalPhone').value.trim();
       s.pob = document.getElementById('modalPob').value.trim();
       s.address = document.getElementById('modalAddress').value.trim();
+      // 👪 ឪពុកម្តាយ
+      s.father = document.getElementById('modalFather').value.trim(); s.fatherName = s.father;
+      s.fatherJob = document.getElementById('modalFatherJob').value.trim();
+      s.mother = document.getElementById('modalMother').value.trim(); s.motherName = s.mother;
+      s.motherJob = document.getElementById('modalMotherJob').value.trim();
       s.isDraft = false;
       if (modalPhotoBase64) {
         s.photoUrl = modalPhotoBase64;
@@ -2946,8 +3012,8 @@
           sex: gender,
           grade: defGrade,
           phone: phone,
-          father: father,
-          mother: mother,
+          father: father, fatherName: father, fatherJob: '',
+          mother: mother, motherName: mother, motherJob: '',
           pob: '',
           address: '',
           dob: '',
@@ -2968,10 +3034,10 @@
     }
 
     function downloadExcelTemplate() {
-      const headers = ["អត្តលេខ", "គោត្តនាម", "នាម", "ភេទ", "ថ្ងៃខែឆ្នាំកំណើត", "ទូរស័ព្ទ", "ទីកន្លែងកំណើត", "អាសយដ្ឋានបច្ចុប្បន្ន"];
+      const headers = ["អត្តលេខ", "គោត្តនាម", "នាម", "ភេទ", "ថ្ងៃខែឆ្នាំកំណើត", "ទូរស័ព្ទ", "ទីកន្លែងកំណើត", "អាសយដ្ឋានបច្ចុប្បន្ន", "ឈ្មោះឪពុក", "មុខរបរឪពុក", "ឈ្មោះម្តាយ", "មុខរបរម្តាយ"];
       const sample = [
-        ["001", "សុខ", "ចន្ថា", "ប្រុស", "2015-02-14", "012345678", "ភ្នំពេញ", "ភ្នំពេញ"],
-        ["002", "ចាន់", "ដារ៉ា", "ស្រី", "2015-05-20", "098765432", "កណ្តាល", "កណ្តាល"]
+        ["001", "សុខ", "ចន្ថា", "ប្រុស", "2015-02-14", "012345678", "ភ្នំពេញ", "ភ្នំពេញ", "សុខ ដារ៉ា", "កសិករ", "ចាន់ ស្រីមុំ", "លក់ដូរ"],
+        ["002", "ចាន់", "ដារ៉ា", "ស្រី", "2015-05-20", "098765432", "កណ្តាល", "កណ្តាល", "ចាន់ វិបុល", "កម្មករ", "ម៉ម សុខា", "មេផ្ទះ"]
       ];
       const ws = XLSX.utils.aoa_to_sheet([headers, ...sample]);
       const wb = XLSX.utils.book_new();
@@ -3008,9 +3074,15 @@
             const phone = String(row[5] ?? '').trim();
             const pob = String(row[6] ?? '').trim();
             const addr = String(row[7] ?? '').trim();
+            const father = String(row[8] ?? '').trim();
+            const fatherJob = String(row[9] ?? '').trim();
+            const mother = String(row[10] ?? '').trim();
+            const motherJob = String(row[11] ?? '').trim();
 
             list.push({
               id: sid, studentId: sid, origId: '', name, sex, dob, phone, pob, address: addr,
+              father: father, fatherName: father, fatherJob: fatherJob,
+              mother: mother, motherName: mother, motherJob: motherJob,
               grade: defGrade, isDraft: true, _uid: ++uidSeq
             });
           }
