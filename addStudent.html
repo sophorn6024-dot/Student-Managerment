@@ -1136,6 +1136,8 @@
     let currentSelectedClass = USER_CLASS ? USER_CLASS.replace(/^ថ្នាក់ទី\s*/, '').trim() : '៤(ក)';
     let availableClassesList = ['១', '២', '៣', '៤(ក)', '៤(ខ)', '៥', '៦'];
     let studentsList = [];
+    // លេខសំណើសមកាលកម្ម៖ ការពារលទ្ធផលថ្នាក់ចាស់មកសរសេរជំនួសថ្នាក់ថ្មី
+    let rosterSyncRequestId = 0;
     let activeRowIndex = null;
     let uploadTargetIndex = null;
     let isTableLocked = false;
@@ -1402,13 +1404,22 @@
 
     async function syncWithBackendParallel(showLoadingRow = false) {
       const tbody = document.getElementById('tableBody');
-      if (showLoadingRow) tbody.innerHTML = `<tr><td colspan="18" class="status-row"><span class="spinner-dark"></span> កំពុងទាញទិន្នន័យពី Google Sheet...</td></tr>`;
+      const requestId = ++rosterSyncRequestId;
+      const requestedClass = String(currentSelectedClass || '').replace(/^ថ្នាក់ទី\s*/, '').trim();
+
+      if (showLoadingRow && tbody) {
+        tbody.innerHTML = `<tr><td colspan="18" class="status-row"><span class="spinner-dark"></span> កំពុងទាញទិន្នន័យពី Google Sheet...</td></tr>`;
+      }
       setSyncStatusBadge("🔄 កំពុងពិនិត្យ...");
 
       const [classesRes, rosterRes] = await Promise.all([
         apiRequest('getClassList'),
-        apiRequest('getStudentRosterByClass', { className: currentSelectedClass })
+        apiRequest('getStudentRosterByClass', { className: requestedClass })
       ]);
+
+      // ប្រសិនបើអ្នកប្រើបានប្ដូរថ្នាក់ ខណៈសំណើចាស់កំពុងរង់ចាំ សូមមិនយកលទ្ធផលចាស់មកបង្ហាញ។
+      const latestClass = String(currentSelectedClass || '').replace(/^ថ្នាក់ទី\s*/, '').trim();
+      if (requestId !== rosterSyncRequestId || requestedClass !== latestClass) return;
 
       const fetchedClasses = (classesRes && classesRes.classes) ? classesRes.classes : (Array.isArray(classesRes) ? classesRes : []);
       if (fetchedClasses.length) {
