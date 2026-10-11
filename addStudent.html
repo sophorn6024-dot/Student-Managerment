@@ -189,9 +189,6 @@
     }
     .col-option:hover { background: var(--surface-elevated); }
 
-    /* =========================================================
-       📊 TABLE CONTAINER & STICKY SCROLL ENGINE
-    ========================================================= */
     .table-container {
       background: var(--surface); border-radius: 14px; border: 1px solid var(--border);
       overflow: auto; max-height: calc(100vh - 210px);
@@ -278,7 +275,6 @@
     .date-picker-trigger:hover { border-color: #0284c7; }
     .date-picker-trigger .cal-icon { color: #0284c7; font-size: 13px; }
 
-    /* បង្ហាញបន្ទាត់ដាច់ៗពណ៌ក្រហមតែពេលចុចប៊ូតុង ខ្វះព័ត៌មាន ប៉ុណ្ណោះ */
     .cell-missing {
       border: 1.5px dashed #ef4444 !important;
       background-color: rgba(239, 68, 68, 0.12) !important;
@@ -325,11 +321,104 @@
     }
     @keyframes spin { to { transform: rotate(360deg); } }
 
+    /* =========================================================
+       🪪 STUDENT BIODATA PROFILE MODAL (ដូចក្នុងរូបភាពទី ២ ទាំងស្រុង)
+    ========================================================= */
+    .profile-modal-overlay {
+      display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.65);
+      backdrop-filter: blur(6px); z-index: 100010; align-items: center; justify-content: center; padding: 14px;
+    }
+    .profile-modal-card {
+      background: var(--surface); color: var(--text); width: 100%; max-width: 760px;
+      border-radius: 28px; box-shadow: 0 25px 60px rgba(0, 0, 0, 0.4);
+      border: 1.5px solid var(--border); overflow: hidden; display: flex; flex-direction: column;
+      max-height: 94vh; animation: modalZoom 0.18s ease-out;
+    }
+    .profile-modal-topbar {
+      padding: 14px 20px; border-bottom: 1px solid var(--border); display: flex; align-items: center;
+      justify-content: space-between; gap: 10px; background: var(--surface); flex-wrap: wrap;
+    }
+    .profile-nav-group { display: flex; align-items: center; gap: 8px; flex: 1; }
+    .profile-pill-select {
+      background: var(--surface-elevated); border: 1.5px solid var(--border); border-radius: 14px;
+      height: 38px; padding: 0 12px; font-size: 13px; font-weight: 700; color: var(--text);
+      outline: none; cursor: pointer;
+    }
+    .profile-nav-btn {
+      width: 36px; height: 36px; border-radius: 12px; border: 1.5px solid var(--border);
+      background: var(--surface-elevated); display: flex; align-items: center; justify-content: center;
+      cursor: pointer; font-size: 13px; color: var(--primary); font-weight: 800;
+    }
+    .profile-nav-btn:hover { background: var(--primary); color: white; }
+    .profile-close-btn {
+      width: 36px; height: 36px; border-radius: 12px; border: 1.5px solid var(--border);
+      background: var(--surface-elevated); display: flex; align-items: center; justify-content: center;
+      cursor: pointer; font-size: 15px; color: var(--text-muted); font-weight: 700;
+    }
+    .profile-close-btn:hover { color: #ef4444; border-color: #ef4444; }
+
+    .profile-scroll-body { padding: 18px 22px; overflow-y: auto; display: flex; flex-direction: column; gap: 16px; }
+    
+    /* 🌟 Hero Card */
+    .profile-hero-card {
+      background: var(--surface-elevated); border: 1.5px solid var(--border); border-radius: 22px;
+      padding: 18px 22px; display: flex; align-items: center; gap: 20px;
+    }
+    .profile-avatar-box {
+      width: 90px; height: 100px; border-radius: 18px; border: 2.5px solid var(--border);
+      background: #0284c7; overflow: hidden; display: flex; align-items: center; justify-content: center;
+      color: white; font-size: 38px; font-weight: 800; flex-shrink: 0; box-shadow: 0 4px 14px rgba(0,0,0,0.15);
+    }
+    .profile-avatar-box img { width: 100%; height: 100%; object-fit: cover; }
+    .profile-hero-name { font-size: 24px; font-weight: 900; color: #0284c7; margin-bottom: 8px; }
+    .profile-badges-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .profile-badge {
+      background: var(--surface); border: 1px solid var(--border); border-radius: 16px;
+      padding: 3px 12px; font-size: 12px; font-weight: 700; color: var(--text);
+    }
+
+    /* 🌟 Sections Card */
+    .profile-section-card {
+      background: var(--surface-elevated); border: 1.5px solid var(--border); border-radius: 20px;
+      padding: 16px 20px; display: flex; flex-direction: column; gap: 12px;
+    }
+    .profile-section-title {
+      font-size: 14.5px; font-weight: 800; color: #0284c7; display: flex; align-items: center; gap: 8px;
+      border-bottom: 1px solid var(--border-subtle); padding-bottom: 10px;
+    }
+    .profile-info-row {
+      display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; font-size: 13px;
+      line-height: 1.6;
+    }
+    .profile-label { color: var(--text-muted); font-weight: 600; min-width: 130px; flex-shrink: 0; }
+    .profile-value { color: var(--text); font-weight: 700; text-align: right; word-break: break-word; }
+
+    .profile-modal-footer {
+      padding: 14px 20px; border-top: 1px solid var(--border); display: flex; align-items: center;
+      justify-content: space-between; background: var(--surface);
+    }
+    .btn-print-profile {
+      background: #0284c7; color: white; border: none; border-radius: 12px; height: 42px;
+      padding: 0 20px; font-size: 13.5px; font-weight: 800; cursor: pointer; display: inline-flex;
+      align-items: center; gap: 8px; box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3);
+    }
+    .btn-close-profile {
+      background: var(--surface-elevated); color: var(--text); border: 1.5px solid var(--border);
+      border-radius: 12px; height: 42px; padding: 0 24px; font-size: 13.5px; font-weight: 800; cursor: pointer;
+    }
+
+    /* PRINT STYLES */
+    @media print {
+      body * { visibility: hidden; }
+      #profileModalCard, #profileModalCard * { visibility: visible; }
+      #profileModalCard { position: absolute; left: 0; top: 0; width: 100%; border: none; box-shadow: none; }
+      .profile-modal-topbar, .profile-modal-footer { display: none !important; }
+    }
+
     /* IMPORT ROSTER MODAL */
     .import-modal-overlay {
-      display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(15, 23, 42, 0.65); backdrop-filter: blur(6px);
-      z-index: 10002; align-items: center; justify-content: center; padding: 14px;
+      display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.65);
+      backdrop-filter: blur(6px); z-index: 10002; align-items: center; justify-content: center; padding: 14px;
     }
     .import-modal-card {
       background: var(--surface); color: var(--text); width: 100%; max-width: 580px;
@@ -533,9 +622,8 @@
 
     /* MODALS */
     .missing-modal-overlay, .edit-modal-overlay {
-      display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0;
-      background: rgba(0, 0, 0, 0.65); backdrop-filter: blur(4px);
-      z-index: 10001; align-items: center; justify-content: center; padding: 12px;
+      display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.65);
+      backdrop-filter: blur(4px); z-index: 10001; align-items: center; justify-content: center; padding: 12px;
     }
     .missing-modal-box, .edit-modal-box {
       background: var(--surface); color: var(--text); width: 100%; max-width: 600px; border-radius: 20px;
@@ -694,7 +782,7 @@
         <span>📥</span> <span>បញ្ចូលបញ្ជីសិស្ស</span>
       </button>
 
-      <!-- 🌟 ប៊ូតុង Sort តម្រៀបតាមត្រកូល (គោត្តនាម) ពី ក-អ -->
+      <!-- 🌟 ប៊ូតុង Sort តាមត្រកូល (គោត្តនាម) ពី ក-អ -->
       <button class="btn-action btn-sort" id="sortBtn" onclick="sortStudentsAlphabetical()">
         <span>⇅</span> <span id="sortBtnText">តម្រៀបតាមត្រកូល (ក-អ)</span>
       </button>
@@ -901,14 +989,108 @@
     <button class="bottom-nav-icon-btn" onmousedown="event.preventDefault()" style="color:#16a34a; font-size:17px;" onclick="saveAllRows()" title="រក្សាទុក">✓</button>
   </div>
 
-  <!-- 💬 POPUP ACTION MENU (បង្ហាញគ្រប់ ៣ មុខងារ មិនធ្លាក់បាតអេក្រង់) -->
+  <!-- 💬 POPUP ACTION MENU (បង្ហាញគ្រប់ ៣ ប៊ូតុង មិនធ្លាក់បាត) -->
   <div class="action-popup" id="actionMenu">
-    <div class="action-item" onclick="openEditModalFromMenu()"><span>🪪</span> ប្រវត្តិរូប</div>
+    <div class="action-item" onclick="openProfileModalFromMenu()"><span>🪪</span> ប្រវត្តិរូប</div>
     <div class="action-item" onclick="openEditModalFromMenu()"><span>✏️</span> កែប្រែព័ត៌មាន</div>
     <div class="action-item delete" onclick="deleteCurrentRow()"><span>🗑️</span> លុបទិន្នន័យ</div>
   </div>
 
-  <!-- 🖼️ EDIT MODAL BOX -->
+  <!-- 🪪 STUDENT BIODATA PROFILE MODAL (ដូចក្នុងរូបភាពទី ២ ទាំងស្រុង) -->
+  <div class="profile-modal-overlay" id="profileModalOverlay">
+    <div class="profile-modal-card" id="profileModalCard">
+      <!-- របារខាងលើ -->
+      <div class="profile-modal-topbar">
+        <div class="profile-nav-group">
+          <select class="profile-pill-select" id="profileClassSelect" onchange="onProfileClassChange()"></select>
+          <select class="profile-pill-select" id="profileStudentSelect" onchange="onProfileStudentChange()" style="flex:1; max-width:320px;"></select>
+        </div>
+        <div style="display:flex; align-items:center; gap:6px;">
+          <button type="button" class="profile-nav-btn" onclick="navProfileStudent(-1)" title="សិស្សមុន">❮</button>
+          <button type="button" class="profile-nav-btn" onclick="navProfileStudent(1)" title="សិស្សបន្ទាប់">❯</button>
+          <button type="button" class="profile-close-btn" onclick="closeProfileModal()" title="បិទ">✕</button>
+        </div>
+      </div>
+
+      <!-- តួប្រវត្តិរូប -->
+      <div class="profile-scroll-body">
+        <!-- Hero Card -->
+        <div class="profile-hero-card">
+          <div class="profile-avatar-box" id="profileAvatarBox">
+            <span id="profileAvatarInitial">ក</span>
+          </div>
+          <div>
+            <div class="profile-hero-name" id="profileHeroName">ខន សុខឃេម</div>
+            <div class="profile-badges-row">
+              <span class="profile-badge" id="profileIdBadge">អត្តលេខ: 578</span>
+              <span class="profile-badge" id="profileGradeBadge">ថ្នាក់ទី: ៤(ក)</span>
+              <span class="profile-badge" id="profileGenderBadge">ភេទ: ប្រុស</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- ព័ត៌មានផ្ទាល់ខ្លួន -->
+        <div class="profile-section-card">
+          <div class="profile-section-title">
+            <span>👤</span> <span>ព័ត៌មានផ្ទាល់ខ្លួនសិស្ស</span>
+          </div>
+          <div class="profile-info-row">
+            <span class="profile-label">ថ្ងៃខែឆ្នាំកំណើត៖</span>
+            <span class="profile-value" id="profileDobValue">-</span>
+          </div>
+          <div class="profile-info-row">
+            <span class="profile-label">អាយុសិស្ស៖</span>
+            <span class="profile-value" id="profileAgeValue">-</span>
+          </div>
+          <div class="profile-info-row">
+            <span class="profile-label">លេខទូរស័ព្ទ៖</span>
+            <span class="profile-value" id="profilePhoneValue">-</span>
+          </div>
+          <div class="profile-info-row">
+            <span class="profile-label">ទីកន្លែងកំណើត៖</span>
+            <span class="profile-value" id="profilePobValue">-</span>
+          </div>
+          <div class="profile-info-row">
+            <span class="profile-label">អាសយដ្ឋានបច្ចុប្បន្ន៖</span>
+            <span class="profile-value" id="profileAddressValue">-</span>
+          </div>
+        </div>
+
+        <!-- ព័ត៌មានឪពុកម្តាយ -->
+        <div class="profile-section-card">
+          <div class="profile-section-title">
+            <span>👨‍👩‍👧</span> <span>ព័ត៌មានឪពុកម្តាយ / អាណាព្យាបាល</span>
+          </div>
+          <div class="profile-info-row">
+            <span class="profile-label">ឈ្មោះឪពុក៖</span>
+            <span class="profile-value" id="profileFatherValue">-</span>
+          </div>
+          <div class="profile-info-row">
+            <span class="profile-label">មុខរបរឪពុក៖</span>
+            <span class="profile-value" id="profileFatherJobValue">-</span>
+          </div>
+          <div class="profile-info-row">
+            <span class="profile-label">ឈ្មោះម្តាយ៖</span>
+            <span class="profile-value" id="profileMotherValue">-</span>
+          </div>
+          <div class="profile-info-row">
+            <span class="profile-label">មុខរបរម្តាយ៖</span>
+            <span class="profile-value" id="profileMotherJobValue">-</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- របារខាងក្រោម -->
+      <div class="profile-modal-footer">
+        <button type="button" class="btn-print-profile" onclick="window.print()">
+          <span>🖨️</span> <span>បោះពុម្ពប្រវត្តិរូប</span>
+        </button>
+        <button type="button" class="btn-close-profile" onclick="closeProfileModal()">បិទ</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- 🖼️ EDIT MODAL BOX (សម្រាប់កែប្រែទិន្នន័យ) -->
   <div class="edit-modal-overlay" id="editModalOverlay">
     <div class="edit-modal-box em-box">
       <div class="em-banner">
@@ -1052,9 +1234,6 @@
     function safeUrl(u) { u = String(u || '').trim(); return /^(https:\/\/|data:image\/)/.test(u) ? u : ''; }
     function escParts(p) { const o = {}; for (const k in p) o[k] = esc(p[k]); return o; }
 
-    /* =========================================================
-       🌐 API REQUEST ENGINE
-    ========================================================= */
     async function apiRequest(action, payload = {}) {
       const body = JSON.stringify({ action: action, token: TOKEN, ...payload });
       for (let attempt = 1; attempt <= 2; attempt++) {
@@ -1356,7 +1535,7 @@
           id: sid,
           studentId: sid,
           name: fullName,
-          sex: s.sex || s.gender || 'ស្រី',
+          sex: s.sex || s.gender || s['ភេទ'] || 'ស្រី',
           dob: formatToInputDate(rawDob),
           photoUrl: photo,
           imageUrl: photo,
@@ -1371,9 +1550,7 @@
 
     function refreshDataForce() { syncWithBackendParallel(true); }
 
-    /* =========================================================
-       🚀 AUTO-SAVE & SMART SUBMIT ENGINE
-    ========================================================= */
+
     function triggerAutoSave(realIdx) {
       const s = studentsList[realIdx];
       if (!s || s.isDraft) return;
@@ -1438,20 +1615,36 @@
       }
     }
 
-    /* =========================================================
-       🛠️ DATE & ADDRESS HELPERS
-    ========================================================= */
+    const KHMER_MONTHS_MAP = {
+      'មករា': 1, 'កុម្ភៈ': 2, 'មីនា': 3, 'មេសា': 4,
+      'ឧសភា': 5, 'មិថុនា': 6, 'កក្កដា': 7, 'សីហា': 8,
+      'កញ្ញា': 9, 'តុលា': 10, 'វិច្ឆិកា': 11, 'ធ្នូ': 12
+    };
+
     function formatToInputDate(dateVal) {
       if (!dateVal) return '';
       if (typeof dateVal === 'string') {
         dateVal = dateVal.trim();
         if (/^\d{4}-\d{2}-\d{2}$/.test(dateVal)) return dateVal;
+
+        // 🌟 ស្គាល់ទម្រង់ខ្មែរ៖ "6 ខែតុលា ឆ្នាំ 2017" ឬ "6 តុលា 2017"
+        const kmMatch = dateVal.match(/(\d+)\s*(?:ខែ)?\s*([^\s\d]+)\s*(?:ឆ្នាំ)?\s*(\d{4})/);
+        if (kmMatch) {
+          const d = kmMatch[1].padStart(2, '0');
+          const mStr = kmMatch[2].replace(/^ខែ/, '').trim();
+          const m = KHMER_MONTHS_MAP[mStr];
+          if (m) {
+            return `${kmMatch[3]}-${String(m).padStart(2, '0')}-${d}`;
+          }
+        }
+
         const dmy = dateVal.split(/[\/\-.]/);
         if (dmy.length === 3) {
           if (dmy[2].length === 4) return `${dmy[2]}-${dmy[1].padStart(2, '0')}-${dmy[0].padStart(2, '0')}`;
           if (dmy[0].length === 4) return `${dmy[0]}-${dmy[1].padStart(2, '0')}-${dmy[2].padStart(2, '0')}`;
         }
       }
+
       const d = new Date(dateVal);
       if (!isNaN(d.getTime())) {
         const year = d.getFullYear();
@@ -1474,25 +1667,45 @@
       return age >= 0 ? age : '';
     }
 
+    function cleanDuplicateAddress(str) {
+      if (!str) return '';
+      const parts = str.split(',').map(s => s.trim()).filter(Boolean);
+      if (!parts.length) return '';
+      const unique = [];
+      parts.forEach(p => {
+        if (!unique.includes(p)) unique.push(p);
+      });
+      return unique.join(', ');
+    }
+
     function parseAddressParts(addrStr) {
       if (!addrStr) return { village: '', commune: '', district: '', province: '' };
+      addrStr = cleanDuplicateAddress(addrStr);
       const parts = addrStr.split(',').map(p => p.trim()).filter(Boolean);
-      if (parts.length === 1) return { village: '', commune: '', district: '', province: parts[0] };
-      if (parts.length === 2) return { village: '', commune: '', district: parts[0], province: parts[1] };
+      if (parts.length === 4) return { village: parts[0], commune: parts[1], district: parts[2], province: parts[3] };
       if (parts.length === 3) return { village: '', commune: parts[0], district: parts[1], province: parts[2] };
-      return {
-        village: parts[0] || '', commune: parts[1] || '',
-        district: parts[2] || '', province: parts.slice(3).join(', ') || ''
-      };
+      if (parts.length === 2) return { village: '', commune: '', district: parts[0], province: parts[1] };
+      
+      const words = (parts[0] || '').split(/\s+/).filter(Boolean);
+      if (words.length >= 4) {
+        return {
+          village: words[0] || '',
+          commune: words[1] || '',
+          district: words[2] || '',
+          province: words.slice(3).join(' ') || ''
+        };
+      }
+      return { village: '', commune: '', district: '', province: parts[0] || '' };
     }
 
     function joinAddressParts(village, commune, district, province) {
-      return [village, commune, district, province].map(s => (s || '').trim()).filter(Boolean).join(', ');
+      const parts = [village, commune, district, province].map(s => (s || '').trim()).filter(Boolean);
+      if (parts.length > 1 && parts.every(p => p === parts[0])) return parts[0];
+      const unique = [];
+      parts.forEach(p => { if (!unique.includes(p)) unique.push(p); });
+      return unique.join(', ');
     }
 
-    /* =========================================================
-       📅 KHMER CALENDAR ENGINE
-    ========================================================= */
     const KHMER_MONTHS = ['មករា', 'កុម្ភៈ', 'មីនា', 'មេសា', 'ឧសភា', 'មិថុនា', 'កក្កដា', 'សីហា', 'កញ្ញា', 'តុលា', 'វិច្ឆិកា', 'ធ្នូ'];
     let calCurrentYear = 2026;
     let calCurrentMonth = 9;
@@ -1670,9 +1883,6 @@
       } catch (err) { alert(err.message || 'មិនអាចអានរូបនេះបានទេ'); }
     }
 
-    /* =========================================================
-       ➕ ADD / SAVE ROW DRAFT
-    ========================================================= */
     async function addNewRow() {
       const defaultGrade = currentSelectedClass ? `ថ្នាក់ទី${currentSelectedClass}` : 'ថ្នាក់ទី៤(ក)';
       const autoId = 'ST' + Math.floor(100000 + Math.random() * 900000);
@@ -1943,9 +2153,6 @@
       renderTable(filtered);
     }
 
-    /* =========================================================
-       📊 RENDER TABLE
-    ========================================================= */
     function renderTable(list) {
       const tbody = document.getElementById('tableBody');
 
@@ -2027,7 +2234,7 @@
             <td class="sticky-col-1">${col1Content}</td>
 
             <td class="col-photo">
-              <div class="table-photo-box" onclick="openEditModal(${realIdx})" title="ចុចលើរូបដើម្បីកែប្រែព័ត៌មានសិស្ស">
+              <div class="table-photo-box" onclick="openProfileModal(${realIdx})" title="ចុចលើរូបដើម្បីមើលប្រវត្តិរូបសិស្ស">
                 ${photoImgHtml}
               </div>
             </td>
@@ -2111,6 +2318,121 @@
       }
     }
 
+    let currentProfileIdx = 0;
+
+    function openProfileModal(realIdx) {
+      if (realIdx === null || realIdx === undefined || !studentsList[realIdx]) return;
+      currentProfileIdx = realIdx;
+      renderProfileModalContent();
+      document.getElementById('profileModalOverlay').style.display = 'flex';
+    }
+
+    function openProfileModalFromMenu() {
+      if (activeRowIndex !== null) openProfileModal(activeRowIndex);
+    }
+
+    function closeProfileModal() {
+      document.getElementById('profileModalOverlay').style.display = 'none';
+    }
+
+    function renderProfileModalContent() {
+      const s = studentsList[currentProfileIdx];
+      if (!s) return;
+
+      // Populate Class Selector in Modal
+      const clsSel = document.getElementById('profileClassSelect');
+      clsSel.innerHTML = '';
+      availableClassesList.forEach(cls => {
+        let val = (typeof cls === 'object' && cls !== null) ? (cls.className || cls.name) : cls;
+        val = String(val).replace(/^ថ្នាក់ទី\s*/, '').trim();
+        if (val) clsSel.innerHTML += `<option value="${esc(val)}" ${val === currentSelectedClass ? 'selected' : ''}>ថ្នាក់ទី ${esc(val)}</option>`;
+      });
+
+      // Populate Student Selector in Modal
+      const stSel = document.getElementById('profileStudentSelect');
+      stSel.innerHTML = '';
+      studentsList.forEach((st, idx) => {
+        if (!st.isDraft) {
+          stSel.innerHTML += `<option value="${idx}" ${idx === currentProfileIdx ? 'selected' : ''}>${idx + 1}. ${esc(st.name || 'គ្មានឈ្មោះ')} (${esc(st.grade || currentSelectedClass)})</option>`;
+        }
+      });
+
+      // Hero Card Info
+      const name = (s.name || '').trim();
+      document.getElementById('profileHeroName').innerText = name || 'គ្មានឈ្មោះ';
+      document.getElementById('profileIdBadge').innerText = `អត្តលេខ: ${s.id || '-'}`;
+      document.getElementById('profileGradeBadge').innerText = s.grade ? (s.grade.startsWith('ថ្នាក់ទី') ? s.grade : `ថ្នាក់ទី: ${s.grade}`) : `ថ្នាក់ទី: ${currentSelectedClass}`;
+      document.getElementById('profileGenderBadge').innerText = `ភេទ: ${s.sex || 'ប្រុស'}`;
+
+      // Avatar
+      const box = document.getElementById('profileAvatarBox');
+      box.textContent = '';
+      const pu = safeUrl(s.photoUrl || s.imageUrl);
+      const initial = name ? (name.split(/\s+/)[1] || name).charAt(0) : 'ក';
+      if (pu) {
+        const im = document.createElement('img');
+        im.src = pu;
+        im.onerror = () => { box.textContent = initial; };
+        box.appendChild(im);
+      } else {
+        box.textContent = initial;
+      }
+
+      // Personal Info
+      const formattedDob = formatToInputDate(s.dob);
+      let dobDisplay = s.dob || '-';
+      if (formattedDob) {
+        const [y, m, d] = formattedDob.split('-');
+        const kmM = KHMER_MONTHS[Number(m) - 1] || m;
+        dobDisplay = `${Number(d)} ខែ${kmM} ឆ្នាំ ${y}`;
+      }
+      document.getElementById('profileDobValue').innerText = dobDisplay;
+
+      const age = calculateAge(s.dob);
+      document.getElementById('profileAgeValue').innerText = age ? `${age} ឆ្នាំ` : '-';
+      document.getElementById('profilePhoneValue').innerText = s.phone || '-';
+
+      // 🌟 ទីកន្លែងកំណើត និង អាសយដ្ឋានបច្ចុប្បន្ន (លុបពាក្យស្ទួន ៤ ដង)
+      document.getElementById('profilePobValue').innerText = cleanDuplicateAddress(s.pob) || '-';
+      document.getElementById('profileAddressValue').innerText = cleanDuplicateAddress(s.address) || '-';
+
+      // Parents Info
+      document.getElementById('profileFatherValue').innerText = s.father || s.fatherName || '-';
+      document.getElementById('profileFatherJobValue').innerText = s.fatherJob || '-';
+      document.getElementById('profileMotherValue').innerText = s.mother || s.motherName || '-';
+      document.getElementById('profileMotherJobValue').innerText = s.motherJob || '-';
+    }
+
+    function onProfileStudentChange() {
+      const idx = Number(document.getElementById('profileStudentSelect').value);
+      if (!isNaN(idx) && studentsList[idx]) {
+        currentProfileIdx = idx;
+        renderProfileModalContent();
+      }
+    }
+
+    function onProfileClassChange() {
+      const val = document.getElementById('profileClassSelect').value;
+      currentSelectedClass = val;
+      const classFilterSel = document.getElementById('classFilterSelect');
+      if (classFilterSel) classFilterSel.value = val;
+      syncWithBackendParallel(true).then(() => {
+        currentProfileIdx = 0;
+        renderProfileModalContent();
+      });
+    }
+
+    function navProfileStudent(dir) {
+      let nextIdx = currentProfileIdx + dir;
+      while (nextIdx >= 0 && nextIdx < studentsList.length && studentsList[nextIdx].isDraft) {
+        nextIdx += dir;
+      }
+      if (nextIdx >= 0 && nextIdx < studentsList.length) {
+        currentProfileIdx = nextIdx;
+        renderProfileModalContent();
+      }
+    }
+
     /* 🌟 EDIT MODAL */
     function openEditModal(realIdx) {
       activeRowIndex = realIdx;
@@ -2156,8 +2478,8 @@
       document.getElementById('modalAgeDisplay').innerText = age ? `អាយុ: ${age} ឆ្នាំ` : 'អាយុ: -';
 
       document.getElementById('modalPhone').value = s.phone || '';
-      document.getElementById('modalPob').value = s.pob || '';
-      document.getElementById('modalAddress').value = s.address || '';
+      document.getElementById('modalPob').value = cleanDuplicateAddress(s.pob) || '';
+      document.getElementById('modalAddress').value = cleanDuplicateAddress(s.address) || '';
 
       document.getElementById('editModalOverlay').style.display = 'flex';
     }
@@ -2302,9 +2624,6 @@
       }
     }
 
-    /* =========================================================
-       🌟 មុខងារ SORT តាមត្រកូល (គោត្តនាម / ពាក្យខាងមុខ) ពី ក-អ
-    ========================================================= */
     function getKhmerSortParts(fullName) {
       const clean = String(fullName || '').trim();
       if (!clean) return { last: '', first: '' };
@@ -2370,28 +2689,22 @@
       document.getElementById('lockText').innerText = isTableLocked ? 'ដោះសោ' : 'ចាក់សោ';
     }
 
-    /* =========================================================
-       🌟 POPUP MENU (វាស់កម្ពស់ជាក់ស្តែង បើជិតបាតអេក្រង់ លោតឡើងលើវិញ)
-    ========================================================= */
+    /* 🌟 POPUP MENU (វាស់កម្ពស់ជាក់ស្តែង បើជិតបាតអេក្រង់ លោតឡើងលើវិញ) */
     function openActionMenu(e, realIdx) {
       e.stopPropagation();
       activeRowIndex = realIdx;
       const menu = document.getElementById('actionMenu');
-      
-      // បើក display block ជាមុនដើម្បីឱ្យ Browser អាចវាស់ទំហំជាក់ស្តែងបាន
       menu.style.display = 'block';
 
       const rect = e.currentTarget.getBoundingClientRect();
-      const menuHeight = menu.offsetHeight || 135; // កម្ពស់ជាក់ស្តែងនៃ Menu ទាំងមូល
+      const menuHeight = menu.offsetHeight || 135;
       const menuWidth = menu.offsetWidth || 195;
 
-      // 🌟 បើកន្លែងទំនេរខាងក្រោមមិនគ្រប់គ្រាន់ ឱ្យ Menu លោតឡើងលើវិញ
       let top = rect.bottom + 6;
       if (top + menuHeight > window.innerHeight - 10) {
         top = rect.top - menuHeight - 6;
       }
       
-      // បើឡើងលើហួសក្បាលអេក្រង់
       if (top < 10) {
         top = Math.max(10, window.innerHeight - menuHeight - 15);
       }
@@ -2564,6 +2877,8 @@
         statusMenu.classList.remove('show');
         document.getElementById('statusChevronIcon').innerText = '⌵';
       }
+      const profileOverlay = document.getElementById('profileModalOverlay');
+      if (e.target === profileOverlay) closeProfileModal();
       const modalOverlay = document.getElementById('editModalOverlay');
       if (e.target === modalOverlay) closeEditModal();
       const missingOverlay = document.getElementById('missingModalOverlay');
