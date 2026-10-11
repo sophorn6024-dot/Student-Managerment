@@ -169,7 +169,7 @@
     .btn-sort { background: rgba(124, 58, 237, 0.15); color: #a78bfa; border: 1.5px solid rgba(124, 58, 237, 0.3); }
     .btn-sort.active { background: #7c3aed; color: white; }
     .btn-columns { background: rgba(2, 132, 199, 0.15); color: #38bdf8; border: 1px solid var(--border); }
-    
+
     /* 🌟 ប៊ូតុង ទាញយក Excel */
     .btn-excel-export { background: #059669; color: white; }
     .btn-excel-export:hover { background: #047857; }
@@ -272,6 +272,13 @@
       border-color: var(--primary);
     }
 
+    /* 🌟 FIX: ទម្រង់គ្មានរូបថត — បង្ហាញរូបសញ្ញាមនុស្សពណ៌ប្រផេះ (មិនបង្ហាញអក្សរ/រូបក្លែងក្លាយ) */
+    .no-photo {
+      background: var(--surface-elevated) !important;
+      color: var(--text-muted) !important;
+    }
+    .no-photo svg { width: 58%; height: 58%; display: block; opacity: 0.85; }
+
     .date-picker-trigger {
       width: 100%; height: 32px; border: 1px solid var(--border); border-radius: 6px;
       background: var(--surface-elevated); color: var(--text); padding: 0 8px; font-size: 12.5px;
@@ -367,7 +374,7 @@
     .profile-close-btn:hover { color: #ef4444; border-color: #ef4444; }
 
     .profile-scroll-body { padding: 18px 22px; overflow-y: auto; display: flex; flex-direction: column; gap: 16px; }
-    
+
     .profile-hero-card {
       background: var(--surface-elevated); border: 1.5px solid var(--border); border-radius: 22px;
       padding: 18px 22px; display: flex; align-items: center; gap: 20px;
@@ -1165,6 +1172,39 @@
       }
     }
 
+    /* =========================================================
+       🖼️ AVATAR / PHOTO PLACEHOLDER (FIX: គ្មានរូប = រូបសញ្ញាមនុស្សទទេ)
+    ========================================================= */
+    const PHOTO_PLACEHOLDER_SVG =
+      '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' +
+      '<circle cx="12" cy="8" r="4"/><path d="M4 21c0-4.4 3.6-7 8-7s8 2.6 8 7"/></svg>';
+
+    // ប្រើពេល <img> ទាញរូបមិនបាន (onerror)
+    function photoFallback(img) {
+      img.onerror = null;
+      const p = img.parentElement;
+      if (!p) return;
+      p.classList.add('no-photo');
+      p.innerHTML = PHOTO_PLACEHOLDER_SVG;
+    }
+
+    // កំណត់ box ណាមួយឱ្យបង្ហាញរូបថត ឬ placeholder
+    function setAvatar(box, url) {
+      if (!box) return;
+      box.textContent = '';
+      const u = safeUrl(url);
+      if (u) {
+        box.classList.remove('no-photo');
+        const im = document.createElement('img');
+        im.onerror = () => photoFallback(im);
+        im.src = u;
+        box.appendChild(im);
+      } else {
+        box.classList.add('no-photo');
+        box.innerHTML = PHOTO_PLACEHOLDER_SVG;
+      }
+    }
+
     function normalizePhotoUrl(url) {
       if (!url || typeof url !== 'string') return '';
       url = url.trim();
@@ -1218,27 +1258,27 @@
             headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: body
           });
           const text = await response.text();
-          
+
           if (/^\s*</.test(text)) {
             lastApiError = 'Server ត្រឡប់ទំព័រ Login/HTML — សូមពិនិត្យមើល Web App Deployment (ត្រូវដាក់ Anyone)';
             return null;
           }
 
           let j = null;
-          try { 
-            j = JSON.parse(text); 
-          } catch (pe) { 
+          try {
+            j = JSON.parse(text);
+          } catch (pe) {
             if (/ជោគជ័យ|success|ok|true/i.test(text)) {
               lastApiError = '';
               return { success: true, message: text };
             }
-            lastApiError = text.slice(0, 160); 
-            return null; 
+            lastApiError = text.slice(0, 160);
+            return null;
           }
 
-          if (j && (j.success === false || j.status === 'error')) { 
-            lastApiError = j.error || j.message || 'កំហុសពី Server'; 
-            return null; 
+          if (j && (j.success === false || j.status === 'error')) {
+            lastApiError = j.error || j.message || 'កំហុសពី Server';
+            return null;
           }
 
           lastApiError = '';
@@ -1323,7 +1363,7 @@
         const displayClassName = currentSelectedClass || 'មិនទាន់កំណត់';
         container.innerHTML = `
           <div class="teacher-class-pill" title="ថ្នាក់ដែលបានចាត់តាំង">
-            <span>🏫</span> <span>ថ្នាក់ទី ${displayClassName}</span>
+            <span>🏫</span> <span>ថ្នាក់ទី ${esc(displayClassName)}</span>
           </div>
         `;
         populateModalClassSelect(availableClassesList);
@@ -1385,7 +1425,7 @@
 
       modalSelect.disabled = false;
       list.forEach(cls => {
-        let val = typeof cls === 'object' ? (cls.className || cls.name) : cls;
+        let val = (typeof cls === 'object' && cls !== null) ? (cls.className || cls.name) : cls;
         val = String(val).replace(/^ថ្នាក់ទី\s*/, '').trim();
         if (val) modalSelect.innerHTML += `<option value="ថ្នាក់ទី${esc(val)}">ថ្នាក់ទី ${esc(val)}</option>`;
       });
@@ -1456,7 +1496,7 @@
     function refreshDataForce() { syncWithBackendParallel(true); }
 
     /* =========================================================
-       🚀 មុខងារ UPDATE & AUTO-SAVE (កែលម្អមិនឱ្យបាត់បង់ទិន្នន័យ)
+       🚀 មុខងារ UPDATE & AUTO-SAVE
     ========================================================= */
     function triggerAutoSave(realIdx) {
       const s = studentsList[realIdx];
@@ -1467,7 +1507,6 @@
       autoSaveTimers[s._uid] = setTimeout(() => executeAutoSaveRow(s), 1000);
     }
 
-    // 🌟 កែសម្រួល៖ មិនបង្កើតលេខចៃដន្យ ST... ឡើយ (ទុកនៅទទេបើមិនបានបំពេញ)
     function buildPayload(s) {
       const sid = String(s.id || s.studentId || '').trim();
       const orig = String(s.origId || sid).trim();
@@ -1496,16 +1535,13 @@
       };
     }
 
-    // 🌟 ពិនិត្យ និងកែលម្អការ Update ទៅ Server
     async function executeAutoSaveRow(s) {
       if (!s || !s.name) return;
       const payload = buildPayload(s);
       let res = null;
 
-      // បើជាសិស្សមានក្នុងប្រព័ន្ធស្រាប់ (Update)
       if (s.origId || s.rowNum || !s.isDraft) {
         res = await apiRequest('updateStudentData', { formData: payload });
-        // បើ update មិនឃើញ ទើបសាកល្បង submit
         if (!res && lastApiError && (lastApiError.includes('រកមិនឃើញ') || lastApiError.includes('not found'))) {
           res = await apiRequest('submitStudentData', { formData: payload });
         }
@@ -1601,7 +1637,7 @@
       if (parts.length === 4) return { village: parts[0], commune: parts[1], district: parts[2], province: parts[3] };
       if (parts.length === 3) return { village: '', commune: parts[0], district: parts[1], province: parts[2] };
       if (parts.length === 2) return { village: '', commune: '', district: parts[0], province: parts[1] };
-      
+
       const words = (parts[0] || '').split(/\s+/).filter(Boolean);
       if (words.length >= 4) {
         return {
@@ -1783,6 +1819,14 @@
       document.getElementById('rowPhotoFileInput').click();
     }
 
+    // 🌟 ចុចលើរូបក្នុងតារាង៖ សិស្សថ្មី (Draft) → ជ្រើសរូប, សិស្សមានស្រាប់ → មើលប្រវត្តិរូប
+    function onTablePhotoClick(realIdx) {
+      const s = studentsList[realIdx];
+      if (!s) return;
+      if (s.isDraft) triggerRowPhotoUpload(realIdx);
+      else openProfileModal(realIdx);
+    }
+
     async function onRowPhotoFileSelected(input) {
       const file = input.files[0];
       if (!file || uploadTargetIndex === null) return;
@@ -1803,15 +1847,16 @@
     }
 
     /* =========================================================
-       ➕ បន្ថែមជួរថ្មី (អត្តលេខចេញទទេស្អាត)
+       ➕ បន្ថែមជួរថ្មី (គ្មានរូបថត / អត្តលេខទទេ)
     ========================================================= */
     async function addNewRow() {
       const defaultGrade = currentSelectedClass ? `ថ្នាក់ទី${currentSelectedClass}` : 'ថ្នាក់ទី៤(ក)';
       studentsList.push({
         isDraft: true,
-        id: '', // 🌟 ចេញទទេតាមការស្នើសុំ
+        id: '',
         studentId: '',
         origId: '',
+        rowNum: null,
         name: '',
         sex: 'ស្រី',
         dob: '',
@@ -1819,7 +1864,8 @@
         phone: '',
         pob: '',
         address: '',
-        photoUrl: '',
+        photoUrl: '',   // 🌟 គ្មានរូបថត
+        imageUrl: '',
         nationality: 'ខ្មែរ',
         _uid: ++uidSeq
       });
@@ -1849,6 +1895,7 @@
         inputs.forEach(inp => data[inp.dataset.field] = inp.value.trim());
 
         s.id = data.id || '';
+        s.studentId = s.id;
         const lName = data.lastName || '';
         const fName = data.firstName || '';
         s.name = `${lName} ${fName}`.trim() || s.name || '';
@@ -1867,13 +1914,14 @@
         res = await apiRequest('updateStudentData', { formData: payload });
       }
 
-      if (!res) { 
-        alert("❌ ការរក្សាទុកបរាជ័យ៖ " + (lastApiError || 'ពិនិត្យ Server')); 
-        return false; 
+      if (!res) {
+        alert("❌ ការរក្សាទុកបរាជ័យ៖ " + (lastApiError || 'ពិនិត្យ Server'));
+        return false;
       }
 
-      s.isDraft = false; 
+      s.isDraft = false;
       s.origId = s.id || (res && res.studentId) || s.origId;
+      if (res && res.rowNum) s.rowNum = res.rowNum;
       applyFilterAndRender();
       showToast(`🎉 បានរក្សាទុកសិស្ស «${s.name}» ជោគជ័យ!`);
       notifyParentDataChanged();
@@ -1901,7 +1949,7 @@
       const field = input.dataset.field;
       const val = input.value.trim();
 
-      if (field === 'id') s.id = val;
+      if (field === 'id') { s.id = val; s.studentId = val; }
       if (field === 'lastName' || field === 'firstName') {
         const tr = input.closest('tr');
         const lName = tr.querySelector('input[data-field="lastName"]').value.trim();
@@ -2020,15 +2068,14 @@
         container.innerHTML = `<div style="text-align:center;padding:30px;color:#16a34a;font-weight:700;">🎉 ព័ត៌មានសិស្សទាំងអស់ត្រូវបានបំពេញពេញលេញ!</div>`;
       } else {
         items.forEach(({ s, i, missing }) => {
-          const name = (s.name || '').trim(), parts = name.split(/\s+/);
-          const ini = parts.length > 1 ? parts[1].charAt(0) : (name.charAt(0) || 'ក');
+          const name = (s.name || '').trim();
           const url = safeUrl(s.photoUrl || s.imageUrl);
           const card = document.createElement('div');
           card.className = 'missing-card';
           card.innerHTML = `
             <div style="display:flex;align-items:center;gap:10px;">
-              <div class="avatar-circle" style="width:38px;height:38px;font-size:14px;box-shadow:none;border:1.5px solid var(--border);">
-                ${url ? `<img src="${esc(url)}" data-ini="${esc(ini)}" onerror="this.onerror=null;this.parentElement.textContent=this.dataset.ini">` : esc(ini)}</div>
+              <div class="avatar-circle ${url ? '' : 'no-photo'}" style="width:38px;height:38px;font-size:14px;box-shadow:none;border:1.5px solid var(--border);">
+                ${url ? `<img src="${esc(url)}" onerror="photoFallback(this)">` : PHOTO_PLACEHOLDER_SVG}</div>
               <div>
                 <div style="font-weight:700;">${esc(name) || 'គ្មានឈ្មោះ'} <span style="font-size:11.5px;color:#ea580c;">(${s.id ? 'អត្តលេខ: ' + esc(s.id) : 'គ្មានអត្តលេខ'})</span></div>
                 <div style="font-size:11.5px;color:var(--text-muted);">${esc(s.grade) || 'មិនទាន់មានថ្នាក់'}</div>
@@ -2067,6 +2114,9 @@
       const q = document.getElementById('searchInput').value.toLowerCase().trim();
 
       const filtered = studentsList.filter(s => {
+        // 🌟 ជួរថ្មី (Draft) បង្ហាញជានិច្ច មិនត្រូវបាត់ដោយសារការស្វែងរក/ត្រង
+        if (s.isDraft) return true;
+
         const matchSearch = !q ||
           (s.name && s.name.toLowerCase().includes(q)) ||
           (s.id && String(s.id).toLowerCase().includes(q));
@@ -2077,7 +2127,7 @@
         if (currentStatusFilter === 'កំពុងសិក្សា' && isDropout) return false;
         if (currentStatusFilter === 'ឈប់រៀន' && !isDropout) return false;
 
-        if (isMissingFilterActive && !s.isDraft) {
+        if (isMissingFilterActive) {
           const missing = getMissingFields(s);
           if (missing.length === 0) return false;
         }
@@ -2114,7 +2164,6 @@
         const parts = fullName.split(/\s+/);
         const lastName = parts[0] || '';
         const firstName = parts.slice(1).join(' ') || '';
-        const initialBadge = firstName ? firstName.charAt(0) : (lastName ? lastName.charAt(0) : 'ក');
 
         const formattedDob = formatToInputDate(s.dob);
         const age = calculateAge(formattedDob);
@@ -2129,10 +2178,13 @@
         const hasMissingAddr = showMissingHighlight && (!s.address || s.address.trim() === '');
         const hasMissingId = showMissingHighlight && (!s.id || String(s.id).trim() === '');
 
+        // 🌟 FIX: បើគ្មានរូបថត → បង្ហាញ placeholder រូបមនុស្សពណ៌ប្រផេះ (មិនមែនអក្សរពណ៌ទឹកក្រូច)
         const photoUrl = safeUrl(s.photoUrl || s.imageUrl);
+        const photoBoxClass = photoUrl ? 'table-photo-box' : 'table-photo-box no-photo';
         const photoImgHtml = photoUrl
-          ? `<img src="${esc(photoUrl)}" data-ini="${esc(initialBadge)}" onerror="this.onerror=null;this.parentElement.textContent=this.dataset.ini">`
-          : esc(initialBadge);
+          ? `<img src="${esc(photoUrl)}" onerror="photoFallback(this)">`
+          : PHOTO_PLACEHOLDER_SVG;
+        const photoTitle = s.isDraft ? 'ចុចដើម្បីជ្រើសរូបថតសិស្ស' : 'ចុចលើរូបដើម្បីមើលប្រវត្តិរូបសិស្ស';
 
         let col1Content, genderContent, actionContent;
 
@@ -2143,8 +2195,8 @@
           `;
           genderContent = `
             <select class="gender-pill gender-dash" data-field="sex" onchange="syncRowInput(this, ${realIdx})">
-              <option value="ស្រី" selected>ស្រី</option>
-              <option value="ប្រុស">ប្រុស</option>
+              <option value="ស្រី" ${isF ? 'selected' : ''}>ស្រី</option>
+              <option value="ប្រុស" ${!isF ? 'selected' : ''}>ប្រុស</option>
             </select>
           `;
           actionContent = `
@@ -2171,7 +2223,7 @@
             <td class="sticky-col-1">${col1Content}</td>
 
             <td class="col-photo">
-              <div class="table-photo-box" onclick="openProfileModal(${realIdx})" title="ចុចលើរូបដើម្បីមើលប្រវត្តិរូបសិស្ស">
+              <div class="${photoBoxClass}" onclick="onTablePhotoClick(${realIdx})" title="${photoTitle}">
                 ${photoImgHtml}
               </div>
             </td>
@@ -2256,7 +2308,7 @@
     }
 
     /* =========================================================
-       🪪 STUDENT BIODATA PROFILE MODAL LOGIC (បង្ហាញតែសិស្សក្នុងថ្នាក់ដែលគ្រូកាន់)
+       🪪 STUDENT BIODATA PROFILE MODAL LOGIC
     ========================================================= */
     let currentProfileSubIdx = 0;
 
@@ -2274,10 +2326,12 @@
 
     function openProfileModal(realIdx) {
       if (realIdx === null || realIdx === undefined || !studentsList[realIdx]) return;
+      // 🌟 FIX: មិនបើកប្រវត្តិរូបសម្រាប់ជួរថ្មីដែលមិនទាន់រក្សាទុក (មុននេះបង្ហាញសិស្សផ្សេងដោយខុស)
+      if (studentsList[realIdx].isDraft) return;
 
       const profileStudents = getFilteredStudentsForProfile();
-      let matchIdx = profileStudents.findIndex(item => item.originalIdx === realIdx);
-      if (matchIdx === -1) matchIdx = 0;
+      const matchIdx = profileStudents.findIndex(item => item.originalIdx === realIdx);
+      if (matchIdx === -1) return; // 🌟 មិនប្រើ 0 ជា fallback ទៀតទេ
 
       currentProfileSubIdx = matchIdx;
       renderProfileModalContent();
@@ -2333,18 +2387,8 @@
       document.getElementById('profileGradeBadge').innerText = s.grade ? (s.grade.startsWith('ថ្នាក់ទី') ? s.grade : `ថ្នាក់ទី: ${s.grade}`) : `ថ្នាក់ទី: ${currentSelectedClass}`;
       document.getElementById('profileGenderBadge').innerText = `ភេទ: ${s.sex || 'ប្រុស'}`;
 
-      const box = document.getElementById('profileAvatarBox');
-      box.textContent = '';
-      const pu = safeUrl(s.photoUrl || s.imageUrl);
-      const initial = name ? (name.split(/\s+/)[1] || name).charAt(0) : 'ក';
-      if (pu) {
-        const im = document.createElement('img');
-        im.src = pu;
-        im.onerror = () => { box.textContent = initial; };
-        box.appendChild(im);
-      } else {
-        box.textContent = initial;
-      }
+      // 🌟 FIX: គ្មានរូប → placeholder
+      setAvatar(document.getElementById('profileAvatarBox'), s.photoUrl || s.imageUrl);
 
       const formattedDob = formatToInputDate(s.dob);
       let dobDisplay = s.dob || '-';
@@ -2410,21 +2454,17 @@
       const parts = fullName.split(/\s+/);
       const lastName = parts[0] || '';
       const firstName = parts.slice(1).join(' ') || '';
-      const initial = firstName ? firstName.charAt(0) : (lastName ? lastName.charAt(0) : 'ក');
 
       document.getElementById('modalHeaderSub').innerText = `${lastName} ${firstName}`.trim() || 'គ្មានឈ្មោះ';
       document.getElementById('modalProfileNameText').innerText = `${lastName} ${firstName}`.trim() || 'គ្មានឈ្មោះ';
 
-      const avatarBox = document.getElementById('modalAvatarBox');
-      avatarBox.textContent = '';
-      const pu = safeUrl(s.photoUrl || s.imageUrl);
-      if (pu) { const img = document.createElement('img'); img.src = pu; img.onerror = () => { avatarBox.textContent = initial; }; avatarBox.appendChild(img); }
-      else avatarBox.textContent = initial;
+      // 🌟 FIX: គ្មានរូប → placeholder
+      setAvatar(document.getElementById('modalAvatarBox'), s.photoUrl || s.imageUrl);
 
       document.getElementById('modalLastName').value = lastName;
       document.getElementById('modalFirstName').value = firstName;
-      document.getElementById('modalStudentId').value = s.id || ''; // 🌟 បង្ហាញអត្តលេខទទេ បើគ្មាន
-      
+      document.getElementById('modalStudentId').value = s.id || '';
+
       const gradeSel = document.getElementById('modalGrade');
       if (s.grade) {
         gradeSel.value = s.grade.startsWith('ថ្នាក់ទី') ? s.grade : `ថ្នាក់ទី${s.grade}`;
@@ -2462,13 +2502,10 @@
       if (file.size > 10 * 1024 * 1024) { alert("ទំហំរូបថតត្រូវតែតូចជាង 10MB!"); return; }
       try {
         modalPhotoBase64 = await compressImageFile(file, 800, 0.85);
-        const box = document.getElementById('modalAvatarBox');
-        box.textContent = '';
-        const im = document.createElement('img'); im.src = modalPhotoBase64; box.appendChild(im);
+        setAvatar(document.getElementById('modalAvatarBox'), modalPhotoBase64);
       } catch (err) { alert(err.message || 'មិនអាចអានរូបនេះបានទេ'); }
     }
 
-    // 🌟 មុខងាររក្សាទុកការកែប្រែក្នុង Modal (Update Modal Data)
     async function saveModalChanges() {
       if (activeRowIndex === null) return;
 
@@ -2480,7 +2517,7 @@
       if (!fullName) { alert("សូមបញ្ចូលឈ្មោះសិស្ស!"); return; }
 
       const s = studentsList[activeRowIndex];
-      s.id = studentId; // 🌟 ទុកជាទទេបាន បើមិនបានបំពេញ
+      s.id = studentId;
       s.studentId = studentId;
       s.name = fullName;
       s.grade = document.getElementById('modalGrade').value;
@@ -2489,12 +2526,12 @@
       s.phone = document.getElementById('modalPhone').value.trim();
       s.pob = document.getElementById('modalPob').value.trim();
       s.address = document.getElementById('modalAddress').value.trim();
-      s.isDraft = false;
       if (modalPhotoBase64) {
         s.photoUrl = modalPhotoBase64;
         s.imageUrl = modalPhotoBase64;
       }
 
+      const wasDraft = !!s.isDraft;
       const saveBtn = document.getElementById('modalSaveBtn');
       saveBtn.disabled = true;
       saveBtn.innerText = '⏳ កំពុងរក្សាទុក...';
@@ -2502,7 +2539,8 @@
       const payload = buildPayload(s);
       let res = null;
 
-      if (s.origId || s.rowNum) {
+      // 🌟 FIX: ជួរ Draft (មិនទាន់នៅលើ Server) ត្រូវ submit មិនមែន update
+      if (!wasDraft && (s.origId || s.rowNum)) {
         res = await apiRequest('updateStudentData', { formData: payload });
         if (!res && lastApiError && (lastApiError.includes('រកមិនឃើញ') || lastApiError.includes('not found'))) {
           res = await apiRequest('submitStudentData', { formData: payload });
@@ -2522,6 +2560,7 @@
         return;
       }
 
+      s.isDraft = false;
       s.origId = s.id || (res.studentId || s.origId);
       if (res.rowNum) s.rowNum = res.rowNum;
       applyFilterAndRender();
@@ -2626,7 +2665,7 @@
 
     function sortStudentsAlphabetical() {
       sortDirectionAsc = !sortDirectionAsc;
-      
+
       studentsList.sort((a, b) => {
         if (a.isDraft && !b.isDraft) return 1;
         if (!a.isDraft && b.isDraft) return -1;
@@ -2691,7 +2730,7 @@
       if (top + menuHeight > window.innerHeight - 10) {
         top = rect.top - menuHeight - 6;
       }
-      
+
       if (top < 10) {
         top = Math.max(10, window.innerHeight - menuHeight - 15);
       }
@@ -2755,12 +2794,14 @@
         if (gender !== 'ប្រុស' && gender !== 'ស្រី') {
           gender = (gender.includes('ប') || gender.toLowerCase().startsWith('m')) ? 'ប្រុស' : 'ស្រី';
         }
-        const sid = tokens[3] || ''; // 🌟 ទុកទទេបើគ្មាន
+        const sid = tokens[3] || '';
         const phone = tokens[4] || '';
 
         list.push({
           id: sid,
           studentId: sid,
+          origId: '',
+          rowNum: null,
           name: `${lName} ${fName}`.trim() || lName,
           sex: gender,
           grade: defGrade,
@@ -2768,6 +2809,8 @@
           pob: '',
           address: '',
           dob: '',
+          photoUrl: '',
+          imageUrl: '',
           isDraft: true,
           _uid: ++uidSeq
         });
@@ -2827,7 +2870,9 @@
             const addr = String(row[7] || '').trim();
 
             list.push({
-              id: sid, studentId: sid, name, sex, dob, phone, pob, address: addr,
+              id: sid, studentId: sid, origId: '', rowNum: null,
+              name, sex, dob, phone, pob, address: addr,
+              photoUrl: '', imageUrl: '',
               grade: defGrade, isDraft: true, _uid: ++uidSeq
             });
           }
@@ -2845,10 +2890,11 @@
 
     function submitImportStudents() {
       if (!pendingImportStudents.length) return;
+      const count = pendingImportStudents.length;
       studentsList = studentsList.concat(pendingImportStudents);
       applyFilterAndRender();
       closeImportModal();
-      showToast(`🎉 បាននាំចូល ${pendingImportStudents.length} នាក់ទៅក្នុងតារាងជោគជ័យ!`);
+      showToast(`🎉 បាននាំចូល ${count} នាក់ទៅក្នុងតារាង! ចុច ✓ ដើម្បីរក្សាទុក`);
       showBottomNavBar();
     }
 
@@ -2879,12 +2925,20 @@
     async function deleteCurrentRow() {
       if (activeRowIndex === null) return;
       const s = studentsList[activeRowIndex];
+      if (!s) return;
       if (!confirm(`តើអ្នកពិតជាចង់លុបសិស្ស «${s.name || s.id}» ចេញពីប្រព័ន្ធមែនទេ?`)) return;
-      if (s.origId) {
-        const res = await apiRequest('deleteStudentData', { studentId: s.origId });
+      // 🌟 FIX: សិស្សដែលគ្មានអត្តលេខ ក៏ត្រូវលុបពី Server ដែរ (ប្រើ rowNum)
+      if (!s.isDraft && (s.origId || s.rowNum)) {
+        const res = await apiRequest('deleteStudentData', {
+          studentId: s.origId || '',
+          originalId: s.origId || '',
+          rowNum: s.rowNum || null,
+          name: s.name || ''
+        });
         if (!res) { alert("❌ លុបមិនបាន៖ " + lastApiError); return; }
       }
       studentsList.splice(activeRowIndex, 1);
+      activeRowIndex = null;
       applyFilterAndRender();
       showToast("បានលុបទិន្នន័យរួចរាល់!");
       notifyParentDataChanged();
