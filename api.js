@@ -1,6 +1,3 @@
-// ==========================================================================
-// 🔗 API CLIENT FOR GITHUB PAGES
-// ==========================================================================
 const BACKEND_API_URL = "https://script.google.com/macros/s/AKfycby4J4X894zcwgJhqw6plF-RehJvATYOGNzUigg1JDHIQMpXXbhiq3-obuuvJsaMEQPI_w/exec";
 const TOKEN_KEY = "school_persistent_token";
 
