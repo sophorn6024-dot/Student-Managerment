@@ -164,7 +164,7 @@
     .btn-sort { background: rgba(124, 58, 237, 0.15); color: #a78bfa; border: 1.5px solid rgba(124, 58, 237, 0.3); }
     .btn-sort.active { background: #7c3aed; color: white; }
     .btn-columns { background: rgba(2, 132, 199, 0.15); color: #38bdf8; border: 1px solid var(--border); }
-    
+
     .btn-excel-export { background: #059669; color: white; }
     .btn-excel-export:hover { background: #047857; }
 
@@ -251,6 +251,7 @@
       background: var(--surface-elevated); color: var(--text); padding: 0 6px; font-size: 12.5px; outline: none; text-align: center;
     }
     .table-input:focus { border-color: #0284c7; box-shadow: 0 0 0 2px rgba(2,132,199,0.2); }
+    .table-input[readonly] { opacity: 0.75; cursor: not-allowed; }
     .input-left { text-align: left; }
 
     .table-photo-box {
@@ -361,7 +362,7 @@
     .profile-close-btn:hover { color: #ef4444; border-color: #ef4444; }
 
     .profile-scroll-body { padding: 18px 22px; overflow-y: auto; display: flex; flex-direction: column; gap: 16px; }
-    
+
     .profile-hero-card {
       background: var(--surface-elevated); border: 1.5px solid var(--border); border-radius: 22px;
       padding: 18px 22px; display: flex; align-items: center; gap: 20px;
@@ -617,6 +618,7 @@
       padding: 10px 18px; border-radius: 12px; font-size: 13px; font-weight: 700;
       box-shadow: 0 10px 25px rgba(0,0,0,0.2); z-index: 99999;
       transform: translateY(-50px); opacity: 0; pointer-events: none; transition: all 0.25s ease;
+      max-width: calc(100vw - 36px);
     }
     .toast-notification.show { transform: translateY(0); opacity: 1; }
 
@@ -684,9 +686,10 @@
     .em-section-icon { width:36px; height:36px; border-radius:11px; background:rgba(2,132,199,.14); color:var(--primary); display:flex; align-items:center; justify-content:center; }
     .em-section-title { font-size:15px; font-weight:800; color:var(--primary); }
     .em-section-body { padding:16px 18px 18px; }
-    .em-box .modal-input { height:48px; border-radius:14px; border:1.5px solid var(--border-subtle); background:var(--surface); font-size:15px; padding:0 14px; display:flex; align-items:center; box-shadow:0 1px 2px rgba(0,0,0,.04); transition:border-color .15s, box-shadow .15s; }
+    .em-box .modal-input { height:48px; border-radius:14px; border:1.5px solid var(--border-subtle); background:var(--surface); font-size:15px; padding:0 14px; display:flex; align-items:center; box-shadow:0 1px 2px rgba(0,0,0,.04); transition:border-color .15s, box-shadow .15s; width:100%; color:var(--text); }
     .em-box .modal-input:focus { border-color:#3b82f6; box-shadow:0 0 0 4px rgba(59,130,246,.2); }
-    .em-box .form-group label { font-size:13.5px; font-weight:600; color:var(--text-muted); margin-bottom:7px; }
+    .em-box .modal-input:disabled { opacity:.75; cursor:not-allowed; }
+    .em-box .form-group label { font-size:13.5px; font-weight:600; color:var(--text-muted); margin-bottom:7px; display:block; }
     .em-req { color:#e11d48; }
     .em-date { gap:10px; cursor:pointer; color:var(--text-muted); }
     .em-date-icon { color:var(--text-muted); display:flex; }
@@ -823,10 +826,10 @@
         <tr>
           <th rowspan="2" class="sticky-col-1"><div class="th-vertical">ល.រ</div></th>
           <th rowspan="2" class="col-photo"><div class="th-vertical">រូបថត</div></th>
-          <th rowspan="2" class="col-id"><div class="th-vertical">អត្តលេខ</div></th>
-          <th rowspan="2" class="sticky-col-2"><div class="th-vertical">គោត្តនាម</div></th>
+          <th rowspan="2" class="col-id"><div class="th-vertical">អត្តលេខ *</div></th>
+          <th rowspan="2" class="sticky-col-2"><div class="th-vertical">គោត្តនាម *</div></th>
           <th rowspan="2" class="sticky-col-3"><div class="th-vertical">នាម</div></th>
-          <th rowspan="2" class="col-gender" style="width: 60px;"><div class="th-vertical">ភេទ</div></th>
+          <th rowspan="2" class="col-gender" style="width: 60px;"><div class="th-vertical">ភេទ *</div></th>
           <th colspan="4" class="th-academic col-info">ព័ត៌មានសិស្ស</th>
           <th colspan="4" class="th-pob-main col-pob">ទីកន្លែងកំណើតសិស្ស</th>
           <th colspan="4" class="th-addr-main col-address">អាសយដ្ឋានបច្ចុប្បន្នសិស្ស</th>
@@ -867,7 +870,7 @@
 
       <div class="import-class-row">
         <span>ថ្នាក់</span>
-        <span class="import-class-tag" id="importClassTag">ថ្នាក់ទី៤(ក)</span>
+        <span class="import-class-tag" id="importClassTag">-</span>
       </div>
 
       <div class="import-tabs-bar">
@@ -886,7 +889,7 @@
               <div class="guide-icon-box">📋</div>
               <div>
                 <div class="guide-title">វាយ ឬបិទភ្ជាប់ មួយនាក់ក្នុងមួយបន្ទាត់</div>
-                <div class="guide-sub">ដកឃ្លា = ក្រឡា ។ ចម្លងជួរពី Excel ក៏បាន ។ ត្រូវការតែ គោត្តនាម នាម ភេទ • សល់បំពេញក្នុងតារាងក្រោយក៏បាន ។</div>
+                <div class="guide-sub">ដកឃ្លា = ក្រឡា ។ ចម្លងជួរពី Excel ក៏បាន ។ ត្រូវការ <b>គោត្តនាម នាម ភេទ និងអត្តលេខ</b> • ប្រសិនបើខ្វះ អាចបំពេញក្នុងតារាងជួរពណ៌ក្រហមបន្ទាប់ ។</div>
               </div>
             </div>
 
@@ -894,7 +897,7 @@
               <div class="num-chip primary"><span class="chip-n">1</span> គោត្តនាម *</div>
               <div class="num-chip primary"><span class="chip-n">2</span> នាម *</div>
               <div class="num-chip primary"><span class="chip-n">3</span> ភេទ *</div>
-              <div class="num-chip"><span class="chip-n">4</span> លេខសិស្ស</div>
+              <div class="num-chip primary"><span class="chip-n">4</span> អត្តលេខ *</div>
               <div class="num-chip"><span class="chip-n">5</span> ទូរស័ព្ទ</div>
               <div class="num-chip"><span class="chip-n">6</span> ឈ្មោះឪពុក</div>
               <div class="num-chip"><span class="chip-n">7</span> ទូរស័ព្ទឪពុក</div>
@@ -902,7 +905,7 @@
               <div class="num-chip"><span class="chip-n">9</span> ទូរស័ព្ទម្តាយ</div>
             </div>
 
-            <textarea class="import-textarea" id="pasteInputText" placeholder="សុខ ចន្ថា ប្រុស&#10;ចាន់ ដារ៉ា ស្រី 012345678&#10;រស់ សុភាព" oninput="onPasteTextInput()"></textarea>
+            <textarea class="import-textarea" id="pasteInputText" placeholder="សុខ ចន្ថា ប្រុស 001&#10;ចាន់ ដារ៉ា ស្រី 002 012345678&#10;រស់ សុភាព ស្រី 003" oninput="onPasteTextInput()"></textarea>
           </div>
         </div>
 
@@ -911,7 +914,7 @@
             <div class="step-number-circle">1</div>
             <div class="step-info">
               <div class="step-title">ទាញយកគំរូ រួចបំពេញឈ្មោះសិស្ស</div>
-              <div class="step-sub">បើមាន file បញ្ជីសិស្សពី PLP រួចហើយ មិនបាច់ទាញយកគំរូទេ ។</div>
+              <div class="step-sub">ត្រូវបំពេញ អត្តលេខ, គោត្តនាម, នាម, ភេទ ។</div>
               <button class="btn-download-tmpl" onclick="downloadExcelTemplate()">
                 <span>📥</span> <span>ទាញយកគំរូ Excel</span>
               </button>
@@ -930,11 +933,6 @@
               <div class="dropzone-cloud">☁️</div>
               <div class="dropzone-title">ចុចទីនេះ ដើម្បីជ្រើស file</div>
               <div class="dropzone-types">.xlsx ឬ .xls</div>
-            </div>
-
-            <div class="plp-note-box">
-              <span>📄</span>
-              <span>មាន file ពី PLP (បញ្ជីសិស្សនាំចេញ ឬគំរូនាំចូលសិស្សរបស់ PLP)? ដាក់ file នោះចូលបានតែម្តង មិនបាច់ចម្លងចូលគំរូទេ ។</span>
             </div>
           </div>
         </div>
@@ -987,7 +985,7 @@
     <button class="bottom-nav-icon-btn" onmousedown="event.preventDefault()" onclick="navigateTable('left')" title="ទៅឆ្វេង">←</button>
     <button class="bottom-nav-btn bottom-nav-primary" onmousedown="event.preventDefault()" onclick="navigateTable('down')">↵ ចុះក្រោម</button>
     <button class="bottom-nav-btn bottom-nav-primary" onmousedown="event.preventDefault()" onclick="navigateTable('right')">→| ទៅមុខ</button>
-    <button class="bottom-nav-icon-btn" onmousedown="event.preventDefault()" style="color:#16a34a; font-size:17px;" onclick="saveAllDraftRows()" title="រក្សាទុក">✓</button>
+    <button class="bottom-nav-icon-btn" onmousedown="event.preventDefault()" style="color:#16a34a; font-size:17px;" onclick="saveAllDraftRows()" title="រក្សាទុកជួរថ្មីទាំងអស់">✓</button>
   </div>
 
   <!-- 💬 POPUP ACTION MENU -->
@@ -1085,14 +1083,14 @@
           <div class="em-section-body">
             <div class="form-row-2">
               <div class="form-group"><label>គោត្តនាម <b class="em-req">*</b></label><input type="text" class="modal-input" id="modalLastName"></div>
-              <div class="form-group"><label>នាម <b class="em-req">*</b></label><input type="text" class="modal-input" id="modalFirstName"></div>
+              <div class="form-group"><label>នាម</label><input type="text" class="modal-input" id="modalFirstName"></div>
             </div>
             <div class="form-row-2">
-              <div class="form-group"><label>អត្តលេខ</label><input type="text" class="modal-input" id="modalStudentId" placeholder="អាចទុកទទេបាន"></div>
+              <div class="form-group"><label>អត្តលេខ <b class="em-req">*</b></label><input type="text" class="modal-input" id="modalStudentId" placeholder="វាយអត្តលេខសិស្ស"></div>
               <div class="form-group"><label>ថ្នាក់ <b class="em-req">*</b></label><select class="modal-input" id="modalGrade"></select></div>
             </div>
             <div class="form-row-2">
-              <div class="form-group"><label>ភេទ</label><select class="modal-input" id="modalGender"><option value="ស្រី">ស្រី</option><option value="ប្រុស">ប្រុស</option></select></div>
+              <div class="form-group"><label>ភេទ <b class="em-req">*</b></label><select class="modal-input" id="modalGender"><option value="">— ជ្រើសភេទ —</option><option value="ស្រី">ស្រី</option><option value="ប្រុស">ប្រុស</option></select></div>
               <div class="form-group">
                 <label>ថ្ងៃខែឆ្នាំកំណើត <span id="modalAgeDisplay" class="em-age">អាយុ: -</span></label>
                 <div class="modal-input em-date" id="modalDobTrigger" onclick="openKhmerCalendarForModal(event)">
@@ -1133,7 +1131,8 @@
     const USER_CLASS = parentVar('ASSIGNED_CLASS') || localStorage.getItem('krou_assigned_class') || localStorage.getItem('krou_user_class') || "";
     const IS_ADMIN = String(USER_ROLE).toLowerCase().trim() === 'admin';
 
-    let currentSelectedClass = USER_CLASS ? USER_CLASS.replace(/^ថ្នាក់ទី\s*/, '').trim() : '៤(ក)';
+    // គ្រូ៖ ថ្នាក់ត្រូវបានចាក់សោតាមការចាត់តាំង / Admin៖ ជ្រើសបាន (ទទេ = គ្រប់ថ្នាក់)
+    let currentSelectedClass = USER_CLASS ? String(USER_CLASS).replace(/^ថ្នាក់ទី\s*/, '').trim() : '';
     let availableClassesList = ['១', '២', '៣', '៤(ក)', '៤(ខ)', '៥', '៦'];
     let studentsList = [];
     // លេខសំណើសមកាលកម្ម៖ ការពារលទ្ធផលថ្នាក់ចាស់មកសរសេរជំនួសថ្នាក់ថ្មី
@@ -1147,6 +1146,7 @@
     let searchDebounceTimer = null;
     let autoSaveTimers = {};
     let sortDirectionAsc = false;
+    let isSavingDrafts = false;
 
     let pendingImportStudents = [];
     let activeImportTab = 'paste';
@@ -1203,6 +1203,52 @@
     function escParts(p) { const o = {}; for (const k in p) o[k] = esc(p[k]); return o; }
 
     /* =========================================================
+       🛡️ ឧបករណ៍ផ្ទៀងផ្ទាត់ (អត្តលេខ + ឈ្មោះ + ភេទ + ថ្នាក់ ជាចាំបាច់)
+    ========================================================= */
+    function normalizeGenderFront(v) {
+      const g = String(v ?? '').trim().toLowerCase();
+      if (!g) return '';
+      if (g === 'ស្រី' || g === 'ស' || g === 'f' || g === 'female' || g === 'girl') return 'ស្រី';
+      if (g === 'ប្រុស' || g === 'ប' || g === 'm' || g === 'male' || g === 'boy') return 'ប្រុស';
+      if (g.indexOf('ស្រី') !== -1) return 'ស្រី';
+      if (g.indexOf('ប្រុស') !== -1) return 'ប្រុស';
+      return '';
+    }
+
+    function getDefaultGrade() {
+      return currentSelectedClass ? `ថ្នាក់ទី${currentSelectedClass}` : '';
+    }
+
+    function getEffectiveGrade(s) {
+      // គ្រូ៖ ប្រើថ្នាក់ខ្លួនជានិច្ច (Server ក៏បង្ខំដែរ)
+      if (!IS_ADMIN) return currentSelectedClass ? `ថ្នាក់ទី${currentSelectedClass}` : '';
+      return String(s.grade || '').trim() || getDefaultGrade();
+    }
+
+    function validateStudent(s) {
+      const err = {}, msgs = [];
+      if (!String(s.id ?? '').trim()) { err.id = true; msgs.push('អត្តលេខ'); }
+      if (!String(s.name ?? '').trim()) { err.name = true; msgs.push('ឈ្មោះ'); }
+      if (!normalizeGenderFront(s.sex || s.gender)) { err.sex = true; msgs.push('ភេទ'); }
+      if (!getEffectiveGrade(s)) { err.grade = true; msgs.push('ថ្នាក់'); }
+      return { ok: msgs.length === 0, err: err, msg: msgs.length ? ('សូមបំពេញ៖ ' + msgs.join(', ')) : '' };
+    }
+
+    function ensureClassReadyForAdd() {
+      if (!IS_ADMIN && !currentSelectedClass) {
+        alert("គណនីរបស់អ្នកមិនទាន់ត្រូវបានចាត់តាំងថ្នាក់ទេ។ សូមទាក់ទងអ្នកគ្រប់គ្រង។");
+        return false;
+      }
+      if (IS_ADMIN && !currentSelectedClass) {
+        alert("សូមជ្រើសរើសថ្នាក់ជាមុនសិន (នៅប្រអប់ថ្នាក់ខាងលើ) មុននឹងបន្ថែមសិស្ស។");
+        return false;
+      }
+      return true;
+    }
+
+    function isDuplicateError(msg) { return /រួចហើយ/.test(String(msg || '')); }
+
+    /* =========================================================
        🌐 API REQUEST ENGINE
     ========================================================= */
     async function apiRequest(action, payload = {}) {
@@ -1214,27 +1260,23 @@
             headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: body
           });
           const text = await response.text();
-          
+
           if (/^\s*</.test(text)) {
             lastApiError = 'Server ត្រឡប់ទំព័រ Login/HTML — សូមពិនិត្យមើល Web App Deployment (ត្រូវដាក់ Anyone)';
             return null;
           }
 
           let j = null;
-          try { 
-            j = JSON.parse(text); 
-          } catch (pe) { 
-            if (/ជោគជ័យ|success|ok|true/i.test(text)) {
-              lastApiError = '';
-              return { success: true, message: text };
-            }
-            lastApiError = text.slice(0, 160); 
-            return null; 
+          try {
+            j = JSON.parse(text);
+          } catch (pe) {
+            lastApiError = text.slice(0, 160);
+            return null;
           }
 
-          if (j && (j.success === false || j.status === 'error')) { 
-            lastApiError = j.error || j.message || 'កំហុសពី Server'; 
-            return null; 
+          if (j && (j.success === false || j.status === 'error')) {
+            lastApiError = j.error || j.message || 'កំហុសពី Server';
+            return null;
           }
 
           lastApiError = '';
@@ -1290,9 +1332,10 @@
       });
     }
 
-    function showToast(msg) {
+    function showToast(msg, isError) {
       const toast = document.getElementById('toastNotification');
       toast.innerText = msg;
+      toast.style.background = isError ? '#dc2626' : '#16a34a';
       toast.classList.add('show');
       setTimeout(() => toast.classList.remove('show'), 3500);
     }
@@ -1302,6 +1345,7 @@
       initClassFilterDropdown();
       initKhmerCalendarComponent();
       initArrowKeyVisibilityEvents();
+      if (!TOKEN) showToast("⚠️ មិនមាន Token ចូលប្រើ — សូមចូលប្រើប្រព័ន្ធម្ដងទៀត", true);
     });
 
     function renderRoleBadge() {
@@ -1319,7 +1363,7 @@
         const displayClassName = currentSelectedClass || 'មិនទាន់កំណត់';
         container.innerHTML = `
           <div class="teacher-class-pill" title="ថ្នាក់ដែលបានចាត់តាំង">
-            <span>🏫</span> <span>ថ្នាក់ទី ${displayClassName}</span>
+            <span>🏫</span> <span>ថ្នាក់ទី ${esc(displayClassName)}</span>
           </div>
         `;
         populateModalClassSelect(availableClassesList);
@@ -1373,9 +1417,14 @@
 
       const list = (Array.isArray(classes) && classes.length) ? classes : availableClassesList;
 
-      if (!IS_ADMIN && currentSelectedClass) {
-        modalSelect.innerHTML = `<option value="ថ្នាក់ទី${esc(currentSelectedClass)}">ថ្នាក់ទី ${esc(currentSelectedClass)}</option>`;
-        modalSelect.disabled = false;
+      // 🏫 គ្រូ៖ ជ្រើសបានតែថ្នាក់ខ្លួន
+      if (!IS_ADMIN) {
+        if (currentSelectedClass) {
+          modalSelect.innerHTML = `<option value="ថ្នាក់ទី${esc(currentSelectedClass)}">ថ្នាក់ទី ${esc(currentSelectedClass)}</option>`;
+        } else {
+          modalSelect.innerHTML = `<option value="">មិនទាន់កំណត់ថ្នាក់</option>`;
+        }
+        modalSelect.disabled = true;
         return;
       }
 
@@ -1416,6 +1465,7 @@
         apiRequest('getClassList'),
         apiRequest('getStudentRosterByClass', { className: requestedClass })
       ]);
+      const rosterErr = lastApiError;
 
       // ប្រសិនបើអ្នកប្រើបានប្ដូរថ្នាក់ ខណៈសំណើចាស់កំពុងរង់ចាំ សូមមិនយកលទ្ធផលចាស់មកបង្ហាញ។
       const latestClass = String(currentSelectedClass || '').replace(/^ថ្នាក់ទី\s*/, '').trim();
@@ -1428,8 +1478,9 @@
       }
 
       if (!Array.isArray(rosterRes)) {
-        setSyncStatusBadge("⚠️ " + (lastApiError || 'ក្រៅបណ្ដាញ'), "#ea580c");
-        if (showLoadingRow) tbody.innerHTML = `<tr><td colspan="18" class="status-row">⚠️ ${esc(lastApiError || 'ទាញទិន្នន័យមិនបាន')}</td></tr>`;
+        const em = rosterErr || lastApiError || 'ក្រៅបណ្ដាញ';
+        setSyncStatusBadge("⚠️ " + em, "#ea580c");
+        if (showLoadingRow) tbody.innerHTML = `<tr><td colspan="18" class="status-row">⚠️ ${esc(em || 'ទាញទិន្នន័យមិនបាន')}</td></tr>`;
         return;
       }
 
@@ -1445,7 +1496,7 @@
           id: sid,
           studentId: sid,
           name: fullName,
-          sex: s.sex || s.gender || s['ភេទ'] || 'ស្រី',
+          sex: s.sex || s.gender || s['ភេទ'] || '',
           dob: formatToInputDate(rawDob),
           photoUrl: photo,
           imageUrl: photo,
@@ -1461,7 +1512,7 @@
     function refreshDataForce() { syncWithBackendParallel(true); }
 
     /* =========================================================
-       🚀 មុខងារ UPDATE & AUTO-SAVE (កែលម្អមិនឱ្យបាត់បង់ទិន្នន័យ)
+       🚀 មុខងារ UPDATE & AUTO-SAVE
     ========================================================= */
     function triggerAutoSave(realIdx) {
       const s = studentsList[realIdx];
@@ -1473,10 +1524,12 @@
     }
 
     function buildPayload(s) {
-      const sid = String(s.id || s.studentId || '').trim();
-      const orig = String(s.origId || sid).trim();
-      const currentGrade = s.grade || (currentSelectedClass ? `ថ្នាក់ទី${currentSelectedClass}` : 'ថ្នាក់ទី៤(ក)');
-      const clsName = currentSelectedClass || (currentGrade ? currentGrade.replace(/^ថ្នាក់ទី\s*/, '').trim() : '');
+      // 🔧 ប្រើ ?? ដើម្បីកុំឱ្យអត្តលេខចាស់ត្រឡប់មកវិញ ពេលអ្នកប្រើលុបអត្តលេខចេញ
+      const sid = String(s.id ?? s.studentId ?? '').trim();
+      const orig = String(s.origId ?? sid).trim();
+      const currentGrade = getEffectiveGrade(s);
+      const clsName = currentGrade ? currentGrade.replace(/^ថ្នាក់ទី\s*/, '').trim() : '';
+      const gender = normalizeGenderFront(s.sex || s.gender);
 
       return {
         rowNum: s.rowNum || s.rowIndex || null,
@@ -1484,8 +1537,8 @@
         studentId: sid,
         id: sid,
         name: (s.name || '').trim(),
-        gender: s.sex || s.gender || 'ស្រី',
-        sex: s.sex || s.gender || 'ស្រី',
+        gender: gender,
+        sex: gender,
         dob: s.dob || '',
         grade: currentGrade,
         className: clsName,
@@ -1501,26 +1554,27 @@
     }
 
     async function executeAutoSaveRow(s) {
-      if (!s || !s.name) return;
-      const payload = buildPayload(s);
-      let res = null;
+      if (!s || s.isDraft) return;
+      const v = validateStudent(s);
+      if (!v.ok) {
+        setSyncStatusBadge("⚠️ " + v.msg, "#ef4444");
+        showToast("⚠️ មិនទាន់រក្សាទុក៖ " + v.msg, true);
+        return;
+      }
 
-      // បើជាសិស្សមានក្នុងប្រព័ន្ធស្រាប់ (Update)
-      if (s.origId || s.rowNum || !s.isDraft) {
-        res = await apiRequest('updateStudentData', { formData: payload });
-        // បើ update មិនឃើញ ទើបសាកល្បង submit
-        if (!res && lastApiError && (lastApiError.includes('រកមិនឃើញ') || lastApiError.includes('not found'))) {
-          res = await apiRequest('submitStudentData', { formData: payload });
-        }
-      } else {
+      const payload = buildPayload(s);
+      let res = await apiRequest('updateStudentData', { formData: payload });
+      let err = lastApiError;
+
+      // បើជួរនេះមិនមានលើ Server ទៀតទេ (ត្រូវបានលុបពីកន្លែងផ្សេង) ទើបបង្កើតថ្មី
+      if (!res && /រកមិនឃើញសិស្ស/.test(err)) {
         res = await apiRequest('submitStudentData', { formData: payload });
-        if (!res && lastApiError && (lastApiError.includes('មានរួចហើយ') || lastApiError.includes('ស្ទួន'))) {
-          res = await apiRequest('updateStudentData', { formData: payload });
-        }
+        err = lastApiError;
       }
 
       if (res) {
         s.origId = s.id || (res.studentId || s.origId);
+        s.studentId = s.id;
         if (res.rowNum) s.rowNum = res.rowNum;
         s.isDraft = false;
         if (s.photoUrl && s.photoUrl.startsWith('data:image')) syncWithBackendParallel(false);
@@ -1528,7 +1582,13 @@
         notifyParentDataChanged();
       } else {
         setSyncStatusBadge("⚠️ រក្សាទុកមិនបាន", "#ef4444");
-        showToast("⚠️ " + (lastApiError || 'រក្សាទុកមិនបាន'));
+        showToast("⚠️ " + (err || 'រក្សាទុកមិនបាន'), true);
+        // អត្តលេខស្ទួន ➜ ត្រឡប់អត្តលេខចាស់វិញ
+        if (isDuplicateError(err) && s.origId && s.id !== s.origId) {
+          s.id = s.origId;
+          s.studentId = s.origId;
+          applyFilterAndRender();
+        }
       }
     }
 
@@ -1574,6 +1634,17 @@
       return '';
     }
 
+    // Excel ផ្ញើថ្ងៃខែជាលេខសៀរៀល (ឧ. 42000) ➜ បម្លែងត្រឹមត្រូវ
+    function excelCellToIsoDate(v) {
+      if (typeof v === 'number' && v > 20000 && v < 80000) {
+        const d = new Date(Math.round((v - 25569) * 86400 * 1000));
+        if (!isNaN(d.getTime())) {
+          return `${d.getUTCFullYear()}-${String(d.getUTCMonth() + 1).padStart(2, '0')}-${String(d.getUTCDate()).padStart(2, '0')}`;
+        }
+      }
+      return formatToInputDate(v || '');
+    }
+
     function calculateAge(dobStr) {
       if (!dobStr) return '';
       const standardDateStr = formatToInputDate(dobStr);
@@ -1604,7 +1675,7 @@
       if (parts.length === 4) return { village: parts[0], commune: parts[1], district: parts[2], province: parts[3] };
       if (parts.length === 3) return { village: '', commune: parts[0], district: parts[1], province: parts[2] };
       if (parts.length === 2) return { village: '', commune: '', district: parts[0], province: parts[1] };
-      
+
       const words = (parts[0] || '').split(/\s+/).filter(Boolean);
       if (words.length >= 4) {
         return {
@@ -1806,19 +1877,20 @@
     }
 
     /* =========================================================
-       ➕ បន្ថែមជួរថ្មី (អត្តលេខចេញទទេស្អាត)
+       ➕ បន្ថែមជួរថ្មី (អត្តលេខ + ភេទ ទទេ ឱ្យអ្នកប្រើវាយខ្លួនឯង)
     ========================================================= */
     async function addNewRow() {
-      const defaultGrade = currentSelectedClass ? `ថ្នាក់ទី${currentSelectedClass}` : 'ថ្នាក់ទី៤(ក)';
+      if (!ensureClassReadyForAdd()) return;
+
       studentsList.push({
         isDraft: true,
-        id: '', 
+        id: '',
         studentId: '',
         origId: '',
         name: '',
-        sex: 'ស្រី',
+        sex: '',
         dob: '',
-        grade: defaultGrade,
+        grade: getDefaultGrade(),
         phone: '',
         pob: '',
         address: '',
@@ -1835,69 +1907,146 @@
         tableContainer.scrollTop = tableContainer.scrollHeight;
         const tr = document.querySelector(`#tableBody tr[data-index="${studentsList.length - 1}"]`);
         if (tr) {
-          const lNameInp = tr.querySelector('input[data-field="lastName"]');
-          if (lNameInp) lNameInp.focus();
+          const idInp = tr.querySelector('input[data-field="id"]');
+          if (idInp) idInp.focus();
         }
       }, 80);
     }
 
+    // អានតម្លៃពី DOM ចូល object (សម្រាប់ជួរថ្មី)
+    function syncDraftFromDom(realIdx) {
+      const s = studentsList[realIdx];
+      if (!s) return;
+      const tr = document.querySelector(`#tableBody tr[data-index="${realIdx}"]`);
+      if (!tr) return;
+      const data = {};
+      tr.querySelectorAll('[data-field]').forEach(inp => data[inp.dataset.field] = inp.value.trim());
+
+      s.id = data.id || '';
+      s.studentId = s.id;
+      s.name = `${data.lastName || ''} ${data.firstName || ''}`.trim();
+      s.sex = data.sex !== undefined ? data.sex : (s.sex || '');
+      s.grade = data.grade || s.grade || getDefaultGrade();
+      s.phone = data.phone !== undefined ? data.phone : (s.phone || '');
+      s.pob = joinAddressParts(data.pob_village, data.pob_commune, data.pob_district, data.pob_province);
+      s.address = joinAddressParts(data.addr_village, data.addr_commune, data.addr_district, data.addr_province);
+    }
+
     async function saveDraftRow(realIdx) {
       const s = studentsList[realIdx];
-      if (!s) return false;
+      if (!s || isSavingDrafts) return false;
 
-      const tr = document.querySelector(`#tableBody tr[data-index="${realIdx}"]`);
-      if (tr) {
-        const inputs = tr.querySelectorAll('[data-field]');
-        let data = {};
-        inputs.forEach(inp => data[inp.dataset.field] = inp.value.trim());
+      syncDraftFromDom(realIdx);
+      const v = validateStudent(s);
+      if (!v.ok) {
+        s._err = v.err;
+        applyFilterAndRender();
+        showToast("⚠️ " + v.msg, true);
+        return false;
+      }
+      s._err = null;
 
-        s.id = data.id || '';
-        const lName = data.lastName || '';
-        const fName = data.firstName || '';
-        s.name = `${lName} ${fName}`.trim() || s.name || '';
-        s.sex = data.sex || s.sex || 'ស្រី';
-        s.grade = data.grade || s.grade || (currentSelectedClass ? `ថ្នាក់ទី${currentSelectedClass}` : 'ថ្នាក់ទី៤(ក)');
-        s.phone = data.phone || s.phone || '';
-        s.pob = joinAddressParts(data.pob_village, data.pob_commune, data.pob_district, data.pob_province);
-        s.address = joinAddressParts(data.addr_village, data.addr_commune, data.addr_district, data.addr_province);
+      isSavingDrafts = true;
+      setSyncStatusBadge("💾 កំពុងរក្សាទុក...", "#f59e0b");
+      const res = await apiRequest('submitStudentData', { formData: buildPayload(s) });
+      const err = lastApiError;
+      isSavingDrafts = false;
+
+      if (!res) {
+        setSyncStatusBadge("⚠️ រក្សាទុកមិនបាន", "#ef4444");
+        if (isDuplicateError(err)) { s._err = { id: true }; applyFilterAndRender(); }
+        alert("❌ ការរក្សាទុកបរាជ័យ៖ " + (err || 'ពិនិត្យ Server'));
+        return false;
       }
 
-      if (!s.name) { alert("⚠️ សូមបញ្ចូល «គោត្តនាម» ឬ «នាម» របស់សិស្ស!"); return false; }
-
-      const payload = buildPayload(s);
-      let res = await apiRequest('submitStudentData', { formData: payload });
-      if (!res && lastApiError && (lastApiError.includes('មានរួចហើយ') || lastApiError.includes('ស្ទួន'))) {
-        res = await apiRequest('updateStudentData', { formData: payload });
-      }
-
-      if (!res) { 
-        alert("❌ ការរក្សាទុកបរាជ័យ៖ " + (lastApiError || 'ពិនិត្យ Server')); 
-        return false; 
-      }
-
-      s.isDraft = false; 
-      s.origId = s.id || (res && res.studentId) || s.origId;
-      if (res && res.rowNum) s.rowNum = res.rowNum;
+      s.isDraft = false;
+      s.origId = s.id;
+      if (res.rowNum) s.rowNum = res.rowNum;
 
       applyFilterAndRender();
       showToast(`🎉 បានរក្សាទុកសិស្ស «${s.name}» ជោគជ័យ!`);
+      setSyncStatusBadge("⚡ រក្សាទុករួចរាល់", "#16a34a");
       notifyParentDataChanged();
       syncWithBackendParallel(false);
+      if (!studentsList.some(x => x.isDraft)) hideBottomNavBar();
       return true;
     }
 
+    // 🚀 រក្សាទុកជួរថ្មីទាំងអស់ (ប្រើ bulk ពេលមាន ≥២ នាក់ ដើម្បីលឿន និងមិនគាំង Server)
     async function saveAllDraftRows() {
-      let saved = 0;
-      for (let i = 0; i < studentsList.length; i++) {
-        if (studentsList[i].isDraft) {
-          const ok = await saveDraftRow(i);
-          if (ok) saved++;
+      if (isSavingDrafts) return;
+      const idxs = [];
+      studentsList.forEach((s, i) => { if (s.isDraft) idxs.push(i); });
+      if (!idxs.length) { showToast("គ្មានជួរថ្មីត្រូវរក្សាទុក"); return; }
+
+      idxs.forEach(i => syncDraftFromDom(i));
+
+      const valid = [], invalid = [];
+      idxs.forEach(i => {
+        const s = studentsList[i];
+        const v = validateStudent(s);
+        if (v.ok) { s._err = null; valid.push(s); }
+        else { s._err = v.err; invalid.push(s); }
+      });
+
+      if (!valid.length) {
+        applyFilterAndRender();
+        showToast("⚠️ " + validateStudent(invalid[0]).msg + " (ជួរពណ៌ក្រហម)", true);
+        return;
+      }
+
+      isSavingDrafts = true;
+      setSyncStatusBadge("💾 កំពុងរក្សាទុក...", "#f59e0b");
+
+      const saved = new Set();
+      const problems = [];
+
+      const hasPhoto = (s) => !!(s.photoUrl && s.photoUrl.startsWith('data:image'));
+      let bulkList = valid.filter(s => !hasPhoto(s));
+      let singleList = valid.filter(s => hasPhoto(s));
+      if (bulkList.length < 2) { singleList = singleList.concat(bulkList); bulkList = []; }
+
+      try {
+        if (bulkList.length) {
+          const res = await apiRequest('bulkSubmitStudents', { students: bulkList.map(buildPayload) });
+          const err = lastApiError;
+          if (!res) {
+            problems.push('❌ រក្សាទុកជាក្រុមមិនបាន៖ ' + (err || 'ពិនិត្យ Server'));
+          } else {
+            const skipped = Array.isArray(res.skipped) ? res.skipped : [];
+            const skippedNames = skipped.map(x => String(x.name || '').trim());
+            skipped.forEach(x => problems.push(`• ${x.name || '(គ្មានឈ្មោះ)'} — ${x.reason}`));
+            bulkList.forEach(s => {
+              if (skippedNames.indexOf(String(s.name || '').trim()) === -1) saved.add(s);
+              else s._err = { id: true };
+            });
+          }
         }
+
+        for (const s of singleList) {
+          const res = await apiRequest('submitStudentData', { formData: buildPayload(s) });
+          const err = lastApiError;
+          if (res) saved.add(s);
+          else { problems.push(`• ${s.name} — ${err || 'រក្សាទុកមិនបាន'}`); if (isDuplicateError(err)) s._err = { id: true }; }
+        }
+      } finally {
+        isSavingDrafts = false;
       }
-      if (saved > 0) {
-        showToast(`🎉 បានរក្សាទុក ${saved} នាក់ជោគជ័យ!`);
-        hideBottomNavBar();
+
+      if (saved.size) {
+        studentsList = studentsList.filter(s => !saved.has(s));
+        notifyParentDataChanged();
+        showToast(`🎉 បានរក្សាទុក ${saved.size} នាក់ជោគជ័យ!`);
+        setSyncStatusBadge("⚡ រក្សាទុករួចរាល់", "#16a34a");
+        await syncWithBackendParallel(false);
+      } else {
+        applyFilterAndRender();
+        setSyncStatusBadge("⚠️ រក្សាទុកមិនបាន", "#ef4444");
       }
+
+      if (invalid.length) problems.push(`• មាន ${invalid.length} ជួរ ខ្វះ អត្តលេខ/ឈ្មោះ/ភេទ/ថ្នាក់ (ជួរពណ៌ក្រហម)`);
+      if (problems.length) alert("⚠️ ជួរខ្លះមិនទាន់បានរក្សាទុក៖\n\n" + problems.join('\n'));
+      if (!studentsList.some(x => x.isDraft)) hideBottomNavBar();
     }
 
     function syncRowInput(input, realIdx) {
@@ -1906,7 +2055,7 @@
       const field = input.dataset.field;
       const val = input.value.trim();
 
-      if (field === 'id') s.id = val;
+      if (field === 'id') { s.id = val; s.studentId = val; }
       if (field === 'lastName' || field === 'firstName') {
         const tr = input.closest('tr');
         const lName = tr.querySelector('input[data-field="lastName"]').value.trim();
@@ -1937,13 +2086,20 @@
         );
       }
 
+      // 🔧 អត្តលេខ៖ រក្សាទុកតែពេលចេញពីប្រអប់ (onchange) កុំរក្សាទុករាល់តួអក្សរ
+      if (field === 'id') return;
+      triggerAutoSave(realIdx);
+    }
+
+    function commitRowId(input, realIdx) {
+      syncRowInput(input, realIdx);
       triggerAutoSave(realIdx);
     }
 
     function cancelDraftRow(realIdx) {
       studentsList.splice(realIdx, 1);
       applyFilterAndRender();
-      hideBottomNavBar();
+      if (!studentsList.some(x => x.isDraft)) hideBottomNavBar();
     }
 
     function showBottomNavBar() {
@@ -1981,7 +2137,7 @@
           const activeEl = document.activeElement;
           const isInTable = activeEl && activeEl.closest('#tableBody');
           const isInBottomBar = activeEl && activeEl.closest('#bottomNavBar');
-          if (!isInTable && !isInBottomBar) hideBottomNavBar();
+          if (!isInTable && !isInBottomBar && !studentsList.some(x => x.isDraft)) hideBottomNavBar();
         }, 120);
       });
     }
@@ -2008,6 +2164,7 @@
       const missing = [];
       if (!s.id) missing.push('អត្តលេខ');
       if (!s.name) missing.push('ឈ្មោះ');
+      if (!normalizeGenderFront(s.sex)) missing.push('ភេទ');
       if (!s.dob) missing.push('ថ្ងៃខែឆ្នាំកំណើត');
       if (!s.phone) missing.push('លេខទូរស័ព្ទ');
       if (!s.pob) missing.push('ទីកន្លែងកំណើត');
@@ -2072,6 +2229,9 @@
       const q = document.getElementById('searchInput').value.toLowerCase().trim();
 
       const filtered = studentsList.filter(s => {
+        // ជួរថ្មី (Draft) បង្ហាញជានិច្ច ដើម្បីកុំឱ្យបាត់ពេលកំពុងវាយ
+        if (s.isDraft) return true;
+
         const matchSearch = !q ||
           (s.name && s.name.toLowerCase().includes(q)) ||
           (s.id && String(s.id).toLowerCase().includes(q));
@@ -2082,7 +2242,7 @@
         if (currentStatusFilter === 'កំពុងសិក្សា' && isDropout) return false;
         if (currentStatusFilter === 'ឈប់រៀន' && !isDropout) return false;
 
-        if (isMissingFilterActive && !s.isDraft) {
+        if (isMissingFilterActive) {
           const missing = getMissingFields(s);
           if (missing.length === 0) return false;
         }
@@ -2111,8 +2271,10 @@
       for (let i = 0; i < list.length; i++) {
         const s = list[i];
         const realIdx = studentsList.indexOf(s);
+        const errs = s._err || {};
 
-        const isF = (s.sex || '').indexOf('ស្រី') !== -1;
+        const gv = normalizeGenderFront(s.sex);
+        const isF = gv === 'ស្រី';
         if (isF) femaleCount++;
 
         const fullName = (s.name || '').trim();
@@ -2132,37 +2294,40 @@
         const hasMissingPhone = showMissingHighlight && (!s.phone || String(s.phone).trim() === '');
         const hasMissingPob = showMissingHighlight && (!s.pob || s.pob.trim() === '');
         const hasMissingAddr = showMissingHighlight && (!s.address || s.address.trim() === '');
-        const hasMissingId = showMissingHighlight && (!s.id || String(s.id).trim() === '');
+        const hasMissingId = (showMissingHighlight && (!s.id || String(s.id).trim() === '')) || !!errs.id;
+        const hasMissingName = (showMissingHighlight && !lastName) || !!errs.name;
+        const hasMissingSex = (showMissingHighlight && !gv) || !!errs.sex;
+        const hasMissingGrade = !!errs.grade;
 
         const photoUrl = safeUrl(s.photoUrl || s.imageUrl);
         const photoImgHtml = photoUrl
           ? `<img src="${esc(photoUrl)}" data-ini="${esc(initialBadge)}" onerror="this.onerror=null;this.parentElement.textContent=this.dataset.ini">`
           : esc(initialBadge);
 
-        let col1Content, genderContent, actionContent;
+        let col1Content, actionContent;
+
+        // ជម្រើសភេទ (មានជម្រើសទទេ បើមិនទាន់ជ្រើស)
+        const genderOptions = `
+          ${!gv ? '<option value="" selected>— ភេទ —</option>' : ''}
+          <option value="ស្រី" ${gv === 'ស្រី' ? 'selected' : ''}>ស្រី</option>
+          <option value="ប្រុស" ${gv === 'ប្រុស' ? 'selected' : ''}>ប្រុស</option>`;
+        const genderClass = gv === 'ស្រី' ? 'gender-f' : (gv === 'ប្រុស' ? 'gender-m' : 'gender-dash');
+        const genderContent = `
+          <select class="gender-pill ${genderClass} ${hasMissingSex ? 'cell-missing' : ''}" data-field="sex"
+            onchange="this.className='gender-pill '+(this.value==='ស្រី'?'gender-f':(this.value==='ប្រុស'?'gender-m':'gender-dash')); syncRowInput(this, ${realIdx})">
+            ${genderOptions}
+          </select>`;
 
         if (s.isDraft) {
           col1Content = `
             <span style="font-weight:700; margin-right:3px;">${i + 1}</span>
             <button class="btn-cancel-draft" onclick="cancelDraftRow(${realIdx})" title="បោះបង់">✕</button>
           `;
-          genderContent = `
-            <select class="gender-pill gender-dash" data-field="sex" onchange="syncRowInput(this, ${realIdx})">
-              <option value="ស្រី" selected>ស្រី</option>
-              <option value="ប្រុស">ប្រុស</option>
-            </select>
-          `;
           actionContent = `
             <button class="btn-save-row-now" onclick="saveDraftRow(${realIdx})" title="ចុចរក្សាទុកជួរនេះ (Enter)">💾 រក្សាទុក</button>
           `;
         } else {
           col1Content = `<span style="font-weight:700;">${i + 1}</span>`;
-          genderContent = `
-            <select class="gender-pill ${isF ? 'gender-f' : 'gender-m'}" data-field="sex" onchange="this.className='gender-pill '+(this.value==='ស្រី'?'gender-f':'gender-m'); syncRowInput(this, ${realIdx})">
-              <option value="ស្រី" ${isF ? 'selected' : ''}>ស្រី</option>
-              <option value="ប្រុស" ${!isF ? 'selected' : ''}>ប្រុស</option>
-            </select>
-          `;
           actionContent = `
             <div class="action-icons">
               <button class="btn-circle" title="ប្រវត្តិ" onclick="viewHistory(${realIdx})">🕒</button>
@@ -2182,10 +2347,10 @@
             </td>
 
             <td class="col-id">
-              <input type="text" class="table-input ${hasMissingId ? 'cell-missing' : ''}" value="${esc(s.id)}" data-field="id" oninput="syncRowInput(this, ${realIdx})" placeholder="អត្តលេខ">
+              <input type="text" class="table-input ${hasMissingId ? 'cell-missing' : ''}" value="${esc(s.id)}" data-field="id" oninput="syncRowInput(this, ${realIdx})" onchange="commitRowId(this, ${realIdx})" placeholder="អត្តលេខ *">
             </td>
             <td class="sticky-col-2">
-              <input type="text" class="table-input input-left ${showMissingHighlight && !lastName ? 'cell-missing' : ''}" value="${esc(lastName)}" data-field="lastName" style="font-weight:700;" oninput="syncRowInput(this, ${realIdx})" placeholder="គោត្តនាម">
+              <input type="text" class="table-input input-left ${hasMissingName ? 'cell-missing' : ''}" value="${esc(lastName)}" data-field="lastName" style="font-weight:700;" oninput="syncRowInput(this, ${realIdx})" placeholder="គោត្តនាម *">
             </td>
             <td class="sticky-col-3">
               <input type="text" class="table-input input-left ${showMissingHighlight && !firstName ? 'cell-missing' : ''}" value="${esc(firstName)}" data-field="firstName" style="font-weight:700;" oninput="syncRowInput(this, ${realIdx})" placeholder="នាម">
@@ -2198,7 +2363,7 @@
               </div>
             </td>
             <td class="col-info"><span class="age-text" style="font-weight:700;">${age}</span></td>
-            <td class="col-info"><input type="text" class="table-input" value="${esc(s.grade)}" data-field="grade" oninput="syncRowInput(this, ${realIdx})"></td>
+            <td class="col-info"><input type="text" class="table-input ${hasMissingGrade ? 'cell-missing' : ''}" value="${esc(s.grade)}" data-field="grade" ${IS_ADMIN ? '' : 'readonly title="គ្រូមិនអាចប្តូរថ្នាក់បានទេ"'} oninput="syncRowInput(this, ${realIdx})"></td>
             <td class="col-info">
               <input type="tel" class="table-input ${hasMissingPhone ? 'cell-missing' : ''}" value="${esc(s.phone)}" data-field="phone" oninput="syncRowInput(this, ${realIdx})">
             </td>
@@ -2319,6 +2484,7 @@
         clsSel.disabled = true;
       } else {
         clsSel.disabled = false;
+        clsSel.innerHTML = `<option value="" ${!currentSelectedClass ? 'selected' : ''}>គ្រប់ថ្នាក់</option>`;
         availableClassesList.forEach(cls => {
           let val = (typeof cls === 'object' && cls !== null) ? (cls.className || cls.name) : cls;
           val = String(val).replace(/^ថ្នាក់ទី\s*/, '').trim();
@@ -2335,8 +2501,8 @@
       const name = (s.name || '').trim();
       document.getElementById('profileHeroName').innerText = name || 'គ្មានឈ្មោះ';
       document.getElementById('profileIdBadge').innerText = `អត្តលេខ: ${s.id || '-'}`;
-      document.getElementById('profileGradeBadge').innerText = s.grade ? (s.grade.startsWith('ថ្នាក់ទី') ? s.grade : `ថ្នាក់ទី: ${s.grade}`) : `ថ្នាក់ទី: ${currentSelectedClass}`;
-      document.getElementById('profileGenderBadge').innerText = `ភេទ: ${s.sex || 'ប្រុស'}`;
+      document.getElementById('profileGradeBadge').innerText = s.grade ? (String(s.grade).startsWith('ថ្នាក់ទី') ? s.grade : `ថ្នាក់ទី: ${s.grade}`) : `ថ្នាក់ទី: ${currentSelectedClass || '-'}`;
+      document.getElementById('profileGenderBadge').innerText = `ភេទ: ${s.sex || '-'}`;
 
       const box = document.getElementById('profileAvatarBox');
       box.textContent = '';
@@ -2382,6 +2548,7 @@
     }
 
     function onProfileClassChange() {
+      if (!IS_ADMIN) return;
       const val = document.getElementById('profileClassSelect').value;
       currentSelectedClass = val;
       const classFilterSel = document.getElementById('classFilterSelect');
@@ -2428,16 +2595,18 @@
 
       document.getElementById('modalLastName').value = lastName;
       document.getElementById('modalFirstName').value = firstName;
-      document.getElementById('modalStudentId').value = s.id || ''; // 🌟 បង្ហាញអត្តលេខទទេ បើគ្មាន
-      
+      document.getElementById('modalStudentId').value = s.id || '';
+
       const gradeSel = document.getElementById('modalGrade');
-      if (s.grade) {
-        gradeSel.value = s.grade.startsWith('ថ្នាក់ទី') ? s.grade : `ថ្នាក់ទី${s.grade}`;
-      } else if (currentSelectedClass) {
-        gradeSel.value = `ថ្នាក់ទី${currentSelectedClass}`;
+      if (IS_ADMIN) {
+        if (s.grade) {
+          gradeSel.value = String(s.grade).startsWith('ថ្នាក់ទី') ? s.grade : `ថ្នាក់ទី${s.grade}`;
+        } else if (currentSelectedClass) {
+          gradeSel.value = `ថ្នាក់ទី${currentSelectedClass}`;
+        }
       }
 
-      document.getElementById('modalGender').value = s.sex || 'ស្រី';
+      document.getElementById('modalGender').value = normalizeGenderFront(s.sex);
 
       const formattedDob = formatToInputDate(s.dob);
       const dobText = document.getElementById('modalDobText');
@@ -2476,20 +2645,28 @@
     // 🌟 មុខងាររក្សាទុកការកែប្រែក្នុង Modal
     async function saveModalChanges() {
       if (activeRowIndex === null) return;
+      const s = studentsList[activeRowIndex];
+      if (!s) return;
 
       const lastName = document.getElementById('modalLastName').value.trim();
       const firstName = document.getElementById('modalFirstName').value.trim();
       const fullName = `${lastName} ${firstName}`.trim();
-      let studentId = document.getElementById('modalStudentId').value.trim();
+      const studentId = document.getElementById('modalStudentId').value.trim();
+      const gender = document.getElementById('modalGender').value;
+      const grade = IS_ADMIN ? document.getElementById('modalGrade').value : getDefaultGrade();
 
-      if (!fullName) { alert("សូមបញ្ចូលឈ្មោះសិស្ស!"); return; }
+      // ផ្ទៀងផ្ទាត់មុនប៉ះ object (កុំឱ្យទិន្នន័យខូចបើមិនត្រឹមត្រូវ)
+      const candidate = { id: studentId, name: fullName, sex: gender, grade: grade };
+      const v = validateStudent(candidate);
+      if (!v.ok) { alert("⚠️ " + v.msg); return; }
 
-      const s = studentsList[activeRowIndex];
+      const backup = { ...s };
+
       s.id = studentId;
       s.studentId = studentId;
       s.name = fullName;
-      s.grade = document.getElementById('modalGrade').value;
-      s.sex = document.getElementById('modalGender').value;
+      s.grade = grade;
+      s.sex = gender;
       s.dob = formatToInputDate(document.getElementById('modalDobText').dataset.rawDate);
       s.phone = document.getElementById('modalPhone').value.trim();
       s.pob = document.getElementById('modalPob').value.trim();
@@ -2505,31 +2682,28 @@
       saveBtn.innerText = '⏳ កំពុងរក្សាទុក...';
 
       const payload = buildPayload(s);
-      let res = null;
-
-      if (s.origId || s.rowNum) {
-        res = await apiRequest('updateStudentData', { formData: payload });
-        if (!res && lastApiError && (lastApiError.includes('រកមិនឃើញ') || lastApiError.includes('not found'))) {
-          res = await apiRequest('submitStudentData', { formData: payload });
-        }
-      } else {
+      let res = await apiRequest('updateStudentData', { formData: payload });
+      let err = lastApiError;
+      if (!res && /រកមិនឃើញសិស្ស/.test(err)) {
         res = await apiRequest('submitStudentData', { formData: payload });
-        if (!res && lastApiError && (lastApiError.includes('មានរួចហើយ') || lastApiError.includes('ស្ទួន'))) {
-          res = await apiRequest('updateStudentData', { formData: payload });
-        }
+        err = lastApiError;
       }
 
       saveBtn.disabled = false;
       saveBtn.innerText = '💾 រក្សាទុកការកែប្រែ';
 
       if (!res) {
-        alert("❌ រក្សាទុកបរាជ័យ៖ " + (lastApiError || 'ពិនិត្យ Server'));
+        // ត្រឡប់ទិន្នន័យចាស់វិញ ព្រោះ Server មិនបានទទួល
+        Object.keys(s).forEach(k => delete s[k]);
+        Object.assign(s, backup);
+        applyFilterAndRender();
+        alert("❌ រក្សាទុកបរាជ័យ៖ " + (err || 'ពិនិត្យ Server'));
         return;
       }
 
-      s.origId = s.id || (res.studentId || s.origId);
+      s.origId = s.id;
       if (res.rowNum) s.rowNum = res.rowNum;
-      
+
       applyFilterAndRender();
       closeEditModal();
       showToast(`🎉 បានកែប្រែព័ត៌មានសិស្ស «${s.name}» ជោគជ័យ!`);
@@ -2582,7 +2756,7 @@
           s.id || '',
           lName,
           fName,
-          s.sex || s.gender || 'ស្រី',
+          s.sex || s.gender || '',
           formattedDob || s.dob || '',
           age || '',
           s.grade || (currentSelectedClass ? `ថ្នាក់ទី${currentSelectedClass}` : ''),
@@ -2632,7 +2806,7 @@
 
     function sortStudentsAlphabetical() {
       sortDirectionAsc = !sortDirectionAsc;
-      
+
       studentsList.sort((a, b) => {
         if (a.isDraft && !b.isDraft) return 1;
         if (!a.isDraft && b.isDraft) return -1;
@@ -2715,9 +2889,10 @@
        📥 IMPORT MODAL LOGIC (បិទភ្ជាប់ ឬ Excel)
     ========================================================= */
     function openImportModal() {
+      if (!ensureClassReadyForAdd()) return;
       pendingImportStudents = [];
       const tag = document.getElementById('importClassTag');
-      if (tag) tag.innerText = currentSelectedClass ? `ថ្នាក់ទី${currentSelectedClass}` : 'ថ្នាក់ទី៤(ក)';
+      if (tag) tag.innerText = currentSelectedClass ? `ថ្នាក់ទី${currentSelectedClass}` : '-';
       document.getElementById('pasteInputText').value = '';
       updateImportSubmitBtn();
       document.getElementById('importModalOverlay').style.display = 'flex';
@@ -2746,7 +2921,7 @@
 
       const lines = txt.split('\n');
       const list = [];
-      const defGrade = currentSelectedClass ? `ថ្នាក់ទី${currentSelectedClass}` : 'ថ្នាក់ទី៤(ក)';
+      const defGrade = getDefaultGrade();
 
       lines.forEach(line => {
         line = line.trim();
@@ -2756,20 +2931,23 @@
 
         const lName = tokens[0] || '';
         const fName = tokens[1] || '';
-        let gender = tokens[2] || 'ស្រី';
-        if (gender !== 'ប្រុស' && gender !== 'ស្រី') {
-          gender = (gender.includes('ប') || gender.toLowerCase().startsWith('m')) ? 'ប្រុស' : 'ស្រី';
-        }
-        const sid = tokens[3] || ''; // អនុញ្ញាតឱ្យទទេ
-        const phone = tokens[4] || '';
+        // ភេទត្រូវតែស្គាល់ច្បាស់ ទើបយកអត្តលេខ/ទូរស័ព្ទបន្ទាប់ (មិនទាយភេទទេ)
+        const gender = normalizeGenderFront(tokens[2]);
+        const sid = gender ? (tokens[3] || '') : '';
+        const phone = gender ? (tokens[4] || '') : '';
+        const father = gender ? (tokens[5] || '') : '';
+        const mother = gender ? (tokens[7] || '') : '';
 
         list.push({
           id: sid,
           studentId: sid,
+          origId: '',
           name: `${lName} ${fName}`.trim() || lName,
           sex: gender,
           grade: defGrade,
           phone: phone,
+          father: father,
+          mother: mother,
           pob: '',
           address: '',
           dob: '',
@@ -2792,8 +2970,8 @@
     function downloadExcelTemplate() {
       const headers = ["អត្តលេខ", "គោត្តនាម", "នាម", "ភេទ", "ថ្ងៃខែឆ្នាំកំណើត", "ទូរស័ព្ទ", "ទីកន្លែងកំណើត", "អាសយដ្ឋានបច្ចុប្បន្ន"];
       const sample = [
-        ["", "សុខ", "ចន្ថា", "ប្រុស", "2015-02-14", "012345678", "ភ្នំពេញ", "ភ្នំពេញ"],
-        ["", "ចាន់", "ដារ៉ា", "ស្រី", "2015-05-20", "098765432", "កណ្តាល", "កណ្តាល"]
+        ["001", "សុខ", "ចន្ថា", "ប្រុស", "2015-02-14", "012345678", "ភ្នំពេញ", "ភ្នំពេញ"],
+        ["002", "ចាន់", "ដារ៉ា", "ស្រី", "2015-05-20", "098765432", "កណ្តាល", "កណ្តាល"]
       ];
       const ws = XLSX.utils.aoa_to_sheet([headers, ...sample]);
       const wb = XLSX.utils.book_new();
@@ -2811,28 +2989,28 @@
           const data = new Uint8Array(e.target.result);
           const workbook = XLSX.read(data, { type: 'array' });
           const firstSheet = workbook.Sheets[workbook.SheetNames[0]];
-          const json = XLSX.utils.sheet_to_json(firstSheet, { header: 1 });
+          const json = XLSX.utils.sheet_to_json(firstSheet, { header: 1, raw: true });
           if (!json.length) { alert("File គ្មានទិន្នន័យ!"); return; }
 
-          const defGrade = currentSelectedClass ? `ថ្នាក់ទី${currentSelectedClass}` : 'ថ្នាក់ទី៤(ក)';
+          const defGrade = getDefaultGrade();
           const list = [];
           for (let i = 1; i < json.length; i++) {
             const row = json[i];
             if (!row || !row.length) continue;
-            const sid = String(row[0] || '').trim(); // អនុញ្ញាតឱ្យទទេ
-            const lName = String(row[1] || '').trim();
-            const fName = String(row[2] || '').trim();
-            const name = `${lName} ${fName}`.trim() || String(row[1] || '').trim();
+            const sid = String(row[0] ?? '').trim();
+            const lName = String(row[1] ?? '').trim();
+            const fName = String(row[2] ?? '').trim();
+            const name = `${lName} ${fName}`.trim();
             if (!name) continue;
 
-            const sex = String(row[3] || '').includes('ប') ? 'ប្រុស' : 'ស្រី';
-            const dob = formatToInputDate(row[4] || '');
-            const phone = String(row[5] || '').trim();
-            const pob = String(row[6] || '').trim();
-            const addr = String(row[7] || '').trim();
+            const sex = normalizeGenderFront(row[3]);
+            const dob = excelCellToIsoDate(row[4]);
+            const phone = String(row[5] ?? '').trim();
+            const pob = String(row[6] ?? '').trim();
+            const addr = String(row[7] ?? '').trim();
 
             list.push({
-              id: sid, studentId: sid, name, sex, dob, phone, pob, address: addr,
+              id: sid, studentId: sid, origId: '', name, sex, dob, phone, pob, address: addr,
               grade: defGrade, isDraft: true, _uid: ++uidSeq
             });
           }
@@ -2848,13 +3026,24 @@
       reader.readAsArrayBuffer(file);
     }
 
-    function submitImportStudents() {
+    // នាំចូលចូលតារាង ហើយរក្សាទុកភ្លាម បើទិន្នន័យគ្រប់ (អត្តលេខ+ឈ្មោះ+ភេទ)
+    async function submitImportStudents() {
       if (!pendingImportStudents.length) return;
-      studentsList = studentsList.concat(pendingImportStudents);
-      applyFilterAndRender();
+      const imported = pendingImportStudents.slice();
+      studentsList = studentsList.concat(imported);
       closeImportModal();
-      showToast(`🎉 បាននាំចូល ${pendingImportStudents.length} នាក់ទៅក្នុងតារាងជោគជ័យ!`);
+      applyFilterAndRender();
       showBottomNavBar();
+
+      const allValid = imported.every(s => validateStudent(s).ok);
+      if (allValid) {
+        showToast(`កំពុងរក្សាទុក ${imported.length} នាក់...`);
+        await saveAllDraftRows();
+      } else {
+        imported.forEach(s => { const v = validateStudent(s); s._err = v.ok ? null : v.err; });
+        applyFilterAndRender();
+        showToast(`បាននាំចូល ${imported.length} នាក់ ➜ សូមបំពេញអត្តលេខ/ភេទ ក្នុងជួរពណ៌ក្រហម រួចចុច ✓ ដើម្បីរក្សាទុក`, true);
+      }
     }
 
     /* =========================================================
@@ -2889,9 +3078,9 @@
     async function deleteCurrentRow() {
       if (activeRowIndex === null) return;
       const s = studentsList[activeRowIndex];
+      if (!s) return;
       if (!confirm(`តើអ្នកពិតជាចង់លុបសិស្ស «${s.name || s.id || 'សិស្សនេះ'}» ចេញពីប្រព័ន្ធមែនទេ?`)) return;
-      
-      // 🌟 កែប្រែ៖ បញ្ជូន rowNum និង name ទៅកាន់ Server ដើម្បីលុប (ទោះបីគ្មានអត្តលេខក៏ដោយ)
+
       if (s.origId || s.rowNum || !s.isDraft) {
         const payload = {
           rowNum: s.rowNum,
@@ -2901,11 +3090,13 @@
         const res = await apiRequest('deleteStudentData', payload);
         if (!res) { alert("❌ លុបមិនបាន៖ " + (lastApiError || "មានបញ្ហាជាមួយ Server")); return; }
       }
-      
+
       studentsList.splice(activeRowIndex, 1);
       applyFilterAndRender();
       showToast("បានលុបទិន្នន័យរួចរាល់!");
       notifyParentDataChanged();
+      // លេខជួរក្នុង Sheet ផ្លាស់ប្តូរក្រោយលុប ➜ ទាញទិន្នន័យថ្មី
+      syncWithBackendParallel(false);
     }
   </script>
 </body>
