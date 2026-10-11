@@ -170,7 +170,7 @@
     .btn-sort.active { background: #7c3aed; color: white; }
     .btn-columns { background: rgba(2, 132, 199, 0.15); color: #38bdf8; border: 1px solid var(--border); }
     
-    /* 🌟 ប៊ូតុង ទាញយក Excel ថ្មី */
+    /* 🌟 ប៊ូតុង ទាញយក Excel */
     .btn-excel-export { background: #059669; color: white; }
     .btn-excel-export:hover { background: #047857; }
 
@@ -807,7 +807,7 @@
         <label class="col-option"><input type="checkbox" checked onchange="toggleColumn('col-address', this.checked)"> អាសយដ្ឋានបច្ចុប្បន្ន</label>
       </div>
 
-      <!-- 🌟 ប្ដូរទៅជាប៊ូតុង «ទាញយក Excel» តាមការស្នើសុំ -->
+      <!-- 🌟 ប៊ូតុង «ទាញយក Excel» -->
       <button class="btn-action btn-excel-export" id="exportExcelBtn" onclick="exportStudentsToExcel()" title="ទាញយកបញ្ជីឈ្មោះសិស្សជា File Excel">
         <span>📊</span> <span>ទាញយក Excel</span>
       </button>
@@ -1003,10 +1003,9 @@
     <div class="action-item delete" onclick="deleteCurrentRow()"><span>🗑️</span> លុបទិន្នន័យ</div>
   </div>
 
-  <!-- 🪪 STUDENT BIODATA PROFILE MODAL (បង្ហាញតែសិស្សក្នុងថ្នាក់ដែលគ្រូកាន់) -->
+  <!-- 🪪 STUDENT BIODATA PROFILE MODAL -->
   <div class="profile-modal-overlay" id="profileModalOverlay">
     <div class="profile-modal-card" id="profileModalCard">
-      <!-- របារខាងលើ -->
       <div class="profile-modal-topbar">
         <div class="profile-nav-group">
           <select class="profile-pill-select" id="profileClassSelect" onchange="onProfileClassChange()"></select>
@@ -1019,79 +1018,45 @@
         </div>
       </div>
 
-      <!-- តួប្រវត្តិរូប -->
       <div class="profile-scroll-body">
-        <!-- Hero Card -->
         <div class="profile-hero-card">
           <div class="profile-avatar-box" id="profileAvatarBox">
             <span id="profileAvatarInitial">ក</span>
           </div>
           <div>
-            <div class="profile-hero-name" id="profileHeroName">ខន សុខឃេម</div>
+            <div class="profile-hero-name" id="profileHeroName">ឈ្មោះសិស្ស</div>
             <div class="profile-badges-row">
-              <span class="profile-badge" id="profileIdBadge">អត្តលេខ: 578</span>
-              <span class="profile-badge" id="profileGradeBadge">ថ្នាក់ទី: ៤(ក)</span>
-              <span class="profile-badge" id="profileGenderBadge">ភេទ: ប្រុស</span>
+              <span class="profile-badge" id="profileIdBadge">អត្តលេខ: -</span>
+              <span class="profile-badge" id="profileGradeBadge">ថ្នាក់ទី: -</span>
+              <span class="profile-badge" id="profileGenderBadge">ភេទ: -</span>
             </div>
           </div>
         </div>
 
-        <!-- ព័ត៌មានផ្ទាល់ខ្លួន -->
         <div class="profile-section-card">
           <div class="profile-section-title">
             <span>👤</span> <span>ព័ត៌មានផ្ទាល់ខ្លួនសិស្ស</span>
           </div>
-          <div class="profile-info-row">
-            <span class="profile-label">ថ្ងៃខែឆ្នាំកំណើត៖</span>
-            <span class="profile-value" id="profileDobValue">-</span>
-          </div>
-          <div class="profile-info-row">
-            <span class="profile-label">អាយុសិស្ស៖</span>
-            <span class="profile-value" id="profileAgeValue">-</span>
-          </div>
-          <div class="profile-info-row">
-            <span class="profile-label">លេខទូរស័ព្ទ៖</span>
-            <span class="profile-value" id="profilePhoneValue">-</span>
-          </div>
-          <div class="profile-info-row">
-            <span class="profile-label">ទីកន្លែងកំណើត៖</span>
-            <span class="profile-value" id="profilePobValue">-</span>
-          </div>
-          <div class="profile-info-row">
-            <span class="profile-label">អាសយដ្ឋានបច្ចុប្បន្ន៖</span>
-            <span class="profile-value" id="profileAddressValue">-</span>
-          </div>
+          <div class="profile-info-row"><span class="profile-label">ថ្ងៃខែឆ្នាំកំណើត៖</span><span class="profile-value" id="profileDobValue">-</span></div>
+          <div class="profile-info-row"><span class="profile-label">អាយុសិស្ស៖</span><span class="profile-value" id="profileAgeValue">-</span></div>
+          <div class="profile-info-row"><span class="profile-label">លេខទូរស័ព្ទ៖</span><span class="profile-value" id="profilePhoneValue">-</span></div>
+          <div class="profile-info-row"><span class="profile-label">ទីកន្លែងកំណើត៖</span><span class="profile-value" id="profilePobValue">-</span></div>
+          <div class="profile-info-row"><span class="profile-label">អាសយដ្ឋានបច្ចុប្បន្ន៖</span><span class="profile-value" id="profileAddressValue">-</span></div>
         </div>
 
-        <!-- ព័ត៌មានឪពុកម្តាយ -->
         <div class="profile-section-card">
           <div class="profile-section-title">
             <span>👨‍👩‍👧</span> <span>ព័ត៌មានឪពុកម្តាយ / អាណាព្យាបាល</span>
           </div>
-          <div class="profile-info-row">
-            <span class="profile-label">ឈ្មោះឪពុក៖</span>
-            <span class="profile-value" id="profileFatherValue">-</span>
-          </div>
-          <div class="profile-info-row">
-            <span class="profile-label">មុខរបរឪពុក៖</span>
-            <span class="profile-value" id="profileFatherJobValue">-</span>
-          </div>
-          <div class="profile-info-row">
-            <span class="profile-label">ឈ្មោះម្តាយ៖</span>
-            <span class="profile-value" id="profileMotherValue">-</span>
-          </div>
-          <div class="profile-info-row">
-            <span class="profile-label">មុខរបរម្តាយ៖</span>
-            <span class="profile-value" id="profileMotherJobValue">-</span>
-          </div>
+          <div class="profile-info-row"><span class="profile-label">ឈ្មោះឪពុក៖</span><span class="profile-value" id="profileFatherValue">-</span></div>
+          <div class="profile-info-row"><span class="profile-label">មុខរបរឪពុក៖</span><span class="profile-value" id="profileFatherJobValue">-</span></div>
+          <div class="profile-info-row"><span class="profile-label">ឈ្មោះម្តាយ៖</span><span class="profile-value" id="profileMotherValue">-</span></div>
+          <div class="profile-info-row"><span class="profile-label">មុខរបរម្តាយ៖</span><span class="profile-value" id="profileMotherJobValue">-</span></div>
         </div>
       </div>
 
-      <!-- របារខាងក្រោម -->
       <div class="profile-modal-footer">
-        <button type="button" class="btn-print-profile" onclick="window.print()">
-          <span>🖨️</span> <span>បោះពុម្ពប្រវត្តិរូប</span>
-        </button>
+        <button type="button" class="btn-print-profile" onclick="window.print()"><span>🖨️</span> <span>បោះពុម្ពប្រវត្តិរូប</span></button>
         <button type="button" class="btn-close-profile" onclick="closeProfileModal()">បិទ</button>
       </div>
     </div>
@@ -1129,7 +1094,7 @@
               <div class="form-group"><label>នាម <b class="em-req">*</b></label><input type="text" class="modal-input" id="modalFirstName"></div>
             </div>
             <div class="form-row-2">
-              <div class="form-group"><label>លេខសិស្ស</label><input type="text" class="modal-input" id="modalStudentId" placeholder="ទុកទទេដើម្បីបង្កើតស្វ័យប្រវត្តិ"></div>
+              <div class="form-group"><label>អត្តលេខ</label><input type="text" class="modal-input" id="modalStudentId" placeholder="បញ្ចូលអត្តលេខ"></div>
               <div class="form-group"><label>ថ្នាក់ <b class="em-req">*</b></label><select class="modal-input" id="modalGrade"></select></div>
             </div>
             <div class="form-row-2">
@@ -1291,88 +1256,18 @@
       return null;
     }
 
-    /* 🩺 DIAGNOSTICS */
-    async function diagFetch(label, init) {
-      const t0 = Date.now();
-      const ctrl = new AbortController();
-      const timer = setTimeout(() => ctrl.abort(), 20000);
-      try {
-        const r = await fetch(BACKEND_URL, Object.assign({}, init, { signal: ctrl.signal }));
-        const txt = await r.text();
-        clearTimeout(timer);
-        let note = txt.slice(0, 160);
-        if (txt.includes('រកមិនឃើញសិស្ស អត្តលេខ «__diag_no_such_id__»')) {
-          note = '{"success":true,"message":"Server ទទួល POST សរសេរ និងត្រួតពិនិត្យ Sheet បានយ៉ាងល្អ!"}';
-        }
-        return `✅ ${label}: HTTP ${r.status} • ${Date.now() - t0}ms\n    ${note}`;
-      } catch (e) {
-        clearTimeout(timer);
-        const why = (e && e.name === 'AbortError') ? 'អស់ពេល (>20 វិនាទី)' : `${e && e.name}: ${e && e.message}`;
-        return `❌ ${label}: ${why} • ${Date.now() - t0}ms`;
-      }
-    }
-
-    function getDiagPanel() {
-      let ov = document.getElementById('diagOverlay');
-      if (!ov) {
-        ov = document.createElement('div');
-        ov.id = 'diagOverlay';
-        ov.style.cssText = 'position:fixed;inset:0;z-index:100000;background:rgba(0,0,0,.7);display:flex;align-items:center;justify-content:center;padding:12px;';
-        ov.innerHTML = `
-          <div style="background:var(--surface);color:var(--text);border:1.5px solid var(--border);border-radius:16px;max-width:640px;width:100%;max-height:88vh;display:flex;flex-direction:column;overflow:hidden;">
-            <div style="padding:12px 16px;font-weight:800;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;">
-              <span>🩺 លទ្ធផលពិនិត្យ Server</span>
-              <button id="diagClose" style="border:none;background:none;color:var(--text);font-size:18px;cursor:pointer;">✕</button>
-            </div>
-            <pre id="diagText" style="padding:14px 16px;overflow:auto;white-space:pre-wrap;word-break:break-word;font-size:12.5px;line-height:1.6;flex:1;"></pre>
-            <div style="padding:10px 16px;border-top:1px solid var(--border);display:flex;gap:8px;justify-content:flex-end;">
-              <button id="diagCopy" class="modal-btn modal-btn-cancel">📋 ចម្លង</button>
-              <button id="diagOk" class="modal-btn modal-btn-save">បិទ</button>
-            </div>
-          </div>`;
-        document.body.appendChild(ov);
-        const close = () => { ov.style.display = 'none'; };
-        ov.querySelector('#diagClose').onclick = close;
-        ov.querySelector('#diagOk').onclick = close;
-        ov.querySelector('#diagCopy').onclick = () => {
-          try { navigator.clipboard.writeText(ov.querySelector('#diagText').innerText).then(() => showToast('📋 បានចម្លង')); }
-          catch (e) { showToast('ចម្លងមិនបាន'); }
-        };
-      }
-      ov.style.display = 'flex';
-      return ov.querySelector('#diagText');
-    }
-
     async function runDiagnostics() {
       const btn = document.getElementById('diagBtn');
       btn.disabled = true;
-      const out = getDiagPanel();
-      const lines = [];
-      const render = (extra) => { out.textContent = lines.join('\n\n') + (extra ? '\n\n' + extra : ''); };
-      lines.push(`តេស្តប្រព័ន្ធ: Token: ${TOKEN ? 'មាន' : '❌ គ្មាន'} • Role: ${USER_ROLE} • ថ្នាក់: ${currentSelectedClass || '-'}`);
-      render('⏳ កំពុងសាកល្បង...');
-
-      const post = (obj) => ({ method: 'POST', mode: 'cors', redirect: 'follow',
-        headers: { 'Content-Type': 'text/plain;charset=utf-8' }, body: JSON.stringify(obj) });
-      const tests = [
-        ['1) GET (ពិនិត្យដំណើរការ API)', { method: 'GET', mode: 'cors', redirect: 'follow' }],
-        ['2) POST អានបញ្ជីថ្នាក់ (getClassList)', post({ action: 'getClassList', token: TOKEN })],
-        ['3) POST សរសេរ (តេស្តឆ្លើយតប)', post({ action: 'updateStudentData', token: TOKEN,
-          formData: { originalId: '__diag_no_such_id__', studentId: '__diag_no_such_id__' } })]
-      ];
-      for (const [label, init] of tests) {
-        lines.push(await diagFetch(label, init));
-        render('⏳ កំពុងសាកល្បង...');
+      try {
+        const res = await apiRequest('getClassList');
+        if (res) showToast("✅ ការតភ្ជាប់ទៅកាន់ Server ដំណើរការល្អ!");
+        else alert("❌ កំហុស Server៖ " + (lastApiError || 'មិនស្គាល់'));
+      } catch (e) {
+        alert("❌ មិនអាចតភ្ជាប់ Server បានទេ");
+      } finally {
+        btn.disabled = false;
       }
-      const failed = lines.filter(line => line.startsWith('❌'));
-      const postLines = lines.filter(line => line.includes('POST'));
-      const postReachable = postLines.some(line => line.startsWith('✅'));
-      if (failed.length === 0 && postReachable) {
-        render('✅ តេស្ត HTTP បានទទួលការឆ្លើយតបពី Server។');
-      } else {
-        render('❌ មានតេស្តភ្ជាប់មិនបាន។ សូមពិនិត្យ BACKEND_URL និងសិទ្ធិ Anyone។');
-      }
-      btn.disabled = false;
     }
 
     function compressImageFile(file, maxSide, quality) {
@@ -1561,7 +1456,7 @@
     function refreshDataForce() { syncWithBackendParallel(true); }
 
     /* =========================================================
-       🚀 AUTO-SAVE ENGINE
+       🚀 មុខងារ UPDATE & AUTO-SAVE (កែលម្អមិនឱ្យបាត់បង់ទិន្នន័យ)
     ========================================================= */
     function triggerAutoSave(realIdx) {
       const s = studentsList[realIdx];
@@ -1569,13 +1464,11 @@
       s._uid = s._uid || ++uidSeq;
       setSyncStatusBadge("💾 កំពុងរក្សាទុក...", "#f59e0b");
       clearTimeout(autoSaveTimers[s._uid]);
-      autoSaveTimers[s._uid] = setTimeout(() => executeAutoSaveRow(s), 800);
+      autoSaveTimers[s._uid] = setTimeout(() => executeAutoSaveRow(s), 1000);
     }
 
+    // 🌟 កែសម្រួល៖ មិនបង្កើតលេខចៃដន្យ ST... ឡើយ (ទុកនៅទទេបើមិនបានបំពេញ)
     function buildPayload(s) {
-      if (!s.id || !String(s.id).trim()) {
-        s.id = 'ST' + Math.floor(100000 + Math.random() * 900000);
-      }
       const sid = String(s.id || s.studentId || '').trim();
       const orig = String(s.origId || sid).trim();
       const currentGrade = s.grade || (currentSelectedClass ? `ថ្នាក់ទី${currentSelectedClass}` : 'ថ្នាក់ទី៤(ក)');
@@ -1585,6 +1478,7 @@
         rowNum: s.rowNum || s.rowIndex || null,
         originalId: orig,
         studentId: sid,
+        id: sid,
         name: (s.name || '').trim(),
         gender: s.sex || s.gender || 'ស្រី',
         sex: s.sex || s.gender || 'ស្រី',
@@ -1594,17 +1488,24 @@
         phone: (s.phone || '').trim(),
         pob: (s.pob || '').trim(),
         address: (s.address || '').trim(),
+        father: (s.father || s.fatherName || '').trim(),
+        fatherJob: (s.fatherJob || '').trim(),
+        mother: (s.mother || s.motherName || '').trim(),
+        motherJob: (s.motherJob || '').trim(),
         photoFile: s.photoUrl && s.photoUrl.startsWith('data:image') ? { base64: s.photoUrl } : null
       };
     }
 
+    // 🌟 ពិនិត្យ និងកែលម្អការ Update ទៅ Server
     async function executeAutoSaveRow(s) {
       if (!s || !s.name) return;
       const payload = buildPayload(s);
       let res = null;
 
-      if (s.origId) {
+      // បើជាសិស្សមានក្នុងប្រព័ន្ធស្រាប់ (Update)
+      if (s.origId || s.rowNum || !s.isDraft) {
         res = await apiRequest('updateStudentData', { formData: payload });
+        // បើ update មិនឃើញ ទើបសាកល្បង submit
         if (!res && lastApiError && (lastApiError.includes('រកមិនឃើញ') || lastApiError.includes('not found'))) {
           res = await apiRequest('submitStudentData', { formData: payload });
         }
@@ -1616,7 +1517,8 @@
       }
 
       if (res) {
-        s.origId = s.id;
+        s.origId = s.id || (res.studentId || s.origId);
+        if (res.rowNum) s.rowNum = res.rowNum;
         s.isDraft = false;
         if (s.photoUrl && s.photoUrl.startsWith('data:image')) syncWithBackendParallel(false);
         setSyncStatusBadge("⚡ រក្សាទុករួចរាល់", "#16a34a");
@@ -1901,15 +1803,14 @@
     }
 
     /* =========================================================
-       ➕ ADD / SAVE ROW DRAFT
+       ➕ បន្ថែមជួរថ្មី (អត្តលេខចេញទទេស្អាត)
     ========================================================= */
     async function addNewRow() {
       const defaultGrade = currentSelectedClass ? `ថ្នាក់ទី${currentSelectedClass}` : 'ថ្នាក់ទី៤(ក)';
-      const autoId = 'ST' + Math.floor(100000 + Math.random() * 900000);
       studentsList.push({
         isDraft: true,
-        id: autoId,
-        studentId: autoId,
+        id: '', // 🌟 ចេញទទេតាមការស្នើសុំ
+        studentId: '',
         origId: '',
         name: '',
         sex: 'ស្រី',
@@ -1947,7 +1848,7 @@
         let data = {};
         inputs.forEach(inp => data[inp.dataset.field] = inp.value.trim());
 
-        s.id = data.id || s.id || ('ST' + Math.floor(100000 + Math.random() * 900000));
+        s.id = data.id || '';
         const lName = data.lastName || '';
         const fName = data.firstName || '';
         s.name = `${lName} ${fName}`.trim() || s.name || '';
@@ -1972,7 +1873,7 @@
       }
 
       s.isDraft = false; 
-      s.origId = s.id;
+      s.origId = s.id || (res && res.studentId) || s.origId;
       applyFilterAndRender();
       showToast(`🎉 បានរក្សាទុកសិស្ស «${s.name}» ជោគជ័យ!`);
       notifyParentDataChanged();
@@ -2359,7 +2260,6 @@
     ========================================================= */
     let currentProfileSubIdx = 0;
 
-    // ត្រងយកតែសិស្សដែលស្ថិតក្នុងថ្នាក់បច្ចុប្បន្ន (ថ្នាក់ដែលគ្រូកាន់)
     function getFilteredStudentsForProfile() {
       const targetClass = currentSelectedClass ? currentSelectedClass.replace(/^ថ្នាក់ទី\s*/, '').trim() : '';
       return studentsList
@@ -2406,7 +2306,6 @@
       const currentItem = profileStudents[currentProfileSubIdx];
       const s = currentItem.s;
 
-      // បង្ហាញ Dropdown ថ្នាក់ (បើមិនមែន Admin គឺចាក់សោរបង្ហាញតែថ្នាក់ដែលគ្រូកាន់)
       const clsSel = document.getElementById('profileClassSelect');
       clsSel.innerHTML = '';
       if (!IS_ADMIN) {
@@ -2422,21 +2321,18 @@
         });
       }
 
-      // បង្ហាញ Dropdown សិស្ស (បង្ហាញតែសិស្សក្នុងថ្នាក់នោះប៉ុណ្ណោះ)
       const stSel = document.getElementById('profileStudentSelect');
       stSel.innerHTML = '';
       profileStudents.forEach((item, subIdx) => {
         stSel.innerHTML += `<option value="${subIdx}" ${subIdx === currentProfileSubIdx ? 'selected' : ''}>${subIdx + 1}. ${esc(item.s.name || 'គ្មានឈ្មោះ')}</option>`;
       });
 
-      // Hero Card Info
       const name = (s.name || '').trim();
       document.getElementById('profileHeroName').innerText = name || 'គ្មានឈ្មោះ';
       document.getElementById('profileIdBadge').innerText = `អត្តលេខ: ${s.id || '-'}`;
       document.getElementById('profileGradeBadge').innerText = s.grade ? (s.grade.startsWith('ថ្នាក់ទី') ? s.grade : `ថ្នាក់ទី: ${s.grade}`) : `ថ្នាក់ទី: ${currentSelectedClass}`;
       document.getElementById('profileGenderBadge').innerText = `ភេទ: ${s.sex || 'ប្រុស'}`;
 
-      // Avatar
       const box = document.getElementById('profileAvatarBox');
       box.textContent = '';
       const pu = safeUrl(s.photoUrl || s.imageUrl);
@@ -2450,7 +2346,6 @@
         box.textContent = initial;
       }
 
-      // Personal Info
       const formattedDob = formatToInputDate(s.dob);
       let dobDisplay = s.dob || '-';
       if (formattedDob) {
@@ -2464,11 +2359,9 @@
       document.getElementById('profileAgeValue').innerText = age ? `${age} ឆ្នាំ` : '-';
       document.getElementById('profilePhoneValue').innerText = s.phone || '-';
 
-      // ទីកន្លែងកំណើត និង អាសយដ្ឋានបច្ចុប្បន្ន
       document.getElementById('profilePobValue').innerText = cleanDuplicateAddress(s.pob) || '-';
       document.getElementById('profileAddressValue').innerText = cleanDuplicateAddress(s.address) || '-';
 
-      // Parents Info
       document.getElementById('profileFatherValue').innerText = s.father || s.fatherName || '-';
       document.getElementById('profileFatherJobValue').innerText = s.fatherJob || '-';
       document.getElementById('profileMotherValue').innerText = s.mother || s.motherName || '-';
@@ -2530,7 +2423,7 @@
 
       document.getElementById('modalLastName').value = lastName;
       document.getElementById('modalFirstName').value = firstName;
-      document.getElementById('modalStudentId').value = s.id || '';
+      document.getElementById('modalStudentId').value = s.id || ''; // 🌟 បង្ហាញអត្តលេខទទេ បើគ្មាន
       
       const gradeSel = document.getElementById('modalGrade');
       if (s.grade) {
@@ -2575,6 +2468,7 @@
       } catch (err) { alert(err.message || 'មិនអាចអានរូបនេះបានទេ'); }
     }
 
+    // 🌟 មុខងាររក្សាទុកការកែប្រែក្នុង Modal (Update Modal Data)
     async function saveModalChanges() {
       if (activeRowIndex === null) return;
 
@@ -2584,12 +2478,10 @@
       let studentId = document.getElementById('modalStudentId').value.trim();
 
       if (!fullName) { alert("សូមបញ្ចូលឈ្មោះសិស្ស!"); return; }
-      if (!studentId) {
-        studentId = 'ST' + Math.floor(100000 + Math.random() * 900000);
-      }
 
       const s = studentsList[activeRowIndex];
-      s.id = studentId;
+      s.id = studentId; // 🌟 ទុកជាទទេបាន បើមិនបានបំពេញ
+      s.studentId = studentId;
       s.name = fullName;
       s.grade = document.getElementById('modalGrade').value;
       s.sex = document.getElementById('modalGender').value;
@@ -2609,7 +2501,8 @@
 
       const payload = buildPayload(s);
       let res = null;
-      if (s.origId) {
+
+      if (s.origId || s.rowNum) {
         res = await apiRequest('updateStudentData', { formData: payload });
         if (!res && lastApiError && (lastApiError.includes('រកមិនឃើញ') || lastApiError.includes('not found'))) {
           res = await apiRequest('submitStudentData', { formData: payload });
@@ -2629,7 +2522,8 @@
         return;
       }
 
-      s.origId = s.id;
+      s.origId = s.id || (res.studentId || s.origId);
+      if (res.rowNum) s.rowNum = res.rowNum;
       applyFilterAndRender();
       closeEditModal();
       showToast(`🎉 បានកែប្រែព័ត៌មានសិស្ស «${s.name}» ជោគជ័យ!`);
@@ -2638,7 +2532,7 @@
     }
 
     /* =========================================================
-       📊 មុខងារទាញយក EXCEL (EXPORT TO EXCEL) តាមការស្នើសុំ
+       📊 មុខងារទាញយក EXCEL (EXPORT TO EXCEL)
     ========================================================= */
     function exportStudentsToExcel() {
       const q = document.getElementById('searchInput').value.toLowerCase().trim();
@@ -2813,7 +2707,7 @@
     }
 
     /* =========================================================
-       📥 IMPORT MODAL LOGIC (EXCEL & PASTE LIST)
+       📥 IMPORT MODAL LOGIC
     ========================================================= */
     function openImportModal() {
       pendingImportStudents = [];
@@ -2861,7 +2755,7 @@
         if (gender !== 'ប្រុស' && gender !== 'ស្រី') {
           gender = (gender.includes('ប') || gender.toLowerCase().startsWith('m')) ? 'ប្រុស' : 'ស្រី';
         }
-        const sid = tokens[3] || ('ST' + Math.floor(100000 + Math.random() * 900000));
+        const sid = tokens[3] || ''; // 🌟 ទុកទទេបើគ្មាន
         const phone = tokens[4] || '';
 
         list.push({
@@ -2893,8 +2787,8 @@
     function downloadExcelTemplate() {
       const headers = ["អត្តលេខ", "គោត្តនាម", "នាម", "ភេទ", "ថ្ងៃខែឆ្នាំកំណើត", "ទូរស័ព្ទ", "ទីកន្លែងកំណើត", "អាសយដ្ឋានបច្ចុប្បន្ន"];
       const sample = [
-        ["1001", "សុខ", "ចន្ថា", "ប្រុស", "2015-02-14", "012345678", "ភ្នំពេញ", "ភ្នំពេញ"],
-        ["1002", "ចាន់", "ដារ៉ា", "ស្រី", "2015-05-20", "098765432", "កណ្តាល", "កណ្តាល"]
+        ["", "សុខ", "ចន្ថា", "ប្រុស", "2015-02-14", "012345678", "ភ្នំពេញ", "ភ្នំពេញ"],
+        ["", "ចាន់", "ដារ៉ា", "ស្រី", "2015-05-20", "098765432", "កណ្តាល", "កណ្តាល"]
       ];
       const ws = XLSX.utils.aoa_to_sheet([headers, ...sample]);
       const wb = XLSX.utils.book_new();
@@ -2920,7 +2814,7 @@
           for (let i = 1; i < json.length; i++) {
             const row = json[i];
             if (!row || !row.length) continue;
-            const sid = String(row[0] || '').trim() || ('ST' + Math.floor(100000 + Math.random() * 900000));
+            const sid = String(row[0] || '').trim();
             const lName = String(row[1] || '').trim();
             const fName = String(row[2] || '').trim();
             const name = `${lName} ${fName}`.trim() || String(row[1] || '').trim();
