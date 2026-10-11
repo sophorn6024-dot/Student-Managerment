@@ -1,4 +1,4 @@
-const BACKEND_API_URL = "https://script.google.com/macros/s/AKfycby4J4X894zcwgJhqw6plF-RehJvATYOGNzUigg1JDHIQMpXXbhiq3-obuuvJsaMEQPI_w/exec";
+const BACKEND_API_URL = "https://script.google.com/macros/s/AKfycbxe6vrQshGAPglgmmZykljXazDNh1ZwWSRdFDAip1WWWRky24lmBo-qicLK3_i10AvT/exec";
 const TOKEN_KEY = "school_persistent_token";
 
 async function callBackendApi(action, data = {}) {
