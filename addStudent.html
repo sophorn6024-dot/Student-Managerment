@@ -2505,60 +2505,114 @@
     }
 
     async function saveModalChanges() {
-      if (activeRowIndex === null) return;
+  if (activeRowIndex === null) return;
 
-      const lastName = document.getElementById('modalLastName').value.trim();
-      const firstName = document.getElementById('modalFirstName').value.trim();
-      const fullName = `${lastName} ${firstName}`.trim();
-      let studentId = document.getElementById('modalStudentId').value.trim();
+  const saveBtn = document.getElementById('modalSaveBtn');
+  const originalText = '💾 រក្សាទុកការកែប្រែ';
 
-      if (!fullName) { alert("សូមបញ្ចូលឈ្មោះសិស្ស!"); return; }
-      if (!studentId) {
-        studentId = 'ST' + Math.floor(100000 + Math.random() * 900000);
-      }
+  if (!saveBtn) {
+    alert('មិនអាចរកប៊ូតុងរក្សាទុកបានទេ!');
+    return;
+  }
 
-      const s = studentsList[activeRowIndex];
-      s.id = studentId;
-      s.name = fullName;
-      s.grade = document.getElementById('modalGrade').value;
-      s.sex = document.getElementById('modalGender').value;
-      s.dob = formatToInputDate(document.getElementById('modalDobText').dataset.rawDate);
-      s.phone = document.getElementById('modalPhone').value.trim();
-      s.pob = document.getElementById('modalPob').value.trim();
-      s.address = document.getElementById('modalAddress').value.trim();
-      s.isDraft = false;
-      if (modalPhotoBase64) {
-        s.photoUrl = modalPhotoBase64;
-        s.imageUrl = modalPhotoBase64;
-      }
+  if (saveBtn.disabled) return;
 
-      const saveBtn = document.getElementById('modalSaveBtn');
-      saveBtn.disabled = true;
-      saveBtn.innerText = '⏳ កំពុងរក្សាទុក...';
+  try {
+    const lastName =
+      document.getElementById('modalLastName').value.trim();
 
-      const payload = buildPayload(s);
-      let res = null;
-      if (s.origId) {
-        res = await apiRequest('updateStudentData', { formData: payload });
-        if (!res && lastApiError && (lastApiError.includes('រកមិនឃើញ') || lastApiError.includes('not found'))) {
-          res = await apiRequest('submitStudentData', { formData: payload });
-        }
-      } else {
-        res = await apiRequest('submitStudentData', { formData: payload });
-        if (!res && lastApiError && (lastApiError.includes('មានរួចហើយ') || lastApiError.includes('ស្ទួន'))) {
-          res = await apiRequest('updateStudentData', { formData: payload });
-        }
-      }
+    const firstName =
+      document.getElementById('modalFirstName').value.trim();
 
-      saveBtn.disabled = false;
-      saveBtn.innerText = '💾 រក្សាទុកការកែប្រែ';
+    const fullName = `${lastName} ${firstName}`.trim();
 
-      if (!res) {
-        alert("❌ រក្សាទុកបរាជ័យ៖ " + (lastApiError || 'ពិនិត្យ Server'));
-        return;
-      }
+    if (!fullName) {
+      alert('សូមបញ្ចូលឈ្មោះសិស្ស!');
+      return;
+    }
 
-      s.origId = s.id;
+    const s = studentsList[activeRowIndex];
+
+    if (!s) {
+      alert('រកមិនឃើញទិន្នន័យសិស្សដែលត្រូវកែទេ!');
+      return;
+    }
+
+    const studentIdInput =
+      document.getElementById('modalStudentId');
+
+    let studentId = studentIdInput.value.trim();
+
+    if (s.origId && !studentId) {
+      alert('សូមបញ្ចូលអត្តលេខសិស្ស!');
+      return;
+    }
+
+    if (!s.origId && !studentId) {
+      studentId =
+        'ST' + Math.floor(100000 + Math.random() * 900000);
+
+      studentIdInput.value = studentId;
+    }
+
+    s.id = studentId;
+    s.name = fullName;
+
+    s.grade =
+      document.getElementById('modalGrade').value;
+
+    s.sex =
+      document.getElementById('modalGender').value;
+
+    s.dob = formatToInputDate(
+      document.getElementById('modalDobText').dataset.rawDate
+    );
+
+    s.phone =
+      document.getElementById('modalPhone').value.trim();
+
+    s.pob =
+      document.getElementById('modalPob').value.trim();
+
+    s.address =
+      document.getElementById('modalAddress').value.trim();
+
+    saveBtn.disabled = true;
+    saveBtn.innerText = '⏳ កំពុងរក្សាទុក...';
+
+    const payload = buildPayload(s);
+
+    let res = null;
+
+    if (s.origId) {
+      res = await apiRequest('updateStudentData', {
+        formData: payload
+      });
+    } else {
+      res = await apiRequest('submitStudentData', {
+        formData: payload
+      });
+    }
+
+    if (!res) {
+      throw new Error(lastApiError || 'ពិនិត្យការតភ្ជាប់ Server');
+    }
+
+    alert('✅ រក្សាទុកព័ត៌មានសិស្សបានជោគជ័យ!');
+
+  } catch (err) {
+    console.error('saveModalChanges error:', err);
+
+    alert(
+      '❌ រក្សាទុកបរាជ័យ៖ ' +
+      (err.message || 'មានបញ្ហាមិនស្គាល់')
+    );
+
+  } finally {
+    saveBtn.disabled = false;
+    saveBtn.innerText = originalText;
+  }
+}     s.origId = s.id;
       applyFilterAndRender();
       closeEditModal();
       showToast(`🎉 បានកែប្រែព័ត៌មានសិស្ស «${s.name}» ជោគជ័យ!`);
