@@ -165,7 +165,8 @@
     .btn-import-roster { background: #4f46e5; color: white; }
     .btn-import-roster:hover { background: #4338ca; }
 
-    .btn-sort { background: rgba(124, 58, 237, 0.15); color: #a78bfa; }
+    /* 🌟 ប៊ូតុង Sort តាមត្រកូល (ក-អ) */
+    .btn-sort { background: rgba(124, 58, 237, 0.15); color: #a78bfa; border: 1.5px solid rgba(124, 58, 237, 0.3); }
     .btn-sort.active { background: #7c3aed; color: white; }
     .btn-columns { background: rgba(2, 132, 199, 0.15); color: #38bdf8; border: 1px solid var(--border); }
     .btn-import { background: #0d9488; color: white; }
@@ -277,7 +278,7 @@
     .date-picker-trigger:hover { border-color: #0284c7; }
     .date-picker-trigger .cal-icon { color: #0284c7; font-size: 13px; }
 
-    /* 🌟 កែប្រែ៖ បង្ហាញបន្ទាត់ដាច់ៗពណ៌ក្រហមតែពេលចុចប៊ូតុង ខ្វះព័ត៌មាន ប៉ុណ្ណោះ */
+    /* បង្ហាញបន្ទាត់ដាច់ៗពណ៌ក្រហមតែពេលចុចប៊ូតុង ខ្វះព័ត៌មាន ប៉ុណ្ណោះ */
     .cell-missing {
       border: 1.5px dashed #ef4444 !important;
       background-color: rgba(239, 68, 68, 0.12) !important;
@@ -303,17 +304,19 @@
       display: flex; align-items: center; justify-content: center;
     }
 
-    /* 🌟 កែប្រែ Popup Menu កុំឱ្យធ្លាក់ចុះក្រោមដាច់មើលមិនឃើញ */
+    /* 🌟 POPUP ACTION MENU (បង្ហាញគ្រប់ ៣ ប៊ូតុង និងមិនធ្លាក់បាតអេក្រង់) */
     .action-popup {
-      display: none; position: fixed; z-index: 99999; background: var(--surface); border-radius: 14px;
-      box-shadow: 0 16px 36px rgba(0,0,0,0.35); border: 1px solid var(--border); width: 190px;
+      display: none; position: fixed; z-index: 100005; background: var(--surface); border-radius: 14px;
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4); border: 1.5px solid var(--border); width: 195px;
       overflow: hidden; animation: fadeIn 0.12s ease-out;
     }
     .action-item {
-      padding: 10px 14px; display: flex; align-items: center; gap: 9px; font-size: 12.5px; cursor: pointer; color: var(--text); font-weight: 700;
+      padding: 11px 16px; display: flex; align-items: center; gap: 10px; font-size: 13px; cursor: pointer;
+      color: var(--text); font-weight: 700; transition: background 0.12s, color 0.12s;
     }
     .action-item:hover { background: var(--surface-elevated); color: var(--primary); }
     .action-item.delete { color: #ef4444; border-top: 1px solid var(--border); }
+    .action-item.delete:hover { background: rgba(239, 68, 68, 0.1); }
 
     .status-row { text-align: center; padding: 36px 14px; color: var(--text-muted); font-size: 13.5px; font-weight: 700; }
     .spinner-dark {
@@ -691,9 +694,9 @@
         <span>📥</span> <span>បញ្ចូលបញ្ជីសិស្ស</span>
       </button>
 
-      <!-- 🌟 កែប្រែប៊ូតុង Sort ឱ្យបង្ហាញទិសដៅច្បាស់លាស់ -->
+      <!-- 🌟 ប៊ូតុង Sort តម្រៀបតាមត្រកូល (គោត្តនាម) ពី ក-អ -->
       <button class="btn-action btn-sort" id="sortBtn" onclick="sortStudentsAlphabetical()">
-        <span>⇅</span> <span id="sortBtnText">តម្រៀបតាមនាម (ក-អ)</span>
+        <span>⇅</span> <span id="sortBtnText">តម្រៀបតាមត្រកូល (ក-អ)</span>
       </button>
 
       <button class="btn-action btn-columns" onclick="toggleColumnMenu(event)">
@@ -898,8 +901,9 @@
     <button class="bottom-nav-icon-btn" onmousedown="event.preventDefault()" style="color:#16a34a; font-size:17px;" onclick="saveAllRows()" title="រក្សាទុក">✓</button>
   </div>
 
-  <!-- 💬 POPUP ACTION MENU -->
+  <!-- 💬 POPUP ACTION MENU (បង្ហាញគ្រប់ ៣ មុខងារ មិនធ្លាក់បាតអេក្រង់) -->
   <div class="action-popup" id="actionMenu">
+    <div class="action-item" onclick="openEditModalFromMenu()"><span>🪪</span> ប្រវត្តិរូប</div>
     <div class="action-item" onclick="openEditModalFromMenu()"><span>✏️</span> កែប្រែព័ត៌មាន</div>
     <div class="action-item delete" onclick="deleteCurrentRow()"><span>🗑️</span> លុបទិន្នន័យ</div>
   </div>
@@ -992,7 +996,7 @@
     let isMissingFilterActive = false;
     let searchDebounceTimer = null;
     let autoSaveTimers = {};
-    let sortDirectionAsc = true; // 🌟 សម្រាប់គ្រប់គ្រងទិសដៅ Sort
+    let sortDirectionAsc = false; // 🌟 ចុចលើកដំបូងចេញពី ក-អ
 
     let pendingImportStudents = [];
     let activeImportTab = 'paste';
@@ -1348,11 +1352,11 @@
         const fullName = String(s.name || s.studentName || s['ឈ្មោះ'] || s['ឈ្មោះសិស្ស'] || '').trim();
         return {
           ...s,
-          rowNum: s.rowNum || null, // 🌟 រក្សាទុក rowNum ពី Server ជានិច្ច
+          rowNum: s.rowNum || null,
           id: sid,
           studentId: sid,
           name: fullName,
-          sex: s.sex || s.gender || s['ភេទ'] || 'ស្រី',
+          sex: s.sex || s.gender || 'ស្រី',
           dob: formatToInputDate(rawDob),
           photoUrl: photo,
           imageUrl: photo,
@@ -1379,7 +1383,6 @@
       autoSaveTimers[s._uid] = setTimeout(() => executeAutoSaveRow(s), 800);
     }
 
-    // 🌟 បន្ថែម rowNum ទៅក្នុង Payload ដើម្បីឱ្យ Update ដំណើរការ ១០០%
     function buildPayload(s) {
       if (!s.id || !String(s.id).trim()) {
         s.id = 'ST' + Math.floor(100000 + Math.random() * 900000);
@@ -1872,7 +1875,7 @@
         container.innerHTML = `<div style="text-align:center;padding:30px;color:#16a34a;font-weight:700;">🎉 ព័ត៌មានសិស្សទាំងអស់ត្រូវបានបំពេញពេញលេញ!</div>`;
       } else {
         items.forEach(({ s, i, missing }) => {
-          const name = (s.name || '').trim(), parts = name.split(' ');
+          const name = (s.name || '').trim(), parts = name.split(/\s+/);
           const ini = parts.length > 1 ? parts[1].charAt(0) : (name.charAt(0) || 'ក');
           const url = safeUrl(s.photoUrl || s.imageUrl);
           const card = document.createElement('div');
@@ -1963,7 +1966,7 @@
         if (isF) femaleCount++;
 
         const fullName = (s.name || '').trim();
-        const parts = fullName.split(' ');
+        const parts = fullName.split(/\s+/);
         const lastName = parts[0] || '';
         const firstName = parts.slice(1).join(' ') || '';
         const initialBadge = firstName ? firstName.charAt(0) : (lastName ? lastName.charAt(0) : 'ក');
@@ -1974,7 +1977,7 @@
         const pob = escParts(parseAddressParts(s.pob));
         const addr = escParts(parseAddressParts(s.address));
 
-        // 🌟 កែប្រែ៖ ដាក់ពណ៌ក្រហមដាច់ៗតែពេលចុចប៊ូតុង «ខ្វះព័ត៌មាន» ប៉ុណ្ណោះ
+        // 🌟 ដាក់ពណ៌ក្រហមដាច់ៗតែពេលចុចប៊ូតុង «ខ្វះព័ត៌មាន» ប៉ុណ្ណោះ
         const showMissingHighlight = isMissingFilterActive && !s.isDraft;
         const hasMissingDob = showMissingHighlight && (!formattedDob || formattedDob.trim() === '');
         const hasMissingPhone = showMissingHighlight && (!s.phone || String(s.phone).trim() === '');
@@ -2118,7 +2121,7 @@
       populateModalClassSelect(availableClassesList);
 
       const fullName = (s.name || '').trim();
-      const parts = fullName.split(' ');
+      const parts = fullName.split(/\s+/);
       const lastName = parts[0] || '';
       const firstName = parts.slice(1).join(' ') || '';
       const initial = firstName ? firstName.charAt(0) : (lastName ? lastName.charAt(0) : 'ក');
@@ -2300,34 +2303,33 @@
     }
 
     /* =========================================================
-       🌟 មុខងារ SORT តាមក្បួនខ្នាតខ្មែរ (តម្រៀបតាម «នាម» ពី ក-អ)
+       🌟 មុខងារ SORT តាមត្រកូល (គោត្តនាម / ពាក្យខាងមុខ) ពី ក-អ
     ========================================================= */
     function getKhmerSortParts(fullName) {
       const clean = String(fullName || '').trim();
-      if (!clean) return { first: '', last: '' };
+      if (!clean) return { last: '', first: '' };
       const parts = clean.split(/\s+/);
-      if (parts.length === 1) return { first: parts[0], last: '' };
-      const last = parts[0];
-      const first = parts.slice(1).join(' ');
-      return { first, last };
+      const last = parts[0] || ''; // ត្រកូល (គោត្តនាម)
+      const first = parts.slice(1).join(' ') || ''; // នាម
+      return { last, first };
     }
 
     function sortStudentsAlphabetical() {
-      sortDirectionAsc = !sortDirectionAsc; // ប្តូរទិសដៅរាល់ពេលចុច
+      sortDirectionAsc = !sortDirectionAsc; // ចុចប្តូរ ក-អ ឬ អ-ក
       
       studentsList.sort((a, b) => {
-        // រក្សាទុកជួរ Draft នៅចុងក្រោយគេជានិច្ច
+        // ជួរ Draft ទុកនៅក្រោមគេជានិច្ច
         if (a.isDraft && !b.isDraft) return 1;
         if (!a.isDraft && b.isDraft) return -1;
 
         const partA = getKhmerSortParts(a.name);
         const partB = getKhmerSortParts(b.name);
 
-        // 🌟 ១. ប្រៀបធៀបតាម «នាម» (First Name) ជាចម្បង
-        let cmp = (partA.first || '').localeCompare(partB.first || '', 'km');
-        // 🌟 ២. បើនាមដូចគ្នា ទើបប្រៀបធៀបតាម «គោត្តនាម» (Last Name)
+        // 🌟 ១. ប្រៀបធៀបតាម «ត្រកូល (គោត្តនាម)» ពី ក ដល់ អ ជាចម្បង
+        let cmp = (partA.last || '').localeCompare(partB.last || '', 'km');
+        // 🌟 ២. បើត្រកូលដូចគ្នា ទើបប្រៀបធៀបតាម «នាម» ខាងក្រោយ
         if (cmp === 0) {
-          cmp = (partA.last || '').localeCompare(partB.last || '', 'km');
+          cmp = (partA.first || '').localeCompare(partB.first || '', 'km');
         }
 
         return sortDirectionAsc ? cmp : -cmp;
@@ -2335,13 +2337,13 @@
 
       const btnText = document.getElementById('sortBtnText');
       if (btnText) {
-        btnText.innerText = sortDirectionAsc ? 'តម្រៀបតាមនាម (ក-អ)' : 'តម្រៀបតាមនាម (អ-ក)';
+        btnText.innerText = sortDirectionAsc ? 'តម្រៀបតាមត្រកូល (ក-អ)' : 'តម្រៀបតាមត្រកូល (អ-ក)';
       }
       const sortBtn = document.getElementById('sortBtn');
       if (sortBtn) sortBtn.classList.toggle('active', !sortDirectionAsc);
 
       applyFilterAndRender();
-      showToast(sortDirectionAsc ? '✅ បានតម្រៀបតាមនាមសិស្ស (ក ដល់ អ)' : '✅ បានតម្រៀបតាមនាមសិស្ស (អ ដល់ ក)');
+      showToast(sortDirectionAsc ? '✅ បានតម្រៀបតាមត្រកូលសិស្ស (ក ដល់ អ)' : '✅ បានតម្រៀបតាមត្រកូលសិស្ស (អ ដល់ ក)');
     }
 
     function toggleColumnMenu(e) {
@@ -2368,27 +2370,39 @@
       document.getElementById('lockText').innerText = isTableLocked ? 'ដោះសោ' : 'ចាក់សោ';
     }
 
-    /* 🌟 កែប្រែ Popup Action Menu ឱ្យបង្ហាញគ្រប់ទំហំអេក្រង់ និងមិនធ្លាក់បាត */
+    /* =========================================================
+       🌟 POPUP MENU (វាស់កម្ពស់ជាក់ស្តែង បើជិតបាតអេក្រង់ លោតឡើងលើវិញ)
+    ========================================================= */
     function openActionMenu(e, realIdx) {
       e.stopPropagation();
       activeRowIndex = realIdx;
       const menu = document.getElementById('actionMenu');
+      
+      // បើក display block ជាមុនដើម្បីឱ្យ Browser អាចវាស់ទំហំជាក់ស្តែងបាន
       menu.style.display = 'block';
 
       const rect = e.currentTarget.getBoundingClientRect();
-      const menuHeight = 90;
-      const menuWidth = 190;
+      const menuHeight = menu.offsetHeight || 135; // កម្ពស់ជាក់ស្តែងនៃ Menu ទាំងមូល
+      const menuWidth = menu.offsetWidth || 195;
 
-      // បើជិតបាតអេក្រង់ ឱ្យ Menu លោតឡើងលើវិញ
+      // 🌟 បើកន្លែងទំនេរខាងក្រោមមិនគ្រប់គ្រាន់ ឱ្យ Menu លោតឡើងលើវិញ
       let top = rect.bottom + 6;
-      if (top + menuHeight > window.innerHeight) {
+      if (top + menuHeight > window.innerHeight - 10) {
         top = rect.top - menuHeight - 6;
+      }
+      
+      // បើឡើងលើហួសក្បាលអេក្រង់
+      if (top < 10) {
+        top = Math.max(10, window.innerHeight - menuHeight - 15);
       }
 
       let left = rect.right - menuWidth;
       if (left < 10) left = 10;
+      if (left + menuWidth > window.innerWidth - 10) {
+        left = window.innerWidth - menuWidth - 10;
+      }
 
-      menu.style.top = `${Math.max(10, top)}px`;
+      menu.style.top = `${top}px`;
       menu.style.left = `${left}px`;
     }
 
