@@ -169,7 +169,10 @@
     .btn-sort { background: rgba(124, 58, 237, 0.15); color: #a78bfa; border: 1.5px solid rgba(124, 58, 237, 0.3); }
     .btn-sort.active { background: #7c3aed; color: white; }
     .btn-columns { background: rgba(2, 132, 199, 0.15); color: #38bdf8; border: 1px solid var(--border); }
-    .btn-import { background: #0d9488; color: white; }
+    
+    /* 🌟 ប៊ូតុង ទាញយក Excel ថ្មី */
+    .btn-excel-export { background: #059669; color: white; }
+    .btn-excel-export:hover { background: #047857; }
 
     .btn-warning {
       background: rgba(245, 158, 11, 0.15); color: #f59e0b; border: 1.5px solid rgba(245, 158, 11, 0.3);
@@ -303,7 +306,7 @@
       display: flex; align-items: center; justify-content: center;
     }
 
-    /* 🌟 POPUP ACTION MENU (បង្ហាញគ្រប់ ៣ ប៊ូតុង និងមិនធ្លាក់បាតអេក្រង់) */
+    /* 🌟 POPUP ACTION MENU */
     .action-popup {
       display: none; position: fixed; z-index: 100005; background: var(--surface); border-radius: 14px;
       box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4); border: 1.5px solid var(--border); width: 195px;
@@ -325,7 +328,7 @@
     @keyframes spin { to { transform: rotate(360deg); } }
 
     /* =========================================================
-       🪪 STUDENT BIODATA PROFILE MODAL (ដូចក្នុងរូបភាពទី ២ ទាំងស្រុង)
+       🪪 STUDENT BIODATA PROFILE MODAL
     ========================================================= */
     .profile-modal-overlay {
       display: none; position: fixed; inset: 0; background: rgba(15, 23, 42, 0.65);
@@ -347,6 +350,9 @@
       height: 38px; padding: 0 12px; font-size: 13px; font-weight: 700; color: var(--text);
       outline: none; cursor: pointer;
     }
+    .profile-pill-select:disabled {
+      opacity: 0.9; cursor: not-allowed; background: rgba(2, 132, 199, 0.1); color: var(--primary);
+    }
     .profile-nav-btn {
       width: 36px; height: 36px; border-radius: 12px; border: 1.5px solid var(--border);
       background: var(--surface-elevated); display: flex; align-items: center; justify-content: center;
@@ -362,7 +368,6 @@
 
     .profile-scroll-body { padding: 18px 22px; overflow-y: auto; display: flex; flex-direction: column; gap: 16px; }
     
-    /* 🌟 Hero Card */
     .profile-hero-card {
       background: var(--surface-elevated); border: 1.5px solid var(--border); border-radius: 22px;
       padding: 18px 22px; display: flex; align-items: center; gap: 20px;
@@ -380,7 +385,6 @@
       padding: 3px 12px; font-size: 12px; font-weight: 700; color: var(--text);
     }
 
-    /* 🌟 Sections Card */
     .profile-section-card {
       background: var(--surface-elevated); border: 1.5px solid var(--border); border-radius: 20px;
       padding: 16px 20px; display: flex; flex-direction: column; gap: 12px;
@@ -410,7 +414,6 @@
       border-radius: 12px; height: 42px; padding: 0 24px; font-size: 13.5px; font-weight: 800; cursor: pointer;
     }
 
-    /* PRINT STYLES */
     @media print {
       body * { visibility: hidden; }
       #profileModalCard, #profileModalCard * { visibility: visible; }
@@ -804,8 +807,9 @@
         <label class="col-option"><input type="checkbox" checked onchange="toggleColumn('col-address', this.checked)"> អាសយដ្ឋានបច្ចុប្បន្ន</label>
       </div>
 
-      <button class="btn-action btn-import" id="saveAllBtn" onclick="saveAllRows()">
-        <span>📥</span> <span>នាំចូល Sheet</span>
+      <!-- 🌟 ប្ដូរទៅជាប៊ូតុង «ទាញយក Excel» តាមការស្នើសុំ -->
+      <button class="btn-action btn-excel-export" id="exportExcelBtn" onclick="exportStudentsToExcel()" title="ទាញយកបញ្ជីឈ្មោះសិស្សជា File Excel">
+        <span>📊</span> <span>ទាញយក Excel</span>
       </button>
 
       <button class="btn-action btn-warning" id="missingInfoBtn" onclick="handleMissingInfoClick()">
@@ -989,17 +993,17 @@
     <button class="bottom-nav-icon-btn" onmousedown="event.preventDefault()" onclick="navigateTable('left')" title="ទៅឆ្វេង">←</button>
     <button class="bottom-nav-btn bottom-nav-primary" onmousedown="event.preventDefault()" onclick="navigateTable('down')">↵ ចុះក្រោម</button>
     <button class="bottom-nav-btn bottom-nav-primary" onmousedown="event.preventDefault()" onclick="navigateTable('right')">→| ទៅមុខ</button>
-    <button class="bottom-nav-icon-btn" onmousedown="event.preventDefault()" style="color:#16a34a; font-size:17px;" onclick="saveAllRows()" title="រក្សាទុក">✓</button>
+    <button class="bottom-nav-icon-btn" onmousedown="event.preventDefault()" style="color:#16a34a; font-size:17px;" onclick="saveAllDraftRows()" title="រក្សាទុក">✓</button>
   </div>
 
-  <!-- 💬 POPUP ACTION MENU (បង្ហាញគ្រប់ ៣ ប៊ូតុង មិនធ្លាក់បាត) -->
+  <!-- 💬 POPUP ACTION MENU -->
   <div class="action-popup" id="actionMenu">
     <div class="action-item" onclick="openProfileModalFromMenu()"><span>🪪</span> ប្រវត្តិរូប</div>
     <div class="action-item" onclick="openEditModalFromMenu()"><span>✏️</span> កែប្រែព័ត៌មាន</div>
     <div class="action-item delete" onclick="deleteCurrentRow()"><span>🗑️</span> លុបទិន្នន័យ</div>
   </div>
 
-  <!-- 🪪 STUDENT BIODATA PROFILE MODAL (ដូចក្នុងរូបភាពទី ២ ទាំងស្រុង) -->
+  <!-- 🪪 STUDENT BIODATA PROFILE MODAL (បង្ហាញតែសិស្សក្នុងថ្នាក់ដែលគ្រូកាន់) -->
   <div class="profile-modal-overlay" id="profileModalOverlay">
     <div class="profile-modal-card" id="profileModalCard">
       <!-- របារខាងលើ -->
@@ -1093,7 +1097,7 @@
     </div>
   </div>
 
-  <!-- 🖼️ EDIT MODAL BOX (សម្រាប់កែប្រែទិន្នន័យ) -->
+  <!-- 🖼️ EDIT MODAL BOX -->
   <div class="edit-modal-overlay" id="editModalOverlay">
     <div class="edit-modal-box em-box">
       <div class="em-banner">
@@ -1181,7 +1185,7 @@
     let isMissingFilterActive = false;
     let searchDebounceTimer = null;
     let autoSaveTimers = {};
-    let sortDirectionAsc = false; // 🌟 ចុចលើកដំបូងចេញពី ក-អ
+    let sortDirectionAsc = false;
 
     let pendingImportStudents = [];
     let activeImportTab = 'paste';
@@ -1557,7 +1561,7 @@
     function refreshDataForce() { syncWithBackendParallel(true); }
 
     /* =========================================================
-       🚀 AUTO-SAVE & SMART SUBMIT ENGINE
+       🚀 AUTO-SAVE ENGINE
     ========================================================= */
     function triggerAutoSave(realIdx) {
       const s = studentsList[realIdx];
@@ -1624,7 +1628,7 @@
     }
 
     /* =========================================================
-       🛠️ ស្គាល់ថ្ងៃខែជាភាសាខ្មែរ និងលុបអាសយដ្ឋានស្ទួន ៤ ដង
+       🛠️ ស្គាល់ថ្ងៃខែ និងទិន្នន័យអាសយដ្ឋាន
     ========================================================= */
     const KHMER_MONTHS_MAP = {
       'មករា': 1, 'កុម្ភៈ': 2, 'មីនា': 3, 'មេសា': 4,
@@ -1638,7 +1642,6 @@
         dateVal = dateVal.trim();
         if (/^\d{4}-\d{2}-\d{2}$/.test(dateVal)) return dateVal;
 
-        // 🌟 ស្គាល់ទម្រង់ខ្មែរ៖ "6 ខែតុលា ឆ្នាំ 2017" ឬ "6 តុលា 2017"
         const kmMatch = dateVal.match(/(\d+)\s*(?:ខែ)?\s*([^\s\d]+)\s*(?:ឆ្នាំ)?\s*(\d{4})/);
         if (kmMatch) {
           const d = kmMatch[1].padStart(2, '0');
@@ -1977,6 +1980,20 @@
       return true;
     }
 
+    async function saveAllDraftRows() {
+      let saved = 0;
+      for (let i = 0; i < studentsList.length; i++) {
+        if (studentsList[i].isDraft) {
+          const ok = await saveDraftRow(i);
+          if (ok) saved++;
+        }
+      }
+      if (saved > 0) {
+        showToast(`🎉 បានរក្សាទុក ${saved} នាក់ជោគជ័យ!`);
+        hideBottomNavBar();
+      }
+    }
+
     function syncRowInput(input, realIdx) {
       const s = studentsList[realIdx];
       if (!s) return;
@@ -2204,7 +2221,6 @@
         const pob = escParts(parseAddressParts(s.pob));
         const addr = escParts(parseAddressParts(s.address));
 
-        // 🌟 ដាក់ពណ៌ក្រហមដាច់ៗតែពេលចុចប៊ូតុង «ខ្វះព័ត៌មាន» ប៉ុណ្ណោះ
         const showMissingHighlight = isMissingFilterActive && !s.isDraft;
         const hasMissingDob = showMissingHighlight && (!formattedDob || formattedDob.trim() === '');
         const hasMissingPhone = showMissingHighlight && (!s.phone || String(s.phone).trim() === '');
@@ -2339,13 +2355,31 @@
     }
 
     /* =========================================================
-       🪪 STUDENT BIODATA PROFILE MODAL LOGIC (បង្ហាញដូចរូបថតទី ២)
+       🪪 STUDENT BIODATA PROFILE MODAL LOGIC (បង្ហាញតែសិស្សក្នុងថ្នាក់ដែលគ្រូកាន់)
     ========================================================= */
-    let currentProfileIdx = 0;
+    let currentProfileSubIdx = 0;
+
+    // ត្រងយកតែសិស្សដែលស្ថិតក្នុងថ្នាក់បច្ចុប្បន្ន (ថ្នាក់ដែលគ្រូកាន់)
+    function getFilteredStudentsForProfile() {
+      const targetClass = currentSelectedClass ? currentSelectedClass.replace(/^ថ្នាក់ទី\s*/, '').trim() : '';
+      return studentsList
+        .map((s, idx) => ({ s, originalIdx: idx }))
+        .filter(item => {
+          if (item.s.isDraft) return false;
+          if (!targetClass) return true;
+          const sGrade = (item.s.grade || '').replace(/^ថ្នាក់ទី\s*/, '').trim();
+          return !sGrade || sGrade === targetClass;
+        });
+    }
 
     function openProfileModal(realIdx) {
       if (realIdx === null || realIdx === undefined || !studentsList[realIdx]) return;
-      currentProfileIdx = realIdx;
+
+      const profileStudents = getFilteredStudentsForProfile();
+      let matchIdx = profileStudents.findIndex(item => item.originalIdx === realIdx);
+      if (matchIdx === -1) matchIdx = 0;
+
+      currentProfileSubIdx = matchIdx;
       renderProfileModalContent();
       document.getElementById('profileModalOverlay').style.display = 'flex';
     }
@@ -2359,25 +2393,40 @@
     }
 
     function renderProfileModalContent() {
-      const s = studentsList[currentProfileIdx];
-      if (!s) return;
+      const profileStudents = getFilteredStudentsForProfile();
+      if (!profileStudents.length) {
+        alert("គ្មានទិន្នន័យសិស្សក្នុងថ្នាក់នេះដើម្បីបង្ហាញឡើយ!");
+        closeProfileModal();
+        return;
+      }
 
-      // Populate Class Selector in Modal
+      if (currentProfileSubIdx < 0) currentProfileSubIdx = 0;
+      if (currentProfileSubIdx >= profileStudents.length) currentProfileSubIdx = profileStudents.length - 1;
+
+      const currentItem = profileStudents[currentProfileSubIdx];
+      const s = currentItem.s;
+
+      // បង្ហាញ Dropdown ថ្នាក់ (បើមិនមែន Admin គឺចាក់សោរបង្ហាញតែថ្នាក់ដែលគ្រូកាន់)
       const clsSel = document.getElementById('profileClassSelect');
       clsSel.innerHTML = '';
-      availableClassesList.forEach(cls => {
-        let val = (typeof cls === 'object' && cls !== null) ? (cls.className || cls.name) : cls;
-        val = String(val).replace(/^ថ្នាក់ទី\s*/, '').trim();
-        if (val) clsSel.innerHTML += `<option value="${esc(val)}" ${val === currentSelectedClass ? 'selected' : ''}>ថ្នាក់ទី ${esc(val)}</option>`;
-      });
+      if (!IS_ADMIN) {
+        const clsName = currentSelectedClass || 'មិនទាន់កំណត់';
+        clsSel.innerHTML = `<option value="${esc(clsName)}">ថ្នាក់ទី ${esc(clsName)}</option>`;
+        clsSel.disabled = true;
+      } else {
+        clsSel.disabled = false;
+        availableClassesList.forEach(cls => {
+          let val = (typeof cls === 'object' && cls !== null) ? (cls.className || cls.name) : cls;
+          val = String(val).replace(/^ថ្នាក់ទី\s*/, '').trim();
+          if (val) clsSel.innerHTML += `<option value="${esc(val)}" ${val === currentSelectedClass ? 'selected' : ''}>ថ្នាក់ទី ${esc(val)}</option>`;
+        });
+      }
 
-      // Populate Student Selector in Modal
+      // បង្ហាញ Dropdown សិស្ស (បង្ហាញតែសិស្សក្នុងថ្នាក់នោះប៉ុណ្ណោះ)
       const stSel = document.getElementById('profileStudentSelect');
       stSel.innerHTML = '';
-      studentsList.forEach((st, idx) => {
-        if (!st.isDraft) {
-          stSel.innerHTML += `<option value="${idx}" ${idx === currentProfileIdx ? 'selected' : ''}>${idx + 1}. ${esc(st.name || 'គ្មានឈ្មោះ')} (${esc(st.grade || currentSelectedClass)})</option>`;
-        }
+      profileStudents.forEach((item, subIdx) => {
+        stSel.innerHTML += `<option value="${subIdx}" ${subIdx === currentProfileSubIdx ? 'selected' : ''}>${subIdx + 1}. ${esc(item.s.name || 'គ្មានឈ្មោះ')}</option>`;
       });
 
       // Hero Card Info
@@ -2415,7 +2464,7 @@
       document.getElementById('profileAgeValue').innerText = age ? `${age} ឆ្នាំ` : '-';
       document.getElementById('profilePhoneValue').innerText = s.phone || '-';
 
-      // 🌟 ទីកន្លែងកំណើត និង អាសយដ្ឋានបច្ចុប្បន្ន (លុបពាក្យស្ទួន ៤ ដង)
+      // ទីកន្លែងកំណើត និង អាសយដ្ឋានបច្ចុប្បន្ន
       document.getElementById('profilePobValue').innerText = cleanDuplicateAddress(s.pob) || '-';
       document.getElementById('profileAddressValue').innerText = cleanDuplicateAddress(s.address) || '-';
 
@@ -2427,9 +2476,9 @@
     }
 
     function onProfileStudentChange() {
-      const idx = Number(document.getElementById('profileStudentSelect').value);
-      if (!isNaN(idx) && studentsList[idx]) {
-        currentProfileIdx = idx;
+      const subIdx = Number(document.getElementById('profileStudentSelect').value);
+      if (!isNaN(subIdx)) {
+        currentProfileSubIdx = subIdx;
         renderProfileModalContent();
       }
     }
@@ -2440,20 +2489,19 @@
       const classFilterSel = document.getElementById('classFilterSelect');
       if (classFilterSel) classFilterSel.value = val;
       syncWithBackendParallel(true).then(() => {
-        currentProfileIdx = 0;
+        currentProfileSubIdx = 0;
         renderProfileModalContent();
       });
     }
 
     function navProfileStudent(dir) {
-      let nextIdx = currentProfileIdx + dir;
-      while (nextIdx >= 0 && nextIdx < studentsList.length && studentsList[nextIdx].isDraft) {
-        nextIdx += dir;
-      }
-      if (nextIdx >= 0 && nextIdx < studentsList.length) {
-        currentProfileIdx = nextIdx;
-        renderProfileModalContent();
-      }
+      const profileStudents = getFilteredStudentsForProfile();
+      if (!profileStudents.length) return;
+      let nextSubIdx = currentProfileSubIdx + dir;
+      if (nextSubIdx < 0) nextSubIdx = profileStudents.length - 1;
+      if (nextSubIdx >= profileStudents.length) nextSubIdx = 0;
+      currentProfileSubIdx = nextSubIdx;
+      renderProfileModalContent();
     }
 
     /* 🌟 EDIT MODAL */
@@ -2589,90 +2637,110 @@
       syncWithBackendParallel(false);
     }
 
-    async function saveAllRows() {
-      const btn = document.getElementById('saveAllBtn');
-      btn.innerHTML = `<span class="spinner-dark" style="width:12px;height:12px;border-top-color:#fff;"></span> កំពុងរក្សាទុក...`;
-      btn.disabled = true;
-      let ok = 0, fail = 0;
-      try {
-        const jobs = [];
-        document.querySelectorAll('#tableBody tr[data-index]').forEach(r => {
-          const s = studentsList[Number(r.dataset.index)];
-          if (!s) return;
-          const f = {}; r.querySelectorAll('[data-field]').forEach(inp => f[inp.dataset.field] = inp.value.trim());
-          const name = `${f.lastName || ''} ${f.firstName || ''}`.trim();
-          if (!name) return;
-          s.id = f.id || s.id || ('ST' + Math.floor(100000 + Math.random() * 900000));
-          s.name = name; 
-          s.sex = f.sex || s.sex; 
-          s.grade = f.grade || s.grade; 
-          s.phone = f.phone;
-          s.pob = joinAddressParts(f.pob_village, f.pob_commune, f.pob_district, f.pob_province);
-          s.address = joinAddressParts(f.addr_village, f.addr_commune, f.addr_district, f.addr_province);
-          jobs.push(s);
-        });
+    /* =========================================================
+       📊 មុខងារទាញយក EXCEL (EXPORT TO EXCEL) តាមការស្នើសុំ
+    ========================================================= */
+    function exportStudentsToExcel() {
+      const q = document.getElementById('searchInput').value.toLowerCase().trim();
 
-        if (!jobs.length) { 
-          showToast("គ្មានទិន្នន័យត្រូវរក្សាទុកឡើយ!"); 
-          btn.innerHTML = `<span>📥</span> <span>នាំចូល Sheet</span>`; 
-          btn.disabled = false;
-          return; 
-        }
+      const exportList = studentsList.filter(s => {
+        if (s.isDraft) return false;
+        const matchSearch = !q ||
+          (s.name && s.name.toLowerCase().includes(q)) ||
+          (s.id && String(s.id).toLowerCase().includes(q));
 
-        for (let i = 0; i < jobs.length; i += 2) {
-          await Promise.all(jobs.slice(i, i + 2).map(async s => {
-            const payload = buildPayload(s);
-            let res = null;
-            if (s.origId) {
-              res = await apiRequest('updateStudentData', { formData: payload });
-              if (!res && lastApiError && lastApiError.includes('រកមិនឃើញ')) res = await apiRequest('submitStudentData', { formData: payload });
-            } else {
-              res = await apiRequest('submitStudentData', { formData: payload });
-              if (!res && lastApiError && lastApiError.includes('មានរួចហើយ')) res = await apiRequest('updateStudentData', { formData: payload });
-            }
-            if (res) { s.origId = s.id; s.isDraft = false; ok++; } else fail++;
-          }));
-        }
+        if (!matchSearch) return false;
 
-        showToast(fail ? `⚠️ រក្សាទុកបាន ${ok} • បរាជ័យ ${fail} (${lastApiError})` : `🎉 បានរក្សាទុក ${ok} នាក់ជោគជ័យ!`);
-        hideBottomNavBar();
-        notifyParentDataChanged();
-        syncWithBackendParallel(false);
-      } catch (err) { 
-        showToast("⚠️ ការរក្សាទុកជួបបញ្ហា"); 
-        console.error(err); 
-      } finally { 
-        btn.innerHTML = `<span>📥</span> <span>នាំចូល Sheet</span>`; 
-        btn.disabled = false; 
+        const isDropout = Boolean(s.dropoutSemester && String(s.dropoutSemester).trim() !== '');
+        if (currentStatusFilter === 'កំពុងសិក្សា' && isDropout) return false;
+        if (currentStatusFilter === 'ឈប់រៀន' && !isDropout) return false;
+
+        return true;
+      });
+
+      if (!exportList.length) {
+        alert("គ្មានទិន្នន័យសិស្សសម្រាប់ទាញយកជា Excel ទេ!");
+        return;
       }
+
+      const headers = [
+        "ល.រ", "អត្តលេខ", "គោត្តនាម", "នាម", "ភេទ",
+        "ថ្ងៃខែឆ្នាំកំណើត", "អាយុ", "ថ្នាក់", "លេខទូរស័ព្ទ",
+        "ទីកន្លែងកំណើត", "អាសយដ្ឋានបច្ចុប្បន្ន",
+        "ឈ្មោះឪពុក", "មុខរបរឪពុក", "ឈ្មោះម្តាយ", "មុខរបរម្តាយ"
+      ];
+
+      const rows = exportList.map((s, index) => {
+        const parts = (s.name || '').trim().split(/\s+/);
+        const lName = parts[0] || '';
+        const fName = parts.slice(1).join(' ') || '';
+        const formattedDob = formatToInputDate(s.dob);
+        const age = calculateAge(formattedDob);
+
+        return [
+          index + 1,
+          s.id || '',
+          lName,
+          fName,
+          s.sex || s.gender || 'ស្រី',
+          formattedDob || s.dob || '',
+          age || '',
+          s.grade || (currentSelectedClass ? `ថ្នាក់ទី${currentSelectedClass}` : ''),
+          s.phone || '',
+          cleanDuplicateAddress(s.pob) || '',
+          cleanDuplicateAddress(s.address) || '',
+          s.father || s.fatherName || '',
+          s.fatherJob || '',
+          s.mother || s.motherName || '',
+          s.motherJob || ''
+        ];
+      });
+
+      const wsData = [headers, ...rows];
+      const ws = XLSX.utils.aoa_to_sheet(wsData);
+
+      const colWidths = headers.map((h, i) => {
+        let maxLen = h.length;
+        rows.forEach(r => {
+          const val = String(r[i] || '');
+          if (val.length > maxLen) maxLen = val.length;
+        });
+        return { wch: Math.min(Math.max(maxLen + 4, 10), 40) };
+      });
+      ws['!cols'] = colWidths;
+
+      const wb = XLSX.utils.book_new();
+      const sheetName = currentSelectedClass ? `ថ្នាក់ទី${currentSelectedClass}` : "បញ្ជីសិស្ស";
+      XLSX.utils.book_append_sheet(wb, ws, sheetName.substring(0, 31));
+
+      const fileName = `បញ្ជីរាយនាមសិស្ស_${sheetName.replace(/\s+/g, '_')}.xlsx`;
+      XLSX.writeFile(wb, fileName);
+      showToast(`📥 បានទាញយកឯកសារ «${fileName}» ជោគជ័យ!`);
     }
 
     /* =========================================================
-       🌟 មុខងារ SORT តាមត្រកូល (គោត្តនាម / ពាក្យខាងមុខ) ពី ក-អ
+       🌟 មុខងារ SORT តាមត្រកូល (គោត្តនាម) ពី ក-អ
     ========================================================= */
     function getKhmerSortParts(fullName) {
       const clean = String(fullName || '').trim();
       if (!clean) return { last: '', first: '' };
       const parts = clean.split(/\s+/);
-      const last = parts[0] || ''; // ត្រកូល (គោត្តនាម)
-      const first = parts.slice(1).join(' ') || ''; // នាម
+      const last = parts[0] || '';
+      const first = parts.slice(1).join(' ') || '';
       return { last, first };
     }
 
     function sortStudentsAlphabetical() {
-      sortDirectionAsc = !sortDirectionAsc; // ចុចប្តូរ ក-អ ឬ អ-ក
+      sortDirectionAsc = !sortDirectionAsc;
       
       studentsList.sort((a, b) => {
-        // ជួរ Draft ទុកនៅក្រោមគេជានិច្ច
         if (a.isDraft && !b.isDraft) return 1;
         if (!a.isDraft && b.isDraft) return -1;
 
         const partA = getKhmerSortParts(a.name);
         const partB = getKhmerSortParts(b.name);
 
-        // 🌟 ១. ប្រៀបធៀបតាម «ត្រកូល (គោត្តនាម)» ពី ក ដល់ អ ជាចម្បង
         let cmp = (partA.last || '').localeCompare(partB.last || '', 'km');
-        // 🌟 ២. បើត្រកូលដូចគ្នា ទើបប្រៀបធៀបតាម «នាម» ខាងក្រោយ
         if (cmp === 0) {
           cmp = (partA.first || '').localeCompare(partB.first || '', 'km');
         }
@@ -2715,7 +2783,6 @@
       document.getElementById('lockText').innerText = isTableLocked ? 'ដោះសោ' : 'ចាក់សោ';
     }
 
-    /* 🌟 POPUP MENU (វាស់កម្ពស់ជាក់ស្តែង បើជិតបាតអេក្រង់ លោតឡើងលើវិញ) */
     function openActionMenu(e, realIdx) {
       e.stopPropagation();
       activeRowIndex = realIdx;
@@ -2887,7 +2954,7 @@
       studentsList = studentsList.concat(pendingImportStudents);
       applyFilterAndRender();
       closeImportModal();
-      showToast(`🎉 បាននាំចូល ${pendingImportStudents.length} នាក់ទៅក្នុងតារាង! ចុច «នាំចូល Sheet» ដើម្បីរក្សាទុក`);
+      showToast(`🎉 បាននាំចូល ${pendingImportStudents.length} នាក់ទៅក្នុងតារាងជោគជ័យ!`);
       showBottomNavBar();
     }
 
