@@ -1,13 +1,51 @@
 <!DOCTYPE html>
-<html lang="km">
+<html lang="km" data-theme="dark">
 <head>
   <base target="_top">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>តារាងចំណាត់ថ្នាក់សិស្ស</title>
+
+  <!-- 🔤 Google Fonts Khmer & FontAwesome -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Moul&family=Kantumruy+Pro:wght@400;500;600;700&family=Noto+Sans+Khmer:wght@400;500;600;700&family=Noto+Serif+Khmer:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <style>
+    /* =========================================================
+       🎨 DYNAMIC THEME SYSTEM (LIGHT & DARK MODE)
+    ========================================================= */
+    :root {
+      /* Theme Tokens - Light Mode */
+      --app-bg: #f8fafc;
+      --tb-bg: rgba(255, 255, 255, 0.95);
+      --tb-border: #e2e8f0;
+      --card-panel-bg: #ffffff;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --input-bg: #ffffff;
+      --input-border: #cbd5e1;
+      --input-focus: #0284c7;
+      --ctrl-group-bg: #f1f5f9;
+      --shadow-sm: 0 4px 16px rgba(15, 23, 42, 0.06);
+    }
+
+    [data-theme="dark"] {
+      /* Theme Tokens - Dark Mode */
+      --app-bg: #090e17;
+      --tb-bg: rgba(15, 23, 42, 0.94);
+      --tb-border: #1e293b;
+      --card-panel-bg: #111e33;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --input-bg: #162642;
+      --input-border: #233f66;
+      --input-focus: #38bdf8;
+      --ctrl-group-bg: #0e1a2d;
+      --shadow-sm: 0 8px 24px rgba(0, 0, 0, 0.45);
+    }
+
     @page { size: A4 portrait; margin: 8mm; }
     * { box-sizing: border-box; }
     
@@ -21,8 +59,8 @@
       font-family: 'Noto Serif Khmer', 'Kantumruy Pro', 'Noto Sans Khmer', 'Khmer OS', sans-serif;
       margin: 0; 
       padding: 0 0 120px 0 !important;
-      background: white; 
-      color: #000; 
+      background: var(--app-bg); 
+      color: var(--text-main); 
       line-height: 1.4;
       min-height: 100%; 
       height: auto !important;
@@ -30,24 +68,272 @@
       overflow-y: auto;
       -webkit-overflow-scrolling: touch;
       position: relative;
+      transition: background 0.25s ease, color 0.25s ease;
+    }
+
+    /* =========================================================
+       🎛️ NEW SLEEK TOOLBAR (CONTROL PANEL)
+    ========================================================= */
+    .control-panel {
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      background: var(--tb-bg);
+      backdrop-filter: blur(14px);
+      padding: 12px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      box-shadow: var(--shadow-sm);
+      border-bottom: 1.5px solid var(--tb-border);
+      transition: all 0.25s ease;
+    }
+
+    .control-row {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
+
+    .cp-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .panel-pill-box {
+      background: var(--ctrl-group-bg);
+      border: 1px solid var(--tb-border);
+      border-radius: 12px;
+      padding: 5px 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .toolbar-label {
+      font-size: 12.5px;
+      font-weight: 700;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+    }
+
+    .form-control {
+      padding: 6px 10px;
+      font-family: 'Noto Serif Khmer', 'Kantumruy Pro', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      border: 1.5px solid var(--input-border);
+      border-radius: 8px;
+      outline: none;
+      background: var(--input-bg);
+      color: var(--text-main);
+      transition: all 0.2s ease;
+    }
+    .form-control:focus {
+      border-color: var(--input-focus);
+      box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
+    }
+    .form-control:disabled {
+      opacity: 0.65;
+      cursor: not-allowed;
+    }
+
+    /* ── Switchers & Badges ── */
+    .period-type-switcher {
+      display: inline-flex;
+      background: var(--input-bg);
+      padding: 3px;
+      border-radius: 9px;
+      border: 1.5px solid var(--input-border);
+      gap: 3px;
+    }
+    .period-type-btn {
+      padding: 5px 12px;
+      border: none;
+      border-radius: 6px;
+      background: transparent;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-family: inherit;
+      font-weight: 700;
+      font-size: 12.5px;
+      transition: all 0.2s ease;
+    }
+    .period-type-btn:hover { color: var(--text-main); }
+    .period-type-btn.active {
+      background: #0284c7;
+      color: #ffffff;
+      box-shadow: 0 2px 6px rgba(2, 132, 199, 0.35);
+    }
+
+    #monthSelectWrap, #semesterSelectWrap { display: none; align-items: center; gap: 8px; }
+    #monthSelectWrap.active, #semesterSelectWrap.active { display: flex; }
+
+    .layout-switcher {
+      display: inline-flex;
+      background: var(--ctrl-group-bg);
+      padding: 3px;
+      border-radius: 9px;
+      border: 1px solid var(--tb-border);
+      gap: 4px;
+    }
+    .layout-btn {
+      padding: 5px 12px;
+      border: 1px solid transparent;
+      border-radius: 7px;
+      background: transparent;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-family: inherit;
+      font-weight: 700;
+      font-size: 12.5px;
+      transition: all 0.2s ease;
+    }
+    .layout-btn:hover { color: var(--text-main); }
+    .layout-btn.active {
+      background: var(--card-panel-bg);
+      color: #0284c7;
+      border-color: var(--input-border);
+      box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+    }
+    [data-theme="dark"] .layout-btn.active {
+      color: #38bdf8;
+    }
+
+    /* ── Action Buttons ── */
+    .btn {
+      padding: 6px 14px;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 700;
+      border-radius: 9px;
+      border: 1px solid transparent;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      user-select: none;
+      white-space: nowrap;
+    }
+    .btn:active { transform: scale(0.96); }
+
+    .btn-secondary {
+      background: var(--ctrl-group-bg);
+      color: var(--text-main);
+      border-color: var(--input-border);
+    }
+    .btn-secondary:hover {
+      border-color: var(--input-focus);
+      color: var(--input-focus);
+    }
+
+    .btn-success {
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: #fff;
+      box-shadow: 0 3px 10px rgba(16, 185, 129, 0.25);
+    }
+    .btn-success:hover {
+      background: linear-gradient(135deg, #059669, #047857);
+      transform: translateY(-1px);
+    }
+
+    /* ── Zoom Buttons ── */
+    .zoom-btn-group {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      background: var(--ctrl-group-bg);
+      padding: 3px;
+      border-radius: 9px;
+      border: 1px solid var(--tb-border);
+    }
+    .zoom-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      padding: 5px 10px;
+      border-radius: 6px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      font-family: 'Kantumruy Pro', sans-serif;
+    }
+    .zoom-btn:hover { color: var(--text-main); }
+    .zoom-btn.active {
+      background: #0284c7 !important;
+      color: #ffffff !important;
+      box-shadow: 0 2px 8px rgba(2, 132, 199, 0.4);
+    }
+
+    /* =========================================================
+       📄 A4 PRINT PAGE CONTAINER (រក្សាពណ៌សដាច់ខាត)
+    ========================================================= */
+    #printPage {
+      position: relative;
+      transition: zoom 0.2s ease;
+      padding: 20px 30px 40px;
+      max-width: 1050px;
+      margin: 20px auto 0;
+      background: #ffffff !important;
+      color: #000000 !important;
+      box-shadow: 0 10px 35px rgba(0, 0, 0, 0.2);
+      border-radius: 4px;
     }
 
     .khmer-moul { font-family: 'Moul', cursive; }
     .document-header { position: relative; width: 100%; margin-bottom: 12px; padding-top: 0px; }
     .school-info { position: absolute; left: 0; top: 25px; text-align: center; font-size: 12px; line-height: 1.6; }
     .nation-info { text-align: center; width: 100%; }
-    table.data-table { width: 100%; border-collapse: collapse; font-size: 12px; margin-top: 8px; table-layout: fixed; }
+
+    /* ── Table Styling (ការពារកុំឱ្យខ្មៅពេល Dark Mode) ── */
+    table.data-table { 
+      width: 100%; 
+      border-collapse: collapse; 
+      font-size: 12px; 
+      margin-top: 8px; 
+      table-layout: fixed; 
+      background: #ffffff !important;
+    }
     table.data-table th, table.data-table td {
-      border: 1px solid #000; padding: 6px 3px; text-align: center;
-      vertical-align: middle; line-height: 1.35; overflow-wrap: break-word; word-break: normal;
+      border: 1px solid #000 !important; 
+      padding: 6px 3px; 
+      text-align: center;
+      vertical-align: middle; 
+      line-height: 1.35; 
+      overflow-wrap: break-word; 
+      word-break: normal;
+      background: #ffffff !important;
+      color: #000000 !important;
     }
     table.data-table th {
-      background-color: #f1f5f9; color: #000;
-      font-family: 'Noto Serif Khmer', 'Kantumruy Pro', 'Noto Sans Khmer', 'Khmer OS', sans-serif;
-      font-size: 11px; padding: 7px 2px; font-weight: 700;
-      -webkit-print-color-adjust: exact; print-color-adjust: exact;
+      background-color: #f1f5f9 !important; 
+      color: #000000 !important;
+      font-family: 'Noto Serif Khmer', 'Kantumruy Pro', sans-serif;
+      font-size: 11px; 
+      padding: 7px 2px; 
+      font-weight: 700;
+      -webkit-print-color-adjust: exact; 
+      print-color-adjust: exact;
     }
-    table.data-table td.col-name { text-align: left; padding-left: 8px; padding-right: 4px; font-weight: 600; font-size: 12.5px; white-space: nowrap; }
+    table.data-table td.col-name { 
+      text-align: left; 
+      padding-left: 8px; 
+      padding-right: 4px; 
+      font-weight: 600; 
+      font-size: 12.5px; 
+      white-space: nowrap; 
+    }
+
     .rank-layout { display: none; width: 100%; }
     .rank-layout.active { display: block; }
     .rank-two-columns { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; width: 100%; align-items: start; }
@@ -55,15 +341,20 @@
     .rank-two-columns table.data-table th { font-size: 9.5px; padding: 5px 1px; }
     .rank-two-columns table.data-table td { padding: 4px 1px; }
     .rank-two-columns table.data-table td.col-name { font-size: 10px; padding-left: 4px; white-space: normal; word-break: break-word; overflow-wrap: break-word; line-height: 1.25; }
+    
     .blank-row td { border: none !important; background: transparent !important; color: transparent !important; }
     .blank-row { border: none !important; }
+
+    /* ── Summary & Footer ── */
     .summary-boxes { display: flex; gap: 12px; width: 100%; margin-top: 10px; border-top: 1px solid #000; padding-top: 8px; }
     .summary-box-left, .summary-box-right {
       flex: 1; border: 1.5px dashed #16a34a; border-radius: 6px; padding: 8px 12px;
       font-size: 11.5px; font-weight: 500; line-height: 1.9; color: #000; white-space: nowrap;
+      background: #ffffff !important;
     }
     .summary-box-left span, .summary-box-right span { font-weight: 700; color: #16a34a; }
     .grade-percent { font-weight: 700; white-space: nowrap; }
+
     .footer-container { margin-top: 12px; display: flex; justify-content: space-between; align-items: flex-start; font-size: 12px; }
     .footer-left { text-align: center; width: 40%; margin-top: 55px; }
     .footer-right { text-align: center; width: 55%; }
@@ -73,7 +364,6 @@
       text-align: center; background-color: #f8fafc; color: #000; font-weight: 600;
     }
     
-    /* ── ឈ្មោះគ្រូ DRAGGABLE (ច្បាស់ មិនបាត់ មិនលិចក្រោយគេ) ── */
     .teacher-name-display {
       font-family: 'Moul', cursive;
       font-size: 12px;
@@ -84,7 +374,6 @@
       display: inline-block;
       cursor: grab;
       user-select: none;
-      -webkit-user-select: none;
       padding: 4px 10px;
       border: 1px dashed transparent;
       border-radius: 4px;
@@ -99,75 +388,30 @@
       cursor: grabbing !important;
       box-shadow: 0 4px 14px rgba(37,99,235,0.25);
     }
-    
-    .control-panel { margin-bottom: 15px; background: #eff6ff; padding: 10px 15px; border-radius: 8px; display: flex; flex-direction: column; gap: 12px; border: 1px solid #bfdbfe; }
-    .control-row { display: flex; gap: 15px; align-items: center; justify-content: space-between; flex-wrap: wrap; }
-    .cp-select-group { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
-    .cp-select-group select, .cp-select-group input { padding: 6px; border-radius: 4px; border: 1px solid #ccc; font-family: 'Noto Serif Khmer', 'Kantumruy Pro'; }
-    .period-type-switcher { display: flex; gap: 6px; background: #dbeafe; padding: 4px; border-radius: 6px; }
-    .period-type-btn { padding: 6px 14px; border: none; border-radius: 5px; background: transparent; color: #1e3a8a; cursor: pointer; font-family: 'Noto Serif Khmer', 'Kantumruy Pro'; font-weight: 700; font-size: 13px; }
-    .period-type-btn.active { background: #1e40af; color: white; }
-    #monthSelectWrap, #semesterSelectWrap { display: none; align-items: center; gap: 8px; }
-    #monthSelectWrap.active, #semesterSelectWrap.active { display: flex; }
-    .layout-switcher { display: flex; gap: 6px; }
-    .layout-btn { padding: 6px 12px; border: 1px solid #93c5fd; border-radius: 5px; background: white; color: #1e3a8a; cursor: pointer; font-family: 'Noto Serif Khmer', 'Kantumruy Pro'; font-weight: 700; }
-    .layout-btn.active { background: #2563eb; color: white; border-color: #2563eb; }
-
-    .zoom-btn-group {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      background: #0f172a;
-      padding: 3px 6px;
-      border-radius: 8px;
-      border: 1px solid #334155;
-    }
-    .zoom-btn {
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid #334155;
-      color: #f8fafc;
-      padding: 5px 10px;
-      border-radius: 6px;
-      font-size: 12px;
-      font-weight: 700;
-      cursor: pointer;
-      transition: all 0.15s ease;
-      font-family: 'Kantumruy Pro', sans-serif;
-    }
-    .zoom-btn:hover { background: rgba(255, 255, 255, 0.18); }
-    .zoom-btn.active {
-      background: #2563eb !important;
-      border-color: #3b82f6 !important;
-      color: #ffffff !important;
-      box-shadow: 0 2px 8px rgba(37, 99, 235, 0.4);
-    }
-
-    #printPage {
-      position: relative;
-      transition: zoom 0.2s ease;
-      padding-bottom: 20px;
-    }
 
     @media screen and (max-width: 768px) {
-      body { padding: 6px 6px 140px 6px !important; }
-      .control-row { flex-direction: column; align-items: stretch; gap: 10px; }
-      .control-panel .cp-select-group { flex-direction: column !important; align-items: stretch !important; width: 100%; gap: 8px; }
-      .control-panel .cp-select-group select, .control-panel .cp-select-group input { width: 100%; }
-      #monthSelectWrap, #semesterSelectWrap { width: 100%; }
-      .period-type-switcher { width: 100%; }
-      .period-type-btn { flex: 1; }
-      .control-panel .cp-actions { flex-direction: column !important; align-items: stretch !important; width: 100%; gap: 8px; }
-      .control-panel .cp-actions button { width: 100%; }
-      .layout-switcher { width: 100%; }
-      .layout-switcher .layout-btn { flex: 1; }
-      .zoom-btn-group { width: 100%; justify-content: center; }
-      .zoom-btn { flex: 1; text-align: center; }
+      body { padding: 0 0 140px 0 !important; }
+      .control-panel { padding: 10px 12px; }
+      .control-row { flex-direction: column; align-items: stretch; gap: 8px; }
+      .cp-group { width: 100%; justify-content: space-between; }
+      .panel-pill-box { width: 100%; }
+      .period-type-switcher, .layout-switcher, .zoom-btn-group { width: 100%; justify-content: center; }
+      .period-type-btn, .layout-btn, .zoom-btn { flex: 1; text-align: center; }
     }
 
+    /* =========================================================
+       🖨️ PRINT RULES (ស្តង់ដារក្រដាស A4 ស-ខ្មៅ ត្រឹមត្រូវ)
+    ========================================================= */
     @media print {
       .no-print { display: none !important; }
-      body { padding: 0 !important; background: white; }
-      #printPage { zoom: 1 !important; transform: none !important; padding-bottom: 0 !important; }
+      body { padding: 0 !important; background: white !important; }
+      #printPage { 
+        zoom: 1 !important; 
+        transform: none !important; 
+        padding: 0 !important; 
+        margin: 0 !important;
+        box-shadow: none !important;
+      }
       table.data-table { page-break-inside: auto; break-inside: auto; }
       table.data-table tr, table.data-table thead, table.data-table tbody tr { page-break-inside: avoid !important; break-inside: avoid !important; }
       table.data-table thead { display: table-header-group; }
@@ -200,45 +444,62 @@
 </head>
 <body>
 
+  <!-- =========================================================
+       🎛️ NEW PREMIUM TOOLBAR DESIGN
+  ========================================================= -->
   <div class="no-print control-panel">
+    <!-- ជួរទី ១៖ ថ្នាក់, គ្រូ, ប្លង់ទម្រង់, Zoom និងបោះពុម្ព -->
     <div class="control-row">
-      <div class="cp-select-group">
-        <label><b>🏫 ថ្នាក់៖</b></label>
-        <select id="classSelect" onchange="loadRankData()">
-          <option value="">-- កំពុងទាញយក... --</option>
-        </select>
+      <div class="cp-group">
+        <div class="panel-pill-box">
+          <span class="toolbar-label"><i class="fa-solid fa-graduation-cap" style="color:#0284c7;"></i> ថ្នាក់៖</span>
+          <select id="classSelect" class="form-control" style="min-width:130px;" onchange="loadRankData()">
+            <option value="">-- កំពុងទាញយក... --</option>
+          </select>
+        </div>
+
+        <div class="panel-pill-box">
+          <span class="toolbar-label"><i class="fa-solid fa-user-tie" style="color:#10b981;"></i> គ្រូបន្ទុកថ្នាក់៖</span>
+          <input type="text" id="teacherNameCtrl" class="form-control" placeholder="វាយឈ្មោះគ្រូ..." oninput="syncTeacherName(this.value)">
+        </div>
       </div>
 
-      <div class="cp-select-group">
-        <label><b>👤 គ្រូបន្ទុកថ្នាក់ (កែបាន)៖</b></label>
-        <input type="text" id="teacherNameCtrl" placeholder="ឈ្មោះគ្រូ..." oninput="syncTeacherName(this.value)">
-      </div>
-
-      <div class="cp-actions" style="display:flex; gap:8px; align-items:center;">
+      <div class="cp-group">
+        <!-- 🔍 Zoom Buttons -->
         <div class="zoom-btn-group" title="ពង្រីក/បង្រួមទំហំមើល">
           <button type="button" class="zoom-btn active" data-zoom="1" onclick="setZoom(1, this)">100%</button>
           <button type="button" class="zoom-btn" data-zoom="0.75" onclick="setZoom(0.75, this)">75%</button>
           <button type="button" class="zoom-btn" data-zoom="0.5" onclick="setZoom(0.5, this)">50%</button>
         </div>
 
+        <!-- 📑 Layout Switcher -->
         <div class="layout-switcher">
           <button id="layout1Btn" class="layout-btn active" onclick="setRankLayout(1)">ទម្រង់ទី ១</button>
           <button id="layout2Btn" class="layout-btn" onclick="setRankLayout(2)">ទម្រង់ទី ២ (ចែកជា២)</button>
         </div>
-        <button id="resetTeacherPosBtn" onclick="resetTeacherNamePosition()" title="ដាក់ឈ្មោះគ្រូបន្ទុកថ្នាក់ត្រឡប់ទីតាំងដើមវិញ" style="padding:6px 14px; background:#64748b; color:white; border:none; border-radius:4px; cursor:pointer; font-weight:bold; font-family:'Noto Serif Khmer','Kantumruy Pro'; font-size:12px;">↺ ទីតាំងឈ្មោះគ្រូ</button>
-        <button id="printBtn" onclick="printWhenFontsReady()" style="padding:6px 16px; background:#16a34a; color:white; border:none; border-radius:4px; cursor:pointer; font-weight:bold; font-family:'Noto Serif Khmer','Kantumruy Pro';">🖨️ បោះពុម្ព</button>
+
+        <button id="resetTeacherPosBtn" class="btn btn-secondary" onclick="resetTeacherNamePosition()" title="ដាក់ឈ្មោះគ្រូបន្ទុកថ្នាក់ត្រឡប់ទីតាំងដើមវិញ">
+          <i class="fa-solid fa-rotate-left"></i> ទីតាំងឈ្មោះគ្រូ
+        </button>
+
+        <button id="printBtn" class="btn btn-success" onclick="printWhenFontsReady()">
+          <i class="fa-solid fa-print"></i> បោះពុម្ព
+        </button>
       </div>
     </div>
 
-    <div class="control-row">
-      <div class="cp-select-group" style="width:100%;">
-        <label><b>📅 ប្រភេទ៖</b></label>
+    <!-- ជួរទី ២៖ ការកំណត់ខែ/ឆមាស (Period Switcher) -->
+    <div class="control-row" style="background:var(--ctrl-group-bg); padding:6px 12px; border-radius:12px; border:1px solid var(--tb-border);">
+      <div class="cp-group" style="width:100%;">
+        <span class="toolbar-label"><i class="fa-solid fa-calendar-days" style="color:#0284c7;"></i> ប្រភេទពិន្ទុ៖</span>
+
         <div class="period-type-switcher">
           <button type="button" id="typeMonthBtn" class="period-type-btn active" onclick="setPeriodType('month')">ប្រចាំខែ</button>
           <button type="button" id="typeSemesterBtn" class="period-type-btn" onclick="setPeriodType('semester')">ឆមាស / ប្រចាំឆ្នាំ</button>
         </div>
+
         <div id="monthSelectWrap" class="active">
-          <select id="monthSelect" onchange="loadRankData()">
+          <select id="monthSelect" class="form-control" onchange="loadRankData()">
             <option value="មករា">ខែមករា</option>
             <option value="កុម្ភៈ" selected>ខែកុម្ភៈ</option>
             <option value="មីនា">ខែមីនា</option>
@@ -253,8 +514,9 @@
             <option value="ធ្នូ">ខែធ្នូ</option>
           </select>
         </div>
+
         <div id="semesterSelectWrap">
-          <select id="semesterSelect" onchange="loadRankData()">
+          <select id="semesterSelect" class="form-control" onchange="loadRankData()">
             <option value="ឆមាសទី១">ការប្រឡងឆមាសទី១ (តែប្រឡង)</option>
             <option value="ប្រចាំឆមាសទី១">ប្រចាំឆមាសទី១ (សរុប)</option>
             <option value="ឆមាសទី២">ការប្រឡងឆមាសទី២ (តែប្រឡង)</option>
@@ -266,7 +528,10 @@
     </div>
   </div>
 
-  <div id="printPage" style="position:relative;">
+  <!-- =========================================================
+       📄 A4 PRINTABLE DOCUMENT
+  ========================================================= -->
+  <div id="printPage">
     <div class="document-header">
       <div class="school-info">
         <span style="font-weight:700;">រដ្ឋបាល ស្រុកសំឡូត</span><br>
@@ -362,20 +627,40 @@
 
   <script>
     // =========================================================
-    // ⚙️ CONFIG & GITHUB/APPS SCRIPT BRIDGING
+    // ⚙️ THEME MANAGEMENT (SYNC 100% WITH HOMEPAGE)
     // =========================================================
-    var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz9GLD2TJS4UPKVGxrc3H73tGCtjlMI7-56E7TlKcLHyBwqCiZ1jPF_okv2m1ubTjpy/exec';
-
     var _urlParams = new URLSearchParams(window.location.search);
     function _get(key) { try { return localStorage.getItem(key) || ''; } catch(e) { return ''; } }
     function _set(key, val) { try { localStorage.setItem(key, val); } catch(e) {} }
 
-    var TOKEN        = (window.parent && window.parent.SESSION_TOKEN) || _urlParams.get('token') || _get('krou_session_token') || _get('school_token') || '';
-    var USER_ROLE    = (window.parent && window.parent.USER_ROLE)     || _urlParams.get('role')  || _get('krou_user_role')    || _get('school_user_role')  || 'teacher';
-    var USER_CLASS   = (window.parent && window.parent.USER_CLASS)    || _urlParams.get('cls')   || _urlParams.get('class')   || _get('krou_user_class')    || _get('school_user_class') || '';
+    function applyTheme(theme) {
+      theme = theme || 'dark';
+      document.documentElement.setAttribute('data-theme', theme);
+    }
+
+    // ទាញយក Theme ដំបូង
+    var initialTheme = _urlParams.get('theme') || _get('krou_theme_manual') || 'dark';
+    applyTheme(initialTheme);
+
+    // ស្ដាប់សារប្ដូរ Theme ពី Homepage ភ្លាមៗ (Realtime)
+    window.addEventListener('message', function(event) {
+      if (event.data && (event.data.type === 'THEME_CHANGE' || event.data.theme)) {
+        applyTheme(event.data.theme || event.data);
+      }
+    });
+
+    // =========================================================
+    // ⚙️ CONFIG & API CALLER
+    // =========================================================
+    var SCRIPT_URL = (window.parent && window.parent.BACKEND_URL)
+      || _urlParams.get('apiUrl')
+      || 'https://script.google.com/macros/s/AKfycbz9GLD2TJS4UPKVGxrc3H73tGCtjlMI7-56E7TlKcLHyBwqCiZ1jPF_okv2m1ubTjpy/exec';
+
+    var TOKEN        = (window.parent && window.parent.SESSION_TOKEN) || _urlParams.get('token') || _get('krou_session_token') || _get('user_token') || _get('school_token') || '';
+    var USER_ROLE    = (window.parent && window.parent.USER_ROLE)     || _urlParams.get('role')  || _get('krou_user_role')    || 'teacher';
+    var USER_CLASS   = (window.parent && window.parent.USER_CLASS)    || _urlParams.get('cls')   || _urlParams.get('class')   || _get('krou_assigned_class') || _get('krou_user_class') || '';
     var TEACHER_NAME = (window.parent && window.parent.TEACHER_NAME) || _get('krou_teacher_name') || '';
 
-    // ── Universal API Caller ──
     async function apiCall(action, params) {
       params = params || {};
       if (TOKEN) params.token = params.token || TOKEN;
@@ -389,7 +674,12 @@
       }
 
       if (typeof callBackendApi === 'function') {
-        return callBackendApi(action, params);
+        try {
+          var res = await callBackendApi(action, params);
+          if (res && res.classes !== undefined) return res.classes;
+          if (res && res.data !== undefined) return res.data;
+          return res;
+        } catch(e) {}
       }
 
       var res = await fetch(SCRIPT_URL, {
@@ -400,6 +690,7 @@
       if (!res.ok) throw new Error('HTTP ' + res.status);
       var json = await res.json();
       if (json && json.success === false) throw new Error(json.error || json.message || 'Server error');
+      if (json && json.classes !== undefined) return json.classes;
       if (json && json.data !== undefined) return json.data;
       return json;
     }
@@ -432,7 +723,7 @@
       setCurrentKhmerDay();
       initDraggableTeacherName();
       initTeacherSession();
-      loadClassListFast(); // ⚡ បង្កើនល្បឿនទាញយក
+      loadClassListFast();
 
       const savedLayout = localStorage.getItem('rankLayout');
       setRankLayout(savedLayout === '2' ? 2 : 1);
@@ -476,7 +767,7 @@
       if (dayEl) dayEl.value = toKhmerNum(new Date().getDate());
     }
 
-    // ── 🌟 ឈ្មោះគ្រូ DRAGGABLE (ដោះស្រាយកំហុសហោះបាត់ឈ្មោះពេល ZOOM) ──
+    // ── 🌟 ឈ្មោះគ្រូ DRAGGABLE ──
     var TEACHER_POS_KEY = 'teacherNameDragPosPct';
 
     function initDraggableTeacherName() {
@@ -612,14 +903,14 @@
         }, 100);
         return;
       }
-      if (btn) { btn.disabled = true; btn.textContent = '⏳ កំពុងរៀបចំ...'; }
+      if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> កំពុងរៀបចំ...'; }
       document.fonts.ready.then(function() {
         setTimeout(function() {
-          if (btn) { btn.disabled = false; btn.textContent = '🖨️ បោះពុម្ព'; }
+          if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fa-solid fa-print"></i> បោះពុម្ព'; }
           try { window.print(); } catch(e) { window.parent.print(); }
         }, 150);
       }).catch(function() {
-        if (btn) { btn.disabled = false; btn.textContent = '🖨️ បោះពុម្ព'; }
+        if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fa-solid fa-print"></i> បោះពុម្ព'; }
         try { window.print(); } catch(e) { window.parent.print(); }
       });
     }
@@ -660,7 +951,6 @@
         : document.getElementById('monthSelect').value;
     }
 
-    // ⚡ បង្កើនល្បឿនដោយប្រើប្រាស់ Cache បញ្ជីថ្នាក់ក្នុង LocalStorage
     async function loadClassListFast() {
       let select = document.getElementById('classSelect');
       var cachedClasses = _get('krou_cached_classes');
@@ -674,7 +964,10 @@
       }
 
       try {
-        var res = await apiCall('getClassListForSession', { token: TOKEN });
+        var res = await apiCall('getClassList');
+        if (!res || !res.length) {
+          res = await apiCall('getClassListForSession');
+        }
         var classes = Array.isArray(res) ? res : (res && res.classes ? res.classes : (res && res.data ? res.data : []));
 
         if (classes && classes.length > 0) {
@@ -729,7 +1022,7 @@
       document.getElementById('txtClassHeader').textContent = selectedClass.startsWith("ថ្នាក់") ? selectedClass : "ថ្នាក់ទី " + selectedClass;
       document.getElementById('txtTitleHeader').textContent = getPeriodTitle(selectedMonth);
       document.getElementById('thTotalHeader').textContent = SUMMARY_TOTAL_AS_AVG_PERIODS.includes(selectedMonth) ? "មធ្យមភាគសរុប" : "ពិន្ទុសរុប";
-      document.getElementById('rankBody').innerHTML = '<tr><td colspan="9" style="padding:20px; color:#1e40af;">⏳ កំពុងទាញយកទិន្នន័យ...</td></tr>';
+      document.getElementById('rankBody').innerHTML = '<tr><td colspan="9" style="padding:20px; color:#0284c7;"><i class="fa-solid fa-spinner fa-spin"></i> កំពុងទាញយកទិន្នន័យ...</td></tr>';
 
       try {
         var res = await apiCall('getRankDataSecured', {
@@ -742,7 +1035,7 @@
         var data = Array.isArray(res) ? res : (res && res.data ? res.data : []);
         renderRankTable(data);
       } catch (err) {
-        document.getElementById('rankBody').innerHTML = '<tr><td colspan="9" style="padding:20px; color:#ef4444;">មានបញ្ហា៖ ' + (err.message || err) + '</td></tr>';
+        document.getElementById('rankBody').innerHTML = '<tr><td colspan="9" style="padding:20px; color:#ef4444;">❌ មានបញ្ហា៖ ' + (err.message || err) + '</td></tr>';
       }
     }
 
