@@ -472,7 +472,7 @@
     });
 
     // =========================================================
-    // ⚙️ BACKEND API & CONFIGURATION
+    // ⚙️ BACKEND API & CONFIGURATION (កែសម្រួលដោះស្រាយកំហុស .classes)
     // =========================================================
     var SCRIPT_URL = (window.parent && window.parent.BACKEND_URL)
       || _urlParams.get('apiUrl')
@@ -480,9 +480,10 @@
 
     var TOKEN        = (window.parent && window.parent.SESSION_TOKEN) || _urlParams.get('token') || _get('krou_session_token') || _get('user_token') || _get('school_token') || '';
     var USER_ROLE    = (window.parent && window.parent.USER_ROLE)     || _urlParams.get('role')  || _get('krou_user_role')    || 'teacher';
-    var USER_CLASS   = (window.parent && window.parent.USER_CLASS)    || _urlParams.get('cls')   || _urlParams.get('class')   || _get('krou_assigned_class') || _get('krou_user_class') || '';
+    var USER_CLASS   = _urlParams.get('cls') || _urlParams.get('class') || _get('krou_assigned_class') || _get('krou_user_class') || '';
     var TEACHER_NAME = (window.parent && window.parent.TEACHER_NAME) || _get('krou_teacher_name') || '';
 
+    // 🌟 API Caller ឆ្លាតវៃ៖ ស្រង់ classes តែពេលហៅ getClassList ប៉ុណ្ណោះ កុំកាត់ចោលពេលហៅ Bundle
     async function apiCall(action, params) {
       params = params || {};
       if (TOKEN) params.token = params.token || TOKEN;
@@ -498,8 +499,9 @@
       if (typeof callBackendApi === 'function') {
         try {
           var res = await callBackendApi(action, params);
-          if (res && res.classes !== undefined) return res.classes;
-          if (res && res.data !== undefined) return res.data;
+          if (action === 'getClassList' || action === 'getClassListForSession') {
+            if (res && res.classes !== undefined) return res.classes;
+          }
           return res;
         } catch(e) {}
       }
@@ -512,8 +514,12 @@
       if (!res.ok) throw new Error('HTTP ' + res.status);
       var json = await res.json();
       if (json && json.success === false) throw new Error(json.error || json.message || 'Server error');
-      if (json && json.classes !== undefined) return json.classes;
-      if (json && json.data !== undefined) return json.data;
+
+      // 🌟 ស្រង់តែពេលដែលហៅទាញយកថ្នាក់សុទ្ធប៉ុណ្ណោះ
+      if (action === 'getClassList' || action === 'getClassListForSession') {
+        if (json && json.classes !== undefined) return json.classes;
+      }
+
       return json;
     }
 
@@ -533,7 +539,6 @@
 
     var bundleData = null;
 
-    // ── 🔍 មុខងារ ZOOM ──
     function setZoom(scale, btnEl) {
       var container = document.getElementById('semesterContainer');
       if (container) container.style.zoom = scale;
@@ -653,7 +658,8 @@
           return;
         }
 
-        bundleData = res;
+        // 🌟 ធានាទទួលយក Object Bundle ពេញលេញ
+        bundleData = (res && res.students) ? res : ((res && res.data && res.data.students) ? res.data : res);
 
         if (bundleData.classes && bundleData.classes.length > 0 && String(USER_ROLE).toLowerCase().trim() === 'admin') {
           var sel = document.getElementById('classSelect');
@@ -692,14 +698,15 @@
       var container = document.getElementById('semesterContainer');
       container.innerHTML = '';
 
-      var targetStudents = (selectedSid === 'ALL') ? bundleData.students : bundleData.students.filter(s => s.id === selectedSid);
+      var studentsList = (bundleData && Array.isArray(bundleData.students)) ? bundleData.students : [];
+      var targetStudents = (selectedSid === 'ALL') ? studentsList : studentsList.filter(s => s.id === selectedSid);
       
       if (!targetStudents || targetStudents.length === 0) {
         container.innerHTML = '<div style="color:var(--text-muted); text-align: center; padding: 40px; font-size: 14px; font-weight: 600;">មិនមានទិន្នន័យសិស្សក្នុងថ្នាក់នេះឡើយ</div>';
         return;
       }
 
-      var totalClassCount = bundleData.students.length;
+      var totalClassCount = studentsList.length;
 
       targetStudents.forEach(function(student) {
         var s1Score = (bundleData.sem1Scores && bundleData.sem1Scores[student.id]) ? bundleData.sem1Scores[student.id] : {};
