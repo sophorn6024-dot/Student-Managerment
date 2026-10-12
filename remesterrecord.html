@@ -152,7 +152,6 @@
       cursor: not-allowed;
     }
 
-    /* 🌟 Badge ថ្នាក់គ្រូ */
     .teacher-class-badge {
       display: inline-flex;
       align-items: center;
@@ -472,7 +471,7 @@
     });
 
     // =========================================================
-    // ⚙️ BACKEND API & CONFIGURATION (កែសម្រួលដោះស្រាយកំហុស .classes)
+    // ⚙️ BACKEND API & CONFIGURATION
     // =========================================================
     var SCRIPT_URL = (window.parent && window.parent.BACKEND_URL)
       || _urlParams.get('apiUrl')
@@ -483,7 +482,6 @@
     var USER_CLASS   = _urlParams.get('cls') || _urlParams.get('class') || _get('krou_assigned_class') || _get('krou_user_class') || '';
     var TEACHER_NAME = (window.parent && window.parent.TEACHER_NAME) || _get('krou_teacher_name') || '';
 
-    // 🌟 API Caller ឆ្លាតវៃ៖ ស្រង់ classes តែពេលហៅ getClassList ប៉ុណ្ណោះ កុំកាត់ចោលពេលហៅ Bundle
     async function apiCall(action, params) {
       params = params || {};
       if (TOKEN) params.token = params.token || TOKEN;
@@ -515,7 +513,6 @@
       var json = await res.json();
       if (json && json.success === false) throw new Error(json.error || json.message || 'Server error');
 
-      // 🌟 ស្រង់តែពេលដែលហៅទាញយកថ្នាក់សុទ្ធប៉ុណ្ណោះ
       if (action === 'getClassList' || action === 'getClassListForSession') {
         if (json && json.classes !== undefined) return json.classes;
       }
@@ -561,6 +558,35 @@
     }
 
     // =========================================================
+    // 🧠 AUTO-RANKING HELPER (គណនាចំណាត់ថ្នាក់ស្វ័យប្រវត្តិ)
+    // =========================================================
+    function computeCompetitionRanks(items) {
+      // items = [{ id: '...', val: 45 }]
+      var valid = items.filter(x => x.val !== '' && x.val !== null && !isNaN(Number(x.val)));
+      valid.sort((a, b) => Number(b.val) - Number(a.val));
+      var ranks = {};
+      var curRank = 1;
+      for (var i = 0; i < valid.length; i++) {
+        if (i > 0 && Number(valid[i].val) < Number(valid[i - 1].val)) {
+          curRank = i + 1;
+        }
+        ranks[String(valid[i].id).trim()] = curRank;
+      }
+      return ranks;
+    }
+
+    function getGradeFromAverage(avg) {
+      var n = Number(avg);
+      if (!Number.isFinite(n) || n <= 0) return '-';
+      if (n >= 9.00) return 'A';
+      if (n >= 8.00) return 'B';
+      if (n >= 7.00) return 'C';
+      if (n >= 6.00) return 'D';
+      if (n >= 5.00) return 'E';
+      return 'F';
+    }
+
+    // =========================================================
     // 🚀 INITIALIZATION (លាក់ DROPDOWN សម្រាប់គ្រូ)
     // =========================================================
     window.onload = function() {
@@ -584,7 +610,6 @@
       var isAdmin = (String(USER_ROLE).toLowerCase().trim() === 'admin');
 
       if (!isAdmin) {
-        // 🏫 គ្រូបង្រៀន -> លាក់ Dropdown បង្ហាញតែ Badge ថ្នាក់របស់គាត់
         document.getElementById('adminClassBox').style.display = 'none';
 
         var badge = document.getElementById('teacherClassBadge');
@@ -604,7 +629,6 @@
             '<div style="text-align:center; padding:50px; color:#f59e0b; font-weight:700;">⚠️ គណនីរបស់អ្នកមិនទាន់ត្រូវបានចាត់តាំងថ្នាក់នៅឡើយទេ។ សូមទាក់ទងអ្នកគ្រប់គ្រង។</div>';
         }
       } else {
-        // 👑 Admin -> បង្ហាញ Dropdown ជ្រើសរើសថ្នាក់
         document.getElementById('teacherClassBadge').style.display = 'none';
         document.getElementById('adminClassBox').style.display = 'flex';
 
@@ -658,7 +682,6 @@
           return;
         }
 
-        // 🌟 ធានាទទួលយក Object Bundle ពេញលេញ
         bundleData = (res && res.students) ? res : ((res && res.data && res.data.students) ? res.data : res);
 
         if (bundleData.classes && bundleData.classes.length > 0 && String(USER_ROLE).toLowerCase().trim() === 'admin') {
@@ -708,21 +731,86 @@
 
       var totalClassCount = studentsList.length;
 
+      // =========================================================
+      // 🌟 AUTO-CALCULATE ALL SUBJECT RANKS & TOTAL RANKS
+      // =========================================================
+      var s1SubRanks = {}, s2SubRanks = {};
+      var s1TotList = [], s2TotList = [];
+      var s1AvgList = [], s2AvgList = [], yAvgList = [];
+
+      SEMESTER_SUBJECTS.forEach(function(sub) {
+        var s1Items = [], s2Items = [];
+        studentsList.forEach(function(st) {
+          var sc1 = (bundleData.sem1Scores && bundleData.sem1Scores[st.id]) ? bundleData.sem1Scores[st.id][sub.key] : '';
+          var sc2 = (bundleData.sem2Scores && bundleData.sem2Scores[st.id]) ? bundleData.sem2Scores[st.id][sub.key] : '';
+          if (sc1 !== '' && sc1 !== undefined && !isNaN(Number(sc1))) s1Items.push({ id: st.id, val: Number(sc1) });
+          if (sc2 !== '' && sc2 !== undefined && !isNaN(Number(sc2))) s2Items.push({ id: st.id, val: Number(sc2) });
+        });
+        s1SubRanks[sub.key] = computeCompetitionRanks(s1Items);
+        s2SubRanks[sub.key] = computeCompetitionRanks(s2Items);
+      });
+
+      // គណនាពិន្ទុសរុប & មធ្យមភាគប្រចាំឆមាស
+      studentsList.forEach(function(st) {
+        var s1 = (bundleData.sem1Scores && bundleData.sem1Scores[st.id]) ? bundleData.sem1Scores[st.id] : {};
+        var s2 = (bundleData.sem2Scores && bundleData.sem2Scores[st.id]) ? bundleData.sem2Scores[st.id] : {};
+
+        var tot1 = 0, cnt1 = 0;
+        var tot2 = 0, cnt2 = 0;
+
+        SEMESTER_SUBJECTS.forEach(function(sub) {
+          var v1 = s1[sub.key]; if (v1 !== '' && v1 !== undefined && !isNaN(Number(v1))) { tot1 += Number(v1); cnt1++; }
+          var v2 = s2[sub.key]; if (v2 !== '' && v2 !== undefined && !isNaN(Number(v2))) { tot2 += Number(v2); cnt2++; }
+        });
+
+        if (tot1 > 0) {
+          s1TotList.push({ id: st.id, val: tot1 });
+          s1AvgList.push({ id: st.id, val: Number((tot1 / (cnt1 || 1)).toFixed(2)) });
+        }
+        if (tot2 > 0) {
+          s2TotList.push({ id: st.id, val: tot2 });
+          s2AvgList.push({ id: st.id, val: Number((tot2 / (cnt2 || 1)).toFixed(2)) });
+        }
+
+        var a1 = cnt1 > 0 ? (tot1 / cnt1) : 0;
+        var a2 = cnt2 > 0 ? (tot2 / cnt2) : 0;
+        var yAvg = (a1 > 0 && a2 > 0) ? ((a1 + a2) / 2) : (a1 || a2 || 0);
+        if (yAvg > 0) {
+          yAvgList.push({ id: st.id, val: Number(yAvg.toFixed(2)) });
+        }
+      });
+
+      var s1TotRanks = computeCompetitionRanks(s1TotList);
+      var s2TotRanks = computeCompetitionRanks(s2TotList);
+      var s1AvgRanks = computeCompetitionRanks(s1AvgList);
+      var s2AvgRanks = computeCompetitionRanks(s2AvgList);
+      var yAvgRanks  = computeCompetitionRanks(yAvgList);
+
+      // =========================================================
+      // 렌 RENDER PER STUDENT
+      // =========================================================
       targetStudents.forEach(function(student) {
         var s1Score = (bundleData.sem1Scores && bundleData.sem1Scores[student.id]) ? bundleData.sem1Scores[student.id] : {};
         var s2Score = (bundleData.sem2Scores && bundleData.sem2Scores[student.id]) ? bundleData.sem2Scores[student.id] : {};
-        var s1SubRanks = bundleData.sem1SubRanks || {};
-        var s2SubRanks = bundleData.sem2SubRanks || {};
-        var s1TotRanks = bundleData.sem1TotalRanks || {};
-        var s2TotRanks = bundleData.sem2TotalRanks || {};
 
-        var s1Rank = (bundleData.sem1RankMap && bundleData.sem1RankMap[student.id]) ? bundleData.sem1RankMap[student.id] : { avg: 0, rank: '-' };
-        var s2Rank = (bundleData.sem2RankMap && bundleData.sem2RankMap[student.id]) ? bundleData.sem2RankMap[student.id] : { avg: 0, rank: '-' };
-        var yRank  = (bundleData.yearRankMap && bundleData.yearRankMap[student.id]) ? bundleData.yearRankMap[student.id] : { avg: 0, rank: '-', grade: '-' };
-        var att    = (bundleData.attMap && bundleData.attMap[student.id]) ? bundleData.attMap[student.id] : { sem1_p:0, sem1_a:0, sem2_p:0, sem2_a:0 };
+        // 🌟 ទាញយកចំណាត់ថ្នាក់ពី Backend ឬប្រើចំណាត់ថ្នាក់ដែលទើបគណនាភ្លាមៗ
+        var s1RankObj = (bundleData.sem1RankMap && bundleData.sem1RankMap[student.id]) ? bundleData.sem1RankMap[student.id] : {};
+        var s2RankObj = (bundleData.sem2RankMap && bundleData.sem2RankMap[student.id]) ? bundleData.sem2RankMap[student.id] : {};
+        var yRankObj  = (bundleData.yearRankMap && bundleData.yearRankMap[student.id]) ? bundleData.yearRankMap[student.id] : {};
+        var att       = (bundleData.attMap && bundleData.attMap[student.id]) ? bundleData.attMap[student.id] : { sem1_p:0, sem1_a:0, sem2_p:0, sem2_a:0 };
 
-        var s1MonthlyVal = (bundleData.s1MonthlyAvgMap && bundleData.s1MonthlyAvgMap[student.id]) ? bundleData.s1MonthlyAvgMap[student.id] : '';
-        var s2MonthlyVal = (bundleData.s2MonthlyAvgMap && bundleData.s2MonthlyAvgMap[student.id]) ? bundleData.s2MonthlyAvgMap[student.id] : '';
+        var s1AvgVal = Number(s1Score.avg || s1RankObj.avg || 0);
+        var s2AvgVal = Number(s2Score.avg || s2RankObj.avg || 0);
+
+        var s1RankNum = s1RankObj.rank || s1AvgRanks[student.id] || '-';
+        var s2RankNum = s2RankObj.rank || s2AvgRanks[student.id] || '-';
+        var yRankNum  = yRankObj.rank || yAvgRanks[student.id] || '-';
+
+        var yAvgVal = Number(yRankObj.avg || ((s1AvgVal > 0 && s2AvgVal > 0) ? ((s1AvgVal + s2AvgVal) / 2) : (s1AvgVal || s2AvgVal || 0))).toFixed(2);
+        var yGradeVal = yRankObj.grade || getGradeFromAverage(yAvgVal);
+
+        var s1MonthlyVal = (bundleData.s1MonthlyAvgMap && bundleData.s1MonthlyAvgMap[student.id]) ? bundleData.s1MonthlyAvgMap[student.id] : (s1AvgVal > 0 ? s1AvgVal.toFixed(2) : '');
+        var s2MonthlyVal = (bundleData.s2MonthlyAvgMap && bundleData.s2MonthlyAvgMap[student.id]) ? bundleData.s2MonthlyAvgMap[student.id] : (s2AvgVal > 0 ? s2AvgVal.toFixed(2) : '');
 
         // ================= SHEET 1: ក្របក្រៅ =================
         if (sheetFilter === 'ALL' || sheetFilter === '1') {
@@ -888,6 +976,7 @@
             if (v1 !== '') s1Total += v1;
             if (v2 !== '') s2Total += v2;
 
+            // 🌟 ចំណាត់ថ្នាក់តាមមុខវិជ្ជា (បង្ហាញពណ៌ក្រហម)
             var r1 = (v1 !== '' && s1SubRanks[sub.key] && s1SubRanks[sub.key][student.id]) ? s1SubRanks[sub.key][student.id] : '';
             var r2 = (v2 !== '' && s2SubRanks[sub.key] && s2SubRanks[sub.key][student.id]) ? s2SubRanks[sub.key][student.id] : '';
 
@@ -902,6 +991,7 @@
             `;
           });
 
+          // 🌟 ចំណាត់ថ្នាក់ពិន្ទុសរុប
           var s1TotRank = (s1Total > 0 && s1TotRanks[student.id]) ? s1TotRanks[student.id] : '';
           var s2TotRank = (s2Total > 0 && s2TotRanks[student.id]) ? s2TotRanks[student.id] : '';
 
@@ -942,9 +1032,9 @@
                     </tr>
                     <tr class="f-bold">
                       <td class="text-left">មធ្យមភាគ</td>
-                      <td>${s1Score.avg ? Number(s1Score.avg).toFixed(2) : ''}</td>
+                      <td>${s1AvgVal > 0 ? s1AvgVal.toFixed(2) : ''}</td>
                       <td></td>
-                      <td>${s2Score.avg ? Number(s2Score.avg).toFixed(2) : ''}</td>
+                      <td>${s2AvgVal > 0 ? s2AvgVal.toFixed(2) : ''}</td>
                       <td></td>
                     </tr>
                     <tr class="f-bold">
@@ -956,14 +1046,14 @@
                     </tr>
                     <tr class="f-bold">
                       <td class="text-left">មធ្យមភាគប្រចាំឆមាស</td>
-                      <td>${s1Rank.avg > 0 ? s1Rank.avg : '0'}</td>
-                      <td class="red-bold">${s1Rank.rank || '-'}</td>
-                      <td>${s2Rank.avg > 0 ? s2Rank.avg : '0'}</td>
-                      <td class="red-bold">${s2Rank.rank || '-'}</td>
+                      <td>${s1AvgVal > 0 ? s1AvgVal.toFixed(2) : '0'}</td>
+                      <td class="red-bold">${s1RankNum}</td>
+                      <td>${s2AvgVal > 0 ? s2AvgVal.toFixed(2) : '0'}</td>
+                      <td class="red-bold">${s2RankNum}</td>
                     </tr>
                     <tr class="f-bold" style="background: #f1f5f9; font-size: 13.5px;">
                       <td colspan="5" style="padding: 4.5px;">
-                        លទ្ធផលដំណាច់ឆ្នាំ ( មធ្យមភាគ <strong class="red-bold">${yRank.avg > 0 ? yRank.avg : '0'}</strong> - ចំណាត់ថ្នាក់ <strong class="red-bold">${yRank.rank || '-'}</strong> - និទ្ទេស <strong class="red-bold">${yRank.grade || '-'}</strong> )
+                        លទ្ធផលដំណាច់ឆ្នាំ ( មធ្យមភាគ <strong class="red-bold">${yAvgVal > 0 ? yAvgVal : '0'}</strong> - ចំណាត់ថ្នាក់ <strong class="red-bold">${yRankNum}</strong> - និទ្ទេស <strong class="red-bold">${yGradeVal}</strong> )
                       </td>
                     </tr>
                   </tbody>
@@ -1015,9 +1105,9 @@
                   </thead>
                   <tbody>
                     <tr style="font-size: 12.5px; text-align: left; vertical-align: top; padding: 4px;">
-                      <td>${s1Rank.avg >= 5 ? 'លទ្ធផលសិក្សាមធ្យម' : ''}</td>
-                      <td>${s2Rank.avg >= 5 ? 'លទ្ធផលសិក្សាមធ្យម គួរខិតខំរៀនបន្ថែម' : ''}</td>
-                      <td>និទ្ទេសប្រចាំឆ្នាំ ${yRank.grade || ''} លទ្ធផលសិក្សាមធ្យម គួរខិតខំរៀនបន្ថែមទៀត។ សមនឹងឡើងថ្នាក់បាន។</td>
+                      <td>${s1AvgVal >= 5 ? 'លទ្ធផលសិក្សាមធ្យម' : ''}</td>
+                      <td>${s2AvgVal >= 5 ? 'លទ្ធផលសិក្សាមធ្យម គួរខិតខំរៀនបន្ថែម' : ''}</td>
+                      <td>និទ្ទេសប្រចាំឆ្នាំ ${yGradeVal} លទ្ធផលសិក្សាមធ្យម គួរខិតខំរៀនបន្ថែមទៀត។ សមនឹងឡើងថ្នាក់បាន។</td>
                     </tr>
                   </tbody>
                 </table>
@@ -1039,7 +1129,7 @@
                   </thead>
                   <tbody>
                     <tr style="font-size: 12.5px; text-align: left; vertical-align: top; padding: 4px;">
-                      <td>${yRank.rank <= 5 ? 'បានចំណាត់ថ្នាក់ទី ' + yRank.rank + ' ក្នុងថ្នាក់ ។ ពូកែខាងសិក្សាសង្គម ។' : 'ខិតខំរៀនសូត្រ'}</td>
+                      <td>${Number(yRankNum) <= 5 && Number(yRankNum) > 0 ? 'បានចំណាត់ថ្នាក់ទី ' + yRankNum + ' ក្នុងថ្នាក់ ។ ពូកែខាងសិក្សាសង្គម ។' : 'ខិតខំរៀនសូត្រ'}</td>
                       <td>គួរពង្រឹងមុខវិជ្ជាសរសេរតាមអាន ។</td>
                     </tr>
                   </tbody>
