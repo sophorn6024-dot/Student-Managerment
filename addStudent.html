@@ -1309,7 +1309,6 @@
           const isWrite = /^(submit|update|delete|bulk|set|save|clear)/.test(action);
           if (attempt === 1 && !isWrite) { await new Promise(r => setTimeout(r, 1200)); continue; }
           lastApiError = "កំហុសបច្ចេកទេស៖ " + (err.message || String(err));
-            : String(err);
           return null;
         }
       }
