@@ -105,9 +105,6 @@
       position: relative;
     }
 
-    /* =========================================================
-       🧭 SIDEBAR
-    ========================================================= */
     .sidebar {
       width: var(--sidebar-w);
       height: 100%;
@@ -169,7 +166,6 @@
     }
     .user-display-role { font-size: 12px; color: #94a3b8; margin-top: 2px; }
 
-    /* 🌟 ប៊ូតុងព្រួញបង្រួម/ពង្រីក */
     .collapse-arrow-btn {
       width: 28px;
       height: 28px;
@@ -195,7 +191,6 @@
       transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
 
-    /* 🌟 ពេលបង្រួម Sidebar (Collapsed) ព្រួញ ‹ នឹងវិលទៅជា › យ៉ាងរលូន */
     .sidebar.collapsed .sidebar-user-header {
       flex-direction: column;
       align-items: center;
@@ -204,9 +199,7 @@
     }
     .sidebar.collapsed .user-profile-meta { display: none; }
     .sidebar.collapsed .collapse-arrow-btn { margin: 0 auto; }
-    .sidebar.collapsed .collapse-arrow-btn span {
-      transform: rotate(180deg);
-    }
+    .sidebar.collapsed .collapse-arrow-btn span { transform: rotate(180deg); }
 
     .class-year-pill-box {
       margin: 4px 12px 12px; background: var(--sidebar-card-navy); border: 1px solid rgba(255, 255, 255, 0.1);
@@ -263,7 +256,6 @@
       transition: all 0.2s; user-select: none;
     }
     .admin-clear-btn:hover { background: rgba(220, 38, 38, 0.35); color: #fff; box-shadow: 0 4px 14px rgba(239, 68, 68, 0.25); }
-    .admin-clear-btn:active { transform: scale(0.98); }
 
     .sidebar-theme-btn {
       width: 100%; height: 38px; border-radius: 11px; border: 1px solid rgba(255, 255, 255, 0.12);
@@ -272,7 +264,6 @@
       transition: all 0.2s ease; user-select: none;
     }
     .sidebar-theme-btn:hover { background: rgba(255, 255, 255, 0.14); }
-    .sidebar-theme-btn:active { transform: scale(0.98); }
 
     .sidebar-logout-btn {
       width: 100%; height: 40px; border-radius: 11px; border: 1px solid rgba(239, 68, 68, 0.35);
@@ -283,16 +274,11 @@
     .sidebar-logout-btn:hover {
       background: #ef4444; color: #ffffff; box-shadow: 0 4px 14px rgba(239, 68, 68, 0.35);
     }
-    .sidebar-logout-btn:active { transform: scale(0.98); }
 
-    /* 🌟 លាក់អក្សរ និងតម្រឹម Icon ឱ្យចំកណ្តាលពេលបង្រួម */
     .sidebar.collapsed .admin-clear-btn { padding: 0; justify-content: center; }
     .sidebar.collapsed .sidebar-theme-btn { padding: 0; justify-content: center; }
     .sidebar.collapsed .sidebar-logout-btn { padding: 0; justify-content: center; }
 
-    /* =========================================================
-       🌟 MAIN WRAPPER & DASHBOARD
-    ========================================================= */
     .main-wrapper {
       flex: 1; height: 100%; height: 100dvh; display: flex; flex-direction: column;
       min-width: 0; min-height: 0; background: var(--bg); position: relative;
@@ -316,7 +302,6 @@
       max-width: 1350px; margin: 0 auto; display: flex; flex-direction: column; gap: 22px;
     }
 
-    /* Hero Banner */
     .hero-banner-card {
       background: var(--hero-bg); border: 1px solid var(--border); border-radius: 24px;
       padding: 22px 26px; display: flex; align-items: center; justify-content: space-between;
@@ -330,9 +315,7 @@
       background: linear-gradient(135deg, #38bdf8 0%, #2563eb 100%);
       color: #ffffff; display: flex; align-items: center; justify-content: center;
       font-size: 26px; flex-shrink: 0; box-shadow: 0 8px 20px rgba(2, 132, 199, 0.35);
-      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
-    .hero-banner-card:hover .hero-building-icon { transform: rotate(5deg) scale(1.05); }
     .hero-info-texts { display: flex; flex-direction: column; gap: 2px; }
     .hero-top-tag { font-size: 13px; opacity: 0.85; font-weight: 600; }
     .hero-main-title { font-size: 24px; font-weight: 700; color: #38bdf8; line-height: 1.3; }
@@ -353,8 +336,7 @@
       border-radius: 18px; padding: 14px 20px; min-width: 140px; display: flex;
       flex-direction: column; gap: 2px; cursor: pointer; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     }
-    .hero-today-card:hover { transform: translateY(-3px) scale(1.02); box-shadow: 0 10px 25px rgba(217, 119, 6, 0.2); }
-    .hero-today-card:active { transform: scale(0.98); }
+    .hero-today-card:hover { transform: translateY(-3px) scale(1.02); }
     .h-today-top { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; color: #d97706; }
     [data-theme="dark"] .h-today-top { color: #fbbf24; }
     .h-today-status { font-size: 26px; font-weight: 800; line-height: 1.2; color: var(--today-card-text); }
@@ -365,29 +347,19 @@
     [data-theme="dark"] .section-cyan-title { color: #38bdf8; }
     .section-slate-sub { font-size: 12.5px; color: var(--text-muted); }
 
-    /* =========================================================
-       🌟 TASK CARDS (វត្តមាន & ពិន្ទុ)
-    ========================================================= */
     .today-tasks-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
     .task-action-card {
       background: var(--surface-card); border: 1.5px solid var(--border); border-radius: 20px;
       padding: 16px 22px; display: flex; align-items: center; justify-content: space-between;
       gap: 14px; cursor: pointer; transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1); box-shadow: var(--card-shadow);
-      position: relative; overflow: hidden;
     }
-    .task-action-card:hover {
-      border-color: #0284c7; transform: translateY(-3px); box-shadow: var(--card-shadow-hover);
-    }
-    .task-action-card:active { transform: scale(0.985); }
+    .task-action-card:hover { border-color: #0284c7; transform: translateY(-3px); }
     .task-left-box { display: flex; align-items: center; gap: 14px; }
 
     .task-icon-orange {
       width: 52px; height: 52px; border-radius: 16px; background: #f59e0b; color: #ffffff;
-      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
-      box-shadow: 0 4px 14px rgba(245, 158, 11, 0.35); padding: 4px;
-      transition: transform 0.2s ease;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0; padding: 4px;
     }
-    .task-action-card:hover .task-icon-orange { transform: scale(1.06); }
     .task-cal-mini {
       width: 36px; height: 38px; background: white; border-radius: 8px;
       overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 2px 6px rgba(0,0,0,0.2);
@@ -404,34 +376,27 @@
     .task-icon-purple {
       width: 52px; height: 52px; border-radius: 16px; background: #6366f1; color: #ffffff;
       display: flex; align-items: center; justify-content: center; font-size: 24px; flex-shrink: 0;
-      box-shadow: 0 4px 14px rgba(99, 102, 241, 0.35); transition: transform 0.2s ease;
     }
-    .task-action-card:hover .task-icon-purple { transform: scale(1.06); }
 
     .task-text-box { display: flex; flex-direction: column; gap: 2px; }
     .task-title-text { font-size: 14.5px; font-weight: 700; color: var(--text); }
-    .task-desc-amber { font-size: 12px; font-weight: 600; color: #d97706; transition: color 0.2s; }
+    .task-desc-amber { font-size: 12px; font-weight: 600; color: #d97706; }
     [data-theme="dark"] .task-desc-amber { color: #fbbf24; }
     
     .task-desc-green { font-size: 12px; font-weight: 700; color: #16a34a !important; }
     [data-theme="dark"] .task-desc-green { color: #34d399 !important; }
-
     .task-desc-slate { font-size: 12px; font-weight: 600; color: var(--text-muted); }
 
-    .task-chevron-arrow { font-size: 18px; color: var(--text-muted); font-weight: bold; transition: transform 0.2s; }
-    .task-action-card:hover .task-chevron-arrow { transform: translateX(3px); color: #0284c7; }
+    .task-chevron-arrow { font-size: 18px; color: var(--text-muted); font-weight: bold; }
     
     .score-percent-badge {
       background: var(--surface-elevated); color: var(--text-muted); font-size: 12px;
       font-weight: 700; padding: 4px 12px; border-radius: 20px; border: 1px solid var(--border);
-      transition: all 0.25s ease;
     }
     .score-percent-badge.complete {
       background: rgba(16, 185, 129, 0.15); color: #10b981; border-color: rgba(16, 185, 129, 0.3);
-      box-shadow: 0 0 10px rgba(16, 185, 129, 0.2);
     }
 
-    /* Shortcuts */
     .shortcuts-pill-grid { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
     .shortcut-pill-btn {
       height: 48px; padding: 0 20px; border-radius: 16px; background: var(--surface-card);
@@ -439,16 +404,12 @@
       align-items: center; gap: 12px; cursor: pointer; color: var(--text); font-size: 13.5px;
       font-weight: 700; transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     }
-    .shortcut-pill-btn:hover { transform: translateY(-3px); border-color: #0284c7; color: #0284c7; box-shadow: var(--card-shadow-hover); }
-    .shortcut-pill-btn:active { transform: scale(0.97); }
-    .sc-arrow { font-size: 13px; margin-left: 2px; opacity: 0.6; transition: transform 0.2s; }
-    .shortcut-pill-btn:hover .sc-arrow { transform: translateX(3px); opacity: 1; }
+    .shortcut-pill-btn:hover { transform: translateY(-3px); border-color: #0284c7; color: #0284c7; }
+    .sc-arrow { font-size: 13px; margin-left: 2px; opacity: 0.6; }
 
-    /* Admin Panel */
     .admin-classes-panel {
       background: var(--surface-card); border: 1px solid var(--border); border-radius: 20px;
       padding: 20px; display: none; flex-direction: column; gap: 14px; box-shadow: var(--card-shadow);
-      animation: fadeIn 0.3s ease;
     }
     .admin-classes-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
     .admin-class-card {
@@ -456,10 +417,8 @@
       padding: 12px 14px; display: flex; align-items: center; justify-content: space-between;
       cursor: pointer; transition: all 0.2s ease;
     }
-    .admin-class-card:hover { border-color: #0284c7; transform: translateY(-2px); box-shadow: 0 6px 16px rgba(2, 132, 199, 0.15); }
-    .admin-class-card:active { transform: scale(0.97); }
+    .admin-class-card:hover { border-color: #0284c7; transform: translateY(-2px); }
 
-    /* Reports Hub View */
     #reportsHubView { padding: 24px 28px 60px; }
     .reports-hub-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 22px; }
     .reports-hub-title { font-size: 19px; color: #0284c7; display: flex; align-items: center; gap: 10px; font-weight: 700; }
@@ -469,7 +428,7 @@
       padding: 8px 16px; border-radius: 12px; font-size: 13px; font-weight: 700;
       cursor: pointer; display: flex; align-items: center; gap: 6px; transition: all 0.2s;
     }
-    .btn-back-home:hover { border-color: #0284c7; color: #0284c7; transform: translateY(-2px); }
+    .btn-back-home:hover { border-color: #0284c7; color: #0284c7; }
 
     .reports-grid-clean { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
     .report-card-item {
@@ -477,23 +436,18 @@
       padding: 18px 20px; display: flex; align-items: center; justify-content: space-between;
       cursor: pointer; box-shadow: var(--card-shadow); transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
     }
-    .report-card-item:hover { transform: translateY(-3px); border-color: #0284c7; box-shadow: var(--card-shadow-hover); }
-    .report-card-item:active { transform: scale(0.98); }
+    .report-card-item:hover { transform: translateY(-3px); border-color: #0284c7; }
     .rci-left { display: flex; align-items: center; gap: 14px; }
     .rci-icon {
       width: 48px; height: 48px; border-radius: 15px; background: rgba(2, 132, 199, 0.12);
       color: #0284c7; display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0;
-      transition: transform 0.2s ease;
     }
-    .report-card-item:hover .rci-icon { transform: scale(1.08); }
     .rci-name { font-size: 14px; font-weight: 700; color: var(--text); }
     .rci-arrow {
       width: 32px; height: 32px; border-radius: 10px; background: var(--surface-elevated); color: var(--text-muted);
-      display: flex; align-items: center; justify-content: center; font-size: 13px; transition: all 0.2s ease;
+      display: flex; align-items: center; justify-content: center; font-size: 13px;
     }
-    .report-card-item:hover .rci-arrow { background: #0284c7; color: #ffffff; transform: translateX(3px); }
 
-    /* Iframe View */
     #iframeView { padding: 0; background: var(--surface); overflow: hidden !important; }
     .iframe-container { width: 100%; height: 100%; position: absolute; inset: 0; overflow: hidden; -webkit-overflow-scrolling: touch; }
     #pageFrame { width: 100%; height: 100%; border: none; display: block; background: var(--surface); }
@@ -509,9 +463,7 @@
       border-top-color: var(--primary); border-radius: 50%; animation: spin 0.7s cubic-bezier(0.5, 0.1, 0.5, 0.9) infinite;
     }
     @keyframes spin { to { transform: rotate(360deg); } }
-    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-    /* Mobile Bottom Nav */
     .mobile-bottom-nav {
       display: none; position: fixed; left: 0; right: 0; bottom: 0;
       height: calc(var(--bottom-nav-h) + env(safe-area-inset-bottom, 0px));
@@ -522,28 +474,17 @@
     .m-nav-item {
       display: flex; flex-direction: column; align-items: center; justify-content: center;
       flex: 1; height: 100%; cursor: pointer; color: var(--text-muted); font-size: 10.5px; font-weight: 600;
-      transition: all 0.2s;
     }
-    .m-nav-item:active { transform: scale(0.92); }
     .m-nav-item.active { color: #0284c7; font-weight: 700; }
 
-    /* =========================================================
-       🪪 MODAL: មើលប្រវត្តិរូបសិស្ស
-    ========================================================= */
     .profile-viewer-backdrop {
       display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.65);
       backdrop-filter: blur(6px); z-index: 10005; align-items: center; justify-content: center; padding: 14px;
-      animation: fadeIn 0.2s ease;
     }
     .profile-viewer-box {
       width: 100%; max-width: 680px; max-height: 94vh; background: var(--surface);
       border: 1.5px solid var(--border); border-radius: 24px; box-shadow: 0 25px 60px rgba(0,0,0,0.3);
       display: flex; flex-direction: column; overflow: hidden; color: var(--text);
-      animation: modalPop 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
-    }
-    @keyframes modalPop {
-      from { opacity: 0; transform: scale(0.92) translateY(12px); }
-      to { opacity: 1; transform: scale(1) translateY(0); }
     }
     .pv-top-bar {
       padding: 14px 18px; background: var(--surface-elevated); border-bottom: 1px solid var(--border);
@@ -553,21 +494,17 @@
     .pv-dropdown-select {
       flex: 1; height: 38px; border-radius: 12px; background: var(--surface); border: 1.5px solid var(--border);
       color: var(--text); font-size: 13px; font-weight: 700; padding: 0 12px; outline: none; cursor: pointer;
-      transition: border-color 0.2s;
     }
-    .pv-dropdown-select:focus { border-color: #0284c7; }
     .pv-nav-arrow-btn {
       width: 38px; height: 38px; border-radius: 12px; background: var(--surface); border: 1.5px solid var(--border);
       color: #0284c7; font-size: 16px; font-weight: 700; display: flex; align-items: center; justify-content: center;
-      cursor: pointer; flex-shrink: 0; transition: all 0.2s;
+      cursor: pointer; flex-shrink: 0;
     }
-    .pv-nav-arrow-btn:hover { background: #0284c7; color: #fff; }
     .pv-close-btn {
       width: 32px; height: 32px; border-radius: 50%; background: var(--surface-elevated);
       border: 1px solid var(--border); color: var(--text-muted); font-size: 15px; cursor: pointer;
-      display: flex; align-items: center; justify-content: center; flex-shrink: 0; transition: all 0.2s;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
     }
-    .pv-close-btn:hover { background: #ef4444; color: #fff; }
     .pv-content-scroll { padding: 20px; overflow-y: auto; display: flex; flex-direction: column; gap: 18px; }
     .pv-bio-header-card {
       background: var(--surface-elevated); border: 1px solid var(--border); border-radius: 20px; padding: 18px 20px;
@@ -576,7 +513,6 @@
     .pv-avatar-frame {
       width: 90px; height: 90px; border-radius: 22px; background: #0284c7; border: 3px solid #38bdf8;
       display: flex; align-items: center; justify-content: center; font-size: 38px; font-weight: 700; color: #fff; overflow: hidden; flex-shrink: 0;
-      box-shadow: 0 6px 18px rgba(2, 132, 199, 0.3);
     }
     .pv-avatar-frame img { width: 100%; height: 100%; object-fit: cover; }
     .pv-student-name { font-size: 22px; font-weight: 700; color: #0284c7; line-height: 1.2; }
@@ -604,24 +540,18 @@
     .btn-pv-print {
       height: 38px; padding: 0 16px; border-radius: 12px; background: #0284c7;
       color: #ffffff; border: none; font-size: 13px; font-weight: 700; cursor: pointer;
-      display: flex; align-items: center; gap: 6px; transition: all 0.2s;
+      display: flex; align-items: center; gap: 6px;
     }
-    .btn-pv-print:hover { background: #0369a1; transform: translateY(-1px); }
 
-    /* =========================================================
-       👤 MODAL: PROFILE គ្រូ / ADMIN
-    ========================================================= */
     .modal-backdrop {
       display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, 0.65);
       backdrop-filter: blur(6px); z-index: 10020; align-items: center; justify-content: center; padding: 16px;
-      animation: fadeIn 0.2s ease;
     }
     .modal-backdrop.show { display: flex; }
     .modal-dialog {
       width: 440px; max-width: 100%; max-height: 90vh; overflow-y: auto;
       background: var(--surface); border: 1.5px solid var(--border); border-radius: 22px;
       box-shadow: 0 25px 60px rgba(0,0,0,0.3); color: var(--text);
-      animation: modalPop 0.28s cubic-bezier(0.34, 1.56, 0.64, 1);
     }
     .modal-head-banner {
       padding: 20px; background: linear-gradient(135deg, #0284c7, #0369a1); color: #fff;
@@ -630,12 +560,9 @@
     .modal-close-btn {
       position: absolute; right: 14px; top: 14px; background: rgba(255,255,255,0.18);
       border: none; color: #fff; width: 30px; height: 30px; border-radius: 50%; cursor: pointer;
-      transition: all 0.2s;
     }
-    .modal-close-btn:hover { background: rgba(255,255,255,0.35); transform: scale(1.08); }
     .modal-avatar-preview {
       width: 80px; height: 80px; border-radius: 50%; border: 3px solid #38bdf8; object-fit: cover;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.25);
     }
     .modal-body { padding: 18px; }
     .form-group-field { margin-bottom: 12px; }
@@ -643,18 +570,12 @@
     .form-group-field input, .form-group-field select {
       width: 100%; padding: 10px 14px; border-radius: 11px; border: 1px solid var(--border);
       background: var(--surface-elevated); color: var(--text); outline: none; font-size: 13px;
-      transition: border-color 0.2s;
     }
-    .form-group-field input:focus, .form-group-field select:focus { border-color: #0284c7; }
     .modal-foot-actions { display: flex; justify-content: flex-end; gap: 8px; margin-top: 16px; }
-    .btn-modal { padding: 9px 18px; border-radius: 11px; font-size: 12.5px; font-weight: 700; cursor: pointer; border: none; transition: all 0.2s; }
-    .btn-modal:active { transform: scale(0.97); }
+    .btn-modal { padding: 9px 18px; border-radius: 11px; font-size: 12.5px; font-weight: 700; cursor: pointer; border: none; }
     .btn-modal.primary { background: #0284c7; color: #fff; }
-    .btn-modal.primary:hover { background: #0369a1; }
     .btn-modal.cancel { background: var(--surface-elevated); color: var(--text); border: 1px solid var(--border); }
-    .btn-modal.cancel:hover { background: var(--border); }
 
-    /* Responsive */
     @media (max-width: 1024px) { .reports-grid-clean { grid-template-columns: repeat(2, 1fr); } }
     @media (max-width: 900px) {
       .hero-banner-card { flex-direction: column; align-items: flex-start; }
@@ -684,9 +605,6 @@
 
   <div id="mobileBackdrop" style="display:none; position:fixed; inset:0; background:rgba(0,0,0,0.6); backdrop-filter:blur(3px); z-index:80;" onclick="closeSidebarMobile()"></div>
 
-  <!-- =========================================================
-       🧭 SIDEBAR
-  ========================================================= -->
   <aside class="sidebar" id="sidebar">
     <div class="sidebar-user-header">
       <div class="user-profile-summary">
@@ -699,7 +617,6 @@
         </div>
       </div>
 
-      <!-- 🌟 ប៊ូតុងបង្វិលព្រួញ ‹ › ស្វ័យប្រវត្តិតាម CSS Transition -->
       <button class="collapse-arrow-btn" id="collapseArrowBtn" onclick="toggleSidebarCollapse()" title="បង្រួម/ពង្រីករបាចំហៀង">
         <span id="collapseArrowChar">‹</span>
       </button>
@@ -763,17 +680,13 @@
     </div>
   </aside>
 
-  <!-- ============ 🖥️ MAIN AREA ============ -->
   <main class="main-wrapper">
     <div class="content-area">
 
-      <!-- =========================================================
-           🌟 1. DASHBOARD VIEW
-      ========================================================= -->
+      <!-- 1. DASHBOARD VIEW -->
       <div class="view-panel active" id="dashboardView">
         <div class="dash-inner-container">
 
-          <!-- Hero Banner Card -->
           <div class="hero-banner-card">
             <div class="hero-banner-left">
               <div class="hero-building-icon">🏫</div>
@@ -803,14 +716,12 @@
             </div>
           </div>
 
-          <!-- កិច្ចការថ្ងៃនេះ -->
           <div class="section-headline-group">
             <div class="section-cyan-title">កិច្ចការថ្ងៃនេះ:</div>
             <div class="section-slate-sub">រឿងសំខាន់ៗដែលត្រូវពិនិត្យថ្ងៃនេះ</div>
           </div>
 
           <div class="today-tasks-grid">
-            <!-- ១. កិច្ចការវត្តមានថ្ងៃនេះ -->
             <div class="task-action-card" onclick="navigate('attendance', null)">
               <div class="task-left-box">
                 <div class="task-icon-orange">
@@ -827,7 +738,6 @@
               <div class="task-chevron-arrow">›</div>
             </div>
 
-            <!-- ២. កិច្ចការពិន្ទុខែនេះ -->
             <div class="task-action-card" onclick="navigate('score', null)">
               <div class="task-left-box">
                 <div class="task-icon-purple">📋</div>
@@ -843,7 +753,6 @@
             </div>
           </div>
 
-          <!-- ផ្លូវកាត់ -->
           <div class="section-headline-group" style="margin-top:6px;">
             <div class="section-cyan-title">ផ្លូវកាត់</div>
           </div>
@@ -866,7 +775,6 @@
             </div>
           </div>
 
-          <!-- Admin Classes Overview -->
           <div class="admin-classes-panel" id="adminClassesPanel">
             <div class="section-headline-group">
               <div class="section-cyan-title" style="font-size:15px;">🏫 ស្ថិតិសិស្សតាមថ្នាក់ទាំងអស់ (Admin Overview)</div>
@@ -878,9 +786,7 @@
         </div>
       </div>
 
-      <!-- =========================================================
-           🌟 2. REPORTS HUB VIEW
-      ========================================================= -->
+      <!-- 2. REPORTS HUB VIEW -->
       <div class="view-panel" id="reportsHubView">
         <div class="dash-inner-container">
           <div class="reports-hub-header">
@@ -919,9 +825,7 @@
         </div>
       </div>
 
-      <!-- =========================================================
-           🌟 3. IFRAME VIEW
-      ========================================================= -->
+      <!-- 3. IFRAME VIEW -->
       <div class="view-panel" id="iframeView">
         <div class="iframe-container">
           <div class="loading-glass-overlay" id="loadingOverlay">
@@ -1052,12 +956,18 @@
   const KHMER_MONTHS = ['មករា','កុម្ភៈ','មីនា','មេសា','ឧសភា','មិថុនា','កក្កដា','សីហា','កញ្ញា','តុលា','វិច្ឆិកា','ធ្នូ'];
   const ENG_MONTHS = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
 
+  // 🌟 ចងភ្ជាប់ Token ក្នុង localStorage & window ឱ្យទំព័រកូនៗប្រើបានរហូត
   let SESSION_TOKEN = localStorage.getItem('krou_session_token') || localStorage.getItem('user_token') || localStorage.getItem('school_persistent_token') || "";
   let TEACHER_NAME = localStorage.getItem('krou_teacher_name') || "";
   let TEACHER_PHOTO_URL = localStorage.getItem('krou_teacher_photo') || "";
   let USER_ROLE = localStorage.getItem('krou_user_role') || "teacher";
   let ASSIGNED_CLASS = localStorage.getItem('krou_assigned_class') || "";
   let IS_ADMIN = String(USER_ROLE).toLowerCase().trim() === 'admin';
+
+  window.SESSION_TOKEN = SESSION_TOKEN;
+  window.USER_ROLE = USER_ROLE;
+  window.TEACHER_NAME = TEACHER_NAME;
+  window.ASSIGNED_CLASS = ASSIGNED_CLASS;
 
   let cachedStudentsRoster = [];
   let currentPvIndex = 0;
@@ -1296,7 +1206,6 @@
     }
   });
 
-  /* 🌟 បង្រួម/ពង្រីក Sidebar (CSS នឹងធ្វើចលនាបង្វិលព្រួញ ‹ › ស្វ័យប្រវត្តិ) */
   function toggleSidebarCollapse() {
     const sidebar = document.getElementById('sidebar');
     sidebar.classList.toggle('collapsed');
@@ -1311,9 +1220,6 @@
     document.getElementById('mobileBackdrop').style.display = 'none';
   }
 
-  /* =========================================================
-     🌟 មុខងារត្រួតពិនិត្យ និងដំណើរការកិច្ចការវត្តមាន និងពិន្ទុ
-  ========================================================= */
   async function checkDashboardTasks(targetCls, currentMonth, todayDay, totalClassStudents) {
     try {
       const now = new Date();
@@ -1413,7 +1319,6 @@
     }
   }
 
-  /* 📊 REFRESH STATS & DASHBOARD */
   async function refreshStats() {
     try {
       const stats = await apiRequest('getDashboardStats');
@@ -1486,7 +1391,6 @@
     }
   }
 
-  /* 👤 PROFILE MODAL AUTO-FETCH (ទាញទិន្នន័យត្រឹមត្រូវ ១០០%) */
   async function openProfileModal() {
     const modal = document.getElementById('profileModalBackdrop');
     if (!modal) return;
@@ -1557,7 +1461,6 @@
     reader.readAsDataURL(file);
   }
 
-  /* 💾 SAVE PROFILE & REFRESH UI */
   async function saveMyProfile(ev) {
     ev.preventDefault();
     const btn = document.getElementById('profileSaveBtn');
@@ -1602,7 +1505,6 @@
     return false;
   }
 
-  /* 🪪 STUDENT PROFILE VIEWER */
   async function openStudentProfileViewer() {
     const modal = document.getElementById('studentProfileModal');
     modal.style.display = 'flex';
@@ -1743,7 +1645,6 @@
     document.getElementById('pvMotherJob').innerText = '-';
   }
 
-  /* 🌟 LOGOUT */
   function doLogout() {
     if (!confirm('តើអ្នកពិតជាចង់ចាកចេញពីប្រព័ន្ធមែនទេ?')) return;
     localStorage.removeItem('krou_session_token');
@@ -1768,7 +1669,7 @@
     } catch(err) { alert('កំហុស៖ ' + err.message); }
   }
 
-  /* 🚀 VERIFY SESSION & BOOT */
+  /* 🚀 BOOTSTRAP & PERMANENT SESSION VERIFY */
   async function verifySessionBeforeBoot() {
     if (!SESSION_TOKEN) {
       window.location.replace('login.html');
@@ -1780,7 +1681,9 @@
 
     try {
       const session = await apiRequest('getCurrentSession', { token: SESSION_TOKEN });
-      if (!session || !session.loggedIn) {
+      
+      // 🌟 បើ server បញ្ជាក់ច្បាស់ថាកាលបរិច្ឆេទមិនត្រឹមត្រូវ (loggedIn === false) ទើប redirect
+      if (session && session.loggedIn === false) {
         localStorage.removeItem('krou_session_token');
         localStorage.removeItem('user_token');
         localStorage.removeItem('school_persistent_token');
@@ -1788,21 +1691,28 @@
         return;
       }
 
-      TEACHER_NAME = session.name || TEACHER_NAME;
-      USER_ROLE = session.role || USER_ROLE;
-      ASSIGNED_CLASS = session.assignedClass || ASSIGNED_CLASS;
-      TEACHER_PHOTO_URL = session.photoUrl || TEACHER_PHOTO_URL;
-      IS_ADMIN = String(USER_ROLE).toLowerCase().trim() === 'admin';
+      if (session && session.loggedIn) {
+        TEACHER_NAME = session.name || TEACHER_NAME;
+        USER_ROLE = session.role || USER_ROLE;
+        ASSIGNED_CLASS = session.assignedClass || ASSIGNED_CLASS;
+        TEACHER_PHOTO_URL = session.photoUrl || TEACHER_PHOTO_URL;
+        IS_ADMIN = String(USER_ROLE).toLowerCase().trim() === 'admin';
 
-      localStorage.setItem('krou_teacher_name', TEACHER_NAME);
-      localStorage.setItem('krou_user_role', USER_ROLE);
-      localStorage.setItem('krou_assigned_class', ASSIGNED_CLASS);
-      if (TEACHER_PHOTO_URL) localStorage.setItem('krou_teacher_photo', TEACHER_PHOTO_URL);
+        window.SESSION_TOKEN = SESSION_TOKEN;
+        window.USER_ROLE = USER_ROLE;
+        window.TEACHER_NAME = TEACHER_NAME;
+        window.ASSIGNED_CLASS = ASSIGNED_CLASS;
 
-      renderSidebarProfile();
-      refreshStats();
+        localStorage.setItem('krou_teacher_name', TEACHER_NAME);
+        localStorage.setItem('krou_user_role', USER_ROLE);
+        localStorage.setItem('krou_assigned_class', ASSIGNED_CLASS);
+        if (TEACHER_PHOTO_URL) localStorage.setItem('krou_teacher_photo', TEACHER_PHOTO_URL);
+
+        renderSidebarProfile();
+        refreshStats();
+      }
     } catch(err) {
-      console.warn("Session offline:", err);
+      console.warn("Session offline check:", err);
     }
   }
 
