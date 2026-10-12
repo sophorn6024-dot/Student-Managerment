@@ -169,15 +169,33 @@
     }
     .user-display-role { font-size: 12px; color: #94a3b8; margin-top: 2px; }
 
+    /* 🌟 ប៊ូតុងព្រួញបង្រួម/ពង្រីក */
     .collapse-arrow-btn {
-      width: 28px; height: 28px; border-radius: 50%; background: rgba(255, 255, 255, 0.1);
-      border: 1px solid rgba(255, 255, 255, 0.15); color: #cbd5e1; display: flex;
-      align-items: center; justify-content: center; cursor: pointer; font-size: 14px;
-      flex-shrink: 0; transition: all 0.2s ease;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      color: #cbd5e1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-size: 15px;
+      flex-shrink: 0;
+      transition: background 0.2s ease, color 0.2s ease;
     }
-    .collapse-arrow-btn:hover { background: rgba(255, 255, 255, 0.25); color: #fff; transform: scale(1.05); }
+    .collapse-arrow-btn:hover {
+      background: rgba(255, 255, 255, 0.25);
+      color: #fff;
+    }
+    .collapse-arrow-btn span {
+      display: inline-block;
+      line-height: 1;
+      transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
 
-    /* 🌟 កែសម្រួល៖ នៅពេលបង្រួម Sidebar រៀបចំក្បាល Header ឱ្យត្រឹមត្រូវ កុំឱ្យជាន់លើ Avatar */
+    /* 🌟 ពេលបង្រួម Sidebar (Collapsed) ព្រួញ ‹ នឹងវិលទៅជា › យ៉ាងរលូន */
     .sidebar.collapsed .sidebar-user-header {
       flex-direction: column;
       align-items: center;
@@ -185,9 +203,9 @@
       padding: 14px 6px 10px;
     }
     .sidebar.collapsed .user-profile-meta { display: none; }
-    .sidebar.collapsed .collapse-arrow-btn { 
-      margin: 0 auto; 
-      transform: rotate(180deg); 
+    .sidebar.collapsed .collapse-arrow-btn { margin: 0 auto; }
+    .sidebar.collapsed .collapse-arrow-btn span {
+      transform: rotate(180deg);
     }
 
     .class-year-pill-box {
@@ -267,7 +285,7 @@
     }
     .sidebar-logout-btn:active { transform: scale(0.98); }
 
-    /* 🌟 កែសម្រួល៖ តម្រឹមប៊ូតុងទាំងអស់ឱ្យចំកណ្តាលពេលបង្រួម Sidebar (Collapsed) */
+    /* 🌟 លាក់អក្សរ និងតម្រឹម Icon ឱ្យចំកណ្តាលពេលបង្រួម */
     .sidebar.collapsed .admin-clear-btn { padding: 0; justify-content: center; }
     .sidebar.collapsed .sidebar-theme-btn { padding: 0; justify-content: center; }
     .sidebar.collapsed .sidebar-logout-btn { padding: 0; justify-content: center; }
@@ -363,7 +381,6 @@
     .task-action-card:active { transform: scale(0.985); }
     .task-left-box { display: flex; align-items: center; gap: 14px; }
 
-    /* Icon ប្រតិទិនថ្ងៃនេះ */
     .task-icon-orange {
       width: 52px; height: 52px; border-radius: 16px; background: #f59e0b; color: #ffffff;
       display: flex; align-items: center; justify-content: center; flex-shrink: 0;
@@ -384,7 +401,6 @@
       font-size: 16px; font-weight: 800; color: #0f172a; line-height: 1;
     }
 
-    /* Icon ស្រង់ពិន្ទុ */
     .task-icon-purple {
       width: 52px; height: 52px; border-radius: 16px; background: #6366f1; color: #ffffff;
       display: flex; align-items: center; justify-content: center; font-size: 24px; flex-shrink: 0;
@@ -683,6 +699,7 @@
         </div>
       </div>
 
+      <!-- 🌟 ប៊ូតុងបង្វិលព្រួញ ‹ › ស្វ័យប្រវត្តិតាម CSS Transition -->
       <button class="collapse-arrow-btn" id="collapseArrowBtn" onclick="toggleSidebarCollapse()" title="បង្រួម/ពង្រីករបាចំហៀង">
         <span id="collapseArrowChar">‹</span>
       </button>
@@ -732,7 +749,6 @@
     </nav>
 
     <div class="sidebar-footer">
-      <!-- 🌟 កែសម្រួល៖ ថែម class="nav-text" ដើម្បីឱ្យលាក់អក្សរស្អាតពេលបង្រួម Sidebar -->
       <button class="admin-clear-btn" id="adminClearBtn" onclick="confirmClearAllData()" title="សម្អាតទិន្នន័យ">
         <span>🗑️</span><span class="nav-text">សម្អាតទិន្នន័យ</span>
       </button>
@@ -1036,7 +1052,6 @@
   const KHMER_MONTHS = ['មករា','កុម្ភៈ','មីនា','មេសា','ឧសភា','មិថុនា','កក្កដា','សីហា','កញ្ញា','តុលា','វិច្ឆិកា','ធ្នូ'];
   const ENG_MONTHS = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
 
-  // 🔐 គាំទ្រគ្រប់ Token Key ដែលរក្សាទុកពីមុន
   let SESSION_TOKEN = localStorage.getItem('krou_session_token') || localStorage.getItem('user_token') || localStorage.getItem('school_persistent_token') || "";
   let TEACHER_NAME = localStorage.getItem('krou_teacher_name') || "";
   let TEACHER_PHOTO_URL = localStorage.getItem('krou_teacher_photo') || "";
@@ -1281,11 +1296,10 @@
     }
   });
 
+  /* 🌟 បង្រួម/ពង្រីក Sidebar (CSS នឹងធ្វើចលនាបង្វិលព្រួញ ‹ › ស្វ័យប្រវត្តិ) */
   function toggleSidebarCollapse() {
     const sidebar = document.getElementById('sidebar');
-    const isCollapsed = sidebar.classList.toggle('collapsed');
-    const arrow = document.getElementById('collapseArrowChar');
-    if (arrow) arrow.innerText = isCollapsed ? '›' : '‹';
+    sidebar.classList.toggle('collapsed');
   }
 
   function openSidebarMobile() {
@@ -1472,13 +1486,12 @@
     }
   }
 
-  /* 👤 PROFILE MODAL AUTO-FETCH (ទាញទិន្នន័យឱ្យត្រឹមត្រូវ ១០០%) */
+  /* 👤 PROFILE MODAL AUTO-FETCH (ទាញទិន្នន័យត្រឹមត្រូវ ១០០%) */
   async function openProfileModal() {
     const modal = document.getElementById('profileModalBackdrop');
     if (!modal) return;
     modal.classList.add('show');
 
-    // បង្ហាញព័ត៌មានបឋមពី cache/localStorage មុនពេលទាញពី Server
     document.getElementById('pfName').value = TEACHER_NAME || '';
     if (TEACHER_PHOTO_URL && String(TEACHER_PHOTO_URL).trim() !== "") {
       document.getElementById('profilePhotoPreview').src = TEACHER_PHOTO_URL;
@@ -1498,7 +1511,6 @@
         if (tData.sex) document.getElementById('pfSex').value = (tData.sex && tData.sex.includes('ស្រី')) ? 'ស្រី' : 'ប្រុស';
         if (tData.phone) document.getElementById('pfPhone').value = tData.phone;
         
-        // 🌟 គណនា និងរៀបចំថ្ងៃខែឆ្នាំកំណើតឱ្យត្រូវនឹងទម្រង់ YYYY-MM-DD របស់ input type="date"
         const rawDob = tData.dobIso || tData.dob || '';
         if (/^\d{4}-\d{2}-\d{2}$/.test(rawDob)) {
           document.getElementById('pfDob').value = rawDob;
@@ -1731,7 +1743,7 @@
     document.getElementById('pvMotherJob').innerText = '-';
   }
 
-  /* 🌟 LOGOUT៖ លុបតែ Session ដោយរក្សាទុក Theme */
+  /* 🌟 LOGOUT */
   function doLogout() {
     if (!confirm('តើអ្នកពិតជាចង់ចាកចេញពីប្រព័ន្ធមែនទេ?')) return;
     localStorage.removeItem('krou_session_token');
