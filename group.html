@@ -12,15 +12,11 @@
   <link href="https://fonts.googleapis.com/css2?family=Battambang:wght@400;600;700;900&family=Moul&family=Siemreap&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-  <!-- 🔗 ភ្ជាប់ API សម្រាប់ទំនាក់ទំនងជាមួយ Google Sheets -->
-  <script src="api.js"></script>
-
   <style>
     /* =========================================================
        🎨 DYNAMIC THEME SYSTEM (LIGHT & DARK MODE)
     ========================================================= */
     :root {
-      /* Theme Tokens - Light Mode */
       --bg-app: #f8fafc;
       --surface: #ffffff;
       --surface-elevated: #f1f5f9;
@@ -36,7 +32,6 @@
       --primary-hover: #0369a1;
       --card-shadow: 0 4px 18px rgba(15, 23, 42, 0.05);
 
-      /* Highlight Roles Palette */
       --role-pres-border: #ef4444;
       --role-pres-bg: rgba(239, 68, 68, 0.08);
       --role-dep1-border: #0284c7;
@@ -46,7 +41,6 @@
     }
 
     [data-theme="dark"] {
-      /* Theme Tokens - Dark Mode */
       --bg-app: #090e17;
       --surface: #0f172a;
       --surface-elevated: #162642;
@@ -110,6 +104,7 @@
       transition: all 0.25s ease;
     }
 
+    /* ── Header Title Banner ── */
     .header-banner {
       display: flex;
       align-items: center;
@@ -131,6 +126,7 @@
       color: #38bdf8;
     }
 
+    /* 🌟 Badge បង្ហាញថ្នាក់គ្រូ (ពេលលាក់ Dropdown) */
     .teacher-class-badge {
       display: inline-flex;
       align-items: center;
@@ -145,6 +141,7 @@
       user-select: none;
     }
 
+    /* ── Form Controls & Flex Row ── */
     .controls {
       display: flex;
       gap: 14px;
@@ -193,6 +190,7 @@
       box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
     }
 
+    /* ── Buttons ── */
     .btn {
       padding: 8px 16px;
       font-weight: 700;
@@ -262,6 +260,7 @@
       transform: translateY(-1px);
     }
 
+    /* ── Roles Section ── */
     .roles-card {
       background: var(--surface-card);
       border: 1.5px solid var(--border);
@@ -334,6 +333,7 @@
       min-height: 22px;
     }
 
+    /* ── Groups Output Grid ── */
     .groups-container {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
@@ -555,7 +555,7 @@
           <i class="fa-solid fa-users-rectangle"></i> ប្រព័ន្ធបែងចែកសិស្សតាមវេនសម្អាត
         </div>
 
-        <!-- 🌟 Badge ថ្នាក់របស់គ្រូ -->
+        <!-- 🌟 Badge ថ្នាក់របស់គ្រូ (ពេលជាគ្រូ Dropdown នឹងត្រូវលាក់) -->
         <div id="teacherClassBadge" class="teacher-class-badge" style="display:none;">
           <i class="fa-solid fa-chalkboard-user"></i>
           <span id="teacherClassText">ថ្នាក់ទី...</span>
@@ -698,11 +698,32 @@
 
   <script>
     // =========================================================
-    // ⚙️ THEME MANAGEMENT
+    // ⚙️ SESSION & CONFIGURATION (ដូច card.html ១០០%)
     // =========================================================
     var _urlParams = new URLSearchParams(window.location.search);
     function _get(key) { try { return localStorage.getItem(key) || ''; } catch(e) { return ''; } }
+    function _set(key, val) { try { localStorage.setItem(key, val); } catch(e) {} }
 
+    // 🌟 ទាញយក SCRIPT_URL ដូច card.html
+    var SCRIPT_URL = (window.parent && window.parent.BACKEND_URL)
+      || _urlParams.get('apiUrl')
+      || 'https://script.google.com/macros/s/AKfycbz9GLD2TJS4UPKVGxrc3H73tGCtjlMI7-56E7TlKcLHyBwqCiZ1jPF_okv2m1ubTjpy/exec';
+
+    var TOKEN      = (window.parent && window.parent.SESSION_TOKEN) || _urlParams.get('token') || _get('krou_session_token') || _get('user_token') || _get('school_token') || '';
+    var USER_ROLE  = (window.parent && window.parent.USER_ROLE)     || _urlParams.get('role')  || _get('krou_user_role')    || 'teacher';
+    var USER_CLASS = _urlParams.get('cls') || _urlParams.get('class') || _get('krou_assigned_class') || _get('krou_user_class') || '';
+
+    var currentStudents = [];
+    var currentGroups = [];
+    var savedLeadership = null;
+
+    var daysOfWeek = [
+      "ថ្ងៃចន្ទ", "ថ្ងៃអង្គារ", "ថ្ងៃពុធ", "ថ្ងៃព្រហស្បតិ៍", "ថ្ងៃសុក្រ", "ថ្ងៃសៅរ៍"
+    ];
+
+    // =========================================================
+    // 🌙 THEME MANAGEMENT (SYNC REALTIME WITH HOMEPAGE)
+    // =========================================================
     function applyTheme(theme) {
       theme = theme || 'dark';
       document.documentElement.setAttribute('data-theme', theme);
@@ -718,61 +739,42 @@
     });
 
     // =========================================================
-    // ⚙️ BACKEND API & CONFIGURATION
+    // 🌐 API CALLER (ចម្លងពី card.html ដោះស្រាយបញ្ហា .classes)
     // =========================================================
-    var BACKEND_URL = (window.parent && window.parent.BACKEND_URL)
-      || "https://script.google.com/macros/s/AKfycbz9GLD2TJS4UPKVGxrc3H73tGCtjlMI7-56E7TlKcLHyBwqCiZ1jPF_okv2m1ubTjpy/exec";
+    async function apiCall(action, params) {
+      params = params || {};
+      if (TOKEN) params.token = params.token || TOKEN;
 
-    var TOKEN = (window.parent && window.parent.SESSION_TOKEN) || _get('krou_session_token') || _get('user_token') || "";
-    var USER_ROLE = (window.parent && window.parent.USER_ROLE) || _get('krou_user_role') || "teacher";
-    var USER_CLASS = _urlParams.get('cls') || _get('krou_assigned_class') || _get('krou_user_class') || "";
-
-    var currentStudents = [];
-    var currentGroups = [];
-    var savedLeadership = null;
-
-    var daysOfWeek = [
-      "ថ្ងៃចន្ទ", "ថ្ងៃអង្គារ", "ថ្ងៃពុធ", "ថ្ងៃព្រហស្បតិ៍", "ថ្ងៃសុក្រ", "ថ្ងៃសៅរ៍"
-    ];
-
-    // 🌟 API Caller ដំណើរការទាំង callBackendApi និង fetch ដោយសុវត្ថិភាព
-    async function apiCall(action, params = {}) {
-      params.token = params.token || TOKEN;
-      var res = null;
-
-      if (typeof callBackendApi === 'function') {
-        try {
-          res = await callBackendApi(action, params);
-        } catch(e) {
-          res = null;
-        }
-      }
-
-      if (!res) {
-        var fetchRes = await fetch(BACKEND_URL, {
-          method: 'POST',
-          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-          body: JSON.stringify(Object.assign({ action: action }, params))
+      if (typeof google !== 'undefined' && google.script && google.script.run) {
+        return new Promise(function(resolve, reject) {
+          google.script.run
+            .withSuccessHandler(resolve)
+            .withFailureHandler(reject)[action](params);
         });
-        if (!fetchRes.ok) throw new Error('HTTP ' + fetchRes.status);
-        res = await fetchRes.json();
       }
 
-      if (res && res.success === false) throw new Error(res.error || res.message || 'Server error');
-      
-      // 🌟 ដោះស្រាយមិនឱ្យស្ទះ Array ឡើយ
-      if (res && res.classes !== undefined) return res.classes;
-      if (res && res.data !== undefined) return res.data;
-      return res;
+      var res = await fetch(SCRIPT_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify(Object.assign({ action: action }, params))
+      });
+      if (!res.ok) throw new Error('HTTP ' + res.status);
+      var json = await res.json();
+      if (json && json.success === false) throw new Error(json.error || json.message || 'Server error');
+
+      if (json && json.data !== undefined)    return json.data;
+      if (json && json.classes !== undefined) return json.classes;
+      return json;
     }
 
     // =========================================================
-    // 🚀 INITIALIZATION
+    // 🚀 INITIALIZATION (លាក់ DROPDOWN សម្រាប់គ្រូ / បង្ហាញសម្រាប់ ADMIN)
     // =========================================================
     window.onload = async function() {
+      // បើ USER_CLASS មិនទាន់មាន ព្យាយាមទាញពី Session
       if (!USER_CLASS && TOKEN) {
         try {
-          var session = await apiCall('getCurrentSession', { token: TOKEN });
+          var session = await apiCall('getCurrentSession');
           if (session && session.loggedIn) {
             USER_ROLE = session.role || USER_ROLE;
             USER_CLASS = session.assignedClass || USER_CLASS;
@@ -783,7 +785,7 @@
       var isAdmin = (String(USER_ROLE).toLowerCase().trim() === 'admin');
 
       if (!isAdmin) {
-        // 🏫 គ្រូបង្រៀន -> លាក់ Dropdown បង្ហាញតែ Badge ថ្នាក់គាត់
+        // 🏫 គ្រូបង្រៀន (Teacher) -> លាក់ Dropdown បង្ហាញតែ Badge ថ្នាក់គាត់
         document.getElementById('adminClassBox').style.display = 'none';
 
         var badge = document.getElementById('teacherClassBadge');
@@ -802,17 +804,34 @@
           status('⚠️ គណនីរបស់អ្នកមិនទាន់ត្រូវបានចាត់តាំងថ្នាក់នៅឡើយទេ។ សូមទាក់ទងអ្នកគ្រប់គ្រង។', '#f59e0b');
         }
       } else {
-        // 👑 Admin -> បង្ហាញ Dropdown សម្រាប់ជ្រើសរើសថ្នាក់
+        // 👑 Admin -> បង្ហាញ Dropdown ជ្រើសរើសថ្នាក់ (ដោះស្រាយតាម card.html)
         document.getElementById('teacherClassBadge').style.display = 'none';
         document.getElementById('adminClassBox').style.display = 'flex';
 
+        var s = document.getElementById('classSelect');
+        s.innerHTML = '<option value="">-- កំពុងទាញយកថ្នាក់ --</option>';
+
         try {
-          var classesRes = await apiCall('getClassList');
-          if (!classesRes || (Array.isArray(classesRes) && !classesRes.length)) {
-            classesRes = await apiCall('getClassListForSession');
+          var classes = await apiCall('getClassList');
+          if (!classes || !classes.length) {
+            classes = await apiCall('getClassListForSession');
           }
-          populateClasses(classesRes);
+
+          s.innerHTML = '<option value="">-- ជ្រើសរើសថ្នាក់ --</option>';
+          (classes || []).forEach(function(c) {
+            var o = document.createElement('option');
+            o.value = c;
+            o.textContent = c.toString().startsWith('ថ្នាក់') ? c : 'ថ្នាក់ទី ' + c;
+            s.appendChild(o);
+          });
+
+          if (s.options.length > 1) {
+            s.selectedIndex = 1;
+            onClassChange();
+          }
         } catch(e) {
+          console.error(e);
+          s.innerHTML = '<option value="">បរាជ័យក្នុងការទាញយក</option>';
           status('❌ ' + e.message, '#ef4444');
         }
       }
@@ -823,38 +842,6 @@
       if (el) {
         el.innerText = msg || '';
         el.style.color = color || 'var(--text-muted)';
-      }
-    }
-
-    // 🌟 ដំណោះស្រាយសំខាន់៖ ធានាថា classList ជា Array ១០០% ជៀសវាង Error .forEach
-    function populateClasses(res){
-      var s = document.getElementById('classSelect');
-      s.innerHTML = '<option value="">-- ជ្រើសរើសថ្នាក់ --</option>';
-
-      var classList = [];
-      if (Array.isArray(res)) {
-        classList = res;
-      } else if (res && Array.isArray(res.classes)) {
-        classList = res.classes;
-      } else if (res && Array.isArray(res.data)) {
-        classList = res.data;
-      }
-
-      if (classList.length === 0) {
-        s.innerHTML = '<option value="">-- មិនមានទិន្នន័យថ្នាក់ --</option>';
-        return;
-      }
-
-      classList.forEach(function(c){
-        var o = document.createElement('option');
-        o.value = c;
-        o.textContent = c.toString().startsWith('ថ្នាក់') ? c : 'ថ្នាក់ទី ' + c;
-        s.appendChild(o);
-      });
-
-      if (s.options.length > 1) {
-        s.selectedIndex = 1;
-        onClassChange();
       }
     }
 
