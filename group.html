@@ -93,7 +93,6 @@
       font-weight: normal;
     }
 
-    /* ── Main Container & Cards ── */
     .main-wrap {
       max-width: 1300px;
       margin: 0 auto;
@@ -120,7 +119,7 @@
       padding-bottom: 14px;
       margin-bottom: 16px;
       flex-wrap: wrap;
-      gap: 10px;
+      gap: 12px;
     }
     .header-title-text {
       color: #0284c7;
@@ -131,6 +130,21 @@
     }
     [data-theme="dark"] .header-title-text {
       color: #38bdf8;
+    }
+
+    /* 🌟 Badge សម្រាប់បង្ហាញថ្នាក់របស់គ្រូ (ជំនួស Dropdown) */
+    .teacher-class-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      background: linear-gradient(135deg, #0284c7, #2563eb);
+      color: #ffffff;
+      padding: 7px 16px;
+      border-radius: 25px;
+      font-weight: 700;
+      font-size: 13.5px;
+      box-shadow: 0 4px 12px rgba(2, 132, 199, 0.3);
+      user-select: none;
     }
 
     /* ── Form Controls & Flex Row ── */
@@ -182,7 +196,7 @@
       box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
     }
 
-    /* ── Modern Buttons ── */
+    /* ── Buttons ── */
     .btn {
       padding: 8px 16px;
       font-weight: 700;
@@ -252,7 +266,7 @@
       transform: translateY(-1px);
     }
 
-    /* ── Class Leadership Section (តួនាទីអចិន្ត្រៃយ៍) ── */
+    /* ── Roles Section ── */
     .roles-card {
       background: var(--surface-card);
       border: 1.5px solid var(--border);
@@ -417,7 +431,7 @@
     }
 
     /* =========================================================
-       🖨️ PRINT STYLESHEET (A4 FORMAL)
+       🖨️ PRINT STYLESHEET
     ========================================================= */
     .print-header,
     .print-footer {
@@ -540,17 +554,24 @@
 
   <div class="main-wrap">
     
-    <!-- ── Card 1: ជ្រើសរើសថ្នាក់ ── -->
+    <!-- ── Card 1: ព័ត៌មានថ្នាក់ (ប្ដូរតាម Role គ្រូ ឬ Admin) ── -->
     <div class="card">
       <div class="header-banner">
         <div class="header-title-text khmer-moul">
           <i class="fa-solid fa-users-rectangle"></i> ប្រព័ន្ធបែងចែកសិស្សតាមវេនសម្អាត
         </div>
+
+        <!-- 🌟 ផ្លាកបង្ហាញថ្នាក់របស់គ្រូ (លាក់ Dropdown ជំនួសមកបង្ហាញត្រង់នេះ) -->
+        <div id="teacherClassBadge" class="teacher-class-badge" style="display:none;">
+          <i class="fa-solid fa-chalkboard-user"></i>
+          <span id="teacherClassText">ថ្នាក់ទី...</span>
+        </div>
       </div>
 
-      <div class="controls">
+      <!-- 🌟 ប្រអប់ជ្រើសរើសថ្នាក់ (បង្ហាញតែពេលជា Admin ប៉ុណ្ណោះ បើជាគ្រូត្រូវលាក់) -->
+      <div class="controls" id="adminClassBox" style="display:none;">
         <div class="col">
-          <label><i class="fa-solid fa-graduation-cap" style="color:#0284c7;"></i> ជ្រើសរើសថ្នាក់ ៖</label>
+          <label><i class="fa-solid fa-graduation-cap" style="color:#0284c7;"></i> ជ្រើសរើសថ្នាក់ (Admin) ៖</label>
           <select id="classSelect" onchange="onClassChange()">
             <option value="">-- កំពុងទាញយកថ្នាក់ --</option>
           </select>
@@ -596,7 +617,7 @@
       </div>
 
       <div id="roleSummary" class="summary">
-        សូមជ្រើសរើសថ្នាក់ជាមុនសិន។
+        សូមរង់ចាំ កំពុងទាញយកទិន្នន័យ...
       </div>
     </div>
 
@@ -695,11 +716,9 @@
       document.documentElement.setAttribute('data-theme', theme);
     }
 
-    // ទាញយក Theme ពេលចាប់ផ្ដើម
     var initialTheme = _urlParams.get('theme') || _get('krou_theme_manual') || 'dark';
     applyTheme(initialTheme);
 
-    // ស្ដាប់សារប្ដូរ Theme ពី Homepage ភ្លាមៗ (Realtime Sync)
     window.addEventListener('message', function(event) {
       if (event.data && (event.data.type === 'THEME_CHANGE' || event.data.theme)) {
         applyTheme(event.data.theme || event.data);
@@ -707,7 +726,7 @@
     });
 
     // =========================================================
-    // ⚙️ BACKEND API & LOGIC
+    // ⚙️ BACKEND API & CREDENTIALS
     // =========================================================
     var SCRIPT_URL = (window.parent && window.parent.BACKEND_URL)
       || _urlParams.get('apiUrl')
@@ -750,15 +769,55 @@
       return json;
     }
 
-    window.onload = async function(){
-      try {
-        var classes = await apiCall('getClassList');
-        if (!classes || !classes.length) {
-          classes = await apiCall('getClassListForSession');
+    // =========================================================
+    // 🚀 INITIALIZATION (លាក់ DROPDOWN សម្រាប់គ្រូ / បង្ហាញសម្រាប់ ADMIN)
+    // =========================================================
+    window.onload = async function() {
+      // 1. បើ USER_CLASS មិនទាន់មាន ព្យាយាមទាញពី Session
+      if (!USER_CLASS && TOKEN) {
+        try {
+          var session = await apiCall('getCurrentSession', { token: TOKEN });
+          if (session && session.loggedIn) {
+            USER_ROLE = session.role || USER_ROLE;
+            USER_CLASS = session.assignedClass || USER_CLASS;
+          }
+        } catch(e) {}
+      }
+
+      var isAdmin = (String(USER_ROLE).toLowerCase().trim() === 'admin');
+
+      if (!isAdmin) {
+        // 🏫 គ្រូបង្រៀន (Teacher) -> លាក់ Dropdown បង្ហាញតែ Badge ថ្នាក់គាត់ផ្ទាល់
+        document.getElementById('adminClassBox').style.display = 'none';
+
+        var badge = document.getElementById('teacherClassBadge');
+        var text = document.getElementById('teacherClassText');
+        
+        var cleanCls = (USER_CLASS || '').toString().replace(/^(ថ្នាក់ទី|ថ្នាក់)\s*/, '');
+        if (cleanCls) {
+          text.innerText = 'ថ្នាក់ទី ' + cleanCls;
+          badge.style.display = 'inline-flex';
+          
+          // កំណត់តម្លៃក្នុង classSelect ហើយទាញទិន្នន័យស្វ័យប្រវត្តិ
+          var sel = document.getElementById('classSelect');
+          sel.innerHTML = '<option value="' + cleanCls + '">ថ្នាក់ទី ' + cleanCls + '</option>';
+          sel.value = cleanCls;
+          onClassChange();
+        } else {
+          status('⚠️ គណនីរបស់អ្នកមិនទាន់ត្រូវបានចាត់តាំងថ្នាក់នៅឡើយទេ។ សូមទាក់ទងអ្នកគ្រប់គ្រង។', '#f59e0b');
         }
-        populateClasses(classes);
-      } catch(e) {
-        status('❌ ' + e.message, '#ef4444');
+      } else {
+        // 👑 អ្នកគ្រប់គ្រង (Admin) -> បង្ហាញ Dropdown សម្រាប់ជ្រើសរើសថ្នាក់
+        document.getElementById('teacherClassBadge').style.display = 'none';
+        document.getElementById('adminClassBox').style.display = 'flex';
+
+        try {
+          var classes = await apiCall('getClassList');
+          if (!classes || !classes.length) classes = await apiCall('getClassListForSession');
+          populateClasses(classes);
+        } catch(e) {
+          status('❌ ' + e.message, '#ef4444');
+        }
       }
     };
 
@@ -781,9 +840,8 @@
         s.appendChild(o);
       });
 
-      if (USER_CLASS && USER_ROLE !== 'admin') {
-        s.value = USER_CLASS;
-        s.disabled = true;
+      if (s.options.length > 1) {
+        s.selectedIndex = 1;
         onClassChange();
       }
     }
@@ -859,7 +917,7 @@
     }
 
     async function onClassChange(){
-      var c = document.getElementById('classSelect').value;
+      var c = document.getElementById('classSelect').value || USER_CLASS;
 
       currentGroups = [];
       document.getElementById('groupsContainer').innerHTML = '';
@@ -946,7 +1004,7 @@
     }
 
     async function saveLeadership(){
-      var c = document.getElementById('classSelect').value;
+      var c = document.getElementById('classSelect').value || USER_CLASS;
       if(!c){ alert('សូមជ្រើសរើសថ្នាក់សិន!'); return; }
 
       var p = findStudent(document.getElementById('presidentSelect').value);
@@ -986,7 +1044,7 @@
     }
 
     async function generateGroups(){
-      var c = document.getElementById('classSelect').value;
+      var c = document.getElementById('classSelect').value || USER_CLASS;
       var m = document.getElementById('splitMode').value;
       var n = parseInt(document.getElementById('splitValue').value, 10);
 
@@ -1105,7 +1163,7 @@
     }
 
     async function saveToSheet(){
-      var c = document.getElementById('classSelect').value;
+      var c = document.getElementById('classSelect').value || USER_CLASS;
       if(!currentGroups.length){ alert('សូមបែងចែកវេនសិន!'); return; }
 
       var p = findStudent(document.getElementById('presidentSelect').value);
