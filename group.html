@@ -705,9 +705,7 @@
   </div>
 
   <script>
-    // =========================================================
-    // ⚙️ THEME MANAGEMENT (SYNC REALTIME WITH HOMEPAGE)
-    // =========================================================
+const BACKEND_URL = "https://script.google.com/macros/s/AKfycbz9GLD2TJS4UPKVGxrc3H73tGCtjlMI7-56E7TlKcLHyBwqCiZ1jPF_okv2m1ubTjpy/exec";
     var _urlParams = new URLSearchParams(window.location.search);
     function _get(key) { try { return localStorage.getItem(key) || ''; } catch(e) { return ''; } }
 
@@ -725,12 +723,6 @@
       }
     });
 
-    // =========================================================
-    // ⚙️ BACKEND API & CREDENTIALS
-    // =========================================================
-    var SCRIPT_URL = (window.parent && window.parent.BACKEND_URL)
-      || _urlParams.get('apiUrl')
-      || 'https://script.google.com/macros/s/AKfycbz9GLD2TJS4UPKVGxrc3H73tGCtjlMI7-56E7TlKcLHyBwqCiZ1jPF_okv2m1ubTjpy/exec';
 
     var TOKEN = (window.parent && window.parent.SESSION_TOKEN) || _get('krou_session_token') || _get('user_token') || "";
     var USER_ROLE = (window.parent && window.parent.USER_ROLE) || _get('krou_user_role') || "teacher";
