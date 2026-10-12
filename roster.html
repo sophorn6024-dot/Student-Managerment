@@ -46,7 +46,7 @@
       --shadow-sm: 0 8px 24px rgba(0, 0, 0, 0.45);
     }
 
-    @page { size: A4 portrait; margin: 10mm 12mm; }
+    @page { size: A4 portrait; margin: 8mm 10mm; }
     * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 
     /* ── SCROLL & BASE ── */
@@ -224,7 +224,6 @@
       transition: all 0.15s ease;
       font-family: 'Kantumruy Pro', sans-serif;
     }
-
     .zoom-btn:hover { color: var(--text-main); }
     .zoom-btn.active {
       background: #0284c7 !important;
@@ -233,7 +232,7 @@
     }
 
     /* =========================================================
-       📄 A4 DOCUMENT CONTAINER (រក្សាពណ៌សដាច់ខាត)
+       📄 A4 DOCUMENT CONTAINER (ផ្ទាំងរបាយការណ៍ផ្លូវការ)
     ========================================================= */
     .document-container {
       width: 100%;
@@ -335,6 +334,7 @@
     table.roster-table col.col-note   { width: 10%; }
     table.roster-table col.col-action { width: 14%; }
 
+    /* 🌟 ជួរឈរបោះបង់បង្ហាញតែលើអេក្រង់ លាក់ដាច់ខាតពេល Print */
     th.no-print-col, td.no-print-col { background: #fef9c3 !important; }
     .dropout-select {
       width: 100%;
@@ -429,11 +429,24 @@
       .table-scroll-hint { display: block; }
     }
 
-    /* ============ PRINT STYLES ============ */
+    /* =========================================================
+       🖨️ PRINT RULES (បោះពុម្ពតែរបាយការណ៍ A4 ផ្លូវការ)
+    ========================================================= */
     @media print {
       * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
-      .no-print, .table-scroll-hint { display: none !important; }
-      html, body { background: #fff !important; padding: 0 !important; margin: 0 !important; width: 100% !important; }
+      
+      /* 🌟 លាក់កាត់ចោល Toolbar និងប្រអប់ Scroll ទាំងអស់ */
+      .no-print, .no-print-toolbar, .table-scroll-hint { display: none !important; }
+      
+      html, body { 
+        background: #ffffff !important; 
+        padding: 0 !important; 
+        margin: 0 !important; 
+        width: 100% !important; 
+        height: auto !important;
+      }
+
+      /* 🌟 ផ្ទាំងរបាយការណ៍ពង្រីកពេញក្រដាស A4 ស្អាត */
       .document-container {
         box-shadow: none !important;
         width: 100% !important;
@@ -442,7 +455,9 @@
         margin: 0 !important;
         border-radius: 0 !important;
         zoom: 1 !important;
+        transform: none !important;
       }
+
       .document-header { position: relative !important; display: block !important; }
       .school-info { position: absolute !important; left: 0 !important; top: 18px !important; text-align: left !important; }
 
@@ -453,8 +468,11 @@
       table.roster-table tbody { display: table-row-group; }
       table.roster-table th { background: #f1f5f9 !important; }
 
+      /* 🌟 លាក់ជួរឈរសកម្មភាពបោះបង់ (កុំឱ្យចេញពេល Print) */
       th.no-print-col, td.no-print-col { display: none !important; }
       col.col-action { display: none !important; }
+      
+      /* 🌟 ពង្រីកជួរឈររបាយការណ៍ឱ្យពេញសមមាត្រក្រដាស */
       table.roster-table col.col-no   { width: 7%; }
       table.roster-table col.col-id   { width: 13%; }
       table.roster-table col.col-name { width: 26%; }
@@ -527,15 +545,16 @@
           <i class="fa-solid fa-rotate-left"></i> ទីតាំងឈ្មោះ
         </button>
 
-        <button type="button" id="printBtn" class="btn btn-success" onclick="printWhenFontsReady()" title="បោះពុម្ពបញ្ជីរាយនាមសិស្ស">
-          <i class="fa-solid fa-print"></i> បោះពុម្ពបញ្ជី
+        <!-- 🌟 ប៊ូតុងបោះពុម្ពតែរបាយការណ៍ -->
+        <button type="button" id="printBtn" class="btn btn-success" onclick="printWhenFontsReady()" title="បោះពុម្ពតែរបាយការណ៍បញ្ជីរាយនាមសិស្ស">
+          <i class="fa-solid fa-print"></i> បោះពុម្ពរបាយការណ៍
         </button>
       </div>
     </div>
   </div>
 
   <!-- =========================================================
-       📄 A4 DOCUMENT CONTAINER
+       📄 A4 DOCUMENT CONTAINER (ផ្ទាំងរបាយការណ៍ផ្លូវការដែលត្រូវ Print)
   ========================================================= -->
   <div class="document-container" id="printPage">
 
@@ -822,13 +841,19 @@
         localStorage.setItem(TEACHER_POS_KEY, JSON.stringify({ leftPct: leftPct, topPct: topPct }));
       }
 
-      el.addEventListener('mousedown', function(e) { startDrag(e.clientX, e.clientY); e.preventDefault(); });
-      document.addEventListener('mousemove', function(e) { moveDrag(e.clientX, e.clientY); });
+      el.addEventListener('mousedown', function(e) {
+        startDrag(e.clientX, e.clientY);
+        e.preventDefault();
+      });
+      document.addEventListener('mousemove', function(e) {
+        moveDrag(e.clientX, e.clientY);
+      });
       document.addEventListener('mouseup', endDrag);
 
       el.addEventListener('touchstart', function(e) {
         if (e.touches.length === 1) {
-          startDrag(e.touches[0].clientX, e.touches[0].clientY);
+          var t = e.touches[0];
+          startDrag(t.clientX, t.clientY);
         }
       }, { passive: false });
 
@@ -852,6 +877,7 @@
       }
     }
 
+    // 🌟 បោះពុម្ពតែរបាយការណ៍ A4 សុទ្ធ
     function printWhenFontsReady() {
       var btn = document.getElementById('printBtn');
       window.focus();
@@ -864,11 +890,11 @@
       if (btn) { btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> កំពុងរៀបចំ...'; }
       document.fonts.ready.then(function() {
         setTimeout(function() {
-          if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fa-solid fa-print"></i> បោះពុម្ពបញ្ជី'; }
+          if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fa-solid fa-print"></i> បោះពុម្ពរបាយការណ៍'; }
           try { window.print(); } catch(e) { window.parent.print(); }
         }, 150);
       }).catch(function() {
-        if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fa-solid fa-print"></i> បោះពុម្ពបញ្ជី'; }
+        if (btn) { btn.disabled = false; btn.innerHTML = '<i class="fa-solid fa-print"></i> បោះពុម្ពរបាយការណ៍'; }
         try { window.print(); } catch(e) { window.parent.print(); }
       });
     }
@@ -947,7 +973,6 @@
       var isAdmin = (String(USER_ROLE).toLowerCase().trim() === 'admin');
 
       if (!isAdmin) {
-        // 🏫 គ្រូបង្រៀន -> លាក់ Dropdown បង្ហាញតែ Badge ថ្នាក់របស់គាត់
         document.getElementById('adminClassBox').style.display = 'none';
 
         var badge = document.getElementById('teacherClassBadge');
@@ -967,7 +992,6 @@
             '<tr><td colspan="8" class="empty-note" style="color:#f59e0b; font-weight:700;">⚠️ គណនីរបស់អ្នកមិនទាន់ត្រូវបានចាត់តាំងថ្នាក់នៅឡើយទេ។ សូមទាក់ទងអ្នកគ្រប់គ្រង។</td></tr>';
         }
       } else {
-        // 👑 Admin -> បង្ហាញ Dropdown ជ្រើសរើសថ្នាក់
         document.getElementById('teacherClassBadge').style.display = 'none';
         document.getElementById('adminClassBox').style.display = 'flex';
 
@@ -1020,7 +1044,6 @@
       }
     }
 
-    // ── 🌟 ស្កេនទិន្នន័យបោះបង់ ──
     function parseDropoutStatus(s) {
       var candidates = [
         s.dropoutSemester,
