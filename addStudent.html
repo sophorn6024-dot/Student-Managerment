@@ -1308,8 +1308,7 @@
           console.error('API Error (try ' + attempt + '):', err);
           const isWrite = /^(submit|update|delete|bulk|set|save|clear)/.test(action);
           if (attempt === 1 && !isWrite) { await new Promise(r => setTimeout(r, 1200)); continue; }
-          lastApiError = (err && err.name === 'TypeError')
-            ? 'មិនអាចអានការឆ្លើយតបពី Google Apps Script បានទេ។ សូមពិនិត្យ BACKEND_URL, Deploy សិទ្ធិ Anyone។'
+          lastApiError = "កំហុសបច្ចេកទេស៖ " + (err.message || String(err));
             : String(err);
           return null;
         }
