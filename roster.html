@@ -233,7 +233,7 @@
     }
 
     /* =========================================================
-       📄 A4 DOCUMENT CONTAINER (ផ្ទាំងរបាយការណ៍ផ្លូវការ)
+       📄 A4 DOCUMENT CONTAINER (ផ្ទាំងក្រដាសស A4 ស្អាត)
     ========================================================= */
     .document-container {
       width: 100%;
@@ -429,7 +429,7 @@
     }
 
     /* =========================================================
-       🖨️ PRINT RULES (បោះពុម្ពតែរបាយការណ៍ A4 ផ្លូវការ ១០០%)
+       🖨️ PRINT RULES (បោះពុម្ពតែរបាយការណ៍ A4 សសុទ្ធ ១០០%)
     ========================================================= */
     @media print {
       * { 
@@ -437,12 +437,10 @@
         print-color-adjust: exact !important; 
       }
       
-      /* 🌟 លាក់ Toolbar ខាងលើ និងសញ្ញា Scroll ទាំងអស់ដាច់ខាត */
+      /* 🌟 លាក់ Toolbar និងរបស់ផ្សេងៗទាំងអស់ដាច់ខាត */
       .no-print, 
       .no-print-toolbar, 
-      .table-scroll-hint,
-      header, 
-      nav { 
+      .table-scroll-hint { 
         display: none !important; 
         visibility: hidden !important;
         height: 0 !important;
@@ -452,22 +450,27 @@
       
       html, body { 
         background: #ffffff !important; 
+        background-color: #ffffff !important;
         padding: 0 !important; 
         margin: 0 !important; 
         width: 100% !important; 
-        height: auto !important;
+        height: 100% !important;
+        color: #000000 !important;
       }
 
-      /* 🌟 ផ្ទាំងរបាយការណ៍ពង្រីកពេញក្រដាស A4 ស្អាត */
+      /* 🌟 ផ្ទាំងក្រដាស A4 ពង្រីកពេញទំព័រ និងពណ៌ស ១០០% (គ្មានស្នាមខ្មៅនៅបាតឡើយ) */
       .document-container {
         box-shadow: none !important;
         width: 100% !important;
         max-width: 100% !important;
+        min-height: 275mm !important; /* 👈 ពង្រីកបិទបាំងបាតក្រដាស A4 ឱ្យសសុទ្ធ */
         padding: 0 !important;
         margin: 0 !important;
         border-radius: 0 !important;
         zoom: 1 !important;
         transform: none !important;
+        background: #ffffff !important;
+        background-color: #ffffff !important;
       }
 
       .document-header { position: relative !important; display: block !important; }
@@ -484,7 +487,7 @@
       th.no-print-col, td.no-print-col { display: none !important; }
       col.col-action { display: none !important; }
       
-      /* 🌟 ពង្រីកជួរឈររបាយការណ៍ឱ្យពេញសមមាត្រក្រដាស */
+      /* 🌟 សមមាត្រជួរឈរពេញក្រដាស */
       table.roster-table col.col-no   { width: 7%; }
       table.roster-table col.col-id   { width: 13%; }
       table.roster-table col.col-name { width: 26%; }
@@ -514,7 +517,7 @@
 <body>
 
   <!-- =========================================================
-       🎛️ NEW PREMIUM TOOLBAR DESIGN (ថែម class="no-print")
+       🎛️ NEW PREMIUM TOOLBAR DESIGN
   ========================================================= -->
   <div class="no-print no-print-toolbar">
     <div class="toolbar-row">
@@ -889,10 +892,26 @@
       }
     }
 
-    // 🌟 បោះពុម្ពតែរបាយការណ៍ A4 សុទ្ធ (លាក់អ្វីៗផ្សេងទាំងអស់)
+    // 🌟 បោះពុម្ពតែរបាយការណ៍ A4 សុទ្ធ (ដោះ Dark Mode ចេញស្វ័យប្រវត្តិកំឡុងពេល Print)
     function printWhenFontsReady() {
       var btn = document.getElementById('printBtn');
       window.focus();
+
+      // 🛡️ ដោះស្ទីល Dark Mode ចេញជាបណ្ដោះអាសន្ន ដើម្បីឱ្យក្រដាស A4 ពណ៌ស ១០០%
+      var injected = document.getElementById('krou-dynamic-sync-style');
+      if (injected) injected.disabled = true;
+
+      var prevTheme = document.documentElement.getAttribute('data-theme');
+      document.documentElement.setAttribute('data-theme', 'light');
+
+      // ត្រឡប់មក Dark Mode វិញក្រោយពេលបោះពុម្ពរួច
+      function restoreThemeAfterPrint() {
+        if (injected) injected.disabled = false;
+        if (prevTheme) document.documentElement.setAttribute('data-theme', prevTheme);
+        window.removeEventListener('afterprint', restoreThemeAfterPrint);
+      }
+      window.addEventListener('afterprint', restoreThemeAfterPrint);
+
       if (!document.fonts || !document.fonts.ready) {
         setTimeout(function() {
           try { window.print(); } catch(e) { window.parent.print(); }
