@@ -29,7 +29,7 @@
       --ctrl-group-bg: #f1f5f9;
       --shadow-sm: 0 4px 16px rgba(15, 23, 42, 0.06);
 
-      /* Card Printing Palette */
+      /* Card Printing Palette (ស្តង់ដារកាតសិស្ស) */
       --c-blue: #001fd1;
       --c-green: #009639;
       --c-orange: #c85000;
@@ -335,7 +335,7 @@
       justify-content: center;
       border-bottom: 1.8px solid var(--c-border);
       padding: 1px 4px;
-      background: #ffffff;
+      background: #ffffff !important;
       height: 33px;
       flex-shrink: 0;
     }
@@ -345,15 +345,20 @@
     }
     .header-logo-img { width: 26px; height: 26px; object-fit: contain; }
     .header-kingdom { width: 100%; text-align: center; line-height: 1.15; z-index: 1; }
-    .kingdom-title    { font-family: 'Moul', serif; font-size: 8.2px; color: #000; letter-spacing: -.1px; }
-    .kingdom-subtitle { font-family: 'Moul', serif; font-size: 7.5px; color: #000; margin-top: 1px; }
+    .kingdom-title    { font-family: 'Moul', serif; font-size: 8.2px; color: #000 !important; letter-spacing: -.1px; }
+    .kingdom-subtitle { font-family: 'Moul', serif; font-size: 7.5px; color: #000 !important; margin-top: 1px; }
     .kingdom-divider  { display: flex; align-items: center; justify-content: center; margin-top: 1px; }
     .kingdom-divider svg { width: 72px; height: 3.5px; }
 
+    /* 🌟 កែសម្រួល៖ រៀបចំកម្ពស់ឱ្យសមមាត្រពេញកាតស្អាត មិនសល់ចន្លោះធំនៅបាត */
     .card-main-body {
-      flex: 1; padding: 2px 5px 2px 5px; position: relative;
-      display: flex; flex-direction: column; justify-content: flex-start;
-      background: #ffffff;
+      flex: 1;
+      padding: 3mm 4mm 2.5mm 4mm;
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      background: #ffffff !important;
     }
     .card-watermark {
       position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%);
@@ -366,17 +371,17 @@
       gap: 1px;
       margin-bottom: 1px;
     }
-    .title-badge        { font-family: 'Moul', serif; font-size: 9.2px; color: var(--c-blue); letter-spacing: .2px; line-height: 1.35; }
-    .title-school       { font-family: 'Moul', serif; font-size: 8.3px; color: var(--c-green); line-height: 1.35; }
-    .title-id           { font-family: 'Moul', serif; font-size: 8.8px; color: var(--c-orange); line-height: 1.35; }
+    .title-badge        { font-family: 'Moul', serif; font-size: 9.2px; color: var(--c-blue) !important; letter-spacing: .2px; line-height: 1.35; }
+    .title-school       { font-family: 'Moul', serif; font-size: 8.3px; color: var(--c-green) !important; line-height: 1.35; }
+    .title-id           { font-family: 'Moul', serif; font-size: 8.8px; color: var(--c-orange) !important; line-height: 1.35; }
 
     .title-student-name-center {
       font-family: 'Moul', 'Khmer OS Muol Light', serif;
       font-size: 12.2px;
-      color: var(--c-blue);
+      color: var(--c-blue) !important;
       text-align: center;
       line-height: 1.65;
-      padding-top: 4px;
+      padding-top: 2px;
       padding-bottom: 1px;
       width: 100%;
       white-space: nowrap;
@@ -401,46 +406,64 @@
     }
     .left-profile-block { flex: 1; display: flex; flex-direction: column; height: 100%; overflow: hidden; }
 
+    /* =========================================================
+       🛡️ ការពារតារាងកាតសិស្សដាច់ខាតកុំឱ្យប្រែជាពណ៌ខ្មៅ
+    ========================================================= */
+    .student-card table,
+    .student-card tbody,
+    .student-card tr,
+    .student-card td,
+    .info-table-top,
+    .info-table-bottom,
+    .info-table-top td,
+    .info-table-bottom td {
+      background: transparent !important;
+      background-color: transparent !important;
+      border: none !important;
+      box-shadow: none !important;
+    }
+
     .info-table-top  { width: 100%; height: 100%; border-collapse: collapse; font-size: 8.8px; line-height: 1.42; }
     .info-table-top tr { height: 20%; }
     .info-table-top td { padding: 1.2px 0; vertical-align: middle; }
 
-    .info-table-bottom { width: 100%; border-collapse: collapse; font-size: 8.8px; line-height: 1.42; margin-top: 2.5px; }
-    .info-table-bottom tr { height: 15.5px; }
+    .info-table-bottom { width: 100%; border-collapse: collapse; font-size: 8.8px; line-height: 1.42; margin-top: 3px; }
+    .info-table-bottom tr { height: 16px; }
     .info-table-bottom td { padding: 1.2px 0; vertical-align: middle; }
 
-    .lbl-col { width: 68px; color: var(--c-red); font-weight: 700; white-space: nowrap; text-align: left; }
-    .cln-col { width: 8px; color: var(--c-red); font-weight: 700; text-align: center; padding-right: 1px; }
-    .val-col { font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: left; font-size: 9px; }
-    .val-blue  { color: var(--c-blue); }
-    .val-green { color: var(--c-green); }
+    .lbl-col { width: 68px; color: var(--c-red) !important; font-weight: 700 !important; white-space: nowrap; text-align: left; }
+    .cln-col { width: 8px; color: var(--c-red) !important; font-weight: 700 !important; text-align: center; padding-right: 1px; }
+    .val-col { font-weight: 700 !important; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; text-align: left; font-size: 9px; }
+    .val-blue  { color: var(--c-blue) !important; }
+    .val-green { color: var(--c-green) !important; }
 
     .student-photo-box {
       width: 19mm; height: 25.5mm; border: 1.5px solid #000;
-      border-radius: 4px; background: #fff; overflow: hidden; flex-shrink: 0;
+      border-radius: 4px; background: #fff !important; overflow: hidden; flex-shrink: 0;
       display: flex; align-items: center; justify-content: center;
     }
     .student-photo-box img { width: 100%; height: 100%; object-fit: cover; }
     .student-photo-box i { font-size: 24px; color: #cbd5e1; }
 
+    /* ── ផ្នែកហត្ថលេខា និងត្រា ── */
     .card-bottom-signature {
       position: relative; 
       z-index: 2;
       display: flex; 
       justify-content: flex-start;
-      padding-left: 3px;
-      margin-top: 3.5mm;
-      margin-bottom: 2.5mm;
+      padding-left: 2mm;
+      margin-top: 2mm;
+      margin-bottom: 1mm;
     }
     .signature-box { display: flex; flex-direction: column; align-items: center; position: relative; width: 44mm; text-align: center; }
-    .sig-date { font-family: inherit; font-weight: 700; font-size: 6.8px; color: #000; line-height: 1.2; white-space: nowrap; text-align: center; }
+    .sig-date { font-family: inherit; font-weight: 700; font-size: 6.8px; color: #000 !important; line-height: 1.2; white-space: nowrap; text-align: center; }
 
     .sig-stamp-wrapper {
       position: relative; display: flex; flex-direction: column; align-items: center;
       width: 100%; margin-top: 1.5px; min-height: 22mm;
     }
-    .sig-title { font-family: 'Moul', serif; font-size: 7.2px; color: #000; line-height: 1.25; margin-top: 1px; white-space: nowrap; text-align: center; position: relative; z-index: 2; }
-    .sig-role  { font-family: 'Moul', serif; font-size: 7px; color: #000; line-height: 1.25; margin-top: 1px; white-space: nowrap; text-align: center; position: relative; z-index: 2; }
+    .sig-title { font-family: 'Moul', serif; font-size: 7.2px; color: #000 !important; line-height: 1.25; margin-top: 1px; white-space: nowrap; text-align: center; position: relative; z-index: 2; }
+    .sig-role  { font-family: 'Moul', serif; font-size: 7px; color: #000 !important; line-height: 1.25; margin-top: 1px; white-space: nowrap; text-align: center; position: relative; z-index: 2; }
 
     .stamp-overlay-box {
       position: absolute;
@@ -498,7 +521,7 @@
      🎛️ NEW SLEEK TOOLBAR (SYNC AUTO WITH HOMEPAGE)
 ========================================================= -->
 <div class="no-print-toolbar">
-  <!-- ជួរទី ១៖ ការកំណត់ចម្បង + Zoom + បោះពុម្ព (គ្មានប៊ូតុង Theme ទេ) -->
+  <!-- ជួរទី ១៖ ការកំណត់ចម្បង + Zoom + បោះពុម្ព -->
   <div class="toolbar-row">
     <div class="toolbar-section">
       <div class="panel-pill-box">
@@ -642,10 +665,8 @@ function applyTheme(theme) {
 
 // ស្ដាប់សារប្ដូរ Theme ពីទំព័រមេ (index.html) ភ្លាមៗពេលចុចលើ Sidebar
 window.addEventListener('message', function(event) {
-  if (event.data && event.data.type === 'THEME_CHANGE') {
-    applyTheme(event.data.theme);
-  } else if (event.data && event.data.theme) {
-    applyTheme(event.data.theme);
+  if (event.data && (event.data.type === 'THEME_CHANGE' || event.data.theme)) {
+    applyTheme(event.data.theme || event.data);
   }
 });
 
@@ -803,7 +824,6 @@ function doPrintCards() {
 // 🚀 INITIALIZATION & DATA FETCHING
 // =========================================================
 window.onload = function() {
-  // 🌟 ទាញយក Theme ពី URL Parameter ឬ localStorage របស់ Homepage
   var initialTheme = _urlParams.get('theme') || _get('krou_theme_manual') || 'dark';
   applyTheme(initialTheme);
 
@@ -1005,7 +1025,7 @@ function renderCards() {
               </table>
             </div>
 
-            <!-- ផ្នែកហត្ថលេខា និងត្រា -->
+            <!-- ផ្នែកហត្ថលេខា និងត្រា (នៅចុងបាតកាតស្មើល្អ) -->
             <div class="card-bottom-signature">
               <div class="signature-box">
                 <div class="sig-date">${autoDateText}</div>
