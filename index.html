@@ -777,7 +777,6 @@
             <div class="section-slate-sub">រឿងសំខាន់ៗដែលត្រូវពិនិត្យថ្ងៃនេះ</div>
           </div>
 
-          <!-- 🌟 មុខងារទាំង ២ ដំណើរការជាក់ស្តែង (វត្តមាន & ពិន្ទុ) -->
           <div class="today-tasks-grid">
             <!-- ១. កិច្ចការវត្តមានថ្ងៃនេះ -->
             <div class="task-action-card" onclick="navigate('attendance', null)">
@@ -1021,7 +1020,8 @@
   const KHMER_MONTHS = ['មករា','កុម្ភៈ','មីនា','មេសា','ឧសភា','មិថុនា','កក្កដា','សីហា','កញ្ញា','តុលា','វិច្ឆិកា','ធ្នូ'];
   const ENG_MONTHS = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
 
-  let SESSION_TOKEN = localStorage.getItem('krou_session_token') || localStorage.getItem('school_persistent_token') || "";
+  // 🔐 គាំទ្រគ្រប់ Token Key ដែលរក្សាទុកពីមុន
+  let SESSION_TOKEN = localStorage.getItem('krou_session_token') || localStorage.getItem('user_token') || localStorage.getItem('school_persistent_token') || "";
   let TEACHER_NAME = localStorage.getItem('krou_teacher_name') || "";
   let TEACHER_PHOTO_URL = localStorage.getItem('krou_teacher_photo') || "";
   let USER_ROLE = localStorage.getItem('krou_user_role') || "teacher";
@@ -1230,7 +1230,7 @@
       iframeView.classList.remove('active');
       if (reportsHubView) reportsHubView.classList.remove('active');
       dashboardView.classList.add('active');
-      refreshStats(); // 🌟 Auto-refresh Dashboard Stats
+      refreshStats();
       return;
     }
 
@@ -1259,7 +1259,6 @@
     syncThemeToIframe(currentTheme);
   });
 
-  /* 🌟 ស្តាប់សារពី Subpages ក្នុង Iframe ពេលកត់វត្តមាន ឬពិន្ទុរួច ដើម្បី Auto-Refresh */
   window.addEventListener('message', function(event) {
     if (event.data && (event.data.type === 'DATA_UPDATED' || event.data.action === 'REFRESH_STATS')) {
       refreshStats();
@@ -1300,12 +1299,10 @@
         apiRequest('getSavedScores', { className: targetCls, period: currentMonth })
       ]);
 
-      // ១. 🌟 ពិនិត្យវត្តមានថ្ងៃនេះ (ដោះស្រាយទាំង Array និង Object)
       let isAttRecordedToday = false;
       if (Array.isArray(attRes) && attRes.length > 0) {
         const recordedTodayList = attRes.filter(s => {
           if (!s || !s.days) return false;
-          // ប្រសិនបើជា Array ត្រូវឆែក index [todayDay - 1] បើ Object ឆែក key [todayDay]
           const code = Array.isArray(s.days) ? s.days[todayDay - 1] : s.days[todayDay];
           return code && code !== '-' && String(code).trim() !== '';
         });
@@ -1346,7 +1343,6 @@
         }
       }
 
-      // ២. 🌟 ពិនិត្យពិន្ទុខែនេះ
       let scoredStudentsCount = 0;
       const totalStudentsCount = totalClassStudents || (Array.isArray(attRes) ? attRes.length : 1);
 
@@ -1422,7 +1418,6 @@
           adminPanel.style.display = 'flex';
           adminGrid.innerHTML = '';
           classBreakdown.forEach(c => {
-            // 🌟 កែសម្រួល៖ រក្សាទុកក្នុង localStorage ភ្លាមៗពេលចុច
             adminGrid.innerHTML += `
               <div class="admin-class-card" onclick="ASSIGNED_CLASS='${c.className}'; localStorage.setItem('krou_assigned_class', '${c.className}'); navigate('attendance', null)">
                 <div>
@@ -1461,34 +1456,53 @@
     }
   }
 
-  /* 👤 PROFILE MODAL AUTO-FETCH */
+  /* 👤 PROFILE MODAL AUTO-FETCH (កែសម្រួលដើម្បីទាញទិន្នន័យឱ្យត្រឹមត្រូវ ១០០%) */
   async function openProfileModal() {
     const modal = document.getElementById('profileModalBackdrop');
     if (!modal) return;
     modal.classList.add('show');
 
+    // បង្ហាញព័ត៌មានបឋមពី cache/localStorage មុនពេលទាញពី Server
     document.getElementById('pfName').value = TEACHER_NAME || '';
-    if (TEACHER_PHOTO_URL) {
+    if (TEACHER_PHOTO_URL && String(TEACHER_PHOTO_URL).trim() !== "") {
       document.getElementById('profilePhotoPreview').src = TEACHER_PHOTO_URL;
       document.getElementById('profilePhotoPreview').style.display = 'block';
       document.getElementById('profileAvatarPlaceholder').style.display = 'none';
+    } else {
+      document.getElementById('profilePhotoPreview').style.display = 'none';
+      document.getElementById('profileAvatarPlaceholder').style.display = 'flex';
     }
 
     try {
-      const p = await apiRequest('getMyProfile', { token: SESSION_TOKEN });
-      if (p) {
-        const tData = p.teacher || p;
+      const res = await apiRequest('getMyProfile', { token: SESSION_TOKEN });
+      if (res && (res.success || res.teacher || res.name)) {
+        const tData = res.teacher || res;
+        
         if (tData.name) document.getElementById('pfName').value = tData.name;
         if (tData.sex) document.getElementById('pfSex').value = (tData.sex && tData.sex.includes('ស្រី')) ? 'ស្រី' : 'ប្រុស';
         if (tData.phone) document.getElementById('pfPhone').value = tData.phone;
-        if (tData.dobIso || tData.dob) document.getElementById('pfDob').value = tData.dobIso || tData.dob;
+        
+        // 🌟 គណនា និងរៀបចំថ្ងៃខែឆ្នាំកំណើតឱ្យត្រូវនឹងទម្រង់ YYYY-MM-DD របស់ input type="date"
+        const rawDob = tData.dobIso || tData.dob || '';
+        if (/^\d{4}-\d{2}-\d{2}$/.test(rawDob)) {
+          document.getElementById('pfDob').value = rawDob;
+        } else if (rawDob) {
+          const parts = rawDob.split(/[\/\-.]/);
+          if (parts.length === 3 && parts[2].length === 4) {
+            document.getElementById('pfDob').value = `${parts[2]}-${parts[1].padStart(2, '0')}-${parts[0].padStart(2, '0')}`;
+          }
+        }
+
         if (tData.address) document.getElementById('pfAddress').value = tData.address;
 
         const photo = tData.photoUrl || TEACHER_PHOTO_URL;
-        if (photo) {
+        if (photo && String(photo).trim() !== "") {
           document.getElementById('profilePhotoPreview').src = photo;
           document.getElementById('profilePhotoPreview').style.display = 'block';
           document.getElementById('profileAvatarPlaceholder').style.display = 'none';
+        } else {
+          document.getElementById('profilePhotoPreview').style.display = 'none';
+          document.getElementById('profileAvatarPlaceholder').style.display = 'flex';
         }
       }
     } catch(err) {
@@ -1515,6 +1529,7 @@
     reader.readAsDataURL(file);
   }
 
+  /* 💾 SAVE PROFILE & REFRESH UI */
   async function saveMyProfile(ev) {
     ev.preventDefault();
     const btn = document.getElementById('profileSaveBtn');
@@ -1554,7 +1569,7 @@
     } catch(err) {
       btn.innerText = '💾 រក្សាទុក';
       btn.disabled = false;
-      alert('❌ ការរក្សាទុកបរាជ័យ៖ ' + err.message);
+      alert('❌ ការរក្សាទុកបរាជ័យ៖ ' + (err.message || err));
     }
     return false;
   }
@@ -1632,7 +1647,6 @@
     renderSelectedStudentProfile(currentPvIndex);
   }
 
-  /* 🌟 គណនាអាយុសិស្សឆ្លាតវៃ គាំទ្រគ្រប់ទម្រង់ថ្ងៃខែ (DD/MM/YYYY, DD-MM-YYYY, YYYY-MM-DD) */
   function calculateAge(dobStr) {
     if (!dobStr) return '';
     let b = new Date(dobStr);
@@ -1705,6 +1719,7 @@
   function doLogout() {
     if (!confirm('តើអ្នកពិតជាចង់ចាកចេញពីប្រព័ន្ធមែនទេ?')) return;
     localStorage.removeItem('krou_session_token');
+    localStorage.removeItem('user_token');
     localStorage.removeItem('school_persistent_token');
     localStorage.removeItem('krou_teacher_name');
     localStorage.removeItem('krou_teacher_photo');
@@ -1739,6 +1754,7 @@
       const session = await apiRequest('getCurrentSession', { token: SESSION_TOKEN });
       if (!session || !session.loggedIn) {
         localStorage.removeItem('krou_session_token');
+        localStorage.removeItem('user_token');
         localStorage.removeItem('school_persistent_token');
         window.location.replace('login.html');
         return;
