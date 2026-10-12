@@ -295,7 +295,7 @@
     .school-info { position: absolute; left: 0; top: 25px; text-align: center; font-size: 12px; line-height: 1.6; }
     .nation-info { text-align: center; width: 100%; }
 
-    /* ── Table Styling (ការពារកុំឱ្យខ្មៅពេល Dark Mode) ── */
+    /* ── Table Styling ── */
     table.data-table { 
       width: 100%; 
       border-collapse: collapse; 
@@ -498,10 +498,11 @@
           <button type="button" id="typeSemesterBtn" class="period-type-btn" onclick="setPeriodType('semester')">ឆមាស / ប្រចាំឆ្នាំ</button>
         </div>
 
+        <!-- 🌟 Dropdown ខែ (លុប selected ចេញ ដើម្បីឱ្យ JS ចាប់តាមខែបច្ចុប្បន្នស្វ័យប្រវត្តិ) -->
         <div id="monthSelectWrap" class="active">
           <select id="monthSelect" class="form-control" onchange="loadRankData()">
             <option value="មករា">ខែមករា</option>
-            <option value="កុម្ភៈ" selected>ខែកុម្ភៈ</option>
+            <option value="កុម្ភៈ">ខែកុម្ភៈ</option>
             <option value="មីនា">ខែមីនា</option>
             <option value="មេសា">ខែមេសា</option>
             <option value="ឧសភា">ខែឧសភា</option>
@@ -638,11 +639,9 @@
       document.documentElement.setAttribute('data-theme', theme);
     }
 
-    // ទាញយក Theme ដំបូង
     var initialTheme = _urlParams.get('theme') || _get('krou_theme_manual') || 'dark';
     applyTheme(initialTheme);
 
-    // ស្ដាប់សារប្ដូរ Theme ពី Homepage ភ្លាមៗ (Realtime)
     window.addEventListener('message', function(event) {
       if (event.data && (event.data.type === 'THEME_CHANGE' || event.data.theme)) {
         applyTheme(event.data.theme || event.data);
@@ -660,6 +659,18 @@
     var USER_ROLE    = (window.parent && window.parent.USER_ROLE)     || _urlParams.get('role')  || _get('krou_user_role')    || 'teacher';
     var USER_CLASS   = (window.parent && window.parent.USER_CLASS)    || _urlParams.get('cls')   || _urlParams.get('class')   || _get('krou_assigned_class') || _get('krou_user_class') || '';
     var TEACHER_NAME = (window.parent && window.parent.TEACHER_NAME) || _get('krou_teacher_name') || '';
+
+    const KHMER_MONTHS = ['មករា','កុម្ភៈ','មីនា','មេសា','ឧសភា','មិថុនា','កក្កដា','សីហា','កញ្ញា','តុលា','វិច្ឆិកា','ធ្នូ'];
+
+    // 🌟 ចាប់យកខែបច្ចុប្បន្នស្វ័យប្រវត្តិតាម Calendar
+    function initCurrentMonth() {
+      var now = new Date();
+      var currentMonthKh = KHMER_MONTHS[now.getMonth()];
+      var select = document.getElementById('monthSelect');
+      if (select && currentMonthKh) {
+        select.value = currentMonthKh;
+      }
+    }
 
     async function apiCall(action, params) {
       params = params || {};
@@ -719,6 +730,7 @@
     }
 
     window.onload = function() {
+      initCurrentMonth(); // 👈 កំណត់ខែបច្ចុប្បន្នស្វ័យប្រវត្តិ
       setCurrentKhmerYear();
       setCurrentKhmerDay();
       initDraggableTeacherName();
