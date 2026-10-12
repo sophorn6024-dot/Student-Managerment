@@ -132,6 +132,7 @@
       justify-content: space-between;
       gap: 10px;
       flex-shrink: 0;
+      transition: all 0.2s ease;
     }
 
     .user-profile-summary {
@@ -176,8 +177,18 @@
     }
     .collapse-arrow-btn:hover { background: rgba(255, 255, 255, 0.25); color: #fff; transform: scale(1.05); }
 
+    /* 🌟 កែសម្រួល៖ នៅពេលបង្រួម Sidebar រៀបចំក្បាល Header ឱ្យត្រឹមត្រូវ កុំឱ្យជាន់លើ Avatar */
+    .sidebar.collapsed .sidebar-user-header {
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      padding: 14px 6px 10px;
+    }
     .sidebar.collapsed .user-profile-meta { display: none; }
-    .sidebar.collapsed .collapse-arrow-btn { margin: 0 auto; transform: rotate(180deg); }
+    .sidebar.collapsed .collapse-arrow-btn { 
+      margin: 0 auto; 
+      transform: rotate(180deg); 
+    }
 
     .class-year-pill-box {
       margin: 4px 12px 12px; background: var(--sidebar-card-navy); border: 1px solid rgba(255, 255, 255, 0.1);
@@ -227,6 +238,15 @@
       display: flex; flex-direction: column; gap: 6px; flex-shrink: 0;
     }
 
+    .admin-clear-btn {
+      width: 100%; height: 38px; border-radius: 11px; border: 1px solid rgba(239, 68, 68, 0.35);
+      background: rgba(220, 38, 38, 0.15); color: #fca5a5; font-size: 12.5px; font-weight: 700;
+      display: none; align-items: center; gap: 12px; padding: 0 12px; cursor: pointer;
+      transition: all 0.2s; user-select: none;
+    }
+    .admin-clear-btn:hover { background: rgba(220, 38, 38, 0.35); color: #fff; box-shadow: 0 4px 14px rgba(239, 68, 68, 0.25); }
+    .admin-clear-btn:active { transform: scale(0.98); }
+
     .sidebar-theme-btn {
       width: 100%; height: 38px; border-radius: 11px; border: 1px solid rgba(255, 255, 255, 0.12);
       background: rgba(255, 255, 255, 0.06); color: #fff; display: flex; align-items: center;
@@ -235,7 +255,6 @@
     }
     .sidebar-theme-btn:hover { background: rgba(255, 255, 255, 0.14); }
     .sidebar-theme-btn:active { transform: scale(0.98); }
-    .sidebar.collapsed .sidebar-theme-btn { padding: 0; justify-content: center; }
 
     .sidebar-logout-btn {
       width: 100%; height: 40px; border-radius: 11px; border: 1px solid rgba(239, 68, 68, 0.35);
@@ -247,15 +266,11 @@
       background: #ef4444; color: #ffffff; box-shadow: 0 4px 14px rgba(239, 68, 68, 0.35);
     }
     .sidebar-logout-btn:active { transform: scale(0.98); }
-    .sidebar.collapsed .sidebar-logout-btn { padding: 0; justify-content: center; }
 
-    .admin-clear-btn {
-      width: 100%; height: 36px; border-radius: 10px; border: 1px solid rgba(239, 68, 68, 0.3);
-      background: rgba(220, 38, 38, 0.15); color: #fca5a5; font-size: 11.5px; font-weight: 600;
-      display: none; align-items: center; gap: 10px; padding: 0 12px; cursor: pointer;
-      transition: all 0.2s;
-    }
-    .admin-clear-btn:hover { background: rgba(220, 38, 38, 0.35); color: #fff; }
+    /* 🌟 កែសម្រួល៖ តម្រឹមប៊ូតុងទាំងអស់ឱ្យចំកណ្តាលពេលបង្រួម Sidebar (Collapsed) */
+    .sidebar.collapsed .admin-clear-btn { padding: 0; justify-content: center; }
+    .sidebar.collapsed .sidebar-theme-btn { padding: 0; justify-content: center; }
+    .sidebar.collapsed .sidebar-logout-btn { padding: 0; justify-content: center; }
 
     /* =========================================================
        🌟 MAIN WRAPPER & DASHBOARD
@@ -717,8 +732,9 @@
     </nav>
 
     <div class="sidebar-footer">
-      <button class="admin-clear-btn" id="adminClearBtn" onclick="confirmClearAllData()">
-        <span>🗑️</span><span>សម្អាតទិន្នន័យ</span>
+      <!-- 🌟 កែសម្រួល៖ ថែម class="nav-text" ដើម្បីឱ្យលាក់អក្សរស្អាតពេលបង្រួម Sidebar -->
+      <button class="admin-clear-btn" id="adminClearBtn" onclick="confirmClearAllData()" title="សម្អាតទិន្នន័យ">
+        <span>🗑️</span><span class="nav-text">សម្អាតទិន្នន័យ</span>
       </button>
 
       <button class="sidebar-theme-btn" onclick="toggleTheme()" id="sidebarThemeBtn" title="ប្ដូរ Dark/Light Mode">
@@ -1456,7 +1472,7 @@
     }
   }
 
-  /* 👤 PROFILE MODAL AUTO-FETCH (កែសម្រួលដើម្បីទាញទិន្នន័យឱ្យត្រឹមត្រូវ ១០០%) */
+  /* 👤 PROFILE MODAL AUTO-FETCH (ទាញទិន្នន័យឱ្យត្រឹមត្រូវ ១០០%) */
   async function openProfileModal() {
     const modal = document.getElementById('profileModalBackdrop');
     if (!modal) return;
