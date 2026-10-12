@@ -110,7 +110,6 @@
       transition: all 0.25s ease;
     }
 
-    /* ── Header Title Banner ── */
     .header-banner {
       display: flex;
       align-items: center;
@@ -132,7 +131,6 @@
       color: #38bdf8;
     }
 
-    /* 🌟 Badge សម្រាប់បង្ហាញថ្នាក់របស់គ្រូ (ជំនួស Dropdown) */
     .teacher-class-badge {
       display: inline-flex;
       align-items: center;
@@ -147,7 +145,6 @@
       user-select: none;
     }
 
-    /* ── Form Controls & Flex Row ── */
     .controls {
       display: flex;
       gap: 14px;
@@ -196,7 +193,6 @@
       box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
     }
 
-    /* ── Buttons ── */
     .btn {
       padding: 8px 16px;
       font-weight: 700;
@@ -266,7 +262,6 @@
       transform: translateY(-1px);
     }
 
-    /* ── Roles Section ── */
     .roles-card {
       background: var(--surface-card);
       border: 1.5px solid var(--border);
@@ -339,7 +334,6 @@
       min-height: 22px;
     }
 
-    /* ── Groups Output Grid ── */
     .groups-container {
       display: grid;
       grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
@@ -554,21 +548,21 @@
 
   <div class="main-wrap">
     
-    <!-- ── Card 1: ព័ត៌មានថ្នាក់ (ប្ដូរតាម Role គ្រូ ឬ Admin) ── -->
+    <!-- ── Card 1: ព័ត៌មានថ្នាក់ ── -->
     <div class="card">
       <div class="header-banner">
         <div class="header-title-text khmer-moul">
           <i class="fa-solid fa-users-rectangle"></i> ប្រព័ន្ធបែងចែកសិស្សតាមវេនសម្អាត
         </div>
 
-        <!-- 🌟 ផ្លាកបង្ហាញថ្នាក់របស់គ្រូ (លាក់ Dropdown ជំនួសមកបង្ហាញត្រង់នេះ) -->
+        <!-- 🌟 Badge ថ្នាក់របស់គ្រូ -->
         <div id="teacherClassBadge" class="teacher-class-badge" style="display:none;">
           <i class="fa-solid fa-chalkboard-user"></i>
           <span id="teacherClassText">ថ្នាក់ទី...</span>
         </div>
       </div>
 
-      <!-- 🌟 ប្រអប់ជ្រើសរើសថ្នាក់ (បង្ហាញតែពេលជា Admin ប៉ុណ្ណោះ បើជាគ្រូត្រូវលាក់) -->
+      <!-- 🌟 Dropdown សម្រាប់ Admin -->
       <div class="controls" id="adminClassBox" style="display:none;">
         <div class="col">
           <label><i class="fa-solid fa-graduation-cap" style="color:#0284c7;"></i> ជ្រើសរើសថ្នាក់ (Admin) ៖</label>
@@ -660,9 +654,7 @@
 
   </div>
 
-  <!-- =========================================================
-       🖨️ PRINTABLE FORMAL REPORT SECTION
-  ========================================================= -->
+  <!-- 🖨️ Printable Area -->
   <div id="printableArea">
     <div class="print-header">
       <div class="kingdom khmer-moul">
@@ -705,7 +697,9 @@
   </div>
 
   <script>
-const BACKEND_URL = "https://script.google.com/macros/s/AKfycbz9GLD2TJS4UPKVGxrc3H73tGCtjlMI7-56E7TlKcLHyBwqCiZ1jPF_okv2m1ubTjpy/exec";
+    // =========================================================
+    // ⚙️ THEME MANAGEMENT
+    // =========================================================
     var _urlParams = new URLSearchParams(window.location.search);
     function _get(key) { try { return localStorage.getItem(key) || ''; } catch(e) { return ''; } }
 
@@ -723,6 +717,11 @@ const BACKEND_URL = "https://script.google.com/macros/s/AKfycbz9GLD2TJS4UPKVGxrc
       }
     });
 
+    // =========================================================
+    // ⚙️ BACKEND API & CONFIGURATION
+    // =========================================================
+    var BACKEND_URL = (window.parent && window.parent.BACKEND_URL)
+      || "https://script.google.com/macros/s/AKfycbz9GLD2TJS4UPKVGxrc3H73tGCtjlMI7-56E7TlKcLHyBwqCiZ1jPF_okv2m1ubTjpy/exec";
 
     var TOKEN = (window.parent && window.parent.SESSION_TOKEN) || _get('krou_session_token') || _get('user_token') || "";
     var USER_ROLE = (window.parent && window.parent.USER_ROLE) || _get('krou_user_role') || "teacher";
@@ -736,36 +735,41 @@ const BACKEND_URL = "https://script.google.com/macros/s/AKfycbz9GLD2TJS4UPKVGxrc
       "ថ្ងៃចន្ទ", "ថ្ងៃអង្គារ", "ថ្ងៃពុធ", "ថ្ងៃព្រហស្បតិ៍", "ថ្ងៃសុក្រ", "ថ្ងៃសៅរ៍"
     ];
 
+    // 🌟 API Caller ដំណើរការទាំង callBackendApi និង fetch ដោយសុវត្ថិភាព
     async function apiCall(action, params = {}) {
       params.token = params.token || TOKEN;
+      var res = null;
+
       if (typeof callBackendApi === 'function') {
-        return await callBackendApi(action, params);
-      }
-      if (typeof google !== 'undefined' && google.script && google.script.run) {
-        return new Promise((resolve, reject) => {
-          google.script.run
-            .withSuccessHandler(resolve)
-            .withFailureHandler(reject)[action](params);
-        });
+        try {
+          res = await callBackendApi(action, params);
+        } catch(e) {
+          res = null;
+        }
       }
 
-      var res = await fetch(SCRIPT_URL, {
-        method: 'POST',
-        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-        body: JSON.stringify(Object.assign({ action: action }, params))
-      });
-      if (!res.ok) throw new Error('HTTP ' + res.status);
-      var json = await res.json();
-      if (json && json.success === false) throw new Error(json.error || 'Server error');
-      if (json && json.classes !== undefined) return json.classes;
-      return json;
+      if (!res) {
+        var fetchRes = await fetch(BACKEND_URL, {
+          method: 'POST',
+          headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+          body: JSON.stringify(Object.assign({ action: action }, params))
+        });
+        if (!fetchRes.ok) throw new Error('HTTP ' + fetchRes.status);
+        res = await fetchRes.json();
+      }
+
+      if (res && res.success === false) throw new Error(res.error || res.message || 'Server error');
+      
+      // 🌟 ដោះស្រាយមិនឱ្យស្ទះ Array ឡើយ
+      if (res && res.classes !== undefined) return res.classes;
+      if (res && res.data !== undefined) return res.data;
+      return res;
     }
 
     // =========================================================
-    // 🚀 INITIALIZATION (លាក់ DROPDOWN សម្រាប់គ្រូ / បង្ហាញសម្រាប់ ADMIN)
+    // 🚀 INITIALIZATION
     // =========================================================
     window.onload = async function() {
-      // 1. បើ USER_CLASS មិនទាន់មាន ព្យាយាមទាញពី Session
       if (!USER_CLASS && TOKEN) {
         try {
           var session = await apiCall('getCurrentSession', { token: TOKEN });
@@ -779,7 +783,7 @@ const BACKEND_URL = "https://script.google.com/macros/s/AKfycbz9GLD2TJS4UPKVGxrc
       var isAdmin = (String(USER_ROLE).toLowerCase().trim() === 'admin');
 
       if (!isAdmin) {
-        // 🏫 គ្រូបង្រៀន (Teacher) -> លាក់ Dropdown បង្ហាញតែ Badge ថ្នាក់គាត់ផ្ទាល់
+        // 🏫 គ្រូបង្រៀន -> លាក់ Dropdown បង្ហាញតែ Badge ថ្នាក់គាត់
         document.getElementById('adminClassBox').style.display = 'none';
 
         var badge = document.getElementById('teacherClassBadge');
@@ -790,7 +794,6 @@ const BACKEND_URL = "https://script.google.com/macros/s/AKfycbz9GLD2TJS4UPKVGxrc
           text.innerText = 'ថ្នាក់ទី ' + cleanCls;
           badge.style.display = 'inline-flex';
           
-          // កំណត់តម្លៃក្នុង classSelect ហើយទាញទិន្នន័យស្វ័យប្រវត្តិ
           var sel = document.getElementById('classSelect');
           sel.innerHTML = '<option value="' + cleanCls + '">ថ្នាក់ទី ' + cleanCls + '</option>';
           sel.value = cleanCls;
@@ -799,14 +802,16 @@ const BACKEND_URL = "https://script.google.com/macros/s/AKfycbz9GLD2TJS4UPKVGxrc
           status('⚠️ គណនីរបស់អ្នកមិនទាន់ត្រូវបានចាត់តាំងថ្នាក់នៅឡើយទេ។ សូមទាក់ទងអ្នកគ្រប់គ្រង។', '#f59e0b');
         }
       } else {
-        // 👑 អ្នកគ្រប់គ្រង (Admin) -> បង្ហាញ Dropdown សម្រាប់ជ្រើសរើសថ្នាក់
+        // 👑 Admin -> បង្ហាញ Dropdown សម្រាប់ជ្រើសរើសថ្នាក់
         document.getElementById('teacherClassBadge').style.display = 'none';
         document.getElementById('adminClassBox').style.display = 'flex';
 
         try {
-          var classes = await apiCall('getClassList');
-          if (!classes || !classes.length) classes = await apiCall('getClassListForSession');
-          populateClasses(classes);
+          var classesRes = await apiCall('getClassList');
+          if (!classesRes || (Array.isArray(classesRes) && !classesRes.length)) {
+            classesRes = await apiCall('getClassListForSession');
+          }
+          populateClasses(classesRes);
         } catch(e) {
           status('❌ ' + e.message, '#ef4444');
         }
@@ -821,11 +826,26 @@ const BACKEND_URL = "https://script.google.com/macros/s/AKfycbz9GLD2TJS4UPKVGxrc
       }
     }
 
-    function populateClasses(classes){
+    // 🌟 ដំណោះស្រាយសំខាន់៖ ធានាថា classList ជា Array ១០០% ជៀសវាង Error .forEach
+    function populateClasses(res){
       var s = document.getElementById('classSelect');
       s.innerHTML = '<option value="">-- ជ្រើសរើសថ្នាក់ --</option>';
 
-      (classes || []).forEach(function(c){
+      var classList = [];
+      if (Array.isArray(res)) {
+        classList = res;
+      } else if (res && Array.isArray(res.classes)) {
+        classList = res.classes;
+      } else if (res && Array.isArray(res.data)) {
+        classList = res.data;
+      }
+
+      if (classList.length === 0) {
+        s.innerHTML = '<option value="">-- មិនមានទិន្នន័យថ្នាក់ --</option>';
+        return;
+      }
+
+      classList.forEach(function(c){
         var o = document.createElement('option');
         o.value = c;
         o.textContent = c.toString().startsWith('ថ្នាក់') ? c : 'ថ្នាក់ទី ' + c;
@@ -927,8 +947,8 @@ const BACKEND_URL = "https://script.google.com/macros/s/AKfycbz9GLD2TJS4UPKVGxrc
       status('⏳ កំពុងទាញយកសិស្ស និងតួនាទី...', '#0284c7');
 
       try {
-        var students = await apiCall('getStudentsByClass', { className: c });
-        currentStudents = students || [];
+        var rawStudents = await apiCall('getStudentsByClass', { className: c });
+        currentStudents = Array.isArray(rawStudents) ? rawStudents : (rawStudents && rawStudents.data ? rawStudents.data : []);
         populateRoles();
 
         try {
@@ -1047,7 +1067,8 @@ const BACKEND_URL = "https://script.google.com/macros/s/AKfycbz9GLD2TJS4UPKVGxrc
       document.getElementById('groupsContainer').innerHTML = '';
 
       try {
-        var students = await apiCall('getStudentsByClass', { className: c });
+        var rawSt = await apiCall('getStudentsByClass', { className: c });
+        var students = Array.isArray(rawSt) ? rawSt : (rawSt && rawSt.data ? rawSt.data : []);
         var excluded = getExcludedKeys();
         var cleaning = students.filter(s => excluded.indexOf(studentKey(s)) === -1);
 
