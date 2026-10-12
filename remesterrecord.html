@@ -1,22 +1,55 @@
 <!DOCTYPE html>
-<html lang="km">
+<html lang="km" data-theme="dark">
 <head>
   <base target="_top">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>សៀវភៅសិក្ខាគារិក</title>
   
-  <!-- 🔤 Google Fonts Khmer -->
+  <!-- 🔤 Google Fonts Khmer & FontAwesome -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Battambang:wght@400;700&family=Kantumruy+Pro:ital,wght@0,400;0,600;0,700;1,400&family=Moul&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <style>
+    /* =========================================================
+       🎨 DYNAMIC THEME SYSTEM (LIGHT & DARK MODE)
+    ========================================================= */
     :root {
+      /* Theme Tokens - Light Mode */
+      --app-bg: #f8fafc;
+      --tb-bg: rgba(255, 255, 255, 0.95);
+      --tb-border: #e2e8f0;
+      --card-panel-bg: #ffffff;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --input-bg: #ffffff;
+      --input-border: #cbd5e1;
+      --input-focus: #0284c7;
+      --ctrl-group-bg: #f1f5f9;
+      --shadow-sm: 0 4px 16px rgba(15, 23, 42, 0.06);
+
+      /* Print Document Colors (ស្តង់ដារសៀវភៅសិក្ខាគារិក) */
       --navy: #132d56;
       --navy-light: #1e3a8a;
       --red-star: #dc2626;
       --border-color: #132d56;
+    }
+
+    [data-theme="dark"] {
+      /* Theme Tokens - Dark Mode */
+      --app-bg: #090e17;
+      --tb-bg: rgba(15, 23, 42, 0.94);
+      --tb-border: #1e293b;
+      --card-panel-bg: #111e33;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --input-bg: #162642;
+      --input-border: #233f66;
+      --input-focus: #38bdf8;
+      --ctrl-group-bg: #0e1a2d;
+      --shadow-sm: 0 8px 24px rgba(0, 0, 0, 0.45);
     }
 
     * {
@@ -29,96 +62,227 @@
 
     body {
       font-family: 'Khmer OS Battambang', 'Battambang', 'Kantumruy Pro', sans-serif;
-      background-color: #2b3544;
-      color: var(--navy);
+      background-color: var(--app-bg);
+      color: var(--text-main);
       font-size: 14px;
       line-height: 1.45;
       text-rendering: optimizeLegibility;
       -webkit-font-smoothing: antialiased;
+      transition: background-color 0.25s ease, color 0.25s ease;
+      min-height: 100vh;
+      padding-bottom: 90px;
     }
 
     .f-moul { font-family: 'Khmer OS Muol Light', 'Moul', cursive; font-weight: normal; letter-spacing: 0.3px; }
     .f-bold { font-family: 'Khmer OS Battambang', 'Battambang', sans-serif; font-weight: 700; }
     .f-regular { font-family: 'Khmer OS Battambang', 'Battambang', 'Kantumruy Pro', sans-serif; font-weight: 400; }
 
-    /* Top Toolbar */
+    /* =========================================================
+       🎛️ NEW PREMIUM TOOLBAR DESIGN
+    ========================================================= */
     .no-print-bar {
       position: sticky;
       top: 0;
       z-index: 1000;
-      background: #0f172a;
-      color: #fff;
-      padding: 8px 16px;
+      background: var(--tb-bg);
+      backdrop-filter: blur(14px);
+      padding: 12px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      box-shadow: var(--shadow-sm);
+      border-bottom: 1.5px solid var(--tb-border);
+      transition: all 0.25s ease;
+    }
+
+    .toolbar-row {
       display: flex;
       flex-wrap: wrap;
       align-items: center;
       justify-content: space-between;
-      gap: 8px;
-      box-shadow: 0 4px 15px rgba(0,0,0,0.4);
+      gap: 12px;
     }
-    .tool-group { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
-    .btn {
-      display: inline-flex; align-items: center; gap: 4px; padding: 5px 11px;
-      border-radius: 6px; border: 1px solid #4b5563; background: #1f2937; color: #f3f4f6;
-      font-family: 'Kantumruy Pro', sans-serif; font-size: 11.5px; cursor: pointer; text-decoration: none;
-      transition: all 0.15s;
-    }
-    .btn:hover { background: #374151; }
-    .btn-primary { background: #2563eb; border-color: #1d4ed8; color: #fff; font-weight: bold; }
 
-    /* ── STYLES FOR ZOOM BUTTONS ── */
+    .toolbar-section {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .panel-pill-box {
+      background: var(--ctrl-group-bg);
+      border: 1px solid var(--tb-border);
+      border-radius: 12px;
+      padding: 5px 10px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+
+    .toolbar-label {
+      font-size: 12.5px;
+      font-weight: 700;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      white-space: nowrap;
+    }
+
+    .form-control {
+      padding: 6px 10px;
+      font-family: 'Kantumruy Pro', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      border: 1.5px solid var(--input-border);
+      border-radius: 8px;
+      outline: none;
+      background: var(--input-bg);
+      color: var(--text-main);
+      transition: all 0.2s ease;
+    }
+    .form-control:focus {
+      border-color: var(--input-focus);
+      box-shadow: 0 0 0 3px rgba(2, 132, 199, 0.15);
+    }
+    .form-control:disabled {
+      opacity: 0.65;
+      cursor: not-allowed;
+    }
+
+    /* 🌟 Badge ថ្នាក់គ្រូ */
+    .teacher-class-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: linear-gradient(135deg, #0284c7, #2563eb);
+      color: #ffffff;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-weight: 700;
+      font-size: 13px;
+      box-shadow: 0 3px 10px rgba(2, 132, 199, 0.3);
+      user-select: none;
+    }
+
+    /* ── Action Buttons ── */
+    .btn {
+      padding: 6px 14px;
+      font-family: 'Kantumruy Pro', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      border-radius: 9px;
+      border: 1px solid transparent;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      user-select: none;
+      white-space: nowrap;
+    }
+    .btn:active { transform: scale(0.96); }
+
+    .btn-secondary {
+      background: var(--ctrl-group-bg);
+      color: var(--text-main);
+      border-color: var(--input-border);
+    }
+    .btn-secondary:hover {
+      border-color: var(--input-focus);
+      color: var(--input-focus);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #0284c7, #2563eb);
+      color: #fff;
+      box-shadow: 0 3px 10px rgba(37, 99, 235, 0.25);
+    }
+    .btn-primary:hover {
+      background: linear-gradient(135deg, #0369a1, #1d4ed8);
+      transform: translateY(-1px);
+    }
+
+    .btn-success {
+      background: linear-gradient(135deg, #10b981, #059669);
+      color: #fff;
+      box-shadow: 0 3px 10px rgba(16, 185, 129, 0.25);
+    }
+    .btn-success:hover {
+      background: linear-gradient(135deg, #059669, #047857);
+      transform: translateY(-1px);
+    }
+
+    /* ── Zoom Buttons ── */
     .zoom-btn-group {
       display: inline-flex;
       align-items: center;
       gap: 4px;
-      background: #1e293b;
-      padding: 3px 5px;
-      border-radius: 8px;
-      border: 1px solid #475569;
+      background: var(--ctrl-group-bg);
+      padding: 3px;
+      border-radius: 9px;
+      border: 1px solid var(--tb-border);
     }
     .zoom-btn {
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid #475569;
-      color: #f8fafc;
-      padding: 4px 9px;
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      padding: 5px 10px;
       border-radius: 6px;
-      font-size: 11.5px;
+      font-size: 12px;
       font-weight: 700;
       cursor: pointer;
       transition: all 0.15s ease;
       font-family: 'Kantumruy Pro', sans-serif;
     }
-    .zoom-btn:hover { background: rgba(255, 255, 255, 0.18); }
+    .zoom-btn:hover { color: var(--text-main); }
     .zoom-btn.active {
-      background: #2563eb !important;
-      border-color: #3b82f6 !important;
+      background: #0284c7 !important;
       color: #ffffff !important;
-      box-shadow: 0 2px 8px rgba(37, 99, 235, 0.4);
+      box-shadow: 0 2px 8px rgba(2, 132, 199, 0.4);
     }
 
-    select {
-      font-family: 'Kantumruy Pro', sans-serif; font-size: 11.5px; padding: 4px 8px;
-      border-radius: 6px; background: #1f2937; color: #fff; border: 1px solid #4b5563; outline: none;
-    }
-
+    /* =========================================================
+       📄 A4 BOOKLET PREVIEW (សៀវភៅសិក្ខាគារិក - រក្សាពណ៌សជានិច្ច)
+    ========================================================= */
     .preview-wrapper {
       padding: 20px 10px; 
       display: flex; 
       flex-direction: column; 
       align-items: center; 
-      gap: 20px;
+      gap: 25px;
       transition: zoom 0.2s ease;
     }
 
     .sheet-page {
-      background: #ffffff; width: 297mm; height: 210mm; max-height: 210mm;
-      padding: 6mm 7.5mm; display: grid; grid-template-columns: 1fr 1fr; gap: 7mm;
-      box-shadow: 0 10px 28px rgba(0,0,0,0.5); page-break-after: always; position: relative; overflow: hidden;
+      background: #ffffff !important; 
+      color: var(--navy) !important;
+      width: 297mm; 
+      height: 210mm; 
+      max-height: 210mm;
+      padding: 6mm 7.5mm; 
+      display: grid; 
+      grid-template-columns: 1fr 1fr; 
+      gap: 7mm;
+      box-shadow: 0 10px 28px rgba(0,0,0,0.35); 
+      page-break-after: always; 
+      position: relative; 
+      overflow: hidden;
       flex-shrink: 0;
+      border-radius: 4px;
     }
+
     .page-box {
-      border: 3.5px double var(--navy); padding: 14px 18px 12px 18px; display: flex;
-      flex-direction: column; justify-content: space-between; height: 100%; position: relative;
+      border: 3.5px double var(--navy); 
+      padding: 14px 18px 12px 18px; 
+      display: flex;
+      flex-direction: column; 
+      justify-content: space-between; 
+      height: 100%; 
+      position: relative;
+      background: #ffffff !important;
     }
 
     .header-text { text-align: center; color: var(--navy); }
@@ -157,16 +321,29 @@
       font-size: 16px;
     }
 
+    /* ── Table Styling ── */
     .custom-table {
-      width: 100%; border-collapse: collapse; font-size: 13px; text-align: center; border: 1.35px solid var(--navy); margin-bottom: 3px; table-layout: fixed;
+      width: 100%; 
+      border-collapse: collapse; 
+      font-size: 13px; 
+      text-align: center; 
+      border: 1.35px solid var(--navy) !important; 
+      margin-bottom: 3px; 
+      table-layout: fixed;
+      background: #ffffff !important;
     }
     .custom-table th, .custom-table td {
-      border: 1.15px solid var(--navy); padding: 1.8px 2px; height: 21.5px; vertical-align: middle;
+      border: 1.15px solid var(--navy) !important; 
+      padding: 1.8px 2px; 
+      height: 21.5px; 
+      vertical-align: middle;
+      background: #ffffff !important;
+      color: var(--navy) !important;
     }
-    .custom-table th { background: #f8fafc; font-weight: bold; font-size: 13.5px; }
+    .custom-table th { background: #f8fafc !important; font-weight: bold; font-size: 13.5px; }
     .custom-table td.text-left { text-align: left; padding-left: 7px; font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
-    .red-bold { color: #dc2626; font-weight: bold; font-size: 13.5px; }
+    .red-bold { color: #dc2626 !important; font-weight: bold; font-size: 13.5px; }
 
     .sig-block {
       display: flex;
@@ -178,76 +355,134 @@
       min-width: 180px;
     }
 
+    @media screen and (max-width: 768px) {
+      .no-print-bar { padding: 10px 14px; }
+      .toolbar-row { flex-direction: column; align-items: stretch; gap: 8px; }
+      .toolbar-section { width: 100%; justify-content: space-between; }
+      .panel-pill-box { width: 100%; }
+      .zoom-btn-group { width: 100%; justify-content: center; }
+      .zoom-btn { flex: 1; text-align: center; }
+    }
+
+    /* =========================================================
+       🖨️ PRINT RULES (A4 LANDSCAPE)
+    ========================================================= */
     @media print {
-      html, body { background: none; padding: 0; margin: 0; width: 297mm; height: 210mm; }
+      html, body { background: none !important; padding: 0 !important; margin: 0 !important; width: 297mm; height: 210mm; }
       .no-print-bar { display: none !important; }
-      .preview-wrapper { padding: 0; gap: 0; zoom: 1 !important; transform: none !important; }
-      .sheet-page { box-shadow: none; margin: 0; width: 297mm; height: 210mm; padding: 6mm 7.5mm; page-break-after: always; break-after: page; page-break-inside: avoid; }
+      .preview-wrapper { padding: 0 !important; gap: 0 !important; zoom: 1 !important; transform: none !important; }
+      .sheet-page { box-shadow: none !important; margin: 0 !important; width: 297mm !important; height: 210mm !important; padding: 6mm 7.5mm !important; page-break-after: always !important; break-after: page !important; page-break-inside: avoid !important; border-radius: 0 !important; }
       @page { size: A4 landscape; margin: 0; }
     }
   </style>
 </head>
 <body>
 
-  <!-- Top Action Toolbar -->
+  <!-- =========================================================
+       🎛️ NEW PREMIUM TOOLBAR DESIGN
+  ========================================================= -->
   <div class="no-print-bar">
-    <div class="tool-group">
-      <button class="btn" onclick="window.history.back()">⬅ ត្រឡប់</button>
+    <div class="toolbar-row">
+      <div class="toolbar-section">
+        <button class="btn btn-secondary" onclick="window.history.back()">
+          <i class="fa-solid fa-arrow-left"></i> ត្រឡប់
+        </button>
 
-      <!-- 🔍 ZOOM BUTTONS -->
-      <div class="zoom-btn-group" title="ពង្រីក/បង្រួមទំហំ">
-        <button type="button" class="zoom-btn active" data-zoom="1" onclick="setZoom(1, this)">100%</button>
-        <button type="button" class="zoom-btn" data-zoom="0.75" onclick="setZoom(0.75, this)">75%</button>
-        <button type="button" class="zoom-btn" data-zoom="0.5" onclick="setZoom(0.5, this)">50%</button>
+        <!-- 🌟 បង្ហាញ Dropdown តែពេល Admin -->
+        <div class="panel-pill-box" id="adminClassBox" style="display:none;">
+          <span class="toolbar-label"><i class="fa-solid fa-graduation-cap" style="color:#0284c7;"></i> ថ្នាក់៖</span>
+          <select id="classSelect" class="form-control" onchange="onClassSelectChange()">
+            <option value="">កំពុងទាញយក...</option>
+          </select>
+        </div>
+
+        <!-- 🌟 ផ្លាកថ្នាក់របស់គ្រូ (ពេលជាគ្រូ Dropdown នឹងលាក់) -->
+        <div id="teacherClassBadge" class="teacher-class-badge" style="display:none;">
+          <i class="fa-solid fa-chalkboard-user"></i>
+          <span id="teacherClassText">ថ្នាក់ទី...</span>
+        </div>
+
+        <div class="panel-pill-box">
+          <span class="toolbar-label"><i class="fa-solid fa-user" style="color:#10b981;"></i> សិស្ស៖</span>
+          <select id="studentSelect" class="form-control" style="min-width:140px;" onchange="renderSemesterView()">
+            <option value="ALL">🏫 ទាំងថ្នាក់</option>
+          </select>
+        </div>
+
+        <div class="panel-pill-box">
+          <span class="toolbar-label"><i class="fa-solid fa-file-lines" style="color:#f59e0b;"></i> សន្លឹក៖</span>
+          <select id="sheetFilterSelect" class="form-control" onchange="renderSemesterView()">
+            <option value="ALL">ទាំងអស់ (៣ សន្លឹក/សិស្ស)</option>
+            <option value="1">សន្លឹកទី១ (ក្របក្រៅ)</option>
+            <option value="2">សន្លឹកទី២ (ក្របក្នុង & សេចក្តីណែនាំ)</option>
+            <option value="3" selected>សន្លឹកទី៣ (លទ្ធផលប្រឡងឆមាស & ប្រចាំឆ្នាំ)</option>
+          </select>
+        </div>
       </div>
-      
-      <label>ថ្នាក់:</label>
-      <select id="classSelect" onchange="onClassSelectChange()">
-        <option value="">កំពុងទាញយក...</option>
-      </select>
 
-      <label>សិស្ស:</label>
-      <select id="studentSelect" onchange="renderSemesterView()">
-        <option value="ALL">🏫 ទាំងថ្នាក់</option>
-      </select>
+      <div class="toolbar-section">
+        <!-- 🔍 Zoom Buttons -->
+        <div class="zoom-btn-group" title="ពង្រីក/បង្រួមទំហំ">
+          <button type="button" class="zoom-btn active" data-zoom="1" onclick="setZoom(1, this)">100%</button>
+          <button type="button" class="zoom-btn" data-zoom="0.75" onclick="setZoom(0.75, this)">75%</button>
+          <button type="button" class="zoom-btn" data-zoom="0.5" onclick="setZoom(0.5, this)">50%</button>
+        </div>
 
-      <label>សន្លឹក:</label>
-      <select id="sheetFilterSelect" onchange="renderSemesterView()">
-        <option value="ALL">ទាំងអស់ (៣ សន្លឹក/សិស្ស)</option>
-        <option value="1">សន្លឹកទី១ (ក្របក្រៅ)</option>
-        <option value="2">សន្លឹកទី២ (ក្របក្នុង & សេចក្តីណែនាំ)</option>
-        <option value="3" selected>សន្លឹកទី៣ (លទ្ធផលប្រឡងឆមាស & ប្រចាំឆ្នាំ)</option>
-      </select>
-    </div>
+        <button class="btn btn-primary" onclick="initClasses()" title="ផ្ទុកទិន្នន័យឡើងវិញ">
+          <i class="fa-solid fa-rotate"></i> ផ្ទុកឡើងវិញ
+        </button>
 
-    <div class="tool-group">
-      <button class="btn btn-primary" onclick="doPrint()">🖨️ បោះពុម្ព (Print)</button>
+        <button class="btn btn-success" onclick="doPrint()" title="បោះពុម្ពសៀវភៅសិក្ខាគារិក">
+          <i class="fa-solid fa-print"></i> បោះពុម្ព (Print)
+        </button>
+      </div>
     </div>
   </div>
 
+  <!-- =========================================================
+       📄 A4 BOOKLET PREVIEW CONTAINER
+  ========================================================= -->
   <div class="preview-wrapper" id="semesterContainer">
-    <div style="color: #fff; text-align: center; padding: 40px; font-size: 14px;">⚡ កំពុងទាញយកទិន្នន័យ...</div>
+    <div style="color:var(--text-muted); text-align: center; padding: 60px 20px; font-size: 15px; font-weight: 600;">
+      <i class="fa-solid fa-spinner fa-spin fa-2x" style="color:#0284c7;"></i>
+      <p style="margin-top:12px;">កំពុងទាញយកទិន្នន័យសៀវភៅសិក្ខាគារិក...</p>
+    </div>
   </div>
-
-  <!-- 🔗 ភ្ជាប់ api.js (បើមាន) -->
-  <script src="api.js"></script>
 
   <script>
     // =========================================================
-    // ⚙️ CONFIG & GITHUB/APPS SCRIPT BRIDGING
+    // ⚙️ THEME MANAGEMENT (SYNC 100% WITH HOMEPAGE)
     // =========================================================
-    var SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz9GLD2TJS4UPKVGxrc3H73tGCtjlMI7-56E7TlKcLHyBwqCiZ1jPF_okv2m1ubTjpy/exec';
-
     var _urlParams = new URLSearchParams(window.location.search);
     function _get(key) { try { return localStorage.getItem(key) || ''; } catch(e) { return ''; } }
+    function _set(key, val) { try { localStorage.setItem(key, val); } catch(e) {} }
 
-    var TOKEN        = (window.parent && window.parent.SESSION_TOKEN) || _urlParams.get('token') || _get('krou_session_token') || _get('school_token') || '';
-    var USER_ROLE    = (window.parent && window.parent.USER_ROLE)     || _urlParams.get('role')  || _get('krou_user_role')    || _get('school_user_role')  || 'teacher';
-    var USER_CLASS   = _urlParams.get('cls') || _urlParams.get('class') || _get('krou_user_class') || _get('school_user_class') || '';
+    function applyTheme(theme) {
+      theme = theme || 'dark';
+      document.documentElement.setAttribute('data-theme', theme);
+    }
+
+    var initialTheme = _urlParams.get('theme') || _get('krou_theme_manual') || 'dark';
+    applyTheme(initialTheme);
+
+    window.addEventListener('message', function(event) {
+      if (event.data && (event.data.type === 'THEME_CHANGE' || event.data.theme)) {
+        applyTheme(event.data.theme || event.data);
+      }
+    });
+
+    // =========================================================
+    // ⚙️ BACKEND API & CONFIGURATION
+    // =========================================================
+    var SCRIPT_URL = (window.parent && window.parent.BACKEND_URL)
+      || _urlParams.get('apiUrl')
+      || 'https://script.google.com/macros/s/AKfycbz9GLD2TJS4UPKVGxrc3H73tGCtjlMI7-56E7TlKcLHyBwqCiZ1jPF_okv2m1ubTjpy/exec';
+
+    var TOKEN        = (window.parent && window.parent.SESSION_TOKEN) || _urlParams.get('token') || _get('krou_session_token') || _get('user_token') || _get('school_token') || '';
+    var USER_ROLE    = (window.parent && window.parent.USER_ROLE)     || _urlParams.get('role')  || _get('krou_user_role')    || 'teacher';
+    var USER_CLASS   = (window.parent && window.parent.USER_CLASS)    || _urlParams.get('cls')   || _urlParams.get('class')   || _get('krou_assigned_class') || _get('krou_user_class') || '';
     var TEACHER_NAME = (window.parent && window.parent.TEACHER_NAME) || _get('krou_teacher_name') || '';
-    var TEACHER_SEX  = (window.parent && window.parent.TEACHER_SEX)  || _get('krou_teacher_sex') || '';
 
-    // ── Universal API Caller ──
     async function apiCall(action, params) {
       params = params || {};
       if (TOKEN) params.token = params.token || TOKEN;
@@ -261,7 +496,12 @@
       }
 
       if (typeof callBackendApi === 'function') {
-        return callBackendApi(action, params);
+        try {
+          var res = await callBackendApi(action, params);
+          if (res && res.classes !== undefined) return res.classes;
+          if (res && res.data !== undefined) return res.data;
+          return res;
+        } catch(e) {}
       }
 
       var res = await fetch(SCRIPT_URL, {
@@ -272,6 +512,7 @@
       if (!res.ok) throw new Error('HTTP ' + res.status);
       var json = await res.json();
       if (json && json.success === false) throw new Error(json.error || json.message || 'Server error');
+      if (json && json.classes !== undefined) return json.classes;
       if (json && json.data !== undefined) return json.data;
       return json;
     }
@@ -292,16 +533,19 @@
 
     var bundleData = null;
 
-    window.onload = function() {
-      initClasses();
-    };
-
+    // ── 🔍 មុខងារ ZOOM ──
     function setZoom(scale, btnEl) {
       var container = document.getElementById('semesterContainer');
       if (container) container.style.zoom = scale;
 
       document.querySelectorAll('.zoom-btn').forEach(b => b.classList.remove('active'));
-      if (btnEl) btnEl.classList.add('active');
+      if (btnEl) {
+        btnEl.classList.add('active');
+      } else {
+        var matched = document.querySelector('.zoom-btn[data-zoom="' + scale + '"]');
+        if (matched) matched.classList.add('active');
+      }
+      _set('record_zoom_level', scale);
     }
 
     function doPrint() {
@@ -311,67 +555,114 @@
       }, 100);
     }
 
+    // =========================================================
+    // 🚀 INITIALIZATION (លាក់ DROPDOWN សម្រាប់គ្រូ)
+    // =========================================================
+    window.onload = function() {
+      var savedZoom = parseFloat(_get('record_zoom_level') || '1');
+      setZoom(savedZoom);
+      initClasses();
+    };
+
     async function initClasses() {
-      var sel = document.getElementById('classSelect');
-      sel.innerHTML = '<option value="">កំពុងទាញយក...</option>';
+      if (!USER_CLASS && TOKEN) {
+        try {
+          var session = await apiCall('getCurrentSession');
+          if (session && session.loggedIn) {
+            USER_ROLE = session.role || USER_ROLE;
+            USER_CLASS = session.assignedClass || USER_CLASS;
+            TEACHER_NAME = session.name || TEACHER_NAME;
+          }
+        } catch(e) {}
+      }
 
-      try {
-        var res = await apiCall('getClassListForSession', { token: TOKEN });
-        var classes = Array.isArray(res) ? res : (res && res.classes ? res.classes : []);
-        sel.innerHTML = '';
+      var isAdmin = (String(USER_ROLE).toLowerCase().trim() === 'admin');
 
-        if (!classes || classes.length === 0) {
-          sel.innerHTML = '<option value="">គ្មានថ្នាក់</option>';
+      if (!isAdmin) {
+        // 🏫 គ្រូបង្រៀន -> លាក់ Dropdown បង្ហាញតែ Badge ថ្នាក់របស់គាត់
+        document.getElementById('adminClassBox').style.display = 'none';
+
+        var badge = document.getElementById('teacherClassBadge');
+        var text = document.getElementById('teacherClassText');
+        var cleanCls = (USER_CLASS || '').toString().replace(/^(ថ្នាក់ទី|ថ្នាក់)\s*/, '');
+
+        if (cleanCls) {
+          text.innerText = 'ថ្នាក់ទី ' + cleanCls;
+          badge.style.display = 'inline-flex';
+
+          var sel = document.getElementById('classSelect');
+          sel.innerHTML = '<option value="' + cleanCls + '">ថ្នាក់ទី ' + cleanCls + '</option>';
+          sel.value = cleanCls;
+          loadSemesterData(cleanCls);
+        } else {
+          document.getElementById('semesterContainer').innerHTML = 
+            '<div style="text-align:center; padding:50px; color:#f59e0b; font-weight:700;">⚠️ គណនីរបស់អ្នកមិនទាន់ត្រូវបានចាត់តាំងថ្នាក់នៅឡើយទេ។ សូមទាក់ទងអ្នកគ្រប់គ្រង។</div>';
+        }
+      } else {
+        // 👑 Admin -> បង្ហាញ Dropdown ជ្រើសរើសថ្នាក់
+        document.getElementById('teacherClassBadge').style.display = 'none';
+        document.getElementById('adminClassBox').style.display = 'flex';
+
+        var sel = document.getElementById('classSelect');
+        sel.innerHTML = '<option value="">កំពុងទាញយក...</option>';
+
+        try {
+          var res = await apiCall('getClassList');
+          if (!res || !res.length) res = await apiCall('getClassListForSession');
+          var classes = Array.isArray(res) ? res : (res && res.classes ? res.classes : []);
+          sel.innerHTML = '';
+
+          if (!classes || classes.length === 0) {
+            sel.innerHTML = '<option value="">គ្មានថ្នាក់</option>';
+            loadSemesterData('');
+            return;
+          }
+
+          classes.forEach(function(c) {
+            var opt = document.createElement('option');
+            opt.value = c;
+            opt.textContent = c.toString().startsWith('ថ្នាក់') ? c : 'ថ្នាក់ទី ' + c;
+            sel.appendChild(opt);
+          });
+
+          loadSemesterData(sel.value);
+        } catch (err) {
+          console.error(err);
+          sel.innerHTML = '<option value="">បរាជ័យក្នុងការទាញយក</option>';
           loadSemesterData('');
-          return;
         }
-
-        classes.forEach(function(c) {
-          var opt = document.createElement('option');
-          opt.value = c;
-          opt.textContent = 'ថ្នាក់ទី ' + c;
-          sel.appendChild(opt);
-        });
-
-        if (USER_CLASS && USER_ROLE !== 'admin') {
-          sel.value = USER_CLASS;
-          sel.disabled = true;
-        }
-
-        loadSemesterData(sel.value);
-      } catch (err) {
-        console.error(err);
-        sel.innerHTML = '<option value="">បរាជ័យក្នុងការទាញយក</option>';
-        loadSemesterData('');
       }
     }
 
     function onClassSelectChange() {
-      var cls = document.getElementById('classSelect').value;
+      var cls = document.getElementById('classSelect').value || USER_CLASS;
       loadSemesterData(cls);
     }
 
     async function loadSemesterData(cls) {
       var container = document.getElementById('semesterContainer');
-      container.innerHTML = '<div style="color: #fff; text-align: center; padding: 40px; font-size: 14px;">⚡ កំពុងទាញយកទិន្នន័យថ្នាក់ ' + (cls || '') + '...</div>';
+      container.innerHTML = `<div style="color:var(--text-muted); text-align: center; padding: 60px 20px; font-size: 15px; font-weight: 600;">
+        <i class="fa-solid fa-spinner fa-spin fa-2x" style="color:#0284c7;"></i>
+        <p style="margin-top:12px;">កំពុងទាញយកទិន្នន័យថ្នាក់ទី ${cls || ''}...</p>
+      </div>`;
 
       try {
-        var res = await apiCall('getSemesterRecordBundleSecured', { token: TOKEN, className: cls, cls: cls });
+        var res = await apiCall('getSemesterRecordBundleSecured', { className: cls, cls: cls });
         if (!res || res.success === false) {
-          container.innerHTML = '<div style="color: #f87171; text-align: center; padding: 40px; font-size: 14px;">កំហុស៖ ' + (res ? (res.error || res.message) : 'មិនមានទិន្នន័យថ្នាក់នេះឡើយ') + '</div>';
+          container.innerHTML = '<div style="color: #ef4444; text-align: center; padding: 40px; font-size: 14px; font-weight: 700;">❌ កំហុស៖ ' + (res ? (res.error || res.message) : 'មិនមានទិន្នន័យថ្នាក់នេះឡើយ') + '</div>';
           return;
         }
 
         bundleData = res;
 
-        if (bundleData.classes && bundleData.classes.length > 0) {
+        if (bundleData.classes && bundleData.classes.length > 0 && String(USER_ROLE).toLowerCase().trim() === 'admin') {
           var sel = document.getElementById('classSelect');
           if (sel.options.length <= 1) {
             sel.innerHTML = '';
             bundleData.classes.forEach(function(c) {
               var opt = document.createElement('option');
               opt.value = c;
-              opt.textContent = 'ថ្នាក់ទី ' + c;
+              opt.textContent = c.toString().startsWith('ថ្នាក់') ? c : 'ថ្នាក់ទី ' + c;
               sel.appendChild(opt);
             });
             sel.value = bundleData.className || cls;
@@ -389,7 +680,7 @@
 
         renderSemesterView();
       } catch (err) {
-        container.innerHTML = '<div style="color: #f87171; text-align: center; padding: 40px; font-size: 14px;">កំហុស Server: ' + (err.message || err) + '</div>';
+        container.innerHTML = '<div style="color: #ef4444; text-align: center; padding: 40px; font-size: 14px; font-weight: 700;">❌ កំហុស Server: ' + (err.message || err) + '</div>';
       }
     }
 
@@ -397,14 +688,14 @@
       if (!bundleData) return;
       var selectedSid = document.getElementById('studentSelect').value;
       var sheetFilter = document.getElementById('sheetFilterSelect').value;
-      var cls = bundleData.className || document.getElementById('classSelect').value;
+      var cls = bundleData.className || document.getElementById('classSelect').value || USER_CLASS;
       var container = document.getElementById('semesterContainer');
       container.innerHTML = '';
 
       var targetStudents = (selectedSid === 'ALL') ? bundleData.students : bundleData.students.filter(s => s.id === selectedSid);
       
       if (!targetStudents || targetStudents.length === 0) {
-        container.innerHTML = '<div style="color: #fff; text-align: center; padding: 40px; font-size: 14px;">មិនមានទិន្នន័យសិស្សក្នុងថ្នាក់នេះឡើយ</div>';
+        container.innerHTML = '<div style="color:var(--text-muted); text-align: center; padding: 40px; font-size: 14px; font-weight: 600;">មិនមានទិន្នន័យសិស្សក្នុងថ្នាក់នេះឡើយ</div>';
         return;
       }
 
